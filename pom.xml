@@ -81,6 +81,27 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- NativeImage-->
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.10.6</version>
+                <configuration>
+                    <imageName>${project.build.finalName}</imageName>
+                    <verbose>true</verbose>
+                    <mainClass>${main.class}</mainClass>
+                    <agent>
+                        <enabled>true</enabled>
+                    </agent>
+                    <!-- https://www.graalvm.org/latest/reference-manual/native-image/overview/Options/ -->
+                    <buildArgs>
+                        <buildArg>-march=compatibility</buildArg>
+                        <!-- 启用优化 -->
+                        <buildArg>-Os</buildArg>
+                        <buildArg>-O3</buildArg>
+                    </buildArgs>
+                </configuration>
+            </plugin>
             <!-- Antlr4生成器-->
             <plugin>
                 <groupId>org.antlr</groupId>
