@@ -1,0 +1,3349 @@
+//Please note: Affix names are required to be unique.
+
+export int Affix_ItemColor_None = -1;
+export int Affix_ItemColor_White = 0;
+export int Affix_ItemColor_Green = 1;
+export int Affix_ItemColor_Blue = 2;
+export int Affix_ItemColor_Violet = 3;
+export int Affix_ItemColor_Orange = 4;
+export int Affix_ItemColor_Platinum = 5;
+export int Affix_ItemColor_Exotic = 6;
+
+sub main() 
+{
+    OutfitAffixCount()
+    {
+        White(1);
+        Green(2);
+        Blue(3);
+        Violet(4);
+        Orange(5);
+        Platinum(5);
+    }
+
+    Affix("Weapon_Damage")
+    {
+        //use these fields only if you want to override the default values
+        //DisplayText("&localization_id&"); - default value &Affix_[name]_Desc&
+        //DisplayName("&localization_id&"); - default value &Affix_[name]_Name&
+        //ValueText("&localization_id&");   - default value &Affix_[name]_Val&
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage");
+            ValueSpreadMinCurve("Effect_Damage_Min");
+            ValueSpreadMaxCurve("Effect_Damage_Max");
+        }
+    }
+    
+	Affix("Weapon_Damage_vs_Humans")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Humans");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+	
+	Affix("Weapon_Damage_vs_Infected")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Infected");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+	
+	Affix("Weapon_Damage_at_Day")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_at_Day");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+	
+	Affix("Weapon_Damage_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_at_Night");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+	
+	Affix("Weapon_Damage_on_Charge")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_on_Charge");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+	
+	Affix("Stamina_Damage_on_Hit")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Stamina_Damage_on_Hit");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+	
+	Affix("Fury_Charge_on_Hit")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Fury_Charge_on_Hit");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+	
+	Affix("Stamina_Regen_on_Hit")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Stamina_Regen_on_Hit");
+            ValueSpreadMinCurve("Effect_AffixLow_Min");
+            ValueSpreadMaxCurve("Effect_AffixLow_Max");
+        }
+    }
+	
+	Affix("Stamina_Regen_on_Charge")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Stamina_Regen_on_Charge");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+	
+	Affix("Health_Regen_on_Perfect_Block")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Health_Regen_on_Perfect_Block");
+            ValueSpreadMinCurve("Effect_AffixLow_Min");
+            ValueSpreadMaxCurve("Effect_AffixLow_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_LowDurability")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_LowDurability");
+            ValueSpreadMinCurve("Effect_HardConditionalDamage_Min");
+            ValueSpreadMaxCurve("Effect_HardConditionalDamage_Max");        
+        }
+    }
+
+    Affix("Weapon_Damage_HighDurability")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_HighDurability");
+            ValueSpreadMinCurve("Effect_HardConditionalDamage_Min");
+            ValueSpreadMaxCurve("Effect_HardConditionalDamage_Max");        
+        }
+    }
+
+    Affix("Weapon_Damage_FullStamina")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_FullStamina");
+            ValueSpreadMinCurve("Effect_HardConditionalDamage_Min");
+            ValueSpreadMaxCurve("Effect_HardConditionalDamage_Max");
+        }
+    }
+    
+    Affix("Weapon_Damage_LowStamina")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_LowStamina");
+            ValueSpreadMinCurve("Effect_ConditionalDamage_Min");
+            ValueSpreadMaxCurve("Effect_ConditionalDamage_Max");
+        }
+    }
+    
+    Affix("Weapon_Damage_FullHealth")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_FullHealth");
+            ValueSpreadMinCurve("Effect_ConditionalDamage_Min");
+            ValueSpreadMaxCurve("Effect_ConditionalDamage_Max");
+        }
+    }
+    
+    Affix("Weapon_Damage_LowHealth")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_LowHealth");
+            ValueSpreadMinCurve("Effect_HardConditionalDamage_Min");
+            ValueSpreadMaxCurve("Effect_HardConditionalDamage_Max");
+        }
+    }
+
+    Affix("Stamina_Damage_LowHealth")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Stamina_Damage_LowHealth");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+       
+    Affix("Weapon_Range")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Range");
+            ValueSpreadMinCurve("Effect_Weapon_Range_Min");
+            ValueSpreadMaxCurve("Effect_Weapon_Range_Max");
+        }
+    }
+    Affix("Heavy_Push")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Heavy_Push");
+            ValueSpreadMinCurve("Effect_Push_Min");
+            ValueSpreadMaxCurve("Effect_Push_Max");
+        }
+    }
+    Affix("Push_Recover")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Push_Recover");
+            ValueSpreadMinCurve("Effect_Push_Recover_Min");
+            ValueSpreadMaxCurve("Effect_Push_Recover_Max");
+        }
+    }
+    Affix("Block_Stamina_Cost_Reduction")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Block_Stamina_Cost_Reduction");
+            ValueSpreadMinCurve("Effect_Stamina_Cost_Min");
+            ValueSpreadMaxCurve("Effect_Stamina_Cost_Max");
+        }
+    }
+    
+    Affix("PowerAttack_Stamina_Cost_Reduction")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_PowerAttack_Stamina_Cost_Reduction");
+            ValueSpreadMinCurve("Effect_Stamina_Cost_Min");
+            ValueSpreadMaxCurve("Effect_Stamina_Cost_Max");
+        }
+    }
+
+    Affix("Charge_Attack_Move_Speed")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Charge_Attack_Move_Speed");
+            ValueSpreadMinCurve("Effect_Charge_Attack_Move_Speed_Min");
+            ValueSpreadMaxCurve("Effect_Charge_Attack_Move_Speed_Max");
+        }
+    }
+        
+    Affix("Regen_Boost_Kill")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Regen_Boost_Kill");
+            ValueSpreadMinCurve("Effect_Regen_OnKill_Min");
+            ValueSpreadMaxCurve("Effect_Regen_OnKill_Max");
+        }
+    }
+
+	Affix("Weapon_Damage_Weapon_Throw")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Weapon_Throw");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+    
+    Affix("WeaponThrow_Power_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Throw_Power");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    Affix("Weapon_Damage_Backstab")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Backstab");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_Head")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Head");
+            ValueSpreadMinCurve("Effect_Exotic_Head_Min");
+            ValueSpreadMaxCurve("Effect_Exotic_Head_Max");
+        }
+    }
+
+    Affix("Weapon_Chance_Critical_Hit")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Chance_Critical_Hit");
+            ValueSpreadMinCurve("Effect_Exotic_Crit_Min");
+            ValueSpreadMaxCurve("Effect_Exotic_Crit_Max");
+        }
+    }
+
+    Affix("Weapon_Chance_Critical_Hit_Power_Attack")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Chance_Critical_Hit_Power_Attack");
+            ValueSpreadMinCurve("Effect_Exotic_Crit_Power_Attack_Min");
+            ValueSpreadMaxCurve("Effect_Exotic_Crit_Power_Attack_Max");
+        }
+    }
+    
+    Affix("Weapon_Low_Stamina_Chance_Critical_Hit")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Low_Stamina_Chance_Critical_Hit");
+            ValueSpreadMinCurve("Effect_Exotic_Crit_Min");
+            ValueSpreadMaxCurve("Effect_Exotic_Crit_Max");
+        }
+    }
+
+    Affix("Critical_Hit_Damage_Mul")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Critical_Hit_Damage_Mul");
+            ValueSpreadMinCurve("Effect_Exotic_Crit_Min");
+            ValueSpreadMaxCurve("Effect_Exotic_Crit_Max");
+        }
+    }
+
+    Affix("Outfits_Head_Chance_Critical_Hit")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_Head_Chance_Critical_Hit");
+            ValueSpreadMinCurve("Effect_Exotic_Crit_Min");
+            ValueSpreadMaxCurve("Effect_Exotic_Crit_Max");
+        }
+    }
+
+    Affix("Weapon_Chance_Stun")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Chance_Stun");
+            ValueSpreadMinCurve("Effect_Exotic_Weapon_Stun_Min");
+            ValueSpreadMaxCurve("Effect_Exotic_Weapon_Stun_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_vs_Infected_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Infected_at_Night");
+            ValueSpreadMinCurve("Effect_Night_Damage_vs_Infected_Min");
+            ValueSpreadMaxCurve("Effect_Night_Damage_vs_Infected_Max");
+        }
+    }
+
+    Affix("Weapon_Additional_Experience_vs_Infected_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Additional_Experience_vs_Infected_at_Night");
+            ValueSpreadMinCurve("Effect_Night_Weapon_Experience_vs_Infected_Min");
+            ValueSpreadMaxCurve("Effect_Night_Weapon_Experience_vs_Infected_Max");
+        }
+    }
+
+    Affix("Weapon_Heal_at_Infected_Slain_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Heal_at_Infected_Slain_at_Night");
+            ValueSpreadMinCurve("Effect_Night_Weapon_Heal_vs_Infected_Min");
+            ValueSpreadMaxCurve("Effect_Night_Weapon_Heal_vs_Infected_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_on_Charge_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_on_Charge_at_Night");
+            ValueSpreadMinCurve("Effect_Night_Damage_On_Charge_Min");
+            ValueSpreadMaxCurve("Effect_Night_Damage_On_Charge_Max");
+        }
+    }
+
+    Affix("Weapon_Chance_Critical_Hit_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Chance_Critical_Hit_at_Night");
+            ValueSpreadMinCurve("Effect_Night_Crit_Min");
+            ValueSpreadMaxCurve("Effect_Night_Crit_Max");
+        }
+    }
+
+    Affix("Weapon_Chance_Critical_Hit_Power_Attack_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Chance_Critical_Hit_Power_Attack_at_Night");
+            ValueSpreadMinCurve("Effect_Night_Crit_Power_Attack_Min");
+            ValueSpreadMaxCurve("Effect_Night_Crit_Power_Attack_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_Enemy_Affected_By_Conditions")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Enemy_Affected_By_Conditions");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    
+    Affix("Weapon_Damage_Enemy_Affected_By_Freeze")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Enemy_Affected_By_Freeze");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    Affix("Weapon_Electric_Mods_Damage_Buff")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Electric_Mods_Damage_Buff");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    Affix("Weapon_Elemental_Toxic_Suffer_Damage_Buff")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Elemental_Toxic_Suffer_Damage_Buff");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    Affix("Weapon_Elemental_Shock_Suffer_Damage_Buff")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Elemental_Shock_Suffer_Damage_Buff");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    Affix("Weapon_Elemental_Fire_Suffer_Damage_Buff")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Elemental_Fire_Suffer_Damage_Buff");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    Affix("Weapon_Elemental_Ice_Suffer_Damage_Buff")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Elemental_Ice_Suffer_Damage_Buff");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    Affix("Weapon_Damage_Head_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Head_at_Night");
+            ValueSpreadMinCurve("Effect_Night_Head_Min");
+            ValueSpreadMaxCurve("Effect_Night_Head_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_vs_Volatiles")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Volatiles");
+            ValueSpreadMinCurve("Effect_Night_Damage_On_Volatiles_Min");
+            ValueSpreadMaxCurve("Effect_Night_Damage_On_Volatiles_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_vs_Demolishers")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Demolishers");
+            ValueSpreadMinCurve("Effect_Night_Damage_On_Demolishers_Min");
+            ValueSpreadMaxCurve("Effect_Night_Damage_On_Demolishers_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_vs_Corruptors")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Corruptors");
+            ValueSpreadMinCurve("Effect_Night_Damage_On_Corruptors_Min");
+            ValueSpreadMaxCurve("Effect_Night_Damage_On_Corruptors_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_vs_Virals")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Virals");
+            ValueSpreadMinCurve("Effect_Night_Damage_On_Virals_Banshees_Min");
+            ValueSpreadMaxCurve("Effect_Night_Damage_On_Virals_Banshees_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_vs_Banshees")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Banshees");
+            ValueSpreadMinCurve("Effect_Night_Damage_On_Virals_Banshees_Min");
+            ValueSpreadMaxCurve("Effect_Night_Damage_On_Virals_Banshees_Max");
+        }
+    }
+
+    Affix("Weapon_Antizine_Drain_On_Player_Hit")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Antizine_Drain_On_Player_Hit");
+            ValueSpreadMinCurve("Effect_Night_Weapon_Drain_On_Player_Hit_Min");
+            ValueSpreadMaxCurve("Effect_Night_Weapon_Drain_On_Player_Hit_Max");
+        }
+		Negative(true);
+    }
+
+    Affix("Weapon_Antizine_Drain_On_Damage_Reviced")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Antizine_Drain_On_Damage_Reviced");
+            ValueSpreadMinCurve("Effect_Night_Weapon_Drain_On_Damage_Reviced_Min");
+            ValueSpreadMaxCurve("Effect_Night_Weapon_Drain_On_Damage_Reviced_Max");
+        }
+		Negative(true);
+    }
+
+    Affix("FirearmSway_Decrease")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_FirearmSway_Decrease");
+            ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("CommonCraftAmmountDropped_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_CommonCraftAmmountDropped_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+    
+    Affix("UncommonCraftAmmountDropped_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_UncommonCraftAmmountDropped_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+    
+    Affix("AmmoAmmountDropped_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_AmmoAmmountDropped_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+    
+    Affix("FuelAmmountDropped_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_FuelAmmountDropped_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+	Affix("LimbCutDestroyProbabilityIncrease")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_LimbCutDestroyProbabilityIncrease");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("BowStaminaConsumption_Decrease")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_BowStaminaConsumption_Decrease");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("ThrowItemDamage_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_ThrowItemDamage_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("FireDamage_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_FireDamage_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("FirearmDamage_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_FirearmDamage_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("XpGain_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_XpGain_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("FullFuryDamage_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_FullFuryDamage_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("UnderStatusEffectDamage_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_UnderStatusEffectDamage_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("FuryPointsGain_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_FuryPointsGain_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("LimbCutProbability_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_LimbCutProbability_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("FreakDamage_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_FreakDamage_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("ChainKillDamage_Increase")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_ChainKillDamage_Increase");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    /////////////////////////// PILGRIM COOP AFFIXES/////////////////////////
+
+   Affix("Weapon_Damage_vs_Infected_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Infected_Coop");
+            ValueSpreadMinCurve("Effect_AffixMid_Max");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_vs_Humans_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Humans_Coop");
+            ValueSpreadMinCurve("Effect_AffixMid_Max");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Stamina_Regen_on_Charge_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Stamina_Regen_on_Charge_Coop");
+            ValueSpreadMinCurve("Effect_AffixMid_Max");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_on_Charge_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_on_Charge_Coop");
+            ValueSpreadMinCurve("Effect_AffixMid_Max");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_Weapon_Throw_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Weapon_Throw_Coop");
+            ValueSpreadMinCurve("Effect_AffixMid_Max");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Health_Regen_on_Perfect_Block_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Health_Regen_on_Perfect_Block_Coop");
+            ValueSpreadMinCurve("Effect_AffixLow_Max");
+            ValueSpreadMaxCurve("Effect_AffixLow_Max");
+        }
+    }
+
+    Affix("Stamina_Regen_on_Hit_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Stamina_Regen_on_Hit_Coop");
+            ValueSpreadMinCurve("Effect_AffixLow_Max");
+            ValueSpreadMaxCurve("Effect_AffixLow_Max");
+        }
+    }
+
+    Affix("Weapon_ParkourDamageBoostFactor_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_ParkourDamageBoostFactor_Coop");
+            //BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_AffixLow_Max");
+            ValueSpreadMaxCurve("Effect_AffixLow_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_Backstab_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Backstab_Coop");
+            ValueSpreadMinCurve("Effect_AffixMid_Max");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Weapon_StaminaReduceMelee_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomMelee_StaminaReduceMelee_Coop");
+            //BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_AffixMid_Max");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_at_Day_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_at_Day_Coop");
+            ValueSpreadMinCurve("Effect_AffixMid_Max");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Weapon_Damage_at_Night_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_at_Night_Coop");
+            ValueSpreadMinCurve("Effect_AffixMid_Max");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Stamina_Damage_on_Hit_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Stamina_Damage_on_Hit_Coop");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomMeleeTank_CombatProg_Coop")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomMeleeTank_CombatProg_Coop");
+            //BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_AffixLow_Max");
+            ValueSpreadMaxCurve("Effect_AffixLow_Max");
+        }
+    }
+    
+    Affix("Affix_Outfit_Stamina_Kill_Regen")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Outfit_Stamina_Gain_On_Kill");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Max");
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+	
+	Affix("HalloweenKnife_Weapon_Damage_Backstab")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Backstab");
+            ValueSpreadMinCurve("Effect_Outfit35");
+            ValueSpreadMaxCurve("Effect_Outfit35");
+        }
+    }
+	
+	Affix("HalloweenScythe_Weapon_Damage_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_at_Night");
+            ValueSpreadMinCurve("Effect_Outfit20");
+            ValueSpreadMaxCurve("Effect_Outfit20");
+        }
+    }
+
+    Affix("Lubu_Weapon_Damage_Weapon_Throw")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_Weapon_Throw");
+            ValueSpreadMinCurve("Effect_Outfit20");
+            ValueSpreadMaxCurve("Effect_Outfit20");
+        }
+    }
+	
+	Affix("Weapon_Legend_Level_Gain_Multiplier") 
+	{
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Legend_Level_Gain_Multiplier");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+	}
+	
+	Affix("Weapon_Bleeding_On_Power_Attack") 
+	{
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Bleeding_On_Power_Attack");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+	}
+	
+	Affix ("Weapon_Chase_Level_Damage_Multiplier")
+	{
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Chase_Level_Damage_Multiplier");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+	}
+	
+	Affix ("Weapon_Night_Stamina_Reducer")
+	{
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Night_Stamina_Reducer");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+	}
+	
+	Affix("Weapon_Parkour_Damage_Multiplier")
+	{
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Parkour_Damage_Multiplier");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+	}
+	
+	Affix("Weapon_Speed_Multiplier") 
+	{
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Speed_Multiplier");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+	}
+    
+    Affix("Weapon_Knockdown_Chance") 
+	{
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_LimbCutDestroyProbabilityIncrease_neutral");
+        }
+	}
+    
+    Affix("Weapon_Cut_Chance") 
+	{
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_LimbCutDestroyProbabilityIncrease_neutral");
+        }
+	}
+    
+    Affix("Reaction_Increase") 
+	{
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_LimbCutDestroyProbabilityIncrease_neutral");
+        }
+	}
+					
+	AffixNamedGroup("HalloweenKnife_Affixes")
+    {
+        Affix("HalloweenKnife_Weapon_Damage_Backstab");
+    }
+	
+	AffixNamedGroup("HalloweenScythe_Affixes")
+    {
+        Affix("HalloweenScythe_Weapon_Damage_at_Night");
+    }
+    AffixNamedGroup("Lubu_Affixes")
+    {
+        Affix("Lubu_Weapon_Damage_Weapon_Throw", 70.0);
+    }
+
+    AffixNamedGroup("ErlangShen_Affixes")
+    {
+        Affix("Stamina_Regen_on_Charge", 20.0);
+    }
+
+    AffixNamedGroup("Scorpio_Affixes")
+    {
+        Affix("Weapon_Damage_Enemy_Affected_By_Conditions", 40.0);
+    }
+	
+    AffixNamedGroup("FreezeAxe_Affixes")
+    {
+        Affix("Weapon_Damage_Enemy_Affected_By_Freeze", 10.0);
+        Affix("Weapon_Damage_Weapon_Throw", 40.0);
+    }
+
+    AffixNamedGroup("Snowman_Affixes")
+    {
+        Affix("Weapon_Damage_Enemy_Affected_By_Freeze", 15.0);
+    }
+
+    AffixNamedGroup("Perun_Affixes")
+    {
+        Affix("Weapon_Electric_Mods_Damage_Buff", 10);
+    }
+
+    AffixNamedGroup("Glasscannon_Affixes")
+    {
+        Affix("Weapon_Chance_Critical_Hit", 20.0);
+        Affix("Weapon_Chance_Critical_Hit_Power_Attack", 50.0);
+		Affix("Weapon_Damage_LowHealth", 35.0);
+		Affix("Stamina_Damage_LowHealth", 100.0);
+    }
+	
+    AffixNamedGroup("Evil_Elf_Bow_Affixes")
+    {
+        Affix("Weapon_Damage_Enemy_Affected_By_Freeze", 15.0);
+    }
+	
+    AffixNamedGroup("Creepy_Santa_Polearm_Affixes")
+    {
+        Affix("Weapon_Damage_Enemy_Affected_By_Freeze", 15.0);
+    }
+	
+    AffixNamedGroup("WinterGear_Santa_Affixes")
+    {
+        Affix("Weapon_Damage_Enemy_Affected_By_Freeze", 2.0);
+		Affix("Weapon_Damage_at_Night", 6.0);
+    }
+	
+	AffixNamedGroup("VolatileHunter_Affixes")
+    {
+		Affix("Weapon_Damage_at_Night");
+    }
+	
+	AffixNamedGroup("GRECleaner_Affixes")
+    {
+		Affix("LimbCutDestroyProbabilityIncrease");
+    }
+	
+	AffixNamedGroup("KuaiDagger_Affixes")
+    {
+		Affix("Weapon_Parkour_Damage_Multiplier", 15.0);
+		Affix("Weapon_Speed_Multiplier", 20.0);
+    }
+	
+    Affix("Outfits_CombatProgression")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_CombatProgression");
+            BuffBaseValue(0.1);
+            ForcedValueMultiplier(5.0);
+        }
+    }
+
+    Affix("Outfits_HumanDamageResistance")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_HumanDamageResistance");
+            BuffBaseValue(0.1);
+        }
+    }
+	
+    Affix("Outfit_Enemy_Affected_By_Burning_Damage_Buff")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_Enemy_Affected_By_Burning_Damage_Buff");
+            BuffBaseValue(0.1);
+        }
+    }
+
+    AffixNamedGroup("Empty")
+    {
+    }
+
+    
+	
+    /////////////////////////////////////////////////////////////////////////////////////////
+    /// Exclusion Groups
+    /////////////////////////////////////////////////////////////////////////////////////////
+    
+    AffixExclusionGroup("Damage")
+    {
+        Affix("Weapon_Damage");
+        //Affix("Weapon_Damage_FullStamina");
+        //Affix("Weapon_Damage_LowStamina");
+        //Affix("Weapon_Damage_LowStamina");
+        //Affix("Weapon_Damage_LowHealth");
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    ///  Groups by Items Status Level
+    /////////////////////////////////////////////////////////////////////////////////////////    
+    AffixGroup(2)
+    {
+        Affix("Weapon_Damage_LowStamina");
+		Affix("Weapon_Damage_FullHealth");
+		Affix("Weapon_Damage_LowHealth");
+		Affix("Stamina_Regen_on_Hit");
+    }
+	
+	AffixGroup(4)
+	{
+		Affix("Weapon_Damage_vs_Humans");
+		Affix("Weapon_Damage_vs_Infected");
+	}
+	
+	AffixGroup(6)
+	{
+		Affix("Weapon_Damage_at_Day");
+		Affix("Weapon_Damage_at_Night");
+	}
+	
+	AffixGroup(8)
+    {
+        Affix("Weapon_Damage_on_Charge");
+		Affix("Stamina_Regen_on_Charge");
+	}
+    
+	AffixGroup(10)
+    {   
+        Affix("Stamina_Damage_on_Hit");
+		Affix("Health_Regen_on_Perfect_Block");
+    }
+	
+	/////////////////////////////////////////////////////////////////////////////////////////
+    ///  Groups by Items Status Level - Exotic Only
+    ///////////////////////////////////////////////////////////////////////////////////////// 
+
+	
+/* 	AffixGroup(1)
+    {
+        ExactColor(Affix_ItemColor_Exotic);
+
+        ForcedAffixCount(1); // There is always going to be exactly one affix from this group on any item that matches the requirements
+
+        // This affixes are duplicated for a reason
+        Affix("Weapon_Chance_Critical_Hit_Power_Attack");
+		Affix("Weapon_Chance_Stun");
+		Affix("Weapon_Chance_Critical_Hit");
+        Affix("Weapon_Chance_Critical_Hit_Power_Attack");
+		Affix("Weapon_Chance_Stun");
+		Affix("Weapon_Chance_Critical_Hit");
+		Affix("Weapon_Damage_Head");
+    } */
+	
+	/////////////////////////////////////////////////////////////////////////////////////////
+    ///  Groups by Items Status Level - Nocturnal Only
+    /////////////////////////////////////////////////////////////////////////////////////////
+	AffixGroup(1) //Nocturnal Weapons Disadvantage Affixes
+    {
+
+        ForcedAffixCount(1); // There is always going to be exactly one affix from this group on any item that matches the requirements
+		NocturnalItems();
+		
+        Affix("Weapon_Antizine_Drain_On_Damage_Reviced");
+		Affix("Weapon_Antizine_Drain_On_Damage_Reviced");
+		Affix("Weapon_Antizine_Drain_On_Player_Hit");
+    }
+	
+	AffixGroup(2) //Nocturnal Exotic Weapons Affixes
+    {
+        ExactColor(Affix_ItemColor_Exotic);
+
+        ForcedAffixCount(1); // There is always going to be exactly one affix from this group on any item that matches the requirements
+		NocturnalItems();
+		
+        Affix("Weapon_Chance_Critical_Hit_Power_Attack_at_Night");
+		Affix("Weapon_Chance_Critical_Hit_at_Night");
+		Affix("Weapon_Chance_Critical_Hit_Power_Attack_at_Night");
+		Affix("Weapon_Chance_Critical_Hit_at_Night");
+		Affix("Weapon_Damage_Head_at_Night");
+    }
+
+	AffixNamedGroup("NocturnalWeapons_Affixes")
+    {
+        Affix("Weapon_Damage_vs_Infected_at_Night");
+        Affix("Weapon_Additional_Experience_vs_Infected_at_Night");
+        Affix("Weapon_Heal_at_Infected_Slain_at_Night");
+        Affix("Weapon_Damage_on_Charge_at_Night");
+		Affix("Weapon_Damage_vs_Volatiles");
+		Affix("Weapon_Damage_vs_Demolishers");
+		Affix("Weapon_Damage_vs_Corruptors");
+		Affix("Weapon_Damage_vs_Virals");
+		Affix("Weapon_Damage_vs_Banshees");
+    }
+
+    AffixNamedGroup("CoopWeapons_Affixes")
+    {
+        Affix("Weapon_Damage_vs_Infected_Coop");
+        Affix("Weapon_Damage_vs_Humans_Coop");
+        Affix("Stamina_Regen_on_Charge_Coop");
+        Affix("Weapon_Damage_on_Charge_Coop");
+		Affix("Weapon_Damage_Weapon_Throw_Coop");
+		Affix("Health_Regen_on_Perfect_Block_Coop");
+		Affix("Stamina_Regen_on_Hit_Coop");
+		Affix("Weapon_ParkourDamageBoostFactor_Coop");
+		Affix("Weapon_Damage_Backstab_Coop");
+        Affix("Weapon_StaminaReduceMelee_Coop");
+        Affix("Weapon_Damage_at_Day_Coop");
+        Affix("Weapon_Damage_at_Night_Coop");
+        Affix("Stamina_Damage_on_Hit_Coop");
+        Affix("Affix_Outfit_RandomMeleeTank_CombatProg_Coop");
+    }
+	
+	AffixNamedGroup("LegendLevel_Affixes")
+	{
+		Affix("Weapon_Legend_Level_Gain_Multiplier");
+	}	
+    //////////////////////////
+    //////////OUTFITS/////////
+    //////////////////////////
+
+
+    AffixNamedGroup("Outfits_Test_Base")
+    {
+        Affix("Outfits_CombatProgression");
+    }
+
+    AffixNamedGroup("Outfits_Test_Random")
+    {
+		Affix("Outfits_HumanDamageResistance");
+    }
+    
+	Affix("Outfits_BaseTank_DamageResistanceFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseTank_DamageResistanceFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+	
+    Affix("Outfits_BaseMeleeDPS_MeleeDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseDPS_MeleeDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+	
+	Affix("Outfits_BaseMeleeHealer_ParkourDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_ParkourDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+	
+	Affix("Outfits_BaseMeleeDPS_OneHandedDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseDPS_OneHandedDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+	
+	Affix("Outfits_BaseMeleeTank_TwoHandedDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseTank_TwoHandedDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+	
+    // AMERICAN FOOTBALL PLAYER
+    Affix("Dropkick_Damage_Increase_On_Stamina_Percentage_Missing")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Dropkick_Damage_Increase_On_Stamina_Percentage_Missing");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    Affix("Dropkick_Physical_Damage_Boost")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Dropkick_Physical_Damage_Boost");
+            ValueSpreadMinCurve("Effect_AffixMid_Min");
+            ValueSpreadMaxCurve("Effect_AffixMid_Min");
+        }
+    }
+
+    Affix("Outfits_BaseRangedDPS_RangedDamageBoostFactor")
+    {
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseRangedDPS_RangedDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+	
+	Affix("Affix_Outfits_RandomHealerDPSRanged_KnuckleDusterDamageBoostFactor")
+    {
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealer_KnuckleDusterDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Outfits_BaseHealer_HealingFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_HealingFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfits_RandomTankMelee_HumanDamageResistance")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_RandomTankMelee_HumanDamageResistance");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+
+    Affix("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+	
+    Affix("Affix_Outfit_RandomHealerRanged_StaminaParkourReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealerRanged_StaminaParkourReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomTank_FireDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTank_FireDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomTank_PoisonDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTank_PoisonDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomTank_ElectricyDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTank_ElectricyDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomTankHealer_DayDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTankHealer_DayDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomTankHealer_NightDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTankHealer_NightDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomTank_ImmunityDrainReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTank_ImmunityDrainReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomHealer_HealingBoost")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealer_HealingBoost");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomHealerRanged_SurvSenseRange")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealerRanged_SurvSenseRange");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomHealerRanged_SurvSenseDuration")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealerRanged_SurvSenseDuration");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomHealerRanged_AgilityProgression")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealerRanged_AgilityProgression");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomMeleeTank_CombatProg")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomMeleeTank_CombatProg");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomMelee_StaminaReduceMelee");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomMeleeRanged_StaminaRegen");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+
+    Affix("Affix_Outfit_RandomRanged_StaminaReduceRanged")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomRanged_StaminaReduceRanged");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMid_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+        }
+    }
+
+    // Affix("Elf_Outfit_RandomRanged_StaminaReduceRanged")
+    // {
+    //     Effect()
+    //     {
+    //         EffectClass("StatChangeEffect");
+    //         BuffID("Affix_Outfit_RandomRanged_StaminaReduceRanged");
+    //         //BuffBaseValue(0.1);
+	// 		ValueSpreadMinCurve("Effect_OutfitMid_Min");
+    //         ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+    //     }
+    // }
+
+
+    Affix("Affix_Outfit_Armor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_Armor");
+            UseOutfitArmorValue(true);
+        }
+    }
+	
+	Affix("Affix_Outfits_Authority_HumanDamageResistance")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_RandomTankMelee_HumanDamageResistance");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMkt_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMkt_Max");
+        }
+    }
+	Affix("Outfits_Ronin_ParkourDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_ParkourDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMkt_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMkt_Max");
+        }
+    }
+	Affix("Affix_Outfits_StayHuman_InfectedDamageResistanceFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMkt_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMkt_Max");
+        }
+    }
+	Affix("Affix_Outfit_Nightrunner_NightDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTankHealer_NightDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMkt_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMkt_Max");
+        }
+    }
+	Affix("Affix_Outfit_Nightrunner_ImmunityDrainReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTank_ImmunityDrainReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMkt_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMkt_Max");
+        }
+    }
+	Affix("Affix_Outfits_Postapo_KnuckleDusterDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealer_KnuckleDusterDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMkt_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMkt_Max");
+        }
+    }
+	Affix("Affix_Outfit_Postapo_DayDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTankHealer_DayDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMkt_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMkt_Max");
+        }
+    }
+	Affix("Outfits_Military_TwoHandedDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseTank_TwoHandedDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitMkt_Min");
+            ValueSpreadMaxCurve("Effect_OutfitMkt_Max");
+        }
+    }
+	
+	Affix("Affix_Outfit_RenegadeBoss_NightDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTankHealer_NightDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit15_Min");
+            ValueSpreadMaxCurve("Effect_Outfit15_Max");
+        }
+    }
+	Affix("Affix_Outfit_RenegadeBoss_DayDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTankHealer_DayDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit15_Min");
+            ValueSpreadMaxCurve("Effect_Outfit15_Max");
+        }
+    }
+	Affix("Outfits_RenegadeBoss_OneHandedDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseDPS_OneHandedDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit10_Min");
+            ValueSpreadMaxCurve("Effect_Outfit10_Max");
+        }
+    }
+	Affix("Outfits_RenegadeBoss_TwoHandedDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseTank_TwoHandedDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit10_Min");
+            ValueSpreadMaxCurve("Effect_Outfit10_Max");
+        }
+    }
+	
+	Affix("Outfits_RenegadeBoss_ParkourDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_ParkourDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit10_Min");
+            ValueSpreadMaxCurve("Effect_Outfit10_Max");
+        }
+    }
+
+    Affix("Outfits_RenegadeBoss_RangedDamageBoostFactor")
+    {
+		Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseRangedDPS_RangedDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit10_Min");
+            ValueSpreadMaxCurve("Effect_Outfit10_Max");
+        }
+    }
+	
+	
+	//BLOODY ANNIVERSARY AND DROPKICK CHALLENGE
+	
+	Affix("Affix_Outfit_NighthunterMask_ParkourDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_ParkourDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit250");
+            ValueSpreadMaxCurve("Effect_Outfit250");
+        }
+    }
+	
+	Affix("Affix_Outfit_VolatileMask_Weapon_Damage_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_at_Night");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit250");
+            ValueSpreadMaxCurve("Effect_Outfit250");
+        }
+    }
+	
+	// WALKING DEAD BOUNTY AND DLC
+	
+	Affix("Outfit_WalkingDead_InfectedDamageResistanceFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit200");
+            ValueSpreadMaxCurve("Effect_Outfit200");
+        }
+    }
+	
+	// Payday 2
+	
+	Affix("Outfit_Payday2_RecoqnitionTimeReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffBaseValue(0.1);
+            BuffID("Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce");
+			ValueSpreadMinCurve("Effect_Outfit200");
+            ValueSpreadMaxCurve("Effect_Outfit200");
+        }
+    }
+	
+	Affix("Outfit_Payday2_OneHandedDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffBaseValue(0.1);
+            BuffID("Affix_Outfit_BaseDPS_OneHandedDamageBoostFactor");
+			ValueSpreadMinCurve("Effect_Outfit200");
+            ValueSpreadMaxCurve("Effect_Outfit200");
+        }
+    }
+	
+	// Samurai Skin Bundle
+	
+	Affix("Outfit_Samurai_TwoHandedDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseTank_TwoHandedDamageBoostFactor");
+            BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit90");
+            ValueSpreadMaxCurve("Effect_Outfit90");
+        }
+    }
+	
+	Affix("Outfit_Samurai_Health_Regen_on_Perfect_Block")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Health_Regen_on_Perfect_Block");
+            //BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit3");
+            ValueSpreadMaxCurve("Effect_Outfit3");
+        }
+    }
+	
+	Affix("Outfit_Samurai_StaminaReduceMelee")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomMelee_StaminaReduceMelee");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit70");
+            ValueSpreadMaxCurve("Effect_Outfit70");
+        }
+    }
+	
+	// Ninja Skin Bundle
+	
+	Affix("Outfit_Ninja_ParkourDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_ParkourDamageBoostFactor");
+            BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit110");
+            ValueSpreadMaxCurve("Effect_Outfit110");
+        }
+    }
+	
+	Affix("Outfit_Ninja_StaminaParkourReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealerRanged_StaminaParkourReduce");
+            BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit100");
+            ValueSpreadMaxCurve("Effect_Outfit100");
+        }
+    }
+	
+	Affix("Outfit_Ninja_StaminaRegen")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomMeleeRanged_StaminaRegen");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit70");
+            ValueSpreadMaxCurve("Effect_Outfit70");
+        }
+    }
+	
+	Affix("Outfit_Ninja_RecoqnitionTimeReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit80");
+            ValueSpreadMaxCurve("Effect_Outfit80");
+        }
+    }
+	
+	// Army Skin Bundle
+	
+	Affix("Outfit_Army_OneHandedDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseDPS_OneHandedDamageBoostFactor");
+            BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit100");
+            ValueSpreadMaxCurve("Effect_Outfit100");
+        }
+    }
+	
+	Affix("Outfit_Army_HealingBoost")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealer_HealingBoost");
+			BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit55");
+            ValueSpreadMaxCurve("Effect_Outfit55");
+        }
+    }
+	
+	Affix("Outfit_Army_HealingFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_HealingFactor");
+			BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit75");
+            ValueSpreadMaxCurve("Effect_Outfit75");
+        }
+    }
+	
+	// Military skin bundle
+	
+	Affix("Outfits_Military_HealingFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_HealingFactor");
+			BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit65");
+            ValueSpreadMaxCurve("Effect_Outfit65");
+        }
+    }
+	
+	Affix("Outfit_Military_InfectedDamageResistanceFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit90");
+            ValueSpreadMaxCurve("Effect_Outfit90");
+        }
+    }
+	
+	Affix("Outfit_Military_Weapon_Damage_vs_Infected")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Infected");
+			BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit75");
+            ValueSpreadMaxCurve("Effect_Outfit75");
+        }
+    }
+	
+	// Reburn Skin Bundle
+	
+	Affix("Outfit_Reburn_FireDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTank_FireDmgReduce");
+			BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit125");
+            ValueSpreadMaxCurve("Effect_Outfit125");
+        }
+    }
+	
+	Affix("Outfit_Reburn_TwoHandedDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseTank_TwoHandedDamageBoostFactor");
+			BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit65");
+            ValueSpreadMaxCurve("Effect_Outfit65");
+        }
+    }
+	
+	Affix("Outfit_Reburn_StaminaRegen")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomMeleeRanged_StaminaRegen");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit100");
+            ValueSpreadMaxCurve("Effect_Outfit100");
+        }
+    }
+	
+	
+	// Tank Boxer Skin Bundle
+	
+	Affix("Outfit_TankBoxer_Weapon_Damage_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_at_Night");
+			BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit35");
+            ValueSpreadMaxCurve("Effect_Outfit35");
+        }
+    }
+	
+	Affix("Outfit_TankBoxer_DayDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTankHealer_DayDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit55");
+            ValueSpreadMaxCurve("Effect_Outfit55");
+        }
+    }
+	
+	Affix("Outfit_TankBoxer_StaminaReduceMelee")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomMelee_StaminaReduceMelee");
+			BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit65");
+            ValueSpreadMaxCurve("Effect_Outfit65");
+        }
+    }
+	
+	// WoD skin
+	
+	Affix("Outfit_wod_Health_Regen_on_Perfect_Block")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Health_Regen_on_Perfect_Block");
+			BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit250");
+            ValueSpreadMaxCurve("Effect_Outfit250");
+        }
+    }
+	
+	Affix("Outfit_wod_NightDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTankHealer_NightDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit100");
+            ValueSpreadMaxCurve("Effect_Outfit100");
+        }
+    }
+	
+	Affix("Outfit_wod_Weapon_Damage_at_Night")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_at_Night");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit80");
+            ValueSpreadMaxCurve("Effect_Outfit80");
+        }
+    }
+	
+	//Scarecrow
+	
+	Affix("Outfit_Scarecrow_InfectedDamageResistanceFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit100");
+            ValueSpreadMaxCurve("Effect_Outfit100");
+        }
+    }
+	
+	// Plague
+	
+	Affix("Outfit_Plague_PoisonDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTank_PoisonDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit125");
+            ValueSpreadMaxCurve("Effect_Outfit125");
+        }
+    }
+	
+	//Dragon Warrior
+	
+	Affix("Outfit_Dragonwarrior_HealingBoost")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealer_HealingBoost");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit100");
+            ValueSpreadMaxCurve("Effect_Outfit100");
+        }
+    }
+
+    Affix("Dragonwarrior_Damage_vs_Infected")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_vs_Infected");
+            //BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit70");
+            ValueSpreadMaxCurve("Effect_Outfit70");
+        }
+    }
+
+    Affix("Dragonwarrior_Stamina_Regen_on_Hit")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Stamina_Regen_on_Hit");
+            BuffBaseValue(0.1);
+            ValueSpreadMinCurve("Effect_Outfit40");
+            ValueSpreadMaxCurve("Effect_Outfit40");
+        }
+    }
+
+    // Tank Monster (Coop)
+
+    Affix("Tankmonster_Weapon_Damage_at_Day")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_at_Day");
+            ValueSpreadMinCurve("Effect_Outfit70");
+            ValueSpreadMaxCurve("Effect_Outfit70");
+        }
+    }
+
+    Affix("Tankmonster_NightDmgReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomTankHealer_NightDmgReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit90");
+            ValueSpreadMaxCurve("Effect_Outfit90");
+        }
+    }
+
+    Affix("Tankmonster_HealingBoost")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealer_HealingBoost");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit115");
+            ValueSpreadMaxCurve("Effect_Outfit115");
+        }
+    }
+
+    Affix("pilgrimpo_StaminaParkourReduce")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_RandomHealerRanged_StaminaParkourReduce");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit135");
+            ValueSpreadMaxCurve("Effect_Outfit135");
+        }
+    }
+
+    Affix("pilgrimpo_ParkourDamageBoostFactor")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_BaseHealer_ParkourDamageBoostFactor");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_Outfit135");
+            ValueSpreadMaxCurve("Effect_Outfit135");
+        }
+    }
+
+    Affix("pilgrimpo_Stamina_Regen_on_Hit")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Stamina_Regen_on_Hit");
+            BuffBaseValue(10.0);
+            ValueSpreadMinCurve("Effect_Outfit1");
+            ValueSpreadMaxCurve("Effect_Outfit1");
+        }
+    }
+
+    Affix("Vampire_Weapon_Damage_FullHealth")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Weapon_Damage_FullHealth");
+            ValueSpreadMinCurve("Effect_ConditionalDamage_Max");
+            ValueSpreadMaxCurve("Effect_ConditionalDamage_Max");
+        }
+    }
+
+    // Affix("pilgrimpo_OneHandedDamageBoostFactor")
+    // {
+    //     Effect()
+    //     {
+    //         EffectClass("StatChangeEffect");
+    //         BuffID("Affix_Outfit_BaseDPS_OneHandedDamageBoostFactor");
+    //         BuffBaseValue(0.1);
+	// 		ValueSpreadMinCurve("Effect_OutfitMid_Max");
+    //         ValueSpreadMaxCurve("Effect_OutfitMid_Max");
+    //     }
+    // }
+    
+	Affix("Outfit_No_Ammo_Consumption")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_No_Ammo_Consumption");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+	
+	Affix("Outfit_Damage_To_Infected_Multiplier")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_Damage_To_Infected_Multiplier");
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+
+    Affix("Damage_NextHitOnKilling")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Damage_NextHitOnKilling");
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+
+    Affix("Damage_LowHealthCustomThreshold")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Damage_LowHealth_CustomThreshold");
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+
+
+// Base Affixes for outfits
+
+    AffixNamedGroup("Outfits_BaseTank_Affixes")
+    {
+        Affix("Outfits_BaseMeleeTank_TwoHandedDamageBoostFactor");
+    }
+
+    AffixNamedGroup("Outfits_BaseMeleeDPS_Affixes")
+    {
+        Affix("Outfits_BaseMeleeDPS_OneHandedDamageBoostFactor");
+    }
+
+    AffixNamedGroup("Outfits_BaseRangedDPS_Affixes")
+    {
+        Affix("Outfits_BaseRangedDPS_RangedDamageBoostFactor");
+    }
+
+    AffixNamedGroup("Outfits_BaseHealer_Affixes")
+    {
+        Affix("Outfits_BaseMeleeHealer_ParkourDamageBoostFactor");
+		Affix("Outfits_BaseHealer_HealingFactor");
+    }
+	
+	AffixNamedGroup("Outfits_BaseGeneral_Affixes")
+	{
+        Affix("Outfits_BaseMeleeHealer_ParkourDamageBoostFactor");
+		Affix("Outfits_BaseHealer_HealingFactor");
+		Affix("Outfits_BaseRangedDPS_RangedDamageBoostFactor");
+		Affix("Outfits_BaseMeleeDPS_OneHandedDamageBoostFactor");
+		Affix("Outfits_BaseMeleeTank_TwoHandedDamageBoostFactor");
+    }
+	
+	AffixNamedGroup("Outfits_Authority_Affixes")
+	{
+        Affix("Affix_Outfits_Authority_HumanDamageResistance");
+    }
+	AffixNamedGroup("Outfits_Ronin_Affixes")
+	{
+        Affix("Outfits_Ronin_ParkourDamageBoostFactor");
+    }
+	AffixNamedGroup("Outfits_StayHuman_Affixes")
+	{
+        Affix("Affix_Outfits_StayHuman_InfectedDamageResistanceFactor");
+    }
+	AffixNamedGroup("Outfits_EvilElf_Affixes")
+	{
+        Affix("Weapon_Damage_Enemy_Affected_By_Freeze");
+    }
+	AffixNamedGroup("Outfits_Nightrunner_Affixes")
+	{
+        Affix("Affix_Outfit_Nightrunner_NightDmgReduce");
+		Affix("Affix_Outfit_Nightrunner_ImmunityDrainReduce");
+    }
+	AffixNamedGroup("Outfits_PostApo_Affixes")
+	{
+        Affix("Affix_Outfits_Postapo_KnuckleDusterDamageBoostFactor");
+		Affix("Affix_Outfit_Postapo_DayDmgReduce");
+    }
+	AffixNamedGroup("Outfits_RenegadeBoss_Affixes")
+	{
+        Affix("Affix_Outfit_RenegadeBoss_NightDmgReduce");
+		Affix("Affix_Outfit_RenegadeBoss_DayDmgReduce");
+    }
+	AffixNamedGroup("Outfits_RenegadeBoss_Bonus_Affixes")
+	{
+        Affix("Outfits_RenegadeBoss_ParkourDamageBoostFactor");
+		Affix("Outfits_RenegadeBoss_RangedDamageBoostFactor");
+		Affix("Outfits_RenegadeBoss_OneHandedDamageBoostFactor");
+		Affix("Outfits_RenegadeBoss_TwoHandedDamageBoostFactor");
+    }
+	
+	//BLOODY ANNIVERSARY AND DROPKICK CHALLENGE
+	
+	AffixNamedGroup("Outfits_NighthunterMask_Affixes")
+    {
+        Affix("Affix_Outfit_NighthunterMask_ParkourDamageBoostFactor");
+    }
+	
+	AffixNamedGroup("Outfits_VolatileMask_Affixes")
+    {
+        Affix("Affix_Outfit_VolatileMask_Weapon_Damage_at_Night");
+    }
+	
+	// WALKING DEAD BOUNTY AND DLC
+	
+	AffixNamedGroup("Outfits_WalkindDead_Affixes")
+    {
+        Affix("Outfit_WalkingDead_InfectedDamageResistanceFactor");
+    }
+	
+	// PAYDAY 2
+	
+	AffixNamedGroup("Outfits_Payday2_Affixes")
+    {
+        Affix("Outfit_Payday2_RecoqnitionTimeReduce");
+		Affix("Outfit_Payday2_OneHandedDamageBoostFactor");
+    }
+	
+	// Samurai Skin Bundle
+	
+	AffixNamedGroup("Outfits_Samurai_Affixes")
+    {
+        Affix("Outfit_Samurai_TwoHandedDamageBoostFactor");
+		Affix("Outfit_Samurai_Health_Regen_on_Perfect_Block");
+		Affix("Outfit_Samurai_StaminaReduceMelee");
+    }
+		
+	// Ninja Skin Bundle
+	
+	AffixNamedGroup("Outfits_Ninja_Affixes")
+    {
+        Affix("Outfit_Ninja_ParkourDamageBoostFactor");
+		Affix("Outfit_Ninja_StaminaParkourReduce");
+		Affix("Outfit_Ninja_StaminaRegen");
+		Affix("Outfit_Ninja_RecoqnitionTimeReduce");
+    }
+		
+	// Army Skin Bundle
+	
+	AffixNamedGroup("Outfits_Army_Affixes")
+    {
+        Affix("Outfit_Army_OneHandedDamageBoostFactor");
+		Affix("Outfit_Army_HealingBoost");
+		Affix("Outfit_Army_HealingFactor");
+    }
+	
+	// Military Skin Bundle
+	
+	AffixNamedGroup("Outfits_Military_Affixes")
+    {
+        Affix("Outfits_Military_HealingFactor");
+		Affix("Outfit_Military_InfectedDamageResistanceFactor");
+		Affix("Outfit_Military_Weapon_Damage_vs_Infected");
+    }
+	
+	// WoD skin
+	
+	AffixNamedGroup("Outfits_Wod_Affixes")
+    {
+        Affix("Outfit_wod_Health_Regen_on_Perfect_Block");
+		Affix("Outfit_wod_NightDmgReduce");
+		Affix("Outfit_wod_Weapon_Damage_at_Night");
+    }
+	
+	// Reburn Skin
+	
+	AffixNamedGroup("Outfits_Reburn_Affixes")
+    {
+        Affix("Outfit_Reburn_FireDmgReduce");
+		Affix("Outfit_Reburn_TwoHandedDamageBoostFactor");
+		Affix("Outfit_Reburn_StaminaRegen");
+    }
+	
+    // Tank skinbundle
+	
+	AffixNamedGroup("Outfits_Tank_Boxer_Affixes")
+    {
+        Affix("Outfit_TankBoxer_DayDmgReduce");
+		Affix("Outfit_TankBoxer_Weapon_Damage_at_Night");
+		Affix("Outfit_TankBoxer_StaminaReduceMelee");
+    }
+	
+	//Scarecrow
+	
+	AffixNamedGroup("Outfits_Scarecrow_Affixes")
+    {
+		Affix("Outfit_Scarecrow_InfectedDamageResistanceFactor");
+    }
+	
+	//Plague
+	
+	AffixNamedGroup("Outfits_Plague_Affixes")
+    {
+        Affix("Outfit_Plague_PoisonDmgReduce");
+    }
+
+    AffixNamedGroup("Outfits_Dragonwarrior_Affixes")
+    {
+        Affix("Outfit_Dragonwarrior_HealingBoost");
+		Affix("Dragonwarrior_Damage_vs_Infected", 7.0);
+		Affix("Dragonwarrior_Stamina_Regen_on_Hit");
+    }
+
+    AffixNamedGroup("WinterGear_Elf_Affixes")
+    {
+        Affix("Weapon_Damage_Enemy_Affected_By_Freeze", 2.0);
+        Affix("Affix_Outfit_RandomRanged_StaminaReduceRanged", 10.0);
+    }
+
+    AffixNamedGroup("Outfits_Tank_Monster_Affixes") // COOP
+    {
+        Affix("Tankmonster_Weapon_Damage_at_Day", 7.0);
+		Affix("Tankmonster_NightDmgReduce");
+		Affix("Tankmonster_HealingBoost");
+    }
+
+    AffixNamedGroup("Outfits_pilgrimpo_Affixes")
+    {
+        Affix("pilgrimpo_StaminaParkourReduce");
+		Affix("pilgrimpo_ParkourDamageBoostFactor");
+		Affix("pilgrimpo_Stamina_Regen_on_Hit", 1.0);
+    }
+
+    AffixNamedGroup("Outfits_tif_Affixes")
+    {
+        Affix("Affix_Outfit_RandomTank_ImmunityDrainReduce", 140.0);
+        Affix("Affix_Outfit_RandomTank_PoisonDmgReduce", 150.0);
+        Affix("Affix_Outfit_RandomMeleeTank_CombatProg", 90.0);
+        Affix("Affix_Outfit_RandomHealerRanged_AgilityProgression", 90.0);
+    }
+
+    AffixNamedGroup("Outfits_tif_set_Affixes")
+    {
+        Affix("Affix_Outfit_RandomMeleeTank_CombatProg");
+        Affix("Affix_Outfit_RandomHealerRanged_AgilityProgression");
+    }
+
+    AffixNamedGroup("Outfits_Gridiron_Affixes")
+    {
+        Affix("Dropkick_Damage_Increase_On_Stamina_Percentage_Missing", 0.3);
+        Affix("Dropkick_Physical_Damage_Boost", 30.0);
+    }
+
+    AffixNamedGroup("Weapon_Gridiron_Affixes")
+    {
+        Affix("Weapon_Damage_Weapon_Throw", 160.0);
+        Affix("Stamina_Regen_on_Hit_Coop", 6.0);
+        Affix("WeaponThrow_Power_Increase", 28.0);
+    }
+
+    
+    AffixNamedGroup("Weapon_EXPcalibur")
+    {
+        Affix("Affix_Outfit_RandomMeleeTank_CombatProg", 45.0);
+        Affix("Weapon_Damage_on_Charge", 30.0);
+    }
+
+    AffixNamedGroup("Weapon_Bones_Scythe")
+    {
+        Affix("Weapon_Chase_Level_Damage_Multiplier", 10.5);
+        Affix("Weapon_Night_Stamina_Reducer", 25.0);
+    }
+
+    AffixNamedGroup("Weapon_Gladius")
+    {
+        Affix("Weapon_Damage_on_Charge", 30.0);
+    }
+
+    AffixNamedGroup("Outfits_Vampire_Affixes")
+    {
+        Affix("Vampire_Weapon_Damage_FullHealth");
+        Affix("Outfit_Samurai_Health_Regen_on_Perfect_Block");
+    }
+
+    AffixNamedGroup("Outfits_Vanaiden_Affixes")
+    {
+        Affix("Outfit_No_Ammo_Consumption", 3.5);
+        Affix("Outfit_Damage_To_Infected_Multiplier", 7.0);
+    }
+    
+    AffixNamedGroup("Outfits_Krampus_Affixes")
+    {
+        Affix("Outfit_Reburn_FireDmgReduce");
+		Affix("Outfit_Reburn_TwoHandedDamageBoostFactor");
+		Affix("Outfit_Reburn_StaminaRegen");
+    }
+
+    AffixNamedGroup("Outfits_Snakewarrior_Affixes")
+    {
+        Affix("Affix_Outfit_RandomTank_PoisonDmgReduce", 15.0);
+		Affix("Outfit_Army_OneHandedDamageBoostFactor");
+		Affix("Outfit_Samurai_StaminaReduceMelee");
+    }
+
+    AffixNamedGroup("Outfits_Ranger_Affixes")
+    {
+        Affix("Outfit_Military_InfectedDamageResistanceFactor");
+		Affix("Outfit_Military_Weapon_Damage_vs_Infected");
+    }
+	
+	AffixNamedGroup("Outfits_GRECleaner_Affixes")
+    {
+        Affix("Affix_Outfit_RandomTank_PoisonDmgReduce", 125.0);
+		Affix("Outfits_BaseTank_DamageResistanceFactor", 20.0);
+		Affix("Outfits_BaseMeleeTank_TwoHandedDamageBoostFactor", 20.0);
+		Affix("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor", 20.0);
+		Affix("Affix_Outfit_RandomTank_FireDmgReduce", 50.0);
+    }
+	
+	AffixNamedGroup("Outfits_Firefighter_Affixes")
+    {
+        Affix("Outfit_Reburn_FireDmgReduce");
+    }
+
+    AffixNamedGroup("Weapon_htr_scarecrow")
+    {
+        Affix("Weapon_Damage_vs_Infected", 10.0);
+    }
+
+    AffixNamedGroup("Weapon_htr_plague")
+    {
+        Affix("pilgrimpo_Stamina_Regen_on_Hit", 1.0);
+    }
+
+    AffixNamedGroup("Weapon_htr_pirate")
+    {
+        Affix("Tankmonster_HealingBoost");
+    }
+    AffixNamedGroup("Weapon_uvsaber")
+    {
+        Affix("Weapon_Damage_vs_Infected", 14.0);
+        Affix("Weapon_Damage_Weapon_Throw", 56.0);
+        Affix("Affix_Outfit_RandomTank_ImmunityDrainReduce", 140.0);
+    }
+
+// Random Affixes for outfits
+
+    AffixNamedGroup("Outfits_RandomGeneral_Affixes")
+    {
+        Affix("Affix_Outfit_RandomTank_ImmunityDrainReduce");
+        Affix("Affix_Outfit_RandomTankHealer_NightDmgReduce");
+        Affix("Affix_Outfit_RandomTankHealer_DayDmgReduce");
+        Affix("Affix_Outfit_RandomTank_ElectricyDmgReduce");
+        Affix("Affix_Outfit_RandomTank_PoisonDmgReduce");
+        Affix("Affix_Outfit_RandomTank_FireDmgReduce");
+        Affix("Affix_Outfit_RandomMeleeTank_CombatProg");
+        Affix("Affix_Outfits_RandomTankMelee_HumanDamageResistance");
+        Affix("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor");
+		Affix("Affix_Outfits_RandomHealerDPSRanged_KnuckleDusterDamageBoostFactor");
+		Affix("Affix_Outfit_RandomMeleeTank_CombatProg");
+        Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee");
+        Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen");
+		Affix("Outfits_BaseMeleeHealer_ParkourDamageBoostFactor");
+		Affix("Outfits_BaseHealer_HealingFactor");
+		Affix("Outfits_BaseRangedDPS_RangedDamageBoostFactor");
+		Affix("Outfits_BaseMeleeDPS_OneHandedDamageBoostFactor");
+		Affix("Outfits_BaseMeleeTank_TwoHandedDamageBoostFactor");
+    }
+
+    AffixNamedGroup("Outfits_RandomTank_Affixes")
+    {
+        Affix("Affix_Outfit_RandomTank_ImmunityDrainReduce");
+        Affix("Affix_Outfit_RandomTankHealer_NightDmgReduce");
+        Affix("Affix_Outfit_RandomTankHealer_DayDmgReduce");
+        Affix("Affix_Outfit_RandomTank_ElectricyDmgReduce");
+        Affix("Affix_Outfit_RandomTank_PoisonDmgReduce");
+        Affix("Affix_Outfit_RandomTank_FireDmgReduce");
+        Affix("Affix_Outfit_RandomMeleeTank_CombatProg");
+        Affix("Affix_Outfits_RandomTankMelee_HumanDamageResistance");
+        Affix("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor");
+		Affix("Affix_Outfits_RandomHealerDPSRanged_KnuckleDusterDamageBoostFactor");
+		Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen");
+        Affix("Affix_Outfit_RandomRanged_StaminaReduceRanged");
+        Affix("Affix_Outfit_RandomHealerRanged_StaminaParkourReduce");
+        Affix("Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce");
+        Affix("Affix_Outfit_RandomHealerRanged_SurvSenseRange");
+        Affix("Affix_Outfit_RandomHealerRanged_SurvSenseDuration");
+        Affix("Affix_Outfit_RandomHealerRanged_AgilityProgression");
+        Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee");
+    }
+	
+	AffixNamedGroup("Outfits_RandomTank_Affixes_FirefighterOutfit")
+    {
+        Affix("Affix_Outfit_RandomTank_ImmunityDrainReduce");
+        Affix("Affix_Outfit_RandomTankHealer_NightDmgReduce");
+        Affix("Affix_Outfit_RandomTankHealer_DayDmgReduce");
+        Affix("Affix_Outfit_RandomTank_ElectricyDmgReduce");
+        Affix("Affix_Outfit_RandomTank_PoisonDmgReduce");
+        Affix("Affix_Outfit_RandomMeleeTank_CombatProg");
+        Affix("Affix_Outfits_RandomTankMelee_HumanDamageResistance");
+        Affix("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor");
+		Affix("Affix_Outfits_RandomHealerDPSRanged_KnuckleDusterDamageBoostFactor");
+		Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen");
+        Affix("Affix_Outfit_RandomRanged_StaminaReduceRanged");
+        Affix("Affix_Outfit_RandomHealerRanged_StaminaParkourReduce");
+        Affix("Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce");
+        Affix("Affix_Outfit_RandomHealerRanged_SurvSenseRange");
+        Affix("Affix_Outfit_RandomHealerRanged_SurvSenseDuration");
+        Affix("Affix_Outfit_RandomHealerRanged_AgilityProgression");
+        Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee");
+    }
+
+    AffixNamedGroup("Outfits_RandomMeleeDPS_Affixes")
+    {
+        Affix("Affix_Outfit_RandomMeleeTank_CombatProg");
+        Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee");
+        Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen");
+        Affix("Affix_Outfits_RandomTankMelee_HumanDamageResistance");
+        Affix("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor");
+    }
+
+    AffixNamedGroup("Outfits_RandomRangedDPS_Affixes")
+    {
+        Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen");
+        Affix("Affix_Outfit_RandomRanged_StaminaReduceRanged");
+        Affix("Affix_Outfit_RandomHealerRanged_StaminaParkourReduce");
+        Affix("Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce");
+        Affix("Affix_Outfit_RandomHealerRanged_SurvSenseRange");
+        Affix("Affix_Outfit_RandomHealerRanged_SurvSenseDuration");
+        Affix("Affix_Outfit_RandomHealerRanged_AgilityProgression");
+    }
+
+    AffixNamedGroup("Outfits_RandomHealer_Affixes")
+    {
+        Affix("Affix_Outfit_RandomHealerRanged_StaminaParkourReduce");
+        Affix("Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce");
+        Affix("Affix_Outfit_RandomHealerRanged_SurvSenseRange");
+        Affix("Affix_Outfit_RandomHealerRanged_SurvSenseDuration");
+        Affix("Affix_Outfit_RandomHealerRanged_AgilityProgression");
+        Affix("Affix_Outfit_RandomTankHealer_NightDmgReduce");
+        Affix("Affix_Outfit_RandomTankHealer_DayDmgReduce");
+        Affix("Affix_Outfit_RandomHealer_HealingBoost");
+    }
+    
+    //DLC_FT GEAR
+    
+    AffixNamedGroup("Outfits_XPfarm_Affixes_ft")
+    {
+        Affix("XpGain_Increase", 2.0);
+    }
+    AffixNamedGroup("Outfits_Solider_Affixes_ft")
+    {	
+		Affix("FirearmDamage_Increase", 3);
+		Affix("FirearmSway_Decrease", 3);
+        Affix("Outfits_HumanDamageResistance", 15.0);
+    }
+    AffixNamedGroup("Outfits_Trickster_Affixes_ft")
+    {
+        Affix("Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce", 30.0);
+		Affix("Stamina_Damage_on_Hit", 6.0);
+		Affix("Weapon_Damage_Backstab", 3.0);
+    }
+    AffixNamedGroup("Outfits_Fury_Affixes_ft")
+    {
+        Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee", 30.0);
+		Affix("Outfits_BaseMeleeDPS_MeleeDamageBoostFactor", 20.0);
+		Affix("Affix_Outfit_RandomHealer_HealingBoost", 30.0);
+    }
+    AffixNamedGroup("Outfits_Crafter_Affixes_ft")
+    {
+        Affix("CommonCraftAmmountDropped_Increase", 6.0);
+		Affix("UncommonCraftAmmountDropped_Increase", 3.0);
+		Affix("ThrowItemDamage_Increase", 4.0);
+    }
+    AffixNamedGroup("Outfits_Acrobat_Affixes_ft")
+    {
+        Affix("Outfits_BaseMeleeHealer_ParkourDamageBoostFactor", 70.0);
+		Affix("Weapon_Damage_Weapon_Throw", 4.0);
+		Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee", 30.0);
+    }
+    AffixNamedGroup("Outfits_Gunslinger_Affixes_ft")
+    {
+        Affix("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor", 15.0);
+		Affix("Weapon_Damage_Head", 3.0);
+		Affix("FirearmSway_Decrease", 6.0);
+    }
+    AffixNamedGroup("Outfits_Ranger_Affixes_ft")
+    {
+        Affix("Outfits_BaseRangedDPS_RangedDamageBoostFactor", 30.0);
+		Affix("BowStaminaConsumption_Decrease", 6.0);
+		Affix("Weapon_Damage_Head", 3.0);
+    }
+    AffixNamedGroup("Outfits_Heavy_Affixes_ft")
+    {
+        //Affix("Outfits_BaseTank_DamageResistanceFactor", 40.0);
+    }
+    AffixNamedGroup("Outfits_Brusier_Affixes_ft")
+    {      
+		Affix("Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor", 15.0);
+		Affix("Outfits_BaseMeleeTank_TwoHandedDamageBoostFactor", 30.0);
+        Affix("Weapon_Damage_on_Charge", 3.0);
+    }
+
+	
+	Affix("Outfit_No_Ammo_Consumption")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_No_Ammo_Consumption");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+	
+	Affix("Outfit_Damage_To_Infected_Multiplier")
+    {
+        Effect()
+        {
+            EffectClass("StatChangeEffect");
+            BuffID("Affix_Outfit_Damage_To_Infected_Multiplier");
+            BuffBaseValue(0.1);
+			ValueSpreadMinCurve("Effect_OutfitLow_Min");
+            ValueSpreadMaxCurve("Effect_OutfitLow_Max");
+        }
+    }
+        
+    AffixNamedGroup("Outfits_Armored_Affixes_ft")
+    {      
+		Affix("Weapon_Damage_vs_Infected", 2.0);
+    }
+    
+    AffixNamedGroup("Outfits_Skillet_Affixes_ft")
+    {      
+		Affix("XpGain_Increase", 1.0);
+        Affix("FirearmDamage_Increase", 2.0);
+        Affix("Weapon_Damage_Head", 3.0);
+    }
+    
+    //DLC_FT WEAPONS
+    
+    
+    AffixNamedGroup("Slashing_1h_Affixes_Rare_ft")
+    {
+        Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee", 50.0);  
+    }
+    AffixNamedGroup("Slashing_1h_Affixes_Epic_ft")
+    {          
+        Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee", 60.0);  
+    } 
+    AffixNamedGroup("Slashing_1h_Affixes_Legendary_ft")
+    {          
+        Affix("Affix_Outfit_RandomMelee_StaminaReduceMelee", 75.0);  
+    }
+    
+    AffixNamedGroup("Blunt_1h_Affixes_Rare_ft")
+    {          
+        Affix("Stamina_Damage_on_Hit", 10.0);  
+    }
+    AffixNamedGroup("Blunt_1h_Affixes_Epic_ft")
+    {          
+        Affix("Stamina_Damage_on_Hit", 12.);  
+    } 
+    AffixNamedGroup("Blunt_1h_Affixes_Legendary_ft")
+    {          
+        Affix("Stamina_Damage_on_Hit", 15.0);  
+    }  
+    
+    AffixNamedGroup("Slashing_15h_Affixes_Rare_ft")
+    {          
+        Affix("Weapon_Chance_Critical_Hit", 2.0);  
+    }
+    AffixNamedGroup("Slashing_15h_Affixes_Epic_ft")
+    {          
+        Affix("Weapon_Chance_Critical_Hit", 3.0);  
+    } 
+    AffixNamedGroup("Slashing_15h_Affixes_Legendary_ft")
+    {          
+        Affix("Weapon_Chance_Critical_Hit", 4.0);  
+    }  
+    
+    AffixNamedGroup("Blunt_15h_Affixes_Rare_ft")
+    {          
+        Affix("Weapon_Damage_on_Charge", 10.0);  
+    }
+    AffixNamedGroup("Blunt_15h_Affixes_Epic_ft")
+    {          
+        Affix("Weapon_Damage_on_Charge", 12.0);  
+    } 
+    AffixNamedGroup("Blunt_15h_Affixes_Legendary_ft")
+    {          
+        Affix("Weapon_Damage_on_Charge", 15.0);  
+    }  
+
+    AffixNamedGroup("Slashing_2h_Affixes_Rare_ft")
+    {                  
+        Affix("Weapon_Chance_Critical_Hit_Power_Attack", 3.0);   
+    }
+    AffixNamedGroup("Slashing_2h_Affixes_Epic_ft")
+    {                 
+        Affix("Weapon_Chance_Critical_Hit_Power_Attack", 5.0);  
+    } 
+    AffixNamedGroup("Slashing_2h_Affixes_Legendary_ft")
+    {          
+        Affix("Weapon_Chance_Critical_Hit_Power_Attack", 7.0); 
+    }  
+
+    AffixNamedGroup("Blunt_2h_Affixes_Rare_ft")
+    {                  
+       Affix("Outfits_BaseTank_DamageResistanceFactor", 50.0);        
+    }
+    AffixNamedGroup("Blunt_2h_Affixes_Epic_ft")
+    {                 
+       Affix("Outfits_BaseTank_DamageResistanceFactor", 60.0);     
+    } 
+    AffixNamedGroup("Blunt_2h_Affixes_Legendary_ft")
+    {              
+       Affix("Outfits_BaseTank_DamageResistanceFactor", 80.0);  
+    }  
+    
+    AffixNamedGroup("Knives_Affixes_Rare_ft")
+    {          
+        Affix("Weapon_Damage_Backstab", 33.0);
+    }
+    AffixNamedGroup("Knives_Affixes_Epic_ft")
+    {          
+        Affix("Weapon_Damage_Backstab", 40.0);
+    }
+    AffixNamedGroup("Knives_Affixes_Legendary_ft")
+    {          
+        Affix("Weapon_Damage_Backstab", 50.0);
+    }
+    
+    AffixNamedGroup("Slashing_Duster_Affixes_Rare_ft")
+    {          
+        Affix("Affix_Outfits_RandomHealerDPSRanged_KnuckleDusterDamageBoostFactor", 50.0);  
+    }
+    AffixNamedGroup("Slashing_Duster_Affixes_Epic_ft")
+    {          
+        Affix("Affix_Outfits_RandomHealerDPSRanged_KnuckleDusterDamageBoostFactor", 70.0);  
+    } 
+    AffixNamedGroup("Slashing_Duster_Affixes_Legendary_ft")
+    {          
+        Affix("Affix_Outfits_RandomHealerDPSRanged_KnuckleDusterDamageBoostFactor", 80.0);  
+    }      
+    
+    AffixNamedGroup("Blunt_Duster_Affixes_Rare_ft")
+    {          
+        Affix("Regen_Boost_Kill", 10.0);    //to be fixed
+    }
+    AffixNamedGroup("Blunt_Duster_Affixes_Epic_ft")
+    {          
+        Affix("Regen_Boost_Kill", 15.0);
+    } 
+    AffixNamedGroup("Blunt_Duster_Affixes_Legendary_ft")
+    {          
+        Affix("Regen_Boost_Kill", 20.0);
+    }
+    
+    AffixNamedGroup("Polearm_Affixes_Rare_ft")
+    {          
+        Affix("Vampire_Weapon_Damage_FullHealth", 5.0);  
+    }
+    AffixNamedGroup("Polearm_Affixes_Epic_ft")
+    {          
+        Affix("Vampire_Weapon_Damage_FullHealth", 7.0);  
+    } 
+    AffixNamedGroup("Polearm_Affixes_Legendary_ft")
+    {          
+        Affix("Vampire_Weapon_Damage_FullHealth", 10.0);  
+    }
+
+    AffixNamedGroup("Weapons_Random_Rare_ft")
+    {          
+        Affix("Weapon_Damage_vs_Humans", 5.0);
+        Affix("Weapon_Damage_vs_Infected", 3.0);   
+        Affix("Weapon_Damage_Weapon_Throw", 15.0);  
+        Affix("Affix_Outfit_RandomHealer_HealingBoost", 150.0);  
+        Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen", 100.0);  
+        Affix("Weapon_Damage_Head", 10.0);
+        Affix("Weapon_Damage_at_Night", 10.0);        
+        Affix("Weapon_Parkour_Damage_Multiplier", 33.0);  
+        Affix("ThrowItemDamage_Increase", 10.0);          
+    }
+    AffixNamedGroup("Weapons_Random_Epic_ft")
+    {          
+        Affix("Weapon_Damage_vs_Humans", 7.0);
+        Affix("Weapon_Damage_vs_Infected", 5.0);   
+        Affix("Weapon_Damage_Weapon_Throw", 25.0);  
+        Affix("Affix_Outfit_RandomHealer_HealingBoost", 200.0);  
+        Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen", 120.0);  
+        Affix("Weapon_Damage_Head", 15.0);
+        Affix("Weapon_Damage_at_Night", 15.0);        
+        Affix("Weapon_Parkour_Damage_Multiplier", 50.0);  
+        Affix("ThrowItemDamage_Increase", 15.0);      
+    } 
+    AffixNamedGroup("Weapons_Random_Legendary_ft")
+    {          
+        Affix("Weapon_Damage_vs_Humans", 10.0);
+        Affix("Weapon_Damage_vs_Infected", 6.0);
+        Affix("Weapon_Damage_at_Night", 20.0);
+        Affix("Weapon_Damage_Weapon_Throw", 33.0);
+        Affix("Affix_Outfit_RandomHealer_HealingBoost", 250.0);
+        Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen", 150.0);
+        Affix("Weapon_Damage_Head", 20.0);
+        Affix("Weapon_Parkour_Damage_Multiplier", 75.0);
+        Affix("ThrowItemDamage_Increase", 20.0);
+    }
+	
+	
+    AffixNamedGroup("Tempered_Crowbar_Affixes_Legendary_ft")
+    {          
+        Affix("Stamina_Damage_on_Hit", 15.0); 
+        Affix("Weapon_Damage_Head", 20.0);          
+        Affix("Weapon_Damage_vs_Humans", 10.0);
+        Affix("Weapon_Damage_vs_Infected", 6.0);
+    } 
+    
+    AffixNamedGroup("Skillet_Pan_Affixes_Rare_ft")
+    {          
+        Affix("Weapon_Damage_Head", 10.0);
+    }
+    AffixNamedGroup("Skillet_Pan_Affixes_Epic_ft")
+    {          
+        Affix("Weapon_Damage_Head", 15.0); 
+    } 
+    AffixNamedGroup("Skillet_Pan_Affixes_Legendary_ft")
+    {          
+        Affix("Weapon_Damage_Head", 20.0); 
+    }
+    
+    AffixNamedGroup("Skillet_Bat_Affixes_Rare_ft")
+    {          
+        Affix("Weapon_Damage_Head", 10.0);
+    }
+    AffixNamedGroup("Skillet_Bat_Affixes_Epic_ft")
+    {          
+        Affix("Weapon_Damage_Head", 15.0);  
+    } 
+    AffixNamedGroup("Skillet_Bat_Affixes_Legendary_ft")
+    {          
+        Affix("Weapon_Damage_Head", 20.0);  
+    }
+    
+    AffixNamedGroup("Slashing_15h_EXPCalibur_ft")
+    {      
+		Affix("XpGain_Increase", 5.0);
+    }
+    
+    AffixNamedGroup("Slashing_15h_EXPCalibur_Initial_ft")
+    {      
+		Affix("XpGain_Increase", 10.0);
+    }
+    
+    AffixNamedGroup("Slashing_1h_Stauss_ft")
+    {      
+		Affix("Weapon_Cut_Chance", 10.0);
+    }
+    AffixNamedGroup("Slashing_1h_Stauss_Initial_ft")
+    {      
+		Affix("Weapon_Cut_Chance", 100.0);
+    }
+    
+    AffixNamedGroup("Slashing_1h_Rapier_ft")
+    {      
+		Affix("Weapon_Chance_Critical_Hit_at_Night", 7.5);
+    }
+    AffixNamedGroup("Slashing_1h_Rapier_Initial_ft")
+    {      
+		Affix("Weapon_Chance_Critical_Hit_at_Night", 10.0);
+        Affix("Weapon_Damage_vs_Infected_at_Night", 10.0);       
+    }
+    
+    AffixNamedGroup("Blunt_1h_Beaver_Stick_ft")
+    {      
+		Affix("Weapon_Knockdown_Chance", 20.0);
+    }
+    AffixNamedGroup("Blunt_1h_Beaver_Stick_Initial_ft")
+    {      
+		Affix("Weapon_Knockdown_Chance", 100.0);
+    }
+    
+    AffixNamedGroup("Slashing_1h_Ciupaga_ft")
+    {      
+        Affix("CommonCraftAmmountDropped_Increase", 10.0);
+		Affix("UncommonCraftAmmountDropped_Increase", 5.0);
+        Affix("Weapon_Damage_Weapon_Throw", 50.0);
+    }
+    AffixNamedGroup("Slashing_1h_Ciupaga_Initial_ft")
+    {      
+        Affix("CommonCraftAmmountDropped_Increase", 20.0);
+		Affix("UncommonCraftAmmountDropped_Increase", 10.0);
+        Affix("Weapon_Damage_Weapon_Throw", 100.0);
+    }
+    
+    AffixNamedGroup("Blunt_1h_Racket_ft")
+    {      
+		Affix("Reaction_Increase", 50.0);
+    }
+    AffixNamedGroup("Blunt_1h_Racket_Initial_ft")
+    {      
+		Affix("Reaction_Increase", 100.0);
+    }
+    
+    
+    //Legend Levels Outfit Affixes
+    AffixNamedGroup("Outfits_Ranger_ll_Affixes_ft")
+    {      
+		Affix("Affix_Outfit_Stamina_Kill_Regen", 2.0);
+        Affix("Critical_Hit_Damage_Mul", 8.0);
+        Affix("Outfits_Head_Chance_Critical_Hit", 3.0);
+    }
+    AffixNamedGroup("Outfits_vanguard_Affixes_ft")
+    {      
+		Affix("Damage_LowHealthCustomThreshold", 6.0);
+        Affix("Damage_NextHitOnKilling", 8.0);
+        Affix("Weapon_Damage_Backstab", 5.0);
+    }
+    AffixNamedGroup("Outfits_LegendLevels_Affixes_ft")
+    {      
+		Affix("XpGain_Increase", 5.0);
+    }
+    
+    
+    //Legend Levels Weapon Affixes
+    AffixNamedGroup("1hs_Mach08_Affix_Exotic_ft")
+    {      
+		Affix("Damage_LowHealthCustomThreshold", 20.0);
+    }
+    
+    AffixNamedGroup("1hs_Mach26_Affix_Exotic_ft")
+    {      
+		Affix("Block_Stamina_Cost_Reduction", 50.0);
+    }
+    
+    AffixNamedGroup("15hb_07_Affix_Exotic_ft")
+    {      
+		Affix("Weapon_Damage_LowDurability", 40.0);
+    }
+    
+    AffixNamedGroup("15hb_04_Affix_Exotic_ft")
+    {      
+		Affix("PowerAttack_Stamina_Cost_Reduction", 50.0);
+    }
+    
+    AffixNamedGroup("15hb_p_Affix_Exotic_ft")
+    {      
+		Affix("Weapon_Damage_FullStamina", 100.0);
+    }
+    
+    AffixNamedGroup("2hb_u_Affix_Exotic_ft")
+    {      
+		Affix("Weapon_Damage_HighDurability", 20.0);
+    }
+    
+    AffixNamedGroup("15hs_17_Affix_Exotic_ft")
+    {      
+		Affix("LimbCutProbability_Increase", 30.0);
+    }
+    
+    AffixNamedGroup("15hs_08_Affix_Exotic_ft")
+    {      
+		Affix("UnderStatusEffectDamage_Increase", 25.0);
+    }
+    
+    AffixNamedGroup("1hb_stk_t_Affix_Exotic_ft")
+    {      
+		Affix("Weapon_Damage_LowStamina", 30.0);
+    }
+    
+    AffixNamedGroup("1hb_stk_x_Affix_Exotic_ft")
+    {      
+		Affix("FreakDamage_Increase", 25.0);
+    }
+    
+    AffixNamedGroup("2hs_Polearm_i_Affix_Exotic_ft")
+    {      
+		Affix("Weapon_Low_Stamina_Chance_Critical_Hit", 30.0);
+    }
+    
+    AffixNamedGroup("2hs_m_Affix_Exotic_ft")
+    {      
+		Affix("FuryPointsGain_Increase", 25.0);
+    }
+    
+    AffixNamedGroup("1hb_knuckle_d_Affix_Exotic_ft")
+    {      
+		Affix("FullFuryDamage_Increase", 25.0);
+    }
+    
+    AffixNamedGroup("1hs_knife_h_Affix_Exotic_ft")
+    {      
+		Affix("ChainKillDamage_Increase", 100.0);
+    }
+    
+    AffixNamedGroup("Weapons_Random_Exotic_ft")
+    {          
+        Affix("Weapon_Damage_vs_Humans", 15.0);
+        Affix("Weapon_Damage_vs_Infected", 8.0);
+        Affix("Weapon_Damage_at_Night", 25.0);
+        Affix("Weapon_Damage_Weapon_Throw", 45.0);
+        Affix("Affix_Outfit_RandomHealer_HealingBoost", 350.0);
+        Affix("Affix_Outfit_RandomMeleeRanged_StaminaRegen", 200.0);
+        Affix("Weapon_Damage_Head", 25.0);
+        Affix("Weapon_Parkour_Damage_Multiplier", 75.0);
+        Affix("ThrowItemDamage_Increase", 25.0);
+    }
+    
+    AffixNamedGroup("Knives_Black_Friday_Affixes_Legendary_ft")
+    {          
+        Affix("ChainKillDamage_Increase", 75.0);
+    }
+    
+
+}

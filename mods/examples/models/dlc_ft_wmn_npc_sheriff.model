@@ -1,0 +1,716 @@
+{
+  "version": 6,
+  "preset": {
+    "skeletonName": "sh2_woman_basic_skeleton_hairs.msh"
+  },
+  "data": {
+    "meshAttribute": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "properties": [
+      {
+        "name": "production_state",
+        "value": "prototype"
+      },
+      {
+        "name": "sex",
+        "value": "female"
+      },
+      {
+        "name": "type",
+        "value": "character"
+      }
+    ]
+  },
+  "slots": [
+    {
+      "slotUid": 100,
+      "name": "HEAD",
+      "filterText": "head",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": [
+          {
+            "name": "sh2_npc_ft_mara.msh",
+            "selected": true,
+            "layoutId": 4,
+            "userData": [
+              4286643968,
+              128,
+              4294901760,
+              0
+            ],
+            "materialsData": [
+              {
+                "number": 1,
+                "name": "sh2_eye.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 2,
+                "name": "sh2_eye_shadow.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 3,
+                "name": "sh2_eyelashes.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 4,
+                "name": "sh2_npc_ft_mara.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 5,
+                "name": "sh2_mouth_interior.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 6,
+                "name": "sh2_wet_eye.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 7,
+                "name": "auto_shadow_caster.mat",
+                "layoutId": 4,
+                "loadFlags": "I"
+              }
+            ],
+            "materialsResources": [
+              {
+                "number": 1,
+                "resources": [
+                  {
+                    "name": "sh2_eye_dark_brown.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "resources": [
+                  {
+                    "name": "sh2_eye_shadow.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 3,
+                "resources": [
+                  {
+                    "name": "sh2_eyelashes.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 4,
+                "resources": [
+                  {
+                    "name": "sh2_npc_ft_mara.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 5,
+                "resources": [
+                  {
+                    "name": "sh2_mouth_interior.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 6,
+                "resources": [
+                  {
+                    "name": "sh2_wet_eye.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 7,
+                "resources": [
+                  {
+                    "name": "auto_shadow_caster.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "I",
+                    "rttiValues": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slotUid": 101,
+      "name": "HEAD_PART_1",
+      "filterText": "hat",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": []
+      }
+    },
+    {
+      "slotUid": 102,
+      "name": "HEAD_PART_2",
+      "filterText": "head",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": []
+      }
+    },
+    {
+      "slotUid": 103,
+      "name": "HEAD_PART_3",
+      "filterText": "head",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": [
+          {
+            "name": "npc_ft_mara_hair_a.msh",
+            "selected": true,
+            "layoutId": 4,
+            "userData": [
+              4286643968,
+              128,
+              4294901760,
+              0
+            ],
+            "materialsData": [
+              {
+                "number": 1,
+                "name": "npc_ft_mara_hair_a.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 2,
+                "name": "npc_ft_mara_hair_a_braid.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 3,
+                "name": "auto_shadow_caster.mat",
+                "layoutId": 4,
+                "loadFlags": "I"
+              }
+            ],
+            "materialsResources": [
+              {
+                "number": 1,
+                "resources": [
+                  {
+                    "name": "npc_ft_mara_hair_a.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "resources": [
+                  {
+                    "name": "npc_ft_mara_hair_a_braid.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 3,
+                "resources": [
+                  {
+                    "name": "auto_shadow_caster.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "I",
+                    "rttiValues": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "clothResources": {
+        "name": "npc_ft_mara_hair_a.cloth",
+        "initialized": true
+      }
+    },
+    {
+      "slotUid": 104,
+      "name": "HEAD_PART_4",
+      "filterText": "head",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": []
+      }
+    },
+    {
+      "slotUid": 400,
+      "name": "ARMS",
+      "filterText": "arms",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": [
+          {
+            "name": "npc_ft_sheriff_gloves_a.msh",
+            "selected": true,
+            "layoutId": 4,
+            "userData": [
+              4286643968,
+              128,
+              4294901760,
+              0
+            ],
+            "materialsData": [
+              {
+                "number": 1,
+                "name": "npc_ft_sheriff_gloves_a.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 2,
+                "name": "auto_shadow_caster.mat",
+                "layoutId": 4,
+                "loadFlags": "I"
+              }
+            ],
+            "materialsResources": [
+              {
+                "number": 1,
+                "resources": [
+                  {
+                    "name": "npc_ft_sheriff_gloves_a.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "resources": [
+                  {
+                    "name": "auto_shadow_caster.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "I",
+                    "rttiValues": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slotUid": 500,
+      "name": "HANDS",
+      "filterText": "hands",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": [
+          {
+            "name": "wmn_hands_avg_a.msh",
+            "selected": true,
+            "layoutId": 4,
+            "userData": [
+              4286643968,
+              3221225600,
+              4294901763,
+              0
+            ],
+            "materialsData": [
+              {
+                "number": 1,
+                "name": "wmn_hands_avg_a.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 2,
+                "name": "auto_shadow_caster.mat",
+                "layoutId": 4,
+                "loadFlags": "I"
+              }
+            ],
+            "materialsResources": [
+              {
+                "number": 1,
+                "resources": [
+                  {
+                    "name": "wmn_hands_avg_a_tan.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "resources": [
+                  {
+                    "name": "auto_shadow_caster.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "I",
+                    "rttiValues": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "slotUid": 603,
+      "name": "TORSO_PART_3",
+      "filterText": "torso",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": [
+          {
+            "name": "npc_ft_sheriff_torso_a.msh",
+            "selected": true,
+            "layoutId": 4,
+            "userData": [
+              4286643968,
+              128,
+              4294901760,
+              0
+            ],
+            "materialsData": [
+              {
+                "number": 1,
+                "name": "npc_ft_sheriff_torso_a.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 2,
+                "name": "auto_shadow_caster.mat",
+                "layoutId": 4,
+                "loadFlags": "I"
+              }
+            ],
+            "materialsResources": [
+              {
+                "number": 1,
+                "resources": [
+                  {
+                    "name": "npc_ft_sheriff_torso_a.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "resources": [
+                  {
+                    "name": "auto_shadow_caster.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "I",
+                    "rttiValues": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "clothResources": {
+        "name": "npc_ft_sheriff_torso_a.cloth",
+        "initialized": true
+      }
+    },
+    {
+      "slotUid": 604,
+      "name": "TORSO_PART_4",
+      "filterText": "torso",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": [
+          {
+            "name": "npc_ft_sheriff_torso_a_strings_a.msh",
+            "selected": true,
+            "layoutId": 4,
+            "userData": [
+              4286643968,
+              128,
+              4294901760,
+              0
+            ],
+            "materialsData": [
+              {
+                "number": 1,
+                "name": "npc_ft_sheriff_torso_a.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 2,
+                "name": "auto_shadow_caster.mat",
+                "layoutId": 4,
+                "loadFlags": "I"
+              }
+            ],
+            "materialsResources": [
+              {
+                "number": 1,
+                "resources": [
+                  {
+                    "name": "npc_ft_sheriff_torso_a.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "resources": [
+                  {
+                    "name": "auto_shadow_caster.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "I",
+                    "rttiValues": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "clothResources": {
+        "name": "npc_ft_sheriff_torso_a_strings_a.cloth",
+        "initialized": true
+      }
+    },
+    {
+      "slotUid": 700,
+      "name": "LEGS",
+      "filterText": "legs",
+      "tagsBits": 786432,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": [
+          {
+            "name": "npc_ft_sheriff_pants_a.msh",
+            "selected": true,
+            "layoutId": 4,
+            "userData": [
+              4286643968,
+              128,
+              4294901760,
+              0
+            ],
+            "materialsData": [
+              {
+                "number": 1,
+                "name": "npc_ft_sheriff_shoes_a.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 2,
+                "name": "npc_ft_sheriff_pants_a_chain.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 3,
+                "name": "npc_ft_sheriff_pants_a.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 4,
+                "name": "auto_shadow_caster.mat",
+                "layoutId": 4,
+                "loadFlags": "I"
+              }
+            ],
+            "materialsResources": [
+              {
+                "number": 1,
+                "resources": [
+                  {
+                    "name": "npc_ft_sheriff_shoes_a.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "resources": [
+                  {
+                    "name": "npc_ft_sheriff_pants_a_chain.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 3,
+                "resources": [
+                  {
+                    "name": "npc_ft_sheriff_pants_a.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 4,
+                "resources": [
+                  {
+                    "name": "auto_shadow_caster.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "I",
+                    "rttiValues": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "clothResources": {
+        "name": "npc_ft_sheriff_pants_a.cloth",
+        "initialized": true
+      }
+    },
+    {
+      "slotUid": 900,
+      "name": "OTHER",
+      "filterText": "",
+      "tagsBits": 0,
+      "shadowMaps": 15,
+      "meshResources": {
+        "resources": [
+          {
+            "name": "npc_ft_sheriff_pants_a_pistol.msh",
+            "selected": true,
+            "layoutId": 4,
+            "userData": [
+              4286643968,
+              128,
+              4294901760,
+              0
+            ],
+            "materialsData": [
+              {
+                "number": 1,
+                "name": "npc_ft_sheriff_pants_a_pistol.mat",
+                "layoutId": 4,
+                "loadFlags": "S"
+              },
+              {
+                "number": 2,
+                "name": "auto_shadow_caster.mat",
+                "layoutId": 4,
+                "loadFlags": "I"
+              }
+            ],
+            "materialsResources": [
+              {
+                "number": 1,
+                "resources": [
+                  {
+                    "name": "npc_ft_sheriff_pants_a_pistol.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "S",
+                    "rttiValues": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "resources": [
+                  {
+                    "name": "auto_shadow_caster.mat",
+                    "selected": true,
+                    "layoutId": 4,
+                    "loadFlags": "I",
+                    "rttiValues": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

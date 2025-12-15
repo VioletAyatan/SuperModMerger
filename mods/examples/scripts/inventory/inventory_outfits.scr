@@ -1,0 +1,86 @@
+//This script is generated from Inventory.xlsm. Don't modify it!!!
+
+import "inventorystuff.scr" 
+import "inventory_imports.scr" 
+sub main() 
+{
+	use outfit_imports();
+	
+	Item("Transmog_Special_ForcedDefault_Torso", CategoryType_OutfitPart)
+    {
+        ItemType(ItemType_OutfitPart);
+        GenType(GenType_OutfitPart);
+        Price(0);
+        HudIcon("empty_torso_slot");
+        OutfitPartSlot(OutfitPartSlot_Torso);
+        OutfitPartVisualization("transmog_forced_default_outfit_vis_torso");
+        GameVersion(1);
+        DismantleResult("empty");
+        UID("7244885099903952030");
+    }
+
+    Item("Transmog_Special_ForcedDefault_Legs", CategoryType_OutfitPart)
+    {
+        ItemType(ItemType_OutfitPart);
+        GenType(GenType_OutfitPart);
+        Price(0);
+        HudIcon("empty_legs_slot");
+        OutfitPartSlot(OutfitPartSlot_Legs);
+        OutfitPartVisualization("transmog_forced_default_outfit_vis_legs");
+        GameVersion(1);
+        DismantleResult("empty");
+        UID("7244885100346129656");
+    }
+
+    Item("Transmog_Special_ForcedDefault_Shoes", CategoryType_OutfitPart)
+    {
+        ItemType(ItemType_OutfitPart);
+        GenType(GenType_OutfitPart);
+        Price(0);
+        HudIcon("empty_shoes_slot");
+        OutfitPartSlot(OutfitPartSlot_Shoes);
+        OutfitPartVisualization("transmog_forced_default_outfit_vis_shoes");
+        GameVersion(1);
+        DismantleResult("empty");
+        UID("7244885101165339124");
+    }
+
+    Item("Transmog_Special_ForcedDefault_Head", CategoryType_OutfitPart)
+    {
+        ItemType(ItemType_OutfitPart);
+        GenType(GenType_OutfitPart);
+        Price(0);
+        HudIcon("empty_head_slot");
+        OutfitPartSlot(OutfitPartSlot_Head);
+        OutfitPartVisualization("transmog_forced_default_outfit_vis_head");
+        GameVersion(1);
+        DismantleResult("empty");
+        UID("7244885101463040464");
+    }
+
+    Item("Transmog_Special_ForcedDefault_Gloves", CategoryType_OutfitPart)
+    {
+        ItemType(ItemType_OutfitPart);
+        GenType(GenType_OutfitPart);
+        Price(0);
+        HudIcon("empty_gloves_slot");
+        OutfitPartSlot(OutfitPartSlot_Gloves);
+        OutfitPartVisualization("transmog_forced_default_outfit_vis_gloves");
+        GameVersion(1);
+        DismantleResult("empty");
+        UID("7244885101491112466");
+    }
+
+    Item("Transmog_Special_ForcedDefault_TorsoAddon", CategoryType_OutfitPart)
+    {
+        ItemType(ItemType_OutfitPart);
+        GenType(GenType_OutfitPart);
+        Price(0);
+        HudIcon("empty_bracers_slot");
+        OutfitPartSlot(OutfitPartSlot_TorsoAddon);
+        OutfitPartVisualization("transmog_forced_default_outfit_vis_torso_addon");
+        GameVersion(1);
+        DismantleResult("empty");
+        UID("7244885101867954830");
+    }
+}

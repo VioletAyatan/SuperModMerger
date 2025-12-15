@@ -1,0 +1,11 @@
+sub main()
+{
+    Version(6);
+    ItemsCount(6);
+    Item(3511,"Vehicle_Influ_A_A");
+    Item(3512,"Vehicle_Influ_A_B");
+    Item(3513,"Vehicle_Influ_A_C");
+    Item(3514,"Vehicle_Influ_B_A");
+    Item(3515,"Vehicle_Influ_B_B");
+    Item(3516,"Vehicle_Influ_B_C");
+}
