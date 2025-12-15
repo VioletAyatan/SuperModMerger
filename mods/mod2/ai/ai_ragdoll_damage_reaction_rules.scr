@@ -9,7 +9,7 @@ export string ERagdollHitPart_Head = "Head";
 export string ERagdollHitPart_Torso = "Torso";
 export string ERagdollHitPart_Legs = "Legs";
 
-export string EAttackDirection_Left = "Left2";
+export string EAttackDirection_Left = "Left";
 export string EAttackDirection_Right = "Right";
 export string EAttackDirection_Up = "Up";
 export string EAttackDirection_Down = "Down";
