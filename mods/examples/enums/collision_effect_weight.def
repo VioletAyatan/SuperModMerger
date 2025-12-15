@@ -1,3 +1,0 @@
-export int CollisionEffectWeight_Light               = 0;
-export int CollisionEffectWeight_Heavy               = 1;
-export int CollisionEffectWeight_Count               = 2;
