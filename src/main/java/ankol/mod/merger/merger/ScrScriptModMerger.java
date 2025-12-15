@@ -120,7 +120,6 @@ public class ScrScriptModMerger {
                         Path outputPath = outputDir.resolve(filename);
                         Files.createDirectories(outputPath.getParent());
                         Files.writeString(outputPath, result.mergedContent);
-
                         // 根据是否有冲突进行计数
                         if (result.hasConflicts) {
                             hasAnyConflict = true;
@@ -222,16 +221,11 @@ public class ScrScriptModMerger {
         // 即使用户指定了自动模式（-a），也要强制进入交互模式处理冲突
         List<MergeDecision> decisions;
 
-        if (diffs.isEmpty()) {
-            // 如果没有差异，直接返回
-            decisions = new ArrayList<>();
-        } else {
-            // 交互模式：为每个冲突让用户决策
-            System.out.println("\n" + "=".repeat(80));
-            System.out.println("⚠️  CONFLICTS DETECTED - User Interaction Required");
-            System.out.println("=".repeat(80));
-            decisions = ConflictResolver.resolveConflicts(diffs);
-        }
+        // 交互模式：为每个冲突让用户决策
+        System.out.println("\n" + "=".repeat(80));
+        System.out.println("⚠️  CONFLICTS DETECTED - User Interaction Required");
+        System.out.println("=".repeat(80));
+        decisions = ConflictResolver.resolveConflicts(diffs);
         // 第5步：根据决策构建合并后的内容
         result = buildMergedContent(script1, script2, file1, file2, diffs, decisions);
         return result;
