@@ -1,5 +1,6 @@
-package ankol.mod.merger.merger;
+package ankol.mod.merger.core;
 
+import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.MergeTool;
 import cn.hutool.core.io.FileUtil;
@@ -8,7 +9,6 @@ import cn.hutool.core.util.StrUtil;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Stream;
 

@@ -1,8 +1,8 @@
 package ankol.mod.merger;
 
 import ankol.mod.merger.core.SimpleArgumentsParser;
-import ankol.mod.merger.merger.ModMergerEngine;
-import ankol.mod.merger.merger.ScrConflictResolver;
+import ankol.mod.merger.core.ModMergerEngine;
+import ankol.mod.merger.merger.scr.ScrConflictResolver;
 import ankol.mod.merger.tools.Localizations;
 import cn.hutool.core.io.FileUtil;
 

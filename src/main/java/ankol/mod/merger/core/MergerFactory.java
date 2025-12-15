@@ -1,5 +1,7 @@
-package ankol.mod.merger.merger;
+package ankol.mod.merger.core;
 
+import ankol.mod.merger.merger.scr.ScrFileMerger;
+import ankol.mod.merger.merger.xml.XmlFileMerger;
 import cn.hutool.core.io.FileUtil;
 
 import java.util.HashMap;

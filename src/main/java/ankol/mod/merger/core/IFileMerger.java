@@ -1,5 +1,6 @@
-package ankol.mod.merger.merger;
+package ankol.mod.merger.core;
 
+import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.tools.FileTree;
 
 import java.io.IOException;

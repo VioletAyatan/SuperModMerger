@@ -1,8 +1,10 @@
-package ankol.mod.merger.merger;
+package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
-import ankol.mod.merger.merger.ScrConflictResolver.MergeDecision;
-import ankol.mod.merger.merger.ScrTreeComparator.DiffResult;
+import ankol.mod.merger.merger.MergeResult;
+import ankol.mod.merger.merger.scr.ScrConflictResolver.MergeDecision;
+import ankol.mod.merger.merger.scr.ScrTreeComparator.DiffResult;
+import ankol.mod.merger.core.IFileMerger;
 import ankol.mod.merger.tools.FileTree;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
