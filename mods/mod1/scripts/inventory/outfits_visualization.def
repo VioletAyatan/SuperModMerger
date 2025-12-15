@@ -1,0 +1,102 @@
+// 
+// GROUP ITEMS: 0
+// 
+// 
+// OUITFIT ITEMS: 6
+// 
+// Keep in sync with number of slots in data/Scripts/Player/player_outfit_slots.scr
+//
+sub transmog_forced_default_outfit_vis_torso()
+{
+    OutfitPartMeshesFpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+}
+sub transmog_forced_default_outfit_vis_legs()
+{
+    OutfitPartMeshesFpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+}
+sub transmog_forced_default_outfit_vis_shoes()
+{
+    OutfitPartMeshesFpp()
+    {
+        Mesh("@DefaultMesh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("@DefaultMesh");
+    }
+}
+sub transmog_forced_default_outfit_vis_head()
+{
+    OutfitPartMeshesFpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+}
+sub transmog_forced_default_outfit_vis_gloves()
+{
+    OutfitPartMeshesFpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+}
+sub transmog_forced_default_outfit_vis_torso_addon()
+{
+    OutfitPartMeshesFpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("@DefaultMesh");
+        Mesh("@DefaultMesh");
+    }
+}

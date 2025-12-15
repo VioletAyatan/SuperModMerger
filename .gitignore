@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .kotlin
+merged_mod
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

@@ -1,0 +1,59 @@
+// Contents of this file consists of counter definitions 
+// that are later associated with charm item in Inventory script
+// by ItemStatCounter(Name) keyword.
+
+// ***************************************************************
+// DOCS
+// ***************************************************************
+// Keyword: StatsCounter("Name of counter", "Type");
+//
+// Available types:
+//  * "Kills" - obviously tracks number of killed AIs.
+//
+// Kills type specific data:
+//  You can define which kind of enemies are increasing the counter. (If more examples needed, please look at Bounties*.scr)
+//  * Victim("infected.banshee;infected.biter;infected.bolter");
+//
+// UI:
+//  When charm with counter is applied on item it is displayed in affixes section with following localization rules:
+//  * &Affix_Counter_{Name}&
+//  * &Affix_Counter_{Name}_Desc&
+//  * &Affix_Counter_Val&
+// 
+
+// ***************************************************************
+// EXAMPLES
+// ***************************************************************
+// Example kill counter def:
+// StatsCounter("kill_counter_01")
+// {
+//     Victim("infected.volatile;infected.banshee");
+// }
+// Final localization text for aboves example, order is preserved like it was displayed on UI tooltip on affixes section:
+// "&Affix_Counter_Val& &Affix_Counter_kill_counter_01&"
+//
+
+// ***************************************************************
+// CONTENT
+// ***************************************************************
+sub main()
+{
+    StatsCounter("kill_counter_01")
+    {
+        Victim("infected.banshee;infected.biter;infected.bolter;infected.volatile");
+    }
+	StatsCounter("kill_counter_02")
+    {
+        //Victim("infected;human;survivormissions_boss");
+        Victim("infected.volatile");    
+    }
+    StatsCounter("kill_counter_03") // pirate
+    {
+        Victim("infected;human_melee;human_ranged;survivormissions_boss");   
+    }
+
+    StatsCounter("kill_counter_04")
+    {
+        Victim("infected;human.two_handed.for_honor;survivormissions_boss");
+    }
+}

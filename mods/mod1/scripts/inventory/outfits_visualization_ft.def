@@ -1,0 +1,3084 @@
+// 
+// GROUP ITEMS: 17
+// 
+sub __groups__()
+{
+    group("kc_outfit_fury");
+    group("kc_outfit_crafter");
+    group("kc_outfit_trickster");
+    group("kc_outfit_soldier");
+    group("kc_outfit_xpfarm");
+    group("kc_outfit_acrobat");
+    group("kc_outfit_gunslinger");
+    group("kc_outfit_ranger");
+    group("kc_outfit_heavy");
+    group("kc_outfit_bruiser");
+    group("kc_outfit_casual");
+    group("kc_outfit_prologue");
+    group("kc_outfit_eventskillet");
+    group("kc_body");
+    group("kc_outfit_vanguard");
+    group("kc_outfit_park_ranger");
+    group("kc_outfit_ngplus");
+}
+// 
+// OUITFIT ITEMS: 96
+// 
+sub dlc_ft_outfit_kc_xpfarm_legs()
+{
+    UpdateTime("2024-11-08 20:29:15");
+    Group("kc_outfit_xpfarm");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_xpfarm_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_xpfarm_pants_a_holster_knife_tpp.mat", "player_kc_xpfarm_pants_a_holster_knife_fpp.mat");
+            ReplaceMaterial("player_kc_xpfarm_pants_a_threads_tpp.mat", "player_kc_xpfarm_pants_a_threads_fpp.mat");
+            ReplaceMaterial("player_kc_xpfarm_pants_a_tpp.mat", "player_kc_xpfarm_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_xpfarm_pants_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_xpfarm_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_xpfarm_pants_a_holster_knife_tpp.mat", "player_kc_xpfarm_pants_a_holster_knife_fpp.mat");
+            ReplaceMaterial("player_kc_xpfarm_pants_a_threads_tpp.mat", "player_kc_xpfarm_pants_a_threads_fpp.mat");
+            ReplaceMaterial("player_kc_xpfarm_pants_a_tpp.mat", "player_kc_xpfarm_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_soldier_legs()
+{
+    UpdateTime("2025-04-19 13:26:13");
+    Group("kc_outfit_soldier");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_soldier_pants_a_long_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_pants_a_addon_a_tpp.mat", "player_kc_soldier_pants_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_pants_a_sock_tpp.mat", "player_kc_soldier_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_pants_a_tpp.mat", "player_kc_soldier_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_soldier_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_pants_a_addon_a_tpp.mat", "player_kc_soldier_pants_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_pants_a_sock_tpp.mat", "player_kc_soldier_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_pants_a_tpp.mat", "player_kc_soldier_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_soldier_pants_a_long_tpp.msh");
+        PantsShortMesh("player_kc_soldier_pants_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_soldier_pants_a_long_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_pants_a_addon_a_tpp.mat", "player_kc_soldier_pants_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_pants_a_sock_tpp.mat", "player_kc_soldier_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_pants_a_tpp.mat", "player_kc_soldier_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_soldier_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_pants_a_addon_a_tpp.mat", "player_kc_soldier_pants_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_pants_a_sock_tpp.mat", "player_kc_soldier_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_pants_a_tpp.mat", "player_kc_soldier_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_trickster_legs()
+{
+    UpdateTime("2025-04-19 13:24:56");
+    Group("kc_outfit_trickster");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_trickster_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_trickster_pants_a_bag_a_tpp.mat", "player_kc_trickster_pants_a_bag_a_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_knife_holster_tpp.mat", "player_kc_trickster_pants_a_knife_holster_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_sock_tpp.mat", "player_kc_trickster_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_tpp.mat", "player_kc_trickster_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_trickster_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_trickster_pants_a_bag_a_tpp.mat", "player_kc_trickster_pants_a_bag_a_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_belt_tpp.mat", "player_kc_trickster_pants_a_belt_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_knife_holster_tpp.mat", "player_kc_trickster_pants_a_knife_holster_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_sock_tpp.mat", "player_kc_trickster_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_tpp.mat", "player_kc_trickster_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_trickster_pants_a_tpp.msh");
+        PantsShortMesh("player_kc_trickster_pants_a_short_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_trickster_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_trickster_pants_a_bag_a_tpp.mat", "player_kc_trickster_pants_a_bag_a_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_knife_holster_tpp.mat", "player_kc_trickster_pants_a_knife_holster_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_sock_tpp.mat", "player_kc_trickster_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_tpp.mat", "player_kc_trickster_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_trickster_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_trickster_pants_a_bag_a_tpp.mat", "player_kc_trickster_pants_a_bag_a_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_belt_tpp.mat", "player_kc_trickster_pants_a_belt_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_knife_holster_tpp.mat", "player_kc_trickster_pants_a_knife_holster_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_sock_tpp.mat", "player_kc_trickster_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_pants_a_tpp.mat", "player_kc_trickster_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_crafter_legs()
+{
+    UpdateTime("2025-04-19 13:24:15");
+    Group("kc_outfit_crafter");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_crafter_pants_a_belt_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_pants_a_belt_a_addon_a_tpp.mat", "player_kc_crafter_pants_a_belt_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_crafter_pants_a_belt_a_tpp.mat", "player_kc_crafter_pants_a_belt_a_fpp.mat");
+        }
+        PantsLongMesh("player_kc_crafter_pants_a_long_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_pants_a_tpp.mat", "player_kc_crafter_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_crafter_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_pants_a_tpp.mat", "player_kc_crafter_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_crafter_pants_a_belt_a_tpp.msh");
+        PantsLongMesh("player_kc_crafter_pants_a_long_tpp.msh");
+        PantsShortMesh("player_kc_crafter_pants_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_crafter_pants_a_belt_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_pants_a_belt_a_addon_a_tpp.mat", "player_kc_crafter_pants_a_belt_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_crafter_pants_a_belt_a_tpp.mat", "player_kc_crafter_pants_a_belt_a_fpp.mat");
+        }
+        PantsLongMesh("player_kc_crafter_pants_a_long_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_pants_a_tpp.mat", "player_kc_crafter_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_crafter_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_pants_a_tpp.mat", "player_kc_crafter_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_acrobat_legs()
+{
+    UpdateTime("2025-04-19 13:27:02");
+    Group("kc_outfit_acrobat");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_acrobat_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_pants_a_torn_tpp.mat", "player_kc_acrobat_pants_a_torn_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_pants_a_tpp.mat", "player_kc_acrobat_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_acrobat_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_pants_a_torn_tpp.mat", "player_kc_acrobat_pants_a_torn_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_pants_a_tpp.mat", "player_kc_acrobat_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_acrobat_pants_a_tpp.msh");
+        PantsShortMesh("player_kc_acrobat_pants_a_short_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_acrobat_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_pants_a_torn_tpp.mat", "player_kc_acrobat_pants_a_torn_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_pants_a_tpp.mat", "player_kc_acrobat_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_acrobat_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_pants_a_torn_tpp.mat", "player_kc_acrobat_pants_a_torn_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_pants_a_tpp.mat", "player_kc_acrobat_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_gunslinger_legs()
+{
+    UpdateTime("2025-04-19 13:27:52");
+    Group("kc_outfit_gunslinger");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_gunslinger_pants_a_long_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_pants_a_bandadge_tpp.mat", "player_kc_gunslinger_pants_a_bandadge_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_pants_a_belt_a_tpp.mat", "player_kc_gunslinger_pants_a_belt_a_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_pants_a_tpp.mat", "player_kc_gunslinger_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_gunslinger_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_pants_a_bandadge_tpp.mat", "player_kc_gunslinger_pants_a_bandadge_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_pants_a_belt_a_tpp.mat", "player_kc_gunslinger_pants_a_belt_a_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_pants_a_tpp.mat", "player_kc_gunslinger_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_gunslinger_pants_a_long_tpp.msh");
+        PantsShortMesh("player_kc_gunslinger_pants_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_gunslinger_pants_a_long_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_pants_a_bandadge_tpp.mat", "player_kc_gunslinger_pants_a_bandadge_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_pants_a_belt_a_tpp.mat", "player_kc_gunslinger_pants_a_belt_a_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_pants_a_tpp.mat", "player_kc_gunslinger_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_gunslinger_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_pants_a_bandadge_tpp.mat", "player_kc_gunslinger_pants_a_bandadge_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_pants_a_belt_a_tpp.mat", "player_kc_gunslinger_pants_a_belt_a_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_pants_a_tpp.mat", "player_kc_gunslinger_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ranger_legs()
+{
+    UpdateTime("2025-02-13 12:50:53");
+    Group("kc_outfit_ranger");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_ranger_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_pants_a_tpp.mat", "player_kc_ranger_pants_a_fpp.mat");
+        }
+        Mesh("player_kc_ranger_pants_a_bag_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_pants_bags_a_tpp.mat", "player_kc_ranger_pants_bags_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_ranger_pants_a_tpp.msh");
+        Mesh("player_kc_ranger_pants_a_bag_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_ranger_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_pants_a_tpp.mat", "player_kc_ranger_pants_a_fpp.mat");
+        }
+        Mesh("player_kc_ranger_pants_a_bag_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_pants_bags_a_tpp.mat", "player_kc_ranger_pants_bags_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_bruiser_legs()
+{
+    UpdateTime("2025-08-25 15:45:32");
+    Group("kc_outfit_bruiser");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_badger_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_badger_pants_a_tpp.mat", "player_kc_badger_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_badger_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_badger_pants_a_tpp.mat", "player_kc_badger_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_badger_pants_a_tpp.msh");
+        PantsShortMesh("player_kc_badger_pants_a_short_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_badger_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_badger_pants_a_tpp.mat", "player_kc_badger_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_badger_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_badger_pants_a_tpp.mat", "player_kc_badger_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_heavy_legs()
+{
+    UpdateTime("2025-04-19 13:29:20");
+    Group("kc_outfit_heavy");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_bruiser_pants_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_pants_a_tpp.mat", "player_kc_bruiser_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_bruiser_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_pants_a_tpp.mat", "player_kc_bruiser_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_bruiser_pants_tpp.msh");
+        PantsShortMesh("player_kc_bruiser_pants_a_short_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_bruiser_pants_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_pants_a_tpp.mat", "player_kc_bruiser_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_bruiser_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_pants_a_tpp.mat", "player_kc_bruiser_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_soldier_torso()
+{
+    UpdateTime("2024-11-09 19:58:32");
+    Group("kc_outfit_soldier");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_soldier_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_torso_a_addon_a_tpp.mat", "player_kc_soldier_torso_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_torso_a_armor_a_pouches_a_tpp.mat", "player_kc_soldier_torso_a_armor_a_pouches_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_torso_a_armor_a_tpp.mat", "player_kc_soldier_torso_a_armor_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_torso_a_sleeves_a_tpp.mat", "player_kc_soldier_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_torso_a_tpp.mat", "player_kc_soldier_torso_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_soldier_torso_a_tpp.msh");
+        Mesh("player_kc_soldier_torso_a_flashlight_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_soldier_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_torso_a_addon_a_tpp.mat", "player_kc_soldier_torso_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_torso_a_armor_a_pouches_a_tpp.mat", "player_kc_soldier_torso_a_armor_a_pouches_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_torso_a_armor_a_tpp.mat", "player_kc_soldier_torso_a_armor_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_torso_a_sleeves_a_tpp.mat", "player_kc_soldier_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_soldier_torso_a_tpp.mat", "player_kc_soldier_torso_a_fpp.mat");
+        }
+        Mesh("player_kc_soldier_torso_a_flashlight_a_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_xpfarm_torso()
+{
+    UpdateTime("2025-07-28 16:39:21");
+    Group("kc_outfit_xpfarm");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_xpfarm_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_xpfarm_torso_a_tpp.mat", "player_kc_xpfarm_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_xpfarm_torso_a_sleeves_a_tpp.mat", "player_kc_xpfarm_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_xpfarm_torso_a_tpp.msh");
+        Mesh("player_kc_xpfarm_torso_a_flashlight_a_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_xpfarm_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_xpfarm_torso_a_tpp.mat", "player_kc_xpfarm_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_xpfarm_torso_a_sleeves_a_tpp.mat", "player_kc_xpfarm_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_xpfarm_torso_a_flashlight_a_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_trickster_torso()
+{
+    UpdateTime("2025-07-28 16:38:41");
+    Group("kc_outfit_trickster");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_trickster_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_trickster_torso_a_tpp.mat", "player_kc_trickster_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_torso_a_sleeves_a_tpp.mat", "player_kc_trickster_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_trickster_torso_a_tpp.msh");
+        Mesh("player_kc_trickster_torso_a_flashlight_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+        HoodUpMesh("player_kc_trickster_torso_a_hood_a_tpp.msh");
+        HoodDownMesh("player_kc_trickster_torso_a_hood_b_tpp.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_trickster_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_trickster_torso_a_tpp.mat", "player_kc_trickster_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_trickster_torso_a_sleeves_a_tpp.mat", "player_kc_trickster_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_trickster_torso_a_flashlight_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        HoodUpMesh("player_kc_trickster_torso_a_hood_a_tpp.msh");
+        HoodDownMesh("player_kc_trickster_torso_a_hood_b_tpp.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_crafter_torso()
+{
+    UpdateTime("2025-07-28 16:38:14");
+    Group("kc_outfit_crafter");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_crafter_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_torso_a_bag_a_tpp.mat", "player_kc_crafter_torso_a_bag_a_fpp.mat");
+            ReplaceMaterial("player_kc_crafter_torso_a_flashlight_a_tpp.mat", "player_kc_crafter_torso_a_flashlight_a_fpp.mat");
+            ReplaceMaterial("player_kc_crafter_torso_a_tpp.mat", "player_kc_crafter_torso_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_b_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_crafter_torso_a_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+        Mesh("player_kc_body_arms_b_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_crafter_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_torso_a_bag_a_tpp.mat", "player_kc_crafter_torso_a_bag_a_fpp.mat");
+            ReplaceMaterial("player_kc_crafter_torso_a_flashlight_a_tpp.mat", "player_kc_crafter_torso_a_flashlight_a_fpp.mat");
+            ReplaceMaterial("player_kc_crafter_torso_a_tpp.mat", "player_kc_crafter_torso_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_b_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_acrobat_torso()
+{
+    UpdateTime("2025-07-28 16:39:49");
+    Group("kc_outfit_acrobat");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_acrobat_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_torso_a_addons_a_tpp.mat", "player_kc_acrobat_torso_a_addons_a_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_torso_a_torns_b_tpp.mat", "player_kc_acrobat_torso_a_torns_b_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_torso_a_torns_tpp.mat", "player_kc_acrobat_torso_a_torns_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_torso_a_tpp.mat", "player_kc_acrobat_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_torso_a_zipper_tpp.mat", "player_kc_acrobat_torso_a_zipper_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_full_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_acrobat_torso_a_tpp.msh");
+        Mesh("player_kc_acrobat_torso_a_flashlight_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+        HoodUpMesh("player_kc_acrobat_torso_a_hood_b_tpp.msh");
+        HoodDownMesh("player_kc_acrobat_torso_a_hood_a_tpp.msh");
+        Mesh("player_kc_body_arms_full_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_acrobat_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_torso_a_addons_a_tpp.mat", "player_kc_acrobat_torso_a_addons_a_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_torso_a_torns_b_tpp.mat", "player_kc_acrobat_torso_a_torns_b_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_torso_a_torns_tpp.mat", "player_kc_acrobat_torso_a_torns_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_torso_a_tpp.mat", "player_kc_acrobat_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_acrobat_torso_a_zipper_tpp.mat", "player_kc_acrobat_torso_a_zipper_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        HoodUpMesh("player_kc_acrobat_torso_a_hood_b_tpp.msh");
+        HoodDownMesh("player_kc_acrobat_torso_a_hood_a_tpp.msh");
+        Mesh("player_kc_acrobat_torso_a_flashlight_tpp.msh");
+        Mesh("player_kc_body_arms_full_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_gunslinger_torso()
+{
+    UpdateTime("2025-08-24 10:13:24");
+    Group("kc_outfit_gunslinger");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_gunslinger_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_torso_a_sleeves_a_tpp.mat", "player_kc_gunslinger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_torso_a_tpp.mat", "player_kc_gunslinger_torso_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_gunslinger_torso_a_tpp.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_gunslinger_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_torso_a_sleeves_a_tpp.mat", "player_kc_gunslinger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_torso_a_tpp.mat", "player_kc_gunslinger_torso_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_ranger_torso()
+{
+    UpdateTime("2025-07-28 16:40:40");
+    Group("kc_outfit_ranger");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_ranger_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_torso_a_threads_tpp.mat", "player_kc_ranger_torso_a_threads_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_a_sleeves_a_tpp.mat", "player_kc_ranger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_a_tpp.mat", "player_kc_ranger_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_bags_a_tpp.mat", "player_kc_ranger_torso_bags_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_ranger_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_torso_a_threads_tpp.mat", "player_kc_ranger_torso_a_threads_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_a_sleeves_a_tpp.mat", "player_kc_ranger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_a_tpp.mat", "player_kc_ranger_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_bags_a_tpp.mat", "player_kc_ranger_torso_bags_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_ranger_torso_a_tpp.msh");
+        Mesh("player_kc_ranger_torso_a_flashlight_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_ranger_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_torso_a_threads_tpp.mat", "player_kc_ranger_torso_a_threads_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_a_sleeves_a_tpp.mat", "player_kc_ranger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_a_tpp.mat", "player_kc_ranger_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_bags_a_tpp.mat", "player_kc_ranger_torso_bags_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_ranger_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_torso_a_threads_tpp.mat", "player_kc_ranger_torso_a_threads_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_a_sleeves_a_tpp.mat", "player_kc_ranger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_a_tpp.mat", "player_kc_ranger_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_ranger_torso_bags_a_tpp.mat", "player_kc_ranger_torso_bags_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_ranger_torso_a_flashlight_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_bruiser_torso()
+{
+    UpdateTime("2025-08-28 12:11:57");
+    Group("kc_outfit_bruiser");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_badger_torso_a.msh")
+        {
+            ReplaceMaterial("player_kc_badger_torso_a_tpp.mat", "player_kc_badger_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_badger_torso_a_sleeves_a_tpp.mat", "player_kc_badger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_badger_torso_a.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+        Mesh("player_kc_badger_torso_a_flashlight_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_badger_torso_a.msh")
+        {
+            ReplaceMaterial("player_kc_badger_torso_a_tpp.mat", "player_kc_badger_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_badger_torso_a_sleeves_a_tpp.mat", "player_kc_badger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+        Mesh("player_kc_badger_torso_a_flashlight_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+        Mesh("player_kc_badger_torso_a_fur_a.msh");
+        Mesh("player_kc_badger_torso_a_fur_b.msh");
+    }
+}
+sub dlc_ft_outfit_kc_heavy_torso()
+{
+    UpdateTime("2025-09-10 19:03:58");
+    Group("kc_outfit_heavy");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_bruiser_torso_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_bruiser_torso_a_tpp.msh");
+        Mesh("player_kc_bruiser_torso_a_flashlight_a_tpp.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_bruiser_torso_a_flashlight_a_tpp.msh");
+        Mesh("player_kc_bruiser_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_torso_a_sleeves_a_tpp.mat", "player_kc_bruiser_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_bruiser_torso_a_tpp.mat", "player_kc_bruiser_torso_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_xpfarm_gloves()
+{
+    UpdateTime("2025-07-28 16:26:40");
+    Group("kc_outfit_xpfarm");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_xpfarm_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_xpfarm_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_hands_fpp_a.mat", "player_hands_tpp_a.mat");
+            ReplaceMaterial("player_kc_xpfarm_gloves_a_fpp.mat", "player_kc_xpfarm_gloves_a_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_xpfarm_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_soldier_gloves()
+{
+    UpdateTime("2025-07-28 16:25:49");
+    Group("kc_outfit_soldier");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_soldier_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_soldier_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_gloves_a_fpp.mat", "player_kc_soldier_gloves_a_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_soldier_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_trickster_gloves()
+{
+    UpdateTime("2025-07-28 16:25:32");
+    Group("kc_outfit_trickster");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_trickster_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_trickster_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_hands_fpp_a.mat", "player_hands_tpp_a.mat");
+            ReplaceMaterial("player_kc_trickster_glove_a_fpp.mat", "player_kc_trickster_glove_a_tpp.mat");
+            ReplaceMaterial("player_kc_trickster_glove_a_torns_fpp.mat", "player_kc_trickster_glove_a_torns_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_trickster_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_crafter_gloves()
+{
+    UpdateTime("2025-07-28 16:24:41");
+    Group("kc_outfit_crafter");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_crafter_gloves_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_gloves_a_tpp.mat", "player_kc_crafter_gloves_a_fpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_crafter_gloves_a_tpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_crafter_gloves_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_gloves_a_tpp.mat", "player_kc_crafter_gloves_a_fpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_acrobat_gloves()
+{
+    UpdateTime("2025-07-28 16:27:28");
+    Group("kc_outfit_acrobat");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_acrobat_glove_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_acrobat_glove_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_glove_a_fpp.mat", "player_kc_acrobat_glove_a_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_acrobat_glove_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_gunslinger_gloves()
+{
+    UpdateTime("2025-07-28 16:28:00");
+    Group("kc_outfit_gunslinger");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_gunslinger_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_gunslinger_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_hands_fpp_a.mat", "player_hands_tpp_a.mat");
+            ReplaceMaterial("player_kc_gunslinger_gloves_a_fpp.mat", "player_kc_gunslinger_gloves_a_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_gunslinger_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_ranger_gloves()
+{
+    UpdateTime("2025-07-28 16:28:41");
+    Group("kc_outfit_ranger");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_ranger_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_b_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_ranger_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_hands_fpp_a.mat", "player_hands_tpp_a.mat");
+            ReplaceMaterial("player_kc_ranger_gloves_a_fpp.mat", "player_kc_ranger_gloves_a_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fingers_b_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_ranger_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_b_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_bruiser_gloves()
+{
+    UpdateTime("2025-08-24 10:05:48");
+    Group("kc_outfit_bruiser");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_badger_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_badger_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_badger_gloves_a_fpp.mat", "player_kc_badger_gloves_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_badger_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_right_fingers_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_heavy_gloves()
+{
+    UpdateTime("2025-08-24 10:04:30");
+    Group("kc_outfit_heavy");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_bruiser_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_bruiser_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_gloves_a_fpp.mat", "player_kc_bruiser_gloves_a_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_bruiser_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_xpfarm_bracers()
+{
+    UpdateTime("2024-11-08 20:29:44");
+    Group("kc_outfit_xpfarm");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_xpfarm_bracer_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_xpfarm_bracer_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_xpfarm_bracer_a_fpp.mat", "player_kc_xpfarm_bracer_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_xpfarm_bracer_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_soldier_bracers()
+{
+    UpdateTime("2024-11-09 19:56:22");
+    Group("kc_outfit_soldier");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_soldier_bracer_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_bracer_a_tpp.mat", "player_kc_soldier_bracer_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_soldier_bracer_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_soldier_bracer_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_bracer_a_tpp.mat", "player_kc_soldier_bracer_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_trickster_bracers()
+{
+    UpdateTime("2025-01-07 16:36:00");
+    Group("kc_outfit_trickster");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_trickster_bracer_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_trickster_bracer_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_trickster_bracer_a_fpp.mat", "player_kc_trickster_bracer_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_trickster_bracer_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_crafter_bracers()
+{
+    UpdateTime("2025-01-07 16:42:20");
+    Group("kc_outfit_crafter");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_crafter_bracer_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_bracer_a_tpp.mat", "player_kc_crafter_bracer_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_crafter_bracer_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_crafter_bracer_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_bracer_a_tpp.mat", "player_kc_crafter_bracer_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_acrobat_bracers()
+{
+    UpdateTime("2025-03-07 13:10:03");
+    Group("kc_outfit_acrobat");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_acrobat_bracer_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_acrobat_bracer_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_bracer_a_fpp.mat", "player_kc_acrobat_bracer_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_acrobat_bracer_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_gunslinger_bracers()
+{
+    UpdateTime("2025-02-01 10:31:03");
+    Group("kc_outfit_gunslinger");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_gunslinger_bracer_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_bracer_a_threads_a_tpp.mat", "player_kc_gunslinger_bracer_a_threads_a_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_bracer_a_threads_b_tpp.mat", "player_kc_gunslinger_bracer_a_threads_b_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_bracer_a_tpp.mat", "player_kc_gunslinger_bracer_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_gunslinger_bracer_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_gunslinger_bracer_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_bracer_a_threads_a_tpp.mat", "player_kc_gunslinger_bracer_a_threads_a_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_bracer_a_threads_b_tpp.mat", "player_kc_gunslinger_bracer_a_threads_b_fpp.mat");
+            ReplaceMaterial("player_kc_gunslinger_bracer_a_tpp.mat", "player_kc_gunslinger_bracer_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ranger_bracers()
+{
+    UpdateTime("2025-02-13 12:50:24");
+    Group("kc_outfit_ranger");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_ranger_bracer_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_ranger_bracer_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_bracer_a_fpp.mat", "player_kc_ranger_bracer_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_ranger_bracer_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_bruiser_bracers()
+{
+    UpdateTime("2025-08-23 20:50:51");
+    Group("kc_outfit_bruiser");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_badger_bracer_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_badger_bracer_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_badger_bracer_a_fpp.mat", "player_kc_badger_bracer_a_tpp.mat");
+            ReplaceMaterial("player_kc_badger_bracer_a_torn_fpp.mat", "player_kc_badger_bracer_a_torn_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_badger_bracer_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_heavy_bracers()
+{
+    UpdateTime("2024-12-05 16:20:22");
+    Group("kc_outfit_heavy");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_bruiser_bracers_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_bruiser_bracers_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_bracers_a_fpp.mat", "player_kc_bruiser_bracers_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_bruiser_bracers_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_xpfarm_headwear()
+{
+    UpdateTime("2025-04-01 11:29:40");
+    Group("kc_outfit_xpfarm");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("player_kc_xpfarm_glasses_a.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+    }
+}
+sub dlc_ft_outfit_kc_soldier_headwear()
+{
+    UpdateTime("2024-11-09 19:57:20");
+    Group("kc_outfit_soldier");
+    OutfitSlot("Head");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("", "");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("player_kc_soldier_headwear_a_balaclava_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("player_kc_soldier_headwear_a_balaclava_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_headwear_a_balaclava_tpp.mat", "player_kc_soldier_headwear_a_balaclava_ui.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_trickster_headwear()
+{
+    UpdateTime("2024-11-09 13:05:34");
+    Group("kc_outfit_trickster");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("player_kc_trickster_headwear_mask_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("player_kc_trickster_headwear_mask_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_trickster_headwear_mask_a_tpp.mat", "player_kc_trickster_headwear_mask_a_ui.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_fury_headwear()
+{
+    UpdateTime("2025-08-24 18:50:01");
+    Group("kc_outfit_fury");
+    OutfitSlot("Head");
+    ForceHoodDown(true);
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("player_kc_fury_headwear_a_tpp.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("player_kc_fury_headwear_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_fury_headwear_a_tpp.mat", "player_kc_fury_headwear_a_ui.mat");
+        }
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+    }
+}
+sub dlc_ft_outfit_kc_crafter_headwear()
+{
+    UpdateTime("2025-08-28 12:09:43");
+    Group("kc_outfit_crafter");
+    OutfitSlot("Head");
+    ForceHoodDown(true);
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("player_kc_crafter_headwear_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+    }
+}
+sub dlc_ft_outfit_kc_acrobat_headwear()
+{
+    UpdateTime("2025-08-24 18:51:38");
+    Group("kc_outfit_acrobat");
+    OutfitSlot("Head");
+    ForceHoodDown(true);
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("player_kc_acrobat_headwear_a_tpp.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+    }
+}
+sub dlc_ft_outfit_kc_gunslinger_headwear()
+{
+    UpdateTime("2025-01-24 14:50:00");
+    Group("kc_outfit_gunslinger");
+    OutfitSlot("Head");
+    ForceHoodDown(true);
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("player_kc_gunslinger_headwear_a_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_ranger_headwear()
+{
+    UpdateTime("2025-08-24 18:52:13");
+    Group("kc_outfit_ranger");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("player_kc_ranger_headwear_cap_b_tpp.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+    }
+}
+sub dlc_ft_outfit_kc_bruiser_headwear()
+{
+    UpdateTime("2025-08-23 20:46:40");
+    Group("kc_outfit_bruiser");
+    OutfitSlot("Head");
+    ForceHoodDown(true);
+    OutfitPartMeshesFpp()
+    {
+        Mesh("", "");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("player_kc_badger_headwear_cap_a_tpp.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+    }
+}
+sub dlc_ft_outfit_kc_heavy_headwear()
+{
+    UpdateTime("2025-03-07 13:22:18");
+    Group("kc_outfit_heavy");
+    OutfitSlot("Head");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("", "");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("player_kc_bruiser_headwear_balaclava_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_headwear_balaclava_a_tpp.mat", "player_kc_bruiser_headwear_balaclava_a_ui.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("player_kc_bruiser_headwear_balaclava_a_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_xpfarm_shoes()
+{
+    UpdateTime("2024-11-08 20:30:15");
+    Group("kc_outfit_xpfarm");
+    OutfitSlot("Shoes");
+    ForcePantsShort(true);
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_xpfarm_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_xpfarm_shoes_a_tpp.mat", "player_kc_xpfarm_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_xpfarm_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_xpfarm_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_xpfarm_shoes_a_tpp.mat", "player_kc_xpfarm_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_soldier_shoes()
+{
+    UpdateTime("2024-11-09 19:58:04");
+    Group("kc_outfit_soldier");
+    OutfitSlot("Shoes");
+    ForcePantsShort(true);
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_soldier_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_shoes_a_tpp.mat", "player_kc_soldier_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_soldier_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_soldier_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_shoes_a_tpp.mat", "player_kc_soldier_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_trickster_shoes()
+{
+    UpdateTime("2025-02-06 13:16:08");
+    Group("kc_outfit_trickster");
+    OutfitSlot("Shoes");
+    ForcePantsShort(true);
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_gunslinger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_shoes_a_tpp.mat", "player_kc_trickster_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_gunslinger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_shoes_a_tpp.mat", "player_kc_trickster_shoes_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_gunslinger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_shoes_a_tpp.mat", "player_kc_trickster_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_acrobat_shoes()
+{
+    UpdateTime("2025-03-07 13:11:57");
+    Group("kc_outfit_acrobat");
+    OutfitSlot("Shoes");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_acrobat_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_shoes_a_tpp.mat", "player_kc_acrobat_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_acrobat_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_acrobat_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_shoes_a_tpp.mat", "player_kc_acrobat_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_gunslinger_shoes()
+{
+    UpdateTime("2025-01-22 15:54:08");
+    Group("kc_outfit_gunslinger");
+    OutfitSlot("Shoes");
+    ForcePantsShort(true);
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_gunslinger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_shoes_a_tpp.mat", "player_kc_gunslinger_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_gunslinger_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_gunslinger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_gunslinger_shoes_a_tpp.mat", "player_kc_gunslinger_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ranger_shoes()
+{
+    UpdateTime("2025-02-13 12:51:15");
+    Group("kc_outfit_ranger");
+    OutfitSlot("Shoes");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_ranger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_shoes_a_tpp.mat", "player_kc_ranger_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_ranger_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_ranger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_ranger_shoes_a_tpp.mat", "player_kc_ranger_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_bruiser_shoes()
+{
+    UpdateTime("2025-09-07 19:45:22");
+    Group("kc_outfit_bruiser");
+    OutfitSlot("Shoes");
+    ForcePantsShort(true);
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_badger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_badger_shoes_a_tpp.mat", "player_kc_badger_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_badger_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_badger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_badger_shoes_a_tpp.mat", "player_kc_badger_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_heavy_shoes()
+{
+    UpdateTime("2024-12-05 16:22:42");
+    Group("kc_outfit_heavy");
+    OutfitSlot("Shoes");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_bruiser_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_shoes_a_tpp.mat", "player_kc_bruiser_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_bruiser_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_bruiser_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_bruiser_shoes_a_tpp.mat", "player_kc_bruiser_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_fury_gloves()
+{
+    UpdateTime("2025-08-24 06:20:20");
+    Group("kc_outfit_fury");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_bracers_a_torn_fpp.mat", "player_kc_bracers_a_torn_tpp.mat");
+            ReplaceMaterial("player_kc_gloves_a_fpp.mat", "player_kc_gloves_a_tpp.mat");
+            ReplaceMaterial("player_kc_gloves_a_nails_fpp.mat", "player_kc_gloves_a_nails_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_gloves_a_fpp.msh");
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_fury_shoes()
+{
+    UpdateTime("2024-09-05 13:42:30");
+    Group("kc_outfit_fury");
+    OutfitSlot("Shoes");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_shoes_a_tpp.mat", "player_kc_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_shoes_a_tpp.mat", "player_kc_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_fury_legs()
+{
+    UpdateTime("2025-08-24 06:20:07");
+    Group("kc_outfit_fury");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_sock_tpp.mat", "player_kc_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_pants_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_sock_tpp.mat", "player_kc_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_pants_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_pants_a_tpp.msh");
+        PantsShortMesh("player_kc_pants_a_short_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_sock_tpp.mat", "player_kc_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_pants_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_sock_tpp.mat", "player_kc_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_pants_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_fury_bracers()
+{
+    UpdateTime("2025-08-01 13:49:12");
+    Group("kc_outfit_fury");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_bracers_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_bracers_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_bracers_a_fpp.mat", "player_kc_bracers_a_tpp.mat");
+            ReplaceMaterial("player_kc_bracers_a_torn_fpp.mat", "player_kc_bracers_a_torn_tpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_fury_torso()
+{
+    UpdateTime("2025-08-24 06:48:05");
+    Group("kc_outfit_fury");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_torso_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_torso_a_sleeves_a_tpp.mat", "player_kc_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_torso_a_tpp.mat", "player_kc_torso_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_torso_a_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+        Mesh("player_kc_torso_a_flashlight_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_torso_a_sleeves_a_tpp.mat", "player_kc_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_torso_a_tpp.mat", "player_kc_torso_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_torso_a_flashlight_a_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_casual_torso()
+{
+    UpdateTime("2025-09-08 11:35:15");
+    Group("kc_outfit_casual");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_basic_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_torso_a_decal_a_tpp.mat", "null.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_sleeves_a_tpp.mat", "player_kc_basic_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_tpp.mat", "player_kc_basic_torso_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_sticker_tpp.mat", "player_kc_basic_torso_a_sticker_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh");
+        Mesh("player_kc_basic_torso_a_tpp.msh");
+        HoodUpMesh("player_kc_basic_torso_a_hood_b_tpp.msh");
+        HoodDownMesh("player_kc_basic_torso_a_hood_a_tpp.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+        Mesh("player_kc_basic_torso_a_flashlight_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_basic_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_torso_a_sleeves_a_tpp.mat", "player_kc_basic_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_tpp.mat", "player_kc_basic_torso_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_sticker_tpp.mat", "player_kc_basic_torso_a_sticker_fpp.mat");
+        }
+        HoodUpMesh("player_kc_basic_torso_a_hood_b_tpp.msh");
+        HoodDownMesh("player_kc_basic_torso_a_hood_a_tpp.msh");
+        Mesh("player_kc_basic_torso_a_flashlight_a_tpp.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_casual_legs()
+{
+    UpdateTime("2025-04-19 13:30:51");
+    Group("kc_outfit_casual");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_basic_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_pants_a_sock_tpp.mat", "player_kc_basic_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_basic_pants_a_tpp.mat", "player_kc_basic_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_basic_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_pants_a_sock_tpp.mat", "player_kc_basic_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_basic_pants_a_tpp.mat", "player_kc_basic_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_basic_pants_a_tpp.msh");
+        PantsShortMesh("player_kc_basic_pants_a_short_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_basic_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_pants_a_sock_tpp.mat", "player_kc_basic_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_basic_pants_a_tpp.mat", "player_kc_basic_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_basic_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_pants_a_sock_tpp.mat", "player_kc_basic_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_basic_pants_a_tpp.mat", "player_kc_basic_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_crafter_shoes()
+{
+    UpdateTime("2025-02-13 13:00:06");
+    Group("kc_outfit_crafter");
+    OutfitSlot("Shoes");
+    ForcePantsShort(true);
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_crafter_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_shoes_a_tpp.mat", "player_kc_crafter_shoes_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_crafter_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_crafter_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_shoes_a_tpp.mat", "player_kc_crafter_shoes_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_casual_shoes()
+{
+    UpdateTime("2025-02-28 12:16:51");
+    Group("kc_outfit_casual");
+    OutfitSlot("Shoes");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_basic_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_shoes_a_tpp.mat", "player_kc_basic_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_basic_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_basic_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_shoes_a_tpp.mat", "player_kc_basic_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_prologue_torso()
+{
+    UpdateTime("2025-07-28 16:41:51");
+    Group("kc_outfit_prologue");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_default_torso_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_default_torso_a_sleeves_tpp.mat", "player_kc_default_torso_a_sleeves_fpp.mat");
+            ReplaceMaterial("player_kc_default_torso_a_tpp.mat", "player_kc_default_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_default_torso_a_sewing_decal_tpp.mat", "null.mat");
+        }
+        Mesh("player_kc_body_arms_b_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh");
+        Mesh("player_kc_default_torso_a_fpp.msh");
+        Mesh("player_kc_body_arms_b_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_default_torso_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_default_torso_a_sleeves_tpp.mat", "player_kc_default_torso_a_sleeves_fpp.mat");
+            ReplaceMaterial("player_kc_default_torso_a_tpp.mat", "player_kc_default_torso_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_b_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_prologue_shoes()
+{
+    UpdateTime("2025-03-11 12:14:53");
+    Group("kc_outfit_prologue");
+    OutfitSlot("Shoes");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_default_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_default_shoes_a_tpp.mat", "player_kc_default_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_default_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_default_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_default_shoes_a_tpp.mat", "player_kc_default_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_bare_feet()
+{
+    UpdateTime("2025-06-05 11:35:30");
+    Group("kc_body");
+    OutfitSlot("Shoes");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_body_feet_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_feet_a_tpp.mat", "player_kc_body_feet_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_body_feet_a_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_prologue_pants()
+{
+    UpdateTime("2025-06-18 14:25:58");
+    Group("kc_outfit_prologue");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_default_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_default_pants_a_tpp.mat", "player_kc_default_pants_a_fpp.mat");
+            ReplaceMaterial("player_kc_body_feet_a_tpp.mat", "player_kc_body_feet_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_default_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_default_pants_a_tpp.mat", "player_kc_default_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_default_pants_a_tpp.msh");
+        PantsShortMesh("player_kc_default_pants_a_short_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_default_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_default_pants_a_tpp.mat", "player_kc_default_pants_a_fpp.mat");
+            ReplaceMaterial("player_kc_body_feet_a_tpp.mat", "player_kc_body_feet_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_default_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_default_pants_a_tpp.mat", "player_kc_default_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_eventskillet_torso()
+{
+    UpdateTime("2025-07-31 11:10:22");
+    Group("kc_outfit_eventskillet");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_basic_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_torso_a_decal_a_tpp.mat", "null.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_sticker_tpp.mat", "null.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_tpp.mat", "player_kc_skillet_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_sleeves_a_tpp.mat", "player_kc_skillet_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("null.mat", "player_kc_skillet_torso_a_sticker_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh");
+        Mesh("player_kc_basic_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("null.mat", "player_kc_skillet_torso_a_sticker_tpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_sticker_tpp.mat", "null.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_decal_a_tpp.mat", "null.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_tpp.mat", "player_kc_skillet_torso_a_tpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_sleeves_a_tpp.mat", "player_kc_skillet_torso_a_sleeves_a_tpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+        Mesh("player_kc_basic_torso_a_hood_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_torso_a_hood_a_tpp.mat", "player_kc_skillet_torso_a_hood_a_tpp.mat");
+        }
+        Mesh("player_kc_basic_torso_a_flashlight_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_basic_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_torso_a_decal_a_tpp.mat", "null.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_sticker_tpp.mat", "null.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_tpp.mat", "player_kc_skillet_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_torso_a_sleeves_a_tpp.mat", "player_kc_skillet_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("null.mat", "player_kc_skillet_torso_a_sticker_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_basic_torso_a_hood_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_torso_a_hood_a_tpp.mat", "player_kc_skillet_torso_a_hood_a_tpp.mat");
+        }
+        Mesh("player_kc_basic_torso_a_flashlight_a_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_eventskillet_legs()
+{
+    UpdateTime("2025-07-31 10:53:34");
+    Group("kc_outfit_eventskillet");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_sock_tpp.mat", "player_kc_pants_a_sock_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_skillet_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_sock_tpp.mat", "player_kc_pants_a_sock_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_skillet_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_skillet_pants_a_tpp.mat");
+        }
+        PantsShortMesh("player_kc_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_skillet_pants_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_sock_tpp.mat", "player_kc_pants_a_sock_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_skillet_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_pants_a_sock_tpp.mat", "player_kc_pants_a_sock_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+            ReplaceMaterial("player_kc_pants_a_tpp.mat", "player_kc_skillet_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_eventskillet_shoes()
+{
+    UpdateTime("2025-07-31 10:53:53");
+    Group("kc_outfit_eventskillet");
+    OutfitSlot("Shoes");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_acrobat_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_shoes_a_tpp.mat", "player_kc_skillet_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_acrobat_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_shoes_a_tpp.mat", "player_kc_skillet_shoes_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_acrobat_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_acrobat_shoes_a_tpp.mat", "player_kc_skillet_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_eventskillet_gloves()
+{
+    UpdateTime("2025-07-31 10:54:14");
+    Group("kc_outfit_eventskillet");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_crafter_gloves_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_gloves_a_tpp.mat", "player_kc_skillet_gloves_a_fpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_crafter_gloves_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_gloves_a_tpp.mat", "player_kc_skillet_gloves_a_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_crafter_gloves_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_crafter_gloves_a_tpp.mat", "player_kc_skillet_gloves_a_fpp.mat");
+        }
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_bare_hands()
+{
+    UpdateTime("2025-08-26 09:26:28");
+    Group("kc_body");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_body_hands_right_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_body_hands_right_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_bare_torso()
+{
+    UpdateTime("2025-08-26 09:32:25");
+    Group("kc_body");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_body_torso_fpp.msh");
+        Mesh("player_kc_body_head_cap_fpp.msh");
+        Mesh("player_kc_body_arms_full_fpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_body_torso_fpp.msh");
+        Mesh("player_kc_body_torso_collar_blend_tpp.msh");
+        Mesh("player_kc_body_arms_full_fpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_body_torso_fpp.msh");
+        Mesh("player_kc_body_torso_collar_blend_tpp.msh");
+        Mesh("player_kc_body_arms_full_fpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh");
+    }
+}
+sub dlc_ft_outfit_kc_sunglasses_a()
+{
+    UpdateTime("2025-08-31 11:02:21");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("player_kc_sunglasses_a_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_park_ranger_torso()
+{
+    UpdateTime("2025-10-29 12:55:23");
+    Group("kc_outfit_park_ranger");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_park_ranger_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_park_ranger_torso_a_belt_a_tpp.mat", "player_kc_park_ranger_torso_a_belt_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_torso_a_sleeves_a_tpp.mat", "player_kc_park_ranger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_torso_a_tpp.mat", "player_kc_park_ranger_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_badge_a_tpp.mat", "player_kc_park_ranger_badge_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_badge_beads_a_tpp.mat", "player_kc_park_ranger_badge_beads_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_forearm_hairs_a.msh");
+        Mesh("player_kc_body_arms_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+        Mesh("player_kc_park_ranger_torso_a_tpp.msh");
+        Mesh("player_kc_park_ranger_torso_a_flashlight_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_trickster_torso_a_flashlight_tpp.msh");
+        Mesh("player_kc_forearm_hairs_a.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_a_fpp.msh");
+        Mesh("player_kc_park_ranger_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_park_ranger_torso_a_belt_a_tpp.mat", "player_kc_park_ranger_torso_a_belt_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_torso_a_sleeves_a_tpp.mat", "player_kc_park_ranger_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_torso_a_tpp.mat", "player_kc_park_ranger_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_badge_a_tpp.mat", "player_kc_park_ranger_badge_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_badge_beads_a_tpp.mat", "player_kc_park_ranger_badge_beads_a_fpp.mat");
+            ReplaceMaterial("zipper_a.mat", "zipper_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_park_ranger_legs()
+{
+    UpdateTime("2025-10-29 13:04:52");
+    Group("kc_outfit_park_ranger");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_park_ranger_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_pants_a_sock_tpp.mat", "player_kc_basic_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_pants_a_tpp.mat", "player_kc_park_ranger_pants_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_holster_a_tpp.mat", "player_kc_park_ranger_holster_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_park_ranger_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_park_ranger_holster_a_tpp.mat", "player_kc_park_ranger_holster_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_pants_a_tpp.mat", "player_kc_park_ranger_pants_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_pants_a_sock_tpp.mat", "player_kc_basic_pants_a_sock_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_park_ranger_pants_a_tpp.msh");
+        PantsShortMesh("player_kc_park_ranger_pants_a_short_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_park_ranger_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_park_ranger_pants_a_tpp.mat", "player_kc_park_ranger_pants_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_holster_a_tpp.mat", "player_kc_park_ranger_holster_a_fpp.mat");
+            ReplaceMaterial("player_kc_basic_pants_a_sock_tpp.mat", "player_kc_basic_pants_a_sock_fpp.mat");
+        }
+        PantsShortMesh("player_kc_park_ranger_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_basic_pants_a_sock_tpp.mat", "player_kc_basic_pants_a_sock_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_holster_a_tpp.mat", "player_kc_park_ranger_holster_a_fpp.mat");
+            ReplaceMaterial("player_kc_park_ranger_pants_a_tpp.mat", "player_kc_park_ranger_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_park_ranger_shoes()
+{
+    UpdateTime("2025-10-29 13:08:42");
+    Group("kc_outfit_park_ranger");
+    OutfitSlot("Shoes");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_park_ranger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_park_ranger_shoes_a_tpp.mat", "player_kc_park_ranger_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_park_ranger_shoes_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_park_ranger_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_park_ranger_shoes_a_tpp.mat", "player_kc_park_ranger_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_park_ranger_bracers()
+{
+    UpdateTime("2025-10-29 13:11:18");
+    Group("kc_outfit_park_ranger");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_park_ranger_bracer_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_park_ranger_bracer_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_park_ranger_bracer_a_fpp.mat", "player_kc_park_ranger_bracer_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_park_ranger_bracer_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_park_ranger_headwear()
+{
+    UpdateTime("2025-11-06 12:16:39");
+    Group("kc_outfit_park_ranger");
+    OutfitSlot("Head");
+    ForceHoodDown(true);
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_park_ranger_headwear_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_park_ranger_headwear_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_park_ranger_headwear_a_tpp.mat", "player_kc_park_ranger_headwear_a_ui.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_park_ranger_gloves()
+{
+    UpdateTime("2025-10-29 13:17:14");
+    Group("kc_outfit_park_ranger");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_armored_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_armored_gloves_a_fpp.mat", "player_kc_park_ranger_glove_a_fpp.mat");
+        }
+        Mesh("player_kc_armored_gloves_a_hand_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_body_hands_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+        Mesh("player_kc_armored_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_armored_gloves_a_detail_fpp.mat", "null.mat");
+            ReplaceMaterial("player_kc_armored_gloves_a_fpp.mat", "player_kc_park_ranger_glove_a_tpp.mat");
+        }
+        Mesh("player_kc_armored_gloves_a_hand_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_body_hands_left_fpp.msh");
+        Mesh("player_kc_armored_gloves_a_hand_fpp.msh");
+        Mesh("player_kc_armored_gloves_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_armored_gloves_a_fpp.mat", "player_kc_park_ranger_glove_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_vanguard_torso()
+{
+    UpdateTime("2025-11-17 15:15:19");
+    Group("kc_outfit_vanguard");
+    OutfitSlot("Torso");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_mercenary_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_mercenary_torso_a_sleeves_a_tpp.mat", "player_kc_mercenary_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_mercenary_torso_a_tpp.mat", "player_kc_mercenary_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_mercenary_torso_a_addons_a_tpp.mat", "player_kc_mercenary_torso_a_addons_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_b_left_fpp.msh");
+        Mesh("player_kc_forearm_hairs_a_left.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_mercenary_torso_a_tpp.msh");
+        Mesh("player_kc_mercenary_torso_a_flashlight_a_tpp.msh");
+        Mesh("player_kc_body_arms_b_left_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_body_arms_fpp.mat", "player_kc_body_arms_tpp.mat");
+        }
+        Mesh("player_kc_forearm_hairs_a_left.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_mercenary_torso_a_flashlight_a_tpp.msh");
+        Mesh("player_kc_mercenary_torso_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_mercenary_torso_a_sleeves_a_tpp.mat", "player_kc_mercenary_torso_a_sleeves_a_fpp.mat");
+            ReplaceMaterial("player_kc_mercenary_torso_a_tpp.mat", "player_kc_mercenary_torso_a_fpp.mat");
+            ReplaceMaterial("player_kc_mercenary_torso_a_addons_a_tpp.mat", "player_kc_mercenary_torso_a_addons_a_fpp.mat");
+        }
+        Mesh("player_kc_body_arms_b_left_fpp.msh");
+        Mesh("player_kc_forearm_hairs_a_left.msh")
+        {
+            ReplaceMaterial("player_kc_forearm_hairs_a.mat", "player_kc_forearm_hairs_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_vanguard_bracers()
+{
+    UpdateTime("2025-11-06 15:52:16");
+    Group("kc_outfit_vanguard");
+    OutfitSlot("TorsoAddon");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_mercenary_bracer_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_mercenary_bracer_a_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_mercenary_bracer_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_vanguard_gloves()
+{
+    UpdateTime("2025-11-17 18:53:35");
+    Group("kc_outfit_vanguard");
+    OutfitSlot("Gloves");
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_mercenary_glove_a_fpp.msh");
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_mercenary_glove_a_fpp.msh")
+        {
+            ReplaceMaterial("player_kc_mercenary_glove_a_fpp.mat", "player_kc_mercenary_glove_a_tpp.mat");
+            ReplaceMaterial("player_kc_body_hands_fpp.mat", "player_kc_body_hands_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_mercenary_glove_a_fpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_vanguard_shoes()
+{
+    UpdateTime("2025-10-29 13:19:16");
+    Group("kc_outfit_vanguard");
+    OutfitSlot("Shoes");
+    ForcePantsShort(true);
+    OutfitPartMeshesFpp()
+    {
+        Mesh("player_kc_soldier_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_shoes_a_tpp.mat", "player_kc_mercenary_shoes_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        Mesh("player_kc_soldier_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_shoes_a_tpp.mat", "player_kc_mercenary_shoes_a_tpp.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("player_kc_soldier_shoes_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_soldier_shoes_a_tpp.mat", "player_kc_mercenary_shoes_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_vanguard_legs()
+{
+    UpdateTime("2025-10-29 13:20:12");
+    Group("kc_outfit_vanguard");
+    OutfitSlot("Legs");
+    OutfitPartMeshesFpp()
+    {
+        PantsLongMesh("player_kc_mercenary_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_mercenary_pants_a_tpp.mat", "player_kc_mercenary_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_mercenary_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_mercenary_pants_a_addon_a_tpp.mat", "player_kc_mercenary_pants_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_mercenary_pants_a_tpp.mat", "player_kc_mercenary_pants_a_fpp.mat");
+        }
+    }
+    OutfitPartMeshesTpp()
+    {
+        PantsLongMesh("player_kc_mercenary_pants_a_tpp.msh");
+        PantsShortMesh("player_kc_mercenary_pants_a_short_tpp.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        PantsLongMesh("player_kc_mercenary_pants_a_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_mercenary_pants_a_addon_a_tpp.mat", "player_kc_mercenary_pants_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_mercenary_pants_a_tpp.mat", "player_kc_mercenary_pants_a_fpp.mat");
+        }
+        PantsShortMesh("player_kc_mercenary_pants_a_short_tpp.msh")
+        {
+            ReplaceMaterial("player_kc_mercenary_pants_a_addon_a_tpp.mat", "player_kc_mercenary_pants_a_addon_a_fpp.mat");
+            ReplaceMaterial("player_kc_mercenary_pants_a_tpp.mat", "player_kc_mercenary_pants_a_fpp.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_vanguard_headwear()
+{
+    UpdateTime("2025-10-29 13:21:35");
+    Group("kc_outfit_vanguard");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh_npc_ft_crane_hair_a.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("player_kc_mercenary_headwear_a_tpp.msh");
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_1_headwear()
+{
+    UpdateTime("2025-11-12 12:04:01");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_a.mat", "player_kc_ngplus_headwear_decal_1.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_a.mat", "player_kc_ngplus_headwear_decal_1.mat");
+            ReplaceMaterial("player_kc_ngplus_headwear_cap_a.mat", "player_kc_ngplus_headwear_cap_ui.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_2_headwear()
+{
+    UpdateTime("2025-11-12 12:06:45");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_2.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_cap_a.mat", "player_kc_ngplus_headwear_cap_ui.mat");
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_2.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_3_headwear()
+{
+    UpdateTime("2025-11-12 12:18:41");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_3.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_cap_a.mat", "player_kc_ngplus_headwear_cap_ui.mat");
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_3.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_4_headwear()
+{
+    UpdateTime("2025-11-12 12:22:11");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_4.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_cap_a.mat", "player_kc_ngplus_headwear_cap_ui.mat");
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_4.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_5_headwear()
+{
+    UpdateTime("2025-11-12 12:22:48");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_5.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_cap_a.mat", "player_kc_ngplus_headwear_cap_ui.mat");
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_5.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_6_headwear()
+{
+    UpdateTime("2025-11-12 12:23:15");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_6.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_cap_a.mat", "player_kc_ngplus_headwear_cap_ui.mat");
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_6.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_7_headwear()
+{
+    UpdateTime("2025-11-12 12:23:42");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_7.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_cap_a.mat", "player_kc_ngplus_headwear_cap_ui.mat");
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_7.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_8_headwear()
+{
+    UpdateTime("2025-11-12 12:24:08");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_8.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_cap_a.mat", "player_kc_ngplus_headwear_cap_ui.mat");
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_8.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_9_headwear()
+{
+    UpdateTime("2025-11-12 12:24:32");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_9.mat");
+        }
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_headwear_cap_a.mat", "player_kc_ngplus_headwear_cap_ui.mat");
+            ReplaceMaterial("player_kc_ngplus_headwear_decal_1.mat", "player_kc_ngplus_headwear_decal_9.mat");
+        }
+    }
+}
+sub dlc_ft_outfit_kc_ngplus_final_headwear()
+{
+    UpdateTime("2025-11-12 12:27:29");
+    Group("kc_outfit_ngplus");
+    OutfitSlot("Head");
+    OutfitPartMeshesTpp()
+    {
+        Mesh("sh2_npc_crane.msh")
+        {
+            ReplaceMaterial("sh2_eye_green.mat", "sh2_eye_kyle_crane.mat");
+        }
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_final_headwear_cap_a.msh");
+    }
+    OutfitPartMeshesUi()
+    {
+        Mesh("sh2_npc_crane.msh");
+        Mesh("sh2_npc_ft_crane_eyebrows.msh");
+        Mesh("sh2_npc_ft_crane_beard_a.msh");
+        Mesh("sh_npc_ft_crane_hair_a_caps.msh");
+        Mesh("player_kc_ngplus_final_headwear_cap_a.msh")
+        {
+            ReplaceMaterial("player_kc_ngplus_final_headwear_cap_a.mat", "player_kc_ngplus_final_headwear_cap_ui.mat");
+            ReplaceMaterial("player_kc_ngplus_final_headwear_decal_a.mat", "player_kc_ngplus_final_headwear_decal_ui.mat");
+        }
+    }
+}

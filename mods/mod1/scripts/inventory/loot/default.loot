@@ -1,0 +1,597 @@
+//This script is generated from Inventory.xlsm. Don't modify it!!!
+
+import "color_sets.loot"
+import "item_sets.loot"
+import "lootpools_ft.loot"
+
+export int LootType_None            = 0;
+export int LootType_Knuckles        = 1;
+export int LootType_Blunt           = 2;
+export int LootType_Sharp           = 3;
+export int LootType_Firearm_Short   = 4;
+export int LootType_Firearm_Long    = 5;
+export int LootType_Firearm_Auto    = 6;
+export int LootType_Throwable       = 7;
+export int LootType_Powerup         = 8;
+
+//----- CONTAINERS -----
+sub Loot()
+{
+	LootedObject("Empty")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty(weight = 1.0, min_amount = 1, max_amount = 1);
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////General Pools ////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//Craftparts
+	
+	LootedObject("Scrap")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Scrap (weight = 1.0);
+    }
+	LootedObject("Scrap_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Scrap (weight = 1.0);
+    }
+	LootedObject("Container")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Container (weight = 1.0);
+    }
+	LootedObject("Container_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Container (weight = 1.0);
+    }
+	LootedObject("Resin")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Resin (weight = 1.0);
+    }
+	LootedObject("Resin_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Resin (weight = 1.0);
+    }
+	LootedObject("Wiring")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Wiring (weight = 1.0);
+    }
+	LootedObject("Wiring_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Wiring (weight = 1.0);
+    }
+	LootedObject("Rags")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Rags (weight = 1.0);
+    }
+	LootedObject("Rags_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Rags (weight = 1.0);
+    }
+	LootedObject("Alcohol")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Alcohol (weight = 1.0);
+    }
+	LootedObject("Alcohol_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Alcohol (weight = 1.0);
+    }
+	LootedObject("Weights")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Weights (weight = 1.0);
+    }
+	LootedObject("Weights_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Weights (weight = 1.0);
+    }
+	LootedObject("Blades")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Blades (weight = 1.0);
+    }
+	LootedObject("Blades_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Blades (weight = 1.0);
+    }
+	LootedObject("Leather")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Leather (weight = 1.0);
+    }
+	LootedObject("Leather_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Leather (weight = 1.0);
+    }
+	LootedObject("Electrical_Parts")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Electrical_Parts (weight = 1.0);
+    }
+	LootedObject("Electrical_Parts_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Electrical_Parts (weight = 1.0);
+    }
+	LootedObject("Feathers")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Feathers (weight = 1.0);
+    }
+	LootedObject("Feathers_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Feathers (weight = 1.0);
+    }
+	LootedObject("Pigments")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Pigments (weight = 1.0);
+    }
+	LootedObject("Pigments_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Pigments (weight = 1.0);
+    }
+	LootedObject("Cleaning_Supplies")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Cleaning_Supplies (weight = 1.0);
+    }
+	LootedObject("Cleaning_Supplies_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Cleaning_Supplies (weight = 1.0);
+    }
+	LootedObject("Oxidizer")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Oxidizer (weight = 1.0);
+    }
+	LootedObject("Oxidizer_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Oxidizer (weight = 1.0);
+    }
+	LootedObject("Battery")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Battery (weight = 1.0);
+    }
+	LootedObject("Battery_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Battery (weight = 1.0);
+    }
+	
+	//Plants
+	
+	LootedObject("Chamomile")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Chamomile (weight = 1.0);
+    }
+	LootedObject("Chamomile_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Chamomile (weight = 1.0);
+    }
+	LootedObject("Lavender")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Lavender (weight = 1.0);
+    }
+	LootedObject("Lavender_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Lavender (weight = 1.0);
+    }
+	LootedObject("Honey")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Honey (weight = 1.0);
+    }
+	LootedObject("Honey_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Honey (weight = 1.0);
+    }
+	LootedObject("Cordyceps")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Cordyceps (weight = 1.0);
+    }
+	LootedObject("Cordyceps_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Cordyceps (weight = 1.0);
+    }
+	LootedObject("Poppy")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Poppy (weight = 1.0);
+    }
+	LootedObject("Poppy_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Poppy (weight = 1.0);
+    }
+	
+	
+	//Valuables
+	
+	LootedObject("Bracelet")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Bracelet (weight = 1.0);
+    }
+	LootedObject("Bracelet_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Bracelet (weight = 1.0);
+    }
+	LootedObject("Soaps")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Soaps (weight = 1.0);
+    }
+	LootedObject("Soaps_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Soaps (weight = 1.0);
+    }
+	LootedObject("Aspirin")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Aspirin (weight = 1.0);
+    }
+	LootedObject("Aspirin_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Aspirin (weight = 1.0);
+    }
+	LootedObject("Cigarettes")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Cigarettes (weight = 1.0);
+    }
+	LootedObject("Cigarettes_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Cigarettes (weight = 1.0);
+    }
+	LootedObject("Flour")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Flour (weight = 1.0);
+    }
+	LootedObject("Flour_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Flour (weight = 1.0);
+    }
+	LootedObject("Rice")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Rice (weight = 1.0);
+    }
+	LootedObject("Rice_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Rice (weight = 1.0);
+    }
+	LootedObject("Jewelry")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Jewelry (weight = 1.0);
+    }
+	LootedObject("Jewelry_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Jewelry (weight = 1.0);
+    }
+	LootedObject("Wristwatch")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Wristwatch (weight = 1.0);
+    }
+	LootedObject("Wristwatch_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Wristwatch (weight = 1.0);
+    }
+	LootedObject("Tools")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Tools (weight = 1.0);
+    }
+	LootedObject("Tools_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Tools (weight = 1.0);
+    }
+	LootedObject("Canned_Food")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Canned_Food (weight = 1.0);
+    }
+	LootedObject("Canned_Food_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Canned_Food (weight = 1.0);
+    }
+	LootedObject("Vodka")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Vodka (weight = 1.0);
+    }
+	LootedObject("Vodka_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Vodka (weight = 1.0);
+    }
+	LootedObject("Antibiotics")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Antibiotics (weight = 1.0);
+    }
+	LootedObject("Antibiotics_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Antibiotics (weight = 1.0);
+    }
+	LootedObject("MRE_Rations")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use MRE_Rations (weight = 1.0);
+    }
+	LootedObject("MRE_Rations_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use MRE_Rations (weight = 1.0);
+    }
+	LootedObject("Perfume")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Perfume (weight = 1.0);
+    }
+	LootedObject("Perfume_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Perfume (weight = 1.0);
+    }
+	LootedObject("Whiskey")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Whiskey (weight = 1.0);
+    }
+	LootedObject("Whiskey_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Whiskey (weight = 1.0);
+    }
+	LootedObject("Wine")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Wine (weight = 1.0);
+    }
+	LootedObject("Wine_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Wine (weight = 1.0);
+    }
+	LootedObject("Smartphone")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Smartphone (weight = 1.0);
+    }
+	LootedObject("Smartphone_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Smartphone (weight = 1.0);
+    }
+	LootedObject("Morphine")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Morphine (weight = 1.0);
+    }
+	LootedObject("Morphine_Chance")
+    {
+        ColorSet(ColorSet_Equal);
+		LootAmount(1);
+		use Empty (weight = 1.0);
+		use Morphine (weight = 1.0);
+    }
+	
+	LootedObject("Valuables")
+    {
+        ColorSet(ColorSet_Equal);
+		use Valuable (weight = 1.0);
+    }
+	
+	LootedObject("Valuables_Uncommon")
+    {
+        ColorSet(ColorSet_ContainerLv2);
+		use Valuable (weight = 1.0);
+    }
+	
+	LootedObject("Valuables_Rare")
+    {
+        ColorSet(ColorSet_ContainerLv3);
+		use Valuable (weight = 1.0);
+    }
+	
+	LootedObject("Craftparts")
+    {
+        ColorSet(ColorSet_Equal);
+		use CraftParts (weight = 1.0);
+    }
+	
+	LootedObject("Craftparts_Common")
+    {
+        ColorSet(ColorSet_ContainerLv1);
+		use CraftParts (weight = 1.0);
+    }
+	
+	LootedObject("Craftparts_Uncommon")
+    {
+        ColorSet(ColorSet_ContainerLv2);
+		use CraftParts (weight = 1.0);
+    } 
+	
+	LootedObject("Craftparts_Rare")
+    {
+        ColorSet(ColorSet_ContainerLv3);
+		use CraftParts (weight = 1.0);
+    }
+}
+
+sub default()
+{
+    use DefineColors();
+    use Loot();
+	use Loot_FT();
+}
+
+sub default_hard()
+{
+    use DefineColorsHard();
+    use Loot();
+	use Loot_FT();
+}
+
+sub default_nightmare()
+{
+    use DefineColorsNightmare();
+    use Loot();
+	use Loot_FT();
+}
