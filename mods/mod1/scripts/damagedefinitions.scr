@@ -21654,8 +21654,6 @@ sub main() {
 	}
 	Damage("dlc_ft_knife_bleeding_damages_13") {
 		Bleeding("563");
-		Fire("1560");
-		Cut("15000");
 	}
 	Damage("dlc_ft_knife_bleeding_damages_14") {
 		Bleeding("263");

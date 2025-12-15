@@ -604,7 +604,7 @@ sub main() {
 	DamageResistance("Potion_DamageReduction_Electricity_Upgrade8") {
 		Electricity("75%");
 	}
-	///////////////////// TEST ///////////////////////	
+	///////////////////// TEST ///////////////////////
 	DamageResistance("TestResistance_AllButBlast") {
 		All("1000%");
 		Blast("0%");
@@ -12503,7 +12503,7 @@ sub main() {
 	}
 
 
-	// WEAPON BALANCING 
+	// WEAPON BALANCING
 	//rais
 
 	Damage("scaling_rais_tier_damages_0") {
@@ -13909,7 +13909,7 @@ sub main() {
 	Damage("Exotic_1hs_damages") {
 		Cut("283");
 	}
-	//1h Blunt 
+	//1h Blunt
 	Damage("Exotic_1hb_damages") {
 		Blunt("254");
 	}
@@ -14583,7 +14583,7 @@ sub main() {
 	Damage("scaling_blunt_tier_damages_Legendary_9") {
 		Blunt("279");
 	}
-	//specialist 
+	//specialist
 	Damage("scaling_blunt_SpecialistVariants_0") {
 		Blunt("13");
 	}
@@ -14711,7 +14711,7 @@ sub main() {
 		Blunt("271");
 	}
 
-	// scaling 2h blunt 
+	// scaling 2h blunt
 	Damage("scaling_2h_blunt_tier_damages_Legendary_0") {
 		Blunt("35");
 	}
@@ -21157,7 +21157,7 @@ sub main() {
 		Physical("35% of MaxHealth");
 	}
 
-	// Skillet 
+	// Skillet
 
 	Damage("ExplosiveGrenade_Grenadier_Level_1") {
 		Blast("375");
@@ -21653,7 +21653,7 @@ sub main() {
 		Bleeding("243");
 	}
 	Damage("dlc_ft_knife_bleeding_damages_13") {
-		Bleeding("253");
+		Bleeding("563");
 	}
 	Damage("dlc_ft_knife_bleeding_damages_14") {
 		Bleeding("263");
