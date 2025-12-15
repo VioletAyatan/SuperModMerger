@@ -90,6 +90,9 @@ public class ModMergerEngine {
         Map<String, Path> map1 = buildFileMap(mod1Dir, scripts1);
         Map<String, Path> map2 = buildFileMap(mod2Dir, scripts2);
 
+        // 尝试将 mod2 中放错位置但可以根据文件名唯一匹配到基准的文件对齐到基准路径
+        alignPathsToBaseline(map1, map2);
+
         // 统计计数器
         int mergedCount = 0;      // 成功合并（无冲突）的文件数
         int conflictCount = 0;     // 包含冲突的文件数
@@ -251,5 +254,37 @@ public class ModMergerEngine {
         }
 
         return map;
+    }
+
+    /**
+     * 如果 modMap 中有文件路径在 baseMap 中不存在，尝试用文件名在 baseMap 中唯一匹配，
+     * 若匹配成功则把 modMap 的 key 重映射到基准的相对路径，从而修正放错位置的文件。
+     */
+    private void alignPathsToBaseline(Map<String, Path> baseMap, Map<String, Path> modMap) {
+        // 构建基准文件名 -> 相对路径 列表
+        Map<String, List<String>> nameToPaths = new HashMap<>();
+        for (String rel : baseMap.keySet()) {
+            String name = Path.of(rel).getFileName().toString();
+            nameToPaths.computeIfAbsent(name, k -> new ArrayList<>()).add(rel);
+        }
+
+        List<String> toRemove = new ArrayList<>();
+        Map<String, Path> toAdd = new HashMap<>();
+
+        for (Map.Entry<String, Path> e : modMap.entrySet()) {
+            String rel = e.getKey();
+            if (baseMap.containsKey(rel)) continue; // already matches
+            String name = e.getValue().getFileName().toString();
+            List<String> candidates = nameToPaths.get(name);
+            if (candidates != null && candidates.size() == 1) {
+                String targetRel = candidates.get(0);
+                System.out.println("Relocating file from mod path '" + rel + "' to baseline path '" + targetRel + "'");
+                toRemove.add(rel);
+                toAdd.put(targetRel, e.getValue());
+            }
+        }
+
+        for (String r : toRemove) modMap.remove(r);
+        for (Map.Entry<String, Path> a : toAdd.entrySet()) modMap.put(a.getKey(), a.getValue());
     }
 }

@@ -3,6 +3,7 @@ package ankol.mod.merger.merger;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.misc.Interval;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -23,6 +24,10 @@ public class ScrTreeComparator {
         public final String description;
         public final int lineNumber1;
         public final int lineNumber2;
+        public final int startToken1;
+        public final int endToken1;
+        public final int startToken2;
+        public final int endToken2;
 
         public DiffResult(ParseTree tree1, ParseTree tree2, String ruleName, String description) {
             this.tree1 = tree1;
@@ -31,6 +36,23 @@ public class ScrTreeComparator {
             this.description = description;
             this.lineNumber1 = getLineNumber(tree1);
             this.lineNumber2 = getLineNumber(tree2);
+
+            Interval i1 = tree1 != null ? tree1.getSourceInterval() : null;
+            Interval i2 = tree2 != null ? tree2.getSourceInterval() : null;
+            if (i1 != null) {
+                this.startToken1 = i1.a;
+                this.endToken1 = i1.b;
+            } else {
+                this.startToken1 = -1;
+                this.endToken1 = -1;
+            }
+            if (i2 != null) {
+                this.startToken2 = i2.a;
+                this.endToken2 = i2.b;
+            } else {
+                this.startToken2 = -1;
+                this.endToken2 = -1;
+            }
         }
 
         @Override
@@ -70,6 +92,44 @@ public class ScrTreeComparator {
             return compareMaps(defs1, defs2);
         }
 
+        // 3. 如果是函数调用声明，则进行参数级别比较
+        if (tree1 instanceof TechlandScriptParser.FuntionCallDeclContext && tree2 instanceof TechlandScriptParser.FuntionCallDeclContext) {
+            TechlandScriptParser.FuntionCallDeclContext call1 = (TechlandScriptParser.FuntionCallDeclContext) tree1;
+            TechlandScriptParser.FuntionCallDeclContext call2 = (TechlandScriptParser.FuntionCallDeclContext) tree2;
+
+            // 如果文本完全相等，则没有差异
+            if (treeEquals(tree1, tree2)) return diffs;
+
+            // 比较参数列表
+            TechlandScriptParser.ValueListContext v1 = call1.valueList();
+            TechlandScriptParser.ValueListContext v2 = call2.valueList();
+            List<TechlandScriptParser.ExpressionContext> exprs1 = v1 != null ? v1.expression() : new ArrayList<>();
+            List<TechlandScriptParser.ExpressionContext> exprs2 = v2 != null ? v2.expression() : new ArrayList<>();
+
+            int min = Math.min(exprs1.size(), exprs2.size());
+            for (int i = 0; i < min; i++) {
+                if (!treeEquals(exprs1.get(i), exprs2.get(i))) {
+                    diffs.add(new DiffResult(exprs1.get(i), exprs2.get(i), "Expression", "Parameter value changed at index " + i));
+                }
+            }
+            if (exprs1.size() < exprs2.size()) {
+                for (int i = min; i < exprs2.size(); i++) {
+                    diffs.add(new DiffResult(null, exprs2.get(i), "Expression", "Parameter added in Mod2 at index " + i));
+                }
+            } else if (exprs1.size() > exprs2.size()) {
+                for (int i = min; i < exprs1.size(); i++) {
+                    diffs.add(new DiffResult(exprs1.get(i), null, "Expression", "Parameter removed in Mod2 at index " + i));
+                }
+            }
+
+            // 如果没有发现参数级别差异，则报告为整体修改
+            if (diffs.isEmpty()) {
+                diffs.add(new DiffResult(tree1, tree2, tree1.getClass().getSimpleName(), "Content differs"));
+            }
+
+            return diffs;
+        }
+
         // 3. 默认情况：如果内容不相等，则直接报告差异
         if (!treeEquals(tree1, tree2)) {
             diffs.add(new DiffResult(tree1, tree2, tree1.getClass().getSimpleName(), "Content differs"));
@@ -82,17 +142,49 @@ public class ScrTreeComparator {
      * 比较两个函数块内部的语句。
      */
     private static List<DiffResult> compareFunctionBlocks(TechlandScriptParser.FunctionBlockContext block1, TechlandScriptParser.FunctionBlockContext block2) {
+        List<DiffResult> diffs = new ArrayList<>();
+
         // 索引内部所有语句 (主要是函数调用)
         Map<String, TechlandScriptParser.FuntionCallDeclContext> calls1 = indexBy(
                 block1.statements().stream().map(TechlandScriptParser.StatementsContext::funtionCallDecl).collect(Collectors.toList()),
-                c -> c.Id().getText()
+                c -> {
+                    if (c == null) return "";
+                    int paramCount = c.valueList() != null ? c.valueList().expression().size() : 0;
+                    return c.Id().getText() + "|" + paramCount;
+                }
         );
         Map<String, TechlandScriptParser.FuntionCallDeclContext> calls2 = indexBy(
                 block2.statements().stream().map(TechlandScriptParser.StatementsContext::funtionCallDecl).collect(Collectors.toList()),
-                c -> c.Id().getText()
+                c -> {
+                    if (c == null) return "";
+                    int paramCount = c.valueList() != null ? c.valueList().expression().size() : 0;
+                    return c.Id().getText() + "|" + paramCount;
+                }
         );
 
-        return compareMaps(calls1, calls2);
+        // 对比两个 map
+        for (Map.Entry<String, TechlandScriptParser.FuntionCallDeclContext> entry : calls1.entrySet()) {
+            String key = entry.getKey();
+            TechlandScriptParser.FuntionCallDeclContext node1 = entry.getValue();
+
+            if (!calls2.containsKey(key)) {
+                diffs.add(new DiffResult(node1, null, node1.getClass().getSimpleName(), "Removed in Mod2: " + key));
+            } else {
+                TechlandScriptParser.FuntionCallDeclContext node2 = calls2.get(key);
+                // 递归比较函数调用（参数级别）
+                diffs.addAll(compareTrees(node1, node2));
+            }
+        }
+
+        for (Map.Entry<String, TechlandScriptParser.FuntionCallDeclContext> entry : calls2.entrySet()) {
+            String key = entry.getKey();
+            if (!calls1.containsKey(key)) {
+                TechlandScriptParser.FuntionCallDeclContext node2 = entry.getValue();
+                diffs.add(new DiffResult(null, node2, node2.getClass().getSimpleName(), "Added in Mod2: " + key));
+            }
+        }
+
+        return diffs;
     }
 
     /**

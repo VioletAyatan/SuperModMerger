@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.Files;
 
 /**
  * Techland脚本解析器 - 负责将脚本文件解析为ANTLR4语法树
@@ -29,6 +30,11 @@ public class ScrScriptParser {
     private TechlandScriptLexer techlandScriptLexer;
 
     /**
+     * Parsed script container holding AST, tokens and original source text
+     */
+    public record ParsedScript(TechlandScriptParser.FileContext file, CommonTokenStream tokens, String originalText) {}
+
+    /**
      * 从文件路径解析脚本
      * 执行流程：
      * 1. 使用Files.readString读取文件内容为字符串
@@ -43,6 +49,27 @@ public class ScrScriptParser {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Parse file and return parsed script with token stream and original text.
+     */
+    public ParsedScript parseFileWithTokens(Path scriptPath) throws IOException {
+        String text = Files.readString(scriptPath, StandardCharsets.UTF_8);
+        // create parser with full token stream
+        TechlandScriptParser parser = getTechlandScriptParser(CharStreams.fromString(text));
+        // add same error listener as in parseContent
+        parser.addErrorListener(new BaseErrorListener() {
+            @Override
+            public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
+                                    int line, int charPositionInLine, String msg,
+                                    RecognitionException e) {
+                System.err.println("Parser Error at line " + line + ":" + charPositionInLine + " - " + msg);
+            }
+        });
+        TechlandScriptParser.FileContext file = parser.file();
+        CommonTokenStream tokens = (CommonTokenStream) this.getTokenStream();
+        return new ParsedScript(file, tokens, text);
     }
 
     /**
@@ -123,4 +150,3 @@ public class ScrScriptParser {
         return techlandScriptLexer;
     }
 }
-
