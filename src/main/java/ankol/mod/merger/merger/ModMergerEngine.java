@@ -1,5 +1,7 @@
 package ankol.mod.merger.merger;
 
+import ankol.mod.merger.tools.FileTree;
+import ankol.mod.merger.tools.MergeTool;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -79,19 +81,11 @@ public class ModMergerEngine {
         // 创建输出目录（如果不存在）
         FileUtil.mkdir(outputDir);
         // 扫描两个模组目录，查找所有脚本文件
-        List<Path> scripts1 = findScriptFiles(mod1Dir);
-        List<Path> scripts2 = findScriptFiles(mod2Dir);
-
-        System.out.println("Found " + scripts1.size() + " scripts in Mod1");
-        System.out.println("Found " + scripts2.size() + " scripts in Mod2");
-        System.out.println();
-
-        // 建立文件映射：相对路径 -> 完整路径
-        Map<String, Path> map1 = buildFileMap(mod1Dir, scripts1);
-        Map<String, Path> map2 = buildFileMap(mod2Dir, scripts2);
-
-        // 尝试将 mod2 中放错位置但可以根据文件名唯一匹配到基准的文件对齐到基准路径
-        alignPathsToBaseline(map1, map2);
+        Map<String, FileTree> mod1FileTree = MergeTool.buildFileTree(mod1Dir);
+        Map<String, FileTree> mod2FileTree = MergeTool.buildFileTree(mod2Dir);
+        //打印文件数量
+        System.out.println("Found " + mod1FileTree.size() + " scripts in Mod1");
+        System.out.println("Found " + mod2FileTree.size() + " scripts in Mod2");
 
         // 统计计数器
         int mergedCount = 0;      // 成功合并（无冲突）的文件数
@@ -102,17 +96,17 @@ public class ModMergerEngine {
 
         // 处理模组1中的文件
         Set<String> processedFiles = new HashSet<>();
-        for (String filename : map1.keySet()) {
+        for (String filename : mod1FileTree.keySet()) {
             // 标记为已处理，避免后面重复处理
             processedFiles.add(filename);
-            if (map2.containsKey(filename)) {
+            if (mod2FileTree.containsKey(filename)) {
                 // 两个模组都有这个文件，需要合并
                 System.out.println("Processing: " + filename);
                 try {
                     Optional<IFileMerger> mergerOptional = MergerFactory.getMerger(filename);
                     if (mergerOptional.isPresent()) {
                         // 可解析的文件（.scr, .txt）进行智能合并和对比
-                        MergeResult result = mergerOptional.get().merge(map1.get(filename), map2.get(filename));
+                        MergeResult result = mergerOptional.get().merge(mod1FileTree.get(filename), mod2FileTree.get(filename));
                         // 写入合并结果
                         Path outputPath = outputDir.resolve(filename);
                         Files.createDirectories(outputPath.getParent());
@@ -130,7 +124,7 @@ public class ModMergerEngine {
                         // 不可解析的文件（.def, .model, .loot, .xml等）直接使用mod2版本
                         Path outputPath = outputDir.resolve(filename);
                         Files.createDirectories(outputPath.getParent());
-                        Files.copy(map2.get(filename), outputPath, StandardCopyOption.REPLACE_EXISTING);
+//                        Files.copy(mod2.get(filename), outputPath, StandardCopyOption.REPLACE_EXISTING);
                         copiedCount++;
                         System.out.println("  ✓ Copied (Mod2 version - non-parseable)");
                     }
@@ -144,19 +138,19 @@ public class ModMergerEngine {
                 System.out.println("Copying: " + filename + " (Mod1 only)");
                 Path outputPath = outputDir.resolve(filename);
                 Files.createDirectories(outputPath.getParent());
-                Files.copy(map1.get(filename), outputPath, StandardCopyOption.REPLACE_EXISTING);
+//                Files.copy(map1.get(filename), outputPath, StandardCopyOption.REPLACE_EXISTING);
                 copiedCount++;
             }
         }
 
         // 处理仅在模组2中存在的文件
-        for (String filename : map2.keySet()) {
+        for (String filename : mod2FileTree.keySet()) {
             if (!processedFiles.contains(filename)) {
                 // 这个文件只在模组2中，直接复制到输出目录
                 System.out.println("Adding: " + filename + " (Mod2 only)");
                 Path outputPath = outputDir.resolve(filename);
                 Files.createDirectories(outputPath.getParent());
-                Files.copy(map2.get(filename), outputPath, StandardCopyOption.REPLACE_EXISTING);
+//                Files.copy(map2.get(filename), outputPath, StandardCopyOption.REPLACE_EXISTING);
                 addedCount++;
             }
         }

@@ -1,7 +1,8 @@
 package ankol.mod.merger.merger;
 
+import ankol.mod.merger.tools.FileTree;
+
 import java.io.IOException;
-import java.nio.file.Path;
 
 /**
  * 文件合并器通用接口
@@ -19,6 +20,6 @@ public interface IFileMerger {
      * @return 一个包含合并后内容和冲突信息的 {@link MergeResult} 对象。
      * @throws IOException 如果在文件读取或处理过程中发生IO错误。
      */
-    MergeResult merge(Path file1, Path file2) throws IOException;
+    MergeResult merge(FileTree file1, FileTree file2) throws IOException;
 
 }

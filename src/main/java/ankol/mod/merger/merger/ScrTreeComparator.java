@@ -71,14 +71,9 @@ public class ScrTreeComparator {
         List<DiffResult> diffs = new ArrayList<>();
 
         // 1. 如果是函数块声明 (如 Item {...})，则进行深度比较
-        if (tree1 instanceof TechlandScriptParser.FuntionBlockDeclContext && tree2 instanceof TechlandScriptParser.FuntionBlockDeclContext) {
-            TechlandScriptParser.FuntionBlockDeclContext block1 = (TechlandScriptParser.FuntionBlockDeclContext) tree1;
-            TechlandScriptParser.FuntionBlockDeclContext block2 = (TechlandScriptParser.FuntionBlockDeclContext) tree2;
-
-            // 比较块内部的语句
+        if (tree1 instanceof TechlandScriptParser.FuntionBlockDeclContext block1 && tree2 instanceof TechlandScriptParser.FuntionBlockDeclContext block2) {
             return compareFunctionBlocks(block1.functionBlock(), block2.functionBlock());
         }
-
         // 2. 如果是文件根节点，则比较文件内的所有顶层定义
         if (tree1 instanceof TechlandScriptParser.FileContext && tree2 instanceof TechlandScriptParser.FileContext) {
             Map<String, TechlandScriptParser.DefinitionContext> defs1 = indexBy(
@@ -93,10 +88,7 @@ public class ScrTreeComparator {
         }
 
         // 3. 如果是函数调用声明，则进行参数级别比较
-        if (tree1 instanceof TechlandScriptParser.FuntionCallDeclContext && tree2 instanceof TechlandScriptParser.FuntionCallDeclContext) {
-            TechlandScriptParser.FuntionCallDeclContext call1 = (TechlandScriptParser.FuntionCallDeclContext) tree1;
-            TechlandScriptParser.FuntionCallDeclContext call2 = (TechlandScriptParser.FuntionCallDeclContext) tree2;
-
+        if (tree1 instanceof TechlandScriptParser.FuntionCallDeclContext call1 && tree2 instanceof TechlandScriptParser.FuntionCallDeclContext call2) {
             // 如果文本完全相等，则没有差异
             if (treeEquals(tree1, tree2)) return diffs;
 
