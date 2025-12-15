@@ -1,5 +1,0 @@
-sub main()
-{
-    Version(3);
-    ItemsCount(0);
-}
