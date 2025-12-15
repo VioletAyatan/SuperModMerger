@@ -26,4 +26,9 @@ public class MergeResult {
      * 冲突列表
      */
     public List<DiffResult> conflicts = new ArrayList<>();
+
+    public MergeResult(String mergedContent, boolean hasConflicts) {
+        this.mergedContent = mergedContent;
+        this.hasConflicts = hasConflicts;
+    }
 }
