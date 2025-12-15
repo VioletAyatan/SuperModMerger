@@ -1,9 +1,9 @@
 package ankol.mod.merger.merger;
 
+import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import ankol.mod.merger.merger.ScrConflictResolver.MergeChoice;
 import ankol.mod.merger.merger.ScrConflictResolver.MergeDecision;
 import ankol.mod.merger.merger.ScrTreeComparator.DiffResult;
-import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 
