@@ -3,33 +3,21 @@ package ankol.mod.merger;
 import ankol.mod.merger.core.SimpleArgumentsParser;
 import ankol.mod.merger.merger.ModMergerEngine;
 import ankol.mod.merger.merger.ScrConflictResolver;
+import cn.hutool.core.io.FileUtil;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Techland模组合并工具 - 主应用入口类
- * <p>
- * 职责：
- * 1. 解析命令行参数
- * 2. 初始化合并配置
- * 3. 启动核心合并引擎
- * 4. 处理异常并返回适当的退出码
- * 5. 清理资源（关闭扫描器等）
- * <p>
- * 使用方式：
- * java -jar ModMergerTool.jar <mod1_dir> <mod2_dir> [options]
- * <p>
- * 退出码：
- * 0 - 成功完成
- * 1 - 参数错误
- * 2 - 文件IO错误
- * 3 - 其他运行时错误
  */
 public class AppMain {
     /**
      * 主程序入口方法
      * <p>
-     * 执行流程：
+     * ���行流程：
      * 1. 解析命令行参数生成配置对象 (MergeConfig.fromArgs)
      * 2. 验证配置的有效性 (config.validate)
      * 3. 如果启用详细模式，打印配置信息
@@ -61,11 +49,34 @@ public class AppMain {
                 System.out.println("Config: " + config);
             }
 
-            // 第4步：创建核心合并引擎实例
-            ModMergerEngine merger = new ModMergerEngine(config.mod1Directory, config.mod2Directory, config.outputDirectory);
-            // 第5步：执行合并操作
-            // 这是主要的业务逻辑，会扫描目录、解析脚本、对比差异、处理冲突
-            merger.merge();
+            // 支持 baseline + 多 mod 的合并流程：
+            // args[0] = baseline (官方/原版目录), args[1..N] = mod dirs to merge on top
+            List<Path> modsToMerge = new ArrayList<>();
+            // 从原始 args 中收集除了第0个 baseline 之外的 mod 目录
+            for (int i = 1; i < args.length; i++) {
+                String a = args[i];
+                if (!a.startsWith("-")) {
+                    modsToMerge.add(Path.of(a));
+                }
+            }
+
+            Path baseline = Path.of(args[0]);
+            Path output = config.outputDirectory;
+
+            // 1) 先把 baseline 内容复制到 output 作为合并基准
+            System.out.println("Copying baseline to output: " + baseline + " -> " + output);
+            // 确保输出目录存在
+            FileUtil.mkdir(output.toFile());
+            // 递归复制目录，覆盖模式
+            FileUtil.copy(baseline.toFile(), output.toFile(), true);
+
+            // 2) 依次将每个 mod 合并�� output（把 output 当作 mod1，mod 当作 mod2）
+            for (Path mod : modsToMerge) {
+                System.out.println("Merging mod into output: " + mod);
+                ModMergerEngine merger = new ModMergerEngine(output, mod, output);
+                merger.merge();
+            }
+
             System.out.println("\nDone!");
             System.exit(0);
         } catch (IllegalArgumentException e) {
