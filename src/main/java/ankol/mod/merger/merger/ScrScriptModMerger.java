@@ -1,8 +1,9 @@
-package ankol.mod.merger;
+package ankol.mod.merger.merger;
 
-import ankol.mod.merger.ConflictResolver.MergeChoice;
-import ankol.mod.merger.ConflictResolver.MergeDecision;
-import ankol.mod.merger.TreeComparator.DiffResult;
+import ankol.mod.merger.core.ConflictResolver;
+import ankol.mod.merger.core.ConflictResolver.MergeChoice;
+import ankol.mod.merger.core.ConflictResolver.MergeDecision;
+import ankol.mod.merger.merger.ScrTreeComparator.DiffResult;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * 核心模组合并引擎 - 协调所有模块完成合并操作
@@ -28,7 +30,7 @@ import java.util.*;
  * 4. 对于仅在模组2中的文件，直接复制
  * 5. 输出统计信息
  */
-public class ModMerger {
+public class ScrScriptModMerger {
 
     /**
      * 模组1的目录路径
@@ -60,8 +62,8 @@ public class ModMerger {
      * @param interactive     是否交互模式
      * @param defaultStrategy 自动模式的默认策略
      */
-    public ModMerger(Path mod1Dir, Path mod2Dir, Path outputDir,
-                     boolean interactive, MergeChoice defaultStrategy) {
+    public ScrScriptModMerger(Path mod1Dir, Path mod2Dir, Path outputDir,
+                              boolean interactive, MergeChoice defaultStrategy) {
         this.mod1Dir = mod1Dir;
         this.mod2Dir = mod2Dir;
         this.outputDir = outputDir;
@@ -191,12 +193,12 @@ public class ModMerger {
      * @throws IOException 如果文件读取或解析失败
      */
     private MergeResult mergeScriptFiles(Path script1, Path script2) throws IOException {
-        // 第1步：解析两个脚本文件为AST
-        TechlandScriptParser.FileContext file1 = ScriptParser.parseFile(script1);
-        TechlandScriptParser.FileContext file2 = ScriptParser.parseFile(script2);
+        // 1、使用Antlr4将文件内容解析为AST语法树
+        TechlandScriptParser.FileContext file1 = ScrScriptParser.parseFile(script1);
+        TechlandScriptParser.FileContext file2 = ScrScriptParser.parseFile(script2);
 
         // 第2步：对比两个AST，获取差异列表
-        List<DiffResult> diffs = TreeComparator.compareFiles(file1, file2);
+        List<DiffResult> diffs = ScrTreeComparator.compareFiles(file1, file2);
 
         // 初始化合并结果
         MergeResult result = new MergeResult();
@@ -356,17 +358,17 @@ public class ModMerger {
         List<Path> scripts = new ArrayList<>();
 
         // 遍历目录树（包括子目录）
-        Files.walk(directory)
-                // 过滤出常规文件（不是目录等其他类型）
-                .filter(Files::isRegularFile)
-                // 过滤出扩展名为 .scr 或 .txt 的文件
-                .filter(p -> {
-                    String name = p.getFileName().toString().toLowerCase();
-                    return name.endsWith(".scr") || name.endsWith(".txt");
-                })
-                // 添加到列表
-                .forEach(scripts::add);
-
+        try (Stream<Path> walk = Files.walk(directory)) {
+            // 过滤出常规文件（不是目录等其他类型）
+            walk.filter(Files::isRegularFile)
+                    // 过滤出扩展名为 .scr 或 .txt 的文件
+                    .filter(p -> {
+                        String name = p.getFileName().toString().toLowerCase();
+                        return name.endsWith(".scr") || name.endsWith(".txt");
+                    })
+                    // 添加到列表
+                    .forEach(scripts::add);
+        }
         return scripts;
     }
 

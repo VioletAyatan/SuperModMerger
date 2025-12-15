@@ -1,6 +1,6 @@
-package ankol.mod.merger;
+package ankol.mod.merger.core;
 
-import ankol.mod.merger.ConflictResolver.MergeChoice;
+import ankol.mod.merger.core.ConflictResolver.MergeChoice;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 

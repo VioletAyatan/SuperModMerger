@@ -1,5 +1,9 @@
 package ankol.mod.merger;
 
+import ankol.mod.merger.core.ConflictResolver;
+import ankol.mod.merger.core.MergeConfig;
+import ankol.mod.merger.merger.ScrScriptModMerger;
+
 import java.io.IOException;
 
 /**
@@ -63,7 +67,7 @@ public class AppMain {
 
             // 第4步：创建核心合并引擎实例
             // 传入：两个模组目录、输出目录、交互模式标志、默认合并策略
-            ModMerger merger = new ModMerger(
+            ScrScriptModMerger merger = new ScrScriptModMerger(
                     config.mod1Directory,
                     config.mod2Directory,
                     config.outputDirectory,
@@ -74,13 +78,10 @@ public class AppMain {
             // 第5步：执行合并操作
             // 这是主要的业务逻辑，会扫描目录、解析脚本、对比差异、处理冲突
             merger.merge();
-
             // 第6步：合并成功，打印完成信息
             System.out.println("\nDone!");
-
             // 以成功退出码退出
             System.exit(0);
-
         } catch (IllegalArgumentException e) {
             // 参数错误处理：打印错误信息，退出码1
             System.err.println("Error: " + e.getMessage());

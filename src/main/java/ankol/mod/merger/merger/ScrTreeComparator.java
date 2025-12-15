@@ -1,4 +1,4 @@
-package ankol.mod.merger;
+package ankol.mod.merger.merger;
 
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import org.antlr.v4.runtime.RuleContext;
@@ -23,7 +23,7 @@ import java.util.Map;
  * - 唯一键 = 定义类型 + 名称（如 "sub:player_init"）
  * - 对比两个索引表，找出差异
  */
-public class TreeComparator {
+public class ScrTreeComparator {
 
     /**
      * 差异结果内部类 - 表示两个脚本之间的一个差异

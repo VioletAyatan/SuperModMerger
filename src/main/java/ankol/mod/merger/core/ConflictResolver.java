@@ -1,6 +1,6 @@
-package ankol.mod.merger;
+package ankol.mod.merger.core;
 
-import ankol.mod.merger.TreeComparator.DiffResult;
+import ankol.mod.merger.merger.ScrTreeComparator.DiffResult;
 
 import java.util.*;
 

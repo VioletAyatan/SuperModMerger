@@ -1,4 +1,4 @@
-package ankol.mod.merger;
+package ankol.mod.merger.merger;
 
 import ankol.mod.merger.antlr4.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
@@ -21,7 +21,7 @@ import java.nio.file.Path;
  * <p>
  * 支持的语法：TechlandScript.g4 定义的完整语法
  */
-public class ScriptParser {
+public class ScrScriptParser {
 
     /**
      * 从文件路径解析脚本
