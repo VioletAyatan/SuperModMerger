@@ -1,0 +1,84 @@
+import "item_color.def"
+import "common_color_sets.scr"
+
+sub main()
+{
+    use common_color_sets();
+
+	ColorSet("even_colors")
+    {
+        Color(Color_Green,  15);
+        Color(Color_Violet, 10);
+        Color(Color_Platinum,5);
+    }
+	
+	ColorSet("odd_colors")
+    {
+        Color(Color_White,   2);        
+        Color(Color_Blue,    5);        
+        Color(Color_Orange,  5);
+    }
+	
+	ColorSet("weapons_renegade")
+    {
+        Color(Color_White, 0);
+        Color(Color_Green, 0);
+        Color(Color_Blue,  95);
+        Color(Color_Violet, 5);
+        Color(Color_Orange, 0);
+    }
+	
+	ColorSet("weapons_PK")
+    {
+        Color(Color_White, 0);
+        Color(Color_Green, 0);
+        Color(Color_Blue,  95);
+        Color(Color_Violet, 5);
+        Color(Color_Orange, 0);
+    }
+	
+	ColorSet("weapons_duke")
+    {
+        Color(Color_White, 0);
+        Color(Color_Green, 0);
+        Color(Color_Blue,  95);
+        Color(Color_Violet, 5);
+        Color(Color_Orange, 0);
+    }
+	
+	ColorSet("weapons_fodder")
+    {
+        Color(Color_White, 90);
+        Color(Color_Green, 10);
+        Color(Color_Blue,  0);
+        Color(Color_Violet, 5);
+        Color(Color_Orange, 0);
+    }
+	
+	ColorSet("weapons_generic")
+    {
+        Color(Color_White, 70);
+        Color(Color_Green, 30);
+        Color(Color_Blue,  0);
+        Color(Color_Violet, 0);
+        Color(Color_Orange, 0);
+    }
+	
+	ColorSet("dlc_ft_weapon_human")
+    {
+        Color(Color_White, 0);
+        Color(Color_Green, 1);
+        Color(Color_Blue,  0);
+        Color(Color_Violet, 0);
+        Color(Color_Orange, 0);
+    }
+	
+	ColorSet("dlc_ft_weapon_baron")
+    {
+        Color(Color_White, 0);
+        Color(Color_Green, 1);
+        Color(Color_Blue,  0);
+        Color(Color_Violet, 0);
+        Color(Color_Orange, 0);
+    }
+}

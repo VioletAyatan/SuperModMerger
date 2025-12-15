@@ -1,0 +1,9 @@
+//This script is generated from Inventory.xlsm. Don't modify it!!!
+
+import "inventorystuff.scr" 
+import "faction_exports.scr"
+import "inventory_imports.scr" 
+sub main()
+{
+	use collectables_imports();
+}

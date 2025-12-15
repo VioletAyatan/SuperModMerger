@@ -1,0 +1,1326 @@
+import "damage_type.def"
+import "item_hit_fx_category.def"
+import "item_color.def"
+import "hit_reaction.def"
+
+export int OwnerType_None           = 0;
+export int OwnerType_Player         = 1;
+export int OwnerType_AI             = 2;
+
+export int UsageType_Normal         = 0;
+export int UsageType_Aim            = 1;
+export int UsageType_Akimbo         = 2;
+
+export int CategoryType_Unknown             = -1;
+export int CategoryType_Melee               = 0;
+export int CategoryType_Firearm             = 1;
+export int CategoryType_Throwable           = 2;
+export int CategoryType_Powerup             = 3;
+export int CategoryType_Ammo                = 4;
+export int CategoryType_Cash                = 5;
+export int CategoryType_Collectable         = 6;
+export int CategoryType_Medkit              = 7;
+export int CategoryType_CraftPart           = 8;
+export int CategoryType_InventoryItem       = 9;
+export int CategoryType_Other     	        = 10;
+export int CategoryType_RepairPart	        = 11;
+export int CategoryType_Flashlight	        = 12;
+export int CategoryType_ThrowableLiquid     = 13;
+export int CategoryType_ThrowableFlare      = 14;
+export int CategoryType_Fuel                = 15;
+export int CategoryType_Lockpick            = 16;
+export int CategoryType_ItemBundle          = 17;
+export int CategoryType_CraftComponent      = 18;
+export int CategoryType_SurvivorPack        = 19;
+export int CategoryType_Valuable            = 20;
+export int CategoryType_Voucher             = 21;
+export int CategoryType_VehicleUpgrade     	= 22;
+export int CategoryType_SyringeAntizin      = 23;
+export int CategoryType_PureAntizin         = 24;
+export int CategoryType_Token               = 25;
+export int CategoryType_OutfitPart			= 26;
+export int CategoryType_LootPack            = 27;
+export int CategoryType_EvolvingItem        = 28;
+
+export int StatsType_None           = 0;
+export int StatsType_Blunt          = 1;
+export int StatsType_Cut            = 2;
+export int StatsType_Pistol         = 3;
+export int StatsType_Rifle          = 4;
+export int StatsType_Shotgun        = 5;
+export int StatsType_Explosive      = 6;
+export int StatsType_Special        = 7;
+export int StatsType_Flame          = 8;
+export int StatsType_Fists          = 9;
+
+export int AchType_None				= 0;
+export int AchType_Knuckles			= 1;
+export int AchType_Hammer			= 2;
+export int AchType_PoliceBaton		= 3;
+export int AchType_Baton			= 4;
+export int AchType_WoodenBaton		= 5;
+export int AchType_Stick			= 6;
+export int AchType_Tonfa			= 7;
+export int AchType_BaseballBat		= 8;
+export int AchType_Wrench			= 9;
+export int AchType_HeavyWrench		= 10;
+export int AchType_BigHammer		= 11;
+export int AchType_Bo				= 12;
+export int AchType_Mace				= 13;
+export int AchType_Crowbar			= 14;
+export int AchType_PickAxe			= 15;
+export int AchType_Kanabo			= 16;
+export int AchType_Knife			= 17;
+export int AchType_DoubleBlade		= 18;
+export int AchType_Cleaver			= 19;
+export int AchType_Machete			= 20;
+export int AchType_Sword			= 21;
+export int AchType_Axe				= 22;
+export int AchType_BigAxe			= 23;
+export int AchType_Revolver			= 24;
+export int AchType_Pistol			= 25;
+export int AchType_Rifle			= 26;
+export int AchType_Shotgun			= 27;
+export int AchType_Grenade			= 28;
+export int AchType_Molotov			= 29;
+export int AchType_Sickle           = 30;
+export int AchType_FryingPan        = 31;
+export int AchType_Branch           = 32;
+export int AchType_Hatstand         = 33;
+export int AchType_Shovel           = 34;
+export int AchType_Spade            = 35;
+export int AchType_Paddle           = 36;
+export int AchType_Plank            = 37;
+export int AchType_Pipe             = 38;
+
+export int LootType_None            = 0;
+export int LootType_Knuckles        = 1;
+export int LootType_Blunt           = 2;
+export int LootType_Sharp           = 3;
+export int LootType_Firearm_Short   = 4;
+export int LootType_Firearm_Long    = 5;
+export int LootType_Firearm_Auto    = 6;
+export int LootType_Throwable       = 7;
+export int LootType_Powerup         = 8;
+
+export int LootClass_None			= -1;
+export int LootClass_Good			= 0;
+export int LootClass_Common			= 1;
+
+export int WeaponBuildType_Undefined         = -1;
+export int WeaponBuildType_Universal         = 0;
+export int WeaponBuildType_Metal             = 1;
+export int WeaponBuildType_Wood              = 2;
+
+export int DeathEffect_None					  =  -1;
+export int DeathEffect_Explode				  =  0;
+export int DeathEffect_Fire				  	  = 1;
+
+export int RagdollBehavior_None         	= 0;
+export int RagdollBehavior_BaseballBat  	= 1;
+export int RagdollBehavior_Shotgun      	= 2;
+export int RagdollBehavior_Fists        	= 3;
+export int RagdollBehavior_Machete     		= 4;
+export int RagdollBehavior_FireAxe      	= 5;
+export int RagdollBehavior_FistsInfected   	= 6;
+
+export int AmmoType_Unknown      = -1;
+export int AmmoType_Pistol       = 0;
+export int AmmoType_Revolver     = 1;
+export int AmmoType_Rifle        = 2;
+export int AmmoType_SubMachine   = 3;
+export int AmmoType_Shotgun      = 4;
+export int AmmoType_Sniper       = 5;
+export int AmmoType_LightMachine = 6;
+export int AmmoType_Rocket       = 7;
+export int AmmoType_Arrow        = 8;
+export int AmmoType_Bolt         = 9;
+export int AmmoType_Harpoon      = 10;
+export int AmmoType_Stone        = 11;
+export int AmmoType_FlameThrower = 12;
+export int AmmoType_GrenadeLauncher = 13;
+export int AmmoType_Sawblade     = 14;
+
+export int BulletVis_None             = 0;
+export int BulletVis_Arrow            = 1;
+export int BulletVis_ArrowElectricity = 2;
+export int BulletVis_ArrowFire        = 3;
+export int BulletVis_ArrowExploding   = 4;
+export int BulletVis_Bolt             = 5;
+export int BulletVis_BoltPoison		  = 6;
+export int BulletVis_BoltStunning	  = 7;
+export int BulletVis_BoltImpact		  = 8;
+export int BulletVis_Invisible		  = 9;
+export int BulletVis_Custom			  = 10;
+export int BulletVis_Mesh             = 11;
+
+export int ShotMode_None        = 0;
+export int ShotMode_Single      = 1;
+export int ShotMode_Burst       = 2;
+export int ShotMode_Automatic   = 3;
+
+export int HitSeverity_None     = 0;
+export int HitSeverity_Light    = 1;
+export int HitSeverity_Medium   = 2;
+export int HitSeverity_Heavy    = 3;
+
+export int SRF_Unknown        =  0 ;
+export int SRF_Flexible       =  1 ;
+export int SRF_Fire           =  2 ;
+export int SRF_Water          =  3 ;
+export int SRF_Snow           =  4 ;
+export int SRF_Sand           =  5 ;
+export int SRF_Gravel         =  6 ;
+export int SRF_Grass          =  7 ;
+export int SRF_Ground         =  8 ;
+export int SRF_Mud            =  9 ;
+export int SRF_Flesh          = 10 ;
+export int SRF_Rubber         = 11 ;
+export int SRF_Wood           = 12 ;
+export int SRF_Plastic        = 13 ;
+export int SRF_Tarmac         = 14 ;
+export int SRF_Glass          = 15 ;
+export int SRF_Ice            = 16 ;
+export int SRF_Metal          = 17 ;
+export int SRF_Stone          = 18 ;
+export int SRF_Canvas        =  19 ;
+
+export int Gen_Damage = 0;
+export int Gen_Force = 1;
+export int Gen_Speed = 2;
+export int Gen_Durability = 3;
+
+export float Gen_NONE = -1.0;
+export float Gen_VERY_LOW = 0.0;
+export float Gen_LOW = 1.0;
+export float Gen_MEDIUM = 2.0;
+export float Gen_HIGH = 3.0;
+export float Gen_VERY_HIGH = 4.0;
+
+export float NONE = -1.0;
+export float VERY_LOW = 0.0;
+export float LOW = 1.0;
+export float MEDIUM = 2.0;
+export float HIGH = 3.0;
+export float VERY_HIGH = 4.0;
+
+export int GenType_None = -1;
+export int GenType_MeleeWeapon = 0;
+export int GenType_Firearm = 1;
+export int GenType_UpgradePart = 2;
+export int GenType_OutfitPart = 3;
+export int GenType_RangedWeapon = 4;
+
+export int BulletFx_None  = -1;
+export int BulletFx_ZombieSpit = 0; //DI
+export int BulletFx_TracerAmmunition = 0;
+
+export int DetectorEquipment_Unknown = -1;
+export int DetectorEquipment_Proximity = 0;
+export int DetectorEquipment_ThermalVisOcclude = 1;
+export int DetectorEquipment_ThermalVisXRay = 2;
+
+export int CollectableAwardRunner = 98;
+export int CollectableAwardStatus = 99;
+export int CollectableAwardFighter = 100;
+
+export int VehicleSlot_Engine = 0;
+export int VehicleSlot_Turbo = 1;
+export int VehicleSlot_Suspension = 2;
+export int VehicleSlot_Tires = 3;
+export int VehicleSlot_Brakes = 4;
+export int VehicleSlot_Blueprints = 5;
+export int VehicleSlot_Equipment = 6;
+export int VehicleSlot_Upgrades = 7;
+export int VehicleSlot_Remote = 8;
+
+
+export int VehicleStats_Grip = 0;
+export int VehicleStats_Braking = 1;
+export int VehicleStats_Handling	= 2;
+export int VehicleStats_Acceleration = 3;
+export int VehicleStats_TopSpeed = 4;
+
+export int MOD_SLOT_SHAFT = 1;
+export int MOD_SLOT_TIP   = 2;
+export int MOD_SLOT_GRIP  = 4;
+export int MOD_SLOT_CHARM = 8;
+
+export int OutfitPartSlot_Torso = 0;
+export int OutfitPartSlot_Legs = 1;
+export int OutfitPartSlot_Shoes = 2;
+export int OutfitPartSlot_Head = 3;
+export int OutfitPartSlot_Gloves = 4;
+export int OutfitPartSlot_TorsoAddon = 5;
+
+export int PlayerModifiableTool_Paraglider = 0;
+export int PlayerModifiableTool_RopeHook = 1;
+
+export int PlayerToken_MutationSamples = 0;
+export int PlayerToken_NightrunnerToken = 1;
+export int PlayerToken_ChapterChallengeTicket = 2;
+export int PlayerToken_Chapter2Token = 3;
+export int PlayerToken_Chapter3Token = 4;
+export int PlayerToken_Chapter4Token = 5;
+export int PlayerToken_AgentDLCToken = 6;
+export int PlayerToken_OperaToken = 7;
+export int PlayerToken_Chapter2ChallengeTicket = 8;
+export int PlayerToken_Chapter3ChallengeTicket = 9;
+export int PlayerToken_Chapter4ChallengeTicket = 10;
+export int PlayerToken_Event5Token = 25;
+export int PlayerToken_Event6Token = 26;
+export int PlayerToken_TowerRaidToken = 30;
+export int PlayerToken_TowerRaidPerk = 31;
+
+//keep in sync with EWpnSubtype, usage: WpnSubtype(EWpnSubtype_Machete)
+export int EWpnSubtype_Machete = 1;
+export int EWpnSubtype_Axe = 2;
+export int EWpnSubtype_Sword = 3;
+export int EWpnSubtype_Hammer = 4;
+export int EWpnSubtype_Stick = 5;
+export int EWpnSubtype_Mace = 6;
+export int EWpnSubtype_Bow = 7;
+export int EWpnSubtype_Crossbow = 8;
+export int EWpnSubtype_Spear = 9;
+export int EWpnSubtype_Knife = 10;
+export int EWpnSubtype_Halberd = 11;
+
+// keep it in sync with EAiSkinPack, usage: AiSkinPack(EAiSkinPack_LawanDefault)
+export int EAiSkinPack_LawanPreorder = 0;
+export int EAiSkinPack_LawanCN = 1;
+
+export int HandModification_Normal = 0;
+export int HandModification_Custom = 1;
+
+export int ECrosshairType_None = 0;
+export int ECrosshairType_Pistol = 1;
+export int ECrosshairType_Rifle = 2;
+export int ECrosshairType_Shotgun = 3;
+export int ECrosshairType_Bow = 4;
+export int ECrosshairType_Crossbow = 5;
+export int ECrosshairType_Binoculars = 6;
+export int ECrosshairType_Harpoon = 7;
+export int ECrosshairType_Count = 8;
+
+sub Precache()
+{
+// TODO: add new fxes and precache in a new fx system
+    SeqFx("AsphaltHit_SG_sequence.fx");
+    SeqFx("DI_cutflesh_sequence.fx");
+    SeqFx("DI_hitflesh_sequence.fx");
+    SeqFx("DirtHit_SG_sequence.fx");
+    SeqFx("armorhit_small_sequence.fx");
+    SeqFx("gunshotBlood_sequence.fx");
+    SeqFx("MetalHit_SG_sequence.fx");
+    SeqFx("StoneHit_SG_sequence.fx");
+    SeqFx("WeaponHit_Water_sequence.fx");
+    SeqFx("WoodHit_Small_sequence.fx");
+
+    SeqLodFx("AsphaltHit_SG_*_sequence.fx");
+    SeqLodFx("DI_cutflesh_*_sequence.fx");
+    SeqLodFx("DI_hitflesh_*_sequence.fx");
+    SeqLodFx("DirtHit_SG_*_sequence.fx");
+    SeqLodFx("armorhit_small_*_sequence.fx");
+    SeqLodFx("gunshotBlood_*_sequence.fx");
+    SeqLodFx("MetalHit_SG_*_sequence.fx");
+    SeqLodFx("StoneHit_SG_*_sequence.fx");
+    SeqLodFx("WeaponHit_Water_*_sequence.fx");
+    SeqLodFx("WoodHit_Small_*_sequence.fx");
+}
+
+sub FxDefalt()
+{
+	Fx(SRF_Unknown,     "collision_dust.gpufx");
+	Fx(SRF_Flexible,    "collision_dust.gpufx");
+	Fx(SRF_Fire,        "collision_dust.gpufx");
+	Fx(SRF_Water,       "collision_dust.gpufx");
+	Fx(SRF_Snow,        "collision_dust.gpufx");
+	Fx(SRF_Sand,        "collision_dust.gpufx");
+	Fx(SRF_Gravel,      "collision_dust.gpufx");
+	Fx(SRF_Grass,       "collision_dust.gpufx");
+	Fx(SRF_Ground,      "collision_dust.gpufx");
+	Fx(SRF_Mud,         "collision_dust.gpufx");
+	Fx(SRF_Flesh,       "collision_dust.gpufx");
+	Fx(SRF_Rubber,      "collision_dust.gpufx");
+	Fx(SRF_Wood,        "collision_dust.gpufx");
+	Fx(SRF_Plastic,     "collision_dust.gpufx");
+	Fx(SRF_Tarmac,      "collision_dust.gpufx");
+	Fx(SRF_Glass,       "collision_dust.gpufx");
+	Fx(SRF_Ice,         "collision_dust.gpufx");
+	Fx(SRF_Metal,       "collision_dust.gpufx");
+	Fx(SRF_Stone,       "collision_dust.gpufx");
+}
+
+sub FxSharp()
+{
+	Fx(SRF_Unknown,     "collision_dust.gpufx");
+	Fx(SRF_Flexible,    "collision_dust.gpufx");
+	Fx(SRF_Fire,        "collision_dust.gpufx");
+	Fx(SRF_Water,       "collision_dust.gpufx");
+	Fx(SRF_Snow,        "collision_dust.gpufx");
+	Fx(SRF_Sand,        "collision_dust.gpufx");
+	Fx(SRF_Gravel,      "collision_dust.gpufx");
+	Fx(SRF_Grass,       "collision_dust.gpufx");
+	Fx(SRF_Ground,      "concrete_hit_heavy_01.gpufx");
+	Fx(SRF_Mud,         "collision_dust.gpufx");
+	Fx(SRF_Flesh,       "collision_dust.gpufx");
+	Fx(SRF_Rubber,      "collision_dust.gpufx");
+	Fx(SRF_Wood,        "wood_hit_heavy.gpufx");
+	Fx(SRF_Plastic,     "collision_dust.gpufx");
+	Fx(SRF_Tarmac,      "concrete_hit_heavy_01.gpufx");
+	Fx(SRF_Glass,       "collision_dust.gpufx");
+	Fx(SRF_Ice,         "collision_dust.gpufx");
+	Fx(SRF_Metal,       "metal_hit_heavy_01.gpufx");
+	Fx(SRF_Stone,       "concrete_hit_heavy_01.gpufx");
+}
+
+
+
+
+
+sub HitEffects_Default()
+{
+    HitEffects(ItemHitFxCategory_Default)
+    {
+        Sound("collision_hit_default");
+        use	FxDefalt();
+    }
+}
+
+sub HitEffects_Baseball_Metal()
+{
+    HitEffects(ItemHitFxCategory_Default)
+    {
+        Sound("collision_hit_baseball");
+		use	FxDefalt();
+    }
+}
+
+sub HitEffects_Wooden()
+{
+    HitEffects(ItemHitFxCategory_Wooden)
+    {
+        Sound("collision_hit_wooden");
+		
+    }
+}
+
+sub HitEffects_BuggyUpgrade()
+{
+    HitEffects(ItemHitFxCategory_BuggyUpgrade)
+    {
+        Sound("collision_hit_default");
+		use	FxDefalt();
+    }
+}
+
+sub HitEffects_Sharp()
+{
+    HitEffects(ItemHitFxCategory_Sharp)
+    {
+        Sound("collision_hit_sharp");        
+		use	FxSharp();
+    }
+}
+
+sub HitEffects_Sharp_Heavy()
+{
+    HitEffects(ItemHitFxCategory_Sharp)
+    {
+        Sound("collision_hit_sharp_heavy");
+		use	FxSharp();
+    }
+}
+
+
+////////////////PICKUP_WEAPON//////////////
+
+
+sub PickupSounds_Machete()
+{
+    PickupSounds("pickup_machete");
+}
+
+sub PickupSounds_Machete_Low()
+{
+    PickupSounds("pickup_machete_low");
+}
+
+sub PickupSounds_Machete_15h()
+{
+    PickupSounds("pickup_machete_15h");
+}
+
+sub PickupSounds_Machete_15h_low()
+{
+    PickupSounds("pickup_machete_15h_low");
+}
+
+sub PickupSounds_Machete_2h()
+{
+    PickupSounds("pickup_machete_2h");
+}
+
+sub PickupSounds_Machete_2h_low()
+{
+    PickupSounds("pickup_machete_2h_low");
+}
+
+sub PickupSounds_Axe()
+{
+    PickupSounds("pickup_axe");
+}
+
+sub PickupSounds_Axe_low()
+{
+    PickupSounds("pickup_axe_low");
+}
+
+sub PickupSounds_Axe_15h()
+{
+    PickupSounds("pickup_axe_15h");
+}
+
+sub PickupSounds_Axe_2h()
+{
+    PickupSounds("pickup_axe_2h");
+}
+
+sub PickupSounds_Axe_2h_low()
+{
+    PickupSounds("pickup_axe_2h_low");
+}
+
+sub PickupSounds_Pipe()
+{
+    PickupSounds("pickup_pipe");
+}
+
+sub PickupSounds_Pipe_low()
+{
+    PickupSounds("pickup_pipe_low");
+}
+
+sub PickupSounds_Hammer()
+{
+    PickupSounds("pickup_hammer");
+}
+
+sub PickupSounds_Hammer_low()
+{
+    PickupSounds("pickup_hammer_low");
+}
+
+sub PickupSounds_Hammer_15h()
+{
+    PickupSounds("pickup_hammer_15h");
+}
+
+sub PickupSounds_Hammer_2h()
+{
+    PickupSounds("pickup_hammer_2h");
+}
+
+sub PickupSounds_Hammer_Wood_2h()
+{
+    PickupSounds("pickup_hammer_wood_2h");
+}
+
+sub PickupSounds_Hammer_Wood_2h_low()
+{
+    PickupSounds("pickup_hammer_wood_2h_low");
+}
+
+sub PickupSounds_Hammer_Fence_2h()
+{
+    PickupSounds("pickup_hammer_fence_2h");
+}
+
+sub PickupSounds_Knife()
+{
+    PickupSounds("pickup_knife");
+}
+
+sub PickupSounds_extinguisher()
+{
+    PickupSounds("pickup_extinguisher");
+}
+
+sub PickupSounds_Mace_Metal_2h()
+{
+    PickupSounds("pickup_mace_metal_2h");
+}
+
+sub PickupSounds_Mace_Metal_2h_low()
+{
+    PickupSounds("pickup_mace_metal_2h_low");
+}
+
+sub PickupSounds_Stick_Metal()
+{
+    PickupSounds("pickup_stick_metal");
+}
+
+sub PickupSounds_Stick_Metal_15h()
+{
+    PickupSounds("pickup_stick_metal_15h");
+}
+
+sub PickupSounds_Stick_Wood()
+{
+    PickupSounds("pickup_stick_wood");
+}
+
+sub PickupSounds_Stick_Wood_low()
+{
+    PickupSounds("pickup_stick_wood_low");
+}
+
+sub PickupSounds_Stick_Wood_15h()
+{
+    PickupSounds("pickup_stick_wood_15h");
+}
+
+sub PickupSounds_Stick_Wood_15h_low()
+{
+    PickupSounds("pickup_stick_wood_15h_low");
+}
+
+sub PickupSounds_Stick_Guitar_15h()
+{
+    PickupSounds("pickup_stick_guitar_15h");
+}
+
+sub PickupSounds_Shield()
+{
+    PickupSounds("pickup_shield");
+}
+
+sub PickupSounds_Knuckle()
+{
+    PickupSounds("pickup_knuckles_blunt");
+}
+
+sub PickupSounds_Rifle()
+{
+    PickupSounds("pickup_rifle");
+}
+
+sub PickupSounds_Pistol()
+{
+    PickupSounds("pickup_pistol");
+}
+
+sub PickupSounds_HeavyRanged()
+{
+    PickupSounds("pickup_heavy_ranged");
+}
+
+sub PickupSounds_Frying_Pan()
+{
+    PickupSounds("pickup_frying_pan");
+}
+
+/////////OLD/////////////
+
+sub PickupSounds_Mace()
+{
+    PickupSounds("pickup_mace");
+}
+
+sub PickupSounds_Hammer_Metal_2h()
+{
+    PickupSounds("pickup_hammer_metal_2h");
+}
+
+
+
+
+
+///////////////////PICKUP_ITEMS////////////////
+
+sub PickupSounds_Default()
+{
+    PickupSounds("pickup_default");
+}
+
+sub PickupSounds_Default_Simple()
+{
+    PickupSounds("pickup_default_simple");
+}
+
+sub PickupSounds_Bottle()
+{
+    PickupSounds("pickup_bottle_a");
+}
+
+sub PickupSounds_Bottle_Glass_With_Liquid()
+{
+    PickupSounds("pickup_bottle_glass_with_liquid");
+}
+
+sub PickupSounds_Bottle_Plastic_With_Liquid()
+{
+    PickupSounds("pickup_bottle_plastic_with_liquid");
+}
+
+sub PickupSounds_Bottle_Tiny()
+{
+    PickupSounds("pickup_bottle_tiny");
+}
+
+sub PickupSounds_Scrap()
+{
+    PickupSounds("pickup_scrap_generic");
+}
+
+sub PickupSounds_Inhibitor_Container()
+{
+    PickupSounds("pickup_inhibitor_container");
+}
+
+sub PickupSounds_Inhibitor()
+{
+    PickupSounds("pickup_inhibitor");
+}
+
+sub PickupSounds_Electrical_Parts()
+{
+    PickupSounds("pickup_electrical_parts");
+}
+
+sub PickupSounds_Brick()
+{
+    PickupSounds("pickup_brick");
+}
+
+sub PickupSounds_Tin_Can_Empty()
+{
+    PickupSounds("pickup_tin_can_empty");
+}
+
+sub PickupSounds_Throwable_Explosives()
+{
+    PickupSounds("pickup_throwable_explosives");
+}
+
+sub PickupSounds_Medkit_Large()
+{
+    PickupSounds("pickup_medkit_large");
+}
+
+sub PickupSounds_Heavy_Metal_Parts()
+{
+    PickupSounds("pickup_metal_parts_heavy");
+}
+
+sub PickupSounds_Rugs()
+{
+    PickupSounds("pickup_rugs");
+}
+
+sub PickupSounds_Explosives()
+{
+    PickupSounds("pickup_explosives");
+}
+
+sub PickupSounds_Coin()
+{
+    PickupSounds("pickup_coin");
+}
+
+sub PickupSounds_Cash()
+{
+    PickupSounds("pickup_cash");
+}
+
+sub PickupSounds_Herbs()
+{
+    PickupSounds("pickup_herbs");
+}
+
+sub PickupSounds_Book()
+{
+    PickupSounds("pickup_book");
+}
+
+sub PickupSounds_Toolbox()
+{
+    PickupSounds("pickup_toolbox");
+}
+
+sub PickupSounds_Food_Supply()
+{
+    PickupSounds("pickup_food_supply");
+}
+
+sub PickupSounds_Jewelry()
+{
+    PickupSounds("pickup_jewelry");
+}
+
+sub PickupSounds_Egg_Explosive()
+{
+    PickupSounds("pickup_egg_explosive");
+}
+
+sub PickupSounds_Ammo_Box()
+{
+    PickupSounds("pickup_ammo_box");
+}
+
+sub PickupSounds_Pill_Bottle()
+{
+    PickupSounds("pickup_pill_bottle");
+}
+
+sub PickupSounds_Pill_Blister()
+{
+    PickupSounds("pickup_pill_blister");
+}
+
+sub PickupSounds_Crystals()
+{
+    PickupSounds("pickup_crystals");
+}
+
+
+sub HitEffects_Firearm()
+{
+    HitEffects(ItemHitFxCategory_Firearm)
+    {
+        Sound("collision_hit_default");
+
+        Fx(SRF_Unknown,     "metal_hit_heavy.gpufx");
+        Fx(SRF_Flexible,    "metal_hit_heavy.gpufx");
+        Fx(SRF_Fire,        "metal_hit_heavy.gpufx");
+        Fx(SRF_Water,       "metal_hit_heavy.gpufx");
+        Fx(SRF_Snow,        "metal_hit_heavy.gpufx");
+        Fx(SRF_Sand,        "metal_hit_heavy.gpufx");
+        Fx(SRF_Gravel,      "concrete_hit_heavy.gpufx");
+        Fx(SRF_Grass,       "metal_hit_heavy.gpufx");
+        Fx(SRF_Ground,      "concrete_hit_heavy.gpufx");
+        Fx(SRF_Mud,         "metal_hit_heavy.gpufx");
+        Fx(SRF_Flesh,       "collision_dust.gpufx");
+        Fx(SRF_Rubber,      "metal_hit_heavy.gpufx");
+        Fx(SRF_Wood,        "metal_hit_heavy.gpufx");
+        Fx(SRF_Plastic,     "metal_hit_heavy.gpufx");
+        Fx(SRF_Tarmac,      "concrete_hit_heavy.gpufx");
+        Fx(SRF_Glass,       "metal_hit_heavy.gpufx");
+        Fx(SRF_Ice,         "metal_hit_heavy.gpufx");
+        Fx(SRF_Metal,       "metal_hit_heavy.gpufx");
+        Fx(SRF_Stone,       "concrete_hit_heavy.gpufx");
+    }
+}
+
+sub HitEffects_Firearm_Pistol()
+{
+    HitEffects(ItemHitFxCategory_Firearm_Pistol)
+    {
+        Sound("wpn_pistol_surface_hit");
+        RicochetSound("wpn_pistol_ricochet");
+
+        Trace(SRF_Unknown,  "pistol_plastic_hit_01a.gpufx");
+		Trace(SRF_Canvas,  "pistol_canvas_hit_01.gpufx");
+	    Trace(SRF_Flexible, "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Fire,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+	    Trace(SRF_Snow,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Sand,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Gravel,   "pistol_concrete_hit_01a.gpufx");
+	    Trace(SRF_Grass,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Ground,   "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Mud,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flesh,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Rubber,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Wood,     "pistol_wood_hit_fx_01a.gpufx");
+	    Trace(SRF_Plastic,  "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Tarmac,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Glass,    "pistol_glass_hit_01a.gpufx");
+	    Trace(SRF_Ice,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Metal,    "pistol_metal_hit_01a.gpufx");
+	    Trace(SRF_Stone,    "pistol_concrete_hit_01a.gpufx");
+    }
+}
+
+sub HitEffects_Firearm_SMG()
+{
+    HitEffects(ItemHitFxCategory_Firearm_SMG)
+    {
+        Sound("wpn_smg_surface_hit");
+        RicochetSound("wpn_smg_ricochet");
+
+        Trace(SRF_Unknown,  "pistol_plastic_hit_01a.gpufx");
+		Trace(SRF_Canvas,  "pistol_canvas_hit_01.gpufx");
+		Trace(SRF_Flexible, "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Fire,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+	    Trace(SRF_Snow,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Sand,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Gravel,   "pistol_concrete_hit_01a.gpufx");
+	    Trace(SRF_Grass,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Ground,   "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Mud,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flesh,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Rubber,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Wood,     "pistol_wood_hit_fx_01a.gpufx");
+	    Trace(SRF_Plastic,  "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Tarmac,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Glass,    "pistol_glass_hit_01a.gpufx");
+	    Trace(SRF_Ice,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Metal,    "pistol_metal_hit_01a.gpufx");
+	    Trace(SRF_Stone,    "pistol_concrete_hit_01a.gpufx");
+    }
+}
+
+sub HitEffects_Firearm_Rifle()
+{
+    HitEffects(ItemHitFxCategory_Firearm_Rifle)
+    {
+        Sound("wpn_rifle_surface_hit");
+        RicochetSound("wpn_rifle_ricochet");
+
+        Trace(SRF_Unknown,  "pistol_plastic_hit_01a.gpufx");
+		Trace(SRF_Canvas,  "pistol_canvas_hit_01.gpufx");
+	    Trace(SRF_Flexible, "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Fire,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+	    Trace(SRF_Snow,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Sand,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Gravel,   "pistol_concrete_hit_01a.gpufx");
+	    Trace(SRF_Grass,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Ground,   "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Mud,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flesh,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Rubber,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Wood,     "pistol_wood_hit_fx_01a.gpufx");
+	    Trace(SRF_Plastic,  "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Tarmac,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Glass,    "pistol_glass_hit_01a.gpufx");
+	    Trace(SRF_Ice,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Metal,    "pistol_metal_hit_01a.gpufx");
+	    Trace(SRF_Stone,    "pistol_concrete_hit_01a.gpufx");
+    }
+}
+sub HitEffects_Firearm_Shotgun()
+{
+    HitEffects(ItemHitFxCategory_Firearm_Shotgun)
+    {
+        Sound("wpn_shotgun_surface_hit");
+        RicochetSound("wpn_shotgun_ricochet");
+
+        Trace(SRF_Unknown,  "pistol_plastic_hit_01a.gpufx");
+		Trace(SRF_Canvas,  "pistol_canvas_hit_01.gpufx");
+	    Trace(SRF_Flexible, "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Fire,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+	    Trace(SRF_Snow,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Sand,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Gravel,   "pistol_concrete_hit_01a.gpufx");
+	    Trace(SRF_Grass,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Ground,   "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Mud,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flesh,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Rubber,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Wood,     "pistol_wood_hit_fx_01a.gpufx");
+	    Trace(SRF_Plastic,  "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Tarmac,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Glass,    "pistol_glass_hit_01a.gpufx");
+	    Trace(SRF_Ice,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Metal,    "pistol_metal_hit_01a.gpufx");
+	    Trace(SRF_Stone,    "pistol_concrete_hit_01a.gpufx");
+    }
+}
+
+
+///////////////////HIT_COLLISION_WEAPON///////////////////
+
+
+sub HitEffects_Kick()
+{
+    HitEffects(ItemHitFxCategory_Kick)
+    {
+        Sound("hit_collision_kick");
+		
+    }
+}
+
+sub HitEffects_Fists()
+{
+    HitEffects(ItemHitFxCategory_Fists)
+    {
+        Sound("hit_collision_fists");
+		
+    }
+}
+
+sub HitEffects_Machete()
+{
+    HitEffects(ItemHitFxCategory_Machete)
+    {
+        Sound("hit_collision_machete");
+		use	FxSharp();
+    }
+}
+
+sub HitEffects_Machete_2h()
+{
+    HitEffects(ItemHitFxCategory_Machete_2h)
+    {
+        Sound("hit_collision_machete_2h");
+		use	FxSharp();
+    }
+}
+
+sub HitEffects_StickWood()
+{
+    HitEffects(ItemHitFxCategory_StickWood)
+    {
+        Sound("hit_collision_stick_wood");
+		
+    }
+}
+
+sub HitEffects_StickWood_2h()
+{
+    HitEffects(ItemHitFxCategory_StickWood_2h)
+    {
+        Sound("hit_collision_stick_wood_2h");
+    }
+}
+
+sub HitEffects_Pipe()
+{
+    HitEffects(ItemHitFxCategory_Pipe)
+    {
+        Sound("hit_collision_pipe");
+		use	FxDefalt();
+		
+    }
+}
+
+sub HitEffects_Axe()
+{
+    HitEffects(ItemHitFxCategory_Axe)
+    {
+        Sound("hit_collision_axe");
+		use	FxSharp();
+    }
+}
+
+sub HitEffects_Axe_2h()
+{
+    HitEffects(ItemHitFxCategory_Axe_2h)
+    {
+        Sound("hit_collision_axe_2h");
+		use	FxSharp();
+    }
+}
+
+sub HitEffects_StickMetal()
+{
+    HitEffects(ItemHitFxCategory_StickMetal)
+    {
+        Sound("hit_collision_stick_metal");
+		use	FxDefalt();
+    }
+}
+
+sub HitEffects_StickMetal_2h()
+{
+    HitEffects(ItemHitFxCategory_StickMetal_2h)
+    {
+        Sound("hit_collision_stick_metal_2h");
+		use	FxDefalt();
+    }
+}
+
+sub HitEffects_BowArrow()
+{
+    HitEffects(ItemHitFxCategory_BowArrow)
+    {
+        Sound("hit_collision_bow_arrow");
+		use	FxSharp();
+		
+	    Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+		Trace(SRF_Unknown,  "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flexible, "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Fire,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Snow,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Sand,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Gravel,   "sawblade_hard_surface_impact_01.gpufx");
+	    Trace(SRF_Grass,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Ground,   "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Mud,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flesh,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Rubber,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Wood,     "pistol_wood_hit_fx_01a.gpufx");
+	    Trace(SRF_Plastic,  "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Tarmac,   "sawblade_hard_surface_impact_01.gpufx");
+	    Trace(SRF_Glass,    "pistol_glass_hit_01a.gpufx");
+	    Trace(SRF_Ice,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Metal,    "sawblade_hard_surface_impact_01.gpufx");
+	    Trace(SRF_Stone,    "sawblade_hard_surface_impact_01.gpufx");
+    }
+}
+
+sub HitEffects_BaronGrenade()
+{
+    HitEffects(ItemHitFxCategory_Snowball)
+    {
+        Sound("hit_collision_baron_grenade");
+		use	FxSharp();
+		
+	    Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+		Trace(SRF_Unknown,  "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flexible, "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Fire,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Snow,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Sand,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Gravel,   "pistol_concrete_hit_01a.gpufx");
+	    Trace(SRF_Grass,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Ground,   "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Mud,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flesh,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Rubber,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Wood,     "pistol_wood_hit_fx_01a.gpufx");
+	    Trace(SRF_Plastic,  "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Tarmac,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Glass,    "pistol_glass_hit_01a.gpufx");
+	    Trace(SRF_Ice,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Metal,    "arrow_metal_hit_01a.gpufx");
+	    Trace(SRF_Stone,    "pistol_concrete_hit_01a.gpufx");
+    }
+}
+
+sub HitEffects_Bullet_Scorpio()
+{
+    HitEffects(ItemHitFxCategory_CrossbowArrow)
+    {
+        Sound("hit_collision_harpoon_arrow");
+		use	FxSharp();
+		
+		Trace(SRF_Water,    "scorpio_harpoon_water_hit_01.gpufx");
+	    Trace(SRF_Unknown,  "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flexible, "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Fire,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Snow,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Sand,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Gravel,   "pistol_concrete_hit_01a.gpufx");
+	    Trace(SRF_Grass,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Ground,   "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Mud,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flesh,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Rubber,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Wood,     "pistol_wood_hit_fx_01a.gpufx");
+	    Trace(SRF_Plastic,  "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Tarmac,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Glass,    "pistol_glass_hit_01a.gpufx");
+	    Trace(SRF_Ice,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Metal,    "arrow_metal_hit_01a.gpufx");
+	    Trace(SRF_Stone,    "pistol_concrete_hit_01a.gpufx");
+    }
+}
+
+sub HitEffects_CrossbowArrow()
+{
+    HitEffects(ItemHitFxCategory_CrossbowArrow)
+    {
+        Sound("hit_collision_crossbow_arrow");
+		use	FxSharp();
+		
+		Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+		Trace(SRF_Unknown,  "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flexible, "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Fire,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Snow,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Sand,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Gravel,   "pistol_concrete_hit_01a.gpufx");
+	    Trace(SRF_Grass,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Ground,   "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Mud,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flesh,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Rubber,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Wood,     "pistol_wood_hit_fx_01a.gpufx");
+	    Trace(SRF_Plastic,  "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Tarmac,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Glass,    "pistol_glass_hit_01a.gpufx");
+	    Trace(SRF_Ice,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Metal,    "arrow_metal_hit_01a.gpufx");
+	    Trace(SRF_Stone,    "pistol_concrete_hit_01a.gpufx");
+    }
+}
+
+sub HitEffects_ThrownSpear()
+{
+    HitEffects(ItemHitFxCategory_ThrownSpear)
+    {
+        Sound("hit_collision_thrown_spear");
+		use	FxSharp();
+		
+		Trace(SRF_Water,    "water_hit_big_fx_01a.gpufx");
+    }
+}
+
+sub HitEffects_Knuckle()
+{
+    HitEffects(ItemHitFxCategory_Knuckle)
+    {
+        Sound("hit_collision_knuckle");
+		use	FxSharp();
+    }
+}
+
+sub HitEffects_KnuckleSharp()
+{
+    HitEffects(ItemHitFxCategory_KnuckleSharp)
+    {
+        Sound("hit_collision_knuckle_sharp");
+		use	FxSharp();
+    }
+}
+
+sub HitEffects_StickGuitar_15h()
+{
+    HitEffects(ItemHitFxCategory_StickGuitar_15h)
+    {
+        Sound("hit_collision_stick_guitar_15h");
+		use	FxSharp();
+    }
+}
+
+sub HitEffects_Knife()
+{
+    HitEffects(ItemHitFxCategory_Knife)
+    {
+        Sound("hit_collision_knife");
+		use	FxSharp();
+		
+		Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+    }
+}
+
+sub HitEffects_ToySword()
+{
+    HitEffects(ItemHitFxCategory_ToySword)
+    {
+        Sound("hit_collision_toy_sword");
+		use	FxSharp();
+    }
+}
+
+sub HitEffects_Frying_Pan()
+{
+    HitEffects(ItemHitFxCategory_Frying_Pan)
+    {
+        Sound("hit_collision_frying_pan");
+		use	FxSharp();
+    }
+}
+
+
+
+
+///////////////COLLISION_OBJECT/////////////////
+
+
+
+sub HitEffects_Brick()
+{
+    HitEffects(ItemHitFxCategory_Brick)
+    {
+        Sound("brick_collision");
+		use	FxDefalt();
+		
+		Trace(SRF_Water,    "water_hit_big_fx_01a.gpufx");
+    }
+}
+
+sub HitEffects_Coin()
+{
+    HitEffects(ItemHitFxCategory_Coin)
+    {
+        Sound("coin_collision");
+		use	FxDefalt();
+		
+		Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+    }
+}
+
+sub HitEffects_Knife_Throw()
+{
+   HitEffects(ItemHitFxCategory_KnifeThrow)
+    {
+        Sound("knife_throw_collision");
+		use	FxSharp();
+		
+		Trace(SRF_Water,    "pistol_water_hit_01a.gpufx");
+		Trace(SRF_Unknown,  "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flexible, "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Fire,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Snow,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Sand,     "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Gravel,   "pistol_concrete_hit_01a.gpufx");
+	    Trace(SRF_Grass,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Ground,   "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Mud,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Flesh,    "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Rubber,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Wood,     "pistol_wood_hit_fx_01a.gpufx");
+	    Trace(SRF_Plastic,  "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Tarmac,   "pistol_plastic_hit_01a.gpufx");
+	    Trace(SRF_Glass,    "pistol_glass_hit_01a.gpufx");
+	    Trace(SRF_Ice,      "pistol_dirt_hit_01a.gpufx");
+	    Trace(SRF_Metal,    "arrow_metal_hit_01a.gpufx");
+	    Trace(SRF_Stone,    "pistol_concrete_hit_01a.gpufx");
+    }
+}
+
+sub HitEffects_Snowball()
+{
+   HitEffects(ItemHitFxCategory_Snowball)
+    {
+        Sound("snowball_collision");
+		
+		Trace(SRF_Unknown,     "snowball_impact_01.gpufx");
+		Trace(SRF_Flexible,    "snowball_impact_01.gpufx");
+		Trace(SRF_Fire,        "snowball_impact_01.gpufx");
+		Trace(SRF_Water,       "snowball_impact_01.gpufx");
+		Trace(SRF_Snow,        "snowball_impact_01.gpufx");
+		Trace(SRF_Sand,        "snowball_impact_01.gpufx");
+		Trace(SRF_Gravel,      "snowball_impact_01.gpufx");
+		Trace(SRF_Grass,       "snowball_impact_01.gpufx");
+		Trace(SRF_Ground,      "snowball_impact_01.gpufx");
+		Trace(SRF_Mud,         "snowball_impact_01.gpufx");
+		Trace(SRF_Flesh,       "snowball_impact_01.gpufx");
+		Trace(SRF_Rubber,      "snowball_impact_01.gpufx");
+		Trace(SRF_Wood,        "snowball_impact_01.gpufx");
+		Trace(SRF_Plastic,     "snowball_impact_01.gpufx");
+		Trace(SRF_Tarmac,      "snowball_impact_01.gpufx");
+		Trace(SRF_Glass,       "snowball_impact_01.gpufx");
+		Trace(SRF_Ice,         "snowball_impact_01.gpufx");
+		Trace(SRF_Metal,       "snowball_impact_01.gpufx");
+		Trace(SRF_Stone,       "snowball_impact_01.gpufx");
+    }
+}
+
+sub HitEffects_Pan_Of_Destiny()
+{
+   HitEffects(ItemHitFxCategory_PanOfDestiny)
+    {
+        Sound("pan_of_destiny_throw_collision");
+		use	FxDefalt();
+    }
+}
+
+sub ContainerRotation_Knife_Throw()
+{
+    ContainerRotation([90.0, 0.0, -90.0]);
+}
+
+
+
+
+
+
+

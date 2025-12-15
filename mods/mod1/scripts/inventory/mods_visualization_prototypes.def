@@ -1,0 +1,143 @@
+	sub ModVisualization_Shield_Test1()
+    {
+        Holder("shield_a", "mod_central_elemental_a_wpn_shield_a_fpp.prefab");
+    }
+
+    sub ModVisualization_Shield_Test2()
+    {
+        Holder("shield_a", "mod_left_elemental_a_wpn_shield_a_fpp.prefab");
+    }
+
+    sub ModVisualization_Shield_Test3()
+    {
+        Holder("shield_a", "mod_right_elemental_a_wpn_shield_a_fpp.prefab");
+    }
+	
+	sub ModVisualization_Shield_Blast()
+    {
+        Holder("shield_a", "mod_shield_a_blast_a_fpp.prefab");
+    }
+
+    sub ModVisualization_Shield_Elemental()
+    {
+        Holder("shield_a", "mod_shield_elemental_a_fpp.prefab");
+    }
+
+    sub ModVisualization_Shield_RandomElemental()
+    {
+        Holder("shield_a", "mod_shield_random_elemental_a_fpp.prefab");
+    }
+	
+	sub ModVisualization_Shield_Shock()
+    {
+        Holder("shield_a", "mod_shield_shock_a_fpp.prefab");
+    }
+	
+	sub ModVisualization_Shield_RandomShock()
+    {
+        Holder("shield_a", "mod_shield_random_shock_a_fpp.prefab");
+    }
+	
+	
+	
+	
+	
+	
+	sub ModVisualization_RedKatana()
+    {
+        AttachmentInfo("15hs_b", "mod_shaft_shockfx.prefab","shock","mod_shock_idle_random_a_red");
+    }
+	
+	sub ModVisualization_Prodder()
+    {
+        AttachmentInfo("15hb_a", "mod_shaft_prodder.prefab","shock","mod_shock_idle_random_a");
+    }
+	
+	sub ModVisualization_FelineClaw()
+    {
+        AttachmentInfo("mace_c", "mod_tip_blades_mace_c_fpp.prefab");
+    }
+	
+	sub ModVisualization_DyingLaugh()
+    {
+        AttachmentInfo("15hb_o", "mod_toxic_wpn_15hb_o_fpp.prefab");
+    }
+	
+	sub ModVisualization_BreckenWrench()
+    {
+        AttachmentInfo("stk_m", "mod_tip_random_shock_a_stk_m_fpp.prefab");
+    }
+	
+	sub ModVisualization_Samurai()
+    {
+        AttachmentInfo("15hs_u", "mod_tip_random_bloody_a_wpn_15hs_u_fpp.prefab");
+    }
+	
+	sub ModVisualization_Ninja()
+    {
+        AttachmentInfo("axe_v", "mod_tip_random_toxic_a_1hs_axe_v_fpp.prefab");
+    }
+	
+	sub ModVisualization_Army()
+    {
+        AttachmentInfo("mach_03", "mod_tip_random_bloody_a_1hs_mach03_fpp.prefab");
+    }
+	
+	sub ModVisualization_FrostAxe()
+    {
+        AttachmentInfo("15hs_g", "mod_tip_random_elemental_winterfreeze_fpp.prefab");
+    }
+
+    sub ModVisualization_NightVibes()
+    {
+        AttachmentInfo("mach_q", "mod_shaft_powerattack_anniversary_mach_q_fpp");
+        AttachmentInfo("mach_08", "mod_shaft_powerattack_anniversary_mach_q_fpp");
+    }
+	
+	sub ModVisualization_Empty()
+    {
+        AttachmentInfo("15hs_p", "mod_tip_random_fire_a_wpn_15hs_p_fpp.prefab");
+		AttachmentInfo("mach_05", "mod_tip_random_fire_a_mach_05_fpp.prefab");
+		AttachmentInfo("1hs_knuckle_duster_e", "mod_tip_random_fire_a_1hs_knuckle_duster_e_fpp.prefab");
+		AttachmentInfo("2hs_o", "mod_tip_random_fire_a_2hs_o_fpp.prefab");
+		AttachmentInfo("15hs_v", "mod_tip_random_fire_a_2hs_o_fpp.prefab");
+    }
+
+    sub ModVisualization_Anubis()
+    {
+        AttachmentInfo("mach_06", "mod_shaft_anubis_fpp.prefab");
+    }
+
+    sub ModVisualization_AnubisShield_Elemental()
+    {
+        Holder("shield_a", "mod_shield_anubis_elemental.prefab");
+    }
+
+    sub ModVisualization_AnubisShield_RandomElemental()
+    {
+        Holder("shield_a", "mod_shield_anubis_randomelemental.prefab");
+    }
+
+    sub ModVisualization_Perun()
+    {
+        AttachmentInfo("axe_y", "mod_shaft_perun_fpp.prefab");
+    }
+
+    sub ModVisualization_America()
+    {
+        AttachmentInfo("15hb_y", "mod_blank_effect.prefab");
+    }
+	
+	sub ModVisualization_VolatileSword_Heat()
+    {
+        AttachmentInfo("mach_17", "mod_fire_mach_17_fpp.prefab","heat","mod_fire_idle_special_a");
+    }
+	
+	sub ModVisualization_VolatileBat_Shock()
+    {
+        AttachmentInfo("stk_p", "mod_shock_stk_p_fpp.prefab","shock","mod_shock_idle_special_a");
+    }
+	sub ModVisualization_VolatileBat_Heat()
+    {
+        AttachmentInfo("stk_p", "mod_fire_stk_p_fpp.prefab","heat","mod_fire_idle_special_a");
+    }

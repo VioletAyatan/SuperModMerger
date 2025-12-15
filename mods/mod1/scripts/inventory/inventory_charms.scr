@@ -1,0 +1,883 @@
+// Contains definitions of CHARMS.
+
+import "inventorystuff.scr"
+import "faction_exports.scr"
+
+sub main() 
+{
+
+    Item("charm_Final_Boss_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Final_Boss_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_final_boss_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_RegenerateStaminaPointsOnKillChance, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Final_Boss_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Stamina_Kill&", 5, "SignedPercent");
+         }
+        Name("&charm_Final_Boss_ft_n&");
+        Description("&charm_Final_Boss_ft_d&");
+        GameVersion(1);
+        UID("7509047114952319463");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Beast_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Beast_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_beast_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedDamageAgainstHuman, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Beast_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Human_Dmg&", 3, "SignedPercent");
+         }
+        Name("&charm_Beast_ft_n&");
+        Description("&charm_Beast_ft_d&");
+        GameVersion(1);
+        UID("7509047115067934541");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Liam_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Liam_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_Liam_ft_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedDamageAgainstInfected, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Liam_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Infeced_DmgResist&", 2, "SignedPercent");
+         }
+        Name("&charm_Liam_ft_n&");
+        Description("&charm_Liam_ft_d&");
+        GameVersion(1);
+        UID("7509047115181692722");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Kid_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Kid_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_kidstoy_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedCriticalChanceOnChargeAttack, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Kid_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Crit_PowerAttack&", 3, "SignedPercent");
+         }
+        Name("&charm_Kid_ft_n&");
+        Description("&charm_Kid_ft_d&");
+        GameVersion(1);
+        UID("7509047115375037935");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Volatile_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Volatile_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_volatile_trophy_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedMeleeDamage, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Volatile_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Melee_Dmg&", 2, "SignedPercent");
+         }
+        Name("&charm_Volatile_ft_n&");
+        Description("&charm_Volatile_ft_d&");
+        GameVersion(1);
+        UID("7509047115528995254");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Demolisher_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Demolisher_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_demolisher_trophy_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedDamageResistance, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Demolisher_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_DmgResist&", 1, "SignedPercent");
+         }
+        Name("&charm_Demolisher_ft_n&");
+        Description("&charm_Demolisher_ft_d&");
+        GameVersion(1);
+        UID("7509047115998509856");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Baron_Merc_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Baron_Merc_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_dogtag_b_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedDamageTwoHandedMelee, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Baron_Merc_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_2handed_Dmg&", 2, "SignedPercent");
+         }
+        Name("&charm_Baron_Merc_ft_n&");
+        Description("&charm_Baron_Merc_ft_d&");
+        GameVersion(1);
+        UID("7509047116293971224");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Tyrant_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Tyrant_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_shoe_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedChanceForCriticalHit, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Tyrant_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Crit&", 2, "SignedPercent");
+         }
+        Name("&charm_Tyrant_ft_n&");
+        Description("&charm_Tyrant_ft_d&");
+        GameVersion(1);
+        UID("7509047116638317160");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Survivor _ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Survivor _ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_survivorwish_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_DecreasedStaminaUsageMeleeAttacks, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Survivor _ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Melee_Stamina&", -3, "Percent");
+         }
+        Name("&charm_Survivor _ft_n&");
+        Description("&charm_Survivor _ft_d&");
+        GameVersion(1);
+        UID("7509047117017837732");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Thief_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Thief_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_thiefhonor_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedBackStabDamage, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Thief_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Backstab_Dmg&", 5, "SignedPercent");
+         }
+        Name("&charm_Thief_ft_n&");
+        Description("&charm_Thief_ft_d&");
+        GameVersion(1);
+        UID("7509047117027226719");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Flare_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Flare_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_flare_b_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedUncommonCraftDropped, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Flare_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Uncommon_Loot&", 3, "SignedPercent");
+         }
+        Name("&charm_Flare_ft_n&");
+        Description("&charm_Flare_ft_d&");
+        GameVersion(1);
+        UID("7509047117055070412");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Inhibitor_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Inhibitor_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_inhibitor_b_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedXpGain, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Inhibitor_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_XP_Gain&", 3, "SignedPercent");
+         }
+        Name("&charm_Inhibitor_ft_n&");
+        Description("&charm_Inhibitor_ft_d&");
+        GameVersion(1);
+        UID("7036406534735434495");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Family_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Family_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_familytoy_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedHealing, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Family_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Healing_Effectiveness&", 3, "SignedPercent");
+         }
+        Name("&charm_Family_ft_n&");
+        Description("&charm_Family_ft_d&");
+        GameVersion(1);
+        UID("7041873339203039533");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Duck_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Duck_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_lucky_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedCommonCraftDropped, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Duck_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Common_Loot&", 5, "SignedPercent");
+         }
+        Name("&charm_Duck_ft_n&");
+        Description("&charm_Duck_ft_d&");
+        GameVersion(1);
+        UID("7041873339219101971");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Parkour_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Parkour_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_parkour_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedParkourDamage, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Parkour_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Parkour_Dmg&", 5, "SignedPercent");
+         }
+        Name("&charm_Parkour_ft_n&");
+        Description("&charm_Parkour_ft_d&");
+        GameVersion(1);
+        UID("7041873339811382434");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Carnage_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Carnage_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_carnagetrophy_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedDamageOneHandedMelee, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Carnage_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_1handed_Dmg&", 2, "SignedPercent");
+         }
+        Name("&charm_Carnage_ft_n&");
+        Description("&charm_Carnage_ft_d&");
+        GameVersion(1);
+        UID("7041873339891568511");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Slasher_boss_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Slasher_boss_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_Slasher_boss_ft_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedMeleeDamage, 2);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Slasher_boss_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Orange);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Melee_Dmg&", 4, "SignedPercent");
+         }
+        Name("&charm_Slasher_boss_ft_n&");
+        Description("&charm_Slasher_boss_ft_d&");
+        GameVersion(1);
+        UID("7533230856282301510");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Gorilla_boss_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Gorilla_boss_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_Gorilla_boss_ft_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedDamageTwoHandedMelee, 2);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Gorilla_boss_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Orange);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_2handed_Dmg&", 6, "SignedPercent");
+         }
+        Name("&charm_Gorilla_boss_ft_n&");
+        Description("&charm_Gorilla_boss_ft_d&");
+        GameVersion(1);
+        UID("7533230856288404912");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Karen_boss_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Karen_boss_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_Karen_boss_ft_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedParkourDamage, 2);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Karen_boss_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Orange);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Parkour_Dmg&", 10, "SignedPercent");
+         }
+        Name("&charm_Karen_boss_ft_n&");
+        Description("&charm_Karen_boss_ft_d&");
+        GameVersion(1);
+        UID("7533230856498305417");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Behemoth_boss_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Behemoth_boss_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_Behemoth_boss_ft_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedDamageResistance, 2);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Behemoth_boss_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Orange);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_DmgResist&", 3, "SignedPercent");
+         }
+        Name("&charm_Behemoth_boss_ft_n&");
+        Description("&charm_Behemoth_boss_ft_d&");
+        GameVersion(1);
+        UID("7533230857157092898");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Nemo_boss_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Nemo_boss_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_Nemo_boss_ft_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedPoisonDamageResistance, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Nemo_boss_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Orange);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_DmgResist_Poison&", 33, "SignedPercent");
+         }
+        Name("&charm_Nemo_boss_ft_n&");
+        Description("&charm_Nemo_boss_ft_d&");
+        GameVersion(1);
+        UID("7533230857277638016");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Matriarch_boss_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Matriarch_boss_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_logitech_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedChanceForCriticalHit, 2);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Matriarch_boss_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Orange);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Crit&", 4, "SignedPercent");
+         }
+        Name("&charm_Matriarch_boss_ft_n&");
+        Description("&charm_Matriarch_boss_ft_d&");
+        GameVersion(1);
+        UID("7533230857352286686");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Hologram_boss_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Hologram_boss_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_chicken_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedBackStabDamage, 2);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Hologram_boss_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Orange);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Backstab_Dmg&", 10, "SignedPercent");
+         }
+        Name("&charm_Hologram_boss_ft_n&");
+        Description("&charm_Hologram_boss_ft_d&");
+        GameVersion(1);
+        UID("7533230857795704795");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_Colossus_boss_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_Colossus_boss_ft_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_grenade_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedCriticalChanceOnChargeAttack, 2);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_Colossus_boss_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Orange);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Crit_PowerAttack&", 6, "SignedPercent");
+         }
+        Name("&charm_Colossus_boss_ft_n&");
+        Description("&charm_Colossus_boss_ft_d&");
+        GameVersion(1);
+        UID("7533230857907967086");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+
+    Item("charm_eventskillet_ft", CategoryType_CraftPart)
+    {
+        ItemType(ItemType_CraftPart);
+        CraftWeaponDamageType(DamageType_All);
+        CraftWeaponBuildType(WeaponBuildType_Universal);
+        //PrefabName(mod_charm_eventskillet_a);
+        GenType(GenType_None);
+        Visualization()
+        {
+        AttachmentVis("ModVisualization_CharmsHolder");
+        AdditionalAttachmentInfoEntry("wpn", "mod_charm_eventskillet_a_fpp.prefab");
+        }
+        Crafting()
+        {
+        Effect(CraftingEffect_IncreasedLimbCutDestroyMul, 1);
+        }
+        Visibility(true);
+        Price(0);
+        HudIcon("mod_charm_eventskillet_ft_icon");
+        Mesh("upgrade_mode_box_a.msh");
+        Skin("hnd");
+        MaxStackCount(1);
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Violet);
+        OccupiedModSlots(MOD_SLOT_CHARM);
+         UIStats(){
+         UIStat("&StatsUI_Limbs_Destroy&", 20, "SignedPercent");
+         }
+        Name("&charm_eventskillet_ft_n&");
+        Description("&charm_eventskillet_ft_d&");
+        GameVersion(1);
+        UID("7509047114952319463");
+        DismantleResult("Dismantle_Charm_Mod");
+    }
+}

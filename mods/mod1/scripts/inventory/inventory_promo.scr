@@ -1,0 +1,24 @@
+
+import "inventorystuff.scr"
+import "faction_exports.scr"
+
+sub dlc_ft_promo()
+{
+	Item("Promo_DeluxeEdition", CategoryType_Other)
+    {
+        ItemType(ItemType_FakeStashItem);
+        Visibility(true);
+        MaxStackCount(1);
+        Price(0);
+        HudIcon("promo_deluxeedition_icon");
+        Mesh("drugs.msh");
+        Skin("default");
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Orange);
+        Condition(-1);
+        GenType(GenType_None);
+        GameVersion(2);
+        DLC("DLC_DeluxePack");
+    }
+}

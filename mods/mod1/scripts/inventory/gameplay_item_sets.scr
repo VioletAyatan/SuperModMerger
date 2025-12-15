@@ -1,0 +1,24 @@
+sub main()
+{
+	GameplayItemSet("DLC_FT_BeggarTurning")
+    {
+		Items("Medkit_Small_FT_T1");
+		Items("Medkit_Small_FT_T2");
+		Items("Medkit_Small_FT_T3");
+		Items("Medkit_Small_FT_T4");
+		Items("Medkit_Large_FT");
+		DescriptionGiveItem("&DLC_FT_BeggarGiveItem&");
+		DescriptionMissingItem("&DLC_FT_BeggarMissingItem&");
+	}
+
+	GameplayItemSet("DLC_FT_Medicine")
+    {
+		Items("Medkit_Small_FT_T1");
+		Items("Medkit_Small_FT_T2");
+		Items("Medkit_Small_FT_T3");
+		Items("Medkit_Small_FT_T4");
+		Items("Medkit_Large_FT");
+		DescriptionGiveItem("&DLC_FT_BeggarGiveItem&");
+		DescriptionMissingItem("&DLC_FT_BeggarMissingItem&");
+	}
+}
