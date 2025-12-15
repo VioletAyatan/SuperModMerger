@@ -1,8 +1,8 @@
 package ankol.mod.merger;
 
-import ankol.mod.merger.merger.ScrConflictResolver;
 import ankol.mod.merger.core.SimpleArgumentsParser;
-import ankol.mod.merger.merger.ScrScriptModMerger;
+import ankol.mod.merger.merger.ModMergerEngine;
+import ankol.mod.merger.merger.ScrConflictResolver;
 
 import java.io.IOException;
 
@@ -62,11 +62,7 @@ public class AppMain {
             }
 
             // 第4步：创建核心合并引擎实例
-            ScrScriptModMerger merger = new ScrScriptModMerger(
-                    config.mod1Directory,
-                    config.mod2Directory,
-                    config.outputDirectory
-            );
+            ModMergerEngine merger = new ModMergerEngine(config.mod1Directory, config.mod2Directory, config.outputDirectory);
             // 第5步：执行合并操作
             // 这是主要的业务逻辑，会扫描目录、解析脚本、对比差异、处理冲突
             merger.merge();
@@ -91,4 +87,3 @@ public class AppMain {
         }
     }
 }
-

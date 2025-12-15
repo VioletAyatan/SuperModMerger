@@ -32,6 +32,10 @@ import java.util.stream.Stream;
  * 5. 输出统计信息
  */
 public class ScrScriptModMerger {
+    /**
+     * scr脚本文件类型后缀
+     */
+    private final String[] scrFileSuffix = new String[]{".scr", ".def", ".loot", ".ppfx", ".ares", ".mpcloth"};
 
     /**
      * 模组1的目录路径
