@@ -1,0 +1,268 @@
+import "hit_reaction.def"
+
+export string EDamageContextBodyPose_Default = "Default";
+export string EDamageContextBodyPose_Crouching = "Crouching";
+export string EDamageContextBodyPose_Laying = "Laying";
+export string EDamageContextBodyPose_Jumping = "Jumping";
+
+export string ERagdollHitPart_Head = "Head";
+export string ERagdollHitPart_Torso = "Torso";
+export string ERagdollHitPart_Legs = "Legs";
+
+export string EAttackDirection_Left = "Left";
+export string EAttackDirection_Right = "Right";
+export string EAttackDirection_Up = "Up";
+export string EAttackDirection_Down = "Down";
+export string EAttackDirection_Forward = "Forward";
+export string EAttackDirection_Backward = "Backward";
+export string EAttackDirection_ForwardLeft = "Forward_Left";
+export string EAttackDirection_BackwardLeft = "Backward_Left";
+export string EAttackDirection_ForwardRight = "Forward_Right";
+export string EAttackDirection_BackwardRight = "Backward_Right";
+
+export string EImpactDirection_Left = "Left";
+export string EImpactDirection_Right = "Right";
+export string EImpactDirection_Up = "Up";
+export string EImpactDirection_Down = "Down";
+export string EImpactDirection_Forward = "Forward";
+export string EImpactDirection_Backward = "Backward";
+export string EImpactDirection_ForwardLeft = "Forward_Left";
+export string EImpactDirection_BackwardLeft = "Backward_Left";
+export string EImpactDirection_ForwardRight = "Forward_Right";
+export string EImpactDirection_BackwardRight = "Backward_Right";
+
+export string Any = "";
+
+export string EDamageContextBodyPose_Any = Any;
+export string EReactionType_Any = Any;
+export string EReactionContext_Any = Any;
+export string EHitSeverity_Any = Any;
+export string EMoveSeverity_Any = Any;
+export string ERagdollHitPart_Any = Any;
+export string EImpactDirection_Any = Any;
+export string EAttackDirection_Any = Any;
+
+sub Datas() {
+
+	// Attacks 360
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Up, "melee_power_360_windmill@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Up, "melee_power_360_windmill@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Up, "melee_power_360_windmill_1h@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Up, "melee_power_360_windmill_1h@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+
+
+	// ANY POSE
+	///////////////////////////////// SHARP WEAPONS ////////////////////////////////////////////////////
+	/*   
+	
+    // 1h Sharp Weapons (Stick)
+	Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Light, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,    "cut_melee_stick_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 1h Sharp Weapons Power Attack (Stick)
+    Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Light, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,   	"cut_melee_stick_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	
+	
+	
+    // 1.5h Sharp Weapons (Stick2Close) 
+	Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,     "cut_melee_stick2close_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 1.5h Sharp Weapons Jump Attack - VERTICAL
+	Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Down,     	"cut_melee_stick2close_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 1.5h Sharp Weapons Power Attack
+    Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,     "cut_melee_stick2close_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	
+	// 2h Sharp Weapons (Stick2Heavy)
+	Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,   	"cut_melee_stick2heavy_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");	
+	// 2h Sharp Weapons Jump Attack - VERTICAL	
+	Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Down,     	"cut_melee_stick2heavy_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 2h Sharp Weapons Power Attack
+    Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,    		"cut_melee_stick2heavy_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Failsafe Sharp Weapons
+    Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,   			"cut_melee_stick_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+
+	
+	///////////////////////////////// BLUNT WEAPONS ////////////////////////////////////////////////////
+	
+	
+    // 1h Blunt Weapons (Stick)
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Light, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,    "blunt_melee_stick_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 1h Blunt Weapons Power Attack
+    Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Light, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,     "blunt_melee_stick_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	
+	
+	// 1.5h Blunt (Stick2Close)
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,    "blunt_melee_stick2close_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 1.5h Blunt Jump Attack - VERTICAL
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Down,    	"blunt_melee_stick2close_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");	
+	// 1.5h Blunt Power Attack 
+    Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,    "blunt_melee_stick2close_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	
+	// 2h Blunt Weapons (Stick2Heavy)
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,   	"blunt_melee_stick2heavy_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");	
+	// 2h Blunt Weapons Jump Attack - VERTICAL	
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Down,     	"blunt_melee_stick2heavy_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 2h Blunt Weapons Power Attack
+    Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,    		"blunt_melee_stick2heavy_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	
+	// Failsafe Blunt Weapons
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Right,     	"blunt_melee_stick2close_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+    Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any,       	"blunt_melee_stick2close_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+*/
+
+	///////////////////////////////// ANY WEAPONS ////////////////////////////////////////////////////
+
+
+	// 1h Blunt Weapons (Stick)
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_MeleeWeapon, EHitSeverity_Light, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "blunt_melee_stick2close_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 1h Sharp Weapons (Stick)
+	Data(EDamageContextBodyPose_Any, EReactionType_Cut, EReactionContext_MeleeWeapon, EHitSeverity_Light, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "cut_melee_stick2close_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 1h Weapons Power Attack
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_MeleeWeapon, EHitSeverity_Light, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "cut_melee_stick2close_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+
+
+	// 1.5h Weapons (Stick2Close)
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "blunt_melee_stick2heavy_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 1.5h Weapons Jump Attack - VERTICAL
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Down, "blunt_melee_stick2heavy_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 1.5h Weapons Power Attack 
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_MeleeWeapon, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "blunt_melee_stick2heavy_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// 2h Weapons (Stick2Heavy)
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "blunt_melee_stick2heavy_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 2h Weapons Jump Attack - VERTICAL	
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Down, "blunt_melee_stick2heavy_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// 2h Weapons Power Attack
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "blunt_melee_stick2heavy_power_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Failsafe Weapons
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_MeleeWeapon, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Right, "cut_melee_stick2close_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_MeleeWeapon, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "cut_melee_stick2close_quick_any@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+
+	///////////////////////////////// OTHERS ////////////////////////////////////////////////////
+
+	// Explosions 
+	//Grenades close
+	Data(EDamageContextBodyPose_Laying, EReactionType_Blast, EReactionContext_Environment, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "explosion_laying@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_Environment, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "explosion@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	//Grenades far
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_Environment, EHitSeverity_Medium, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "explosion_light@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Laying, EReactionType_Blast, EReactionContext_Environment, EHitSeverity_Medium, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "explosion_medium_laying@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Medium Explosion - all weapon GroundPounds, fury GroundPound far
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_Any, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "explosion_medium@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Laying, EReactionType_Blast, EReactionContext_Any, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "explosion_medium_laying@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+
+	/////////////////AI vs AI
+	// Demolisher Zombie throw near
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_ThrowWeapon, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "ai_throw_near@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Demolisher Zombie throw far
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_ThrowWeapon, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "ai_throw@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Demolisher throw
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_Throwable, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "demolisher_shockwave@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Demolisher shockwave
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_Throwable, EHitSeverity_Light, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "demolisher_shockwave@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Goon attacks
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_Environment, EHitSeverity_Light, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "goon_shockwave@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	//////////////////////////////////////////////////////////////////////////////////////////////
+
+	//Grappling Hook pull
+	Data(EDamageContextBodyPose_Any, EReactionType_Stab, EReactionContext_RangedWeapon, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Torso, EImpactDirection_Any, EAttackDirection_Any, "grapplinghook_pull@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Kick - Stomp
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Head, EImpactDirection_Any, EAttackDirection_Any, "stomp@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Kick - Wrestle (dropkick)
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "parkour_kick_heavy@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	// regular Ram/Bash, AI charge
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_ForwardLeft, EAttackDirection_Any, "charge_left@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_ForwardRight, EAttackDirection_Any, "charge_right@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "charge@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Kick - Medium (charged kick)
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Medium, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "parkour_kick_medium@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Laying, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Medium, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "parkour_kick_medium_laying@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	//Air Kick
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Medium, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "parkour_air_kick@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Kick Vault //turn on when parameters are ready
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Heavy, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "parkour_vault_kick@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Kick - Light (light kick)
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Light, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "parkour_kick_light@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Laying, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Light, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "parkour_kick_light_laying@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Fury - Fists
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_Melee, EHitSeverity_Medium, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fury@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Fury - GroundPound close
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fury_groundpound@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Laying, EReactionType_Blast, EReactionContext_MeleeWeapon, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fury_groundpound_laying@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Fury - Charged slam
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_Collision, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fury_slam@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Fury - Bash
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_Melee, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Backward, EAttackDirection_Any, "fury_bash_side_push@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Blast, EReactionContext_Melee, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fury_bash@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	//Ranged Weapons
+	//Grenade Launcher has explosion
+	// Arrow
+	Data(EDamageContextBodyPose_Any, EReactionType_Stab, EReactionContext_RangedWeapon, EHitSeverity_Light, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "arrow_stab@ai_ragdoll_damage_reaction_presets.scr", "fireaarms@ai_ragdoll_damage_reaction_context_responses.scr");
+	//rifle, SMG
+	Data(EDamageContextBodyPose_Any, EReactionType_Pierce, EReactionContext_RangedWeapon, EHitSeverity_Light, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "light_pierce@ai_ragdoll_damage_reaction_presets.scr", "fireaarms@ai_ragdoll_damage_reaction_context_responses.scr");
+	//crossbow, pistol, sniper/marksman, shotgun
+	Data(EDamageContextBodyPose_Any, EReactionType_Pierce, EReactionContext_RangedWeapon, EHitSeverity_Medium, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "medium_pierce@ai_ragdoll_damage_reaction_presets.scr", "fireaarms@ai_ragdoll_damage_reaction_context_responses.scr");
+	//sawblade, revolver
+	Data(EDamageContextBodyPose_Any, EReactionType_Pierce, EReactionContext_RangedWeapon, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "heavy_pierce@ai_ragdoll_damage_reaction_presets.scr", "fireaarms@ai_ragdoll_damage_reaction_context_responses.scr");
+	//flamethrower
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_RangedWeapon, EHitSeverity_Light, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "heavy_pierce@ai_ragdoll_damage_reaction_presets.scr", "fireaarms@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	//Fists
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_Melee, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "punch_medium@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_Melee, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "punch_quick@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Vehicle reactions
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_Vehicle, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "vehicle_heavy@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_Vehicle, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "vehicle_AI_slide@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Slide ragdoll
+
+	Data(EDamageContextBodyPose_Laying, EReactionType_Push, EReactionContext_Collision, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "slide_laying@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Crouching, EReactionType_Push, EReactionContext_Collision, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "slide_laying@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Collision, EHitSeverity_Medium, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "slide@ai_ragdoll_damage_reaction_presets.scr", "always_full@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Nagewaza/Grapple Throw
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Light, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "nagewaza@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Fall on collision
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Collision, EHitSeverity_Light, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fall_on_collision@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Biter grab ragdoll break
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_Melee, EHitSeverity_Light, EMoveSeverity_Medium, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fall_with_small_push@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	//Not iterated yet
+	// LAYING POSE
+
+	// Throwables - Blunt (BRICK)	
+	Data(EDamageContextBodyPose_Any, EReactionType_Blunt, EReactionContext_Throwable, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "blunt_melee_throw@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Thrown Spear - bow charged shot
+	Data(EDamageContextBodyPose_Any, EReactionType_Stab, EReactionContext_RangedWeapon, EHitSeverity_Medium, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "medium_stab@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// BoltCannon
+	Data(EDamageContextBodyPose_Any, EReactionType_Stab, EReactionContext_RangedWeapon, EHitSeverity_Heavy, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "heavy_stab@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Kick - Heavy
+
+	//This is probably not working/covering nothing
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Light, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fist_grab_escape@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Fall ragdoll (fall after event on animation)
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Melee, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fall@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+	// Fall on wall hit
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Collision, EHitSeverity_Medium, EMoveSeverity_Light, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "fall@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Heavy ragdoll
+	Data(EDamageContextBodyPose_Any, EReactionType_Push, EReactionContext_Collision, EHitSeverity_Heavy, EMoveSeverity_Heavy, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "heavy_ragdoll@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+
+	// Failsafe
+	Data(EDamageContextBodyPose_Any, EReactionType_Any, EReactionContext_Any, EHitSeverity_Any, EMoveSeverity_Any, ERagdollHitPart_Any, EImpactDirection_Any, EAttackDirection_Any, "default@ai_ragdoll_damage_reaction_presets.scr", "default@ai_ragdoll_damage_reaction_context_responses.scr");
+}

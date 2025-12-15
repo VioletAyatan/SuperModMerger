@@ -1,0 +1,6 @@
+// Syntax: Info("mod_prefab_name.prefab")
+
+sub main()
+{
+	Info("mod_charms_mach_a_fpp.prefab");
+}

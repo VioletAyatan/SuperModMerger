@@ -1,0 +1,6 @@
+sub main()
+{
+    Version(5);
+    ItemsCount(1);
+    Item(3510,"TB_Collectable_Outfit_DL1_Iconic");
+}

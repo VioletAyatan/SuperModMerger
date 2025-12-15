@@ -1,0 +1,102 @@
+//DLC_Set("DLC1", 120) - dlc_id ,  cooldown_time
+//Item(0, "Throwable_ThrowingKnifeAGen") - tier ,  item_name
+
+sub main()
+{
+
+	//////////////////////////
+	////Preorder Pack
+	
+    DLC_Set("DLC_PreorderPack")
+    {
+        Item(1, "dlc_ft_wpn_1hs_knife_p_preorder_r1");
+        ID(0);
+    }
+    DLC_Set("DLC_PreorderPack")
+    {
+        Item(1, "Craftplan_dlc_ft_wpn_1hs_knife_p_preorder_T1_Blueprint");
+        ID(1);
+    }
+	
+    DLC_Set("DLC_PreorderPack")
+    {
+        Item(1, "dlc_ft_firearm_pistol_b_preorder_r1");
+		BoundAmmoItem("Ammo_Firearm_Pistol", 15);
+        ID(2);
+    }
+    DLC_Set("DLC_PreorderPack")
+    {
+        Item(1, "Craftplan_dlc_ft_firearm_pistol_b_preorder_T1_Blueprint");
+        ID(3);
+    }
+	
+    DLC_Set("DLC_PreorderPack")
+    {
+        Item(1, "dlc_ft_wpn_2hr_crossbow_e_preorder_r1");
+		BoundAmmoItem("Ammo_Bolt", 10);
+        ID(4);
+    }
+    DLC_Set("DLC_PreorderPack")
+    {
+        Item(1, "Craftplan_dlc_ft_wpn_2hr_crossbow_e_preorder_T1_Blueprint");
+        ID(5);
+    }
+    DLC_Set("DLC_PreorderPack")
+    {
+        Item(1, "Vehicle_Skin_Police");
+        ID(6);
+    }
+	
+	//////////////////////////
+	
+	//////////////////////////
+	////Deluxe Pack
+	
+    DLC_Set("DLC_DeluxePack")
+    {
+        Item(1, "outfitset_dlc_ft_deluxe_torso");
+        ID(7);
+    }
+    DLC_Set("DLC_DeluxePack")
+    {
+        Item(1, "outfitset_dlc_ft_deluxe_legs");
+        ID(8);
+    }
+    DLC_Set("DLC_DeluxePack")
+    {
+        Item(1, "outfitset_dlc_ft_deluxe_shoes");
+        ID(9);
+    }
+    DLC_Set("DLC_DeluxePack")
+    {
+        Item(1, "outfitset_dlc_ft_deluxe_headwear");
+        ID(10);
+    }
+    DLC_Set("DLC_DeluxePack")
+    {
+        Item(1, "outfitset_dlc_ft_deluxe_gloves");
+        ID(11);
+    }
+    DLC_Set("DLC_DeluxePack")
+    {
+        Item(1, "outfitset_dlc_ft_deluxe_bracers");
+        ID(12);
+    }
+	
+    DLC_Set("DLC_DeluxePack")
+    {
+        Item(1, "dlc_ft_firearm_smg_e_deluxe_r1");
+		BoundAmmoItem("Ammo_Firearm_SMG", 40);
+        ID(13);
+    }
+    DLC_Set("DLC_DeluxePack")
+    {
+        Item(1, "Craftplan_dlc_ft_firearm_smg_e_deluxe_T1_Blueprint");
+        ID(14);
+    }
+    DLC_Set("DLC_DeluxePack")
+    {
+        Item(1, "Vehicle_Skin_CW_Army");
+        ID(15);
+    }
+}

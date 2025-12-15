@@ -1,0 +1,119 @@
+export int Hand_RIGHT         = 0;
+export int Hand_LEFT          = 1;
+
+// Special use types are enumerated in code --> consult programmers if you want to add new types!!!
+sub main()
+{
+    Params("InstallWeaponMod")
+    {
+        //ItemToUse("PursuitBreakerSwitch");
+        UseAnim("InstallWeaponMod"); //FPP_Unarmed_InstallWeaponMod
+        UseInTpp(true);
+        UseSound("pursuit_remote_activate.wav");
+    }
+	
+	Params("ToggleTransformItem")
+    {        
+        UseAnim("ToggleTransformItem"); //FPP_Unarmed_InstallWeaponMod
+        UseInTpp(true);        
+    }
+    
+    Params("PursuitBreaker")
+    {
+        ItemToUse("PursuitBreakerSwitch", 1);
+        UseAnim("UseEvolvingItem"); //FPP_Unarmed_InstallWeaponMod
+        UseInTpp(true);
+        UseSound("pursuit_remote_activate.wav");
+    }
+	
+    Params("RemoteExplosive")
+    {
+        ItemToUse("PursuitBreakerSwitch", 1);
+        UseAnim("UseEvolvingItem"); //FPP_Unarmed_InstallWeaponMod
+        UseInTpp(true);
+        UseSound("pursuit_remote_activate.wav");
+    }
+	
+	Params("ActivateNightRunner")
+    {
+        ItemToUse("NightRunnerItem");
+        UseAnim("ActivateNightRunner");
+        UseInTpp(true);		
+    }
+
+	Params("InhibitorAdded")
+    {
+        ItemToUse("Inhibitor_Container", 1);
+        UseAnim("InhibitorsContainerCheck");
+        UseInTpp(true);		
+    }
+
+    Params("InhibitorAdded_Bundle2")
+    {
+        ItemToUse("Inhibitor_Container_Bundle2", 1);
+        UseAnim("InhibitorsContainerCheck");
+        UseInTpp(true);
+    }
+
+    Params("InhibitorAdded_Bundle3")
+    {
+        ItemToUse("Inhibitor_Container_Bundle3", 1);
+        UseAnim("InhibitorsContainerCheck");
+        UseInTpp(true);
+    }
+
+    Params("PortableCamouflage")
+    {
+        UseAnim("ApplyPortableCamouflage");
+        UseInTpp(true);
+    }
+
+    Params("EvolvingItem")
+    {
+        ItemToUse("", 1); // Item ID is taken from code but this still needs to be here to specify the hand
+        AllowItemInOtherHand(true);
+        UseAnim("UseEvolvingItem");
+        UseInTpp(true);
+    }
+
+    Params("ToggleTransformItemCrouched")
+    {        
+        UseAnim("ToggleTransformItemCrouched");
+        UseInTpp(true);        
+    }
+
+    Params("ActivateFuryLvl1")
+    {        
+        ItemToUse("FuryWeaponItem");
+        UseAnim("ActivateNightRunner_Roar");
+        UseInTpp(true);		    
+    }
+    
+    Params("ActivateFuryLvl2")
+    {        
+        ItemToUse("FuryWeaponItem");
+        UseAnim("ActivateNightRunner_Roar_Lvl2");
+        UseInTpp(true);		    
+    }
+
+    Params("DeactivateFury")
+    {        
+        ItemToUse("FuryWeaponItem");
+        UseAnim("Fury_DLC_Deactivate_Fury");
+        UseInTpp(true);		    
+    }
+
+    Params("FuryScream")
+    {        
+        ItemToUse("FuryWeaponItem");
+        UseAnim("Fury_DLC_Scream");
+        UseInTpp(true);		    
+    }
+
+    Params("SerumInjection")
+    {        
+        ItemToUse("Serum_Syringe");
+        UseAnim("m_fpp_syncaction_interaction_serum_injection");
+        UseInTpp(true);		    
+    }
+}

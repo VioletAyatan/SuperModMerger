@@ -1,0 +1,23 @@
+// 流血效果
+export string EDamageEffect_Bleeding = "Bleeding";
+// 燃烧效果
+export string EDamageEffect_Burning = "Burning";
+export string EDamageEffect_Chemical = "Chemical";
+// 触电效果
+export string EDamageEffect_Electrocuted = "Electrocuted";
+// 冻结效果
+export string EDamageEffect_Frozen = "Frozen";
+export string EDamageEffect_Infected = "Infected";
+export string EDamageEffect_Intoxicated = "Intoxicated";
+// 眩晕效果
+export string EDamageEffect_Stunned = "Stunned";
+// 湿身效果
+export string EDamageEffect_Wet = "Wet";
+export string EDamageEffect_Suppressed = "Suppressed";
+export string EDamageEffect_StaminaDecrease = "StaminaDecrease";
+export string EDamageEffect_InfectedPlaguebearer = "InfectedPlaguebearer";
+export string EDamageEffect_StunnedHeavy = "StunnedHeavy";
+export string EDamageEffect_XrayHit = "XrayHit";
+export string EDamageEffect_Buffed = "Buffed";
+export string EDamageEffect_Exposed = "Exposed";
+export string EDamageEffect_Frightened = "Frightened";

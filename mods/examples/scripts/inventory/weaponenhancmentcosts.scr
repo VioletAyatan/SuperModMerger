@@ -1,0 +1,441 @@
+
+sub main()
+{
+    Fallback()
+	{
+		BaseCost()
+		{
+			Cost("Craft_Scrap", 25);
+			Cost("Craft_Rags", 5);
+			Cost("Craft_Leather", 1);
+		}
+		
+		PerRankCost()
+		{
+        	Cost("Craft_Scrap", 2);
+		}
+	}
+	
+	WeaponType("Blunt")
+	{
+		Rarity("White")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 20);
+				Cost("Craft_Rags", 5);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Green")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 20);
+				Cost("Craft_Rags", 8);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Blue")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 25);
+				Cost("Craft_Rags", 10);
+				Cost("Craft_Weights", 1);
+                Cost("Craft_Rags", 3);
+			}
+			
+			PerRankCost()
+			{
+               Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Violet")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 25);
+				Cost("Craft_Rags", 12);
+				Cost("Craft_Weights", 3);
+                Cost("Craft_Rags", 3);
+                Cost("Craft_Leather", 1);
+			}
+			
+			PerRankCost()
+			{
+               Cost("Craft_Scrap", 2);
+			}
+		}
+		Rarity("Orange")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 30);
+				Cost("Craft_Rags", 15);
+				Cost("Craft_Weights", 5);
+				Cost("Craft_Leather", 3);
+                Cost("Craft_Rags", 5);
+			}
+			
+			PerRankCost()
+			{
+               Cost("Craft_Scrap", 2);
+			}
+		}
+		Rarity("Limited")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 10);
+				Cost("Craft_Rags", 5);
+				Cost("Craft_Weights", 1);
+				Cost("Craft_Leather", 1);
+                Cost("Craft_Rags", 2);
+			}
+			
+			PerRankCost()
+			{
+               Cost("Craft_Scrap", 1);
+			}
+		}
+		Rarity("Exotic")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 30);
+				Cost("Craft_Rags", 20);
+				Cost("Craft_Weights", 10);
+				Cost("Craft_Leather", 6);
+                Cost("Craft_Rags", 10);
+			}
+			
+			PerRankCost()
+			{
+               Cost("Craft_Scrap", 2);
+			}
+		}
+	}
+	
+	WeaponType("Slashing")
+	{
+		Rarity("White")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 20);
+				Cost("Craft_Rags", 5);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Green")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 20);
+				Cost("Craft_Rags", 8);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Blue")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 25);
+				Cost("Craft_Rags", 10);
+				Cost("Craft_Blades", 1);
+                Cost("Craft_Rags", 3);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Violet")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 25);
+				Cost("Craft_Rags", 12);
+				Cost("Craft_Blades", 3);
+                Cost("Craft_Rags", 3);
+                Cost("Craft_Leather", 1);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Orange")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 30);
+				Cost("Craft_Rags", 15);
+				Cost("Craft_Blades", 5);
+				Cost("Craft_Leather", 3);
+                Cost("Craft_Rags", 5);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Limited")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 10);
+				Cost("Craft_Rags", 5);
+				Cost("Craft_Blades", 1);
+				Cost("Craft_Leather", 1);
+                Cost("Craft_Rags", 2);
+			}
+			
+			PerRankCost()
+			{
+               Cost("Craft_Scrap", 1);
+			}
+		}
+		Rarity("Exotic")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 30);
+				Cost("Craft_Rags", 20);
+				Cost("Craft_Weights", 10);
+				Cost("Craft_Leather", 6);
+                Cost("Craft_Rags", 10);
+			}
+			
+			PerRankCost()
+			{
+               Cost("Craft_Scrap", 2);
+			}
+		}
+	}
+	
+	WeaponType("Ranged")
+	{
+		Rarity("White")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 20);
+				Cost("Craft_Rags", 5);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Green")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 20);
+				Cost("Craft_Rags", 8);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Blue")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 25);
+				Cost("Craft_Rags", 10);
+				Cost("Craft_Leather", 1);
+                Cost("Craft_Wiring", 3);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Violet")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 25);
+				Cost("Craft_Rags", 12);
+				Cost("Craft_Leather", 3);
+                Cost("Craft_Wiring", 3);
+                Cost("Craft_Feathers", 1);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Orange")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 30);
+				Cost("Craft_Rags", 15);
+				Cost("Craft_Leather", 5);
+                Cost("Craft_Wiring", 5);
+                Cost("Craft_Feathers", 3);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		Rarity("Exotic")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 30);
+				Cost("Craft_Rags", 20);
+				Cost("Craft_Weights", 10);
+				Cost("Craft_Leather", 6);
+                Cost("Craft_Rags", 10);
+			}
+			
+			PerRankCost()
+			{
+               Cost("Craft_Scrap", 2);
+			}
+		}
+	}
+    WeaponType("Firearm")
+	{
+		Rarity("White")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 20);
+				Cost("Craft_Rags", 5);
+                Cost("Craft_Firearm_Scrap_FT", 1);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Green")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 20);
+				Cost("Craft_Rags", 8);
+                Cost("Craft_Firearm_Scrap_FT", 2);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Blue")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 25);
+				Cost("Craft_Rags", 10);
+				Cost("Craft_Leather", 1);
+                Cost("Craft_Firearm_Scrap_FT", 4);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Violet")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 25);
+				Cost("Craft_Rags", 12);
+				Cost("Craft_Leather", 3);
+                Cost("Craft_Rags", 3);
+                Cost("Craft_Firearm_Scrap_FT", 8);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+		
+		Rarity("Orange")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 30);
+				Cost("Craft_Rags", 15);
+				Cost("Craft_Leather", 5);
+                Cost("Craft_Rags", 5);
+                Cost("Craft_Firearm_Scrap_FT", 10);
+			}
+			
+			PerRankCost()
+			{
+                Cost("Craft_Scrap", 2);
+			}
+		}
+
+		Rarity("Exotic")
+		{
+			BaseCost()
+			{
+				Cost("Craft_Scrap", 30);
+				Cost("Craft_Rags", 20);
+				Cost("Craft_Weights", 10);
+				Cost("Craft_Leather", 6);
+                Cost("Craft_Rags", 10);
+				Cost("Craft_Firearm_Scrap_FT", 15);
+			}
+			
+			PerRankCost()
+			{
+               Cost("Craft_Scrap", 2);
+			}
+		}
+	}
+}

@@ -1,0 +1,33 @@
+export string EHitSeverity_Light = "Light";
+export string EHitSeverity_Medium = "Medium";
+export string EHitSeverity_Heavy	= "Heavy";
+
+export string EMoveSeverity_Light = "Light";
+export string EMoveSeverity_Medium = "Medium";
+export string EMoveSeverity_Heavy	= "Heavy";
+
+export string EReactionType_None = "None";
+export string EReactionType_Cut = "Cut";
+export string EReactionType_Blunt = "Blunt";
+export string EReactionType_Stab = "Stab";
+export string EReactionType_Push = "Push";
+export string EReactionType_Blast = "Blast";
+export string EReactionType_Pierce = "Pierce";
+
+export string EReactionFlag_None = "None";
+export string EReactionFlag_Interrupt = "Interrupt";
+export string EReactionFlag_Knockdown = "Knockdown";
+export string EReactionFlag_FovKnockdown = "FovKnockdown";
+export string EReactionFlag_Ragdoll = "Ragdoll";
+export string EReactionFlag_ImpactOnCollision = "ImpactOnCollision";
+export string EReactionFlag_ReduceHitSeverityOnBlock = "ReduceHitSeverityOnBlock";
+
+export string EReactionContext_Collision = "Collision";
+export string EReactionContext_Environment = "Environment";
+export string EReactionContext_Melee = "Melee";
+export string EReactionContext_MeleeWeapon = "MeleeWeapon";
+export string EReactionContext_RangedWeapon = "RangedWeapon";
+export string EReactionContext_Throwable = "Throwable";
+export string EReactionContext_Power = "Power";
+export string EReactionContext_Vehicle = "Vehicle";
+export string EReactionContext_ThrowWeapon = "ThrowWeapon";

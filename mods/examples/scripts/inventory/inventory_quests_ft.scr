@@ -1,0 +1,371 @@
+// Contains definitions of PROTOTYPE items defined for testing and debug purposes only.
+// Don't be surprised if these items will get removed at a later stage of the the production
+
+
+import "inventorystuff.scr"
+
+sub dlc_ft_quest()
+{
+
+    Item("Quest_Bomb", CategoryType_Other)
+    {
+        Name("&Quest_Bomb&");
+        Description("&Bomb&");
+        Visibility(true);
+        ItemType(ItemType_QuestItem);
+        HudIcon("quest_bomb_icon");
+        PhysicsScript("simple.phx");
+        Mesh("bomb_a_cutscenes.msh");        
+        MaxStackCount(5);
+        Skin("Default");
+		use PickupSounds_Explosives();
+        Color(Color_Violet);
+		GameVersion(1);
+    }
+    
+    Item("Quest_Alarm", CategoryType_Other)
+    {
+        Name("&Quest_Alarm&");
+        Description("&Alarm&");
+        Visibility(true);
+        ItemType(ItemType_QuestItem);
+        HudIcon("quest_bomb_icon");
+        PhysicsScript("simple.phx");
+        Mesh("trigger_homemade_alarm_a.msh");        
+        MaxStackCount(5);
+        Skin("Default");
+        Color(Color_Violet);
+		GameVersion(1);
+    }
+	
+    Item("Quest_Freak_Blood", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        HudIcon("reward_freak_blood_sample");
+        Mesh("drugs.msh");
+        Skin("default");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+    }
+    Item("Quest_Screamer_Tissue", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("reward_screamer_tissue_sample");
+        Mesh("drugs.msh");
+        Skin("default");
+        MaxStackCount(9999);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+		RotDuration(600.0);
+		RotItemName("Quest_Screamer_Tissue_Rot");
+        Color(Color_Green);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+    }
+    Item("Quest_Screamer_Tissue_Rot", CategoryType_Valuable)
+    {
+        ItemType(ItemType_Valuables);
+        Visibility(true);
+        Price(1);
+        HudIcon("reward_rotten_screamer_tissue_sample");
+        Mesh("drugs.msh");
+        Skin("default");
+        MaxStackCount(9999);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        GameVersion(1);
+    }
+	Item("Quest_Virtual_Baron_Radio", CategoryType_Token)
+    {
+        ItemType(ItemType_VirtualItem);
+        Visibility(true);
+        Price(0);
+        HudIcon("valuables_walkie_talkie");
+        Mesh("walkie_talkie_a.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+		Name("&Quest_Baron_Radio_n&");
+    }
+    Item("Quest_Baron_Radio", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("valuables_walkie_talkie");
+        Mesh("walkie_talkie_a.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+    }
+	Item("Quest_Binoculars", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("weapon_binoculars");
+        Mesh("binoculars.msh");
+        Skin("Default");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+		Name("&Craftplan_Binoculars_FT_N&");
+        Description("&Craftplan_Binoculars_FT_D&");
+    }
+    Item("Quest_DLC_FT_KeyCave", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("DLC_FT_KeyCave");
+        Mesh("hotel_card.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+    }
+    Item("Quest_DLC_FT_Madness_Tree_Root", CategoryType_Token) //DL THE BEAST - SQ07 DO NOT REMOVE CONTACT QD
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("icon_dlc_ft_sq07_bark");
+        Mesh("drugs.msh");
+        Skin("default");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		Name("&Madness_Tree_Root_N&");
+		ShowLootBackground(true);
+    }
+	Item("Quest_DLC_FT_Infected_Gallbladder", CategoryType_Token) //DL THE BEAST SQ07 DO NOT REMOVE CONTACT QD
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("reward_screamer_tissue_sample");
+        Mesh("drugs.msh");
+        Skin("default");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		Name("&Infected_Gallbladder_N&");
+		ShowLootBackground(true);
+    }
+	Item("Quest_DLC_FT_KeyWaterworks_Administration", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("DLC_FT_KeyCave");
+        Mesh("hotel_card.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		Name("&KeyWaterworks_Administration_N&");
+		ShowLootBackground(true);
+    }
+	Item("Quest_DLC_FT_KeyChief_Engineer", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("DLC_FT_KeyCave");
+        Mesh("hotel_card.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		Name("&KeyChief_Engineer_N&");
+		ShowLootBackground(true);
+    }
+	Item("Quest_RemoteTrapControl", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("DLC_FT_RemoteTrapControl");
+        Mesh("wpn_poweritem_detonator_a_fpp.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+    }
+	Item("Quest_DLC_FT_KeyIris_House", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("DLC_FT_KeyCave");
+        Mesh("hotel_card.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		Name("&KeyIris_House_N&");
+		ShowLootBackground(true);
+    }
+	
+	Item("Quest_DLC_FT_William_Knife", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("wpn_1hs_knife_k_icon_ft");
+        Mesh("wpn_1hs_knife_k_TPP.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+        Name("&wpn_1hs_knife_k_n&");
+		ShowLootBackground(true);
+    }
+	Item("Quest_DLC_FT_PolsterWine", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("DLC_FT_PolsterWine");
+        Mesh("hotel_card.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+    }
+	Item("Quest_DLC_FT_ChildDrawing", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("DLC_FT_ChildDrawing");
+        Mesh("hotel_card.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+    }
+	Item("Quest_DLC_FT_RockShirt", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        Visibility(true);
+        Price(0);
+        HudIcon("DLC_FT_RockShirt");
+        Mesh("hotel_card.msh");
+        Skin("loot");
+        MaxStackCount(1);
+		CanDrop(false);
+        TokenType(-1);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        GenType(GenType_None);
+        AllowedInShop(false);
+        GameVersion(1);
+		ShowLootBackground(true);
+    }
+}

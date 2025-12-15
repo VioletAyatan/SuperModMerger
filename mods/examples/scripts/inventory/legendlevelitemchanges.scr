@@ -1,0 +1,71 @@
+sub main()
+{
+	//explosive arrow cretaes a secret throwable item that does the kaboom
+	Item("Throwable_ExplosiveArrow")	{ UseLLExplosivesBonus(true); }
+	
+	Item("Throwable_ExplosiveGrenade")			{ UseLLExplosivesBonus(true); }
+	Item("Throwable_ExplosiveGrenade_Upgrade1")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_ExplosiveGrenade_Upgrade2")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_ExplosiveGrenade_Upgrade3")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_ExplosiveGrenade_Upgrade4")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_ExplosiveGrenade_Upgrade5")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_ExplosiveGrenade_Upgrade6")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_ExplosiveGrenade_Upgrade7")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_ExplosiveGrenade_Upgrade8")	{ UseLLExplosivesBonus(true); }
+	
+	Item("Throwable_Molotov")			{ UseLLExplosivesBonus(true); }
+	Item("Throwable_Molotov_Upgrade1")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_Molotov_Upgrade2")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_Molotov_Upgrade3")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_Molotov_Upgrade4")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_Molotov_Upgrade5")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_Molotov_Upgrade6")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_Molotov_Upgrade7")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_Molotov_Upgrade8")	{ UseLLExplosivesBonus(true); }
+	
+	Item("Throwable_EggsplosiveGrenade")			{ UseLLExplosivesBonus(true); }
+	Item("Throwable_EggsplosiveGrenade_Upgrade1")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_EggsplosiveGrenade_Upgrade2")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_EggsplosiveGrenade_Upgrade3")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_EggsplosiveGrenade_Upgrade4")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_EggsplosiveGrenade_Upgrade5")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_EggsplosiveGrenade_Upgrade6")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_EggsplosiveGrenade_Upgrade7")	{ UseLLExplosivesBonus(true); }
+	Item("Throwable_EggsplosiveGrenade_Upgrade8")	{ UseLLExplosivesBonus(true); }
+	
+	//unfortunatly CoMine does not have connection to ItemDesc...
+	//so this setting is pointless
+	Item("Mine_Explosive")			{ UseLLExplosivesBonus(true); }
+	Item("Mine_Explosive_Upgrade1")	{ UseLLExplosivesBonus(true); }
+	Item("Mine_Explosive_Upgrade2")	{ UseLLExplosivesBonus(true); }
+	Item("Mine_Explosive_Upgrade3")	{ UseLLExplosivesBonus(true); }
+	Item("Mine_Explosive_Upgrade4")	{ UseLLExplosivesBonus(true); }
+	Item("Mine_Explosive_Upgrade5")	{ UseLLExplosivesBonus(true); }
+	Item("Mine_Explosive_Upgrade6")	{ UseLLExplosivesBonus(true); }
+	Item("Mine_Explosive_Upgrade7")	{ UseLLExplosivesBonus(true); }
+	Item("Mine_Explosive_Upgrade8")	{ UseLLExplosivesBonus(true); }
+	
+	//unfortunatly CoRemoteexplosive does not have connection to ItemDesc...
+	//so this setting is pointless
+	Item("Shrapnel_Trap")			{ UseLLExplosivesBonus(true); }
+	Item("Shrapnel_Trap_Upgrade1")	{ UseLLExplosivesBonus(true); }
+	Item("Shrapnel_Trap_Upgrade2")	{ UseLLExplosivesBonus(true); }
+	Item("Shrapnel_Trap_Upgrade3")	{ UseLLExplosivesBonus(true); }
+	Item("Shrapnel_Trap_Upgrade4")	{ UseLLExplosivesBonus(true); }
+	Item("Shrapnel_Trap_Upgrade5")	{ UseLLExplosivesBonus(true); }
+	Item("Shrapnel_Trap_Upgrade6")	{ UseLLExplosivesBonus(true); }
+	Item("Shrapnel_Trap_Upgrade7")	{ UseLLExplosivesBonus(true); }
+	Item("Shrapnel_Trap_Upgrade8")	{ UseLLExplosivesBonus(true); }
+	
+	//unfortunatly CoRemoteexplosive does not have connection to ItemDesc...
+	//so this setting is pointless
+	Item("Remote_Explosive")			{ UseLLExplosivesBonus(true); }
+	Item("Remote_Explosive_Upgrade1")	{ UseLLExplosivesBonus(true); }
+	Item("Remote_Explosive_Upgrade2")	{ UseLLExplosivesBonus(true); }
+	Item("Remote_Explosive_Upgrade3")	{ UseLLExplosivesBonus(true); }
+	Item("Remote_Explosive_Upgrade4")	{ UseLLExplosivesBonus(true); }
+	Item("Remote_Explosive_Upgrade5")	{ UseLLExplosivesBonus(true); }
+	Item("Remote_Explosive_Upgrade6")	{ UseLLExplosivesBonus(true); }
+	Item("Remote_Explosive_Upgrade7")	{ UseLLExplosivesBonus(true); }
+	Item("Remote_Explosive_Upgrade8")	{ UseLLExplosivesBonus(true); }
+}

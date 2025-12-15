@@ -1,0 +1,410 @@
+//This script is generated from Inventory.xlsm. Don't modify it!!!
+
+export int Consumables = 1;
+export int Ammo = 2;
+export int Valuables = 3;
+export int Weapon = 4;
+export int Dirty = 5;
+export int CraftPart = 6;
+export int Lockpick = 7;
+export int Mods = 8;
+export int Other = 9;
+
+
+	sub EMPTY_SET(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+        }
+    }
+	
+	sub Empty(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+        }
+    }
+	
+	
+	////////////////////////////////////////////////
+	////////////////SINGLE ITEMS////////////////////
+	////////////////////////////////////////////////
+	
+	//Craftparts
+	
+	
+	sub Scrap(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			ItemCount("Craft_Scrap", 5, 10, 1.0);
+		}
+    }
+	
+	sub Container(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Container", 1.0);
+		}
+    }
+	
+	sub Resin(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Resin", 1.0);
+		}
+    }
+	
+	sub Wiring(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Wiring", 1.0);
+		}
+    }
+	
+	sub Rags(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Rags", 1.0);
+		}
+    }
+	
+	sub Alcohol(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Alcohol", 1.0);
+		}
+    }
+	
+	sub Weights(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Weights", 1.0);
+		}
+    }
+	
+	sub Blades(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Blades", 1.0);
+		}
+    }
+			
+	sub Leather(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Leather", 1.0);
+		}
+    }
+	
+	sub Electrical_Parts(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Electrical_Parts", 1.0);
+		}
+    }
+	
+	sub Feathers(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Feathers", 1.0);
+		}
+    }
+			
+	sub Pigments(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Pigments", 1.0);
+		}
+    }
+	
+	sub Cleaning_Supplies(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Cleaning_Supplies", 1.0);
+		}
+    }
+	
+	sub Oxidizer(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Oxidizer", 1.0);
+		}
+    }
+	
+	sub Battery(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Battery", 1.0);
+		}
+    }
+	
+	//Plants
+			
+	sub Chamomile(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			ItemCount("Plant_Chamomile", 2, 6, 1.0);
+		}
+    }
+			
+	sub Lavender(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			ItemCount("Plant_Lavender", 2, 6, 1.0);
+		}
+    }
+	
+	sub Honey(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Plant_Honey", 1.0);
+		}
+    }
+	
+	sub Cordyceps(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			ItemCount("Plant_Cordyceps", 1, 2, 1.0);
+		}
+    }
+	
+	sub Poppy(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			ItemCount("Plant_Poppy", 1, 2, 1.0);
+		}
+    }
+	
+	//Valuables
+			
+	sub Bracelet(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Toilet_Paper", 1.0);
+		}
+    }
+	
+	sub Soaps(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Soaps", 1.0);
+		}
+    }
+	
+	sub Aspirin(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Aspirin", 1.0);
+		}
+    }
+	
+	sub Cigarettes(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Cigarettes", 1.0);
+		}
+    }
+	
+	sub Flour(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Dried_Fruit", 1.0);
+		}
+    }
+	
+	sub Rice(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Rice", 1.0);
+		}
+    }
+	
+	sub Beeswax(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Beeswax", 1.0);
+		}
+    }
+	
+	sub Jewelry(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Jewelry", 1.0);
+		}
+    }
+			
+	sub Wristwatch(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Wristwatch", 1.0);
+		}
+    }
+	
+	sub Tools(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Tools", 1.0);
+		}
+    }
+	
+	sub Canned_Food(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Canned_Food", 1.0);
+		}
+    }
+	
+	sub Vodka(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Vodka", 1.0);
+		}
+    }
+	
+	sub Antibiotics(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Antidepressants", 1.0);
+		}
+    }
+			
+	sub MRE_Rations(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_MRE_Rations", 1.0);
+		}
+    }
+			
+	sub Perfume(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Perfume", 1.0);
+		}
+    }
+	
+	sub Whiskey(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Whiskey", 1.0);
+		}
+    }
+	
+	sub Wine(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Wine", 1.0);
+		}
+    }
+	
+	sub Smartphone(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Smartphone", 1.0);
+		}
+    }
+	
+	sub Morphine(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Morphine", 1.0);
+		}
+    }
+	
+	////////////////////////////////////////////////
+	//////////////    LOOT GROUPS     //////////////
+	////////////////////////////////////////////////
+	
+	sub CraftParts(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Craft_Scrap", 1.0);
+			Item("Craft_Blades", 1.0);
+			Item("Craft_Weights", 1.0);
+			Item("Craft_Container", 1.0);
+			Item("Craft_Alcohol", 1.0);
+			Item("Craft_Cleaning_Supplies", 1.0);
+			Item("Craft_Resin", 1.0);
+			Item("Craft_Pigments", 1.0);
+			Item("Craft_Oxidizer", 1.0);
+			Item("Craft_Rags", 1.0);
+			Item("Craft_Leather", 1.0);
+			Item("Craft_Feathers", 1.0);
+			Item("Craft_Wiring", 1.0);
+			Item("Craft_Electrical_Parts", 1.0);
+			Item("Craft_Battery", 1.0);
+		}
+    }
+	
+	sub Valuable(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Valuable_Tools", 1.0);
+			Item("Valuable_Cigarettes", 1.0);
+			Item("Valuable_Dried_Fruits", 1.0);
+			Item("Valuable_Rice", 1.0);
+			Item("Valuable_Canned_Food", 1.0);
+			Item("Valuable_Vodka", 1.0);
+			Item("Valuable_Whiskey", 1.0);
+			Item("Valuable_Wine", 1.0);
+			Item("Valuable_Soaps", 1.0);
+			Item("Valuable_Aspirin", 1.0);
+			Item("Valuable_Antidepressants", 1.0);
+			Item("Valuable_Toilet_Paper", 1.0);
+			Item("Valuable_Jewelry", 1.0);
+			Item("Valuable_Wristwatch", 1.0);
+			Item("Valuable_Perfume", 1.0);
+		}
+    }
+	
+	sub Potions_Encounter(float weight = 1.0, int min_amount = 1, int max_amount = 1, float prob = 1.0)
+    {
+        Set(Other, weight, min_amount, max_amount, prob)
+        {
+			Item("Medkit_Small_FT_T2", 80.0);
+			Item("Medkit_Small_FT_T3", 15.0);
+			Item("Medkit_Small_FT_T4", 10.0);
+			Item("Medkit_Large_FT", 5.0);
+		}
+    }
+
