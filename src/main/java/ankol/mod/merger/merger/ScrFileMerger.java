@@ -3,10 +3,11 @@ package ankol.mod.merger.merger;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import ankol.mod.merger.merger.ScrConflictResolver.MergeDecision;
 import ankol.mod.merger.merger.ScrTreeComparator.DiffResult;
+import ankol.mod.merger.tools.FileTree;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,10 +19,10 @@ import java.util.List;
 public class ScrFileMerger implements IFileMerger {
 
     @Override
-    public MergeResult merge(Path script1, Path script2) throws IOException {
+    public MergeResult merge(FileTree script1, FileTree script2) throws IOException {
         ScrScriptParser parser = new ScrScriptParser();
-        ScrScriptParser.ParsedScript p1 = parser.parseFileWithTokens(script1);
-        ScrScriptParser.ParsedScript p2 = parser.parseFileWithTokens(script2);
+        ScrScriptParser.ParsedScript p1 = parser.parseFileWithTokens(Path.of(script1.getFullPathName()));
+        ScrScriptParser.ParsedScript p2 = parser.parseFileWithTokens(Path.of(script2.getFullPathName()));
 
         TechlandScriptParser.FileContext fileTree1 = p1.file();
         TechlandScriptParser.FileContext fileTree2 = p2.file();
@@ -29,15 +30,18 @@ public class ScrFileMerger implements IFileMerger {
         List<DiffResult> diffs = ScrTreeComparator.compareFiles(fileTree1, fileTree2);
 
         if (diffs.isEmpty()) {
-            return new MergeResult(Files.readString(script1), false);
+            return new MergeResult(Files.readString(Path.of(script1.getFullPathName())), false);
         }
 
         System.out.println("\n" + "=".repeat(80));
         System.out.println("⚠️ CONFLICTS DETECTED IN [" + script1.getFileName() + "] - User Interaction Required");
         System.out.println("=".repeat(80));
-        List<MergeDecision> decisions = ScrConflictResolver.resolveConflicts(diffs);
+        List<MergeDecision> decisions = ScrConflictResolver.resolveConflicts(diffs, script1, script2);
 
-        return buildMergedContent(script1, decisions, p1, p2);
+        MergeResult result = buildMergedContent(Path.of(script1.getFullPathName()), decisions, p1, p2);
+        // attach conflict diffs for engine-level reporting
+        result.conflicts.addAll(diffs);
+        return result;
     }
 
     private record Replacement(int start, int end, String text) {}
@@ -64,8 +68,8 @@ public class ScrFileMerger implements IFileMerger {
                     replacements.add(new Replacement(insertPos, insertPos, "\t" + tree2.getText() + "\n"));
                 } else if (tree1 != null && tree2 != null) { // Modified
                     Interval interval = tree1.getSourceInterval();
-                    int charStart = tokenStartChar((TokenStream) p1.tokens(), interval.a);
-                    int charEnd = tokenEndChar((TokenStream) p1.tokens(), interval.b);
+                    int charStart = tokenStartChar(p1.tokens(), interval.a);
+                    int charEnd = tokenEndChar(p1.tokens(), interval.b);
                     replacements.add(new Replacement(charStart, charEnd, tree2.getText()));
                 }
             }
@@ -77,7 +81,8 @@ public class ScrFileMerger implements IFileMerger {
             mergedContent.replace(rep.start, rep.end, rep.text);
         }
 
-        return new MergeResult(mergedContent.toString(), !decisions.isEmpty());
+        MergeResult mergeResult = new MergeResult(mergedContent.toString(), !decisions.isEmpty());
+        return mergeResult;
     }
 
     private int tokenStartChar(TokenStream tokens, int tokenIndex) {

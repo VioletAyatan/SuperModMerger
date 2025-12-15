@@ -56,9 +56,7 @@ public class ScrScriptParser {
      */
     public ParsedScript parseFileWithTokens(Path scriptPath) throws IOException {
         String text = Files.readString(scriptPath, StandardCharsets.UTF_8);
-        // create parser with full token stream
         TechlandScriptParser parser = getTechlandScriptParser(CharStreams.fromString(text));
-        // add same error listener as in parseContent
         parser.addErrorListener(new BaseErrorListener() {
             @Override
             public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,

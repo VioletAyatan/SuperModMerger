@@ -3,6 +3,7 @@ package ankol.mod.merger;
 import ankol.mod.merger.core.SimpleArgumentsParser;
 import ankol.mod.merger.merger.ModMergerEngine;
 import ankol.mod.merger.merger.ScrConflictResolver;
+import ankol.mod.merger.tools.Localizations;
 import cn.hutool.core.io.FileUtil;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class AppMain {
      */
     public static void main(String[] args) {
         try {
+            Localizations.init(); //初始化国际化文件
             //1、解析命令行参数
             SimpleArgumentsParser config = SimpleArgumentsParser.fromArgs(args);
             // 第2步：验证配置的合法性
