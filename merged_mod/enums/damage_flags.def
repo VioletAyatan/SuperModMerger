@@ -1,0 +1,12 @@
+export string EDamageFlag_None = "None";
+export string EDamageFlag_Indirect = "Indirect";
+export string EDamageFlag_Stealth = "Stealth";
+export string EDamageFlag_Unmitigable = "Unmitigable";
+export string EDamageFlag_Unblockable = "Unblockable";
+export string EDamageFlag_Spread = "Spread";
+export string EDamageFlag_BodyDamageEnforced = "BodyDamageEnforced";
+export string EDamageFlag_BodyDamageUnconstrained = "BodyDamageUnconstrained";
+export string EDamageFlag_Kill = "Kill";
+export string EDamageFlag_IgnoreInvincibilityFrames = "IgnoreInvincibilityFrames";
+export string EDamageFlag_IgnoredBySyncAction = "IgnoredBySyncAction";
+export string EDamageFlag_IgnoreFuryPoints = "IgnoreFuryPoints";

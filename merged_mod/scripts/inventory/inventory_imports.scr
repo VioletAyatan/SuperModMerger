@@ -1,0 +1,37 @@
+//This script is generated from Inventory.xlsm. Don't modify it!!!
+
+
+import "inventorystuff.scr"
+import "inventory_ranged.scr"
+import "inventory_promo.scr"
+import "Inventory_Technical_JW.scr"
+
+import "inventory_outfits_ft.scr"
+import "inventory_quests_ft.scr"
+import "inventory_vehicle_ft.scr"
+import "collectables_ft.scr"
+
+sub imports() 
+{
+}
+sub outfit_imports() 
+{
+	use dlc_ft_outfits();
+}
+sub collectables_imports() 
+{
+	use dlc_ft_collectables();
+}
+sub weapons_imports() 
+{
+	use rangedweapons();
+}
+sub items_imports() 
+{
+	use dlc_ft_quest();
+	use dlc_ft_vehicle();
+	use dlc_ft_promo();
+	use Inventory_Technical_JW();
+}
+
+

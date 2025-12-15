@@ -1,0 +1,13 @@
+sub main()
+{
+    ActionCost("FuryAttack", 0.2 );
+    ActionCost("FuryPowerAttackLvl2", 4 );
+    ActionCost("FuryGroundPoundLvl1", 4 );
+    ActionCost("FuryJump", 0.5 );
+    ActionCost("FurySprint", 0 );
+    ActionCost("FuryWindmill", 6 );
+    ActionCost("FuryScreamLvl2", 6 );
+    ActionCost("FuryCharge", 4 );
+    ActionCost("FuryGrapplingHookLvl2", 1 );
+    ActionCost("FuryThrowable", 4);
+}

@@ -1,0 +1,5 @@
+sub main()
+{
+    Version(0);
+    ItemsCount(0);
+}

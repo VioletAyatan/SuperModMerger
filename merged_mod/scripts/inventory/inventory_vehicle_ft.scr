@@ -1,0 +1,347 @@
+import "inventorystuff.scr"
+
+sub dlc_ft_vehicle()
+{
+	Item("Vehicle_Skin_Police", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Skin_Police");
+        Color(Color_Violet);
+        SkinName("Unlockable_Police");
+        Name("&Vehicle_Skin_Police_N&");
+        Description("&Vehicle_Skin_Police_D&");
+        GameVersion(1);
+        DLC("DLC_PreorderPack");
+    }
+	
+	Item("Vehicle_Skin_CW_Army", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Skin_CW_Army");
+        Color(Color_Violet);
+        SkinName("Unlockable_CW_Army");
+        Name("&Vehicle_Skin_CW_Army_N&");
+        Description("&Vehicle_Skin_CW_Army_D&");
+        GameVersion(1);
+        DLC("DLC_DeluxePack");
+    }
+    
+    Item("Vehicle_Emissive_KC", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Emissive_KC");
+        Color(Color_Violet);
+        SkinName("Emissive_KC");
+        Name("&Vehicle_Skin_Emissive_KC_N&");
+        Description("&Vehicle_Skin_Emissive_KC_D&");
+        GameVersion(2);
+    }
+    
+    Item("Vehicle_Emissive_VOL", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Emissive_VOL");
+        Color(Color_Violet);
+        SkinName("Emissive_VOL");
+        Name("&Vehicle_Skin_Emissive_VOL_N&");
+        Description("&Vehicle_Skin_Emissive_VOL_D&");
+        GameVersion(2);
+    }
+    
+    Item("Vehicle_Influ_A", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Influ_A");
+        Color(Color_Violet);
+        SkinName("Ranger");
+        Name("Coming Soon");
+        Description("Coming Soon");
+        GameVersion(2);
+    }
+    
+    Item("Vehicle_Influ_B", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Influ_B");
+        Color(Color_Violet);
+        SkinName("Ranger");
+        Name("Coming Soon");
+        Description("Coming Soon");
+        GameVersion(2);
+    }
+
+    Item("Vehicle_Influ_A_A", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Influ_A_A");
+        Color(Color_Violet);
+        SkinName("Influ_A_A");
+        Name("&Vehicle_Skin_Influ_A_A_N&");
+        Description("&Vehicle_Skin_Influ_A_A_D&");
+        GameVersion(6);
+    }
+    
+        Item("Vehicle_Influ_A_B", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Influ_A_B");
+        Color(Color_Violet);
+        SkinName("Influ_A_B");
+        Name("&Vehicle_Skin_Influ_A_B_N&");
+        Description("&Vehicle_Skin_Influ_A_B_D&");
+        GameVersion(6);
+    }
+
+        Item("Vehicle_Influ_B_B", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Influ_B_B");
+        Color(Color_Violet);
+        SkinName("Influ_B_B");
+        Name("&Vehicle_Skin_Influ_B_B_N&");
+        Description("&Vehicle_Skin_Influ_B_B_D&");
+        GameVersion(6);
+    }
+
+        Item("Vehicle_Influ_B_A", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Influ_B_A");
+        Color(Color_Violet);
+        SkinName("Influ_B_A");
+        Name("&Vehicle_Skin_Influ_B_A_N&");
+        Description("&Vehicle_Skin_Influ_B_A_D&");
+        GameVersion(6);
+    }
+
+        Item("Vehicle_Influ_A_C", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Influ_A_C");
+        Color(Color_Violet);
+        SkinName("Influ_A_C");
+        Name("&Vehicle_Skin_Influ_A_C_N&");
+        Description("&Vehicle_Skin_Influ_A_C_D&");
+        GameVersion(6);
+    }
+
+        Item("Vehicle_Influ_B_C", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        HudIcon("Vehicle_Influ_B_C");
+        Color(Color_Violet);
+        SkinName("Influ_B_C");
+        Name("&Vehicle_Skin_Influ_B_C_N&");
+        Description("&Vehicle_Skin_Influ_B_C_D&");
+        GameVersion(6);
+    }
+        Item("Vehicle_Sunset", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("Reward_Sunset");
+        Name("&Vehicle_skin_Sunset_n&");
+        Description("&Vehicle_skin_Sunset_d&");
+        LinkedDocket("Skin12");     // Here we determine that it is a item given by docket.
+        GameVersion(7);
+    }
+	    Item("Vehicle_Bober", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("Bober");
+        Name("&Vehicle_skin_Bober_n&");
+        Description("&Vehicle_skin_Bober_d&");
+        LinkedDocket("Skin13");     // Here we determine that it is a item given by docket.
+        GameVersion(7);
+    }
+        Item("Vehicle_PUBGMTB", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("PUBGMTB");
+        Name("&Vehicle_skin_PUBGMTB_n&");
+        Description("&Vehicle_skin_PUBGMTB_d&");
+        LinkedDocket("Skin14");     // Here we determine that it is a item given by docket.
+        GameVersion(8);
+    }
+
+    	Item("Vehicle_Crafted", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("reward_wood_side");
+        Name("&vehicle_skin_crafted_n&");
+        Description("&vehicle_skin_crafted_d&");
+        LinkedDocket("Skin15");     // Here we determine that it is a item given by docket.
+        GameVersion(8);
+    }
+    	Item("Vehicle_Beast", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("Reward_Bloody");
+        Name("&vehicle_skin_bloody_n&");
+        Description("&vehicle_skin_bloody_d&");
+        LinkedDocket("Skin16");     // Here we determine that it is a item given by docket.
+        GameVersion(8);
+    }
+    	Item("Vehicle_Volatile", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("Reward_Blackout");
+        Name("&vehicle_skin_volatile_n&");
+        Description("&vehicle_skin_volatile_d&");
+        LinkedDocket("Skin17");     // Here we determine that it is a item given by docket.
+        GameVersion(8);
+    }
+    	Item("Vehicle_Accurate", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("Reward_Accurate_Shots");
+        Name("&vehicle_skin_accurate_n&");
+        Description("&vehicle_skin_accurate_d&");
+        LinkedDocket("Skin18");     // Here we determine that it is a item given by docket.
+        GameVersion(8);
+    }
+    
+    Item("Vehicle_Legend_Water_Works_Department", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Exotic);
+        SkinName("Legend_Water_Works_Department");
+        Name("&Vehicle_Skin_Legend_Water_Works_Department_n&");
+        Description("&Vehicle_Skin_Legend_Water_Works_Department_d&");
+        //LinkedDocket("Skin18");     // Here we determine that it is a item given by docket.
+        GameVersion(9);
+    }
+    
+    Item("Vehicle_Legend_Alimental_Food", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Exotic);
+        SkinName("Legend_Alimental_Food");
+        Name("&Vehicle_Skin_Legend_Alimental_Food_n&");
+        Description("&Vehicle_Skin_Legend_Alimental_Food_d&");
+        //LinkedDocket("Skin18");     // Here we determine that it is a item given by docket.
+        GameVersion(9);
+    }
+    
+    Item("Vehicle_Legend_Taurus", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Exotic);
+        SkinName("Legend_Taurus");
+        Name("&Vehicle_Skin_Legend_Taurus_n&");
+        Description("&Vehicle_Skin_Legend_Taurus_d&");
+        //LinkedDocket("Skin18");     // Here we determine that it is a item given by docket.
+        GameVersion(9);
+    }
+    Item("Vehicle_Executed", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("Reward_Finishers_Executed");
+        Name("&vehicle_skin_executed_n&");
+        Description("&vehicle_skin_executed_d&");
+        LinkedDocket("Skin19");     // Here we determine that it is a item given by docket.
+        GameVersion(9);
+    }
+    Item("Vehicle_Fire", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("Reward_Flamethrower_Kills");
+        Name("&vehicle_skin_burnout_n&");
+        Description("&vehicle_skin_burnout_d&");
+        LinkedDocket("Skin20");     // Here we determine that it is a item given by docket.
+        GameVersion(9);
+    }
+    Item("Vehicle_Explode", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("Reward_DFA");
+        Name("&vehicle_skin_beast_n&");
+        Description("&vehicle_skin_beast_d&");
+        LinkedDocket("Skin21");     // Here we determine that it is a item given by docket.
+        GameVersion(9);
+    }
+    Item("Vehicle_Grapple", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("bounty_distance_on_grapple_hook");
+        Name("&vehicle_skin_seraphantom_n&");
+        Description("&vehicle_skin_seraphantom_d&");
+        LinkedDocket("Skin22");     // Here we determine that it is a item given by docket.
+        GameVersion(9);
+    }
+        Item("Vehicle_Loot", CategoryType_Collectable)
+    {
+        ItemType(ItemType_VehicleSkin);
+        Visibility(true);
+        MaxStackCount(1);
+        Color(Color_Violet);
+        SkinName("bounty_items_looted_at_night");
+        Name("&vehicle_skin_scorpion_n&");
+        Description("&vehicle_skin_scorpion_d&");
+        LinkedDocket("Skin23");     // Here we determine that it is a item given by docket.
+        GameVersion(9);
+    }
+
+}

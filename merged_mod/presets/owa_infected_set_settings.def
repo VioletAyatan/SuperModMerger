@@ -1,0 +1,285 @@
+sub declare_owa_infected_set_settings()
+{
+    PresetDef("owa_difficulty")
+	{
+		Description("");
+		AddField("ForcedDifficulty", "", false, true, false);
+		
+		IgnoreField("UserData");
+		IgnoreField("SkinName");
+		Preset("Difficulty_01")
+		{
+			SetField("ForcedDifficulty", "difficulty_01");
+		}
+		Preset("Difficulty_02")
+		{
+			SetField("ForcedDifficulty", "difficulty_02");
+		}
+		Preset("Difficulty_03")
+		{
+			SetField("ForcedDifficulty", "difficulty_03");
+		}
+		Preset("Difficulty_04")
+		{
+			SetField("ForcedDifficulty", "difficulty_04");
+		}
+		Preset("Difficulty_05")
+		{
+			SetField("ForcedDifficulty", "difficulty_05");
+		}
+		Preset("Difficulty_06")
+		{
+			SetField("ForcedDifficulty", "difficulty_06");
+		}
+		Preset("Difficulty_07")
+		{
+			SetField("ForcedDifficulty", "difficulty_07");
+		}
+		Preset("Difficulty_08")
+		{
+			SetField("ForcedDifficulty", "difficulty_08");
+		}
+		Preset("Difficulty_09")
+		{
+			SetField("ForcedDifficulty", "difficulty_09");
+		}
+	}
+	
+    PresetDef("owa_type")
+	{
+		Description("");
+        AddField("EncounterCategory", "");
+        
+        //DLC FT
+		Preset("Default")
+		{
+			SetField("EncounterCategory", "DLC_FT_ISL_Default_Day;DLC_FT_ISL_Default_Night");
+		}
+		Preset("Convoy")
+		{
+			SetField("EncounterCategory", "DLC_FT_ISL_Convoy_Default_Day;DLC_FT_ISL_Convoy_Default_Night");
+		}
+		Preset("Convoy - Toxic")
+		{
+			SetField("EncounterCategory", "DLC_FT_ISL_Convoy_Default_Day;DLC_FT_ISL_Convoy_Default_Night");
+		}
+		Preset("DLC_FT_Monster_Set_Benchmark")
+		{
+			SetField("EncounterCategory", "DLC_FT_Monster_Set_Benchmark");
+		}
+		Preset("DLC_FT_Convoy_Small")
+		{
+			SetField("EncounterCategory", "DLC_FT_Convoy_Small");
+		}
+		Preset("DLC_FT_Convoy_Big")
+		{
+			SetField("EncounterCategory", "DLC_FT_Convoy_Big");
+		}
+        
+        //Enhanced Edition
+		Preset("EE_Monster_Set_A")
+		{
+			SetField("EncounterCategory", "EE_Monster_Set_05;EE_Monster_Set_08;EE_Monster_Set_11;EE_Monster_Set_19;EE_Monster_Set_20;EE_Monster_Set_33;EE_Monster_Set_39;EE_Monster_Set_42");
+		}
+		Preset("EE_Monster_Set_05")
+		{
+			SetField("EncounterCategory", "EE_Monster_Set_05");
+		}
+		Preset("EE_Monster_Set_08")
+		{
+			SetField("EncounterCategory", "EE_Monster_Set_08");
+		}
+		Preset("EE_Monster_Set_11")
+		{
+			SetField("EncounterCategory", "EE_Monster_Set_11");
+		}
+		Preset("EE_Monster_Set_19")
+		{
+			SetField("EncounterCategory", "EE_Monster_Set_19");
+		}
+		Preset("EE_Monster_Set_20")
+		{
+			SetField("EncounterCategory", "EE_Monster_Set_20");
+		}
+		Preset("EE_Monster_Set_33")
+		{
+			SetField("EncounterCategory", "EE_Monster_Set_33");
+		}
+		Preset("EE_Monster_Set_39")
+		{
+			SetField("EncounterCategory", "EE_Monster_Set_39");
+		}
+		Preset("EE_Monster_Set_42")
+		{
+			SetField("EncounterCategory", "EE_Monster_Set_42");
+		}
+        
+        //Dying Light Online
+		Preset("DLO_Monster_Set_All")
+		{
+			SetField("EncounterCategory", "DLO_Monster_Set_All");
+		}
+		Preset("DLO_Monster_Set_Unique_01")
+		{
+			SetField("EncounterCategory", "DLO_Monster_Set_Unique_01");
+		}
+		Preset("DLC_FT_Monster_Set_All")
+		{
+			SetField("EncounterCategory", "DLC_FT_Monster_Set_All");
+		}
+		
+		Preset("DLC_FT_Monster_Set_All_NoDemolisher")
+		{
+			SetField("EncounterCategory", "DLC_FT_Monster_Set_All_NoDemolisher");
+		}
+        
+        //Pilgrim Mission
+		Preset("PM_Patrol_Warmup")
+		{
+			SetField("EncounterCategory", "PM_Patrol_Warmup");
+		}
+		Preset("PM_Patrol_Warmup_Plus")
+		{
+			SetField("EncounterCategory", "PM_Patrol_Warmup_Plus");
+		}
+		Preset("PM_Patrol_Warmup_All")
+		{
+			SetField("EncounterCategory", "PM_Patrol_Warmup_All");
+		}
+		Preset("PM_Patrol_Middle")
+		{
+			SetField("EncounterCategory", "PM_Patrol_Middle");
+		}
+		Preset("PM_Patrol_Middle_Plus")
+		{
+			SetField("EncounterCategory", "PM_Patrol_Middle_Plus");
+		}
+		Preset("PM_Patrol_Middle_All")
+		{
+			SetField("EncounterCategory", "PM_Patrol_Middle_All");
+		}
+		Preset("PM_Patrol_Finale")
+		{
+			SetField("EncounterCategory", "PM_Patrol_Finale");
+		}
+		Preset("PM_Patrol_All")
+		{
+			SetField("EncounterCategory", "PM_Random_Warmup;PM_Random_Warmup_Plus;PM_Random_Warmup_All;PM_Random_Middle;PM_Random_Middle_Plus;PM_Random_Middle_All;PM_Random_Finale;PM_Patrol_Unique_01;PM_Patrol_Unique_02;PM_Patrol_Unique_03;PM_Patrol_Unique_04;PM_Patrol_Unique_05;PM_Patrol_Unique_06;PM_Patrol_Unique_07;PM_Patrol_Unique_08;PM_Patrol_Unique_09;PM_Patrol_Unique_10;PM_Patrol_Unique_11;PM_Patrol_Unique_12;PM_Patrol_Unique_13;PM_Patrol_Unique_14;PM_Patrol_Unique_15;PM_Patrol_Unique_16;PM_Patrol_Unique_17;PM_Patrol_Unique_18;PM_Patrol_Unique_19;PM_Patrol_Unique_20;PM_Patrol_Unique_21;PM_Patrol_Unique_22;PM_Patrol_Unique_23;PM_Patrol_Unique_24;PM_Patrol_Unique_25;PM_Patrol_Unique_26;PM_Patrol_Unique_27;PM_Patrol_Unique_28;PM_Patrol_Unique_29;PM_Patrol_Unique_30;PM_Patrol_Unique_31;PM_Patrol_Unique_32;PM_Patrol_Unique_33;PM_Patrol_Unique_34;PM_Patrol_Unique_35;PM_Patrol_Unique_36;PM_Patrol_Unique_37;PM_Patrol_Unique_38;PM_Patrol_Unique_39;PM_Patrol_Unique_40;PM_Patrol_Unique_41;PM_Patrol_Unique_42;PM_Patrol_Unique_43;PM_Patrol_Unique_44;PM_Patrol_Unique_45;PM_Patrol_Unique_46;PM_Patrol_Unique_47;PM_Patrol_Unique_48;PM_Patrol_Unique_49;PM_Patrol_Unique_50");
+		}
+		Preset("PM_Patrol_Middle_And_Finale")
+		{
+			SetField("EncounterCategory", "PM_Patrol_Middle;PM_Patrol_Finale");
+		}
+		//Test for randomizing encounters in PM003 - MathieuO
+		Preset("PM_Patrol_Mission003")
+		{
+			SetField("EncounterCategory", "PM_003_Warmup");
+		}
+	}
+    
+	
+    PresetDef("owa_spawners")
+	{
+		Description("");
+		AddField("MinBitersToSpawnDay", "", false, true, false);
+		AddField("MaxBitersToSpawnDay", "", false, true, false);
+		AddField("MinBitersToSpawnNight", "", false, true, false);
+		AddField("MaxBitersToSpawnNight", "", false, true, false);
+		AddField("MinViralsToSpawnNight", "", false, true, false);
+		AddField("MaxViralsToSpawnNight", "", false, true, false);
+		AddField("MaxViralsToSpawnDay", "", false, true, false);
+		AddField("MinViralsToSpawnDay", "", false, true, false);
+		AddField("EnableBiters", "", false, true, false);
+		AddField("EnableVirals", "", false, true, false);
+        AddField("BiterDayPool", "", false, true, false);
+        AddField("BiterNightPool", "", false, true, false);
+        AddField("ViralDayPool", "", false, true, false);
+        AddField("ViralNightPool", "", false, true, false);
+		
+		IgnoreField("UserData");
+		IgnoreField("SkinName");
+		Preset("D_Disable Spawners")
+		{
+			SetField("MinBitersToSpawnDay", "2");
+			SetField("MaxBitersToSpawnDay", "7");
+			SetField("MinBitersToSpawnNight", "2");
+			SetField("MaxBitersToSpawnNight", "7");
+			SetField("MinViralsToSpawnNight", "2");
+			SetField("MaxViralsToSpawnNight", "3");
+			SetField("MaxViralsToSpawnDay", "3");
+			SetField("MaxBitersToSpawnNight", "1");
+			SetField("EnableBiters", "0");
+			SetField("EnableVirals", "0");
+		}
+		Preset("Disable Biters")
+		{
+			SetField("MinBitersToSpawnDay", "1");
+			SetField("MaxBitersToSpawnDay", "1");
+			SetField("MinBitersToSpawnNight", "1");
+			SetField("MaxBitersToSpawnNight", "1");
+			SetField("EnableBiters", "0");
+		}
+		Preset("Disable Virals")
+		{
+			SetField("MinViralsToSpawnNight", "1");
+			SetField("MaxViralsToSpawnNight", "1");
+			SetField("MaxViralsToSpawnDay", "1");
+			SetField("MinViralsToSpawnDay", "1");
+			SetField("EnableVirals", "0");
+		}
+		Preset("Difficulty_01")
+		{
+			SetField("MinBitersToSpawnDay", "1");
+			SetField("MaxBitersToSpawnDay", "3");
+			SetField("MinBitersToSpawnNight", "1");
+			SetField("MaxBitersToSpawnNight", "3");
+			SetField("MinViralsToSpawnNight", "1");
+			SetField("MaxViralsToSpawnNight", "2");
+			SetField("MaxViralsToSpawnDay", "2");
+			SetField("MinViralsToSpawnDay", "1");
+			SetField("EnableBiters", "1");
+			SetField("EnableVirals", "1");
+		}
+		Preset("Difficulty_02")
+		{
+			SetField("MinBitersToSpawnDay", "2");
+			SetField("MaxBitersToSpawnDay", "8");
+			SetField("MinBitersToSpawnNight", "2");
+			SetField("MaxBitersToSpawnNight", "8");
+			SetField("MinViralsToSpawnNight", "1");
+			SetField("MaxViralsToSpawnNight", "4");
+			SetField("MaxViralsToSpawnDay", "4");
+			SetField("MinViralsToSpawnDay", "1");
+			SetField("EnableBiters", "1");
+			SetField("EnableVirals", "1");
+		}
+		Preset("Difficulty_03")
+		{
+			SetField("MinBitersToSpawnDay", "2");
+			SetField("MaxBitersToSpawnDay", "7");
+			SetField("MinBitersToSpawnNight", "2");
+			SetField("MaxBitersToSpawnNight", "7");
+			SetField("MinViralsToSpawnNight", "2");
+			SetField("MaxViralsToSpawnNight", "3");
+			SetField("MaxViralsToSpawnDay", "3");
+			SetField("MinViralsToSpawnDay", "2");
+			SetField("EnableBiters", "1");
+			SetField("EnableVirals", "1");
+		}
+        
+        //Pilgrim Mission
+		Preset("PM_Patrol_Adds_Starter")
+		{
+			SetField("MinBitersToSpawnDay", "8");
+			SetField("MaxBitersToSpawnDay", "10");
+			SetField("MinBitersToSpawnNight", "8");
+			SetField("MaxBitersToSpawnNight", "10");
+			SetField("EnableBiters", "1");
+            SetField("BiterDayPool", "PM_Patrol_Adds_Biters_Day");
+            SetField("BiterNightPool", "PM_Patrol_Adds_Biters_Night");
+            SetField("ViralDayPool", "PM_Patrol_Adds_Virals_Day");
+            SetField("ViralNightPool", "PM_Patrol_Adds_Virals_Night");
+		}
+
+	}
+}

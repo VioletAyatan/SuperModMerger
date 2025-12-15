@@ -1,0 +1,30 @@
+sub declare_dead_bodies()
+{
+    PresetDef("Corpse model")
+    {
+        Description("");
+        AddField("ModelName", "", false, true, false);
+        IgnoreField("UserData");
+        IgnoreField("SkinName");
+        Preset("DEFAULT - USE THIS TO SET CORPSE POSITION")
+        {
+            SetField("ModelName", "dlc_ft_db_biter_man_pose_laying_back_a.model");
+        }
+        Preset("Missing_Parts_01")
+        {
+            SetField("ModelName", "dlc_ft_db_man_lying_ripped_head_03_a.model");
+        }
+        Preset("Full_Body_Man_01")
+        {
+            SetField("ModelName", "dlc_ft_db_srv_man_pose_laying_belly_c.model");
+        }        
+        Preset("Full_Body_Woman_01")
+        {
+            SetField("ModelName", "dlc_ft_db_srv_wmn_pose_laying_back_a.model");
+        }        
+        Preset("Hull_01")
+        {
+            SetField("ModelName", "dlc_ft_db_man_lying_ripped_head_02_a.model");
+        }
+    }
+}

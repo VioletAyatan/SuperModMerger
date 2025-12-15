@@ -1,0 +1,13 @@
+sub main()
+{
+    WeaponName("Melee_Fists");
+    WeaponName("PursuitBreakerSwitch");
+    WeaponName("PaperSheet");
+    WeaponName("PlayerBackpack");
+    WeaponName("Parachute");
+
+    WeaponName("TreeBranch");
+    WeaponName("ElectricWrench");
+    WeaponName("StompItem");
+    WeaponName("Bicycle");
+}

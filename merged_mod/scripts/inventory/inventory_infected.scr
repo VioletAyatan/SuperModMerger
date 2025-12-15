@@ -1,0 +1,3613 @@
+import "inventorystuff.scr"
+import "faction_exports.scr"
+import "inventory_weapondefintions.scr"
+import "inventory_weapondefintions_ft.scr"
+import "inventory_firearmsdefintions.scr"
+
+sub Weapon_Zombie_Fists_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);          
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);  
+        DamageType(DamageType_Cut); 
+        DestroyableDamage(20.0);
+		HitReactionType(EReactionType_Blunt);		
+        RagdollBehavior(RagdollBehavior_Fists);       
+        SoundInjuryDamageType("unarmed");
+		AiHitSound("fists");
+		Material("fists");  
+		DamageRange(3.0);
+		StaminaDamage(40);
+		GameVersion(1);
+    }
+}
+
+sub Weapon_Gas_Tank_Explosion(string weapon_name = "", string damage_name = "", float damage_range = 4.0, int game_version = 30)
+{
+	Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Explosion);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+		DamageRange(damage_range);
+        DamageType(DamageType_Blast);
+        DestroyableDamage(120.0);
+		HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		GameVersion(1);
+    }
+}
+
+sub Weapon_Viral_Fists_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        DamageType(DamageType_Cut);
+        DestroyableDamage(20.0);
+		HitReactionType(EReactionType_Blunt);		
+        RagdollBehavior(RagdollBehavior_Fists);
+        SoundInjuryDamageType("unarmed");
+		AiHitSound("fists");
+		Material("fists");
+		GameVersion(1);
+    }
+}
+
+sub Viral_Spit_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("spit");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        DestroyableDamage(20.0);
+        Damage(5.0);
+        ThrowSpeed(26.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(false);
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+        MotionTrailFx("spitter_trail_01_a.gpufx");
+		SweepSize(0.35, 0.21, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+		DamageName(damage_name);
+		SoundInjuryDamageType("toxic_spitter");
+        ApplyLegendLevelOrNewGamePlusModifiers(false);
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Fists_Def(string weapon_name="", string damage_name="", int game_version=1)
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);      
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);     
+        PhysicsDamageMul(3.0);
+        DamageType(DamageType_Blunt);
+        DestroyableDamage(120.0);       
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		SoundInjuryDamageType("blunt_heavy");
+		AiHitSound("fists");
+		GameVersion(1);
+    }
+}
+sub Demolisher_Charge_Def(string weapon_name="", string damage_name="", int game_version=1)
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+		Mesh("weapon_fists.msh");
+        ItemType(ItemType_Stick);      
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);     
+        PhysicsDamageMul(3.0);
+        DamageType(DamageType_Blast);
+        DestroyableDamage(120.0);       
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");      
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		AiHitSound("fists");
+		GameVersion(1);
+    }
+}
+sub Demolisher_Rubble_Def(string weapon_name="", string damage_name="", string skin="", string trail_fx="", int game_version=1)
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowableRock);
+        OwnerType(OwnerType_AI);
+        Visibility(true);       
+        Mesh("armored_rock.msh");
+        Skin(skin);
+        PhysicsScript("simple.phx");     
+        GetShowExplosiveHud(false);       
+        DamageName(damage_name);
+        DamageRange(2.0);    
+        ThrowSpeed(20.0);
+        DestroyableDamage(120.0);
+		ScheduleExplodeAfterContact(true);		
+        DamagerTakesNoDamagePlaysReactionAnim(true);
+        ExplosionFx("demolisher_stone_impact.gpufx");
+        ExplosionSound("demolisher_heavy_stone_explosion");
+        ExplodeDelay(0.0);
+        Force(200.0); 
+        PhysicsDamageMul(3.0);                  
+        MotionTrailFx(trail_fx);
+		ThrowFlySound("demolisher_heavy_object_flying");
+        AIHandElement("R_HandHolder");
+        InWorldScale(2.0);
+		NoiseDataUid("demolisher_rock");
+		SoundInjuryDamageType("blunt_heavy");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        DamageType(DamageType_Blast);
+        HitReactionType(EReactionType_Blast);
+        // NOTE: HitReactionContext is overrided by categoryType_Throwable in ItemDescWeapon::OnDefinitionsLoaded
+        HitReactionHitSeverity(EHitSeverity_Heavy);
+        HitReactionMoveSeverity(EMoveSeverity_Heavy);
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		LimbsCutProb(0.5);
+        LimbsDestroyProb(0.5);
+		FullBodyCutProb(0.25);
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Quest_Fists_Def(string weapon_name="", string damage_name="", int game_version=1)
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);      
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);     
+        PhysicsDamageMul(3.0);
+        DamageType(DamageType_Blunt);
+        DestroyableDamage(120.0);       
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		SoundInjuryDamageType("blunt_heavy");
+		AiHitSound("freak_fists");
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Quest_Charge_Def(string weapon_name="", string damage_name="", int game_version=1)
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+		Mesh("weapon_fists.msh");
+        ItemType(ItemType_Stick);      
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);     
+        PhysicsDamageMul(3.0);
+        DamageType(DamageType_Blast);
+        DestroyableDamage(120.0);       
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");      
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		AiHitSound("freak_fists");
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Quest_Rubble_Def(string weapon_name="", string damage_name="", string skin="", string trail_fx="", int game_version=1)
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowableRock);
+        OwnerType(OwnerType_AI);
+        Visibility(true);       
+        Mesh("armored_rock.msh");
+        Skin(skin);
+        PhysicsScript("simple.phx");     
+        GetShowExplosiveHud(false);       
+        DamageName(damage_name);
+        DamageRange(2.0);    
+        ThrowSpeed(20.0);
+        DestroyableDamage(120.0);
+		ScheduleExplodeAfterContact(true);		
+        DamagerTakesNoDamagePlaysReactionAnim(true);
+        ExplosionFx("demolisher_stone_impact.gpufx");
+        ExplosionSound("demolisher_heavy_stone_explosion");
+        ExplodeDelay(0.0);
+        Force(200.0); 
+        PhysicsDamageMul(3.0);                  
+        MotionTrailFx(trail_fx);
+		ThrowFlySound("demolisher_heavy_object_flying");
+        AIHandElement("R_HandHolder");
+        InWorldScale(2.0);
+		NoiseDataUid("demolisher_rock");
+		SoundInjuryDamageType("blunt_heavy");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        DamageType(DamageType_Blast);
+        HitReactionType(EReactionType_Blast);
+        // NOTE: HitReactionContext is overrided by categoryType_Throwable in ItemDescWeapon::OnDefinitionsLoaded
+        HitReactionHitSeverity(EHitSeverity_Heavy);
+        HitReactionMoveSeverity(EMoveSeverity_Heavy);
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		LimbsCutProb(0.5);
+        LimbsDestroyProb(0.5);
+		FullBodyCutProb(0.25);
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Gorilla_Fists_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);      
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);     
+        PhysicsDamageMul(3.0);
+        DamageType(DamageType_Blunt);
+        DestroyableDamage(120.0);  
+        DamageRange(0.5);     
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		SoundInjuryDamageType("blunt_heavy");
+		AiHitSound("freak_fists");
+		GameVersion(1);
+    }
+}
+sub Demolisher_Gorilla_Rubble_Def(string weapon_name="", string damage_name="", string skin="", string trail_fx="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowableRock);
+        OwnerType(OwnerType_AI);
+        Visibility(true);       
+        Mesh("armored_rock.msh");
+        Skin(skin);
+        PhysicsScript("simple.phx");     
+        GetShowExplosiveHud(false);       
+        DamageName(damage_name);
+        DamageRange(2.0);    
+        ThrowSpeed(20.0);
+        DestroyableDamage(120.0);
+		ScheduleExplodeAfterContact(true);		
+        DamagerTakesNoDamagePlaysReactionAnim(true);
+        ExplosionFx("demolisher_stone_impact.gpufx");
+        ExplosionSound("demolisher_heavy_stone_explosion");
+        ExplodeDelay(0.0);
+        Force(200.0); 
+        PhysicsDamageMul(3.0);                  
+        MotionTrailFx(trail_fx);
+		ThrowFlySound("demolisher_heavy_object_flying");
+        AIHandElement("R_HandHolder");
+        InWorldScale(2.0);
+		NoiseDataUid("demolisher_rock");
+		SoundInjuryDamageType("blunt_heavy");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        DamageType(DamageType_Blast);
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		LimbsCutProb(0.5);
+        LimbsDestroyProb(0.5);
+		FullBodyCutProb(0.25);
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Gorilla_Pounce_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Visibility(false);
+		Mesh("weapon_fists.msh");
+        ItemType(ItemType_Stick);      
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);     
+        PhysicsDamageMul(3.0);
+        DamageType(DamageType_Blast);
+        DestroyableDamage(120.0);  
+        DamageRange(1.2);     
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");      
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		SoundInjuryDamageType("blunt_heavy");
+		AiHitSound("freak_fists");
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Rubble_Winter_Def(string weapon_name="", string damage_name="", string skin="", string trail_fx="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowableRock);
+        OwnerType(OwnerType_AI);
+        Visibility(true);       
+        Mesh("armored_snowball.msh");
+        Skin(skin);
+        PhysicsScript("simple.phx");     
+        GetShowExplosiveHud(false);       
+        DamageName(damage_name);
+        DamageRange(2.0);    
+        ThrowSpeed(20.0);
+        DestroyableDamage(120.0);
+		ScheduleExplodeAfterContact(true);		
+        DamagerTakesNoDamagePlaysReactionAnim(true);
+        ExplosionFx("demolisher_snow_impact.gpufx");
+        ExplosionSound("demolisher_heavy_stone_explosion");
+        ExplodeDelay(0.0);
+        Force(200.0); 
+        PhysicsDamageMul(3.0);                  
+        MotionTrailFx(trail_fx);
+		ThrowFlySound("demolisher_heavy_object_flying");
+        AIHandElement("R_HandHolder");
+        InWorldScale(2.0);
+		NoiseDataUid("demolisher_rock");
+		SoundInjuryDamageType("blunt_heavy");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        DamageType(DamageType_Blast);
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Freak_Fists_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);
+        PhysicsDamageMul(3.0);
+        DamageType(DamageType_Blunt);
+        DestroyableDamage(120.0);
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		SoundInjuryDamageType("blunt_heavy");
+		AiHitSound("freak_fists");
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Freak_Charge_And_Pounce_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Visibility(false);
+		Mesh("weapon_fists.msh");
+        ItemType(ItemType_Stick);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);
+        PhysicsDamageMul(4.0);
+        DestroyableDamage(120.0);
+        DamageType(DamageType_Blast);
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		SoundInjuryDamageType("blunt_heavy");
+		AiHitSound("freak_fists");
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Freak_Rubble_Def(string weapon_name="", string damage_name="", string skin="", string trail_fx="", string noise_data_uid="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowableRock);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        Mesh("armored_rock.msh");
+        Skin(skin);
+        PhysicsScript("simple.phx");
+        GetShowExplosiveHud(false);
+        DamageName(damage_name);
+        DamageRange(2.5);
+        ThrowSpeed(25.0);
+		ScheduleExplodeAfterContact(true);
+        DestroyableDamage(120.0);
+        DamagerTakesNoDamagePlaysReactionAnim(true);
+        ExplosionFx("demolisher_stone_impact.gpufx");
+        ExplosionSound("demolisher_heavy_stone_explosion");
+        ExplodeDelay(0.0);
+        Force(200.0);
+        PhysicsDamageMul(1.5);
+        MotionTrailFx(trail_fx);
+		ThrowFlySound("demolisher_heavy_object_flying");
+        AIHandElement("R_HandHolder");
+        InWorldScale(4.0);
+		NoiseDataUid(noise_data_uid);
+		SoundInjuryDamageType("blunt_heavy");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        DamageType(DamageType_Blast);
+        HitReactionType(EReactionType_Blast);
+        HitReactionHitSeverity(EHitSeverity_Heavy);
+        HitReactionMoveSeverity(EMoveSeverity_Heavy);
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		LimbsCutProb(0.5);
+        LimbsDestroyProb(0.5);
+		FullBodyCutProb(0.25);
+		GameVersion(1);
+    }
+}
+
+sub Demolisher_Freak_Attack_Object_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        Mesh("weapon_fists.msh");
+        ItemType(ItemType_TwoHandedHeavyStick);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);
+        PhysicsDamageMul(10.0);
+        DestroyableDamage(120.0);
+        DamageType(DamageType_Blunt);
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        SoundInjuryDamageType("blunt_heavy");
+        AiHitSound("freak_fists");
+        GameVersion(1);
+    }
+}
+
+sub Banshee_fists_Def(string weapon_name="", string damage_name="", int game_version=1)
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        DamageType(DamageType_Cut);
+        DestroyableDamage(20.0);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+        RagdollBehavior(RagdollBehavior_Fists);
+        SoundInjuryDamageType("sharp_heavy");
+		Material("fists");
+		AiHitSound("fists");
+		GameVersion(1);
+    }
+}
+
+sub Banshee_Weak_fists_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        DamageType(DamageType_Cut);
+        DestroyableDamage(20.0);
+        HitReactionType(EReactionType_Cut);
+        HitReactionHitSeverity(EHitSeverity_Light);
+        RagdollBehavior(RagdollBehavior_Fists);
+        SoundInjuryDamageType("sharp_heavy");
+        Material("fists");
+        AiHitSound("fists");
+        GameVersion(1);
+    }
+}
+
+sub Banshee_Freak_Spit_Def(string weapon_name="", string damage_name="", string trail_fx="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+        DestroyableDamage(60.0);
+        HitReactionFlags(EReactionFlag_Interrupt);
+        Visibility(true);
+        Mesh("invisible.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("knife");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        ThrowSpeed(16.0);
+        ExplodeOnCollision(true);
+		ScheduleExplodeAfterContact(true);
+        ExplosionFx("ft_karen_spit_hit_01a.gpufx");
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName(damage_name);
+        MotionTrailFx(trail_fx);
+		SweepSize(0.25, 0.21, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+		GameVersion(1);
+    }
+}
+
+sub Charger_Fists_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);
+        PhysicsDamageMul(1.0);
+        DamageType(DamageType_Blast);
+        DestroyableDamage(20.0);
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        HitReactionFlags(EReactionFlag_Knockdown);
+		AiHitSound("fists");
+		GameVersion(1);
+    }
+}
+sub Charger_Slasher_Fists_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(100.0);
+        PhysicsDamageMul(0.5);
+        DamageType(DamageType_Cut);
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        DestroyableDamage(20.0);
+		AiHitSound("slasher_limb");
+        LimbsCutProb(1.0);
+		FullBodyCutProb(1.0);
+		GameVersion(1);
+		SoundInjuryDamageType("sharp");
+    }
+}
+sub Charger_Charge_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+		Mesh("weapon_fists.msh");
+        ItemType(ItemType_Stick);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(50.0);
+        PhysicsDamageMul(3.0);
+        DamageType(DamageType_Blast);
+        DestroyableDamage(60.0);
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		AiHitSound("fists");
+		GameVersion(1);
+    }
+}
+
+sub Charger_Slasher_Charge_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+		Mesh("weapon_fists.msh");
+        ItemType(ItemType_Stick);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);
+        PhysicsDamageMul(0.22);
+        DamageType(DamageType_Blast);
+        DestroyableDamage(60.0);
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		AiHitSound("freak_fists");
+        LimbsDestroyProb(0.9);
+		GameVersion(1);
+    }
+}
+	
+sub Goon_Weapon_Def(string weapon_name="", string damage_name="", int game_version=1)
+{
+  Item(weapon_name, CategoryType_Melee)
+    {
+        Name("&Goon_Weapon_n&");
+		Visibility(true);
+        ItemType(ItemType_Stick);
+        OwnerType(OwnerType_AI);
+        PhysicsScript("simple.phx");
+        DamageName(damage_name);
+        Force(200.0);
+        PhysicsDamageMul(3.0);
+        DamageType(DamageType_Blast);
+        DestroyableDamage(120.0);
+        Mesh("wpn_2hs_goon_a_tpp.msh");
+        InventoryMeshHQ("wpn_2hs_goon_a_tpp.msh");
+        InventoryMesh("wpn_2hs_goon_a_tpp.msh");
+        AnimPrefix("Stick2Heavy");     
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");      
+        InWorldScale(1.45);
+		HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		SoundInjuryDamageType("blunt");
+		LimbsCutProb(0.5);
+        LimbsDestroyProb(0.5);
+		FullBodyCutProb(0.25);
+		GameVersion(1);
+        AiHitSound("hammer_2h");
+    }
+}
+
+sub Goon_Torch_Weapon_Def(string weapon_name="", string damage_name="")
+{
+  Item(weapon_name, CategoryType_Melee)
+    {
+        Name("&Goon_Weapon_n&");
+		Visibility(true);
+        ItemType(ItemType_Stick);
+        OwnerType(OwnerType_AI);
+        PhysicsScript("simple.phx");
+        DamageName(damage_name);
+        Force(200.0);
+        PhysicsDamageMul(1.0);
+        DestroyableDamage(120.0);
+        DamageType(DamageType_Blast);
+        Mesh("wpn_2hs_goon_c_tpp2.msh");
+        InventoryMeshHQ("wpn_2hs_goon_a_tpp.msh");
+        InventoryMesh("wpn_2hs_goon_a_tpp.msh");
+        AnimPrefix("Stick2Heavy");     
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");      
+        InWorldScale(1.45);
+		HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		SoundInjuryDamageType("blunt_heavy");
+		LimbsCutProb(0.5);
+        LimbsDestroyProb(0.5);
+		FullBodyCutProb(0.25);
+		GameVersion(1);
+    }
+}
+
+sub Goon_Fists_Def(string weapon_name="", string damage_name="", int game_version=1)
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        DamageType(DamageType_Blunt);
+        DestroyableDamage(120.0);
+		HitReactionType(EReactionType_Blunt);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);	
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        RagdollBehavior(RagdollBehavior_Fists);		
+        SoundInjuryDamageType("blunt_heavy");
+		Material("fists");
+		AiHitSound("fists");
+		GameVersion(1);
+    }
+}
+
+sub Goon_Torch_Fists_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        DamageType(DamageType_Blunt);
+        DestroyableDamage(120.0);
+		HitReactionType(EReactionType_Blunt);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);	
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        RagdollBehavior(RagdollBehavior_Fists);		
+        SoundInjuryDamageType("blunt_heavy");
+		Material("fists");
+		AiHitSound("fists");
+		GameVersion(1);
+    }
+}
+
+sub Goon_Torch_Fire_Projectile_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+        HitReactionType(EReactionType_Cut);
+        HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+        HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("dlc_ft_freak_torch_fireball_explosion");
+        SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowRange(6);
+        ThrowSpeed(16.0);
+        MotionTrailFx("freak_torch_projectile_trail.gpufx");
+        ThrowFlyFx("molotov_bottle_fire_sequence.fx");
+        DamageRange(3.0);
+        ExplosionFx("freak_torch_projectile_explosion.gpufx");
+        ExplodeDelay(-1.0);
+        ExplodeOnCollision(true);
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        DestroyableDamage(20.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+        DamageName(damage_name);
+        DamagePresetName("Freak_Torch_Fire_Projectile");
+        FlyBySound("dlc_ft_freak_torch_fireball_flyby");
+        SweepSize(1.5, 0.5, 0);
+        GameVersion(1);
+    }
+}
+
+sub Goon_Torch_Fire_Wave2_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("molotov");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(25.0);
+        ExplosionFx("freak_torch_projectile_explosion.gpufx");
+        ThrowRange(5);
+        ThrowSpeed(12.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(false);
+        DestroyableDamage(20.0);
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+        MotionTrailFx("freak_torch_projectile_trail.gpufx");
+		SweepSize(3.0, 1.0, 0);
+		DamageName(damage_name);
+        DamagePresetName("Freak_Torch_Fire_Wave2");
+		NoiseDataUid("fury_water");
+		GameVersion(1);
+    }
+}
+
+sub Goon_Torch_Flame_Shot_Projectile_Def(string weapon_name="", string prefab_preset_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowablePrefab);
+        OwnerType(OwnerType_AI);
+        HitReactionType(EReactionType_Cut);
+        HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+        HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        DestroyableDamage(120.0);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("dlc_ft_freak_torch_fireball_explosion");
+        SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Fire);
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowRange(6);
+        ThrowSpeed(16.0);
+        MotionTrailFx("freak_torch_projectile_trail.gpufx");
+        ThrowFlyFx("molotov_bottle_fire_sequence.fx");
+        DamageRange(3.0);
+        ExplosionSound("molotov_explosion.wav");
+        ExplosionFx("freak_torch_projectile_explosion.gpufx");
+        GravityFactor(1.0);
+        ExplodeDelay(-1.0);
+        ExplodeOnCollision(true);
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+        SpawnPrefabName("spitter_mortar_explosion.prefab");
+        SpawnPrefabPresetName(prefab_preset_name);
+        FlyBySound("dlc_ft_freak_torch_fireball_flyby");
+        SweepSize(1.5, 0.5, 0);
+        GameVersion(1);
+    }
+}
+
+sub Volatile_fists_Def(string weapon_name="", string damage_name="")
+
+{
+	Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        DamageType(DamageType_Cut);
+        DestroyableDamage(120.0);
+		HitReactionType(EReactionType_Cut);
+        RagdollBehavior(RagdollBehavior_Fists);
+        SoundInjuryDamageType("unarmed_volatile");
+		Material("fists");
+		AiHitSound("fists");
+		GameVersion(1);
+    }
+}
+
+sub Volatile_Spit_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        DestroyableDamage(40.0);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("spit");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowSpeed(26.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(false);
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+        MotionTrailFx("volatile_spit.gpufx");
+		SweepSize(0.35, 0.21, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+		DamageName(damage_name);
+		SoundInjuryDamageType("toxic_spitter");
+        ApplyLegendLevelOrNewGamePlusModifiers(false);
+		GameVersion(1);
+    }
+}
+
+sub Volatile_Tyrant_Spit_Def(string weapon_name="", string damage_name="")
+
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        DestroyableDamage(60.0);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("spit");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowSpeed(30.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(true);
+		ExplosionFx("spitter_spit_hit_01_a.gpufx");
+        PhysicsDamageMul(5.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName(damage_name);
+        MotionTrailFx("volatile_spit.gpufx");
+		SweepSize(0.55, 0.4, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+        ApplyLegendLevelOrNewGamePlusModifiers(false);
+		GameVersion(1);
+    }
+}
+sub Volatile_Hologram_Spit_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("spit");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowSpeed(15.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(true);
+		ExplosionFx("ft_hologram_spit_hit.gpufx");
+        PhysicsDamageMul(5.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName(damage_name);
+        MotionTrailFx("ft_hologram_spit.gpufx");
+		SweepSize(0.55, 0.4, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+		GameVersion(1);
+    }
+}
+
+sub Spitter_Spit_Def(string weapon_name="", string damage_name="", string damage_preset_name="", string motion_trail_fx="", string buff_preset_to_apply_on_hit="", float speed=16.0, int game_version = 1)
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+        DestroyableDamage(60.0);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("spit");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowSpeed(speed);
+        ExplodeDelay(0.01);
+        ExplodeOnCollision(true);
+		ScheduleExplodeAfterContact(true);
+        ExplosionFx("spitter_spit_hit_01_a.gpufx");
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName(damage_name);
+        DamagePresetName(damage_preset_name);
+        MotionTrailFx(motion_trail_fx);
+		SweepSize(0.25, 0.21, 0);
+		BuffPresetToApplyOnHit(buff_preset_to_apply_on_hit);
+		GameVersion(1);
+    }
+}
+
+sub Spitter_Mortar_Spit_Def(string weapon_name="", string prefab_preset_name="", string motion_trail_fx="", int game_version = 1)
+{
+	Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowablePrefab);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        ThrowSpeed(8.0);
+        DamageName("Spitter_Mortar_Damage");
+        ShowExplosiveHudRange(25.0);
+        Mesh("invisible.msh");
+        PhysicsScript("dropped_inventory.phx");
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DestroyableDamage(60.0);
+        DamageType(DamageType_Toxic);
+        ExplodeOnCollision(true);
+        ThrowImpulseLook(1300.0 *0.01);
+        ThrowImpulseUp(250.0 *0.01);
+        ExplosionSound("molotov_explosion.wav");
+        ExplodeDelay(-1.0);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx(motion_trail_fx);
+        ThrowFlySound("molotov_fly.wav");
+		SpawnPrefabName("spitter_mortar_explosion.prefab");
+		ShowExplosiveHud(false);
+        SpawnPrefabPresetName(prefab_preset_name);
+		GameVersion(1);
+    }
+}
+
+sub Spitter_Puddle_Def(string weapon_name="", string prefab_preset_name="", int game_version = 1)
+{
+	Item(weapon_name, CategoryType_Throwable)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        SpawnPrefabName("spitter_vomit_puddle.prefab");
+        SpawnPrefabPresetName(prefab_preset_name);
+		GameVersion(1);
+    }
+}
+
+sub Corruptor_Fists_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);      
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+        Force(200.0);     
+        PhysicsDamageMul(1.0);
+        DamageType(DamageType_Blunt);
+        DestroyableDamage(20.0);       
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");      
+		AiHitSound("fists");
+		GameVersion(1);
+		SoundInjuryDamageType("unarmed_volatile");
+    }
+}
+
+sub Corruptor_Spit_Def(string weapon_name="", string damage_name="")
+
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        Visibility(true);
+        MaxStackCount(1);
+        DestroyableDamage(40.0);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("spit");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowSpeed(22.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(true);
+		ExplosionFx("spitter_spit_hit_01_a.gpufx");
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName(damage_name);
+        MotionTrailFx("corruptor_spit_trail_01a.gpufx");
+		SweepSize(0.55, 0.4, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+		GameVersion(1);
+    }
+}
+
+sub Corruptor_Mortar_Spit_Def(string weapon_name="", string prefab_preset_name="")
+
+{
+	Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowablePrefab);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        ThrowSpeed(8.0);
+        DamageName("Spitter_Mortar_Damage");
+        ShowExplosiveHudRange(25.0);
+        Mesh("invisible.msh");
+        PhysicsScript("dropped_inventory.phx");
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Toxic);
+        DestroyableDamage(40.0);
+        ExplodeOnCollision(true);
+        ThrowImpulseLook(1300.0 *0.01);
+        ThrowImpulseUp(250.0 *0.01);
+        ExplosionSound("molotov_explosion.wav");
+        ExplodeDelay(-1.0);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx("corruptor_spit_trail_01a.gpufx");
+        ThrowFlySound("molotov_fly.wav");
+		SpawnPrefabName("corruptor_mortar_explosion.prefab");
+		ShowExplosiveHud(true);
+        SpawnPrefabPresetName(prefab_preset_name);
+		GameVersion(1);
+    }
+}
+
+sub Corruptor_Spit_Nemo_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+        DamagePresetName("Corruptor_Spit_Freak_Nemo");
+        DamageName(damage_name);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        Visibility(true);
+        MaxStackCount(1);
+        DestroyableDamage(40.0);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("knife");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowSpeed(20.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(true);
+		ExplosionFx("nemo_spit_explosion_01.gpufx");
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+        MotionTrailFx("nemo_spit_trail_fire_01.gpufx");
+		SweepSize(0.55, 0.4, 0);
+		GameVersion(1);
+    }
+}
+
+sub Corruptor_Mortar_Spit_Nemo_Def(string weapon_name="", string prefab_preset_name="", int game_version = 1)
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowablePrefab);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        ThrowSpeed(6.0);
+        Mesh("invisible.msh");
+        PhysicsScript("dropped_inventory.phx");
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Toxic);
+        ExplodeOnCollision(true);
+        ThrowImpulseLook(1300.0 *0.01);
+        ThrowImpulseUp(250.0 *0.01);
+        ExplosionSound("molotov_explosion.wav");
+        ExplodeDelay(-1.0);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        DestroyableDamage(40.0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx("nemo_mortar_trail_fire_01.gpufx");
+        ThrowFlySound("molotov_fly.wav");
+		SpawnPrefabName("corruptor_mortar_explosion.prefab");
+        SpawnPrefabPresetName(prefab_preset_name);
+		ShowExplosiveHud(false);
+		GameVersion(game_version);
+    }
+}
+
+sub Corruptor_Puddle_Def(string weapon_name="", string prefab_preset_name="")
+{
+	Item(weapon_name, CategoryType_Throwable)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        SpawnPrefabPresetName(prefab_preset_name);
+        SpawnPrefabName("corruptor_vomit_puddle.prefab");
+		GameVersion(1);
+    }
+}
+
+sub Corruptor_Freak_Mortar_Spit_Def(string weapon_name="", string prefab_preset_name="")
+
+{
+	Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowablePrefab);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        ThrowSpeed(8.0);
+        DamageName("Spitter_Mortar_Damage");
+        ShowExplosiveHudRange(25.0);
+        Mesh("invisible.msh");
+        PhysicsScript("dropped_inventory.phx");
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Toxic);
+        DestroyableDamage(40.0);
+        ExplodeOnCollision(true);
+        ThrowImpulseLook(1300.0 *0.01);
+        ThrowImpulseUp(250.0 *0.01);
+        ExplosionSound("molotov_explosion.wav");
+        ExplodeDelay(-1.0);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx("corruptor_spit_trail_01a.gpufx");
+        ThrowFlySound("molotov_fly.wav");
+		SpawnPrefabName("corruptor_mortar_explosion.prefab");
+		ShowExplosiveHud(true);
+        SpawnPrefabPresetName(prefab_preset_name);
+		GameVersion(1);
+    }
+}
+
+sub Corruptor_Freak_Puddle_Def(string weapon_name="", string prefab_preset_name="")
+{
+	Item(weapon_name, CategoryType_Throwable)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        SpawnPrefabPresetName(prefab_preset_name);
+        SpawnPrefabName("corruptor_vomit_puddle.prefab");
+		GameVersion(1);
+    }
+}
+sub Corruptor_Gas_Wave_Def(string weapon_name="", string damage_name="")
+{
+	Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        DestroyableDamage(5.0);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("knife");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowSpeed(16.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(false);
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName(damage_name);
+        MotionTrailFx("corruptor_gas_attack_01a.gpufx");
+		SweepSize(0.75, 0.21, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+		GameVersion(1);
+    }
+}
+
+sub Corruptor_Wave_Nemo_Def(string weapon_name="", string damage_name="")
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        DestroyableDamage(5.0);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("knife");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowSpeed(16.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(false);
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName(damage_name);
+        DamagePresetName("Corruptor_Wave_Freak_Nemo");
+        MotionTrailFx("nemo_lava_wave_01.gpufx");
+		SweepSize(0.75, 0.21, 0);
+		GameVersion(1);
+    }
+}
+
+sub Corruptor_Grenade_Def(string weapon_name="", string damage_name="", float damage_range=2.5, float explode_delay=3.0)
+{
+	Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_Grenade);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        ThrowSpeed(5.0);
+        DamageName(damage_name);
+        ShowExplosiveHud(false);
+        Mesh("invisible.msh");
+        PhysicsScript("dropped_inventory.phx");
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Toxic);
+        ExplodeOnCollision(false);
+        ThrowImpulseLook(1300.0 *0.01);
+        DestroyableDamage(200.0);
+        ThrowImpulseUp(250.0 *0.01);
+        ExplosionSound("molotov_explosion.wav");
+        DamageRange(damage_range);
+        ExplodeDelay(explode_delay);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx("corruptor_spit_trail_01a.gpufx");
+        ThrowFlySound("molotov_fly.wav");
+        ExplosionFx("corruptor_grenade_explosion_01a.gpufx");
+		GameVersion(1);
+    }
+}  
+
+sub Corruptor_Grenade_Nemo_Def(string weapon_name="", string damage_name="", float damage_range=2.5, float explode_delay=1.5)
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_Grenade);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        ThrowSpeed(5.0);
+        DamageName(damage_name);
+        DamagePresetName("Corruptor_Grenade_Freak_Nemo");
+        Mesh("invisible.msh");
+        PhysicsScript("dropped_inventory.phx");
+        ShowExplosiveHud(false);
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Toxic);
+        ExplodeOnCollision(false);
+        DestroyableDamage(200.0);
+        ThrowImpulseLook(1300.0 *0.01);
+        ThrowImpulseUp(250.0 *0.01);
+        ExplosionSound("molotov_explosion.wav");
+        DamageRange(damage_range);
+        ExplodeDelay(explode_delay);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx("nemo_mortar_trail_fire_01.gpufx");
+        ThrowFlySound("molotov_fly.wav");
+        ExplosionFx("nemo_spit_explosion_01.gpufx");
+		GameVersion(1);
+    }
+}
+
+sub Suicider_Explosion_Def(string weapon_name="", string damage_name="", float damage_range = 4.0, int game_version = 1)
+{
+	Item(weapon_name, CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Explosion);
+        OwnerType(OwnerType_AI);
+        DamageName(damage_name);
+		DamageRange(damage_range);
+        DamageType(DamageType_Blast);
+        DestroyableDamage(200.0);
+        CameraShakePreset("medium");
+        CameraShakeTriggerRange(15.0);
+		HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		GameVersion(1);
+    }
+}
+
+sub ExplosiveGrenade_Def(string weapon_name="", string damage_name="", int game_version = 1)
+{
+    Item(weapon_name, CategoryType_Throwable)
+    {
+        ItemType(ItemType_Grenade);
+        Visibility(true);
+        HandToUse("LEFT",false);
+        AmmoCount(1);
+        MaxStackCount(99);
+        Price(250);
+        HudIcon("wpn_grenade_a");
+        Mesh("wpn_grenadelauncher_cartridge_a_tpp.msh");
+        InventoryMesh("wpn_grenadelauncher_cartridge_a_tpp.msh");
+        InventoryMeshTPP("wpn_grenadelauncher_cartridge_a_tpp.msh");
+        Skin("fire");
+        PhysicsScript("dropped_inventory.phx");
+        PhysicsSimsetName("explosivegrenade");
+        AnimPrefix("Grenade");
+        MotionTrailFx("ft_grenade_launcher_trail_regular_01a.gpufx");
+		AdditionalThrowAudioEvent("wpn_baron_grenade_explosive_indicator");
+
+        //Explosion Damage
+        DamageName(damage_name);
+        DamageRange(4);
+        DangerZoneRange(5);
+        PhysicsDamageMul(2.0);
+        HeadCutProb(1.0);
+        ArmsCutProb(1.0);
+        LegsCutProb(1.0);
+        DamageDuration(0.0);
+
+        //Reactions
+        HitReactionHitSeverity(EHitSeverity_Heavy);
+        HitReactionType(EReactionType_Blast);
+        HitReactionMoveSeverity(EMoveSeverity_Heavy);
+        HitReactionFlags(EReactionFlag_Ragdoll);
+        DamageType(DamageType_Blast);
+        StatsType(StatsType_Explosive);
+
+        //FX
+        ExplosionFx("ft_baron_grenade_explosion.gpufx");
+        ExplosionSound("homemade_bomb_explosion.wav");
+        
+        //Throw
+        ThrowImpulseLook(21.0);
+        ThrowImpulseUp(2.0);
+        
+        use PickupSounds_Throwable_Explosives();
+        EquipmentSlot();
+        Color(Color_Orange);
+        ExplodeDelay(2.25);
+        ExplodeOnCollision(false);
+        ScheduleExplodeAfterContact(true);
+		ShowExplosiveHud(true);
+        NoiseType("EXPLOSION");
+        NoiseDataUid("grenade_explosion_baron");
+        MaxBeginAnimSpeed(1.3);
+        AchType(AchType_Grenade);
+        ItemLevel(4, 4);
+        AiHitSound("grenade");
+        ThrowAggroValue(180.0);
+        GameVersion(game_version);
+        CameraShakePreset("Medium");
+        CameraShakeTriggerRange(15.0);
+    }
+}
+
+sub ExplosiveGrenade_Bullet_Def(string weapon_name="", string explosion_spawn_name="", int game_version = 1)
+{
+    Item(weapon_name, CategoryType_Ammo)
+    {
+        IsCustomAmmoForSpecificWeapon(true);
+        Name("&Bullet_Grenade_Explosive_Baron_N&");
+        Description("&Bullet_Grenade_Explosive_Baron_D&");
+        ItemType(ItemType_Bullet);
+        MaxAmmoCount(60);
+        Mesh("wpn_grenadelauncher_cartridge_a_tpp.msh");
+        InventoryMesh("wpn_grenadelauncher_cartridge_a_tpp.msh");
+        InventoryMeshTPP("wpn_grenadelauncher_cartridge_a_tpp.msh");
+        Skin("default");
+        HudIcon("wpn_grenade_a");
+        Color(Color_White);
+        AmmoType(AmmoType_GrenadeLauncher);
+        BulletVis(BulletVis_Mesh);
+        Elemental(Elemental_Explosive, 1);
+        ExplosionSpawn(explosion_spawn_name, 5, 5.0, 5.0);
+        DamageName("Bullet_Bolt");
+        MaxStackCount(999);
+        SelectorPriority(10);        
+        FlyBySound("flyby_quarrel");
+        GameVersion(game_version);
+        MotionTrailFx("ft_grenade_launcher_trail_regular_01a.gpufx");
+	    AiHitSound("grenade_launcher_explosion");
+    }
+}
+
+sub ToxicGasGrenade_Def(string weapon_name="", string explosion_damage_name="", string emitter_damage_name="", int game_version = 1)
+{
+    Item(weapon_name, CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);
+        HandToUse("LEFT", false);
+        Visibility(true);
+        MaxStackCount(99);
+        Price(60);
+        HudIcon("weapon_molotov");
+        InventoryMeshHQ("wpn_husk_grenade_a_fpp.msh");
+        InventoryMesh("wpn_husk_grenade_a_fpp.msh");
+        Mesh("wpn_husk_grenade_a_tpp.msh");
+        Skin("default");
+        PhysicsScript("dropped_inventory.phx");
+        AnimPrefix("Teargas");
+        MotionTrailFx("ft_grenade_launcher_trail_toxic_01a.gpufx");
+        ThrowFlyFx("molotov_bottle_fire_sequence.fx");
+        ThrowSpeed(10.0);
+        ThrowImpulseLook(21.0);
+        ThrowImpulseUp(2.0);
+        RotationVel(5, 0, 0);
+        StatsType(StatsType_Flame);
+        EquipmentSlot();
+        AchType(AchType_Grenade);
+        use PickupSounds_Bottle_Glass_With_Liquid();
+        Color(Color_Green);
+        ItemLevel(1, 9);
+         UIStats(){
+         UIStat("&StatsUI_InitExplosionDmg&", 10, "Normal");
+         UIStat("&StatsUI_DamagePerSecond&", 6, "Normal");
+         UIStat("&StatsUI_FireDuration&", 4, "Seconds");
+         UIStat("&StatsUI_FireRadious&", 2, "Meters");
+         }
+        AiHitSound("molotov");
+        ThrowAggroValue(20.0);
+        FlyBySound("flyby_molotov");
+        DamagePresetName(explosion_damage_name);
+        DamageRange(4.0);
+        SplashRadiusMin(2);
+        SplashRadiusMax(4);
+        SplashNumPositions(8);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(5.0);
+        SplashEmitterLifeTimeMax(6.0);
+        SplashEmitterFadeInTime(0.1);
+        SplashEmitterDamagePreset(emitter_damage_name);
+        SplashEmitterScale([2.2,2.2,2.2]);
+        SplashEmitterCenterGroundFx("ft_baron_tear_gas_center_ground.gpufx");
+        SplashEmitterGroundFx("ft_baron_tear_gas_center_ground.gpufx");
+        SplashEmitterCenterWallFx("ft_baron_tear_gas_center_ground.gpufx");
+        SplashEmitterWallFx("ft_baron_tear_gas_center_ground.gpufx");
+        //ExplosionSpawn("Stunning_Chemicals", 1, 0.0, 0.0);
+		ShowExplosiveHud(true);
+        ExplosionFx("tear_gas_explosion_01.gpufx");
+        ExplodeDelay(1.0);
+        ExplodeOnCollision(false);
+        NoiseType("EXPLOSION");
+        NoiseDataUid("molotov_impact");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;ToxicSmoke;");
+        GameVersion(game_version);
+        CameraShakePreset("Light");
+        CameraShakeTriggerRange(8.0);
+		AdditionalThrowAudioEvent("wpn_baron_grenade_toxic_indicator");
+    }
+}
+
+sub ToxicGasGrenade_Bullet_Def(string weapon_name="", string explosion_spawn_name="", int game_version = 1)
+{
+    Item(weapon_name, CategoryType_Ammo)
+    {
+        IsCustomAmmoForSpecificWeapon(true);
+        Name("&Bullet_Grenade_Toxic_N&");
+        Description("&Bullet_Grenade_Toxic_D&");
+        ItemType(ItemType_Bullet);
+        MaxAmmoCount(60);
+        Mesh("wpn_grenadelauncher_cartridge_a_tpp.msh");
+        InventoryMesh("wpn_husk_grenade_a_fpp.msh");
+        Skin("default");
+        HudIcon("weapon_molotov");
+        Color(Color_White);
+        AmmoType(AmmoType_GrenadeLauncher);
+        BulletVis(BulletVis_Mesh);
+        Elemental(Elemental_Explosive, 1);
+        ExplosionSpawn(explosion_spawn_name, 5, 5.0, 5.0);
+        MotionTrailFx("ft_grenade_launcher_trail_toxic_01a.gpufx");
+        DamageName("Bullet_Bolt");
+        MaxStackCount(999);
+        SelectorPriority(10);
+        FlyBySound("flyby_quarrel");
+        GameVersion(game_version);
+        AiHitSound("molotov");
+		AdditionalThrowAudioEvent("wpn_baron_grenade_toxic_indicator");
+    }
+}
+
+// Move this!
+sub Thrown_Spear_Def(string weapon_name="", string transform_into="", string throw_damage="", string damage_name="")	
+{
+	Item(weapon_name, CategoryType_Throwable)
+    {
+        Visibility(true);
+		HandToUse("RIGHT");
+        ItemType(ItemType_ThrowableSpear);
+        PhysicsScript("simple.phx");
+        Condition(3);
+        CriticalCondition(11);
+        DamageName(throw_damage);
+        Force(25.0);
+        ThrowImpulseLook(45.0);
+        ThrowImpulseUp(2.0);
+		InitialRotation(90,0,0);
+		RotationVel(0,180,0);
+        CriticalProb(1.0);
+        ThrowSpeed(45.0);
+		MotionTrailFx("spear_trail.gpufx");
+		TrailOffset(0,0,1);
+		TrailEulerAngleOffset(90,0,0);
+        GravityFactor(1.0);
+        ExplodeDelay(-1);
+        ExplodeOnCollision(false);
+        ScheduleExplodeAfterContact(false);
+        ExplosionFx("spear_hit.gpufx");
+		PenetrationEnable(true);
+		RicochetEnable(false);
+        CriticalDamage(2.0);
+        DamageRange(1.35);
+        DamageToPhysicsObjects(70.0);
+        PhysicsDamageMul(1.0);
+        StaminaUsage(0.2);
+        ConfusionProb(0.0);
+        WeaponBuildType(WeaponBuildType_Universal);
+        DamageType(DamageType_Pierce);
+        Flags(1);
+        InventoryMeshHQ("wpn_2hp_spear_a_fpp.msh");
+        InventoryMesh("wpn_2hp_spear_a_tpp.msh");
+        Mesh("wpn_2hp_spear_a_tpp.msh");
+        SkinTag("Weapon_Craft0");
+        AnimPrefix("Spear");
+        HudIcon("weapon_spear");
+		HitReactionType(EReactionType_Stab);
+		HitReactionContext(EReactionContext_RangedWeapon);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);	
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        HorizontalAttackDamageMul(3.0);
+        TwoHanded(true);
+        DestroySound("damaged_heavy_weapon_XX.wav");
+        AiHitSound("spear");
+        use HitEffects_ThrownSpear();
+        use PickupSounds_Default();
+        DamageSize(5.0);
+        StatsType(StatsType_Blunt);
+        FF_EffectName("Hit_Stick2HeavyBlunt");
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        SoundDamagedHit("damaged_sharp_weapon_XX.wav");
+        ThrowBeginSound("weapon_heavy_throw.wav");
+        Color(Color_White);
+        AchType(AchType_BigHammer);
+        CraftingSlots(1,0);
+        UniqueFxNameBase("machete");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        HandInertiaFactor(1.8);
+        Price(8118);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(1, 3);
+        InWorldScale(1.0);
+		SynchroMovementOnAttack(true);
+		EnabledAutoAim(true);
+		EnabledAutoAimTarget(true);
+		TwoHanded(true);
+		HandInertiaRotFactor([0.25,1.0,1.0]);
+		HandInertiaFactor(0.8);
+        DuckInertiaFactor(0.0);
+		OpportunityWeapon(true);
+		HideFlightParaboll(true);
+		Name("&Thrown_Spear_N&");
+		Description("&Thrown_Spear_D&");	
+		GameVersion(1);	
+    }
+}
+// Move this!
+sub Tackle_Spear_Def_Common_Params()
+{
+    OwnerType(OwnerType_AI);
+    Visibility(true);
+    HandToUse("RIGHT");
+    ItemType(ItemType_ShortSpear);
+    PhysicsScript("simple.phx");
+    Condition(5);
+    CriticalCondition(11);
+    Force(25.0);
+    ThrowImpulseLook(30.0);
+    ThrowImpulseUp(0.0);
+    InitialRotation(90,0,0);
+    RotationVel(0,180,0);
+    CriticalProb(1.0);
+    ThrowSpeed(28.0);
+    MotionTrailFx("spear_trail.gpufx");
+    TrailOffset(0,0,1);
+    TrailEulerAngleOffset(90,0,0);
+    GravityFactor(0.23);
+    ExplodeDelay(-1);
+    ExplodeOnCollision(false);
+    ScheduleExplodeAfterContact(false);
+    ExplosionFx("glass_bottle_break.gpufx");
+    PenetrationEnable(false);
+    RicochetEnable(false);
+    CriticalDamage(2.0);
+    DamageRange(1.35);
+    DamageToPhysicsObjects(70.0);
+    PhysicsDamageMul(1.0);
+    StaminaUsage(0.2);
+    ConfusionProb(0.0);
+    WeaponBuildType(WeaponBuildType_Universal);
+    DamageType(DamageType_Pierce);
+    Flags(1);
+    SkinTag("Weapon_Craft0");
+    AnimPrefix("Spear_Melee");
+    HudIcon("weapon_spear");
+    MinHitSeverity(HitSeverity_Heavy);
+    MaxHitSeverity(HitSeverity_Heavy);
+    HorizontalAttackDamageMul(3.0);
+    TwoHanded(true);
+    DestroySound("damaged_heavy_weapon_XX.wav");
+    AiHitSound("spear");
+    use HitEffects_Sharp();
+    use PickupSounds_Default();
+    DamageSize(5.0);
+    StatsType(StatsType_Blunt);      
+    RagdollBehaviorPrefix("Stick2HeavyBlunt");        
+    TwoHanded(true);
+    HideFlightParaboll(true);
+    Name("&Thrown_Spear_N&");
+    Description("&Thrown_Spear_D&");
+}
+
+sub Tackle_Spear_Def(string weapon_name="",string transform_into="", string throw_damage="", string damage_name="")	
+{
+	Item(weapon_name, CategoryType_Melee)
+    {
+        use Tackle_Spear_Def_Common_Params();
+
+		ToggleTransformInto(transform_into);
+        TransformInto(transform_into);
+        DamageName(damage_name);
+        InventoryMeshHQ("wpn_2hp_spear_a_fpp.msh");
+        InventoryMesh("wpn_2hp_spear_a_tpp.msh");
+        Mesh("wpn_2hp_spear_a_tpp.msh");
+        GameVersion(1);
+    }
+}
+sub Tackle_Pitchfork_Def(string weapon_name="",string transform_into="", string throw_damage="", string damage_name="")	
+{
+	Item(weapon_name, CategoryType_Melee)
+    {
+        use Tackle_Spear_Def_Common_Params();
+
+		ToggleTransformInto(transform_into);
+        TransformInto(transform_into);
+        DamageName(damage_name);
+        InventoryMeshHQ("wpn_2hp_spear_d_fpp.msh");
+        InventoryMesh("wpn_2hp_spear_d_fpp.msh");
+        Mesh("wpn_2hp_spear_d_tpp.msh");
+        GameVersion(1);
+    }
+}
+
+sub Tackle_Spear_Polearm_B_Def(string weapon_name="",string transform_into="", string damage_name="")	
+{
+	Item(weapon_name, CategoryType_Melee)
+    {
+        use Tackle_Spear_Def_Common_Params();
+
+		ToggleTransformInto(transform_into);
+        TransformInto(transform_into);
+        InventoryMeshHQ("wpn_2hs_polearm_b_fpp.msh");
+        InventoryMesh("wpn_2hs_polearm_b_fpp.msh");
+        Mesh("wpn_2hs_polearm_b_tpp.msh");
+        GenType(GenType_MeleeWeapon);
+		GameVersion(1);
+
+        DamageName(damage_name);
+        // IsAutomaticTierScaling(true);
+        // DamageTiers("scaling_2h_slashing_polearm_tier_damages");
+    }
+}
+
+sub Inventory_Infected()
+{	
+	use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists", damage_name="Zombie_Fists");
+    use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists_1", damage_name="Zombie_Fists_1");
+    use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists_2", damage_name="Zombie_Fists_2");
+    use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists_3", damage_name="Zombie_Fists_3");
+    use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists_4", damage_name="Zombie_Fists_4");
+    use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists_5", damage_name="Zombie_Fists_5");
+    use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists_6", damage_name="Zombie_Fists_6");
+    use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists_7", damage_name="Zombie_Fists_7");
+    use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists_8", damage_name="Zombie_Fists_8");
+    use Weapon_Zombie_Fists_Def(weapon_name="Zombie_Fists_9", damage_name="Zombie_Fists_9");
+
+    use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Explosion_Level_1", damage_name="portable_tank_explosive_tier_1", damage_range=4.0);
+    use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Explosion_Level_2", damage_name="portable_tank_explosive_tier_2", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Explosion_Level_3", damage_name="portable_tank_explosive_tier_3", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Explosion_Level_4", damage_name="portable_tank_explosive_tier_4", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Explosion_Level_5", damage_name="portable_tank_explosive_tier_5", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Explosion_Level_6", damage_name="portable_tank_explosive_tier_6", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Explosion_Level_7", damage_name="portable_tank_explosive_tier_7", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Explosion_Level_8", damage_name="portable_tank_explosive_tier_8", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Explosion_Level_9", damage_name="portable_tank_explosive_tier_9", damage_range=4.0);
+
+    use Weapon_Gas_Tank_Explosion(weapon_name="Gas_Tank_Opera_Explosion", damage_name="portable_tank_explosive_opera", damage_range=3.0);
+	
+	use Weapon_Gas_Tank_Explosion(weapon_name="TR_Gas_Tank_Explosion_Level_9", damage_name="portable_tank_explosive_tier_9", damage_range=2.5, game_version = 34);
+
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_0", damage_name="Viral_Fists_RGD_0");
+	use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_1", damage_name="Viral_Fists_RGD_1");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_2", damage_name="Viral_Fists_RGD_2");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_3", damage_name="Viral_Fists_RGD_3");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_4", damage_name="Viral_Fists_RGD_4");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_5", damage_name="Viral_Fists_RGD_5");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_6", damage_name="Viral_Fists_RGD_6");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_7", damage_name="Viral_Fists_RGD_7");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_8", damage_name="Viral_Fists_RGD_8");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Fists_RGD_9", damage_name="Viral_Fists_RGD_9");
+    
+    use Weapon_Gas_Tank_Explosion(weapon_name="Viral_Gas_Tank_Explosion_Level_1", damage_name="portable_tank_explosive_tier_1", damage_range=4.0);
+    use Weapon_Gas_Tank_Explosion(weapon_name="Viral_Gas_Tank_Explosion_Level_2", damage_name="portable_tank_explosive_tier_2", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Viral_Gas_Tank_Explosion_Level_3", damage_name="portable_tank_explosive_tier_3", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Viral_Gas_Tank_Explosion_Level_4", damage_name="portable_tank_explosive_tier_4", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Viral_Gas_Tank_Explosion_Level_5", damage_name="portable_tank_explosive_tier_5", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Viral_Gas_Tank_Explosion_Level_6", damage_name="portable_tank_explosive_tier_6", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Viral_Gas_Tank_Explosion_Level_7", damage_name="portable_tank_explosive_tier_7", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Viral_Gas_Tank_Explosion_Level_8", damage_name="portable_tank_explosive_tier_8", damage_range=4.0);
+	use Weapon_Gas_Tank_Explosion(weapon_name="Viral_Gas_Tank_Explosion_Level_9", damage_name="portable_tank_explosive_tier_9", damage_range=4.0);
+
+    use Viral_Spit_Def(weapon_name="Viral_Spit_RGD_1", damage_name="Viral_Spit_RGD_1");
+    use Viral_Spit_Def(weapon_name="Viral_Spit_RGD_2", damage_name="Viral_Spit_RGD_2");
+    use Viral_Spit_Def(weapon_name="Viral_Spit_RGD_3", damage_name="Viral_Spit_RGD_3");
+    use Viral_Spit_Def(weapon_name="Viral_Spit_RGD_4", damage_name="Viral_Spit_RGD_4");
+    use Viral_Spit_Def(weapon_name="Viral_Spit_RGD_5", damage_name="Viral_Spit_RGD_5");
+    use Viral_Spit_Def(weapon_name="Viral_Spit_RGD_6", damage_name="Viral_Spit_RGD_6");
+    use Viral_Spit_Def(weapon_name="Viral_Spit_RGD_7", damage_name="Viral_Spit_RGD_7");
+    use Viral_Spit_Def(weapon_name="Viral_Spit_RGD_8", damage_name="Viral_Spit_RGD_8");
+    use Viral_Spit_Def(weapon_name="Viral_Spit_RGD_9", damage_name="Viral_Spit_RGD_9");
+    
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_0", damage_name="Viral_Chase_Fists_RGD_0");
+	use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_1", damage_name="Viral_Chase_Fists_RGD_1");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_2", damage_name="Viral_Chase_Fists_RGD_2");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_3", damage_name="Viral_Chase_Fists_RGD_3");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_4", damage_name="Viral_Chase_Fists_RGD_4");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_5", damage_name="Viral_Chase_Fists_RGD_5");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_6", damage_name="Viral_Chase_Fists_RGD_6");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_7", damage_name="Viral_Chase_Fists_RGD_7");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_8", damage_name="Viral_Chase_Fists_RGD_8");
+    use Weapon_Viral_Fists_Def(weapon_name="Viral_Chase_Fists_RGD_9", damage_name="Viral_Chase_Fists_RGD_9");
+    
+	use Demolisher_Fists_Def(weapon_name="Demolisher_Fists_RGD_1", damage_name="Demolisher_Fists_RGD_1");
+    use Demolisher_Fists_Def(weapon_name="Demolisher_Fists_RGD_2", damage_name="Demolisher_Fists_RGD_2");
+    use Demolisher_Fists_Def(weapon_name="Demolisher_Fists_RGD_3", damage_name="Demolisher_Fists_RGD_3");
+    use Demolisher_Fists_Def(weapon_name="Demolisher_Fists_RGD_4", damage_name="Demolisher_Fists_RGD_4");
+    use Demolisher_Fists_Def(weapon_name="Demolisher_Fists_RGD_5", damage_name="Demolisher_Fists_RGD_5");
+    use Demolisher_Fists_Def(weapon_name="Demolisher_Fists_RGD_6", damage_name="Demolisher_Fists_RGD_6");
+    use Demolisher_Fists_Def(weapon_name="Demolisher_Fists_RGD_7", damage_name="Demolisher_Fists_RGD_7");
+    use Demolisher_Fists_Def(weapon_name="Demolisher_Fists_RGD_8", damage_name="Demolisher_Fists_RGD_8");
+    use Demolisher_Fists_Def(weapon_name="Demolisher_Fists_RGD_9", damage_name="Demolisher_Fists_RGD_9");
+
+    use Demolisher_Quest_Fists_Def(weapon_name="Demolisher_Quest_Fists", damage_name="Demolisher_Fists_RGD_7");
+
+
+	use Demolisher_Fists_Def(weapon_name="DLC_FT_Demolisher_Fists_RGD_1", damage_name="DLC_FT_Demolisher_Fists_RGD_1", game_version=100);
+	use Demolisher_Fists_Def(weapon_name="DLC_FT_Demolisher_Fists_RGD_4", damage_name="DLC_FT_Demolisher_Fists_RGD_4", game_version=100);
+	use Demolisher_Fists_Def(weapon_name="DLC_FT_Demolisher_Fists_RGD_7", damage_name="DLC_FT_Demolisher_Fists_RGD_7", game_version=100);
+    
+    use Demolisher_Charge_Def(weapon_name="Demolisher_Charge_RGD_1", damage_name="Demolisher_Charge_RGD_1");
+    use Demolisher_Charge_Def(weapon_name="Demolisher_Charge_RGD_2", damage_name="Demolisher_Charge_RGD_2");
+    use Demolisher_Charge_Def(weapon_name="Demolisher_Charge_RGD_3", damage_name="Demolisher_Charge_RGD_3");
+    use Demolisher_Charge_Def(weapon_name="Demolisher_Charge_RGD_4", damage_name="Demolisher_Charge_RGD_4");
+    use Demolisher_Charge_Def(weapon_name="Demolisher_Charge_RGD_5", damage_name="Demolisher_Charge_RGD_5");
+    use Demolisher_Charge_Def(weapon_name="Demolisher_Charge_RGD_6", damage_name="Demolisher_Charge_RGD_6");
+    use Demolisher_Charge_Def(weapon_name="Demolisher_Charge_RGD_7", damage_name="Demolisher_Charge_RGD_7");
+    use Demolisher_Charge_Def(weapon_name="Demolisher_Charge_RGD_8", damage_name="Demolisher_Charge_RGD_8");
+    use Demolisher_Charge_Def(weapon_name="Demolisher_Charge_RGD_9", damage_name="Demolisher_Charge_RGD_9");
+
+    use Demolisher_Charge_Def(weapon_name="DLC_FT_Demolisher_Charge_RGD_1", damage_name="DLC_FT_Demolisher_Charge_RGD_1", game_version=100);
+    use Demolisher_Charge_Def(weapon_name="DLC_FT_Demolisher_Charge_RGD_4", damage_name="DLC_FT_Demolisher_Charge_RGD_4", game_version=100);
+    use Demolisher_Charge_Def(weapon_name="DLC_FT_Demolisher_Charge_RGD_7", damage_name="DLC_FT_Demolisher_Charge_RGD_7", game_version=100);
+    
+
+    use Demolisher_Quest_Charge_Def(weapon_name="DLC_FT_Demolisher_Quest_Charge", damage_name="DLC_FT_Demolisher_Quest_Charge", game_version=100);
+
+	use Demolisher_Rubble_Def(weapon_name="Demolisher_Rubble_RGD_1", damage_name="Demolisher_Rubble_RGD_1", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Rubble_Def(weapon_name="Demolisher_Rubble_RGD_2", damage_name="Demolisher_Rubble_RGD_2", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Rubble_Def(weapon_name="Demolisher_Rubble_RGD_3", damage_name="Demolisher_Rubble_RGD_3", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Rubble_Def(weapon_name="Demolisher_Rubble_RGD_4", damage_name="Demolisher_Rubble_RGD_4", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Rubble_Def(weapon_name="Demolisher_Rubble_RGD_5", damage_name="Demolisher_Rubble_RGD_5", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Rubble_Def(weapon_name="Demolisher_Rubble_RGD_6", damage_name="Demolisher_Rubble_RGD_6", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Rubble_Def(weapon_name="Demolisher_Rubble_RGD_7", damage_name="Demolisher_Rubble_RGD_7", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Rubble_Def(weapon_name="Demolisher_Rubble_RGD_8", damage_name="Demolisher_Rubble_RGD_8", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Rubble_Def(weapon_name="Demolisher_Rubble_RGD_9", damage_name="Demolisher_Rubble_RGD_9", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+
+    use Demolisher_Rubble_Def(weapon_name="DLC_FT_Demolisher_Rubble_RGD_1", damage_name="DLC_FT_Demolisher_Rubble_RGD_1", skin="default", trail_fx="demolisher_rubble_trail.gpufx", game_version=100);
+    use Demolisher_Rubble_Def(weapon_name="DLC_FT_Demolisher_Rubble_RGD_4", damage_name="DLC_FT_Demolisher_Rubble_RGD_4", skin="default", trail_fx="demolisher_rubble_trail.gpufx", game_version=100);
+    use Demolisher_Rubble_Def(weapon_name="DLC_FT_Demolisher_Rubble_RGD_7", damage_name="DLC_FT_Demolisher_Rubble_RGD_7", skin="default", trail_fx="demolisher_rubble_trail.gpufx", game_version=100);
+    
+    use Demolisher_Quest_Rubble_Def(weapon_name="DLC_FT_Demolisher_Quest_Rubble", damage_name="DLC_FT_Demolisher_Quest_Rubble", skin="default", trail_fx="demolisher_rubble_trail.gpufx", game_version=100);
+    
+	use Demolisher_Gorilla_Fists_Def(weapon_name="Demolisher_Gorilla_Fists_RGD_1", damage_name="Demolisher_Gorilla_Fists_RGD_1");
+    use Demolisher_Gorilla_Fists_Def(weapon_name="Demolisher_Gorilla_Fists_RGD_2", damage_name="Demolisher_Gorilla_Fists_RGD_2");
+    use Demolisher_Gorilla_Fists_Def(weapon_name="Demolisher_Gorilla_Fists_RGD_3", damage_name="Demolisher_Gorilla_Fists_RGD_3");
+    use Demolisher_Gorilla_Fists_Def(weapon_name="Demolisher_Gorilla_Fists_RGD_4", damage_name="Demolisher_Gorilla_Fists_RGD_4");
+    use Demolisher_Gorilla_Fists_Def(weapon_name="Demolisher_Gorilla_Fists_RGD_5", damage_name="Demolisher_Gorilla_Fists_RGD_5");
+    use Demolisher_Gorilla_Fists_Def(weapon_name="Demolisher_Gorilla_Fists_RGD_6", damage_name="Demolisher_Gorilla_Fists_RGD_6");
+    use Demolisher_Gorilla_Fists_Def(weapon_name="Demolisher_Gorilla_Fists_RGD_7", damage_name="Demolisher_Gorilla_Fists_RGD_7");
+    use Demolisher_Gorilla_Fists_Def(weapon_name="Demolisher_Gorilla_Fists_RGD_8", damage_name="Demolisher_Gorilla_Fists_RGD_8");
+    use Demolisher_Gorilla_Fists_Def(weapon_name="Demolisher_Gorilla_Fists_RGD_9", damage_name="Demolisher_Gorilla_Fists_RGD_9");
+    
+    use Demolisher_Gorilla_Pounce_Def(weapon_name="Demolisher_Gorilla_Pounce_RGD_1", damage_name="Demolisher_Gorilla_Pounce_RGD_1");
+    use Demolisher_Gorilla_Pounce_Def(weapon_name="Demolisher_Gorilla_Pounce_RGD_2", damage_name="Demolisher_Gorilla_Pounce_RGD_2");
+    use Demolisher_Gorilla_Pounce_Def(weapon_name="Demolisher_Gorilla_Pounce_RGD_3", damage_name="Demolisher_Gorilla_Pounce_RGD_3");
+    use Demolisher_Gorilla_Pounce_Def(weapon_name="Demolisher_Gorilla_Pounce_RGD_4", damage_name="Demolisher_Gorilla_Pounce_RGD_4");
+    use Demolisher_Gorilla_Pounce_Def(weapon_name="Demolisher_Gorilla_Pounce_RGD_5", damage_name="Demolisher_Gorilla_Pounce_RGD_5");
+    use Demolisher_Gorilla_Pounce_Def(weapon_name="Demolisher_Gorilla_Pounce_RGD_6", damage_name="Demolisher_Gorilla_Pounce_RGD_6");
+    use Demolisher_Gorilla_Pounce_Def(weapon_name="Demolisher_Gorilla_Pounce_RGD_7", damage_name="Demolisher_Gorilla_Pounce_RGD_7");
+    use Demolisher_Gorilla_Pounce_Def(weapon_name="Demolisher_Gorilla_Pounce_RGD_8", damage_name="Demolisher_Gorilla_Pounce_RGD_8");
+    use Demolisher_Gorilla_Pounce_Def(weapon_name="Demolisher_Gorilla_Pounce_RGD_9", damage_name="Demolisher_Gorilla_Pounce_RGD_9");
+	       
+	use Demolisher_Gorilla_Rubble_Def(weapon_name="Demolisher_Gorilla_Rubble_RGD_1", damage_name="Demolisher_Gorilla_Rubble_RGD_1", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Gorilla_Rubble_Def(weapon_name="Demolisher_Gorilla_Rubble_RGD_2", damage_name="Demolisher_Gorilla_Rubble_RGD_2", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Gorilla_Rubble_Def(weapon_name="Demolisher_Gorilla_Rubble_RGD_3", damage_name="Demolisher_Gorilla_Rubble_RGD_3", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Gorilla_Rubble_Def(weapon_name="Demolisher_Gorilla_Rubble_RGD_4", damage_name="Demolisher_Gorilla_Rubble_RGD_4", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Gorilla_Rubble_Def(weapon_name="Demolisher_Gorilla_Rubble_RGD_5", damage_name="Demolisher_Gorilla_Rubble_RGD_5", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Gorilla_Rubble_Def(weapon_name="Demolisher_Gorilla_Rubble_RGD_6", damage_name="Demolisher_Gorilla_Rubble_RGD_6", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Gorilla_Rubble_Def(weapon_name="Demolisher_Gorilla_Rubble_RGD_7", damage_name="Demolisher_Gorilla_Rubble_RGD_7", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Gorilla_Rubble_Def(weapon_name="Demolisher_Gorilla_Rubble_RGD_8", damage_name="Demolisher_Gorilla_Rubble_RGD_8", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+    use Demolisher_Gorilla_Rubble_Def(weapon_name="Demolisher_Gorilla_Rubble_RGD_9", damage_name="Demolisher_Gorilla_Rubble_RGD_9", skin="default", trail_fx="demolisher_rubble_trail.gpufx");
+
+	use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter", damage_name="Demolisher_Rubble_RGD_4", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+	use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter_RGD_1", damage_name="Demolisher_Rubble_RGD_1", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+    use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter_RGD_2", damage_name="Demolisher_Rubble_RGD_2", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+    use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter_RGD_3", damage_name="Demolisher_Rubble_RGD_3", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+    use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter_RGD_4", damage_name="Demolisher_Rubble_RGD_4", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+    use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter_RGD_5", damage_name="Demolisher_Rubble_RGD_5", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+    use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter_RGD_6", damage_name="Demolisher_Rubble_RGD_6", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+    use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter_RGD_7", damage_name="Demolisher_Rubble_RGD_7", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+    use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter_RGD_8", damage_name="Demolisher_Rubble_RGD_8", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+    use Demolisher_Rubble_Winter_Def(weapon_name="Demolisher_Rubble_Winter_RGD_9", damage_name="Demolisher_Rubble_RGD_9", skin="default", trail_fx="demolisher_snow_trail.gpufx");
+
+    use Demolisher_Freak_Fists_Def(weapon_name="Demolisher_Superman_Fists_RGD_4", damage_name="Demolisher_Superman_Fists_RGD_4");
+    use Demolisher_Freak_Fists_Def(weapon_name="Demolisher_Superman_Fists_RGD_7", damage_name="Demolisher_Superman_Fists_RGD_7");
+    use Demolisher_Freak_Fists_Def(weapon_name="Demolisher_Superman_Fists_RGD_9", damage_name="Demolisher_Superman_Fists_RGD_9");
+
+    use Demolisher_Freak_Rubble_Def(weapon_name="Demolisher_Superman_Rubble_RGD_4", damage_name="Demolisher_Superman_Rubble_RGD_4", skin="opera", trail_fx="demolisher_rubble_trail.gpufx", noise_data_uid="Freak_Superman_rock");
+    use Demolisher_Freak_Rubble_Def(weapon_name="Demolisher_Superman_Rubble_RGD_7", damage_name="Demolisher_Superman_Rubble_RGD_7", skin="opera", trail_fx="demolisher_rubble_trail.gpufx", noise_data_uid="Freak_Superman_rock");
+    use Demolisher_Freak_Rubble_Def(weapon_name="Demolisher_Superman_Rubble_RGD_9", damage_name="Demolisher_Superman_Rubble_RGD_9", skin="opera", trail_fx="demolisher_rubble_trail.gpufx", noise_data_uid="Freak_Superman_rock");
+
+    use Demolisher_Freak_Charge_And_Pounce_Def(weapon_name="Demolisher_Superman_Charge_And_Pounce_RGD_4", damage_name="Demolisher_Superman_Charge_And_Pounce_RGD_4");
+    use Demolisher_Freak_Charge_And_Pounce_Def(weapon_name="Demolisher_Superman_Charge_And_Pounce_RGD_7", damage_name="Demolisher_Superman_Charge_And_Pounce_RGD_7");
+    use Demolisher_Freak_Charge_And_Pounce_Def(weapon_name="Demolisher_Superman_Charge_And_Pounce_RGD_9", damage_name="Demolisher_Superman_Charge_And_Pounce_RGD_9");
+
+    use Demolisher_Freak_Fists_Def(weapon_name="Demolisher_Behemoth_Fists_RGD_4", damage_name="Demolisher_Behemoth_Fists_RGD_4");
+    use Demolisher_Freak_Fists_Def(weapon_name="Demolisher_Behemoth_Fists_RGD_7", damage_name="Demolisher_Behemoth_Fists_RGD_7");
+    use Demolisher_Freak_Fists_Def(weapon_name="Demolisher_Behemoth_Fists_RGD_9", damage_name="Demolisher_Behemoth_Fists_RGD_9");
+
+    use Demolisher_Freak_Rubble_Def(weapon_name="Demolisher_Behemoth_Rubble_RGD_4", damage_name="Demolisher_Behemoth_Rubble_RGD_4", skin="default", trail_fx="demolisher_rubble_trail.gpufx", noise_data_uid="demolisher_rock");
+    use Demolisher_Freak_Rubble_Def(weapon_name="Demolisher_Behemoth_Rubble_RGD_7", damage_name="Demolisher_Behemoth_Rubble_RGD_7", skin="default", trail_fx="demolisher_rubble_trail.gpufx", noise_data_uid="demolisher_rock");
+    use Demolisher_Freak_Rubble_Def(weapon_name="Demolisher_Behemoth_Rubble_RGD_9", damage_name="Demolisher_Behemoth_Rubble_RGD_9", skin="default", trail_fx="demolisher_rubble_trail.gpufx", noise_data_uid="demolisher_rock");
+
+    use Demolisher_Freak_Charge_And_Pounce_Def(weapon_name="Demolisher_Behemoth_Charge_And_Pounce_RGD_4", damage_name="Demolisher_Behemoth_Charge_And_Pounce_RGD_4");
+    use Demolisher_Freak_Charge_And_Pounce_Def(weapon_name="Demolisher_Behemoth_Charge_And_Pounce_RGD_7", damage_name="Demolisher_Behemoth_Charge_And_Pounce_RGD_7");
+    use Demolisher_Freak_Charge_And_Pounce_Def(weapon_name="Demolisher_Behemoth_Charge_And_Pounce_RGD_9", damage_name="Demolisher_Behemoth_Charge_And_Pounce_RGD_9");
+
+    use Demolisher_Freak_Attack_Object_Def(weapon_name="Demolisher_Behemoth_Attack_Object_RGD_4", damage_name="Demolisher_Behemoth_Attack_Object_RGD_4");
+    use Demolisher_Freak_Attack_Object_Def(weapon_name="Demolisher_Behemoth_Attack_Object_RGD_7", damage_name="Demolisher_Behemoth_Attack_Object_RGD_7");
+    use Demolisher_Freak_Attack_Object_Def(weapon_name="Demolisher_Behemoth_Attack_Object_RGD_9", damage_name="Demolisher_Behemoth_Attack_Object_RGD_9");
+
+	use Goon_Weapon_Def(weapon_name="Goon_Weapon_RGD_1", damage_name="Goon_Weapon_RGD_1");
+    use Goon_Weapon_Def(weapon_name="Goon_Weapon_RGD_2", damage_name="Goon_Weapon_RGD_2");
+    use Goon_Weapon_Def(weapon_name="Goon_Weapon_RGD_3", damage_name="Goon_Weapon_RGD_3");
+    use Goon_Weapon_Def(weapon_name="Goon_Weapon_RGD_4", damage_name="Goon_Weapon_RGD_4");
+    use Goon_Weapon_Def(weapon_name="Goon_Weapon_RGD_5", damage_name="Goon_Weapon_RGD_5");
+    use Goon_Weapon_Def(weapon_name="Goon_Weapon_RGD_6", damage_name="Goon_Weapon_RGD_6");
+    use Goon_Weapon_Def(weapon_name="Goon_Weapon_RGD_7", damage_name="Goon_Weapon_RGD_7");
+    use Goon_Weapon_Def(weapon_name="Goon_Weapon_RGD_8", damage_name="Goon_Weapon_RGD_8");
+    use Goon_Weapon_Def(weapon_name="Goon_Weapon_RGD_9", damage_name="Goon_Weapon_RGD_9");
+    use Goon_Torch_Weapon_Def(weapon_name="Goon_Torch_Weapon_RGD_4", damage_name="Goon_Torch_Weapon_RGD_4");
+    use Goon_Torch_Weapon_Def(weapon_name="Goon_Torch_Weapon_RGD_7", damage_name="Goon_Torch_Weapon_RGD_7");
+    use Goon_Torch_Weapon_Def(weapon_name="Goon_Torch_Weapon_RGD_9", damage_name="Goon_Torch_Weapon_RGD_9");
+    use Goon_Weapon_Def(weapon_name="DLC_FT_Goon_Weapon_RGD_1", damage_name="DLC_FT_Goon_Weapon_RGD_1", game_version=100);
+    use Goon_Weapon_Def(weapon_name="DLC_FT_Goon_Weapon_RGD_4", damage_name="DLC_FT_Goon_Weapon_RGD_4", game_version=100);
+    use Goon_Weapon_Def(weapon_name="DLC_FT_Goon_Weapon_RGD_7", damage_name="DLC_FT_Goon_Weapon_RGD_7", game_version=100);
+
+	use Goon_Fists_Def(weapon_name="Goon_Fists_RGD_1", damage_name="Goon_Fists_RGD_1");
+    use Goon_Fists_Def(weapon_name="Goon_Fists_RGD_2", damage_name="Goon_Fists_RGD_2");
+    use Goon_Fists_Def(weapon_name="Goon_Fists_RGD_3", damage_name="Goon_Fists_RGD_3");
+    use Goon_Fists_Def(weapon_name="Goon_Fists_RGD_4", damage_name="Goon_Fists_RGD_4");
+    use Goon_Fists_Def(weapon_name="Goon_Fists_RGD_5", damage_name="Goon_Fists_RGD_5");
+    use Goon_Fists_Def(weapon_name="Goon_Fists_RGD_6", damage_name="Goon_Fists_RGD_6");
+    use Goon_Fists_Def(weapon_name="Goon_Fists_RGD_7", damage_name="Goon_Fists_RGD_7");
+    use Goon_Fists_Def(weapon_name="Goon_Fists_RGD_8", damage_name="Goon_Fists_RGD_8");
+    use Goon_Fists_Def(weapon_name="Goon_Fists_RGD_9", damage_name="Goon_Fists_RGD_9");
+    use Goon_Torch_Fists_Def(weapon_name="Goon_Torch_Fists_RGD_4", damage_name="Goon_Torch_Fists_RGD_4");
+    use Goon_Torch_Fists_Def(weapon_name="Goon_Torch_Fists_RGD_7", damage_name="Goon_Torch_Fists_RGD_7");
+    use Goon_Torch_Fists_Def(weapon_name="Goon_Torch_Fists_RGD_9", damage_name="Goon_Torch_Fists_RGD_9");
+    use Goon_Fists_Def(weapon_name="DLC_FT_Goon_Fists_RGD_1", damage_name="DLC_FT_Goon_Fists_RGD_1", game_version=100);
+    use Goon_Fists_Def(weapon_name="DLC_FT_Goon_Fists_RGD_4", damage_name="DLC_FT_Goon_Fists_RGD_4", game_version=100);
+    use Goon_Fists_Def(weapon_name="DLC_FT_Goon_Fists_RGD_7", damage_name="DLC_FT_Goon_Fists_RGD_7", game_version=100);
+
+    use Goon_Torch_Fire_Projectile_Def(weapon_name="Goon_Torch_Fire_Projectile_Level_1", damage_name="Goon_Torch_Projectile_Level_1");
+    use Goon_Torch_Fire_Projectile_Def(weapon_name="Goon_Torch_Fire_Projectile_Level_4", damage_name="Goon_Torch_Projectile_Level_4");
+    use Goon_Torch_Fire_Projectile_Def(weapon_name="Goon_Torch_Fire_Projectile_Level_7", damage_name="Goon_Torch_Projectile_Level_7");
+
+    use Goon_Torch_Fire_Wave2_Def(weapon_name="Goon_Torch_Fire_Wave2_Level_1", damage_name="Goon_Torch_Wave_Damage_Level_1");
+    use Goon_Torch_Fire_Wave2_Def(weapon_name="Goon_Torch_Fire_Wave2_Level_4", damage_name="Goon_Torch_Wave_Damage_Level_4");
+    use Goon_Torch_Fire_Wave2_Def(weapon_name="Goon_Torch_Fire_Wave2_Level_7", damage_name="Goon_Torch_Wave_Damage_Level_7");
+
+    use Goon_Torch_Flame_Shot_Projectile_Def(weapon_name="Goon_Torch_Flame_Shot_Projectile_Level_1", prefab_preset_name="MortarTier;goon_freak_torch_mortar_level_1");
+    use Goon_Torch_Flame_Shot_Projectile_Def(weapon_name="Goon_Torch_Flame_Shot_Projectile_Level_4", prefab_preset_name="MortarTier;goon_freak_torch_mortar_level_4");
+    use Goon_Torch_Flame_Shot_Projectile_Def(weapon_name="Goon_Torch_Flame_Shot_Projectile_Level_7", prefab_preset_name="MortarTier;goon_freak_torch_mortar_level_7");
+
+	use Banshee_fists_Def(weapon_name="Banshee_Fists_RGD_1", damage_name="Banshee_Fists_RGD_1");
+    use Banshee_fists_Def(weapon_name="Banshee_Fists_RGD_2", damage_name="Banshee_Fists_RGD_2");
+    use Banshee_fists_Def(weapon_name="Banshee_Fists_RGD_3", damage_name="Banshee_Fists_RGD_3");
+    use Banshee_fists_Def(weapon_name="Banshee_Fists_RGD_4", damage_name="Banshee_Fists_RGD_4");
+    use Banshee_fists_Def(weapon_name="Banshee_Fists_RGD_5", damage_name="Banshee_Fists_RGD_5");
+    use Banshee_fists_Def(weapon_name="Banshee_Fists_RGD_6", damage_name="Banshee_Fists_RGD_6");
+    use Banshee_fists_Def(weapon_name="Banshee_Fists_RGD_7", damage_name="Banshee_Fists_RGD_7");
+    use Banshee_fists_Def(weapon_name="Banshee_Fists_RGD_8", damage_name="Banshee_Fists_RGD_8");
+    use Banshee_fists_Def(weapon_name="Banshee_Fists_RGD_9", damage_name="Banshee_Fists_RGD_9");
+    
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Weak_Fists_RGD_1", damage_name="Banshee_Weak_Fists_RGD_1");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Weak_Fists_RGD_2", damage_name="Banshee_Weak_Fists_RGD_2");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Weak_Fists_RGD_3", damage_name="Banshee_Weak_Fists_RGD_3");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Weak_Fists_RGD_4", damage_name="Banshee_Weak_Fists_RGD_4");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Weak_Fists_RGD_5", damage_name="Banshee_Weak_Fists_RGD_5");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Weak_Fists_RGD_6", damage_name="Banshee_Weak_Fists_RGD_6");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Weak_Fists_RGD_7", damage_name="Banshee_Weak_Fists_RGD_7");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Weak_Fists_RGD_8", damage_name="Banshee_Weak_Fists_RGD_8");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Weak_Fists_RGD_9", damage_name="Banshee_Weak_Fists_RGD_9");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Matriarch_Daughter_Fists_RGD_4", damage_name="Banshee_Matriarch_Daughter_Fists_RGD_4");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Matriarch_Daughter_Fists_RGD_7", damage_name="Banshee_Matriarch_Daughter_Fists_RGD_7");
+    use Banshee_Weak_fists_Def(weapon_name="Banshee_Matriarch_Daughter_Fists_RGD_9", damage_name="Banshee_Matriarch_Daughter_Fists_RGD_9");
+
+	use Banshee_fists_Def(weapon_name="DLC_FT_Banshee_Fists_T1", damage_name="DLC_FT_Banshee_Fists_T1", game_version=100);
+    use Banshee_fists_Def(weapon_name="DLC_FT_Banshee_Fists_T2", damage_name="DLC_FT_Banshee_Fists_T2", game_version=100);
+    use Banshee_fists_Def(weapon_name="DLC_FT_Banshee_Fists_T3", damage_name="DLC_FT_Banshee_Fists_T3", game_version=100);
+
+    use Banshee_fists_Def(weapon_name="Banshee_Matriarch_Fists_RGD_4", damage_name="Banshee_Matriarch_Fists_RGD_4", game_version=100);
+    use Banshee_fists_Def(weapon_name="Banshee_Matriarch_Fists_RGD_7", damage_name="Banshee_Matriarch_Fists_RGD_7", game_version=100);
+    use Banshee_fists_Def(weapon_name="Banshee_Matriarch_Fists_RGD_9", damage_name="Banshee_Matriarch_Fists_RGD_9", game_version=100);
+
+    use Banshee_fists_Def(weapon_name="Banshee_Karen_Fists_RGD_4", damage_name="Banshee_Karen_Fists_RGD_4", game_version=100);
+    use Banshee_fists_Def(weapon_name="Banshee_Karen_Fists_RGD_7", damage_name="Banshee_Karen_Fists_RGD_7", game_version=100);
+    use Banshee_fists_Def(weapon_name="Banshee_Karen_Fists_RGD_9", damage_name="Banshee_Karen_Fists_RGD_9", game_version=100);
+
+    use Banshee_Freak_Spit_Def(weapon_name="Freak_Matriarch_Spit_RGD_4", damage_name="Freak_Matriarch_Spit_RGD_4", trail_fx="matriarch_hag_spit_trail_01a.gpufx");
+    use Banshee_Freak_Spit_Def(weapon_name="Freak_Matriarch_Spit_RGD_7", damage_name="Freak_Matriarch_Spit_RGD_7", trail_fx="matriarch_hag_spit_trail_01a.gpufx");
+    use Banshee_Freak_Spit_Def(weapon_name="Freak_Matriarch_Spit_RGD_9", damage_name="Freak_Matriarch_Spit_RGD_9", trail_fx="matriarch_hag_spit_trail_01a.gpufx");
+    use Banshee_Freak_Spit_Def(weapon_name="Freak_Karen_Spit_RGD_4", damage_name="Freak_Karen_Spit_RGD_4", trail_fx="ft_karen_hag_spit_trail_01a.gpufx");
+    use Banshee_Freak_Spit_Def(weapon_name="Freak_Karen_Spit_RGD_7", damage_name="Freak_Karen_Spit_RGD_7", trail_fx="ft_karen_hag_spit_trail_01a.gpufx");
+    use Banshee_Freak_Spit_Def(weapon_name="Freak_Karen_Spit_RGD_9", damage_name="Freak_Karen_Spit_RGD_9", trail_fx="ft_karen_hag_spit_trail_01a.gpufx");
+
+	use Charger_Fists_Def(weapon_name="Charger_Fists_RGD_1", damage_name="Charger_Fists_RGD_1");
+    use Charger_Fists_Def(weapon_name="Charger_Fists_RGD_2", damage_name="Charger_Fists_RGD_2");
+    use Charger_Fists_Def(weapon_name="Charger_Fists_RGD_3", damage_name="Charger_Fists_RGD_3");
+    use Charger_Fists_Def(weapon_name="Charger_Fists_RGD_4", damage_name="Charger_Fists_RGD_4");
+    use Charger_Fists_Def(weapon_name="Charger_Fists_RGD_5", damage_name="Charger_Fists_RGD_5");
+    use Charger_Fists_Def(weapon_name="Charger_Fists_RGD_6", damage_name="Charger_Fists_RGD_6");
+    use Charger_Fists_Def(weapon_name="Charger_Fists_RGD_7", damage_name="Charger_Fists_RGD_7");
+    use Charger_Fists_Def(weapon_name="Charger_Fists_RGD_8", damage_name="Charger_Fists_RGD_8");
+    use Charger_Fists_Def(weapon_name="Charger_Fists_RGD_9", damage_name="Charger_Fists_RGD_9");
+    use Charger_Slasher_Fists_Def(weapon_name="Freak_Slasher_Fists_RGD_4", damage_name="Freak_Slasher_Fists_RGD_4");
+    use Charger_Slasher_Fists_Def(weapon_name="Freak_Slasher_Fists_RGD_7", damage_name="Freak_Slasher_Fists_RGD_7");
+    use Charger_Slasher_Fists_Def(weapon_name="Freak_Slasher_Fists_RGD_9", damage_name="Freak_Slasher_Fists_RGD_9");
+	
+	use Charger_Charge_Def(weapon_name="Charger_Charge_RGD_1", damage_name="Charger_Charge_RGD_1");
+    use Charger_Charge_Def(weapon_name="Charger_Charge_RGD_2", damage_name="Charger_Charge_RGD_2");
+    use Charger_Charge_Def(weapon_name="Charger_Charge_RGD_3", damage_name="Charger_Charge_RGD_3");
+    use Charger_Charge_Def(weapon_name="Charger_Charge_RGD_4", damage_name="Charger_Charge_RGD_4");
+    use Charger_Charge_Def(weapon_name="Charger_Charge_RGD_5", damage_name="Charger_Charge_RGD_5");
+    use Charger_Charge_Def(weapon_name="Charger_Charge_RGD_6", damage_name="Charger_Charge_RGD_6");
+    use Charger_Charge_Def(weapon_name="Charger_Charge_RGD_7", damage_name="Charger_Charge_RGD_7");
+    use Charger_Charge_Def(weapon_name="Charger_Charge_RGD_8", damage_name="Charger_Charge_RGD_8");
+    use Charger_Charge_Def(weapon_name="Charger_Charge_RGD_9", damage_name="Charger_Charge_RGD_9");
+    use Charger_Slasher_Charge_Def(weapon_name="Freak_Slasher_Charge_RGD_4", damage_name="Freak_Slasher_Charge_RGD_4");
+    use Charger_Slasher_Charge_Def(weapon_name="Freak_Slasher_Charge_RGD_7", damage_name="Freak_Slasher_Charge_RGD_7");
+    use Charger_Slasher_Charge_Def(weapon_name="Freak_Slasher_Charge_RGD_9", damage_name="Freak_Slasher_Charge_RGD_9");
+
+	use Corruptor_Spit_Def(weapon_name="Corruptor_Spit_RGD_1", damage_name="Corruptor_Spit_RGD_1");
+    use Corruptor_Spit_Def(weapon_name="Corruptor_Spit_RGD_2", damage_name="Corruptor_Spit_RGD_2");
+    use Corruptor_Spit_Def(weapon_name="Corruptor_Spit_RGD_3", damage_name="Corruptor_Spit_RGD_3");
+    use Corruptor_Spit_Def(weapon_name="Corruptor_Spit_RGD_4", damage_name="Corruptor_Spit_RGD_4");
+    use Corruptor_Spit_Def(weapon_name="Corruptor_Spit_RGD_5", damage_name="Corruptor_Spit_RGD_5");
+    use Corruptor_Spit_Def(weapon_name="Corruptor_Spit_RGD_6", damage_name="Corruptor_Spit_RGD_6");
+    use Corruptor_Spit_Def(weapon_name="Corruptor_Spit_RGD_7", damage_name="Corruptor_Spit_RGD_7");
+    use Corruptor_Spit_Def(weapon_name="Corruptor_Spit_RGD_8", damage_name="Corruptor_Spit_RGD_8");
+    use Corruptor_Spit_Def(weapon_name="Corruptor_Spit_RGD_9", damage_name="Corruptor_Spit_RGD_9");
+    use Corruptor_Spit_Nemo_Def(weapon_name="Corruptor_Spit_Freak_Nemo_Level_1", damage_name="Corruptor_Spit_Freak_Nemo_Level_1");
+    use Corruptor_Spit_Nemo_Def(weapon_name="Corruptor_Spit_Freak_Nemo_Level_4", damage_name="Corruptor_Spit_Freak_Nemo_Level_4");
+    use Corruptor_Spit_Nemo_Def(weapon_name="Corruptor_Spit_Freak_Nemo_Level_7", damage_name="Corruptor_Spit_Freak_Nemo_Level_7");
+
+	use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_1", damage_name="Corruptor_Fists_RGD_1");
+    use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_2", damage_name="Corruptor_Fists_RGD_2");
+    use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_3", damage_name="Corruptor_Fists_RGD_3");
+    use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_4", damage_name="Corruptor_Fists_RGD_4");
+    use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_5", damage_name="Corruptor_Fists_RGD_5");
+    use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_6", damage_name="Corruptor_Fists_RGD_6");
+    use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_7", damage_name="Corruptor_Fists_RGD_7");
+    use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_8", damage_name="Corruptor_Fists_RGD_8");
+    use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_9", damage_name="Corruptor_Fists_RGD_9");
+    use Corruptor_Fists_Def(weapon_name="Corruptor_Fists_RGD_10", damage_name="Corruptor_Fists_RGD_10");
+    
+    use Corruptor_Mortar_Spit_Def(weapon_name="Corruptor_Mortar_Spit_RGD_1", prefab_preset_name="MortarTier;corruptor_mortar_tier_1");
+    use Corruptor_Mortar_Spit_Def(weapon_name="Corruptor_Mortar_Spit_RGD_2", prefab_preset_name="MortarTier;corruptor_mortar_tier_2");
+    use Corruptor_Mortar_Spit_Def(weapon_name="Corruptor_Mortar_Spit_RGD_3", prefab_preset_name="MortarTier;corruptor_mortar_tier_3");
+    use Corruptor_Mortar_Spit_Def(weapon_name="Corruptor_Mortar_Spit_RGD_4", prefab_preset_name="MortarTier;corruptor_mortar_tier_4");
+    use Corruptor_Mortar_Spit_Def(weapon_name="Corruptor_Mortar_Spit_RGD_5", prefab_preset_name="MortarTier;corruptor_mortar_tier_5");
+    use Corruptor_Mortar_Spit_Def(weapon_name="Corruptor_Mortar_Spit_RGD_6", prefab_preset_name="MortarTier;corruptor_mortar_tier_6");
+    use Corruptor_Mortar_Spit_Def(weapon_name="Corruptor_Mortar_Spit_RGD_7", prefab_preset_name="MortarTier;corruptor_mortar_tier_7");
+    use Corruptor_Mortar_Spit_Def(weapon_name="Corruptor_Mortar_Spit_RGD_8", prefab_preset_name="MortarTier;corruptor_mortar_tier_8");
+    use Corruptor_Mortar_Spit_Def(weapon_name="Corruptor_Mortar_Spit_RGD_9", prefab_preset_name="MortarTier;corruptor_mortar_tier_9");
+    use Corruptor_Freak_Mortar_Spit_Def(weapon_name="Corruptor_Opera_Freak_Mortar", prefab_preset_name="MortarTier;corruptor_opera_freak_mortar");
+	use Corruptor_Mortar_Spit_Nemo_Def(weapon_name="Corruptor_Mortar_Spit_Freak_Nemo_Level_1", prefab_preset_name="MortarTier;corruptor_mortar_freak_nemo_level_1");
+	use Corruptor_Mortar_Spit_Nemo_Def(weapon_name="Corruptor_Mortar_Spit_Freak_Nemo_Level_4", prefab_preset_name="MortarTier;corruptor_mortar_freak_nemo_level_4");
+	use Corruptor_Mortar_Spit_Nemo_Def(weapon_name="Corruptor_Mortar_Spit_Freak_Nemo_Level_7", prefab_preset_name="MortarTier;corruptor_mortar_freak_nemo_level_7");
+
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_1", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_1");
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_2", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_2");
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_3", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_3");
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_4", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_4");
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_5", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_5");
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_6", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_6");
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_7", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_7");
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_8", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_8");
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_9", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_9");
+    use Corruptor_Puddle_Def(weapon_name="Corruptor_Puddle_RGD_10", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_tier_10");
+    use Corruptor_Freak_Puddle_Def(weapon_name="Corruptor_Opera_Freak_Puddle", prefab_preset_name="VomitPuddleTier;corruptor_opera_freak_puddle");
+    use Corruptor_Freak_Puddle_Def(weapon_name="Corruptor_Puddle_Freak_Nemo_Level_1", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_freak_nemo_level_1");
+    use Corruptor_Freak_Puddle_Def(weapon_name="Corruptor_Puddle_Freak_Nemo_Level_4", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_freak_nemo_level_4");
+    use Corruptor_Freak_Puddle_Def(weapon_name="Corruptor_Puddle_Freak_Nemo_Level_7", prefab_preset_name="VomitPuddleTier;corruptor_vomit_puddle_freak_nemo_level_7");
+
+    use Corruptor_Gas_Wave_Def(weapon_name="Corruptor_Gas_RGD_1", damage_name="Corruptor_Gas_RGD_1");
+    use Corruptor_Gas_Wave_Def(weapon_name="Corruptor_Gas_RGD_2", damage_name="Corruptor_Gas_RGD_2");
+    use Corruptor_Gas_Wave_Def(weapon_name="Corruptor_Gas_RGD_3", damage_name="Corruptor_Gas_RGD_3");
+    use Corruptor_Gas_Wave_Def(weapon_name="Corruptor_Gas_RGD_4", damage_name="Corruptor_Gas_RGD_4");
+    use Corruptor_Gas_Wave_Def(weapon_name="Corruptor_Gas_RGD_5", damage_name="Corruptor_Gas_RGD_5");
+    use Corruptor_Gas_Wave_Def(weapon_name="Corruptor_Gas_RGD_6", damage_name="Corruptor_Gas_RGD_6");
+    use Corruptor_Gas_Wave_Def(weapon_name="Corruptor_Gas_RGD_7", damage_name="Corruptor_Gas_RGD_7");
+    use Corruptor_Gas_Wave_Def(weapon_name="Corruptor_Gas_RGD_8", damage_name="Corruptor_Gas_RGD_8");
+    use Corruptor_Gas_Wave_Def(weapon_name="Corruptor_Gas_RGD_9", damage_name="Corruptor_Gas_RGD_9");
+    use Corruptor_Wave_Nemo_Def(weapon_name="Corruptor_Wave_Freak_Nemo_Level_1", damage_name="Corruptor_Wave_Freak_Nemo_Level_1");
+    use Corruptor_Wave_Nemo_Def(weapon_name="Corruptor_Wave_Freak_Nemo_Level_4", damage_name="Corruptor_Wave_Freak_Nemo_Level_4");
+    use Corruptor_Wave_Nemo_Def(weapon_name="Corruptor_Wave_Freak_Nemo_Level_7", damage_name="Corruptor_Wave_Freak_Nemo_Level_7");
+
+    use Corruptor_Grenade_Def(weapon_name="Corruptor_Grenade_RGD_1", damage_name="Corruptor_Grenade_RGD_1", damage_range=2.5, explode_delay=3.0);
+    use Corruptor_Grenade_Def(weapon_name="Corruptor_Grenade_RGD_2", damage_name="Corruptor_Grenade_RGD_2", damage_range=2.5, explode_delay=3.0);
+    use Corruptor_Grenade_Def(weapon_name="Corruptor_Grenade_RGD_3", damage_name="Corruptor_Grenade_RGD_3", damage_range=2.5, explode_delay=3.0);
+    use Corruptor_Grenade_Def(weapon_name="Corruptor_Grenade_RGD_4", damage_name="Corruptor_Grenade_RGD_4", damage_range=2.5, explode_delay=3.0);
+    use Corruptor_Grenade_Def(weapon_name="Corruptor_Grenade_RGD_5", damage_name="Corruptor_Grenade_RGD_5", damage_range=2.5, explode_delay=3.0);
+    use Corruptor_Grenade_Def(weapon_name="Corruptor_Grenade_RGD_6", damage_name="Corruptor_Grenade_RGD_6", damage_range=2.5, explode_delay=3.0);
+    use Corruptor_Grenade_Def(weapon_name="Corruptor_Grenade_RGD_7", damage_name="Corruptor_Grenade_RGD_7", damage_range=2.5, explode_delay=3.0);
+    use Corruptor_Grenade_Def(weapon_name="Corruptor_Grenade_RGD_8", damage_name="Corruptor_Grenade_RGD_8", damage_range=2.5, explode_delay=3.0);
+    use Corruptor_Grenade_Def(weapon_name="Corruptor_Grenade_RGD_9", damage_name="Corruptor_Grenade_RGD_9", damage_range=2.5, explode_delay=3.0);
+    use Corruptor_Grenade_Nemo_Def(weapon_name="Corruptor_Grenade_Freak_Nemo_Level_1", damage_name="Corruptor_Grenade_Freak_Nemo_Level_1", damage_range=2.5, explode_delay=2.0);
+    use Corruptor_Grenade_Nemo_Def(weapon_name="Corruptor_Grenade_Freak_Nemo_Level_4", damage_name="Corruptor_Grenade_Freak_Nemo_Level_4", damage_range=2.5, explode_delay=2.0);
+    use Corruptor_Grenade_Nemo_Def(weapon_name="Corruptor_Grenade_Freak_Nemo_Level_7", damage_name="Corruptor_Grenade_Freak_Nemo_Level_7", damage_range=2.5, explode_delay=2.0);
+
+    use Volatile_fists_Def(weapon_name="Volatile_fists_RGD_1", damage_name="Volatile_Fists_RGD_1");
+    use Volatile_fists_Def(weapon_name="Volatile_fists_RGD_2", damage_name="Volatile_Fists_RGD_2");
+    use Volatile_fists_Def(weapon_name="Volatile_fists_RGD_3", damage_name="Volatile_Fists_RGD_3");
+    use Volatile_fists_Def(weapon_name="Volatile_fists_RGD_4", damage_name="Volatile_Fists_RGD_4");
+    use Volatile_fists_Def(weapon_name="Volatile_fists_RGD_5", damage_name="Volatile_Fists_RGD_5");
+    use Volatile_fists_Def(weapon_name="Volatile_fists_RGD_6", damage_name="Volatile_Fists_RGD_6");
+    use Volatile_fists_Def(weapon_name="Volatile_fists_RGD_7", damage_name="Volatile_Fists_RGD_7");
+    use Volatile_fists_Def(weapon_name="Volatile_fists_RGD_8", damage_name="Volatile_Fists_RGD_8");
+    use Volatile_fists_Def(weapon_name="Volatile_fists_RGD_9", damage_name="Volatile_Fists_RGD_9");
+    use Volatile_fists_Def(weapon_name="Hologram_Fists_RGD_4", damage_name="Hologram_Fists_RGD_4");
+    use Volatile_fists_Def(weapon_name="Hologram_Fists_RGD_7", damage_name="Hologram_Fists_RGD_7");
+    use Volatile_fists_Def(weapon_name="Hologram_Fists_RGD_9", damage_name="Hologram_Fists_RGD_9");
+    
+    use Volatile_Spit_Def(weapon_name="Volatile_Spit_RGD_1", damage_name="Volatile_Spit_RGD_1");
+    use Volatile_Spit_Def(weapon_name="Volatile_Spit_RGD_2", damage_name="Volatile_Spit_RGD_2");
+    use Volatile_Spit_Def(weapon_name="Volatile_Spit_RGD_3", damage_name="Volatile_Spit_RGD_3");
+    use Volatile_Spit_Def(weapon_name="Volatile_Spit_RGD_4", damage_name="Volatile_Spit_RGD_4");
+    use Volatile_Spit_Def(weapon_name="Volatile_Spit_RGD_5", damage_name="Volatile_Spit_RGD_5");
+    use Volatile_Spit_Def(weapon_name="Volatile_Spit_RGD_6", damage_name="Volatile_Spit_RGD_6");
+    use Volatile_Spit_Def(weapon_name="Volatile_Spit_RGD_7", damage_name="Volatile_Spit_RGD_7");
+    use Volatile_Spit_Def(weapon_name="Volatile_Spit_RGD_8", damage_name="Volatile_Spit_RGD_8");
+    use Volatile_Spit_Def(weapon_name="Volatile_Spit_RGD_9", damage_name="Volatile_Spit_RGD_9");
+	
+    use Volatile_fists_Def(weapon_name="dlc_ft_Volatile_fists_T1", damage_name="dlc_ft_Volatile_fists_T1");
+    use Volatile_fists_Def(weapon_name="dlc_ft_Volatile_fists_T2", damage_name="dlc_ft_Volatile_fists_T2");
+    use Volatile_fists_Def(weapon_name="dlc_ft_Volatile_fists_T3", damage_name="dlc_ft_Volatile_fists_T3");
+
+    use Volatile_fists_Def(weapon_name="Aiden_beast_fists_T1", damage_name="Aiden_beast_fists_T1");
+    use Volatile_fists_Def(weapon_name="Aiden_beast_fists_T2", damage_name="Aiden_beast_fists_T2");
+    use Volatile_fists_Def(weapon_name="Aiden_beast_fists_T3", damage_name="Aiden_beast_fists_T3");
+    
+    use Volatile_Tyrant_Spit_Def(weapon_name="Volatile_Tyrant_Spit_RGD_1", damage_name="Volatile_Spit_RGD_1");
+    use Volatile_Tyrant_Spit_Def(weapon_name="Volatile_Tyrant_Spit_RGD_2", damage_name="Volatile_Spit_RGD_2");
+    use Volatile_Tyrant_Spit_Def(weapon_name="Volatile_Tyrant_Spit_RGD_3", damage_name="Volatile_Spit_RGD_3");
+    use Volatile_Tyrant_Spit_Def(weapon_name="Volatile_Tyrant_Spit_RGD_4", damage_name="Volatile_Spit_RGD_4");
+    use Volatile_Tyrant_Spit_Def(weapon_name="Volatile_Tyrant_Spit_RGD_5", damage_name="Volatile_Spit_RGD_5");
+    use Volatile_Tyrant_Spit_Def(weapon_name="Volatile_Tyrant_Spit_RGD_6", damage_name="Volatile_Spit_RGD_6");
+    use Volatile_Tyrant_Spit_Def(weapon_name="Volatile_Tyrant_Spit_RGD_7", damage_name="Volatile_Spit_RGD_7");
+    use Volatile_Tyrant_Spit_Def(weapon_name="Volatile_Tyrant_Spit_RGD_8", damage_name="Volatile_Spit_RGD_8");
+    use Volatile_Tyrant_Spit_Def(weapon_name="Volatile_Tyrant_Spit_RGD_9", damage_name="Volatile_Spit_RGD_9");
+    use Volatile_Hologram_Spit_Def(weapon_name="Volatile_Hologram_Spit_RGD_4", damage_name="Volatile_Hologram_Spit_RGD_4");
+    use Volatile_Hologram_Spit_Def(weapon_name="Volatile_Hologram_Spit_RGD_7", damage_name="Volatile_Hologram_Spit_RGD_7");
+    use Volatile_Hologram_Spit_Def(weapon_name="Volatile_Hologram_Spit_RGD_9", damage_name="Volatile_Hologram_Spit_RGD_9");
+    
+    use Volatile_fists_Def(weapon_name="Alpha_Zombie_Fists_RGD_1", damage_name="Alpha_Zombie_Fists_RGD_1");
+    use Volatile_fists_Def(weapon_name="Alpha_Zombie_Fists_RGD_2", damage_name="Alpha_Zombie_Fists_RGD_2");
+    use Volatile_fists_Def(weapon_name="Alpha_Zombie_Fists_RGD_3", damage_name="Alpha_Zombie_Fists_RGD_3");
+    use Volatile_fists_Def(weapon_name="Alpha_Zombie_Fists_RGD_4", damage_name="Alpha_Zombie_Fists_RGD_4");
+    use Volatile_fists_Def(weapon_name="Alpha_Zombie_Fists_RGD_5", damage_name="Alpha_Zombie_Fists_RGD_5");
+    use Volatile_fists_Def(weapon_name="Alpha_Zombie_Fists_RGD_6", damage_name="Alpha_Zombie_Fists_RGD_6");
+    use Volatile_fists_Def(weapon_name="Alpha_Zombie_Fists_RGD_7", damage_name="Alpha_Zombie_Fists_RGD_7");
+    use Volatile_fists_Def(weapon_name="Alpha_Zombie_Fists_RGD_8", damage_name="Alpha_Zombie_Fists_RGD_8");
+    use Volatile_fists_Def(weapon_name="Alpha_Zombie_Fists_RGD_9", damage_name="Alpha_Zombie_Fists_RGD_9");
+    
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Spit_RGD_1", prefab_preset_name="MortarTier;spitter_mortar_tier_1", motion_trail_fx="spitter_mortar_trail_01_a.gpufx");
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Spit_RGD_2", prefab_preset_name="MortarTier;spitter_mortar_tier_2", motion_trail_fx="spitter_mortar_trail_01_a.gpufx");
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Spit_RGD_3", prefab_preset_name="MortarTier;spitter_mortar_tier_3", motion_trail_fx="spitter_mortar_trail_01_a.gpufx");
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Spit_RGD_4", prefab_preset_name="MortarTier;spitter_mortar_tier_4", motion_trail_fx="spitter_mortar_trail_01_a.gpufx");
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Spit_RGD_5", prefab_preset_name="MortarTier;spitter_mortar_tier_5", motion_trail_fx="spitter_mortar_trail_01_a.gpufx");
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Spit_RGD_6", prefab_preset_name="MortarTier;spitter_mortar_tier_6", motion_trail_fx="spitter_mortar_trail_01_a.gpufx");
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Spit_RGD_7", prefab_preset_name="MortarTier;spitter_mortar_tier_7", motion_trail_fx="spitter_mortar_trail_01_a.gpufx");
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Spit_RGD_8", prefab_preset_name="MortarTier;spitter_mortar_tier_8", motion_trail_fx="spitter_mortar_trail_01_a.gpufx");
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Spit_RGD_9", prefab_preset_name="MortarTier;spitter_mortar_tier_9", motion_trail_fx="spitter_mortar_trail_01_a.gpufx");
+    use Spitter_Mortar_Spit_Def(weapon_name="Spitter_Mortar_Ice_Spit", prefab_preset_name="MortarTier;spitter_mortar_ice", motion_trail_fx="ice_spitter_mortar_trail_01_a.gpufx", game_version=40);
+    use Spitter_Mortar_Spit_Def(weapon_name="TR_Spitter_Mortar_Spit", prefab_preset_name="MortarTier;spitter_tower_raid_mortar", motion_trail_fx="spitter_mortar_trail_01_a.gpufx", game_version=43);
+
+    use Spitter_Puddle_Def(weapon_name="Spitter_Puddle_RGD_1", prefab_preset_name="VomitPuddleTier;spitter_vomit_puddle_tier_1");
+    use Spitter_Puddle_Def(weapon_name="Spitter_Puddle_RGD_2", prefab_preset_name="VomitPuddleTier;spitter_vomit_puddle_tier_2");
+    use Spitter_Puddle_Def(weapon_name="Spitter_Puddle_RGD_3", prefab_preset_name="VomitPuddleTier;spitter_vomit_puddle_tier_3");
+    use Spitter_Puddle_Def(weapon_name="Spitter_Puddle_RGD_4", prefab_preset_name="VomitPuddleTier;spitter_vomit_puddle_tier_4");
+    use Spitter_Puddle_Def(weapon_name="Spitter_Puddle_RGD_5", prefab_preset_name="VomitPuddleTier;spitter_vomit_puddle_tier_5");
+    use Spitter_Puddle_Def(weapon_name="Spitter_Puddle_RGD_6", prefab_preset_name="VomitPuddleTier;spitter_vomit_puddle_tier_6");
+    use Spitter_Puddle_Def(weapon_name="Spitter_Puddle_RGD_7", prefab_preset_name="VomitPuddleTier;spitter_vomit_puddle_tier_7");
+    use Spitter_Puddle_Def(weapon_name="Spitter_Puddle_RGD_8", prefab_preset_name="VomitPuddleTier;spitter_vomit_puddle_tier_8");
+    use Spitter_Puddle_Def(weapon_name="Spitter_Puddle_RGD_9", prefab_preset_name="VomitPuddleTier;spitter_vomit_puddle_tier_9");
+    use Spitter_Puddle_Def(weapon_name="Spitter_Ice_Puddle", prefab_preset_name="VomitPuddleTier;spitter_vomit_ice_puddle", game_version=40);
+    use Spitter_Puddle_Def(weapon_name="TR_Spitter_Puddle", prefab_preset_name="VomitPuddleTier;spitter_tower_raid_vomit_puddle", game_version=43);
+    
+    use Spitter_Spit_Def(weapon_name="Spitter_Spit_RGD_1", damage_name="Spitter_Spit_RGD_1", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic");
+    use Spitter_Spit_Def(weapon_name="Spitter_Spit_RGD_2", damage_name="Spitter_Spit_RGD_2", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic");
+    use Spitter_Spit_Def(weapon_name="Spitter_Spit_RGD_3", damage_name="Spitter_Spit_RGD_3", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic");
+    use Spitter_Spit_Def(weapon_name="Spitter_Spit_RGD_4", damage_name="Spitter_Spit_RGD_4", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic");
+    use Spitter_Spit_Def(weapon_name="Spitter_Spit_RGD_5", damage_name="Spitter_Spit_RGD_5", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic");
+    use Spitter_Spit_Def(weapon_name="Spitter_Spit_RGD_6", damage_name="Spitter_Spit_RGD_6", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic");
+    use Spitter_Spit_Def(weapon_name="Spitter_Spit_RGD_7", damage_name="Spitter_Spit_RGD_7", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic");
+    use Spitter_Spit_Def(weapon_name="Spitter_Spit_RGD_8", damage_name="Spitter_Spit_RGD_8", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic");
+    use Spitter_Spit_Def(weapon_name="Spitter_Spit_RGD_9", damage_name="Spitter_Spit_RGD_9", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic");
+    use Spitter_Spit_Def(weapon_name="Spitter_Ice_Spit", damage_name="Spitter_Ice_Spit", damage_preset_name="spitter_ice_spit_freeze", motion_trail_fx="ice_spitter_trail_01_a.gpufx", game_version=40);
+    use Spitter_Spit_Def(weapon_name="DLC_FT_Spitter_Spit_RGD_1", damage_name="DLC_FT_Spitter_Spit_RGD_1", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic", game_version=100);
+    use Spitter_Spit_Def(weapon_name="DLC_FT_Spitter_Spit_RGD_4", damage_name="DLC_FT_Spitter_Spit_RGD_4", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic", game_version=100);
+    use Spitter_Spit_Def(weapon_name="DLC_FT_Spitter_Spit_RGD_7", damage_name="DLC_FT_Spitter_Spit_RGD_7", damage_preset_name="spitter_spit", motion_trail_fx="spitter_trail_01_a.gpufx", buff_preset_to_apply_on_hit="spitter_toxic", game_version=100);
+ 
+	use Suicider_Explosion_Def(weapon_name="Suicider_Explosion_Level_1", damage_name="Suicider_Explosion_Level_1", damage_range=4.0);
+    use Suicider_Explosion_Def(weapon_name="Suicider_Explosion_Level_2", damage_name="Suicider_Explosion_Level_2", damage_range=4.0);
+	use Suicider_Explosion_Def(weapon_name="Suicider_Explosion_Level_3", damage_name="Suicider_Explosion_Level_3", damage_range=4.0);
+	use Suicider_Explosion_Def(weapon_name="Suicider_Explosion_Level_4", damage_name="Suicider_Explosion_Level_4", damage_range=4.5);
+	use Suicider_Explosion_Def(weapon_name="Suicider_Explosion_Level_5", damage_name="Suicider_Explosion_Level_5", damage_range=4.5);
+	use Suicider_Explosion_Def(weapon_name="Suicider_Explosion_Level_6", damage_name="Suicider_Explosion_Level_6", damage_range=5.0);
+	use Suicider_Explosion_Def(weapon_name="Suicider_Explosion_Level_7", damage_name="Suicider_Explosion_Level_7", damage_range=5.0);
+	use Suicider_Explosion_Def(weapon_name="Suicider_Explosion_Level_8", damage_name="Suicider_Explosion_Level_8", damage_range=5.0);
+	use Suicider_Explosion_Def(weapon_name="Suicider_Explosion_Level_9", damage_name="Suicider_Explosion_Level_9", damage_range=5.0);
+	
+	use Suicider_Explosion_Def(weapon_name="TR_Suicider_Explosion_Level_1", damage_name="TR_Suicider_Explosion_Level_1", damage_range=2.0, game_version=34);
+    use Suicider_Explosion_Def(weapon_name="TR_Suicider_Explosion_Level_2", damage_name="TR_Suicider_Explosion_Level_2", damage_range=2.0, game_version=34);
+	use Suicider_Explosion_Def(weapon_name="TR_Suicider_Explosion_Level_3", damage_name="TR_Suicider_Explosion_Level_3", damage_range=2.0, game_version=34);
+	use Suicider_Explosion_Def(weapon_name="TR_Suicider_Explosion_Level_4", damage_name="TR_Suicider_Explosion_Level_4", damage_range=2.5, game_version=34);
+	use Suicider_Explosion_Def(weapon_name="TR_Suicider_Explosion_Level_5", damage_name="TR_Suicider_Explosion_Level_5", damage_range=2.5, game_version=34);
+	use Suicider_Explosion_Def(weapon_name="TR_Suicider_Explosion_Level_6", damage_name="TR_Suicider_Explosion_Level_6", damage_range=3.0, game_version=34);
+	use Suicider_Explosion_Def(weapon_name="TR_Suicider_Explosion_Level_7", damage_name="TR_Suicider_Explosion_Level_7", damage_range=3.0, game_version=34);
+	use Suicider_Explosion_Def(weapon_name="TR_Suicider_Explosion_Level_8", damage_name="TR_Suicider_Explosion_Level_8", damage_range=3.0, game_version=34);
+	use Suicider_Explosion_Def(weapon_name="TR_Suicider_Explosion_Level_9", damage_name="TR_Suicider_Explosion_Level_9", damage_range=3.0, game_version=34);
+
+	use Suicider_Explosion_Def(weapon_name="DLC_FT_Suicider_Explosion_Level_1", damage_name="DLC_FT_Suicider_Explosion_Level_1", damage_range=3.5, game_version=100);
+	use Suicider_Explosion_Def(weapon_name="DLC_FT_Suicider_Explosion_Level_4", damage_name="DLC_FT_Suicider_Explosion_Level_4", damage_range=4.0, game_version=100);
+	use Suicider_Explosion_Def(weapon_name="DLC_FT_Suicider_Explosion_Level_7", damage_name="DLC_FT_Suicider_Explosion_Level_7", damage_range=4.5, game_version=100);
+ 
+ 	use Thrown_Spear_Def(weapon_name="Thrown_Spear_t1", transform_into="Tackle_Spear_t1", throw_damage="SpearThrow_RGD1", damage_name="Tackle_Spear_RGD1");
+	use Thrown_Spear_Def(weapon_name="Thrown_Spear_t2", transform_into="Tackle_Spear_t2", throw_damage="SpearThrow_RGD2", damage_name="Tackle_Spear_RGD2");
+	use Thrown_Spear_Def(weapon_name="Thrown_Spear_t3", transform_into="Tackle_Spear_t3", throw_damage="SpearThrow_RGD3", damage_name="Tackle_Spear_RGD3");
+	use Thrown_Spear_Def(weapon_name="Thrown_Spear_t4", transform_into="Tackle_Spear_t4", throw_damage="SpearThrow_RGD4", damage_name="Tackle_Spear_RGD4");
+	use Thrown_Spear_Def(weapon_name="Thrown_Spear_t5", transform_into="Tackle_Spear_t5", throw_damage="SpearThrow_RGD5", damage_name="Tackle_Spear_RGD5");
+	use Thrown_Spear_Def(weapon_name="Thrown_Spear_t6", transform_into="Tackle_Spear_t6", throw_damage="SpearThrow_RGD6", damage_name="Tackle_Spear_RGD6");
+	use Thrown_Spear_Def(weapon_name="Thrown_Spear_t7", transform_into="Tackle_Spear_t7", throw_damage="SpearThrow_RGD7", damage_name="Tackle_Spear_RGD7");
+	use Thrown_Spear_Def(weapon_name="Thrown_Spear_t8", transform_into="Tackle_Spear_t8", throw_damage="SpearThrow_RGD8", damage_name="Tackle_Spear_RGD8");
+	use Thrown_Spear_Def(weapon_name="Thrown_Spear_t9", transform_into="Tackle_Spear_t9", throw_damage="SpearThrow_RGD9", damage_name="Tackle_Spear_RGD9");
+	
+	use Tackle_Spear_Def(weapon_name="Tackle_Spear_t1", transform_into="Thrown_Spear_t1", throw_damage="SpearThrow_RGD1", damage_name="Tackle_Spear_RGD1");
+	use Tackle_Spear_Def(weapon_name="Tackle_Spear_t2", transform_into="Thrown_Spear_t2", throw_damage="SpearThrow_RGD2", damage_name="Tackle_Spear_RGD2");
+	use Tackle_Spear_Def(weapon_name="Tackle_Spear_t3", transform_into="Thrown_Spear_t3", throw_damage="SpearThrow_RGD3", damage_name="Tackle_Spear_RGD3");
+	use Tackle_Spear_Def(weapon_name="Tackle_Spear_t4", transform_into="Thrown_Spear_t4", throw_damage="SpearThrow_RGD4", damage_name="Tackle_Spear_RGD4");
+	use Tackle_Spear_Def(weapon_name="Tackle_Spear_t5", transform_into="Thrown_Spear_t5", throw_damage="SpearThrow_RGD5", damage_name="Tackle_Spear_RGD5");
+	use Tackle_Spear_Def(weapon_name="Tackle_Spear_t6", transform_into="Thrown_Spear_t6", throw_damage="SpearThrow_RGD6", damage_name="Tackle_Spear_RGD6");
+	use Tackle_Spear_Def(weapon_name="Tackle_Spear_t7", transform_into="Thrown_Spear_t7", throw_damage="SpearThrow_RGD7", damage_name="Tackle_Spear_RGD7");
+	use Tackle_Spear_Def(weapon_name="Tackle_Spear_t8", transform_into="Thrown_Spear_t8", throw_damage="SpearThrow_RGD8", damage_name="Tackle_Spear_RGD8");
+	use Tackle_Spear_Def(weapon_name="Tackle_Spear_t9", transform_into="Thrown_Spear_t9", throw_damage="SpearThrow_RGD9", damage_name="Tackle_Spear_RGD9");
+	
+    use Tackle_Pitchfork_Def(weapon_name="Tackle_Pitchfork_t1", transform_into="dlc_ft_Thrown_Pitchfork_wt1", throw_damage="SpearThrow_RGD1", damage_name="Tackle_Spear_RGD1");
+	use Tackle_Pitchfork_Def(weapon_name="Tackle_Pitchfork_t4", transform_into="dlc_ft_Thrown_Pitchfork_wt2", throw_damage="SpearThrow_RGD4", damage_name="Tackle_Spear_RGD4");
+	use Tackle_Pitchfork_Def(weapon_name="Tackle_Pitchfork_t7", transform_into="dlc_ft_Thrown_Pitchfork_wt3", throw_damage="SpearThrow_RGD7", damage_name="Tackle_Spear_RGD7");
+
+    use Tackle_Spear_Polearm_B_Def(weapon_name="Tackle_Spear_Polearm_B_t1", transform_into="wpn_2hs_polearm_b_r2_renegades", damage_name="Tackle_Polearm_RGD1");
+    use Tackle_Spear_Polearm_B_Def(weapon_name="Tackle_Spear_Polearm_B_t2", transform_into="wpn_2hs_polearm_b_r5_renegades", damage_name="Tackle_Polearm_RGD2");
+    use Tackle_Spear_Polearm_B_Def(weapon_name="Tackle_Spear_Polearm_B_t3", transform_into="wpn_2hs_polearm_b_r8_renegades", damage_name="Tackle_Polearm_RGD3");
+    use Tackle_Spear_Polearm_B_Def(weapon_name="Tackle_Spear_Polearm_B_t4", transform_into="wpn_2hs_polearm_b_r11_renegades", damage_name="Tackle_Polearm_RGD4");
+    use Tackle_Spear_Polearm_B_Def(weapon_name="Tackle_Spear_Polearm_B_t5", transform_into="wpn_2hs_polearm_b_r14_renegades", damage_name="Tackle_Polearm_RGD5");
+    use Tackle_Spear_Polearm_B_Def(weapon_name="Tackle_Spear_Polearm_B_t6", transform_into="wpn_2hs_polearm_b_r17_renegades", damage_name="Tackle_Polearm_RGD6");
+    use Tackle_Spear_Polearm_B_Def(weapon_name="Tackle_Spear_Polearm_B_t7", transform_into="wpn_2hs_polearm_b_r20_renegades", damage_name="Tackle_Polearm_RGD7");
+    use Tackle_Spear_Polearm_B_Def(weapon_name="Tackle_Spear_Polearm_B_t8", transform_into="wpn_2hs_polearm_b_r22_renegades", damage_name="Tackle_Polearm_RGD8");
+    use Tackle_Spear_Polearm_B_Def(weapon_name="Tackle_Spear_Polearm_B_t9", transform_into="wpn_2hs_polearm_b_r24_renegades", damage_name="Tackle_Polearm_RGD9");
+
+    use ExplosiveGrenade_Def(weapon_name="ExplosiveGrenade_Baron", damage_name="ExplosiveGrenade_Baron_Impact", game_version = 1);
+    use ExplosiveGrenade_Def(weapon_name="ExplosiveGrenade_Grenadier_Level_1", damage_name="ExplosiveGrenade_Grenadier_Level_1", game_version = 8);
+    use ExplosiveGrenade_Def(weapon_name="ExplosiveGrenade_Grenadier_Level_4", damage_name="ExplosiveGrenade_Grenadier_Level_4", game_version = 8);
+    use ExplosiveGrenade_Def(weapon_name="ExplosiveGrenade_Grenadier_Level_7", damage_name="ExplosiveGrenade_Grenadier_Level_7", game_version = 8);
+    use ExplosiveGrenade_Def(weapon_name="ExplosiveGrenade_Lieutenant_Level_1", damage_name="ExplosiveGrenade_Lieutenant_Level_1", game_version = 8);
+    use ExplosiveGrenade_Def(weapon_name="ExplosiveGrenade_Lieutenant_Level_4", damage_name="ExplosiveGrenade_Lieutenant_Level_4", game_version = 8);
+    use ExplosiveGrenade_Def(weapon_name="ExplosiveGrenade_Lieutenant_Level_7", damage_name="ExplosiveGrenade_Lieutenant_Level_7", game_version = 8);
+
+    use ExplosiveGrenade_Bullet_Def(weapon_name="Bullet_Grenade_Explosive_Baron", explosion_spawn_name="ExplosiveGrenade_Baron", game_version = 1);
+    use ExplosiveGrenade_Bullet_Def(weapon_name="ExplosiveGrenade_Bullet_Grenadier_Level_1", explosion_spawn_name="ExplosiveGrenade_Grenadier_Level_1", game_version = 8);
+    use ExplosiveGrenade_Bullet_Def(weapon_name="ExplosiveGrenade_Bullet_Grenadier_Level_4", explosion_spawn_name="ExplosiveGrenade_Grenadier_Level_4", game_version = 8);
+    use ExplosiveGrenade_Bullet_Def(weapon_name="ExplosiveGrenade_Bullet_Grenadier_Level_7", explosion_spawn_name="ExplosiveGrenade_Grenadier_Level_7", game_version = 8);
+    use ExplosiveGrenade_Bullet_Def(weapon_name="ExplosiveGrenade_Bullet_Lieutenant_Level_1", explosion_spawn_name="ExplosiveGrenade_Lieutenant_Level_1", game_version = 8);
+    use ExplosiveGrenade_Bullet_Def(weapon_name="ExplosiveGrenade_Bullet_Lieutenant_Level_4", explosion_spawn_name="ExplosiveGrenade_Lieutenant_Level_4", game_version = 8);
+    use ExplosiveGrenade_Bullet_Def(weapon_name="ExplosiveGrenade_Bullet_Lieutenant_Level_7", explosion_spawn_name="ExplosiveGrenade_Lieutenant_Level_7", game_version = 8);
+
+    use ToxicGasGrenade_Def(weapon_name="ToxicGas_Baron", explosion_damage_name="ToxicGas_Baron_Impact", emitter_damage_name="ToxicGas_Baron_Effect", game_version = 1);
+    use ToxicGasGrenade_Def(weapon_name="ToxicGrenade_Grenadier_Level_1", explosion_damage_name="ToxicGrenade_Impact_Grenadier_Level_1", emitter_damage_name="ToxicGrenade_Effect_Grenadier_Level_1", game_version = 8);
+    use ToxicGasGrenade_Def(weapon_name="ToxicGrenade_Grenadier_Level_4", explosion_damage_name="ToxicGrenade_Impact_Grenadier_Level_4", emitter_damage_name="ToxicGrenade_Effect_Grenadier_Level_4", game_version = 8);
+    use ToxicGasGrenade_Def(weapon_name="ToxicGrenade_Grenadier_Level_7", explosion_damage_name="ToxicGrenade_Impact_Grenadier_Level_7", emitter_damage_name="ToxicGrenade_Effect_Grenadier_Level_7", game_version = 8);
+    use ToxicGasGrenade_Def(weapon_name="ToxicGrenade_Lieutenant_Level_1", explosion_damage_name="ToxicGrenade_Impact_Lieutenant_Level_1", emitter_damage_name="ToxicGrenade_Effect_Lieutenant_Level_1", game_version = 8);
+    use ToxicGasGrenade_Def(weapon_name="ToxicGrenade_Lieutenant_Level_4", explosion_damage_name="ToxicGrenade_Impact_Lieutenant_Level_4", emitter_damage_name="ToxicGrenade_Effect_Lieutenant_Level_4", game_version = 8);
+    use ToxicGasGrenade_Def(weapon_name="ToxicGrenade_Lieutenant_Level_7", explosion_damage_name="ToxicGrenade_Impact_Lieutenant_Level_7", emitter_damage_name="ToxicGrenade_Effect_Lieutenant_Level_7", game_version = 8);
+
+    use ToxicGasGrenade_Bullet_Def(weapon_name="Bullet_Grenade_Toxic_Baron", explosion_spawn_name="ToxicGrenade_Baron", game_version = 1);
+    use ToxicGasGrenade_Bullet_Def(weapon_name="ToxicGrenade_Bullet_Grenadier_Level_1", explosion_spawn_name="ToxicGrenade_Grenadier_Level_1", game_version = 8);
+    use ToxicGasGrenade_Bullet_Def(weapon_name="ToxicGrenade_Bullet_Grenadier_Level_4", explosion_spawn_name="ToxicGrenade_Grenadier_Level_4", game_version = 8);
+    use ToxicGasGrenade_Bullet_Def(weapon_name="ToxicGrenade_Bullet_Grenadier_Level_7", explosion_spawn_name="ToxicGrenade_Grenadier_Level_7", game_version = 8);
+    use ToxicGasGrenade_Bullet_Def(weapon_name="ToxicGrenade_Bullet_Lieutenant_Level_1", explosion_spawn_name="ToxicGrenade_Lieutenant_Level_1", game_version = 8);
+    use ToxicGasGrenade_Bullet_Def(weapon_name="ToxicGrenade_Bullet_Lieutenant_Level_4", explosion_spawn_name="ToxicGrenade_Lieutenant_Level_4", game_version = 8);
+    use ToxicGasGrenade_Bullet_Def(weapon_name="ToxicGrenade_Bullet_Lieutenant_Level_7", explosion_spawn_name="ToxicGrenade_Lieutenant_Level_7", game_version = 8);
+
+    Item("Screamer_Weapon", CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        WeaponBuildType(WeaponBuildType_Metal);
+        Condition(-1);
+        DamageTiers("Screamer_Scream");
+        IsAutomaticTierScaling(true);
+        DamageRange(0.1);
+        Force(10.0);
+        PhysicsDamage(10.0);
+        DamageToPhysicsObjects(5.0);
+        StaminaUsage(0.1);
+        DamageType(DamageType_Scream);
+        Flags(3);
+        Price(-1);
+        Mesh("weapon_fists.msh");
+        HudIcon("weapon_fist");
+        MinDamageAngle(-60.0);
+        MaxDamageAngle(45.0);
+        MinDamageMult(1.0);
+        MaxHitSeverity(HitSeverity_Medium);
+        MinHitSeverity(HitSeverity_Light);
+        HorizontalAttackDamageMul(1.0);
+        RagdollBehavior(RagdollBehavior_Fists);
+        TwoHanded(false);
+        AiHitSound("fists");
+        SoundInjuryDamageType("screamer");
+		Material("fists");
+        use HitEffects_Default();
+        use PickupSounds_Default();
+        DamageSize(5.0);
+        StatsType(StatsType_Fists);
+        LootType(LootType_None);
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        Color(Color_White);
+        ApplyLegendLevelOrNewGamePlusModifiers(false);
+		GameVersion(1);
+    }
+	
+Item("Volatile_Spitter_Spit", CategoryType_Throwable)
+{
+    Name("&AI_Throwable_Knife_N&");
+    Description("&AI_Throwable_Knife_D&");
+    ItemType(ItemType_ThrowableKnife);
+    OwnerType(OwnerType_AI);
+    HitReactionType(EReactionType_Push);
+    HitReactionHitSeverity(EMoveSeverity_Medium);
+    HitReactionMoveSeverity(EMoveSeverity_Heavy);
+    HitReactionFlags(EReactionFlag_Interrupt);	
+    DestroyableDamage(40.0);
+    Visibility(true);
+    MaxStackCount(1);
+    Price(5);
+    Mesh("wn_throwing_knife_a.msh");
+    Skin("default");
+    AnimPrefix("Decoy");
+    AiHitSound("knife");
+    PhysicsScript("simple.phx");
+    HudIcon("jar");
+    Damage(5.0);
+    ThrowSpeed(50.0);
+    ExplodeDelay(10.0);
+    ExplodeOnCollision(false);
+    PhysicsDamageMul(5.0);
+    ThrowImpulseLook(13.0);
+    ThrowImpulseUp(2.0);
+    ThrowBeginSound("");
+    StatsType(StatsType_None);
+    NoiseType("NONE");
+    Color(Color_White);
+    FF_EffectName("Throw_Knife");
+    ThrowFlySound("ai_knife_throw_fly.wav");
+    AIHandElement("L_HandHolder");
+    MotionTrailFx("spitter_trail_01_a.gpufx");
+    SweepSize(0.25, 0.21, 0);
+    BuffPresetToApplyOnHit("spitter_toxic");
+    DamageName("Volatile_Spitter_Spit");
+    SoundInjuryDamageType("toxic_spitter");
+    GameVersion(1);
+}
+Item("Goon_Fire_Puddle", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);  
+        OwnerType(OwnerType_AI);
+        StatsType(StatsType_Flame); 
+        DamagePresetName("Goon_Fire_Splash");
+        DamageRange(5.0);
+        ExplosionFx("goon_burning_puddle_explosion_01.gpufx");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;Molotov;");
+        SplashRadiusMin(1.5);
+        SplashRadiusMax(1.5);
+        DestroyableDamage(20.0);
+        SplashNumPositions(3);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(7.0);
+        SplashEmitterLifeTimeMax(7.0);
+        SplashEmitterFadeInTime(1.0);
+        SplashEmitterDamagePreset("Goon_Fire_Splash");
+        SplashEmitterScale([2.0,1.0,2.0]);
+        SplashEmitterForwardOffset(1.5);
+        SplashEmitterCenterGroundFx("goon_elemental_burning_puddle_01a.gpufx");
+        SplashEmitterGroundFx("blank_effect.gpufx");
+        SplashEmitterCenterWallFx("");
+        SplashEmitterWallFx("");    
+        AiHitSound("molotov");
+        GameVersion(1);
+    }
+    Item("Goon_Toxic_Puddle", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);  
+        OwnerType(OwnerType_AI);
+        StatsType(StatsType_Flame); 
+        DamagePresetName("Goon_Toxic_Splash");
+        DamageRange(0.0);
+        ExplosionFx("goon_toxic_pudle_explosion_01.gpufx");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;Molotov;");
+        SplashRadiusMin(1.5);
+        SplashRadiusMax(1.5);
+        SplashNumPositions(3);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(7.0); //30
+        SplashEmitterLifeTimeMax(7.0); //30
+        SplashEmitterFadeInTime(1.0);
+        SplashEmitterDamagePreset("Goon_Toxic_Splash");
+        SplashEmitterScale([2.0,1.0,2.0]);
+        SplashEmitterForwardOffset(1.5);
+        SplashEmitterCenterGroundFx("goon_elemental_toxic_puddle01a.gpufx");
+        SplashEmitterGroundFx("blank_effect.gpufx");
+        SplashEmitterCenterWallFx("");
+        SplashEmitterWallFx("");    
+        AiHitSound("molotov");
+        GameVersion(1);
+    }
+    Item("Goon_Electric_Puddle", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);  
+        OwnerType(OwnerType_AI);
+        StatsType(StatsType_Flame); 
+        DamagePresetName("Goon_Electric_Splash");
+        DamageRange(0.0);
+        ExplosionFx("goon_electric_pudle_explosion_01.gpufx");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;Molotov;");
+        SplashRadiusMin(1.5);
+        SplashRadiusMax(1.5);
+        SplashNumPositions(3);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(1.0);
+        SplashEmitterLifeTimeMax(1.0);
+        SplashEmitterFadeInTime(1.0);
+        SplashEmitterFadeOutTime(0.0);
+        SplashEmitterDamagePreset("Goon_Electric_Splash");
+        SplashEmitterScale([2.0,1.0,2.0]);
+        SplashEmitterForwardOffset(1.5);
+        SplashEmitterCenterGroundFx("goon_elemental_electric_puddle_01.gpufx");
+        SplashEmitterGroundFx("blank_effect.gpufx");
+        SplashEmitterCenterWallFx("");
+        SplashEmitterWallFx("");    
+        AiHitSound("molotov");
+        GameVersion(1);
+    }
+     Item("Toxic_Ranged_Goon_Gas_Wave", CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("knife");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowRange(50);
+        ThrowSpeed(16.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(false);
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName("DLC_Goon_Freak_Wave_Damage");
+        MotionTrailFx("goon_toxic_wave_fx_01a.gpufx");
+		SweepSize(3.0, 0.25, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+		GameVersion(1);
+    }
+    
+    Item("Toxic_Ranged_Goon_Gas_Projectile", CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        DestroyableDamage(20.0);
+        Price(5);
+        Mesh("wn_throwing_knife_a.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("knife");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowRange(50);
+        ThrowSpeed(16.0);
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(false);
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName("DLC_Opera_Goon_Freak_Projectile_Damage");
+        MotionTrailFx("goon_toxic_projectile_fx_01a.gpufx");
+		SweepSize(1.5, 0.5, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+		GameVersion(1);
+    }
+   
+     Item("Banshee_Hag_Spit", CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        Visibility(true);
+        DestroyableDamage(40.0);
+        Mesh("invisible.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("knife");
+		SoundInjuryDamageType("toxic_spitter");
+        PhysicsScript("simple.phx");
+        ThrowSpeed(25.0);
+        ExplodeOnCollision(true);
+		ScheduleExplodeAfterContact(true);
+        ExplosionFx("spitter_spit_hit_01_a.gpufx");
+        PhysicsDamageMul(5.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+		DamageName("Banshee_Hag_Spit");
+        MotionTrailFx("matriarch_hag_spit_trail_01a.gpufx");
+		SweepSize(0.25, 0.21, 0);
+		BuffPresetToApplyOnHit("spitter_toxic");
+        ApplyLegendLevelOrNewGamePlusModifiers(false);
+		GameVersion(1);
+    }
+    Item("Goon_Toxic_Large_Puddle", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);  
+        OwnerType(OwnerType_AI);
+        StatsType(StatsType_Flame); 
+        DamagePresetName("Damage_0");
+        DamageRange(0.0);
+        ExplosionFx("goon_toxic_pudle_explosion_01.gpufx");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;Molotov;");
+        SplashRadiusMin(4.5);
+        SplashRadiusMax(5.5);
+        SplashNumPositions(1);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(7.0); //15
+        SplashEmitterLifeTimeMax(7.0); //15
+        SplashEmitterFadeInTime(0.0);
+        SplashEmitterDamagePreset("Goon_Toxic_Splash");
+        SplashEmitterScale([2.0,1.0,2.0]);
+        SplashEmitterForwardOffset(1.5);
+        SplashEmitterCenterGroundFx("dlc_goon_freak_toxic_puddle_big_01a.gpufx");
+        SplashEmitterGroundFx("blank_effect.gpufx");
+        SplashEmitterCenterWallFx("");
+        SplashEmitterWallFx("");    
+        AiHitSound("molotov");
+        GameVersion(1);
+    }
+    Item("Goon_Toxic_Small_Puddle", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);  
+        OwnerType(OwnerType_AI);
+        StatsType(StatsType_Flame); 
+        DamagePresetName("Damage_0");
+        DamageRange(0.0);
+        ExplosionFx("goon_toxic_pudle_explosion_01.gpufx");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;Molotov;");
+        SplashRadiusMin(1.5);
+        SplashRadiusMax(1.5);
+        SplashNumPositions(1);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(7.0); //10
+        SplashEmitterLifeTimeMax(7.0); //10
+        SplashEmitterFadeInTime(0.0);
+        SplashEmitterDamagePreset("Goon_Toxic_Splash");
+        SplashEmitterScale([2.0,1.0,2.0]);
+        SplashEmitterForwardOffset(1.5);
+        SplashEmitterCenterGroundFx("goon_elemental_toxic_puddle01a.gpufx");
+        SplashEmitterGroundFx("blank_effect.gpufx");
+        SplashEmitterCenterWallFx("");
+        SplashEmitterWallFx("");    
+        AiHitSound("molotov");
+        GameVersion(1);
+    }
+    Item("Banshee_Hag_Fists", CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName("Banshee_Hag_Fists");
+        DestroyableDamage(20.0);
+        DamageType(DamageType_Cut);
+		HitReactionType(EReactionType_Cut);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+        RagdollBehavior(RagdollBehavior_Fists);
+        SoundInjuryDamageType("sharp_heavy");
+		Material("fists");
+		AiHitSound("fists");
+        ApplyLegendLevelOrNewGamePlusModifiers(false);
+		GameVersion(1);
+    }
+   
+    Item("Demolisher_Spike_Puddle", CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowablePrefab);
+        Visibility(true);
+        ThrowSpeed(8.0);
+        DamageName("Spitter_Mortar_Damage");
+        ShowExplosiveHudRange(25.0);
+        Mesh("invisible.msh");
+        PhysicsScript("dropped_inventory.phx");
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Toxic);
+        ExplodeOnCollision(true);
+        ExplosionSound("molotov_explosion.wav");
+        ExplodeDelay(-1.0);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx("corruptor_spit_trail_01a.gpufx");
+        ThrowFlySound("molotov_fly.wav");
+		SpawnPrefabName("corruptor_mortar_explosion.prefab");
+		ShowExplosiveHud(true);
+        SpawnPrefabPresetName("MortarTier;corruptor_mortar_tier_1");
+		GameVersion(1);
+    }
+    Item("Demolisher_Spike_Rain", CategoryType_Throwable)
+    {
+        ItemType(ItemType_Grenade);
+        Visibility(true);
+        ThrowSpeed(5.0);
+        DamageName("demolisher_spike_throw");
+        ShowExplosiveHud(true);
+        ShowExplosiveHudRange(25.0);
+        Mesh("wpn_2hp_spear_a_tpp.msh");
+        PhysicsScript("dropped_inventory.phx");
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Toxic);
+        ExplodeOnCollision(false);
+        ThrowImpulseLook(1300.0 *0.01);
+        ThrowImpulseUp(250.0 *0.01);
+        ExplosionSound("molotov_explosion.wav");
+        DamageRange(2.0);
+        ExplodeDelay(10.0);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx("corruptor_spit_trail_01a.gpufx");
+        ThrowFlySound("molotov_fly.wav");
+        ExplosionFx("corruptor_grenade_explosion_01a.gpufx");
+        ExplosionSpawn("Demolisher_Spike_Puddle", 1, 0.0, 0.0);
+        StickToSurfaces(true);
+        ExplodeOnCharacterCollision(true);
+        OpportunityWeapon(true);
+		GameVersion(1);
+    }
+    Item("Demolisher_Spike_Throw", CategoryType_Throwable)
+    {
+        ItemType(ItemType_Grenade);
+        Visibility(true);
+        ThrowSpeed(5.0);
+        DamageName("demolisher_spike_throw");
+        CollisionDamageName("demolisher_spike_throw");
+        ShowExplosiveHud(true);
+        ShowExplosiveHudRange(25.0);
+        Mesh("wpn_2hp_spear_a_tpp.msh");
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Cut);
+        DestroyableDamage(40.0);
+        ExplodeOnCollision(false);
+        ThrowImpulseLook(1300.0 *0.01);
+        ThrowImpulseUp(250.0 *0.01);
+        ExplosionSound("molotov_explosion.wav");
+        DamageRange(2.0);
+        Damage(10.0);
+        ExplodeDelay(5.0);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx("corruptor_spit_trail_01a.gpufx");
+        ThrowFlySound("molotov_fly.wav");
+        ExplosionFx("corruptor_grenade_explosion_01a.gpufx");
+        StickToSurfaces(true);
+        ExplodeOnCharacterCollision(true);
+        OpportunityWeapon(true);
+		GameVersion(1);
+    }
+    Item("Gas_Tank_Fire_Puddle", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);  
+        //OwnerType(OwnerType_AI);
+        StatsType(StatsType_Flame); 
+        DamagePresetName("");
+        DamageRange(0.0);
+        ExplosionFx("biter_fire_gas_tank_splat_explosion_01.gpufx");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;Molotov;");
+        SplashRadiusMin(1.5);
+        SplashRadiusMax(1.5);
+        DestroyableDamage(20.0);
+        SplashNumPositions(3);
+        SplashSpacingType("Random");
+        SplashEmitterLifeTimeMin(15.0);
+        SplashEmitterLifeTimeMax(15.0);
+        SplashEmitterFadeInTime(1.0);
+        SplashEmitterDamagePreset("Gas_Tank_Fire_Puddle");
+        SplashEmitterScale([2.0,1.0,2.0]);
+        SplashEmitterCenterGroundFx("biter_fire_gas_tank_splat_burning_01.gpufx");
+        SplashEmitterGroundFx("blank_effect.gpufx");
+        SplashEmitterCenterWallFx("");
+        SplashEmitterWallFx("");    
+        AiHitSound("molotov");
+        GameVersion(1);
+    }
+    Item("Suicider_WaterExplosion", CategoryType_ThrowableLiquid)
+    {
+        Visibility(false);
+        ItemType(ItemType_Explosion);
+        OwnerType(OwnerType_AI);
+        DamageRange(2.0);
+        DestroyableDamage(200.0);
+        DamageName("DLC_FT_Freak_Torch_Water_Barrel");
+        DamagePresetName("fury_water_barrel");
+		HitReactionFlags(EReactionFlag_Knockdown);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+        GameVersion(1);
+    }
+
+	Item("Spitter_Mortar_Spit_Freak", CategoryType_Throwable)
+    {
+        ItemType(ItemType_ThrowablePrefab);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        ThrowSpeed(8.0);
+        DamageName("Spitter_Mortar_Damage");
+        ShowExplosiveHudRange(25.0);
+        Mesh("invisible.msh");
+        DestroyableDamage(40.0);
+        PhysicsScript("dropped_inventory.phx");
+        HudIcon("weapon_frag_grenade");
+        PhysicsScript("simple.phx");
+        DamageType(DamageType_Toxic);
+        ExplodeOnCollision(true);
+        ThrowImpulseLook(1300.0 *0.01);
+        ThrowImpulseUp(250.0 *0.01);
+        ExplosionSound("molotov_explosion.wav");
+        ExplodeDelay(-1.0);
+        ThrowBeginSound("molotov_prepare.wav");
+        ThrowLoopSound("molotov_prepare_fire_loop.wav");
+        ThrowEndSound("molotov_throw.wav");
+        EquipmentSlot(0);
+        AchType(AchType_Grenade);
+        ExplosionSoundMin(15.0);
+        ExplosionSoundVol(1.0);
+        MotionTrailFx("spitter_mortar_trail_01_a.gpufx");
+        ThrowFlySound("molotov_fly.wav");
+		SpawnPrefabName("spitter_mortar_explosion.prefab");
+		ShowExplosiveHud(false);
+        SpawnPrefabPresetName("MortarTier;spitter_mortar_freak");
+		GameVersion(1);
+    }
+
+    Item("Beast_Fists", CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageName("Beast_Fists");
+        Force(200);
+        PhysicsDamageMul(5.0);
+        DamageRange(1.0);
+        DestroyableDamage(20.0);
+        DamageType(DamageType_Cut);
+        HitReactionType(EReactionType_Cut);
+        RagdollBehavior(RagdollBehavior_Fists);
+        SoundInjuryDamageType("unarmed_volatile");
+        Material("fists");
+        AiHitSound("fists");
+        GameVersion(1);
+    }
+
+    Item("Beast_Spit", CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+        HitReactionType(EReactionType_Cut);
+        DestroyableDamage(40.0);
+        HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Light);
+        HitReactionFlags(EReactionFlag_Interrupt);	
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        Mesh("invisible.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("spit");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(5.0);
+        ThrowSpeed(40.0);
+        ExplodeDelay(0.0);
+        ExplodeOnCollision(true);
+        PhysicsDamageMul(15.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+        SweepSize(0.35, 0.21, 0);
+        DamageName("Beast_Spit"); 
+        SoundInjuryDamageType("toxic_spitter");
+        GameVersion(1);
+    }
+
+    Item("Beast_Spit_Bullet", CategoryType_Ammo)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_Bullet);
+        Elemental(Elemental_Explosive, 1);
+        BulletVis(BulletVis_Mesh);
+        MotionTrailFx("ft_baron_beast_spit_01.gpufx");
+        ExplosionFx("ft_baron_beast_spit_hit_01.gpufx");
+        ExplosionSpawn("Beast_Spit_Toxic_Gas", 1, 1.0, 1.0);
+        GameVersion(1);
+    }
+
+    Item("Beast_Spit_Toxic_Gas", CategoryType_ThrowableLiquid)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        Visibility(false);
+        ItemType(ItemType_Molotov);
+        PhysicsScript("dropped_inventory.phx");
+        Mesh("invisible.msh");
+        ExplodeDelay(0.5);
+        ScheduleExplodeAfterContact(true);
+        ExplodeOnCollision(false);
+        StatsType(StatsType_Flame);
+        Color(Color_Green);
+        AiHitSound("molotov");
+        ThrowAggroValue(20.0);
+        FlyBySound("flyby_molotov");
+        DamagePresetName("ToxicGas_Baron_Impact");
+        ShowExplosiveHud(false);
+        DamageRange(3.5);
+        ExplosionFx("ft_beast_toxic_spit_gas_cloud_explosion.gpufx");
+        NoiseType("EXPLOSION");
+        NoiseDataUid("molotov_impact");
+        SplashRadiusMin(0.0);
+        SplashRadiusMax(0.5);
+        SplashNumPositions(3);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(1.0);
+        SplashEmitterLifeTimeMax(2.0);
+        SplashEmitterFadeInTime(0.1);
+        SplashEmitterDamagePreset("Beast_Spit_Toxic_Gas");
+        SplashEmitterScale([2.0,1.6,1.1]);
+        SplashEmitterCenterGroundFx("ft_beast_toxic_spit_gas_cloud.gpufx");
+        SplashEmitterGroundFx("ft_beast_toxic_spit_gas_cloud.gpufx");
+        SplashEmitterCenterWallFx("ft_beast_toxic_spit_gas_cloud.gpufx");
+        SplashEmitterWallFx("ft_beast_toxic_spit_gas_cloud.gpufx");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;ToxicSmoke");
+        GameVersion(1);
+    }
+
+    Item("Beast_Shockwave", CategoryType_Throwable)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        Force(200);
+        PhysicsDamageMul(3.0);
+        SpawnPrefabName("dlc_ft_beast_shockwave.prefab");
+        SpawnPrefabPresetName("Type;Beast_Shockwave");
+		GameVersion(1);
+    }
+    Item("Beast_Shockwave_Small", CategoryType_Throwable)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        Force(200);
+        PhysicsDamageMul(3.0);
+        SpawnPrefabName("dlc_ft_beast_shockwave.prefab");
+        SpawnPrefabPresetName("Type;Beast_Shockwave_Small");
+		GameVersion(1);
+    }
+
+    ///// Final Boss Fight - Baron Weapons /////
+
+    Item("Weapon_Firearm_GrenadeLauncher_Baron", CategoryType_Firearm)
+    {
+        ItemType(ItemType_GrenadeLauncher);
+        Name("&DLC_FT_Weapon_Firearm_GrenadeLauncher_N&");
+        Description("&DLC_FT_Weapon_Firearm_GrenadeLauncher_D&");
+        InventoryMeshHQ("wpn_1hr_firearm_grenadelauncher_a_fpp.msh");
+        InventoryMesh("wpn_1hr_firearm_grenadelauncher_a_fpp.msh");
+        Mesh("wpn_1hr_firearm_grenadelauncher_a_tpp.msh");
+		MoveAnimPrefix("Unarmed");
+        AmmoCount(99);
+        AnimPrefix("GrenadeLauncher");
+        DefaultBulletId("Bullet_Grenade_Explosive_Baron");
+        ShootFx("shotgun_muzzle_flash_fx01a_fpp.gpufx");
+        DamageType(DamageType_Bullet);
+        AmmoType(AmmoType_GrenadeLauncher);
+        BulletSpeed(20.0);
+        BulletGravityFactor(1.5);
+        DestroyableDamage(20);
+        HolderElement("r_thigh");
+        HolderOffset([0.0,-10.0,0.0] *[0.01, 0.01, 0.01]);
+        HolderAngle([0.0,90.0,-90.0]);
+        Condition(-1.0);
+        // TrueFirearm(true); // TODO SHOULD BE ENABLED AFTER THE BARREL HELPER BONE IS FIXED
+        FirePointRange(0, 60);
+        FirePointDamage(0, "crossbow_firepoint0_tier_damages");
+        FirePointForce(0, 100);
+        FirePointFlags(0, "LIGHT_ATTACK");
+        FirePointHitSeverity(0, EHitSeverity_Medium);
+        FirePointMoveSeverity(0, EMoveSeverity_Light);
+        FirePointReactionType(0, EReactionType_Stab);
+        FirePointRange(1, 16);
+        FirePointDamage(1, "crossbow_firepoint1_tier_damages");
+        FirePointForce(1, 100);
+        FirePointFlags(1, "LIGHT_ATTACK");
+        FirePointHitSeverity(1, EHitSeverity_Medium);
+        FirePointMoveSeverity(1, EMoveSeverity_Light);
+        FirePointReactionType(1, EReactionType_Stab);
+        FirePointRange(2, 60);
+        FirePointDamage(2, "crossbow_firepoint2_tier_damages");
+        FirePointForce(2, 100);
+        FirePointFlags(2, "LIGHT_ATTACK");
+        FirePointHitSeverity(2, EHitSeverity_Medium);
+        FirePointMoveSeverity(2, EMoveSeverity_Light);
+        FirePointReactionType(2, EReactionType_Stab);
+        StaminaUsage(0.1); //ask Jan
+        UsageType(UsageType_Normal);
+        EnablePenetration(false);
+        StaminaDamage(0);
+        GameVersion(1);
+        IsAutomaticTierScaling(true);
+        IsAutomaticFirePointDamageTierScaling(true);
+        CanDrop(false);
+        AllowedInShop(false); //Ask Jan
+        ShotSound("wpn_grenade_launcher_shot");
+        EmptySound("wpn_grenade_launcher_shot_empty");
+        //crossbow_shot_emptyUID("6959105982928047698");
+        BulletImpulseUp(1.0); // tweak it to see how it works
+        Visibility(true);
+        PhysicsScript("simple.phx");
+        DuckInertiaFactor(0.1);
+        DamageToPhysicsObjects(50.0);
+        BaseSoundPrefix("wpn_grenade_launcher");
+        ClipReload(false);
+        ShootStatAccuracy(95.0);
+        MoveAcurancyLoseFactor(0.05);
+        ShootMinAngle(0.1);
+        BulletsPerShot(1);
+        AimFov(1.6);
+        ShootAnimFactor(1.0);
+        HudIcon("weapon_crossbow_a"); //change it
+        TwoHanded(true);
+        DestroySound("break_wooden_weapon_00.wav"); //check in the exporter, comment if not needed
+        AiHitSound("crossbow");
+        use HitEffects_BaronGrenade();
+        use PickupSounds_Default();
+        DamageSize(15.0);
+        StatsType(StatsType_Explosive);
+        LootLevel(8);
+        LootType(LootType_Sharp);
+        FF_Left(0.6); 
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        Color(Color_Violet);
+        DismantleResult("empty");
+        NameGender(1);
+        SwayMaxAngle(0.0);
+        JumpInertiaFactor(0.1);
+        ShotTime(0.7);
+        //StaminaDamage(0);
+        //Silenced(false);
+        DodgeAccuracyLoseFactor(0.5);
+        AimTime(0.7);
+        DamageTiers("crossbow_tier_damages");
+    }
+
+    Item("IncendiaryGrenade_Baron", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);
+        HandToUse("LEFT", false);
+        Visibility(true);
+        MaxStackCount(99);
+        Price(130);
+        HudIcon("weapon_molotov");
+        Mesh("wpn_molotov_a_tpp.msh");
+        InventoryMesh("wpn_molotov_a_fpp.msh");
+        Skin("default");
+        PhysicsScript("dropped_inventory.phx");
+        AnimPrefix("Molotov");
+        MotionTrailFx("nemo_spit_trail_fire_01.gpufx");
+        ThrowFlyFx("molotov_bottle_fire_sequence.fx");
+        ThrowSpeed(10.0);
+        ThrowImpulseLook(17.5);
+        ThrowImpulseUp(2.0);
+        RotationVel(5, 0, 0);
+        StatsType(StatsType_Flame);
+        EquipmentSlot();
+        AchType(AchType_Grenade);
+        DamagePresetName("Molotov_Baron_Impact");
+        DamageRange(4.5);
+        ExplosionFx("molotov_explosion_big.gpufx");
+        ExplodeDelay(-1.0);
+        NoiseType("EXPLOSION");
+        NoiseDataUid("molotov_impact");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;Molotov;");
+        SplashRadiusMin(2.5);
+        SplashRadiusMax(3.0);
+        SplashNumPositions(10);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(8.0);
+        SplashEmitterLifeTimeMax(8.0);
+        SplashEmitterFadeInTime(1.0);
+        SplashEmitterDamagePreset("Molotov_Baron_Effect"); 
+        SplashEmitterScale([3.0,3.0,3.0]);
+        SplashEmitterCenterGroundFx("molotov_splash_ground_center_big.gpufx");
+        SplashEmitterGroundFx("molotov_splash_ground_side.gpufx");
+        SplashEmitterCenterWallFx("molotov_splash_wall_center.gpufx");
+        SplashEmitterWallFx("molotov_splash_wall_side.gpufx");
+        use PickupSounds_Bottle_Glass_With_Liquid();
+        Color(Color_Orange);
+        ItemLevel(4, 4);
+         UIStats(){
+         UIStat("&StatsUI_InitExplosionDmg&", 300, "Normal");
+         UIStat("&StatsUI_DamagePerSecond&", 25, "Normal");
+         UIStat("&StatsUI_FireDuration&", 8, "Seconds");
+         UIStat("&StatsUI_FireRadious&", 5, "Meters");
+         }
+        AiHitSound("molotov");
+        ThrowAggroValue(180.0);
+        FlyBySound("flyby_molotov");
+        GameVersion(1);
+		AdditionalThrowAudioEvent("wpn_baron_grenade_incendiary_indicator");
+    }
+
+    Item("Bullet_Grenade_Incendiary_Baron", CategoryType_Ammo)
+    {
+        IsCustomAmmoForSpecificWeapon(true);
+        ItemType(ItemType_Bullet);
+        MaxAmmoCount(60);
+        Mesh("wpn_molotov_a_tpp.msh");
+        InventoryMesh("wpn_molotov_a_fpp.msh");
+        Skin("default");
+        HudIcon("weapon_molotov");
+        Color(Color_White);
+        AmmoType(AmmoType_GrenadeLauncher);
+        BulletVis(BulletVis_Mesh);
+        Elemental(Elemental_Explosive, 1);
+        ExplosionSpawn("IncendiaryGrenade_Baron", 5, 5.0, 5.0);
+        MotionTrailFx("nemo_spit_trail_fire_01.gpufx");
+        DamageName("Bullet_Bolt");
+        MaxStackCount(999);
+        SelectorPriority(10);
+        FlyBySound("flyby_quarrel");
+        GameVersion(1);
+		AiHitSound("grenade_launcher_explosion_incendiary");
+    }
+
+    Item("ToxicGrenade_Baron", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);
+        HandToUse("LEFT", false);
+        Visibility(true);
+        MaxStackCount(99);
+        Price(60);
+        HudIcon("weapon_molotov");
+        InventoryMeshHQ("wpn_husk_grenade_a_fpp.msh");
+        InventoryMesh("wpn_grenadelauncher_cartridge_a_fpp.msh");
+        Mesh("wpn_husk_grenade_a_tpp.msh");
+        Skin("default");
+        PhysicsScript("dropped_inventory.phx");
+        AnimPrefix("Teargas");
+        MotionTrailFx("ft_grenade_launcher_trail_toxic_01a.gpufx");
+        ThrowFlyFx("molotov_bottle_fire_sequence.fx");
+        ExplodeDelay(2.5);
+        ScheduleExplodeAfterContact(true);
+        ExplodeOnCollision(false);
+        ThrowSpeed(10.0);
+        ThrowImpulseLook(21.0);
+        ThrowImpulseUp(2.0);
+        RotationVel(5, 0, 0);
+        StatsType(StatsType_Flame);
+        EquipmentSlot();
+        AchType(AchType_Grenade);
+        use PickupSounds_Bottle_Glass_With_Liquid();
+        Color(Color_Green);
+        ItemLevel(1, 9);
+         UIStats(){
+         UIStat("&StatsUI_InitExplosionDmg&", 10, "Normal");
+         UIStat("&StatsUI_DamagePerSecond&", 6, "Normal");
+         UIStat("&StatsUI_FireDuration&", 4, "Seconds");
+         UIStat("&StatsUI_FireRadious&", 2, "Meters");
+         }
+        AiHitSound("molotov");
+        ThrowAggroValue(20.0);
+        FlyBySound("flyby_molotov");
+        DamagePresetName("ToxicGas_Baron_Impact");
+        DamageRange(4.0);
+        SplashRadiusMin(2);
+        SplashRadiusMax(4);
+        SplashNumPositions(8);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(5.0);
+        SplashEmitterLifeTimeMax(6.0);
+        SplashEmitterFadeInTime(0.1);
+        SplashEmitterDamagePreset("ToxicGas_Baron_Effect");
+        SplashEmitterScale([2.2,2.2,2.2]);
+        SplashEmitterCenterGroundFx("ft_baron_tear_gas_center_ground.gpufx");
+        SplashEmitterGroundFx("ft_baron_tear_gas_center_ground.gpufx");
+        SplashEmitterCenterWallFx("ft_baron_tear_gas_center_ground.gpufx");
+        SplashEmitterWallFx("ft_baron_tear_gas_center_ground.gpufx");
+		ShowExplosiveHud(true);
+        ExplosionFx("tear_gas_explosion_01.gpufx");
+        NoiseType("EXPLOSION");
+        NoiseDataUid("molotov_impact");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;ToxicSmoke;");
+        GameVersion(1);
+        CameraShakePreset("Light");
+        CameraShakeTriggerRange(4.0);
+		AdditionalThrowAudioEvent("wpn_baron_grenade_toxic_indicator");
+    }
+
+    Item("SmokeGrenade_Baron", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);
+        HandToUse("LEFT", false);
+        Visibility(true);
+        MaxStackCount(99);
+        Price(60);
+        HudIcon("weapon_molotov");
+        InventoryMeshHQ("wpn_husk_grenade_a_fpp.msh");
+        InventoryMesh("wpn_husk_grenade_a_fpp.msh");
+        Mesh("wpn_husk_grenade_a_tpp.msh");
+        Skin("default");
+        PhysicsScript("dropped_inventory.phx");
+        AnimPrefix("Teargas");
+        MotionTrailFx("ft_grenade_launcher_trail_smoke_01a.gpufx");
+        ThrowFlyFx("molotov_bottle_fire_sequence.fx");
+        ThrowSpeed(10.0);
+        ThrowImpulseLook(21.0);
+        ThrowImpulseUp(2.0);
+        RotationVel(5, 0, 0);
+        StatsType(StatsType_Flame);
+        EquipmentSlot();
+        AchType(AchType_Grenade);
+        use PickupSounds_Bottle_Glass_With_Liquid();
+        Color(Color_Green);
+        ItemLevel(1, 9);
+         UIStats(){
+         UIStat("&StatsUI_InitExplosionDmg&", 10, "Normal");
+         UIStat("&StatsUI_DamagePerSecond&", 6, "Normal");
+         UIStat("&StatsUI_FireDuration&", 4, "Seconds");
+         UIStat("&StatsUI_FireRadious&", 2, "Meters");
+         }
+        AiHitSound("molotov");
+        ThrowAggroValue(20.0);
+        FlyBySound("flyby_molotov");
+        //DamagePresetName("Teargas_Explosion");
+        DamageRange(0.0);
+        SplashRadiusMin(5);
+        SplashRadiusMax(6);
+        SplashNumPositions(10);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(20.0);
+        SplashEmitterLifeTimeMax(30.0);
+        SplashEmitterFadeInTime(1.0);
+        //SplashEmitterDamagePreset("Stunning_Teargas");
+        SplashEmitterScale([5.0,5.0,5.0]);
+        SplashEmitterCenterGroundFx("baron_smoke_ground_center_01.gpufx");
+        SplashEmitterGroundFx("blank_effect.gpufx");
+        SplashEmitterCenterWallFx("baron_smoke_wall_center_01.gpufx");
+        SplashEmitterWallFx("blank_effect.gpufx");
+        //ExplosionSpawn("Stunning_Chemicals", 1, 0.0, 0.0);
+        ExplosionFx("ft_baron_grenade_smoke_bomb.gpufx");
+        ExplodeDelay(-1.0);
+        NoiseType("EXPLOSION");
+        NoiseDataUid("smoke_baron_prototype");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;Smoke;");
+        GameVersion(1);
+    }
+
+    Item("Bullet_Grenade_Smoke_Baron", CategoryType_Ammo)
+    {
+        IsCustomAmmoForSpecificWeapon(true);
+        Name("&Bullet_Grenade_Smoke_N&");
+        Description("&Bullet_Grenade_Smoke_D&");
+        ItemType(ItemType_Bullet);
+        MaxAmmoCount(60);
+        Mesh("wpn_grenadelauncher_cartridge_a_tpp.msh");
+        InventoryMesh("wpn_grenadelauncher_cartridge_a_tpp.msh");
+        Skin("default");
+        HudIcon("weapon_molotov");
+        Color(Color_White);
+        AmmoType(AmmoType_GrenadeLauncher);
+        BulletVis(BulletVis_Mesh);
+        Elemental(Elemental_Explosive, 1);
+        ExplosionSpawn("SmokeGrenade_Baron", 5, 5.0, 5.0);
+        MotionTrailFx("ft_grenade_launcher_trail_smoke_01a.gpufx");
+        DamageName("Bullet_Bolt");
+        MaxStackCount(999);
+        SelectorPriority(10);
+        FlyBySound("flyby_quarrel");
+        GameVersion(1);
+		AiHitSound("grenade_launcher_explosion_incendiary");
+    }
+
+    ////////// Shotgunner smoke grenade - don't touch /////////
+    Item("SmokeGrenade_Shotgunner", CategoryType_ThrowableLiquid)
+    {
+        ItemType(ItemType_Molotov);
+        HandToUse("LEFT", false);
+        Visibility(true);
+        MaxStackCount(99);
+        Price(60);
+        HudIcon("weapon_molotov");
+        InventoryMeshHQ("wpn_husk_grenade_a_fpp.msh");
+        InventoryMesh("wpn_husk_grenade_a_fpp.msh");
+        Mesh("wpn_husk_grenade_a_tpp.msh");
+        Skin("default");
+        PhysicsScript("dropped_inventory.phx");
+        AnimPrefix("Teargas");
+        MotionTrailFx("ft_grenade_launcher_trail_smoke_01a.gpufx");
+        ThrowFlyFx("molotov_bottle_fire_sequence.fx");
+        ThrowSpeed(10.0);
+        ThrowImpulseLook(21.0);
+        ThrowImpulseUp(2.0);
+        RotationVel(5, 0, 0);
+        StatsType(StatsType_Flame);
+        EquipmentSlot();
+        AchType(AchType_Grenade);
+        use PickupSounds_Bottle_Glass_With_Liquid();
+        Color(Color_Green);
+        ItemLevel(1, 9);
+         UIStats(){
+         UIStat("&StatsUI_InitExplosionDmg&", 10, "Normal");
+         UIStat("&StatsUI_DamagePerSecond&", 6, "Normal");
+         UIStat("&StatsUI_FireDuration&", 4, "Seconds");
+         UIStat("&StatsUI_FireRadious&", 2, "Meters");
+         }
+        AiHitSound("molotov");
+        ThrowAggroValue(20.0);
+        FlyBySound("flyby_molotov");
+        //DamagePresetName("Teargas_Explosion");
+        DamageRange(0.0);
+        SplashRadiusMin(5);
+        SplashRadiusMax(6);
+        SplashNumPositions(10);
+        SplashSpacingType("SemiRandom");
+        SplashEmitterLifeTimeMin(20.0);
+        SplashEmitterLifeTimeMax(30.0);
+        SplashEmitterFadeInTime(1.0);
+        //SplashEmitterDamagePreset("Stunning_Teargas");
+        SplashEmitterScale([5.0,5.0,5.0]);
+        SplashEmitterCenterGroundFx("shotgunner_smoke_ground_center_01.gpufx");
+        SplashEmitterGroundFx("blank_effect.gpufx");
+        SplashEmitterCenterWallFx("shotgunner_smoke_wall_center_01.gpufx");
+        SplashEmitterWallFx("blank_effect.gpufx");
+        //ExplosionSpawn("Stunning_Chemicals", 1, 0.0, 0.0);
+        ExplosionFx("shotgunner_smoke_grenade_explosion.gpufx");
+        ExplodeDelay(-1.0);
+        NoiseType("EXPLOSION");
+        NoiseDataUid("smoke_baron_prototype");
+        SpawnPrefabName("splash_explosion.prefab");
+        SpawnPrefabPresetName("Splash Type;Smoke;");
+        GameVersion(1);
+    }
+}

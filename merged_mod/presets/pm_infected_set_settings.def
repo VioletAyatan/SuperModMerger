@@ -1,0 +1,34 @@
+sub declare_pm_infected_set_settings()
+{
+	
+    PresetDef("owa_type")
+	{
+		Description("");
+        //Pilgrim Mission
+        AddField("EncounterCategory", "");
+		
+		Preset("PM_Patrol_Warmup")
+		{
+			SetField("EncounterCategory", "PM_Random_Warmup;PM_Random_Warmup_Plus;PM_Random_Warmup_All;PM_Patrol_Unique_01;PM_Patrol_Unique_02;PM_Patrol_Unique_03;PM_Patrol_Unique_04;PM_Patrol_Unique_05;PM_Patrol_Unique_06;PM_Patrol_Unique_07;PM_Patrol_Unique_08;PM_Patrol_Unique_09;PM_Patrol_Unique_10;PM_Patrol_Unique_11;PM_Patrol_Unique_12;PM_Patrol_Unique_13;PM_Patrol_Unique_14;PM_Patrol_Unique_15;PM_Patrol_Unique_16;PM_Patrol_Unique_17;PM_Patrol_Unique_18;PM_Patrol_Unique_19;PM_Patrol_Unique_20");
+		}
+		Preset("PM_Patrol_Middle")
+		{
+			SetField("EncounterCategory", "PM_Random_Middle;PM_Random_Middle_Plus;PM_Random_Middle_All;PM_Patrol_Unique_21;PM_Patrol_Unique_22;PM_Patrol_Unique_23;PM_Patrol_Unique_24;PM_Patrol_Unique_25;PM_Patrol_Unique_26;PM_Patrol_Unique_27;PM_Patrol_Unique_28;PM_Patrol_Unique_29;PM_Patrol_Unique_30;PM_Patrol_Unique_31;PM_Patrol_Unique_32;PM_Patrol_Unique_33;PM_Patrol_Unique_34;PM_Patrol_Unique_35;PM_Patrol_Unique_36;PM_Patrol_Unique_37;PM_Patrol_Unique_38;PM_Patrol_Unique_39;PM_Patrol_Unique_40");
+		}
+		Preset("PM_Patrol_Finale")
+		{
+			SetField("EncounterCategory", "PM_Random_Finale;PM_Patrol_Unique_41;PM_Patrol_Unique_42;PM_Patrol_Unique_43;PM_Patrol_Unique_44;PM_Patrol_Unique_45;PM_Patrol_Unique_46;PM_Patrol_Unique_47;PM_Patrol_Unique_48;PM_Patrol_Unique_49;PM_Patrol_Unique_40");
+		}
+		
+		Preset("PM_Patrol_Special")
+		{
+			SetField("EncounterCategory", "PM_Patrol_Unique_50;PM_Patrol_Unique_51;PM_Patrol_Unique_52;PM_Patrol_Unique_53;PM_Patrol_Unique_54;PM_Patrol_Unique_55");
+		}
+		
+		Preset("PM_Patrol_All")
+		{
+			SetField("EncounterCategory", "PM_Random_Warmup;PM_Random_Warmup_Plus;PM_Random_Warmup_All;PM_Random_Middle;PM_Random_Middle_Plus;PM_Random_Middle_All;PM_Random_Finale;PM_Patrol_Unique_01;PM_Patrol_Unique_02;PM_Patrol_Unique_03;PM_Patrol_Unique_04;PM_Patrol_Unique_05;PM_Patrol_Unique_06;PM_Patrol_Unique_07;PM_Patrol_Unique_08;PM_Patrol_Unique_09;PM_Patrol_Unique_10;PM_Patrol_Unique_11;PM_Patrol_Unique_12;PM_Patrol_Unique_13;PM_Patrol_Unique_14;PM_Patrol_Unique_15;PM_Patrol_Unique_16;PM_Patrol_Unique_17;PM_Patrol_Unique_18;PM_Patrol_Unique_19;PM_Patrol_Unique_20;PM_Patrol_Unique_21;PM_Patrol_Unique_22;PM_Patrol_Unique_23;PM_Patrol_Unique_24;PM_Patrol_Unique_25;PM_Patrol_Unique_26;PM_Patrol_Unique_27;PM_Patrol_Unique_28;PM_Patrol_Unique_29;PM_Patrol_Unique_30;PM_Patrol_Unique_31;PM_Patrol_Unique_32;PM_Patrol_Unique_33;PM_Patrol_Unique_34;PM_Patrol_Unique_35;PM_Patrol_Unique_36;PM_Patrol_Unique_37;PM_Patrol_Unique_38;PM_Patrol_Unique_39;PM_Patrol_Unique_40;PM_Patrol_Unique_41;PM_Patrol_Unique_42;PM_Patrol_Unique_43;PM_Patrol_Unique_44;PM_Patrol_Unique_45;PM_Patrol_Unique_46;PM_Patrol_Unique_47;PM_Patrol_Unique_48;PM_Patrol_Unique_49;PM_Patrol_Unique_50");
+		}
+
+	}
+}

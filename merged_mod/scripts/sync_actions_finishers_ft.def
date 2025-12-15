@@ -1,0 +1,2789 @@
+import "sync_actions_variables.def"
+
+sub sync_actions_finishers_ft()
+{
+
+
+                                /***********************************************************************/
+                                /**************************HUMAN FINISHERS******************************/
+                                /***********************************************************************/
+    Group("FinisherStagger")
+    {
+        Category("Combat");
+        
+        SyncAction("Skullface_Front")
+        {
+            GrantBackImmunity()
+            {
+            }
+            
+           
+            Events()
+            {
+                Event(ANIM_EVENT, 0, ANIM_EVENT_GIVE_GRAB_DAMAGE)
+                {
+                    DealDamage(0, 1, "skullface_finisher_light_hit@sync_action_damage_presets.scr");
+                }
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    DealDamage(0, 1, "skullface_finisher_heavy_hit@sync_action_damage_presets.scr");
+                }
+                Event(ANIM_EVENT, 1, SYNCACTION_SPAWN_FX)
+                {
+                    SpawnPrefab("decal3d.prefab", "Decal;Blood_splat_v5;")
+                    {
+                        SpawnLocation(0, "FXHelper");
+                        ScaleOverride(0.5);
+                    }
+                }				
+            }
+
+            Conditions()
+            {
+               ActorType(1, "Skullface");
+               DirectionOffset(0, 1, 180, 45);
+			}
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+			
+            States()
+            {
+                StartState("SkullfaceFrontBegin");
+
+                State("SkullfaceFrontBegin")
+                {
+					EnableInvulnerability(0);
+                    IsSpecialMove();
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+					ShowWeapons(1);
+
+                    Animation(0, "sync_action_player_beatingup_start");
+                    Animation(1, "sync_action_skullface_beatingup_start", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    BlendPosition(0, 0, 0.05, 0.75);
+                    BlendDirection(0, 0, 0.05, 0.75);
+                    BlendLookDirection(0.2);
+
+                    BlendPosition(1, 0, 0.05, 0.75);
+                    BlendDirection(1, 0, 0.05, 0.75);
+
+                    ActionCenter(1);
+					ActionCenterDirection(1, 0);
+                    ActionCenterLiveErrorCorrection();
+
+
+                    Transition("SkullfaceFrontEnd")
+                    {
+                        AnimationFinished(0);
+                    }
+
+                }
+                State("SkullfaceFrontEnd")
+                {
+					EnableInvulnerability(0);
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+					ShowWeapons(1);
+
+                    Animation(0, "sync_action_player_beatingup_end");
+                    Animation(1, "sync_action_skullface_beatingup_end", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    ActionCenter(1);
+                    MaintainLookDirection(true);					
+					
+                    EndTransition()
+                    {
+                        AnimationFinished(0, 1);
+                    }
+                }
+			}
+		}
+        SyncAction("Finisher_Skullface_Right", "Skullface_Front")
+		{
+            Conditions()
+			{
+                ActorType(1, "Skullface");
+				DirectionOffset(0, 1, 90, 45);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+			
+            States()
+			{
+				ExtendState("SkullfaceFrontBegin")
+                {
+                    Animation(0, "sync_action_player_beatingup_start_right");
+                    Animation(1, "sync_action_skullface_beatingup_start_right", 0.2);
+                    
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+                }
+				ExtendState("SkullfaceFrontEnd")
+				{
+					ResampleActionCenter();
+				}
+			}
+		}
+		SyncAction("Finisher_Skullface_Left", "Skullface_Front")
+		{
+            Conditions()
+			{
+                ActorType(1, "Skullface");
+				DirectionOffset(0, 1, 270, 45);
+            }
+			
+            SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+			
+            States()
+			{
+				ExtendState("SkullfaceFrontBegin")
+                {
+                    Animation(0, "sync_action_player_beatingup_start_left");
+                    Animation(1, "sync_action_skullface_beatingup_start_left", 0.2);
+                    
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+                }
+				ExtendState("SkullfaceFrontEnd")
+				{
+					ResampleActionCenter();
+				}
+			}
+		}
+		SyncAction("Finisher_Skullface_Back", "Skullface_Front")
+		{
+            Conditions()
+			{
+                ActorType(1, "Skullface");
+				DirectionOffset(0, 1, 0, 45);
+            }
+			
+            SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+			
+            States()
+			{
+				ExtendState("SkullfaceFrontBegin")
+                {
+                    Animation(0, "sync_action_player_beatingup_start_back");
+                    Animation(1, "sync_action_skullface_beatingup_start_back", 0.2);
+                    
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+                }
+				ExtendState("SkullfaceFrontEnd")
+				{
+					ResampleActionCenter();
+				}
+			}
+		}
+        
+        //-----NEW FINISHERS-----//
+		
+		//For Animation, be sure that both Action Centers are aligned to Player Offset Helper in rotation but in translation to AI's
+		
+		/*SyncAction("FinisherUnarmed01")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "fists", "#OpportunityWeapon");
+            }
+
+            Events()
+            {
+                Event(ANIM_EVENT, 0, ANIM_EVENT_PUNCH_HIT)
+                {
+                    ActivateXRay(0, 1, 0.8, "NECK1");
+                }
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherUnarmed01Begin");
+
+                State("FinisherUnarmed01Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_unarmed_attacker_01_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_unarmed_victim_01", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }*/
+		
+		SyncAction("FinisherUnarmed02")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "fists", "#OpportunityWeapon");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_limb_destroy@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                        UseInstigatorForward();
+                    }
+                }
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherUnarmed02Begin");
+
+                State("FinisherUnarmed02Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_unarmed_attacker_02_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_unarmed_victim_02", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+
+                    //FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		
+		SyncAction("ForcedFinisherUnarmed01All", "FinisherUnarmed02")
+		{
+            Conditions()
+            {
+				Tags("!zombie_boss", "ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+		}
+		
+		
+		
+		SyncAction("ForcedFinisherUnarmed02All", "FinisherUnarmed02")
+		{
+            Conditions()
+            {
+				Tags("!zombie_boss", "ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+		}
+
+		
+		SyncAction("ForcedFinisherUnarmed03All", "FinisherUnarmed02")
+		{
+            Conditions()
+            {
+				Tags("!zombie_boss", "ForceUnarmedFinisher", "!AIWithMaskOrHelmet");
+                ActorType(1, "!Skullface");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+		}
+		
+		SyncAction("FinisherKnuckles01")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "knuckles");
+				EquippedWeaponStatsTypeRequired(0, "Blunt");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "R_HAND");
+                        UseInstigatorForward();
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Both");
+                }
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+			
+			
+
+            States()
+            {
+                StartState("FinisherKnuckles01Begin");
+
+                State("FinisherKnuckles01Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_knuckles_attacker_01_dlc2_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_knuckles_victim_01_dlc2", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherKnuckles01_Alt")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "knuckles");
+				EquippedWeaponStatsTypeRequired(0, "Cut");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "R_HAND");
+                        UseInstigatorForward();
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Both");
+                }
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherKnuckles01Begin_Alt");
+
+                State("FinisherKnuckles01Begin_Alt")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_knuckles_attacker_01_dlc2_begin_alt");
+                    Animation(1, "m_hmf_syncaction_finisher_knuckles_victim_01_dlc2_alt", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherKnuckles02")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "knuckles");
+				EquippedWeaponStatsTypeRequired(0, "Blunt");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his torso/pelvis
+                    DealDamage(0, 1, "finisher_limb_cut@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                        UseInstigatorForward(false);
+                    }
+                }			
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Both");
+                }
+				
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherKnuckles02Begin");
+
+                State("FinisherKnuckles02Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_knuckles_attacker_02_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_knuckles_victim_02", 0.4);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.5);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                     Transition("FinisherKnuckles02End")
+                    {
+                        AnimationFinished(0);
+                    }     
+                }   
+     
+				State("FinisherKnuckles02End")
+                {
+                    Animation(0, "m_fpp_syncaction_finisher_knuckles_attacker_02_end", 0.0);
+
+                    RemoveActor(1);
+					ShowWeapons(0);
+                    RequiredActors(0);
+
+                    ActionCenter(1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished();
+                    }
+                }
+			}
+        }
+		
+		SyncAction("FinisherKnife01")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+				ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "knife");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+                Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Both");
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherKnife01Begin");
+
+                State("FinisherKnife01Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_knife_attacker_01_begin_dlc2");
+                    Animation(1, "m_hmf_syncaction_finisher_knife_victim_01_dlc2", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+
+        SyncAction("FinisherKnife03")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+				ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "knife");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+                Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherKnife03Begin");
+
+                State("FinisherKnife03Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_knife_attacker_03");
+                    Animation(1, "m_hmf_syncaction_finisher_knife_victim_03", 0.25);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.25, 0.1, true);
+                    BlendDirection(0, 0, 0.25, 0.1, true);
+
+                    BlendPosition(1, 0, 0.25, 0.1, true);
+                    BlendDirection(1, 0, 0.25, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+
+		/*SyncAction("FinisherKnife02")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+				ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "knife");
+            }
+
+            Events()
+            {
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherKnife02");
+
+                State("FinisherKnife02")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_knife_attacker_02_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_knife_victim_02", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }*/
+
+        SyncAction("FinisherStick01")
+        {
+
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "stick");
+				EquippedWeaponStatsTypeRequired(0, "Blunt");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+                Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick01Begin");
+
+                State("FinisherStick01Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_stick_attacker_01_begin_dlc2");
+                    Animation(1, "m_hmf_syncaction_finisher_weapon_victim_01_dlc2", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);               
+                
+				    Transition("FinisherStick01End")
+                    {
+                        AnimationFinished(0);
+                    }
+
+                }
+                State("FinisherStick01End")
+                {
+					EnableInvulnerability(0);
+                    RequiredActors(0);
+					ShowWeapons(0);
+					RemoveActor(1);
+
+                    Animation(0, "m_fpp_syncaction_finisher_stick_attacker_01_end_dlc2");                    
+
+                    ActionCenter(1);
+                    MaintainLookDirection(true);					
+					
+                    EndTransition()
+                    {
+                        AnimationFinished(0, 1);
+                    }
+                }
+            }
+        }	
+
+        SyncAction("FinisherStick01_Alt")
+        {
+
+            Conditions()
+            {
+                Tags("!zombie_boss");
+                ActorType(1, "!Skullface");				
+                EquippedWeaponTypeRequired(0, "stick", "SyncAction_Axe");
+				EquippedWeaponStatsTypeRequired(0, "Cut");				
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+                Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_limb_cut@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+                
+                Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick01Begin_Alt");
+
+                State("FinisherStick01Begin_Alt")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_stick_attacker_01_begin_alt_dlc2");
+                    Animation(1, "m_hmf_syncaction_finisher_weapon_victim_01_alt_dlc2", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+        SyncAction("FinisherStick03_Alt")
+        {
+
+            Conditions()
+            {
+                Tags("!zombie_boss");
+                ActorType(1, "!Skullface");				
+                EquippedWeaponTypeRequired(0, "stick", "SyncAction_Axe");
+				EquippedWeaponStatsTypeRequired(0, "Cut");				
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+                Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_limb_cut@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick03Begin_Alt");
+
+                State("FinisherStick03Begin_Alt")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_stick_attacker_03_begin_alt_dlc2");
+                    Animation(1, "m_hmf_syncaction_finisher_weapon_victim_03_alt_dlc2", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    Transition("FinisherStick03End_Alt")
+                    {
+                        AnimationFinished(0);
+                    }
+
+                }
+                State("FinisherStick03End_Alt")
+                {
+					EnableInvulnerability(0);
+                    RequiredActors(0);
+					ShowWeapons(0);
+					RemoveActor(1);
+
+                    Animation(0, "m_fpp_syncaction_finisher_stick_attacker_03_end_alt_dlc2");                    
+
+                    ActionCenter(1);
+                    MaintainLookDirection(true);					
+					
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+	  SyncAction("FinisherStick2Close01")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "two_handed_close_stick", "SyncAction_Axe");
+				EquippedWeaponStatsTypeRequired(0, "Blunt");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE_SECOND)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+				
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Close01Begin");
+
+                State("FinisherStick2Close01Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_stick2close_attacker_01_dlc2_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_stick2close_victim_01_dlc2", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.5);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherStick2Close01_Alt")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "two_handed_close_stick", "SyncAction_Pickaxe");
+				EquippedWeaponStatsTypeRequired(0, "Cut");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE_SECOND)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+				
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Close01Begin_Alt");
+
+                State("FinisherStick2Close01Begin_Alt")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_stick2close_attacker_01_dlc2_begin_alt");
+                    Animation(1, "m_hmf_syncaction_finisher_stick2close_victim_01_dlc2_alt", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.5);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherStick2Close02")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "two_handed_close_stick", "SyncAction_Axe");
+				EquippedWeaponStatsTypeRequired(0, "Blunt");
+            }
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+
+				
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Close02Begin");
+
+                State("FinisherStick2Close02Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_stick2close_attacker_02_dlc2_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_stick2close_victim_02_dlc2", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.5);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherStick2Close03")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "two_handed_close_stick", "SyncAction_Axe");
+				EquippedWeaponStatsTypeRequired(0, "Blunt");
+            }
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE_SECOND)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_limb_destroy@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                        UseInstigatorForward();
+                    }
+                }
+				
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Close03Begin");
+
+                State("FinisherStick2Close03Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_stick2close_attacker_03_dlc2_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_stick2close_victim_03_dlc2", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.5);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+		}
+		
+		
+		SyncAction("FinisherStick2Close03Alt")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "two_handed_close_stick", "SyncAction_Axe");
+				EquippedWeaponStatsTypeRequired(0, "Cut");
+                ModelProperty(1, "gameplay_specific", "!hazmat_helmet");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_full_body_cut@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                        UseInstigatorForward(false);
+                    }
+                }			
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Both");
+                }
+				
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Close03AltBegin");
+
+                State("FinisherStick2Close03AltBegin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_stick2close_attacker_03_dlc2_alt_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_stick2close_victim_03_dlc2_alt", 0.4);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.5);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                     Transition("FinisherStick2Close03AltEnd")
+                    {
+                        AnimationFinished(0);
+                    }     
+                }   
+     
+				State("FinisherStick2Close03AltEnd")
+                {
+                    Animation(0, "m_fpp_syncaction_finisher_stick2close_attacker_03_dlc2_alt_end", 0.0);
+
+                    RemoveActor(1);
+					ShowWeapons(0);
+                    RequiredActors(0);
+
+                    ActionCenter(1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished();
+                    }
+                }
+			}
+        }
+		
+		SyncAction("FinisherStick2Close04Alt")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+                EquippedWeaponTypeRequired(0, "two_handed_close_stick", "SyncAction_Axe");
+				EquippedWeaponStatsTypeRequired(0, "Cut");
+                ModelProperty(1, "gameplay_specific", "!hazmat_helmet");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his torso/pelvis
+                    DealDamage(0, 1, "finisher_full_body_cut@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                        UseInstigatorForward(false);
+						UseDamageHelperForImpactPlaneNormal(true);
+                    }
+                }			
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Both");
+                }
+				
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Close04AltBegin");
+
+                State("FinisherStick2Close04AltBegin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_stick2close_attacker_04_dlc2_alt_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_stick2close_victim_04_dlc2_alt", 0.4);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.5);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                     Transition("FinisherStick2Close04AltEnd")
+                    {
+                        AnimationFinished(0);
+                    }     
+                }   
+     
+				State("FinisherStick2Close04AltEnd")
+                {
+                    Animation(0, "m_fpp_syncaction_finisher_stick2close_attacker_04_dlc2_alt_end", 0.0);
+
+                    RemoveActor(1);
+					ShowWeapons(0);
+                    RequiredActors(0);
+
+                    ActionCenter(1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished();
+                    }
+                }
+			}
+        }
+		
+		SyncAction("FinisherStick2Heavy01")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "two_handed_heavy_stick", "SyncAction_TwoHandedAxe");
+				EquippedWeaponStatsTypeRequired(0, "Blunt");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Heavy01Begin");
+
+                State("FinisherStick2Heavy01Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_2h_attacker_01_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_2h_victim_01", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherStick2Heavy03")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "two_handed_heavy_stick", "SyncAction_TwoHandedAxe");
+				EquippedWeaponStatsTypeRequired(0, "Cut");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_full_body_cut@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                        UseInstigatorForward(false);
+                    }
+                }			
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Both");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Heavy03Begin");
+
+                State("FinisherStick2Heavy03Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_2h_attacker_03_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_2h_victim_03", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.2, true);
+                    BlendDirection(0, 0, 0.2, 0.2, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    Transition("FinisherStick2Heavy03End")
+                    {
+                        AnimationFinished(0);
+                    }     
+                }   
+     
+				State("FinisherStick2Heavy03End")
+                {
+                    Animation(0, "m_fpp_syncaction_finisher_2h_attacker_03_end", 0.0);
+
+                    RemoveActor(1);
+					ShowWeapons(0);
+                    RequiredActors(0);
+
+                    ActionCenter(1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished();
+                    }
+                }
+			}
+        }
+		
+		SyncAction("FinisherStick2Heavy01_Alt")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "two_handed_heavy_stick", "SyncAction_TwoHandedAxe", "SyncAction_scythe");
+				EquippedWeaponStatsTypeRequired(0, "Cut");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Heavy01Begin_Alt");
+
+                State("FinisherStick2Heavy01Begin_Alt")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_2h_attacker_01_begin_alt");
+                    Animation(1, "m_hmf_syncaction_finisher_2h_victim_01_alt", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherStick2Heavy02")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "two_handed_heavy_stick", "SyncAction_TwoHandedAxe", "SyncAction_scythe");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+			    Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Both");
+                }
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE_SECOND)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherStick2Heavy02Begin");
+
+                State("FinisherStick2Heavy02Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_2h_attacker_02_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_2h_victim_02", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    Transition("FinisherStick2Heavy02End")
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+				
+				State("FinisherStick2Heavy02End")
+                {
+                    Animation(0, "m_fpp_syncaction_finisher_2h_attacker_02_end", 0.0);
+
+                    RemoveActor(1);
+					ShowWeapons(0);
+                    RequiredActors(0);
+
+                    ActionCenter(1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished();
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherHarpoon01")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "harpoon");
+				//EquippedWeaponStatsTypeRequired(0, "Blunt");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_limb_destroy@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherHarpoon01Begin");
+
+                State("FinisherHarpoon01Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_harpoon_attacker_01_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_harpoon_victim_01", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherHarpoonMelee01")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "harpoon_melee");
+				//EquippedWeaponStatsTypeRequired(0, "Blunt");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_limb_destroy@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherHarpoonMelee01Begin");
+
+                State("FinisherHarpoonMelee01Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_harpoon_melee_attacker_01_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_harpoon_melee_victim_01", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherPolearm01")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "Halberd");
+				EquippedWeaponStatsTypeRequired(0, "Cut");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+				Event(ANIM_EVENT, 0, ANIM_EVENT_PUNCH_HIT)
+                {
+                    ActivateXRay(0, 1, 0.8, "HEAD");
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_limb_cut@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE_SECOND)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_limb_cut@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_APPLY_BLOOD_EFFECT)
+                {
+                    ApplyBloodEffect(0, FINISHER_BLOOD_EFFECT_AMOUNT, "Weapon");
+                }
+
+               Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr")
+                    {
+                        UseActiveWeaponId(true);
+                    }
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherPolearm01Begin");
+
+                State("FinisherPolearm01Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_polearm_attacker_01_dlc2_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_polearm_victim_01_dlc2", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+					ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+        SyncAction("Finisher_Corruptor")
+        {
+            Conditions()
+            {
+                Tags("zombie_boss");
+                ActorType(1, "!Skullface");
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    DealDamage(0, 1, "finisher_corruptor@sync_action_damage_presets.scr");
+                }
+            }
+
+            States()
+            {
+                StartState("Finisher01Begin");
+
+                State("Finisher01Begin")
+                {
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_weapon_attacker_03_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_weapon_victim_03_no_weapon_drop", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+                    ShowWeapons(0);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.15, 0.35);
+                    BlendDirection(0, 0, 0.15, 0.15);
+
+                    BlendPosition(1, 0, 0.15, 0.15);
+                    BlendDirection(1, 0, 0.15, 0.15);
+
+                    BlendLookDirection(0.5);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(1);
+                    ActionCenterLiveErrorCorrection();
+
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		
+		// ----- DLC2 QUICK FINISHERS ----- 
+		
+		
+		SyncAction("FinisherUnarmed_DLC2_01")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "fists", "#OpportunityWeapon");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherUnarmed_DLC2_01_Begin");
+
+                State("FinisherUnarmed_DLC2_01_Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_unarmed_attacker_dlc2_01_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_unarmed_victim_dlc2_01", 0.1);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		SyncAction("FinisherUnarmed_DLC2_01_Back")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "fists", "#OpportunityWeapon");
+				DirectionOffset(0, 1, 0, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherUnarmed_DLC2_01_Back_Begin");
+
+                State("FinisherUnarmed_DLC2_01_Back_Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_unarmed_attacker_back_dlc2_01");
+                    Animation(1, "m_hmf_syncaction_finisher_unarmed_victim_back_dlc2_01", 0.1);
+
+                    AnimationScript(1, "sync_action_anims_ai_ft.scr");
+
+                    RequiredActors(0, 1);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+            }
+        }
+		
+		
+		SyncAction("ForcedFinisherUnarmed_DLC2_01All", "FinisherUnarmed_DLC2_01")
+		{
+            Conditions()
+            {
+				Tags("!zombie_boss", "ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+		}
+
+        SyncAction("ForcedFinisherUnarmed_DLC2_01_Back", "FinisherUnarmed_DLC2_01_Back")
+		{
+            Conditions()
+            {
+				Tags("!zombie_boss", "ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				DirectionOffset(0, 1, 0, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+		}
+		
+		SyncAction("FinisherUnarmed_DLC2_02")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "fists", "#OpportunityWeapon");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+
+                Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr");
+                }
+            }
+
+            States()
+            {
+                StartState("FinisherUnarmed_DLC2_01_Begin");
+
+                State("FinisherUnarmed_DLC2_01_Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_unarmed_attacker_dlc2_02_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_unarmed_victim_dlc2_02", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    Transition("FinisherUnarmed_DLC2_02_End")
+                    {
+                        AnimationFinished(0);
+                    }     
+                }   
+     
+				State("FinisherUnarmed_DLC2_02_End")
+                {
+                    Animation(0, "m_fpp_syncaction_finisher_unarmed_attacker_dlc2_02_end", 0.0);
+
+                    RemoveActor(1);
+                    RequiredActors(0);
+
+                    ActionCenter(1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished();
+                    }
+                }
+			}
+        }
+		
+		
+		SyncAction("ForcedFinisherUnarmed_DLC2_02All", "FinisherUnarmed_DLC2_02")
+		{
+            Conditions()
+            {
+				Tags("!zombie_boss", "ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+		}
+		
+		SyncAction("FinisherUnarmed_DLC2_03")
+        {
+            Conditions()
+            {
+                Tags("!zombie_boss", "!ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				EquippedWeaponTypeRequired(0, "fists", "#OpportunityWeapon");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+
+            Events()
+            {
+
+                Event(ANIM_EVENT, 0, SYNCACTION_AI_BODY_DAMAGE)
+                {
+                    // Fake damage to attacker to damage his head
+                    DealDamage(0, 1, "finisher_body_hole@sync_action_damage_presets.scr")
+                    {
+                        DamageHelper(0, "DamageHelper");
+                    }
+                }
+				
+				Event(ANIM_EVENT, 0, SYNCACTION_TRIGGER_DEATH)
+                {
+                    PerformAction(0, "Finisher");
+                    AddStamina(0, FINISHER_ADD_STAMINA_VALUE, true);
+                    FreezeStamina(0, FINISHER_FREEZE_STAMINA_DURATION);
+                    DealDamage(0, 1, "finisher_kill_ragdoll@sync_action_damage_presets.scr");
+                }
+				
+            }
+
+            States()
+            {
+                StartState("FinisherUnarmed_DLC2_03_Begin");
+
+                State("FinisherUnarmed_DLC2_03_Begin")
+                {
+					StaminaCost(0, 0.5);
+                    IsSpecialMove();
+                    Animation(0, "m_fpp_syncaction_finisher_unarmed_attacker_dlc2_03_begin");
+                    Animation(1, "m_hmf_syncaction_finisher_unarmed_victim_dlc2_03", 0.2);
+
+                    AnimationScript(1, "sync_action_anims_ai.scr");
+
+                    RequiredActors(0, 1);
+
+                    FinisherPhysicsSetting(1);
+
+                    BlendPosition(0, 0, 0.2, 0.1, true);
+                    BlendDirection(0, 0, 0.2, 0.1, true);
+
+                    BlendPosition(1, 0, 0.2, 0.1, true);
+                    BlendDirection(1, 0, 0.2, 0.1, true);
+
+                    BlendLookDirection(0.2);
+
+                    ActionCenter(1);
+                    ActionCenterDirection(0,1);
+                    ActionCenterLiveErrorCorrection();
+
+                    EnableInvulnerability(0);
+					BlockBreakWhenDamaged(0, 1);
+
+                    Transition("FinisherUnarmed_DLC2_03_End")
+                    {
+                        AnimationFinished(0);
+                    }
+                }
+				
+				State("FinisherUnarmed_DLC2_03_End")
+                {
+                    Animation(0, "m_fpp_syncaction_finisher_unarmed_attacker_dlc2_03_end", 0.0);
+
+                    RemoveActor(1);
+                    RequiredActors(0);
+
+                    ActionCenter(1);
+
+                    EndTransition()
+                    {
+                        AnimationFinished();
+                    }
+                }
+            }
+        }
+		
+		
+		SyncAction("ForcedFinisherUnarmed_DLC2_03All", "FinisherUnarmed_DLC2_03")
+		{
+            Conditions()
+            {
+				Tags("!zombie_boss", "ForceUnarmedFinisher");
+                ActorType(1, "!Skullface");
+				DirectionOffset(0, 1, 180, 90);
+            }
+			
+			SoundEvents()
+			{
+				ExitSoundEvent("set_takedown_out");
+			}
+		}
+	}
+}

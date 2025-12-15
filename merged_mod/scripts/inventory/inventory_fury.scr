@@ -1,0 +1,729 @@
+// Contains definitions of PROTOTYPE items defined for testing and debug purposes only.
+// Don't be surprised if these items will get removed at a later stage of the the production
+
+
+import "inventorystuff.scr"
+import "faction_exports.scr"
+
+sub inventory_fury() {
+	// fists / item - that is used in DLC2 frontier  / fury
+	Item("FuryWeaponItem", CategoryType_Melee) {
+		Visibility(false);
+		ItemType(ItemType_Fists);
+		WeaponBuildType(WeaponBuildType_Metal);
+		Condition(-1);
+		ArmourDamageName("Player_Armour_Damage");
+		DamageRange(1.2);
+		DamageToPhysicsObjects(2.5);
+		StaminaUsage(0.1);
+		DamageType(DamageType_Fury);
+		Flags(1);
+		Price(-1);
+		Mesh("weapon_fists.msh");
+		AnimPrefix("Fury_DLC");
+		HudIcon("weapon_fist");
+		MinDamageMult(1.0);
+		TwoHanded(true);
+		AiHitSound("fists_fury_dlc_ft");
+		SoundInjuryDamageType("unarmed");
+		use HitEffects_Fists();
+		use PickupSounds_Default();
+		DamageSize(1.0);
+		StatsType(StatsType_Fists);
+		LootType(LootType_None);
+		FF_Left(0.6);
+		FF_Right(0.6);
+		FF_Duration(0.2);
+		FF_FadeOut(0.0);
+		Color(Color_White);
+		PlayerTool();
+		ItemType(ItemType_Fists);
+		HitReactionType(EReactionType_Blunt);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		//HitReactionFlags(EReactionFlag_Interrupt);
+		//HitReactionFlags(EReactionFlag_Ragdoll);
+		//RagdollBehavior(RagdollBehavior_Shotgun);
+		//RagdollBehaviorPrefix("NightRunner");
+		LimbsCutProb(1.0);
+		FullBodyCutProb(0.0);
+		BodyHoleProb(1.0);
+		HeadSmashProb(0.5);
+
+		FF_EffectName("Hit_Stick2HeavyBlunt");
+		FuryWeapon();
+		MoveAnimPrefix("Unarmed");
+		MoveAnimPrefixEnabledInTpp(false);
+		XrayTriggerProbability(0.0);
+		HitWeaponMaxHorizontalAngleForObstacle(35);
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Fists_Tier");
+		DamageTag("player_fury");
+
+		DestroyableDamage(250.0);
+		PhysicsDamageMul(1.5); //1.2 original
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_Melee_GroundPoundSmallPush", CategoryType_Melee) {
+		Name("&Melee_GroundPound_N&");
+		Description("&Melee_GroundPound_D&");
+		Visibility(false);
+		DamageRange(7.5);
+		Damage(1.0);
+		DamageName("Damage_GroundPoundSmallPush");
+		DamageToPhysicsObjects(100.0);
+		DamageType(DamageType_Kick);
+		MaxDamageAngle(-1.0);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(5.0);
+		ItemType(ItemType_Stick);
+		HitReactionType(EReactionType_Blunt);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+		StaminaDamage(50.0);
+		ScaleStaminaDamageByCurve(true);
+		IgnoreStaminaDamageItemCheck(true);
+
+		DestroyableDamage(0.0);
+		PhysicsDamageMul(1.0);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_GroundPound_Shockwave_Lvl1", CategoryType_Melee) {
+		Name("&Melee_GroundPound_N&");
+		Visibility(false);
+		DamageRange(2.1);
+		DamageToPhysicsObjects(500.0);
+		PhysicsDamageMulAtMaxRange(0.6);
+		PhysicsDamageMulStartScalingRange(2.0);
+		DamageType(DamageType_Fury);
+		StaminaUsage(0.3);
+		MaxDamageAngle(360.0);
+		ItemType(ItemType_Stick);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+		DestroyableDamage(200.0);
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_GroundPound_Tier");
+		DamageTag("player_fury");
+
+		DestroyableDamage(120.0);
+		PhysicsDamageMul(1.2); //1.2 original
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_GroundPound_Shockwave_Lvl2", CategoryType_Melee) //This one is not used
+	{
+		Name("&Melee_GroundPound_N&");
+		Visibility(false);
+		DamageRange(4.0);
+		DamageToPhysicsObjects(5.0);
+		PhysicsDamageMul(1.1);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(3.0);
+		DamageType(DamageType_Fury);
+		StaminaUsage(0.3);
+		MaxDamageAngle(360.0);
+		ItemType(ItemType_Stick);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		AutoStaminaDamage(1000);
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_GroundPound_Tier");
+		DamageTag("player_fury");
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_GroundPound_Second_Shockwave", CategoryType_Melee) {
+		Name("&Melee_GroundPound_N&");
+		Visibility(false);
+		DamageRange(5.5);
+		DamageToPhysicsObjects(500.0);
+		PhysicsDamageMulAtMaxRange(0.6);
+		PhysicsDamageMulStartScalingRange(2.0);
+		DamageType(DamageType_Fury);
+		StaminaUsage(0.3);
+		MaxDamageAngle(360.0);
+		ItemType(ItemType_Stick);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+		DestroyableDamage(200.0);
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_GroundPound_Tier");
+		DamageTag("player_fury");
+
+		DestroyableDamage(120.0);
+		PhysicsDamageMul(1.2); //1.2 original
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_PowerAttack_Shockwave_lvl1", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Visibility(false);
+		Condition(0);
+		DamageRange(3.0);
+		PhysicsDamageMulAtMaxRange(0.6);
+		PhysicsDamageMulStartScalingRange(6.0);
+		DamageToPhysicsObjects(500.0);
+		AiHitSound("kick");
+		DamageType(DamageType_Fury);
+		Reparable(false);
+		MaxDamageAngle(10.0);
+		ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_PowerAttack_Upgrade_Tier");
+		DamageTag("player_fury");
+		GameVersion(1);
+
+		DestroyableDamage(120.0);
+		PhysicsDamageMul(1.2); //1.2 original
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_PowerAttack_Shockwave_lvl2", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Visibility(false);
+		Condition(0);
+		DamageRange(3.0);
+		DamageToPhysicsObjects(5.0);
+		PhysicsDamageMul(1.2);
+		AiHitSound("kick");
+		DamageType(DamageType_Fury);
+		Reparable(false);
+		MaxDamageAngle(60.0);
+		ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+		DamageTag("player_fury");
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_PowerAttack_Upgrade_Tier");
+		DestroyableDamage(120.0);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_PowerAttack_Second_Shockwave", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Visibility(false);
+		Condition(0);
+		DamageRange(7.5);
+		DamageToPhysicsObjects(5.0);
+		PhysicsDamageMul(1.2);
+		AiHitSound("kick");
+		DamageType(DamageType_Fury);
+		Reparable(false);
+		MaxDamageAngle(60.0);
+		ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+		DamageTag("player_fury");
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_PowerAttack_Upgrade_Tier");
+		DestroyableDamage(120.0);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_Windmill_Lvl1", CategoryType_Melee) {
+		Visibility(false);
+		ItemType(ItemType_Fists);
+		WeaponBuildType(WeaponBuildType_Metal);
+		Condition(-1);
+		ArmourDamageName("Player_Armour_Damage");
+		DamageRange(1.2);
+		DamageToPhysicsObjects(2.5);
+		StaminaUsage(0.1);
+		DamageType(DamageType_Fury);
+		Flags(33);
+		Price(-1);
+		Mesh("weapon_fists.msh");
+		AnimPrefix("Fury_DLC");
+		HudIcon("weapon_fist");
+		MinDamageMult(1.0);
+		TwoHanded(true);
+		AiHitSound("fists_fury_dlc_ft");
+		SoundInjuryDamageType("unarmed");
+		use HitEffects_Fists();
+		use PickupSounds_Default();
+		DamageSize(1.0);
+		StatsType(StatsType_Fists);
+		LootType(LootType_None);
+		FF_Left(0.6);
+		FF_Right(0.6);
+		FF_Duration(0.2);
+		FF_FadeOut(0.0);
+		Color(Color_White);
+		PlayerTool();
+		ItemType(ItemType_Fists);
+		HitReactionType(EReactionType_Blast); //not by mistake, just to increase the vicerality of the skill
+		HitReactionHitSeverity(EMoveSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		LimbsCutProb(1.0);
+		FullBodyCutProb(0.0);
+		BodyHoleProb(1.0);
+		FF_EffectName("Hit_Stick2HeavyBlunt");
+		FuryWeapon();
+		MoveAnimPrefix("Unarmed");
+		MoveAnimPrefixEnabledInTpp(false);
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Whirlwind");
+		DamageTag("player_fury");
+
+		DestroyableDamage(250.0);
+		PhysicsDamageMul(1.5);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_Windmill_Lvl2", CategoryType_Melee) //This one is not used
+	{
+		Visibility(false);
+		ItemType(ItemType_Fists);
+		WeaponBuildType(WeaponBuildType_Metal);
+		Condition(-1);
+		ArmourDamageName("Player_Armour_Damage");
+		DamageRange(2);
+		PhysicsDamageMul(1.5);
+		DamageToPhysicsObjects(2.5);
+		StaminaUsage(0.1);
+		DamageType(DamageType_Fury);
+		Flags(33);
+		Price(-1);
+		Mesh("weapon_fists.msh");
+		AnimPrefix("Fury_DLC");
+		HudIcon("weapon_fist");
+		MinDamageMult(1.0);
+		TwoHanded(true);
+		AiHitSound("fists_fury_dlc_ft");
+		SoundInjuryDamageType("unarmed");
+		use HitEffects_Fists();
+		use PickupSounds_Default();
+		DamageSize(1.0);
+		StatsType(StatsType_Fists);
+		LootType(LootType_None);
+		FF_Left(0.6);
+		FF_Right(0.6);
+		FF_Duration(0.2);
+		FF_FadeOut(0.0);
+		Color(Color_White);
+		PlayerTool();
+		ItemType(ItemType_Fists);
+		HitReactionType(EReactionType_Blast); //not by mistake, just to increase the vicerality of the skill
+		HitReactionHitSeverity(EMoveSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		LimbsCutProb(1.0);
+		FullBodyCutProb(0.0);
+		BodyHoleProb(1.0);
+		FF_EffectName("Hit_Stick2HeavyBlunt");
+		FuryWeapon();
+		MoveAnimPrefix("Unarmed");
+		MoveAnimPrefixEnabledInTpp(false);
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Whirlwind");
+		DamageTag("player_fury");
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_First_Start_Shockwave", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Description("&Melee_Leg_D&");
+		ItemType(ItemType_Stick);
+		Condition(-1);
+		//Damage(1.0);
+		DamageRange(3.0);
+		StaminaUsage(0.0);
+		AiHitSound("");
+		Reparable(false);
+		MaxDamageAngle(360.0);
+		StaminaUsage(0.0);
+		//DamageTiers("NightRunner_Roar_Tier");
+		//IsAutomaticTierScaling(true);		
+		DamageToPhysicsObjects(5.0);
+		DamageType(DamageType_Fury);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Roar_Tier");
+
+		DestroyableDamage(0.0);
+		PhysicsDamageMul(1.2); //1.2 original
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_Start_Shockwave_Lvl1", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Description("&Melee_Leg_D&");
+		ItemType(ItemType_Stick);
+		Condition(-1);
+		//Damage(1.0);
+		DamageRange(5.0);
+		StaminaUsage(0.0);
+		AiHitSound("");
+		Reparable(false);
+		MaxDamageAngle(360.0);
+		StaminaUsage(0.0);
+		//DamageTiers("NightRunner_Roar_Tier");
+		//IsAutomaticTierScaling(true);		
+		DamageToPhysicsObjects(250.0);
+		PhysicsDamageMul(1.2);
+		DamageType(DamageType_Fury);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		NoiseDataUid("Fury_Transformation");
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Roar_Tier");
+		DamageTag("player_fury_alpha_roar");
+		DamageEffect("Frightened", 2.0);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_Start_Shockwave_Lvl2", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Description("&Melee_Leg_D&");
+		ItemType(ItemType_Stick);
+		Condition(-1);
+		//Damage(1.0);
+		DamageRange(5.0);
+		StaminaUsage(0.0);
+		AiHitSound("");
+		Reparable(false);
+		MaxDamageAngle(360.0);
+		StaminaUsage(0.0);
+		//DamageTiers("NightRunner_Roar_Tier");
+		//IsAutomaticTierScaling(true);		
+		DamageToPhysicsObjects(250.0);
+		PhysicsDamageMul(1.2);
+		DamageType(DamageType_Fury);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		NoiseDataUid("Fury_Transformation");
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Roar_Tier");
+		DamageTag("player_fury_alpha_roar");
+		DamageEffect("Frightened", 2.0);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_Scream_Shockwave_Lvl1", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Description("&Melee_Leg_D&");
+		ItemType(ItemType_Stick);
+		Condition(-1);
+		DamageRange(12.0);
+		StaminaUsage(0.0);
+		AiHitSound("");
+		Reparable(false);
+		MaxDamageAngle(360.0);
+		StaminaUsage(0.0);
+		DamageToPhysicsObjects(1.0);
+		DamageType(DamageType_Fury);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Roar_Tier");
+
+		DestroyableDamage(0.0);
+		PhysicsDamageMul(0.2); //0.2 original
+		DamageTag("player_fury_alpha_roar");
+		DamageEffect("Frightened", 2.0);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_Scream_Shockwave_Lvl2", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Description("&Melee_Leg_D&");
+		ItemType(ItemType_Stick);
+		Condition(-1);
+		DamageRange(8.0);
+		StaminaUsage(0.0);
+		AiHitSound("");
+		Reparable(false);
+		MaxDamageAngle(360.0);
+		StaminaUsage(0.0);
+		DamageToPhysicsObjects(1.0);
+		PhysicsDamageMul(0.2);
+		DamageType(DamageType_Fury);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		NoiseDataUid("Fury_Scream");
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Roar_Tier");
+		DamageTag("player_fury_alpha_roar");
+		DamageEffect("Frightened", 2.0);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Fury_Quick_Finisher_Shockwave", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Description("&Melee_Leg_D&");
+		ItemType(ItemType_Stick);
+		Condition(-1);
+		//Damage(1.0);
+		DamageRange(2.0);
+		StaminaUsage(0.0);
+		AiHitSound("");
+		Reparable(false);
+		MaxDamageAngle(180.0);
+		StaminaUsage(0.0);
+		//DamageTiers("NightRunner_Roar_Tier");
+		//IsAutomaticTierScaling(true);		
+		DamageToPhysicsObjects(250.0);
+		PhysicsDamageMul(1.2);
+		DamageType(DamageType_Fury);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Roar_Tier");
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Melee_WrestleKickLeg_Fury", CategoryType_Melee) {
+		Name("&Melee_WrestleKickLeg_N&");
+		ItemType(ItemType_Fists);
+		DamageToPhysicsObjects(100.0);
+		DamageRange(2.0);
+		PhysicsDamageMul(3.0);
+		AiHitSound("wrestler_kick");
+		DamageType(DamageType_Fury);
+		Reparable(false);
+		FF_Left(0.9);
+		FF_Right(0.9);
+		FF_Duration(0.4);
+		FF_FadeOut(0.0);
+		use HitEffects_Default();
+		HitReactionType(EReactionType_Push);
+		HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		FF_EffectName("KickHeavy");
+		GameVersion(1);
+		XrayTriggerProbability(0.0);
+		AutoStaminaDamage(5);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_DropKick_Tier");
+
+		DestroyableDamage(250.0);
+		PhysicsDamageMul(3.0); //3.0 original
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Melee_Charge_Fury", CategoryType_Melee) {
+		Name("&Melee_Ram_N&");
+		ItemType(ItemType_Fists);
+		//DamageName("NightRunner_Fists");
+		DamageToPhysicsObjects(100.0);
+		DamageRange(1.0);
+		AiHitSound("charge_fury");
+		DamageType(DamageType_Fury);
+		Reparable(false);
+		FF_Left(0.9);
+		FF_Right(0.9);
+		FF_Duration(0.4);
+		FF_FadeOut(0.0);
+		use HitEffects_Default();
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		RagdollBehavior(RagdollBehavior_Shotgun);
+		HitReactionStrongMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionStrongHitSeverity(EHitSeverity_Heavy);
+		FF_EffectName("CollisionHeavy");
+		GameVersion(1);
+
+		IsAutomaticTierScaling(true);
+		DamageTiers("Fury_Charge_Tier");
+		DamageTag("player_fury");
+
+		DestroyableDamage(250.0);
+		PhysicsDamageMul(2.0); //2.0 original
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Melee_Shockwave_FurySmash", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Condition(0);
+		DamageTiers("Player_Nightrunner_Shockwave_Tier");
+		IsAutomaticTierScaling(true);
+		DamageRange(5.0);
+		PhysicsDamageMul(2.0);
+		AiHitSound("kick");
+		DamageType(DamageType_Forcewave);
+		DestroyableDamage(100.0);
+		Reparable(false);
+		MaxDamageAngle(-1.0);
+		ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Push);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Melee_Shockwave_FuryGroundPound", CategoryType_Melee) {
+		Name("&Melee_Shockwave_N&");
+		Condition(0);
+		DamageTiers("Player_Shockwave_Tier");
+		IsAutomaticTierScaling(true);
+		DamageRange(9.0);
+		PhysicsDamageMul(2.75);
+		AiHitSound("kick");
+		DamageType(DamageType_Forcewave);
+		DestroyableDamage(100.0);
+		Reparable(false);
+		MaxDamageAngle(-1.0);
+		ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Push);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		GameVersion(1);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	Item("Melee_FuryRam", CategoryType_Melee) {
+		Name("&Melee_FuryRam_N&");
+		Description("&Melee_FuryRam_D&");
+		Visibility(false);
+		Condition(-1);
+		AiHitSound("fury_fists");
+		Damage(3.0);
+		Force(1000.0);
+		PhysicsDamageMul(2.55);
+		DamageType(DamageType_Ram);
+		DestroyableDamage(20.0);
+		ItemType(ItemType_Fists);
+		HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		GameVersion(1);
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+	// used for kicks
+	Item("Melee_Leg_Fury", CategoryType_Melee) {
+		Name("&Melee_Leg_Fury&");
+		ItemType(ItemType_Fists);
+		Condition(0);
+		DamageTiers("Player_Fists_Tier");
+		IsAutomaticTierScaling(true);
+		DamageToPhysicsObjects(100.0);
+		DamageRange(1.7);
+		StaminaUsage(0.0);
+		AiHitSound("kick_fury_dlc_ft");
+		DamageType(DamageType_Kick);
+		RagdollBehaviorPrefix("Kick");
+		use HitEffects_Kick();
+		HitReactionType(EReactionType_Push);
+		HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		ConfusionProb(0.0);
+		FF_EffectName("KickLight");
+		GameVersion(1);
+		XrayTriggerProbability(0.0);
+		StaminaDamage(125.0);
+		ScaleStaminaDamageByCurve(true);
+		IgnoreStaminaDamageItemCheck(true);
+
+		DestroyableDamage(40.0);
+		PhysicsDamageMul(1.25); //1.25 original
+		DamageTag("ignore_counterattack");
+
+		IsAutomaticLegendLevelDamageScaling(true);
+	}
+
+}

@@ -1,0 +1,1796 @@
+//WeaponProbPreset(pool_name)
+//  Weapon(wepon_name, weight)
+
+sub main()
+{	
+
+
+	
+	/////////////////////////////////////
+	//// DLC_FT Weapon Presets
+	
+	//Human Enemies
+
+    //T1
+	
+	WeaponProbPreset("Human_1h_T1")
+	{
+		Weapon("dlc_ft_WPN_1HS_AXE_03_opportunity_r1",   1);
+		Weapon("dlc_ft_WPN_1HS_MACH_P_r1",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_15_opportunity_r1",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_13_r1",    1);
+		Weapon("dlc_ft_wpn_1hs_mach_08_r1",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_T_r1",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_O_r1",    1);
+		Weapon("dlc_ft_wpn_1hb_stk_u_r1",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_S_r1",   1);
+		Weapon("dlc_ft_WPN_1HB_HAM_T_r1",   1);
+		//Weapon("dlc_ft_WPN_15HS_A_r1",   1);
+		//Weapon("dlc_ft_WPN_15HS_C_r1",    1);
+		//Weapon("dlc_ft_WPN_15HS_R_r1",    1);
+		//Weapon("dlc_ft_WPN_15HB_P_r1",    1);
+		//Weapon("dlc_ft_WPN_15HB_R_r1",    1);
+		//Weapon("dlc_ft_WPN_15HB_T_r1",    1);
+	}
+	WeaponProbPreset("Human_2h_T1")
+	{
+		Weapon("dlc_ft_WPN_2HS_F_r1",    1);
+		Weapon("dlc_ft_wpn_2hs_u_r1",    1);
+		Weapon("dlc_ft_WPN_2HB_U_r1",    1);
+		Weapon("dlc_ft_WPN_2HB_V_r1",    1);
+	}
+	WeaponProbPreset("Human_Bow_T1")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r1",    1);
+	}
+	WeaponProbPreset("Human_Spear_T1")
+	{
+		Weapon("Tackle_Pitchfork_t1",    1);
+	}
+	WeaponProbPreset("Human_Summoner_T1")
+	{
+		Weapon("dlc_ft_WPN_1HS_AXE_03_opportunity_r1",   1);
+		Weapon("dlc_ft_WPN_1HS_MACH_P_r1",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_15_opportunity_r1",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_13_r1",    1);
+		Weapon("dlc_ft_wpn_1hs_mach_08_r1",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_T_r1",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_O_r1",    1);
+		Weapon("dlc_ft_wpn_1hb_stk_u_r1",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_S_r1",   1);
+		Weapon("dlc_ft_WPN_1HB_HAM_T_r1",   1);
+		//Weapon("dlc_ft_WPN_15HS_A_r1",   1);
+		//Weapon("dlc_ft_WPN_15HS_C_r1",    1);
+		//Weapon("dlc_ft_WPN_15HS_R_r1",    1);
+		//Weapon("dlc_ft_WPN_15HB_P_r1",    1);
+		//Weapon("dlc_ft_WPN_15HB_R_r1",    1);
+		//Weapon("dlc_ft_WPN_15HB_T_r1",    1);
+	}
+	WeaponProbPreset("Human_rifle_T1")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r1",    1);
+	}
+	WeaponProbPreset("Human_shotgun_T1")
+	{
+		Weapon("dlc_ft_firearm_shotgun_b_npc_only_r1",    1);
+	}
+	WeaponProbPreset("Human_Sniper_T1")
+	{
+		Weapon("dlc_ft_firearm_rifle_i_marksman_r1",    1);
+	}
+	WeaponProbPreset("Baron_1h_T1")
+	{
+		Weapon("dlc_ft_wpn_1hs_axe_02_baron_r1",   1);
+		Weapon("dlc_ft_WPN_1HS_AXE_04_baron_r1",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r1",    1);
+		Weapon("dlc_ft_wpn_1hb_mace_l_baron_r1",   1);
+		Weapon("dlc_ft_wpn_1hb_ham_g_baron_r1",   1);
+		Weapon("dlc_ft_1hb_stk_e_baron_r1",   1);
+	}
+	WeaponProbPreset("Baron_2h_T1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r1",    1);
+		Weapon("dlc_ft_WPN_2HB_C_baron_r1",    1);
+	}
+	WeaponProbPreset("Baron_Bow_T1")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r1",    1);
+	}
+	WeaponProbPreset("Baron_Spear_T1") //TO NOT USE
+	{
+		Weapon("Tackle_Spear_t1",    1);
+	}
+	WeaponProbPreset("Baron_rifle_T1")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r1",    1); 
+	}
+	WeaponProbPreset("Baron_shotgun_T1")
+	{
+		Weapon("dlc_ft_firearm_shotgun_b_npc_only_r1",    1);
+	}
+	WeaponProbPreset("Baron_Sniper_T1")
+	{
+		Weapon("dlc_ft_firearm_rifle_i_marksman_r1",    1);
+	}
+	WeaponProbPreset("Baron_rifle_Prologue")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r1",    1);
+	}
+	
+    //T2
+	
+	WeaponProbPreset("Human_1h_T2")
+	{		
+		Weapon("dlc_ft_WPN_1HS_AXE_03_opportunity_r6",   1);
+		Weapon("dlc_ft_WPN_1HS_MACH_P_r6",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_15_opportunity_r6",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_13_r6",    1);
+		Weapon("dlc_ft_wpn_1hs_mach_08_r6",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_T_r6",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_O_r6",    1);
+		Weapon("dlc_ft_wpn_1hb_stk_u_r6",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_S_r6",   1);
+		Weapon("dlc_ft_WPN_1HB_HAM_T_r6",   1);
+		//Weapon("dlc_ft_WPN_15HS_A_r6",   1);
+		//Weapon("dlc_ft_WPN_15HS_C_r6",    1);
+		//Weapon("dlc_ft_WPN_15HS_R_r6",    1);
+		//Weapon("dlc_ft_WPN_15HB_P_r6",    1);
+		//Weapon("dlc_ft_WPN_15HB_R_r6",    1);
+		//Weapon("dlc_ft_WPN_15HB_T_r6",    1);
+        
+	}
+	WeaponProbPreset("Human_2h_T2")
+	{
+		Weapon("dlc_ft_WPN_2HS_F_r6",    1);
+		Weapon("dlc_ft_wpn_2hs_u_r6",    1);
+		Weapon("dlc_ft_WPN_2HB_U_r6",    1);
+		Weapon("dlc_ft_WPN_2HB_V_r6",    1);
+	}
+	WeaponProbPreset("Human_Bow_T2")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r6",    1);
+	}
+	WeaponProbPreset("Human_Spear_T2")
+	{
+		Weapon("Tackle_Pitchfork_t4",    1);
+	}
+	WeaponProbPreset("Human_Summoner_T2")
+	{	
+		Weapon("dlc_ft_WPN_1HS_AXE_03_opportunity_r6",   1);
+		Weapon("dlc_ft_WPN_1HS_MACH_P_r6",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_15_opportunity_r6",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_13_r6",    1);
+		Weapon("dlc_ft_wpn_1hs_mach_08_r6",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_T_r6",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_O_r6",    1);
+		Weapon("dlc_ft_wpn_1hb_stk_u_r6",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_S_r6",   1);
+		Weapon("dlc_ft_WPN_1HB_HAM_T_r6",   1);
+		//Weapon("dlc_ft_WPN_15HS_A_r6",   1);
+		//Weapon("dlc_ft_WPN_15HS_C_r6",    1);
+		//Weapon("dlc_ft_WPN_15HS_R_r6",    1);
+		//Weapon("dlc_ft_WPN_15HB_P_r6",    1);
+		//Weapon("dlc_ft_WPN_15HB_R_r6",    1);
+		//Weapon("dlc_ft_WPN_15HB_T_r6",    1);
+	}
+	WeaponProbPreset("Human_rifle_T2")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r6",    1);
+	}
+	WeaponProbPreset("Human_shotgun_T2")
+	{
+		Weapon("dlc_ft_firearm_shotgun_b_npc_only_r6",    1);
+	}
+	WeaponProbPreset("Human_Sniper_T2")
+	{
+		Weapon("dlc_ft_firearm_rifle_i_marksman_r6",    1);
+	}
+	WeaponProbPreset("Baron_1h_T2")
+	{
+		Weapon("dlc_ft_wpn_1hs_axe_02_baron_r6",   1);
+		Weapon("dlc_ft_WPN_1HS_AXE_04_baron_r6",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r6",    1);
+		Weapon("dlc_ft_wpn_1hb_ham_g_baron_r6",   1);
+		Weapon("dlc_ft_1hb_stk_e_baron_r6",   1);
+	}
+	WeaponProbPreset("Baron_2h_T2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r6",    1);
+		Weapon("dlc_ft_WPN_2HB_C_baron_r6",    1);
+	}
+	WeaponProbPreset("Baron_Bow_T2")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r6",    1);
+	}
+	WeaponProbPreset("Baron_Spear_T2") //TO NOT USE
+	{
+		Weapon("Tackle_Spear_t4",    1);
+	}
+	WeaponProbPreset("Baron_Summoner_T2") //TO NOT USE
+	{
+		Weapon("dlc_ft_wpn_1hs_axe_02_baron_r6",   1);
+	}
+	WeaponProbPreset("Baron_rifle_T2")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r6",    1);
+	}
+	WeaponProbPreset("Baron_shotgun_T2")
+	{
+		Weapon("dlc_ft_firearm_shotgun_b_npc_only_r6",    1);
+	}
+	WeaponProbPreset("Baron_Sniper_T2")
+	{
+		Weapon("dlc_ft_firearm_rifle_i_marksman_r6",    1);
+	}
+	
+    //T3
+	
+	WeaponProbPreset("Human_1h_T3")
+	{	
+		Weapon("dlc_ft_WPN_1HS_AXE_03_opportunity_r11",   1);
+		Weapon("dlc_ft_WPN_1HS_MACH_P_r11",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_15_opportunity_r11",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_13_r11",    1);
+		Weapon("dlc_ft_wpn_1hs_mach_08_r11",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_T_r11",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_O_r11",    1);
+		Weapon("dlc_ft_wpn_1hb_stk_u_r11",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_S_r11",   1);
+		Weapon("dlc_ft_WPN_1HB_HAM_T_r11",   1);
+		//Weapon("dlc_ft_WPN_15HS_A_r11",   1);
+		//Weapon("dlc_ft_WPN_15HS_C_r11",    1);
+		//Weapon("dlc_ft_WPN_15HS_R_r11",    1);
+		//Weapon("dlc_ft_WPN_15HB_P_r11",    1);
+		//Weapon("dlc_ft_WPN_15HB_R_r11",    1);
+		//Weapon("dlc_ft_WPN_15HB_T_r11",    1);
+	}
+	WeaponProbPreset("Human_2h_T3")
+	{
+		Weapon("dlc_ft_WPN_2HS_F_r11",    1);
+		Weapon("dlc_ft_wpn_2hs_u_r11",    1);
+		Weapon("dlc_ft_WPN_2HB_U_r11",    1);
+		Weapon("dlc_ft_WPN_2HB_V_r11",    1);
+	}
+	WeaponProbPreset("Human_Bow_T3")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11",    1);
+	}
+	WeaponProbPreset("Human_Spear_T3")
+	{
+		Weapon("Tackle_Pitchfork_t7",    1);
+	}
+	WeaponProbPreset("Human_Summoner_T3")
+	{	
+		Weapon("dlc_ft_WPN_1HS_AXE_03_opportunity_r11",   1);
+		Weapon("dlc_ft_WPN_1HS_MACH_P_r11",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_15_opportunity_r11",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_13_r11",    1);
+		Weapon("dlc_ft_wpn_1hs_mach_08_r11",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_T_r11",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_O_r11",    1);
+		Weapon("dlc_ft_wpn_1hb_stk_u_r11",    1);
+		Weapon("dlc_ft_WPN_1HB_STK_S_r11",   1);
+		Weapon("dlc_ft_WPN_1HB_HAM_T_r11",   1);
+		//Weapon("dlc_ft_WPN_15HS_A_r11",   1);
+		//Weapon("dlc_ft_WPN_15HS_C_r11",    1);
+		//Weapon("dlc_ft_WPN_15HS_R_r11",    1);
+		//Weapon("dlc_ft_WPN_15HB_P_r11",    1);
+		//Weapon("dlc_ft_WPN_15HB_R_r11",    1);
+		//Weapon("dlc_ft_WPN_15HB_T_r11",    1);
+	}
+	WeaponProbPreset("Human_rifle_T3")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r11",    1);
+	}
+	WeaponProbPreset("Human_shotgun_T3")
+	{
+		Weapon("dlc_ft_firearm_shotgun_b_npc_only_r11",    1);
+	}
+	WeaponProbPreset("Human_Sniper_T3")
+	{
+		Weapon("dlc_ft_firearm_rifle_i_marksman_r11",    1);
+	}
+	WeaponProbPreset("Baron_1h_T3")
+	{
+		Weapon("dlc_ft_wpn_1hs_axe_02_baron_r11",   1);
+		Weapon("dlc_ft_WPN_1HS_AXE_04_baron_r11",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+		Weapon("dlc_ft_wpn_1hb_ham_g_baron_r11",   1);
+		Weapon("dlc_ft_1hb_stk_e_baron_r11",   1);
+	}
+	WeaponProbPreset("Baron_2h_T3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r11",    1);
+		Weapon("dlc_ft_WPN_2HB_C_baron_r11",    1);
+	}
+	WeaponProbPreset("Baron_Bow_T3")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11",    1);
+	}
+	WeaponProbPreset("Baron_Spear_T3")
+	{
+		Weapon("Tackle_Spear_t7",    1);
+	}
+	WeaponProbPreset("Baron_Summoner_T3")
+	{
+		Weapon("dlc_ft_wpn_1hs_axe_02_baron_r11",   1);
+		Weapon("dlc_ft_WPN_1HS_AXE_04_baron_r11",   1);
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+		Weapon("dlc_ft_wpn_1hb_ham_g_baron_r11",   1); 
+		Weapon("dlc_ft_1hb_stk_e_baron_r11",   1);
+	}
+	WeaponProbPreset("Baron_rifle_T3")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r11",    1);
+	}
+	WeaponProbPreset("Baron_shotgun_T3")
+	{
+		Weapon("dlc_ft_firearm_shotgun_b_npc_only_r11",    1);
+	}
+	WeaponProbPreset("Baron_Sniper_T3")
+	{
+		Weapon("dlc_ft_firearm_rifle_i_marksman_r11",    1);
+	}
+	
+	WeaponProbPreset("Baron_Weapons_pool_d7")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r7",    1);
+	}
+
+	WeaponProbPreset("Baron_Weapons_pool_d8")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r7",    1);
+	}
+	
+	WeaponProbPreset("Baron_Weapons_pool_d9")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r7",    1);
+	}
+	
+	
+	WeaponProbPreset("Baron_Weapons_pool_2h_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7",    1);
+	}
+	
+	WeaponProbPreset("Baron_Weapons_pool_2h_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7",    1);
+	}
+	
+	WeaponProbPreset("Baron_Weapons_pool_2h_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7",    1);
+	}
+	
+	WeaponProbPreset("Baron_Bow_T7")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r7", 	1);
+	}
+	
+	WeaponProbPreset("Baron_Bow_T8")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r7", 	1);
+	}
+	
+	WeaponProbPreset("Baron_Bow_T9")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r7", 	1);
+	}
+	
+	WeaponProbPreset("Baron_rifle_T7")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r11", 	1);
+	}
+	
+	WeaponProbPreset("Baron_rifle_T8")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r11", 	1);
+	}
+	
+	WeaponProbPreset("Baron_rifle_T9")
+	{
+		Weapon("dlc_ft_firearm_rifle_a_baron_npc_only_r11", 	1);
+	}
+
+	WeaponProbPreset("Baron_shotgun")
+	{
+		Weapon("dlc_ft_firearm_shotgun_b_npc_only_r11", 	1);
+	}
+
+/////////////////////////////////////////////////////////
+//////////////////// OLD PRESETS ////////////////////////
+/////////////////////////////////////////////////////////
+
+// All - Tiers //
+
+	WeaponProbPreset("Weapons_1h_T1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_1h_T2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+
+// 1h pools// 
+
+
+	WeaponProbPreset("Weapons_pool_T1_d1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	WeaponProbPreset("Weapons_pool_T1_d2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	WeaponProbPreset("Weapons_pool_T1_d3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	WeaponProbPreset("Weapons_pool_T1_d4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	WeaponProbPreset("Weapons_pool_T1_d5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	WeaponProbPreset("Weapons_pool_T1_d6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	WeaponProbPreset("Weapons_pool_T1_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+		
+	}
+	WeaponProbPreset("Weapons_pool_T1_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	WeaponProbPreset("Weapons_pool_T1_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+
+	WeaponProbPreset("Weapons_pool_d1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+		
+	}
+	
+    WeaponProbPreset("Weapons_pool_d2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+			
+	}
+	
+	WeaponProbPreset("Weapons_pool_d3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+		
+	}
+	
+	WeaponProbPreset("Weapons_pool_d4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+		
+	}
+	
+	WeaponProbPreset("Weapons_pool_d5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_d6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	WeaponProbPreset("Weapons_pool_blunt_d1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+    WeaponProbPreset("Weapons_pool_blunt_d2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_blunt_d3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_blunt_d4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_blunt_d5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_blunt_d6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_blunt_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_blunt_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_blunt_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	//Fodder
+	
+	WeaponProbPreset("Shoddy_Weapons_pool_d1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Shoddy_Weapons_pool_d2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Shoddy_Weapons_pool_d3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Shoddy_Weapons_pool_d4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Shoddy_Weapons_pool_d5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Shoddy_Weapons_pool_d6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Shoddy_Weapons_pool_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Shoddy_Weapons_pool_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+	
+	WeaponProbPreset("Shoddy_Weapons_pool_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r7", 	1);
+	}
+
+// 2h pools //
+
+	WeaponProbPreset("Weapons_LowTier_2h")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_T1_2h_d1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+
+	WeaponProbPreset("Weapons_pool_T1_2h_d2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+	
+	WeaponProbPreset("Weapons_pool_T1_2h_d3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+	
+	WeaponProbPreset("Weapons_pool_T1_2h_d4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+	
+	WeaponProbPreset("Weapons_pool_T1_2h_d5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+
+	WeaponProbPreset("Weapons_pool_T1_2h_d6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+
+	WeaponProbPreset("Weapons_pool_T1_2h_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_T1_2h_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_T1_2h_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_MediumTier_2h")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+		
+	}
+	
+	WeaponProbPreset("Weapons_pool_T2_2h_d1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+
+	WeaponProbPreset("Weapons_pool_T2_2h_d2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+	
+	WeaponProbPreset("Weapons_pool_T2_2h_d3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+	
+	WeaponProbPreset("Weapons_pool_T2_2h_d4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+	
+	WeaponProbPreset("Weapons_pool_T2_2h_d5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}	
+
+	WeaponProbPreset("Weapons_pool_T2_2h_d6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+
+	WeaponProbPreset("Weapons_pool_T2_2h_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_T2_2h_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_pool_T2_2h_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("Weapons_HighTier_2h")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	//Bows
+	
+	WeaponProbPreset("Bow_T1")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11", 	1);
+	}
+	
+	WeaponProbPreset("Bow_T2")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11", 	1);
+	}
+	
+	WeaponProbPreset("Bow_T3")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11", 	1);
+	}
+	
+	WeaponProbPreset("Bow_T4")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11", 	1);
+	}
+	
+	WeaponProbPreset("Bow_T5")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11", 	1);
+	}
+	
+	WeaponProbPreset("Bow_T6")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11", 	1);
+	}
+	
+	WeaponProbPreset("Bow_T7")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11", 	1);
+	}
+	
+	WeaponProbPreset("Bow_T8")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11", 	1);
+	}
+	
+	WeaponProbPreset("Bow_T9")
+	{
+		Weapon("dlc_ft_wpn_lbow_c_r11", 	1);
+	}
+	
+	// Weapons skins // 
+	
+	//PK 1h
+	
+	WeaponProbPreset("PK_Weapons_pool_r1")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+
+	WeaponProbPreset("PK_Weapons_pool_r2")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r3")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+    WeaponProbPreset("PK_Weapons_pool_r4")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r5")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+
+	WeaponProbPreset("PK_Weapons_pool_r6")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r7")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r8")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r9")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r10")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r11")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+
+	WeaponProbPreset("PK_Weapons_pool_r12")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r13")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r14")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r15")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r16")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r17")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r18")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r19")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r20")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r21")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r22")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r23")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_r24")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_d1")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_d2")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_d3")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_d4")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_d5")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_d6")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_d7")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_d8")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_d9")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11", 	1);
+	}
+	
+	//PK 2h
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r0")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r10")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r11")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r12")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r13")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r14")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r15")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r16")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r17")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r18")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r19")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r20")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r21")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r22")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r23")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_r24")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_d1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_d2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_d3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_d4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_d5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_d6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	WeaponProbPreset("PK_Weapons_pool_2h_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10", 	1);
+	}
+	
+	//Dukes 1h
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r0")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r1")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+
+	WeaponProbPreset("Dukes_Weapons_pool_r2")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r3")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+    WeaponProbPreset("Dukes_Weapons_pool_r4")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r5")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+
+	WeaponProbPreset("Dukes_Weapons_pool_r6")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r7")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r8")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r9")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r10")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r11")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+
+	WeaponProbPreset("Dukes_Weapons_pool_r12")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r13")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r14")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r15")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r16")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r17")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r18")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r19")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r20")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r21")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r22")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r23")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_r24")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_d1")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_d2")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_d3")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_d4")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_d5")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_d6")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_d7")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_d8")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_d9")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	//Dukes 2h
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r0")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r10")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r11")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r12")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r13")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r14")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r15")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r16")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r17")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r18")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r19")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r20")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r21")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r22")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r23")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_r24")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_d1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_d2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_d3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_d4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_d5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_d6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Dukes_Weapons_pool_2h_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	//Renegades 1h
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r0")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r1")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+
+	WeaponProbPreset("Renegades_Weapons_pool_r2")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r3")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+    WeaponProbPreset("Renegades_Weapons_pool_r4")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r5")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+
+	WeaponProbPreset("Renegades_Weapons_pool_r6")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r7")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r8")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r9")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r10")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r11")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+
+	WeaponProbPreset("Renegades_Weapons_pool_r12")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r13")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r14")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r15")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r16")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r17")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r18")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r19")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r20")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r21")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r22")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r23")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_r24")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_d1")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_d2")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_d3")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_d4")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_d5")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_d6")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_d7")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_d8")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_d9")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	
+	//Renegades 2h
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r0")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r10")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r11")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r12")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r13")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r14")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r15")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r16")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r17")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r18")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r19")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r20")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r21")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r22")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r23")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_r24")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_d1")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_d2")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_d3")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_d4")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_d5")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_d6")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_d7")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_d8")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Renegades_Weapons_pool_2h_d9")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	
+	WeaponProbPreset("Rumble_1h")
+	{
+		Weapon("dlc_ft_wpn_1hs_mach_b_baron_r11",    1);
+	}
+	WeaponProbPreset("Rumble_2h")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+	WeaponProbPreset("Bandit_Elemental_2h_pool")
+	{
+		Weapon("dlc_ft_WPN_2HS_E_baron_r10",    1);
+	}
+}
