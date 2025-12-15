@@ -1,7 +1,5 @@
 package ankol.mod.merger.core;
 
-import ankol.mod.merger.merger.ScrConflictResolver.MergeChoice;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,8 +17,6 @@ import java.nio.file.Paths;
  * - mod1Directory: 第一个模组目录
  * - mod2Directory: 第二个模组目录
  * - outputDirectory: 合并结果输出目录（默认：./merged_mod）
- * - interactiveMode: 是否使用交互模式（默认：true）
- * - defaultMergeStrategy: 自动模式的默认合并策略（默认：KEEP_MOD1）
  * - verbose: 是否显示详细信息（默认：false）
  */
 public class SimpleArgumentsParser {
@@ -37,10 +33,6 @@ public class SimpleArgumentsParser {
      */
     public Path outputDirectory;
     /**
-     * 是否使用交互模式（true=交互，false=自动）
-     */
-    public boolean interactiveMode;
-    /**
      * 是否启用详细输出
      */
     public boolean verbose;
@@ -49,13 +41,10 @@ public class SimpleArgumentsParser {
      * 默认构造函数 - 设置默认值
      * <p>
      * 默认配置：
-     * - 交互模式启用
-     * - 默认策略：KEEP_MOD1（优先保留模组1）
      * - 详细模式禁用
      * - 输出目录：./merged_mod
      */
     public SimpleArgumentsParser() {
-        this.interactiveMode = true;
         this.verbose = false;
         this.outputDirectory = Paths.get("./merged_mod");
     }
@@ -76,7 +65,6 @@ public class SimpleArgumentsParser {
      * <p>
      * 支持的参数：
      * -o, --output <dir>  - 指定输出目录
-     * -a, --auto <strategy> - 启用自动模式并指定策略
      * -v, --verbose       - 启用详细输出
      * -h, --help          - 显示帮助信息并退出
      *
@@ -104,7 +92,6 @@ public class SimpleArgumentsParser {
                     "Usage: mod1_dir mod2_dir [output_dir] [options]\n" +
                             "Options:\n" +
                             "  -o, --output <dir>        Output directory (default: ./merged_mod)\n" +
-                            "  -a, --auto <strategy>     Auto mode (keep-mod1|keep-mod2|keep-both)\n" +
                             "  -v, --verbose             Verbose output\n" +
                             "  -h, --help                Show help\n"
             );
@@ -146,29 +133,6 @@ public class SimpleArgumentsParser {
         }
 
         return config;
-    }
-
-    /**
-     * 解析合并策略字符串为枚举值
-     * <p>
-     * 支持的策略字符串：
-     * - "keep-mod1"  -> MergeChoice.KEEP_MOD1
-     * - "keep-mod2"  -> MergeChoice.KEEP_MOD2
-     * - "keep-both"  -> MergeChoice.KEEP_BOTH
-     * <p>
-     * 参数不区分大小写。
-     *
-     * @param strategy 策略字符串
-     * @return 对应的MergeChoice枚举值
-     * @throws IllegalArgumentException 如果策略字符串不被识别
-     */
-    private static MergeChoice parseStrategy(String strategy) throws IllegalArgumentException {
-        return switch (strategy.toLowerCase()) {
-            case "keep-mod1" -> MergeChoice.KEEP_MOD1;
-            case "keep-mod2" -> MergeChoice.KEEP_MOD2;
-            case "keep-both" -> MergeChoice.KEEP_BOTH;
-            default -> throw new IllegalArgumentException("Unknown strategy: " + strategy);
-        };
     }
 
     /**
@@ -215,7 +179,6 @@ public class SimpleArgumentsParser {
                         "  mod2_dir              Second mod directory\n" +
                         "\nOptions:\n" +
                         "  -o, --output <dir>    Output directory (default: ./merged_mod)\n" +
-                        "                        Strategies: keep-mod1, keep-mod2, keep-both\n" +
                         "  -v, --verbose         Verbose output\n" +
                         "  -h, --help            Show this help\n"
         );
@@ -234,9 +197,7 @@ public class SimpleArgumentsParser {
                 "mod1=" + mod1Directory +
                 ", mod2=" + mod2Directory +
                 ", output=" + outputDirectory +
-                ", interactive=" + interactiveMode +
                 ", verbose=" + verbose +
                 '}';
     }
 }
-
