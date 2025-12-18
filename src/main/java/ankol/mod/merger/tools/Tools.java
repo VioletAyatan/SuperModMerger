@@ -25,23 +25,35 @@ public abstract class Tools {
      * @param argumentsParser 命令行参数配置，命令行传入的参数可以覆盖默认配置
      * @return 待合并的MOD目录路径
      */
-    public static String getMergingModDir(SimpleArgumentsParser argumentsParser) {
-        Path meringModDir = argumentsParser.meringModDir;
+    public static Path getMergingModDir(SimpleArgumentsParser argumentsParser) {
+        Path meringModDir = null;
+        if (argumentsParser != null) {
+            meringModDir = argumentsParser.meringModDir;
+        }
         if (meringModDir == null) {
             Path defaultPath = Path.of(userDir + File.separator + "mods");
             if (FileUtil.exists(defaultPath, true)) {
-                return defaultPath.toString();
+                return defaultPath;
             } else {
                 throw new IllegalArgumentException("错误，合并目录[" + defaultPath + "]不存在");
             }
         } else {
             if (FileUtil.exists(meringModDir, true)) {
-                return meringModDir.toString();
+                return meringModDir;
             } else {
                 throw new IllegalArgumentException("错误，合并目录[" + meringModDir + "]不存在");
             }
         }
+    }
 
+    /**
+     * 获取待合并的MOD所在目录
+     * 这个工具默认配置的是在mods目录下
+     *
+     * @return 待合并的MOD目录路径
+     */
+    public static Path getMergingModDir() {
+        return getMergingModDir(null);
     }
 
     /**

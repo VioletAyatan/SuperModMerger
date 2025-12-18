@@ -3,7 +3,6 @@ package ankol.mod.merger.core;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Tools;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 
 import java.io.IOException;
@@ -13,80 +12,32 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * 核心模组合并引擎 - 协调所有模块完成合并操作
- * <p>
- * 主要职责：
- * 1. 扫描两个模组目录，查找所有脚本文件
- * 2. 建立文件映射（相对路径 -> 文件路径）
- * 3. 逐文件进行：解析、对比、冲突解决、合并
- * 4. 处理两个模组中独有的文件（直接复制）
- * 5. 输出合并结果和统计信息
- * <p>
- * 工作流程：
- * 1. 扫描模组1和模组2的脚本文件
- * 2. 对于两个模组都有的文件，进行合并
- * 3. 对于仅在模组1中的文件，直接复制
- * 4. 对于仅在模组2中的文件，直接复制
- * 5. 输出统计信息
+ * 模组合并引擎 - 负责执行模组合并的核心逻辑
+ *
+ * @author Ankol
  */
 public class ModMergerEngine {
-    /**
-     * 模组1的目录路径
-     */
-    private final Path mod1Dir;
-    /**
-     * 模组2的目录路径
-     */
-    private final Path mod2Dir;
-    /**
-     * 合并结果输出目录
-     */
-    private final Path outputDir;
+
+    private final List<Path> modsToMerge;
 
     /**
      * 构造函数 - 初始化合并引擎
-     *
-     * @param mod1Dir   模组1目录
-     * @param mod2Dir   模组2目录
-     * @param outputDir 输出目录
      */
-    public ModMergerEngine(Path mod1Dir, Path mod2Dir, Path outputDir) {
-        this.mod1Dir = mod1Dir;
-        this.mod2Dir = mod2Dir;
-        this.outputDir = outputDir;
+    public ModMergerEngine(List<Path> modsToMerge) {
+        this.modsToMerge = modsToMerge;
     }
 
     /**
-     * 执行合并操作 - 核心主方法
-     * <p>
-     * 执行流程：
-     * 1. 显示配置信息
-     * 2. 创建输出目录
-     * 3. 扫描模组1和模组2的脚本文件
-     * 4. 建立文件映射
-     * 5. 处理共同文件（解析、对比、合并、冲突解决）
-     * 6. 处理模组1独有文件（复制）
-     * 7. 处理模组2独有文件（复制）
-     * 8. 输出统计信息
-     *
-     * @throws IOException 如果文件操作失败
+     * 开始执行合并逻辑
      */
     public void merge() throws IOException {
         // 显示配置信息
         System.out.println("====== Techland Mod Merger ======");
-        System.out.println("Mod1: " + mod1Dir);
-        System.out.println("Mod2: " + mod2Dir);
-        System.out.println("Output: " + outputDir);
         System.out.println();
-        // 创建输出目录（如果不存在）
-        FileUtil.mkdir(outputDir);
         // 扫描两个模组目录，查找所有脚本文件
-        Map<String, FileTree> mod1FileTree = Tools.buildFileTree(mod1Dir);
-        Map<String, FileTree> mod2FileTree = Tools.buildFileTree(mod2Dir);
-        //打印文件数量
-        System.out.println("Found " + mod1FileTree.size() + " scripts in Mod1");
-        System.out.println("Found " + mod2FileTree.size() + " scripts in Mod2");
-
+        for (Path path : modsToMerge) {
+            Map<String, FileTree> fileTreeMap = Tools.buildFileTree(path);
+        }
         // 统计计数器
         int mergedCount = 0;      // 成功合并（无冲突）的文件数
         int conflictCount = 0;     // 包含冲突的文件数
