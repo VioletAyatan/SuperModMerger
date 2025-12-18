@@ -2,7 +2,7 @@ package ankol.mod.merger.core;
 
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.tools.FileTree;
-import ankol.mod.merger.tools.MergeTool;
+import ankol.mod.merger.tools.Tools;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -81,8 +81,8 @@ public class ModMergerEngine {
         // 创建输出目录（如果不存在）
         FileUtil.mkdir(outputDir);
         // 扫描两个模组目录，查找所有脚本文件
-        Map<String, FileTree> mod1FileTree = MergeTool.buildFileTree(mod1Dir);
-        Map<String, FileTree> mod2FileTree = MergeTool.buildFileTree(mod2Dir);
+        Map<String, FileTree> mod1FileTree = Tools.buildFileTree(mod1Dir);
+        Map<String, FileTree> mod2FileTree = Tools.buildFileTree(mod2Dir);
         //打印文件数量
         System.out.println("Found " + mod1FileTree.size() + " scripts in Mod1");
         System.out.println("Found " + mod2FileTree.size() + " scripts in Mod2");

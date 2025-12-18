@@ -24,6 +24,10 @@ public class SimpleArgumentsParser {
      * 是否启用详细输出
      */
     public boolean verbose;
+    /**
+     * 需要合并的MOD目录所在文件夹
+     */
+    public Path meringModDir;
 
     public SimpleArgumentsParser() {
         this.verbose = false;

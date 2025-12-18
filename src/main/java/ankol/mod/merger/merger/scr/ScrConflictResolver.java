@@ -20,11 +20,18 @@ public class ScrConflictResolver {
         KEEP_MOD2("Keep Mod2");
 
         private final String description;
-        MergeChoice(String description) { this.description = description; }
-        public String getDescription() { return description; }
+
+        MergeChoice(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
-    public record MergeDecision(DiffResult diff, MergeChoice choice) {}
+    public record MergeDecision(DiffResult diff, MergeChoice choice) {
+    }
 
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -81,13 +88,12 @@ public class ScrConflictResolver {
                 List<String> lines = Files.readAllLines(file1);
                 if (diff.lineNumber1 <= lines.size()) line1 = lines.get(diff.lineNumber1 - 1).trim();
             }
-        } catch (IOException ignored) {}
-        try {
             if (file2 != null && diff.lineNumber2 > 0) {
                 List<String> lines = Files.readAllLines(file2);
                 if (diff.lineNumber2 <= lines.size()) line2 = lines.get(diff.lineNumber2 - 1).trim();
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         System.out.println("\n--- File: " + (file1 != null ? file1.toString() : "(unknown)") + " (Line " + diff.lineNumber1 + ") ---");
         System.out.println(line1);
@@ -181,7 +187,14 @@ public class ScrConflictResolver {
         }
         System.out.println("\nFound " + diffs.size() + " conflicts.");
         for (int i = 0; i < diffs.size(); i++) {
-            decisions.add(resolveConflict(diffs.get(i), i + 1, diffs.size(), file1, file2));
+            decisions.add(resolveConflict(
+                            diffs.get(i),
+                            i + 1,
+                            diffs.size(),
+                            Path.of(file1.getFullPathName()),
+                            Path.of(file2.getFullPathName())
+                    )
+            );
             if (i < diffs.size() - 1) {
                 System.out.print("\nPress Enter to continue...");
                 scanner.nextLine();

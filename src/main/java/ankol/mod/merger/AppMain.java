@@ -4,6 +4,7 @@ import ankol.mod.merger.core.SimpleArgumentsParser;
 import ankol.mod.merger.core.ModMergerEngine;
 import ankol.mod.merger.merger.scr.ScrConflictResolver;
 import ankol.mod.merger.tools.Localizations;
+import ankol.mod.merger.tools.Tools;
 import cn.hutool.core.io.FileUtil;
 
 import java.io.IOException;
@@ -15,30 +16,7 @@ import java.util.List;
  * Techland模组合并工具 - 主应用入口类
  */
 public class AppMain {
-    /**
-     * 主程序入口方法
-     * <p>
-     * ���行流程：
-     * 1. 解析命令行参数生成配置对象 (MergeConfig.fromArgs)
-     * 2. 验证配置的有效性 (config.validate)
-     * 3. 如果启用详细模式，打印配置信息
-     * 4. 创建合并引擎实例，传入配置参数
-     * 5. 启动合并过程 (merger.merge)
-     * 6. 合并成功则打印完成信息并以0退出
-     * <p>
-     * 异常处理：
-     * - IllegalArgumentException: 参数验证失败，退出码1
-     * - IOException: 文件操作失败，退出码2，打印堆栈跟踪
-     * - 其他异常: 未预期的运行时错误，退出码3，打印堆栈跟踪
-     * <p>
-     * finally块：
-     * - 无论成功或失败，都会关闭ConflictResolver的扫描器资源
-     *
-     * @param args 命令行参数数组
-     *             args[0] - 第一个模组目录路径
-     *             args[1] - 第二个模组目录路径
-     *             可选参数 - -o, -a, -v, -h 等
-     */
+
     public static void main(String[] args) {
         try {
             Localizations.init(); //初始化国际化文件
@@ -51,16 +29,11 @@ public class AppMain {
                 System.out.println("Config: " + config);
             }
 
-            // 支持 baseline + 多 mod 的合并流程：
-            // args[0] = baseline (官方/原版目录), args[1..N] = mod dirs to merge on top
+            Path mergingModDir = Tools.getMergingModDir(config);
             List<Path> modsToMerge = new ArrayList<>();
-            // 从原始 args 中收集除了第0个 baseline 之外的 mod 目录
-            for (int i = 1; i < args.length; i++) {
-                String a = args[i];
                 if (!a.startsWith("-")) {
                     modsToMerge.add(Path.of(a));
                 }
-            }
 
             Path baseline = Path.of(args[0]);
             Path output = config.outputDirectory;
