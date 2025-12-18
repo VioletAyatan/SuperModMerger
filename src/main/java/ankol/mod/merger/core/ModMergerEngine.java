@@ -1,6 +1,5 @@
 package ankol.mod.merger.core;
 
-import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Tools;
 import cn.hutool.core.util.StrUtil;
@@ -27,9 +26,6 @@ public class ModMergerEngine {
         this.modsToMerge = modsToMerge;
     }
 
-    /**
-     * 开始执行合并逻辑
-     */
     public void merge() throws IOException {
         // 显示配置信息
         System.out.println("====== Techland Mod Merger ======");
@@ -38,6 +34,7 @@ public class ModMergerEngine {
         for (Path path : modsToMerge) {
             Map<String, FileTree> fileTreeMap = Tools.buildFileTree(path);
         }
+
         // 统计计数器
         int mergedCount = 0;      // 成功合并（无冲突）的文件数
         int conflictCount = 0;     // 包含冲突的文件数
@@ -45,9 +42,9 @@ public class ModMergerEngine {
         int addedCount = 0;        // 新增文件数
         boolean hasAnyConflict = false; // 是否存在任何冲突
 
-        // 处理模组1中的文件
+      /*  // 处理模组1中的文件
         Set<String> processedFiles = new HashSet<>();
-        for (String filename : mod1FileTree.keySet()) {
+        for (String filename : fileTreeMap.keySet()) {
             // 标记为已处理，避免后面重复处理
             processedFiles.add(filename);
             if (mod2FileTree.containsKey(filename)) {
@@ -104,47 +101,15 @@ public class ModMergerEngine {
 //                Files.copy(map2.get(filename), outputPath, StandardCopyOption.REPLACE_EXISTING);
                 addedCount++;
             }
-        }
+        }*/
 
         // 如果存在冲突，给出警告信息
         if (hasAnyConflict) {
             System.out.println("\n⚠️  WARNING: Conflicts detected during merge!");
             System.out.println("Please review the conflicts and ensure all files are correct.");
         }
-
-        // 输出合并完成信息和统计
-        System.out.println("\n====== Merge Complete ======");
-        System.out.println("Successfully merged: " + mergedCount);
-        System.out.println("Copied (no conflicts): " + copiedCount);
-        System.out.println("With conflicts: " + conflictCount);
-        System.out.println("New files from Mod2: " + addedCount);
-        System.out.println("─────────────────────────────");
-        System.out.println("Total files: " + (mergedCount + copiedCount + conflictCount + addedCount));
-        System.out.println("Output: " + outputDir);
     }
 
-    /**
-     * 递归查找目录中的所有脚本文件
-     * <p>
-     * 支持的文件类型：
-     * - .scr  - Techland脚本文件（主要，可解析对比）
-     * - .txt  - 文本脚本文件（可解析对比）
-     * - .def  - 定义文件（复制）
-     * - .model - 模型定义文件（复制）
-     * - .loot - 掉落物品定义（复制）
-     * - .xml  - XML配置文件（复制）
-     * <p>
-     * 执行流程：
-     * 1. 检查目录是否存在，不存在返回空列表
-     * 2. 使用Files.walk进行深度优先遍历
-     * 3. 过滤出常规文件（非目录）
-     * 4. 过滤出支持的所有文件类型
-     * 5. 返回文件列表
-     *
-     * @param directory 要扫描的目录
-     * @return 找到的脚本文件路径列表
-     * @throws IOException 如果目录访问失败
-     */
     private List<Path> findScriptFiles(Path directory) throws IOException {
         // 检查目录是否存在
         if (!Files.exists(directory)) {
@@ -173,21 +138,6 @@ public class ModMergerEngine {
         return scripts;
     }
 
-    /**
-     * 构建文件映射表
-     * <p>
-     * 目的：将脚本文件相对路径映射到完整路径，便于后续查找和处理
-     * <p>
-     * 执行流程：
-     * 1. 创建一个LinkedHashMap（有序Map）
-     * 2. 对于每个脚本文件，计算其相对于基目录的相对路径
-     * 3. 将相对路径和完整路径存入Map
-     * 4. 返回Map
-     *
-     * @param baseDir 基础目录
-     * @param scripts 脚本文件路径列表
-     * @return 映射表，键为相对路径，值为完整路径
-     */
     private Map<String, Path> buildFileMap(Path baseDir, List<Path> scripts) {
         Map<String, Path> map = new LinkedHashMap<>();
 
@@ -201,10 +151,6 @@ public class ModMergerEngine {
         return map;
     }
 
-    /**
-     * 如果 modMap 中有文件路径在 baseMap 中不存在，尝试用文件名在 baseMap 中唯一匹配，
-     * 若匹配成功则把 modMap 的 key 重映射到基准的相对路径，从而修正放错位置的文件。
-     */
     private void alignPathsToBaseline(Map<String, Path> baseMap, Map<String, Path> modMap) {
         // 构建基准文件名 -> 相对路径 列表
         Map<String, List<String>> nameToPaths = new HashMap<>();

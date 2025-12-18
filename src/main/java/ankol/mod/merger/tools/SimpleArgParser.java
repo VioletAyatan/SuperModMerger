@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class SimpleArgParser {
     // --- 定义存储结构 ---
-    private final Map<String, Option> options = new HashMap<>();
+    private final Map<String, Option> options = new LinkedHashMap<>();
     // 关键映射：短名 -> 长名 (例如 "p" -> "port")
     private final Map<String, String> shortToLongMap = new HashMap<>();
     // 解析结果 (统一使用长名作为 Key)
@@ -138,6 +138,19 @@ public class SimpleArgParser {
      */
     public List<String> getPositionalArgs() {
         return positionalArgs;
+    }
+
+    /**
+     * 打印帮助信息
+     */
+    public void printHelp() {
+        System.out.println("Usage:");
+        for (Option opt : options.values()) {
+            String sName = (opt.shortName != null) ? "-" + opt.shortName : "  ";
+            String lName = "--" + opt.longName;
+            String valParams = opt.hasValue ? " <value>" : "";
+            System.out.printf("  %s, %-20s %s%n", sName, lName + valParams, opt.description);
+        }
     }
 
     @Data

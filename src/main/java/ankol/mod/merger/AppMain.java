@@ -25,6 +25,11 @@ public class AppMain {
             //解析命令行参数
             SimpleArgParser argParser = registerArgsParser();
             argParser.parse(args);
+            if (argParser.hasOption("h")) {
+                //显示帮助信息并退出
+                argParser.printHelp();
+                System.exit(0);
+            }
             //读取合并目录
             Path mergingModDir = Tools.getMergingModDir();
             List<Path> modsToMerge = new ArrayList<>();
@@ -41,7 +46,7 @@ public class AppMain {
             }
 
             ModMergerEngine merger = new ModMergerEngine(modsToMerge);
-            merger.merge();
+//            merger.merge();
 
             System.out.println("\nDone!");
             System.exit(0);
@@ -67,6 +72,8 @@ public class AppMain {
     private static SimpleArgParser registerArgsParser() {
         SimpleArgParser argParser = new SimpleArgParser();
         argParser.addOption("o", "output", true, "指定输出位置"); //指定文件输出在哪
+        argParser.addOption("b", "base", true, "基准mod所在的位置"); //mod合并工具所需的基准mod所在目录
+        argParser.addOption("h", "help", false, "显示帮助信息"); //显示帮助信息
         return argParser;
     }
 }
