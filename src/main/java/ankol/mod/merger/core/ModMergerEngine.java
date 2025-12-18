@@ -202,8 +202,7 @@ public class ModMergerEngine {
      */
     private boolean areAllFilesIdentical(List<Path> filePaths) throws IOException {
         if (filePaths.size() <= 1) return true;
-
-        Path first = filePaths.get(0);
+        Path first = filePaths.getFirst();
         for (int i = 1; i < filePaths.size(); i++) {
             if (!PakManager.areFilesIdentical(first, filePaths.get(i))) {
                 return false;

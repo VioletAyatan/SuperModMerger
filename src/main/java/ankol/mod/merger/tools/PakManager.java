@@ -109,6 +109,9 @@ public class PakManager {
 
     /**
      * 判断两个文件在内容上是否相同
+     * <p>
+     * 先判断字节大小是否一致，不一致肯定内容不同
+     * 一致则读取内容进行对比
      */
     public static boolean areFilesIdentical(Path file1, Path file2) throws IOException {
         if (Files.size(file1) != Files.size(file2)) {
