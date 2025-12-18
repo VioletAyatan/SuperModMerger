@@ -22,14 +22,17 @@ public class AppMain {
     public static void main(String[] args) {
         try {
             Localizations.init(); //初始化国际化文件
+
             //解析命令行参数
             SimpleArgParser argParser = registerArgsParser();
             argParser.parse(args);
+
             if (argParser.hasOption("h")) {
                 //显示帮助信息并退出
                 argParser.printHelp();
                 System.exit(0);
             }
+
             //读取合并目录
             Path mergingModDir = Tools.getMergingModDir();
             List<Path> modsToMerge = new ArrayList<>();
@@ -45,23 +48,31 @@ public class AppMain {
                 });
             }
 
-            ModMergerEngine merger = new ModMergerEngine(modsToMerge);
-//            merger.merge();
+            // 确定输出路径
+            Path outputPath = Path.of(System.getProperty("user.dir"), "merged_mod.pak");
+            if (argParser.hasOption("o")) {
+                outputPath = Path.of(argParser.getOptionValue("o"));
+            }
 
-            System.out.println("\nDone!");
+            // 执行合并
+            ModMergerEngine merger = new ModMergerEngine(modsToMerge, outputPath);
+            merger.merge();
+
+            System.out.println("\n✅ Done!");
             System.exit(0);
+
         } catch (IllegalArgumentException e) {
             // 参数错误处理：打印错误信息，退出码1
-            System.err.println("Error: " + e.getMessage());
+            System.err.println("❌ Error: " + e.getMessage());
             System.exit(1);
         } catch (IOException e) {
             // 文件IO错误处理：打印错误信息和堆栈跟踪，退出码2
-            System.err.println("IO Error: " + e.getMessage());
+            System.err.println("❌ IO Error: " + e.getMessage());
             e.printStackTrace();
             System.exit(2);
         } catch (Exception e) {
             // 其他运行时异常处理：打印错误信息和堆栈跟踪，退出码3
-            System.err.println("Error: " + e.getMessage());
+            System.err.println("❌ Error: " + e.getMessage());
             e.printStackTrace();
             System.exit(3);
         } finally {
@@ -71,9 +82,9 @@ public class AppMain {
 
     private static SimpleArgParser registerArgsParser() {
         SimpleArgParser argParser = new SimpleArgParser();
-        argParser.addOption("o", "output", true, "指定输出位置"); //指定文件输出在哪
-        argParser.addOption("b", "base", true, "基准mod所在的位置"); //mod合并工具所需的基准mod所在目录
-        argParser.addOption("h", "help", false, "显示帮助信息"); //显示帮助信息
+        argParser.addOption("o", "output", true, "指定输出 PAK 文件位置 (默认: ./merged_mod.pak)");
+        argParser.addOption("b", "base", true, "基准mod所在的位置 (可选)");
+        argParser.addOption("h", "help", false, "显示帮助信息");
         return argParser;
     }
 }
