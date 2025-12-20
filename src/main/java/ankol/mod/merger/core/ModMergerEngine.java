@@ -103,8 +103,8 @@ public class ModMergerEngine {
 
         for (int i = 0; i < modsToMerge.size(); i++) {
             Path modPath = modsToMerge.get(i);
-            String modFileName = modPath.getFileName().toString();  // 真实的MOD文件名（如 data2.pak）
-            String modTempDirName = "Mod" + (i + 1);                // 临时目录名（如 Mod1）
+            String modFileName = modPath.getFileName().toString(); //文件真实名称
+            String modTempDirName = "Mod" + (i + 1);               // 临时目录名（如 Mod1）
             Path modTempDir = tempDir.resolve(modTempDirName);
 
             ColorPrinter.info("Extracting {}...", modFileName);

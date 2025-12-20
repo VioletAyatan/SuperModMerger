@@ -126,8 +126,8 @@ public class ScrScriptFileMerger extends IFileMerger {
                 ColorPrinter.warning("1. {}, Line {}: {}", record.getBaseModName(), record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
                 ColorPrinter.warning("2. {}, Line {}: {}", record.getMergeModName(), record.getModNode().getLine(), record.getModNode().getSourceText().trim());
                 ColorPrinter.info("请选择:");
-                ColorPrinter.info("1. 使用{}", record.getBaseNode().getSourceText());
-                ColorPrinter.info("2. 使用{}", record.getModNode().getSourceText());
+                ColorPrinter.info("1. 使用{}: {}", record.getBaseModName(), record.getBaseNode().getSourceText());
+                ColorPrinter.info("2. 使用{}: {}", record.getMergeModName(), record.getModNode().getSourceText());
                 ColorPrinter.info("3. 全部使用 {} 的配置", record.getBaseModName());
                 ColorPrinter.info("4. 全部使用 {} 的配置", record.getMergeModName());
 

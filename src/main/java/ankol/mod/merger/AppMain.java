@@ -20,9 +20,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class AppMain {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         try {
-            initCharset();
+            initCharset(); //初始化控制台字符集为UTF-8
             Localizations.init(); //初始化国际化文件
             //解析命令行参数
             SimpleArgParser argParser = registerArgsParser();
@@ -33,7 +33,7 @@ public class AppMain {
                 System.exit(0);
             }
             // 扫描需要合并的MOD目录
-            List<Path> modsToMerge = Tools.scanModFiles(Tools.getMergingModDir());
+            List<Path> modsToMerge = Tools.scanFiles(Tools.getMergingModDir(), ".pak", ".zip");
             // 确定输出路径
             Path outputPath = Path.of(Tools.getUserDir(), "merged_mod.pak");
             if (argParser.hasOption("o")) {
