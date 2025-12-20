@@ -28,7 +28,7 @@ public class ScrFileMerger extends IFileMerger {
     /**
      * Parse 缓存，避免重复解析相同内容的文件
      */
-    private static final Map<String, ScrContainerNode> PARSE_CACHE = new WeakHashMap<>();
+    private static final Map<String, ScrContainerScriptNode> PARSE_CACHE = new WeakHashMap<>();
 
     public ScrFileMerger(MergerContext context) {
         super(context);
@@ -38,8 +38,8 @@ public class ScrFileMerger extends IFileMerger {
     @Override
     public MergeResult merge(FileTree file1, FileTree file2) {
         try {
-            ScrContainerNode baseRoot = parseWithCache(Path.of(file1.getFullPathName()));
-            ScrContainerNode modRoot = parseWithCache(Path.of(file2.getFullPathName()));
+            ScrContainerScriptNode baseRoot = parseWithCache(Path.of(file1.getFullPathName()));
+            ScrContainerScriptNode modRoot = parseWithCache(Path.of(file2.getFullPathName()));
             conflicts.clear();
             // 递归对比，找到冲突项
             reduceCompare(baseRoot, modRoot);
@@ -71,24 +71,24 @@ public class ScrFileMerger extends IFileMerger {
 
     // ...existing code...
 
-    private void reduceCompare(ScrContainerNode baseContainer, ScrContainerNode modContainer) {
+    private void reduceCompare(ScrContainerScriptNode baseContainer, ScrContainerScriptNode modContainer) {
         // 遍历 Mod 的所有子节点
-        for (Map.Entry<String, ScrNode> entry : modContainer.getChildren().entrySet()) {
+        for (Map.Entry<String, ScrScriptNode> entry : modContainer.getChildren().entrySet()) {
             String signature = entry.getKey();
-            ScrNode baseNode = baseContainer.getChildren().get(signature);
-            ScrNode modNode = entry.getValue();
+            ScrScriptNode baseNode = baseContainer.getChildren().get(signature);
+            ScrScriptNode modNode = entry.getValue();
 
             if (baseNode == null) {
                 // [新增] Base 没有这个节点 -> 插入
                 handleInsertion(baseContainer, modNode);
             } else {
                 // [存在] 检查是否冲突
-                if (baseNode instanceof ScrContainerNode && modNode instanceof ScrContainerNode) {
+                if (baseNode instanceof ScrContainerScriptNode && modNode instanceof ScrContainerScriptNode) {
                     // 容器节点，递归进入内部对比
-                    reduceCompare((ScrContainerNode) baseNode, (ScrContainerNode) modNode);
+                    reduceCompare((ScrContainerScriptNode) baseNode, (ScrContainerScriptNode) modNode);
                 }
                 //函数调用，比较参数，不对比String，因为各类mod可能会
-                else if (baseNode instanceof ScrFunCallNode baseFunCall && modNode instanceof ScrFunCallNode modFunCall) {
+                else if (baseNode instanceof ScrFunCallScriptNode baseFunCall && modNode instanceof ScrFunCallScriptNode modFunCall) {
                     if (!baseFunCall.getArguments().equals(modFunCall.getArguments())) {
                         // 参数不一致，标记发生冲突
                         conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
@@ -136,7 +136,7 @@ public class ScrFileMerger extends IFileMerger {
         System.out.println("\n======= 冲突处理完成，正在应用修改 =======");
     }
 
-    private void handleInsertion(ScrContainerNode baseContainer, ScrNode modNode) {
+    private void handleInsertion(ScrContainerScriptNode baseContainer, ScrScriptNode modNode) {
         // 插入位置：Base 容器的 '}' 之前
         // 注意：baseContainer.getStopIndex() 指向 '}' 字符的位置
         int insertPos = baseContainer.getStopIndex();
@@ -156,16 +156,16 @@ public class ScrFileMerger extends IFileMerger {
      * @return 解析后的 AST 树
      * @throws IOException 如果文件不可读
      */
-    private static ScrContainerNode parseWithCache(Path filePath) throws IOException {
+    private static ScrContainerScriptNode parseWithCache(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = computeHash(content);
         // 先查缓存
-        ScrContainerNode cached = PARSE_CACHE.get(contentHash);
+        ScrContainerScriptNode cached = PARSE_CACHE.get(contentHash);
         if (cached != null) {
             return cached;
         }
         // 缓存未命中，执行解析
-        ScrContainerNode result = parse(content);
+        ScrContainerScriptNode result = parse(content);
         // 存入缓存
         PARSE_CACHE.put(contentHash, result);
         return result;
@@ -189,13 +189,13 @@ public class ScrFileMerger extends IFileMerger {
         }
     }
 
-    private static ScrContainerNode parse(String content) throws IOException {
+    private static ScrContainerScriptNode parse(String content) throws IOException {
         CharStream input = CharStreams.fromString(content);
         TechlandScriptLexer lexer = new TechlandScriptLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TechlandScriptParser parser = new TechlandScriptParser(tokens);
         ScrModelVisitor visitor = new ScrModelVisitor();
         // 注意：visitFile 返回的一定是我们定义的 ROOT Container
-        return (ScrContainerNode) visitor.visitFile(parser.file());
+        return (ScrContainerScriptNode) visitor.visitFile(parser.file());
     }
 }

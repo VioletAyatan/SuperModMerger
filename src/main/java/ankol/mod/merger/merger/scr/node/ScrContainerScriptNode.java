@@ -6,11 +6,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Data
-public class ScrContainerNode extends ScrNode {
+public class ScrContainerScriptNode extends ScrScriptNode {
     /**
      * 子节点映射，key 是节点签名，value 是节点对象
      */
-    private Map<String, ScrNode> children = new LinkedHashMap<>();
+    private Map<String, ScrScriptNode> children = new LinkedHashMap<>();
 
     /**
      * 构造函数
@@ -20,11 +20,11 @@ public class ScrContainerNode extends ScrNode {
      * @param stop
      * @param text
      */
-    public ScrContainerNode(String signature, int start, int stop, int line, String text) {
+    public ScrContainerScriptNode(String signature, int start, int stop, int line, String text) {
         super(signature, start, stop, line, text);
     }
 
-    public void addChild(ScrNode node) {
+    public void addChild(ScrScriptNode node) {
         children.put(node.getSignature(), node);
     }
 

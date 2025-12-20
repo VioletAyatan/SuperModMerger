@@ -18,8 +18,8 @@ public class ConflictRecord {
      * 冲突的签名
      */
     private final String signature;
-    private final ScrNode baseNode;
-    private final ScrNode modNode;
+    private final ScrScriptNode baseNode;
+    private final ScrScriptNode modNode;
     /**
      * 用户选择
      */
