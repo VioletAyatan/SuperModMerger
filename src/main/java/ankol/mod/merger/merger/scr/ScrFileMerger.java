@@ -137,10 +137,8 @@ public class ScrFileMerger extends IFileMerger {
 
     private void handleInsertion(ScrContainerScriptNode baseContainer, ScrScriptNode modNode) {
         // 插入位置：Base 容器的 '}' 之前
-        // 注意：baseContainer.getStopIndex() 指向 '}' 字符的位置
+        // baseContainer.getStopIndex() 指向 '}' 字符的位置
         int insertPos = baseContainer.getStopIndex();
-        // 构造插入文本：加换行和缩进 (简单模拟，假设是4空格)
-        // 如果想做得更完美，可以计算 baseContainer 的缩进层级
         String newContent = "\n    " + modNode.getSourceText();
         finalEdits.add(new EditOp(insertPos, insertPos, newContent));
     }
