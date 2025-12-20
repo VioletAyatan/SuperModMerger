@@ -6,8 +6,8 @@ import ankol.mod.merger.core.IFileMerger;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.*;
+import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
-import cn.hutool.core.util.StrUtil;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -113,16 +113,15 @@ public class ScrFileMerger extends IFileMerger {
      */
     private void resolveConflictsInteractively() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\n======= 检测到 " + conflicts.size() + " 处代码冲突 =======");
-
+        ColorPrinter.warning("\n==================== 检测到 {} 处代码冲突 ====================", conflicts.size());
         for (int i = 0; i < conflicts.size(); i++) {
             ConflictRecord record = conflicts.get(i);
-            System.out.println("\n------------------------------------------------");
-            System.out.printf("[%d/%d] 文件: %s\n", i + 1, conflicts.size(), record.getFileName());
-            System.out.printf("位置签名: %s\n", record.getSignature());
-            System.out.println(StrUtil.format("{}: Line:[{}] {}", record.getBaseModName(), record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim()));
-            System.out.println(StrUtil.format("{}: Line:[{}] {}", record.getMergeModName(), record.getModNode().getLine(), record.getModNode().getSourceText().trim()));
-            System.out.print("请选择 (1/2): ");
+            ColorPrinter.info("------------------------------------------------");
+            ColorPrinter.info("[{}/{}] 文件: {}", i + 1, conflicts.size(), record.getFileName());
+//            ColorPrinter.highlight("位置签名: {}", record.getSignature());
+            ColorPrinter.warning("1. {}: Line:[{}] {}", record.getBaseModName(), record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
+            ColorPrinter.warning("2. {}: Line:[{}] {}", record.getMergeModName(), record.getModNode().getLine(), record.getModNode().getSourceText().trim());
+            ColorPrinter.info("请选择 (1/2): ");
 
             while (true) {
                 String input = scanner.nextLine();
@@ -130,10 +129,10 @@ public class ScrFileMerger extends IFileMerger {
                     record.setUserChoice(Integer.parseInt(input));
                     break;
                 }
-                System.out.print("输入无效，请输入 1 或 2: ");
+                ColorPrinter.warning("输入无效，请输入 1 或 2: ");
             }
         }
-        System.out.println("\n======= 冲突处理完成，正在应用修改 =======");
+        ColorPrinter.success("==================== 冲突处理完成，正在应用修改 ====================");
     }
 
     private void handleInsertion(ScrContainerScriptNode baseContainer, ScrScriptNode modNode) {

@@ -4,7 +4,6 @@ import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -22,7 +21,6 @@ public class Localizations {
 
     public static void init() {
         try {
-            System.out.println("locale = " + locale.getLanguage());
             localProperties = new Properties();
             if (locale.getLanguage().contains("zh")) {
                 localProperties.load(new ClassPathResource("i18n/message.properties").getStream());
@@ -33,7 +31,7 @@ public class Localizations {
             defaultProperties = new Properties();
             defaultProperties.load(resource.getStream());
         } catch (IOException e) {
-            System.err.println("Load i18n Resources Failed! Place Concat the author! Failed Message: " + e.getMessage());
+            ColorPrinter.error("Load i18n Resources Failed! Place Concat the author! Failed Message: {}", e.getMessage());
             System.exit(-1);
         }
     }

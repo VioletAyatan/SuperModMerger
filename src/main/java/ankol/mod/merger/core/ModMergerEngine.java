@@ -1,6 +1,7 @@
 package ankol.mod.merger.core;
 
 import ankol.mod.merger.merger.MergeResult;
+import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.PakManager;
 
@@ -15,7 +16,7 @@ import java.util.*;
  *
  * @author Ankol
  */
- public class ModMergerEngine {
+public class ModMergerEngine {
 
     private final List<Path> modsToMerge;
     private final Path outputPath;
@@ -59,16 +60,16 @@ import java.util.*;
      * 执行合并操作
      */
     public void merge() throws IOException {
-        System.out.println("====== Techland Mod Merger ======\n");
+        ColorPrinter.info("====== Techland Mod Merger ======");
 
         if (modsToMerge.isEmpty()) {
-            System.out.println("❌ No mods found to merge!");
+            ColorPrinter.error("❌ No mods found to merge!");
             return;
         }
 
-        System.out.println("📦 Found " + modsToMerge.size() + " mod(s) to merge:");
+        ColorPrinter.info("📦 Found {} mod(s) to merge:", modsToMerge.size());
         for (int i = 0; i < modsToMerge.size(); i++) {
-            System.out.println("  " + (i + 1) + ". " + modsToMerge.get(i).getFileName());
+            ColorPrinter.info("  {}. {}", (i + 1), modsToMerge.get(i).getFileName());
         }
         System.out.println();
 
@@ -81,9 +82,9 @@ import java.util.*;
             //开始合并文件
             processFiles(filesByName, mergedDir);
             //合并完成，打包
-            System.out.println("\n📦 Creating merged PAK file...");
+            ColorPrinter.info("📦 Creating merged PAK file...");
             PakManager.createPak(mergedDir, outputPath);
-            System.out.println("✅ Merged PAK created: " + outputPath);
+            ColorPrinter.success("✅ Merged PAK created: {}", outputPath);
             // 5. 打印统计信息
             printStatistics();
         } finally {
@@ -108,7 +109,7 @@ import java.util.*;
             String modTempDirName = "Mod" + (i + 1);                // 临时目录名（如 Mod1）
             Path modTempDir = tempDir.resolve(modTempDirName);
 
-            System.out.println("📂 Extracting " + modFileName + "...");
+            ColorPrinter.info("📂 Extracting {}...", modFileName);
             Map<String, Path> extractedFiles = PakManager.extractPak(modPath, modTempDir);
 
             // 按文件名分组，并记录来源MOD名字
@@ -119,7 +120,7 @@ import java.util.*;
                 FileSource fileSource = new FileSource(filePath, modFileName);
                 filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(fileSource);
             }
-            System.out.println("✓ Extracted " + extractedFiles.size() + " files");
+            ColorPrinter.success("✓ Extracted {} files", extractedFiles.size());
         }
 
         return filesByName;
@@ -129,7 +130,7 @@ import java.util.*;
      * 处理所有文件（合并或复制）
      */
     private void processFiles(Map<String, List<FileSource>> filesByName, Path mergedDir) {
-        System.out.println("\n🔄 Processing files...");
+        ColorPrinter.info("🔄 Processing files...");
 
         for (Map.Entry<String, List<FileSource>> entry : filesByName.entrySet()) {
             String relPath = entry.getKey();
@@ -143,7 +144,7 @@ import java.util.*;
                     mergeFiles(relPath, fileSources, mergedDir);
                 }
             } catch (Exception e) {
-                System.err.println("❌ ERROR processing " + relPath + ": " + e.getMessage());
+                ColorPrinter.error("❌ ERROR processing {}: {}", relPath, e.getMessage());
             }
         }
     }
@@ -188,19 +189,17 @@ import java.util.*;
         if (mergerOptional.isEmpty()) {
             // 不支持智能合并，使用最后一个 mod 的版本
             FileSource lastSource = fileSources.getLast();
-            System.out.println("📄Copying (non-mergeable): " + relPath + " (using " + lastSource.sourceModName + ")");
+            ColorPrinter.info("📄Copying (non-mergeable): {} (using {})", relPath, lastSource.sourceModName);
             copyFile(relPath, lastSource.filePath, mergedDir);
             return;
         }
 
         // 智能合并脚本文件
-        System.out.println("🔀Merging: " + relPath + " (" + fileSources.size() + " mods)");
+        ColorPrinter.info("🔀Merging: {} ({} mods)", relPath, fileSources.size());
 
         try {
             IFileMerger merger = mergerOptional.get();
             String mergedContent = null;
-            boolean hasConflicts = false;
-            int conflictTotal = 0;
 
             // 顺序合并：FileSource[0] + FileSource[1] + FileSource[2] + ...
             for (int i = 0; i < fileSources.size(); i++) {
@@ -226,16 +225,11 @@ import java.util.*;
                         FileTree fileCurrent = new FileTree(currentModName, currentModPath.toString());
 
                         context.setFileName(relPath);
-                        context.setMod1Name(previousModName);  // 真实的MOD文件名（如 data2.pak）
-                        context.setMod2Name(currentModName);   // 真实的MOD文件名（如 data3.pak）
+                        context.setMod1Name(previousModName);
+                        context.setMod2Name(currentModName);
 
                         MergeResult result = merger.merge(fileBase, fileCurrent);
                         mergedContent = result.mergedContent;
-
-                        if (result.hasConflicts) {
-                            hasConflicts = true;
-                            conflictTotal += result.conflicts.size();
-                        }
                     } finally {
                         // 清理临时文件
                         Files.deleteIfExists(tempBaseFile);
@@ -248,16 +242,10 @@ import java.util.*;
             Files.createDirectories(targetPath.getParent());
             Files.writeString(targetPath, mergedContent);
 
-            if (hasConflicts) {
-                this.hasAnyConflict = true;
-                this.conflictCount++;
-                System.out.println("⚠️  " + conflictTotal + " conflict(s) resolved");
-            } else {
-                this.mergedCount++;
-                System.out.println("✓ Merged successfully");
-            }
+            this.mergedCount++;
+            ColorPrinter.success("✓ Merged successfully");
         } catch (Exception e) {
-            System.err.println("❌ Merge failed: " + e.getMessage());
+            ColorPrinter.error("❌ Merge failed: {}", e.getMessage());
             e.printStackTrace();
             // 失败时使用最后一个 mod 的版本
             FileSource lastSource = fileSources.getLast();
@@ -285,18 +273,18 @@ import java.util.*;
      * 打印合并统计信息
      */
     private void printStatistics() {
-        System.out.println("\n" + "=".repeat(50));
-        System.out.println("📊 Merge Statistics:");
-        System.out.println("   Total files processed: " + totalProcessed);
-        System.out.println("✓  Merged (no conflicts): " + mergedCount);
-        System.out.println("⚠️ Merged (with conflicts): " + conflictCount);
-        System.out.println("📄 Copied: " + copiedCount);
-        System.out.println("=".repeat(50));
+        ColorPrinter.info("\n{}", "=".repeat(50));
+        ColorPrinter.info("📊 Merge Statistics:");
+        ColorPrinter.info("   Total files processed: {}", totalProcessed);
+        ColorPrinter.success("✓  Merged (no conflicts): {}", mergedCount);
+        ColorPrinter.warning("⚠️  Merged (with conflicts): {}", conflictCount);
+        ColorPrinter.info("📄 Copied: {}", copiedCount);
+        ColorPrinter.info("{}", "=".repeat(50));
         if (hasAnyConflict) {
-            System.out.println("\n⚠️  WARNING: Some conflicts were resolved.");
-            System.out.println("   Please review the merged files carefully!");
+            ColorPrinter.warning("\n⚠️  WARNING: Some conflicts were resolved.");
+            ColorPrinter.warning("   Please review the merged files carefully!");
         } else {
-            System.out.println("\n✅ Merge completed successfully with no conflicts!");
+            ColorPrinter.success("\n✅ Merge completed successfully with no conflicts!");
         }
     }
 
@@ -317,7 +305,7 @@ import java.util.*;
                         });
             }
         } catch (Exception e) {
-            System.err.println("Warning: Failed to clean temp directory: " + e.getMessage());
+            ColorPrinter.warning("Warning: Failed to clean temp directory: {}", e.getMessage());
         }
     }
 }

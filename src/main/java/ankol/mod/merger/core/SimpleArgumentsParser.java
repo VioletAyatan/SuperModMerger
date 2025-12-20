@@ -1,5 +1,6 @@
 package ankol.mod.merger.core;
 
+import ankol.mod.merger.tools.ColorPrinter;
 import lombok.Data;
 
 import java.nio.file.Files;
@@ -116,7 +117,7 @@ public class SimpleArgumentsParser {
     }
 
     private static void printHelp() {
-        System.out.println(
+        ColorPrinter.info(
                 "Techland Mod Merger v1.0\n" +
                         "\nUsage:\n" +
                         "  java -jar ModMergerTool.jar <baseline_dir> [mod_dir ...] [options]\n" +
