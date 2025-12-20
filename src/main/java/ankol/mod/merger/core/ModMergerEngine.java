@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 模组合并引擎 - 负责执行模组合并的核心逻辑
@@ -92,44 +93,44 @@ public class ModMergerEngine {
 
     /**
      * 从所有 mod 中提取文件，按文件名分组
-     * <p>
-     * 支持嵌套压缩包：正确处理来自嵌套包的文件
-     * 例如：mymod.zip 中的 data3.pak，会记录完整的来源链 "mymod.zip -> data3.pak"
      *
      * @return Map<相对路径, List<文件来源信息>>
      */
-    private Map<String, List<FileSource>> extractAllMods() throws IOException {
+    private Map<String, List<FileSource>> extractAllMods() {
         Map<String, List<FileSource>> filesByName = new LinkedHashMap<>();
 
-        for (int i = 0; i < modsToMerge.size(); i++) {
-            Path modPath = modsToMerge.get(i);
-            String modFileName = modPath.getFileName().toString(); //文件真实名称
-            String modTempDirName = "Mod" + (i + 1);               // 临时目录名（如 Mod1）
-            Path modTempDir = tempDir.resolve(modTempDirName);
+        AtomicInteger index = new AtomicInteger(0);
+        //并发提取所有MOD文件
+        modsToMerge.parallelStream().forEach((modPath) -> {
+            try {
+                String modFileName = modPath.getFileName().toString(); //文件真实名称
+                String modTempDirName = "Mod" + (index.getAndIncrement() + 1);               // 临时目录名（如 Mod1）
+                Path modTempDir = tempDir.resolve(modTempDirName);
 
-            ColorPrinter.info("Extracting {}...", modFileName);
-            Map<String, FileSourceInfo> extractedFiles = PakManager.extractPak(modPath, modTempDir);
+                ColorPrinter.info("Extracting {}...", modFileName);
+                Map<String, FileSourceInfo> extractedFiles = PakManager.extractPak(modPath, modTempDir);
+                // 按文件名分组，并记录来源MOD名字
+                for (Map.Entry<String, FileSourceInfo> entry : extractedFiles.entrySet()) {
+                    String relPath = entry.getKey();
+                    FileSourceInfo sourceInfo = entry.getValue();
 
-            // 按文件名分组，并记录来源MOD名字
-            for (Map.Entry<String, FileSourceInfo> entry : extractedFiles.entrySet()) {
-                String relPath = entry.getKey();
-                FileSourceInfo sourceInfo = entry.getValue();
+                    // 构建完整的来源信息：如果是嵌套的，则为 "outer.zip -> inner.pak"
+                    String sourceChainString = sourceInfo.getSourceChainString();
 
-                // 构建完整的来源信息：如果是嵌套的，则为 "outer.zip -> inner.pak"
-                String sourceChainString = sourceInfo.getSourceChainString();
+                    // 创建FileSource，记录文件和其来源MOD（包括嵌套链）
+                    FileSource fileSource = new FileSource(sourceInfo.getFilePath(), sourceChainString);
+                    filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(fileSource);
 
-                // 创建FileSource，记录文件和其来源MOD（包括嵌套链）
-                FileSource fileSource = new FileSource(sourceInfo.getFilePath(), sourceChainString);
-                filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(fileSource);
-
-                // 如果是嵌套来源，输出详细日志
-                if (sourceInfo.isFromNestedArchive()) {
-                    ColorPrinter.info("  └─ Nested: {} (from: {})", relPath, sourceChainString);
+                    // 如果是嵌套来源，输出详细日志
+                    if (sourceInfo.isFromNestedArchive()) {
+                        ColorPrinter.info("  └─ Nested: {} (from: {})", relPath, sourceChainString);
+                    }
                 }
+                ColorPrinter.success("✓ Extracted {} files", extractedFiles.size());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            ColorPrinter.success("✓ Extracted {} files", extractedFiles.size());
-        }
-
+        });
         return filesByName;
     }
 
