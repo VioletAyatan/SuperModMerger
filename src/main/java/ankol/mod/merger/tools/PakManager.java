@@ -1,7 +1,5 @@
 package ankol.mod.merger.tools;
 
-import cn.hutool.core.util.StrUtil;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,15 +7,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
- * .pak 文件管理工具 - 处理 .pak 文件的打开、读取和写入
- * .pak 文件本质上是 ZIP 压缩包，因此使用 ZIP 相关的 API 处理
+ * .pak 文件管理工具 - 处理.pak文件的打开、读取和写入
+ * <p>
+ * .pak 文件本质上是ZIP压缩包，因此使用ZIP相关的API处理
+ *
+ * @author Ankol
  */
 public class PakManager {
 
@@ -91,27 +94,6 @@ public class PakManager {
         }
     }
 
-    /**
-     * 获取 .pak 文件中的所有文件列表
-     *
-     * @param pakPath pak文件路径
-     * @return 文件列表
-     */
-    public static List<String> listPakContents(Path pakPath) throws IOException {
-        List<String> contents = new ArrayList<>();
-
-        try (ZipFile zipFile = new ZipFile(pakPath.toFile())) {
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
-            while (entries.hasMoreElements()) {
-                ZipEntry entry = entries.nextElement();
-                if (!entry.isDirectory()) {
-                    contents.add(entry.getName());
-                }
-            }
-        }
-
-        return contents;
-    }
 
     /**
      * 判断两个文件在内容上是否相同
@@ -167,21 +149,6 @@ public class PakManager {
             sb.append(String.format("%02x", b));
         }
         return sb.toString();
-    }
-
-    /**
-     * 判断是否为脚本文件（需要进行智能合并）
-     */
-    public static boolean isScriptFile(String filename) {
-        String lower = filename.toLowerCase();
-        return StrUtil.endWithAny(lower, ".scr", ".def", ".loot", ".ppfx", ".ares", ".mpcloth");
-    }
-
-    /**
-     * 判断是否为 XML 文件
-     */
-    public static boolean isXmlFile(String filename) {
-        return filename.toLowerCase().endsWith(".xml");
     }
 }
 
