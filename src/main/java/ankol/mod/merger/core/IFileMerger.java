@@ -11,7 +11,15 @@ import java.io.IOException;
  * 定义了所有文件类型合并器必须实现的方法。
  * 每个实现类负责处理一种特定的文件类型（如.scr, .xml等）。
  */
-public interface IFileMerger {
+public abstract class IFileMerger {
+    /**
+     * 当前执行合并逻辑的上下文信息
+     */
+    protected MergerContext context;
+
+    public IFileMerger(MergerContext context) {
+        this.context = context;
+    }
 
     /**
      * 合并两个文件。
@@ -21,6 +29,6 @@ public interface IFileMerger {
      * @return 一个包含合并后内容和冲突信息的 {@link MergeResult} 对象。
      * @throws IOException 如果在文件读取或处理过程中发生IO错误。
      */
-    MergeResult merge(FileTree file1, FileTree file2) throws IOException;
+    public abstract MergeResult merge(FileTree file1, FileTree file2) throws RuntimeException;
 
 }
