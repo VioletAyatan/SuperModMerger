@@ -69,10 +69,8 @@ public class ModMergerEngine {
             System.out.println("\n📦 Creating merged PAK file...");
             PakManager.createPak(mergedDir, outputPath);
             System.out.println("✅ Merged PAK created: " + outputPath);
-
             // 5. 打印统计信息
             printStatistics();
-
         } finally {
             // 清理临时文件
             cleanupTempDir();
