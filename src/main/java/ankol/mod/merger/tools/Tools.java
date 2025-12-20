@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -16,6 +17,8 @@ import java.util.zip.ZipFile;
 public abstract class Tools {
     @Getter
     private static final String userDir = System.getProperty("user.dir");
+    @Getter
+    private static final String tempDir = System.getProperty("java.io.tmpdir");
 
     /**
      * 获取待合并的MOD所在目录
@@ -86,13 +89,82 @@ public abstract class Tools {
 
     /**
      * 扫描指定目录中的所有 .pak 和 .zip 文件
+     * 支持嵌套压缩包：如果找到 zip 文件中包含 pak 文件，会自动展开并作为单独的 mod 处理
      *
      * @param dir 目录路径
-     * @return 找到的 PAK 和 ZIP 文件列表
+     * @return 找到的 PAK 和 ZIP 文件列表（已展开嵌套压缩包）
      * @throws IOException 如果目录不存在或无法访问
      */
     public static List<Path> scanModFiles(Path dir) throws IOException {
-        return scanFiles(dir, ".pak", ".zip");
+        List<Path> initialFiles = scanFiles(dir, ".pak", ".zip");
+        List<Path> expandedFiles = new ArrayList<>();
+
+        // 临时目录用于展开嵌套压缩包
+        Path tempExpandDir = Path.of(getTempDir(), "ModExpand_" + System.currentTimeMillis());
+        Files.createDirectories(tempExpandDir);
+
+        for (Path file : initialFiles) {
+            String fileName = file.getFileName().toString().toLowerCase();
+            // 如果是 zip 文件，检查是否包含 pak 文件
+            if (fileName.endsWith(".zip")) {
+                try {
+                    List<Path> extractedPaks = extractNestedPaksFromZip(file, tempExpandDir); //如果有嵌套的pak也提取出来
+                    if (!extractedPaks.isEmpty()) {
+                        ColorPrinter.info("✓ Extracted {} PAK file(s) from nested ZIP: {}", extractedPaks.size(), file.getFileName());
+                        expandedFiles.addAll(extractedPaks);
+                    } else {
+                        // ZIP 中没有 PAK 文件，直接添加 ZIP 文件
+                        expandedFiles.add(file);
+                    }
+                } catch (Exception e) {
+                    ColorPrinter.warning("⚠️ Failed to check ZIP content: {}, will treat as regular ZIP", file.getFileName());
+                    expandedFiles.add(file);
+                }
+            } else {
+                // PAK 文件直接添加
+                expandedFiles.add(file);
+            }
+        }
+
+        return expandedFiles;
+    }
+
+    /**
+     * 从 ZIP 文件中提取所有 PAK 文件到临时目录
+     * <p>
+     * 如果 ZIP 包含嵌套的 PAK 文件，会将其提取出来作为独立的 mod
+     *
+     * @param zipPath          ZIP 文件路径
+     * @param tempExpandDir    临时展开目录
+     * @return 提取出的 PAK 文件列表
+     */
+    private static List<Path> extractNestedPaksFromZip(Path zipPath, Path tempExpandDir) throws IOException {
+        List<Path> extractedPaks = new ArrayList<>();
+        Path zipTempDir = tempExpandDir.resolve("zip_" + System.currentTimeMillis());
+        Files.createDirectories(zipTempDir);
+
+        try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                if (entry.isDirectory()) continue;
+                String entryName = entry.getName().toLowerCase();
+                // 只关心 PAK 文件
+                if (entryName.endsWith(".pak")) {
+                    Path outputPath = zipTempDir.resolve(entry.getName());
+                    Files.createDirectories(outputPath.getParent());
+
+                    try (InputStream input = zipFile.getInputStream(entry)) {
+                        Files.copy(input, outputPath);
+                    }
+
+                    extractedPaks.add(outputPath);
+                    ColorPrinter.info("Extracted: {}", entry.getName());
+                }
+            }
+        }
+
+        return extractedPaks;
     }
 
     /**
