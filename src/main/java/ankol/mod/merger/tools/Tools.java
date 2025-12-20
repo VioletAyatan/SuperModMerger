@@ -7,10 +7,10 @@ import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -54,6 +54,46 @@ public abstract class Tools {
      */
     public static Path getMergingModDir() {
         return getMergingModDir(null);
+    }
+
+    /**
+     * 扫描指定目录中的所有文件，按扩展名过滤
+     *
+     * @param dir        目录路径
+     * @param extensions 要查找的扩展名（如 ".pak", ".zip"）
+     * @return 匹配的文件列表
+     * @throws IOException 如果目录不存在或无法访问
+     */
+    public static List<Path> scanFiles(Path dir, String... extensions) throws IOException {
+        List<Path> results = new ArrayList<>();
+        if (!Files.exists(dir)) {
+            throw new IllegalArgumentException("目录不存在: " + dir);
+        }
+        try (Stream<Path> pathStream = Files.walk(dir)) {
+            pathStream.filter(Files::isRegularFile)
+                    .filter(file -> {
+                        String filename = file.getFileName().toString();
+                        for (String ext : extensions) {
+                            if (filename.endsWith(ext)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    })
+                    .forEach(results::add);
+        }
+        return results;
+    }
+
+    /**
+     * 扫描指定目录中的所有 .pak 和 .zip 文件
+     *
+     * @param dir 目录路径
+     * @return 找到的 PAK 和 ZIP 文件列表
+     * @throws IOException 如果目录不存在或无法访问
+     */
+    public static List<Path> scanModFiles(Path dir) throws IOException {
+        return scanFiles(dir, ".pak", ".zip");
     }
 
     /**

@@ -15,6 +15,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class ScrFileMerger extends IFileMerger {
@@ -23,6 +25,10 @@ public class ScrFileMerger extends IFileMerger {
      */
     private final List<ConflictRecord> conflicts = new ArrayList<>();
     private final List<EditOp> finalEdits = new ArrayList<>();
+    /**
+     * Parse 缓存，避免重复解析相同内容的文件
+     */
+    private static final Map<String, ScrContainerNode> PARSE_CACHE = new WeakHashMap<>();
 
     public ScrFileMerger(MergerContext context) {
         super(context);
@@ -32,8 +38,8 @@ public class ScrFileMerger extends IFileMerger {
     @Override
     public MergeResult merge(FileTree file1, FileTree file2) {
         try {
-            ScrContainerNode baseRoot = parse(Files.readString(Path.of(file1.getFullPathName())));
-            ScrContainerNode modRoot = parse(Files.readString(Path.of(file2.getFullPathName())));
+            ScrContainerNode baseRoot = parseWithCache(Path.of(file1.getFullPathName()));
+            ScrContainerNode modRoot = parseWithCache(Path.of(file2.getFullPathName()));
             conflicts.clear();
             // 递归对比，找到冲突项
             reduceCompare(baseRoot, modRoot);
@@ -62,6 +68,8 @@ public class ScrFileMerger extends IFileMerger {
             throw new RuntimeException(e);
         }
     }
+
+    // ...existing code...
 
     private void reduceCompare(ScrContainerNode baseContainer, ScrContainerNode modContainer) {
         // 遍历 Mod 的所有子节点
@@ -136,6 +144,49 @@ public class ScrFileMerger extends IFileMerger {
         // 如果想做得更完美，可以计算 baseContainer 的缩进层级
         String newContent = "\n    " + modNode.getSourceText();
         finalEdits.add(new EditOp(insertPos, insertPos, newContent));
+    }
+
+    /**
+     * 带缓存的解析方法
+     * <p>
+     * 优化：计算文件内容的哈希值作为缓存键，避免解析相同内容的文件多次。
+     * 这对于包含大量重复文件的 mod 合并场景特别有效。
+     *
+     * @param filePath 文件路径
+     * @return 解析后的 AST 树
+     * @throws IOException 如果文件不可读
+     */
+    private static ScrContainerNode parseWithCache(Path filePath) throws IOException {
+        String content = Files.readString(filePath);
+        String contentHash = computeHash(content);
+        // 先查缓存
+        ScrContainerNode cached = PARSE_CACHE.get(contentHash);
+        if (cached != null) {
+            return cached;
+        }
+        // 缓存未命中，执行解析
+        ScrContainerNode result = parse(content);
+        // 存入缓存
+        PARSE_CACHE.put(contentHash, result);
+        return result;
+    }
+
+    /**
+     * 计算字符串内容的 SHA-256 哈希值
+     */
+    private static String computeHash(String content) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(content.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            // 作为备选方案，使用 hashCode()（虽然不如 SHA-256 安全，但足以识别大多数不同的内容）
+            return String.valueOf(content.hashCode());
+        }
     }
 
     private static ScrContainerNode parse(String content) throws IOException {

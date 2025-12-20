@@ -58,9 +58,9 @@ public class ModMergerEngine {
         System.out.println();
 
         try {
-            //从所有 mod 中提取文件
+            //把所有文件先解压到临时文件夹，生成映射路径
             Map<String, List<Path>> filesByName = extractAllMods();
-            //创建输出目录
+            //输出目录（临时）
             Path mergedDir = tempDir.resolve("merged");
             Files.createDirectories(mergedDir);
             //开始合并文件
@@ -98,7 +98,7 @@ public class ModMergerEngine {
                 filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(filePath);
             }
 
-            System.out.println("   ✓ Extracted " + extractedFiles.size() + " files");
+            System.out.println("✓ Extracted " + extractedFiles.size() + " files");
         }
 
         return filesByName;
@@ -116,7 +116,6 @@ public class ModMergerEngine {
             totalProcessed++;
             try {
                 if (filePaths.size() == 1) {
-                    // 只在一个 mod 中存在，直接复制
                     copyFile(relPath, filePaths.getFirst(), mergedDir);
                 } else {
                     // 在多个 mod 中存在，需要合并
@@ -140,6 +139,18 @@ public class ModMergerEngine {
 
     /**
      * 合并多个同名文件
+     * <p>
+     * 优化：支持合并 N 个文件（不仅仅是 2 个）
+     * 采用顺序合并策略：
+     * 1. Mod1 + Mod2 → 中间结果
+     * 2. 中间结果 + Mod3 → 最终结果
+     * ...依此类推
+     * <p>
+     * 这样可以处理任意数量的 mod 合并场景。
+     *
+     * @param relPath   相对路径
+     * @param filePaths 同名文件的路径列表（从 mod1 到 modn 依次排列）
+     * @param mergedDir 合并输出目录
      */
     private void mergeFiles(String relPath, List<Path> filePaths, Path mergedDir) throws IOException {
         // 检查所有文件是否相同
@@ -148,48 +159,83 @@ public class ModMergerEngine {
             copyFile(relPath, filePaths.getFirst(), mergedDir);
             return;
         }
+
+        // 获取合并器
         MergerContext context = new MergerContext();
-        // 根据脚本名称获取合并器
-        Optional<IFileMerger> merger = MergerFactory.getMerger(relPath, context);
-        if (merger.isPresent()) {
-            // 智能合并脚本文件
-            System.out.println("🔀Merging: " + relPath);
-            try {
-                // 创建 FileTree 对象（保持向后兼容）
-                FileTree file1 = new FileTree(
-                        filePaths.get(0).getFileName().toString(),
-                        filePaths.get(0).toString()
-                );
-                FileTree file2 = new FileTree(
-                        filePaths.get(1).getFileName().toString(),
-                        filePaths.get(1).toString()
-                );
+        Optional<IFileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
 
-                // 执行合并
-                MergeResult result = merger.get().merge(file1, file2);
-
-                // 写入合并结果
-                Path targetPath = mergedDir.resolve(relPath);
-                Files.createDirectories(targetPath.getParent());
-                Files.writeString(targetPath, result.mergedContent);
-
-                if (result.hasConflicts) {
-                    hasAnyConflict = true;
-                    conflictCount++;
-                    System.out.println("⚠️" + result.conflicts.size() + " conflict(s) resolved");
-                } else {
-                    mergedCount++;
-                    System.out.println("✓Merged successfully");
-                }
-            } catch (Exception e) {
-                System.err.println("❌Merge failed: " + e.getMessage());
-                e.printStackTrace();
-                // 失败时使用最后一个 mod 的版本
-                copyFile(relPath, filePaths.get(filePaths.size() - 1), mergedDir);
-            }
-        } else {
+        if (mergerOptional.isEmpty()) {
             // 不支持智能合并，使用最后一个 mod 的版本
             System.out.println("📄Copying (non-mergeable): " + relPath + " (using last mod)");
+            copyFile(relPath, filePaths.getLast(), mergedDir);
+            return;
+        }
+
+        // 智能合并脚本文件
+        System.out.println("🔀Merging: " + relPath + " (" + filePaths.size() + " mods)");
+
+        try {
+            IFileMerger merger = mergerOptional.get();
+            String mergedContent = null;
+            boolean hasConflicts = false;
+            int conflictTotal = 0;
+
+            // 顺序合并：Mod1 + Mod2 + Mod3 + ...
+            for (int i = 0; i < filePaths.size(); i++) {
+                Path currentModPath = filePaths.get(i);
+                String modName = "Mod" + (i + 1);
+
+                if (i == 0) {
+                    // 第一个 mod，直接读取作为基准
+                    mergedContent = Files.readString(currentModPath);
+                } else {
+                    // 后续的 mod，与当前合并结果合并
+                    String previousModName = "Mod" + i;
+
+                    // 创建临时文件存储前面的合并结果
+                    Path tempBaseFile = Files.createTempFile("merge_base_", ".tmp");
+                    Files.writeString(tempBaseFile, mergedContent);
+
+                    try {
+                        // 执行合并
+                        FileTree fileBase = new FileTree(previousModName, tempBaseFile.toString());
+                        FileTree fileCurrent = new FileTree(modName, currentModPath.toString());
+
+                        context.setFileName(relPath);
+                        context.setMod1Name(previousModName);
+                        context.setMod2Name(modName);
+
+                        MergeResult result = merger.merge(fileBase, fileCurrent);
+                        mergedContent = result.mergedContent;
+
+                        if (result.hasConflicts) {
+                            hasConflicts = true;
+                            conflictTotal += result.conflicts.size();
+                        }
+                    } finally {
+                        // 清理临时文件
+                        Files.deleteIfExists(tempBaseFile);
+                    }
+                }
+            }
+
+            // 写入最终合并结果
+            Path targetPath = mergedDir.resolve(relPath);
+            Files.createDirectories(targetPath.getParent());
+            Files.writeString(targetPath, mergedContent);
+
+            if (hasConflicts) {
+                this.hasAnyConflict = true;
+                this.conflictCount++;
+                System.out.println("⚠️  " + conflictTotal + " conflict(s) resolved");
+            } else {
+                this.mergedCount++;
+                System.out.println("✓ Merged successfully");
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Merge failed: " + e.getMessage());
+            e.printStackTrace();
+            // 失败时使用最后一个 mod 的版本
             copyFile(relPath, filePaths.getLast(), mergedDir);
         }
     }
@@ -198,7 +244,9 @@ public class ModMergerEngine {
      * 检查多个文件是否内容相同
      */
     private boolean areAllFilesIdentical(List<Path> filePaths) throws IOException {
-        if (filePaths.size() <= 1) return true;
+        if (filePaths.size() <= 1) {
+            return true;
+        }
         Path first = filePaths.getFirst();
         for (int i = 1; i < filePaths.size(); i++) {
             if (!PakManager.areFilesIdentical(first, filePaths.get(i))) {

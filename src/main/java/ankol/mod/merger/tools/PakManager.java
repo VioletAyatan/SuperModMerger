@@ -2,10 +2,15 @@ package ankol.mod.merger.tools;
 
 import cn.hutool.core.util.StrUtil;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -62,26 +67,27 @@ public class PakManager {
 
         try (ZipOutputStream zipOut = new ZipOutputStream(Files.newOutputStream(pakPath))) {
             // 遍历源目录中的所有文件
-            Files.walk(sourceDir)
-                    .filter(Files::isRegularFile)
-                    .forEach(file -> {
-                        try {
-                            // 计算相对路径
-                            String entryName = sourceDir.relativize(file).toString();
-                            // 使用正斜杠作为路径分隔符（ZIP 标准）
-                            entryName = entryName.replace(File.separator, "/");
+            try (Stream<Path> pathStream = Files.walk(sourceDir)) {
+                pathStream.filter(Files::isRegularFile)
+                        .forEach(file -> {
+                            try {
+                                // 计算相对路径
+                                String entryName = sourceDir.relativize(file).toString();
+                                // 使用正斜杠作为路径分隔符（ZIP 标准）
+                                entryName = entryName.replace(File.separator, "/");
 
-                            ZipEntry entry = new ZipEntry(entryName);
-                            zipOut.putNextEntry(entry);
+                                ZipEntry entry = new ZipEntry(entryName);
+                                zipOut.putNextEntry(entry);
 
-                            // 写入文件内容
-                            Files.copy(file, zipOut);
+                                // 写入文件内容
+                                Files.copy(file, zipOut);
 
-                            zipOut.closeEntry();
-                        } catch (IOException e) {
-                            throw new RuntimeException("Failed to add file to PAK: " + file, e);
-                        }
-                    });
+                                zipOut.closeEntry();
+                            } catch (IOException e) {
+                                throw new RuntimeException("Failed to add file to PAK: " + file, e);
+                            }
+                        });
+            }
         }
     }
 
@@ -109,15 +115,58 @@ public class PakManager {
 
     /**
      * 判断两个文件在内容上是否相同
-     * <p>
-     * 先判断字节大小是否一致，不一致肯定内容不同
-     * 一致则读取内容进行对比
+     *
+     * @param file1 第一个文件
+     * @param file2 第二个文件
+     * @return 两个文件内容是否相同
+     * @throws IOException 如果文件不可读
      */
     public static boolean areFilesIdentical(Path file1, Path file2) throws IOException {
+        // 快速判断：文件大小不同，肯定内容不同
         if (Files.size(file1) != Files.size(file2)) {
             return false;
+        } else {
+            // 文件大小相同的情况下，对比文件HASH值，更快速且节省内存
+            return getFileHash(file1).equals(getFileHash(file2));
         }
-        return Files.readString(file1).equals(Files.readString(file2));
+    }
+
+    /**
+     * 计算文件的 SHA-256 哈希值（流式处理）
+     * <p>
+     * 相比一次性读取文件到内存的方式，这个方法使用 8KB 缓冲区逐块处理，
+     * 即使对于 1GB 的文件也只占用恒定的内存。
+     *
+     * @param file 要计算哈希的文件
+     * @return 十六进制格式的哈希值
+     * @throws IOException 如果文件不可读
+     */
+    private static String getFileHash(Path file) throws IOException {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] buffer = new byte[8192]; // 8KB 缓冲区
+            int bytesRead;
+            try (InputStream fis = Files.newInputStream(file)) {
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    digest.update(buffer, 0, bytesRead);
+                }
+            }
+            return bytesToHex(digest.digest());
+        } catch (NoSuchAlgorithmException e) {
+            // SHA-256 在所有 Java 实现中都应该可用
+            throw new IOException("SHA-256 algorithm not available", e);
+        }
+    }
+
+    /**
+     * 将字节数组转换为十六进制字符串
+     */
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
     /**

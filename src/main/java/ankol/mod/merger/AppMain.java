@@ -4,14 +4,10 @@ import ankol.mod.merger.core.ModMergerEngine;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.SimpleArgParser;
 import ankol.mod.merger.tools.Tools;
-import cn.hutool.core.util.StrUtil;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Techland模组合并工具 - 主应用入口类
@@ -32,20 +28,8 @@ public class AppMain {
                 System.exit(0);
             }
 
-            //读取合并目录
-            Path mergingModDir = Tools.getMergingModDir();
-            List<Path> modsToMerge = new ArrayList<>();
-
-            //先遍历获取需要合并的模组
-            try (Stream<Path> pathStream = Files.walk(mergingModDir)) {
-                pathStream.forEach(filePath -> {
-                    if (Files.isRegularFile(filePath)
-                            && StrUtil.endWithAny(filePath.getFileName().toString(), ".pak", ".zip")
-                    ) {
-                        modsToMerge.add(filePath);
-                    }
-                });
-            }
+            // 扫描需要合并的MOD目录
+            List<Path> modsToMerge = Tools.scanModFiles(Tools.getMergingModDir());
 
             // 确定输出路径
             Path outputPath = Path.of(System.getProperty("user.dir"), "merged_mod.pak");
