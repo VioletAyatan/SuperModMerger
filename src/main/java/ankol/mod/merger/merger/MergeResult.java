@@ -1,7 +1,5 @@
 package ankol.mod.merger.merger;
 
-import ankol.mod.merger.merger.scr.ScrTreeComparator.DiffResult;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package ankol.mod.merger.core;
 
-import ankol.mod.merger.merger.scr.news.SourcePatchMerger;
+import ankol.mod.merger.merger.scr.SourcePatchMerger;
 import ankol.mod.merger.merger.xml.XmlFileMerger;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReflectUtil;

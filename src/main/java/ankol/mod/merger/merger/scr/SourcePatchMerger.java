@@ -1,14 +1,14 @@
-package ankol.mod.merger.merger.scr.news;
+package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr4.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import ankol.mod.merger.core.IFileMerger;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.merger.MergeResult;
-import ankol.mod.merger.merger.scr.news.node.ConflictRecord;
-import ankol.mod.merger.merger.scr.news.node.EditOp;
-import ankol.mod.merger.merger.scr.news.node.ScrContainerNode;
-import ankol.mod.merger.merger.scr.news.node.ScrNode;
+import ankol.mod.merger.merger.scr.node.ConflictRecord;
+import ankol.mod.merger.merger.scr.node.EditOp;
+import ankol.mod.merger.merger.scr.node.ScrContainerNode;
+import ankol.mod.merger.merger.scr.node.ScrNode;
 import ankol.mod.merger.tools.FileTree;
 import cn.hutool.core.util.StrUtil;
 import org.antlr.v4.runtime.CharStream;

@@ -1,7 +1,6 @@
 package ankol.mod.merger;
 
 import ankol.mod.merger.core.ModMergerEngine;
-import ankol.mod.merger.merger.scr.ScrConflictResolver;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.SimpleArgParser;
 import ankol.mod.merger.tools.Tools;

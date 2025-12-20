@@ -1,8 +1,8 @@
-package ankol.mod.merger.merger.scr.news;
+package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr4.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
-import ankol.mod.merger.merger.scr.news.node.ScrContainerNode;
+import ankol.mod.merger.merger.scr.node.ScrContainerNode;
 import ankol.mod.merger.tools.Tools;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;

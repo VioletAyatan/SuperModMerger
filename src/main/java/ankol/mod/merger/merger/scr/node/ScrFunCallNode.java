@@ -1,4 +1,4 @@
-package ankol.mod.merger.merger.scr.news.node;
+package ankol.mod.merger.merger.scr.node;
 
 import lombok.Data;
 

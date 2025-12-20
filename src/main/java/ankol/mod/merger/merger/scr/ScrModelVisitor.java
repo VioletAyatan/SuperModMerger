@@ -1,11 +1,11 @@
-package ankol.mod.merger.merger.scr.news;
+package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr4.scr.TechlandScriptBaseVisitor;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
-import ankol.mod.merger.merger.scr.news.node.ScrContainerNode;
-import ankol.mod.merger.merger.scr.news.node.ScrFunCallNode;
-import ankol.mod.merger.merger.scr.news.node.ScrLeafNode;
-import ankol.mod.merger.merger.scr.news.node.ScrNode;
+import ankol.mod.merger.merger.scr.node.ScrContainerNode;
+import ankol.mod.merger.merger.scr.node.ScrFunCallNode;
+import ankol.mod.merger.merger.scr.node.ScrLeafNode;
+import ankol.mod.merger.merger.scr.node.ScrNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.TerminalNode;
