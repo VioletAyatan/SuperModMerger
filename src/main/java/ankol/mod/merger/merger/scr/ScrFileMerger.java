@@ -5,10 +5,7 @@ import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import ankol.mod.merger.core.IFileMerger;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.merger.MergeResult;
-import ankol.mod.merger.merger.scr.node.ConflictRecord;
-import ankol.mod.merger.merger.scr.node.EditOp;
-import ankol.mod.merger.merger.scr.node.ScrContainerNode;
-import ankol.mod.merger.merger.scr.node.ScrNode;
+import ankol.mod.merger.merger.scr.node.*;
 import ankol.mod.merger.tools.FileTree;
 import cn.hutool.core.util.StrUtil;
 import org.antlr.v4.runtime.CharStream;
@@ -20,14 +17,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-public class SourcePatchMerger extends IFileMerger {
+public class ScrFileMerger extends IFileMerger {
     /**
      * 标记冲突项的容器
      */
     private final List<ConflictRecord> conflicts = new ArrayList<>();
     private final List<EditOp> finalEdits = new ArrayList<>();
 
-    public SourcePatchMerger(MergerContext context) {
+    public ScrFileMerger(MergerContext context) {
         super(context);
     }
 
@@ -81,7 +78,16 @@ public class SourcePatchMerger extends IFileMerger {
                 if (baseNode instanceof ScrContainerNode && modNode instanceof ScrContainerNode) {
                     // 容器节点，递归进入内部对比
                     reduceCompare((ScrContainerNode) baseNode, (ScrContainerNode) modNode);
-                } else {
+                }
+                //函数调用，比较参数，不对比String，因为各类mod可能会
+                else if (baseNode instanceof ScrFunCallNode baseFunCall && modNode instanceof ScrFunCallNode modFunCall) {
+                    if (!baseFunCall.getArguments().equals(modFunCall.getArguments())) {
+                        // 参数不一致，标记发生冲突
+                        conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
+                    }
+                }
+                //普通子节点，直接处理
+                else {
                     // 叶子节点，对比内容。
                     String baseText = baseNode.getSourceText().trim();
                     String modText = modNode.getSourceText().trim();
@@ -95,7 +101,7 @@ public class SourcePatchMerger extends IFileMerger {
     }
 
     /**
-     * 提示用户解决冲突项
+     * 冲突解决
      */
     private void resolveConflictsInteractively() {
         Scanner scanner = new Scanner(System.in);

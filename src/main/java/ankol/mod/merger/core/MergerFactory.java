@@ -1,6 +1,6 @@
 package ankol.mod.merger.core;
 
-import ankol.mod.merger.merger.scr.SourcePatchMerger;
+import ankol.mod.merger.merger.scr.ScrFileMerger;
 import ankol.mod.merger.merger.xml.XmlFileMerger;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReflectUtil;
@@ -27,7 +27,7 @@ public class MergerFactory {
     // 静态初始化块，用于注册所有支持的合并器
     static {
         // 注册.scr格式的合并器
-        registerMerger(SourcePatchMerger.class, ".scr", ".def", ".loot", ".ppfx", ".ares", ".mpcloth");
+        registerMerger(ScrFileMerger.class, ".scr", ".def", ".loot", ".ppfx", ".ares", ".mpcloth");
         // 注册.xml文件的合并器
         registerMerger(XmlFileMerger.class, ".xml");
     }
@@ -50,9 +50,8 @@ public class MergerFactory {
      * @param fileName 文件名（包含扩展名）。
      * @return 一个包含合并器实例的 {@link Optional}；如果找不到合适的合并器，则为空。
      */
-    public static Optional<IFileMerger> getMerger(String fileName) {
+    public static Optional<IFileMerger> getMerger(String fileName, MergerContext context) {
         String extension = "." + FileUtil.extName(fileName);
-        MergerContext context = new MergerContext();
         Class<? extends IFileMerger> aClass = mergerMap.get(extension.toLowerCase());
         if (aClass == null) {
             return Optional.empty();

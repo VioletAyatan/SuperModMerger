@@ -74,8 +74,6 @@ public class AppMain {
             System.err.println("❌ Error: " + e.getMessage());
             e.printStackTrace();
             System.exit(3);
-        } finally {
-            ScrConflictResolver.close();
         }
     }
 
