@@ -26,9 +26,9 @@ public class TestMain {
         ScrContainerNode parse = parse(baseContent);
         ScrContainerNode parse1 = parse(modContent);
 
-        SourcePatchMerger merger = new SourcePatchMerger("data3.pak", "data4.pak", "player_variables.scr");
-        String merged = merger.merge(baseContent, parse, parse1);
-        Files.writeString(Path.of("D:\\Projects\\ModMergerTool\\examples\\merged_" + fileName), merged);
+//        SourcePatchMerger merger = new SourcePatchMerger("data3.pak", "data4.pak", "player_variables.scr");
+//        String merged = merger.merge(baseContent, parse, parse1);
+//        Files.writeString(Path.of("D:\\Projects\\ModMergerTool\\examples\\merged_" + fileName), merged);
     }
 
     private static ScrContainerNode parse(String content) throws IOException {

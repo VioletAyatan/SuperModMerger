@@ -1,8 +1,9 @@
 package ankol.mod.merger.core;
 
-import ankol.mod.merger.merger.scr.ScrFileMerger;
+import ankol.mod.merger.merger.scr.news.SourcePatchMerger;
 import ankol.mod.merger.merger.xml.XmlFileMerger;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.ReflectUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,14 +22,14 @@ import java.util.Optional;
 public class MergerFactory {
 
     // 存储扩展名 -> 合并器实例的映射
-    private static final Map<String, IFileMerger> mergerMap = new HashMap<>();
+    private static final Map<String, Class<? extends IFileMerger>> mergerMap = new HashMap<>();
 
     // 静态初始化块，用于注册所有支持的合并器
     static {
         // 注册.scr格式的合并器
-        registerMerger(new ScrFileMerger(), ".scr", ".def", ".loot", ".ppfx", ".ares", ".mpcloth");
+        registerMerger(SourcePatchMerger.class, ".scr", ".def", ".loot", ".ppfx", ".ares", ".mpcloth");
         // 注册.xml文件的合并器
-        registerMerger(new XmlFileMerger(), ".xml");
+        registerMerger(XmlFileMerger.class, ".xml");
     }
 
     /**
@@ -37,7 +38,7 @@ public class MergerFactory {
      * @param merger     合并器实例。
      * @param extensions 要关联的文件扩展名（例如 ".txt", ".xml"）。
      */
-    private static void registerMerger(IFileMerger merger, String... extensions) {
+    private static void registerMerger(Class<? extends IFileMerger> merger, String... extensions) {
         for (String ext : extensions) {
             mergerMap.put(ext.toLowerCase(), merger);
         }
@@ -51,6 +52,12 @@ public class MergerFactory {
      */
     public static Optional<IFileMerger> getMerger(String fileName) {
         String extension = "." + FileUtil.extName(fileName);
-        return Optional.ofNullable(mergerMap.get(extension.toLowerCase()));
+        MergerContext context = new MergerContext();
+        Class<? extends IFileMerger> aClass = mergerMap.get(extension.toLowerCase());
+        if (aClass == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(ReflectUtil.newInstance(aClass, context));
+        }
     }
 }

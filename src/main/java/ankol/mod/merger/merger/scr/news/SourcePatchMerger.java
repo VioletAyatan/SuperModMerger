@@ -1,6 +1,9 @@
 package ankol.mod.merger.merger.scr.news;
 
+import ankol.mod.merger.antlr4.scr.TechlandScriptLexer;
+import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import ankol.mod.merger.core.IFileMerger;
+import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.news.node.ConflictRecord;
 import ankol.mod.merger.merger.scr.news.node.EditOp;
@@ -8,59 +11,59 @@ import ankol.mod.merger.merger.scr.news.node.ScrContainerNode;
 import ankol.mod.merger.merger.scr.news.node.ScrNode;
 import ankol.mod.merger.tools.FileTree;
 import cn.hutool.core.util.StrUtil;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
-public class SourcePatchMerger implements IFileMerger {
+public class SourcePatchMerger extends IFileMerger {
     /**
      * 标记冲突项的容器
      */
     private final List<ConflictRecord> conflicts = new ArrayList<>();
     private final List<EditOp> finalEdits = new ArrayList<>();
 
-    //记录当前对比的mod，文件名等
-    private final String sourceMod;
-    private final String mergerMod;
-    private final String fileName;
-
-    public SourcePatchMerger(String sourceMod, String mergerMod, String fileName) {
-        this.sourceMod = sourceMod;
-        this.mergerMod = mergerMod;
-        this.fileName = fileName;
+    public SourcePatchMerger(MergerContext context) {
+        super(context);
     }
 
     // 入口
     @Override
-    public MergeResult merge(FileTree file1, FileTree file2) throws IOException {
-        return null;
-    }
-
-    public String merge(String baseSource, ScrContainerNode baseRoot, ScrContainerNode modRoot) {
-        conflicts.clear();
-        // 递归对比，找到冲突项
-        reduceCompare(baseRoot, modRoot);
-        if (!conflicts.isEmpty()) {
-            resolveConflictsInteractively();
-        }
-        // 3. 将用户选择的 Mod 代码转化为 EditOp
-        for (ConflictRecord record : conflicts) {
-            //选择第1位时不用变
-            if (record.getUserChoice() == 2) { // 用户选择了 Mod
-                finalEdits.add(new EditOp(
-                        record.getBaseNode().getStartIndex(),
-                        record.getBaseNode().getStopIndex() + 1,
-                        record.getModNode().getSourceText()
-                ));
+    public MergeResult merge(FileTree file1, FileTree file2) {
+        try {
+            ScrContainerNode baseRoot = parse(Files.readString(Path.of(file1.getFullPathName())));
+            ScrContainerNode modRoot = parse(Files.readString(Path.of(file2.getFullPathName())));
+            conflicts.clear();
+            // 递归对比，找到冲突项
+            reduceCompare(baseRoot, modRoot);
+            if (!conflicts.isEmpty()) {
+                resolveConflictsInteractively();
             }
+            // 3. 将用户选择的 Mod 代码转化为 EditOp
+            for (ConflictRecord record : conflicts) {
+                //选择第1位时不用变
+                if (record.getUserChoice() == 2) { // 用户选择了 Mod
+                    finalEdits.add(new EditOp(
+                            record.getBaseNode().getStartIndex(),
+                            record.getBaseNode().getStopIndex() + 1,
+                            record.getModNode().getSourceText()
+                    ));
+                }
+            }
+            // 4. 应用所有修改 (从后往前)
+            Collections.sort(finalEdits);
+            StringBuilder sb = new StringBuilder(baseRoot.getSourceText());
+            for (EditOp op : finalEdits) {
+                sb.replace(op.getStart(), op.getEnd(), op.getText());
+            }
+            return new MergeResult(sb.toString(), !conflicts.isEmpty());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        // 4. 应用所有修改 (从后往前)
-        Collections.sort(finalEdits);
-        StringBuilder sb = new StringBuilder(baseSource);
-        for (EditOp op : finalEdits) {
-            sb.replace(op.getStart(), op.getEnd(), op.getText());
-        }
-        return sb.toString();
     }
 
     private void reduceCompare(ScrContainerNode baseContainer, ScrContainerNode modContainer) {
@@ -84,7 +87,7 @@ public class SourcePatchMerger implements IFileMerger {
                     String modText = modNode.getSourceText().trim();
                     //内容不一致，标记发生冲突
                     if (!baseText.equals(modText)) {
-                        conflicts.add(new ConflictRecord(fileName, sourceMod, mergerMod, signature, baseNode, modNode));
+                        conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
                     }
                 }
             }
@@ -127,5 +130,15 @@ public class SourcePatchMerger implements IFileMerger {
         // 如果想做得更完美，可以计算 baseContainer 的缩进层级
         String newContent = "\n    " + modNode.getSourceText();
         finalEdits.add(new EditOp(insertPos, insertPos, newContent));
+    }
+
+    private static ScrContainerNode parse(String content) throws IOException {
+        CharStream input = CharStreams.fromString(content);
+        TechlandScriptLexer lexer = new TechlandScriptLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        TechlandScriptParser parser = new TechlandScriptParser(tokens);
+        ScrModelVisitor visitor = new ScrModelVisitor();
+        // 注意：visitFile 返回的一定是我们定义的 ROOT Container
+        return (ScrContainerNode) visitor.visitFile(parser.file());
     }
 }

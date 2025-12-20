@@ -148,10 +148,8 @@ public class ModMergerEngine {
             copyFile(relPath, filePaths.getFirst(), mergedDir);
             return;
         }
-
         // 根据脚本名称获取合并器
         Optional<IFileMerger> merger = MergerFactory.getMerger(relPath);
-
         if (merger.isPresent()) {
             // 智能合并脚本文件
             System.out.println("🔀Merging: " + relPath);

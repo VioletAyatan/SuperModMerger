@@ -1,6 +1,7 @@
 package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
+import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.ScrConflictResolver.MergeDecision;
 import ankol.mod.merger.merger.scr.ScrTreeComparator.DiffResult;
@@ -21,35 +22,43 @@ import java.util.List;
 /**
  * 脚本文件合并器 - 处理 .scr 等脚本文件的智能合并
  */
-public class ScrFileMerger implements IFileMerger {
+public class ScrFileMerger extends IFileMerger {
+
+    public ScrFileMerger(MergerContext context) {
+        super(context);
+    }
 
     @Override
-    public MergeResult merge(FileTree script1, FileTree script2) throws IOException {
-        ScrScriptParser parser = new ScrScriptParser();
-        ScrScriptParser.ParsedScript p1 = parser.parseFileWithTokens(Path.of(script1.getFullPathName()));
-        ScrScriptParser.ParsedScript p2 = parser.parseFileWithTokens(Path.of(script2.getFullPathName()));
+    public MergeResult merge(FileTree script1, FileTree script2) {
+        try {
+            ScrScriptParser parser = new ScrScriptParser();
+            ScrScriptParser.ParsedScript p1 = parser.parseFileWithTokens(Path.of(script1.getFullPathName()));
+            ScrScriptParser.ParsedScript p2 = parser.parseFileWithTokens(Path.of(script2.getFullPathName()));
 
-        TechlandScriptParser.FileContext fileTree1 = p1.file();
-        TechlandScriptParser.FileContext fileTree2 = p2.file();
+            TechlandScriptParser.FileContext fileTree1 = p1.file();
+            TechlandScriptParser.FileContext fileTree2 = p2.file();
 
-        List<DiffResult> diffs = ScrTreeComparator.compareFiles(fileTree1, fileTree2);
+            List<DiffResult> diffs = ScrTreeComparator.compareFiles(fileTree1, fileTree2);
 
-        if (diffs.isEmpty()) {
-            // 两个文件完全相同
-            return new MergeResult(Files.readString(Path.of(script1.getFullPathName())), false);
+            if (diffs.isEmpty()) {
+                // 两个文件完全相同
+                return new MergeResult(Files.readString(Path.of(script1.getFullPathName())), false);
+            }
+
+            // 有差异，需要用户选择如何合并
+            System.out.println("\n" + "=".repeat(80));
+            System.out.println("⚠️ CONFLICTS DETECTED IN [" + script1.getFileName() + "]");
+            System.out.println("=".repeat(80));
+
+            List<MergeDecision> decisions = ScrConflictResolver.resolveConflicts(diffs, script1, script2);
+
+            MergeResult result = buildMergedContent(Path.of(script1.getFullPathName()), decisions, p1, p2);
+            // 记录冲突信息
+            result.conflicts.addAll(diffs);
+            return result;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
-        // 有差异，需要用户选择如何合并
-        System.out.println("\n" + "=".repeat(80));
-        System.out.println("⚠️ CONFLICTS DETECTED IN [" + script1.getFileName() + "]");
-        System.out.println("=".repeat(80));
-
-        List<MergeDecision> decisions = ScrConflictResolver.resolveConflicts(diffs, script1, script2);
-
-        MergeResult result = buildMergedContent(Path.of(script1.getFullPathName()), decisions, p1, p2);
-        // 记录冲突信息
-        result.conflicts.addAll(diffs);
-        return result;
     }
 
     private record Replacement(int start, int end, String text) {
@@ -59,7 +68,7 @@ public class ScrFileMerger implements IFileMerger {
      * 根据用户的决策构建合并后的内容
      */
     private MergeResult buildMergedContent(Path script1Path, List<MergeDecision> decisions,
-                                          ScrScriptParser.ParsedScript p1, ScrScriptParser.ParsedScript p2) throws IOException {
+                                           ScrScriptParser.ParsedScript p1, ScrScriptParser.ParsedScript p2) throws IOException {
         String content1 = Files.readString(script1Path);
         StringBuilder mergedContent = new StringBuilder(content1);
         List<Replacement> replacements = new ArrayList<>();
