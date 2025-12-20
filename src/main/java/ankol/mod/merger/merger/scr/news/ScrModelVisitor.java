@@ -3,9 +3,14 @@ package ankol.mod.merger.merger.scr.news;
 import ankol.mod.merger.antlr4.scr.TechlandScriptBaseVisitor;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import ankol.mod.merger.merger.scr.news.node.ScrContainerNode;
+import ankol.mod.merger.merger.scr.news.node.ScrFunCallNode;
 import ankol.mod.merger.merger.scr.news.node.ScrLeafNode;
 import ankol.mod.merger.merger.scr.news.node.ScrNode;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.TerminalNode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
     //=========================关键字=========================
@@ -22,6 +27,7 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
         ScrContainerNode rootNode = new ScrContainerNode("ROOT",
                 ctx.start.getStartIndex(),
                 ctx.stop.getStopIndex(),
+                ctx.getStart().getLine(),
                 getFullText(ctx)
         );
         for (TechlandScriptParser.DefinitionContext defCtx : ctx.definition()) {
@@ -43,6 +49,7 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
                 signature,
                 ctx.start.getStartIndex(),
                 ctx.stop.getStopIndex(),
+                ctx.start.getLine(),
                 getFullText(ctx)
         );
     }
@@ -57,6 +64,7 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
                 signature,
                 ctx.start.getStartIndex(),
                 ctx.stop.getStopIndex(),
+                ctx.start.getLine(),
                 getFullText(ctx)
         );
     }
@@ -72,9 +80,9 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
                 signature,
                 ctx.start.getStartIndex(),
                 ctx.stop.getStopIndex(),
+                ctx.start.getLine(),
                 getFullText(ctx)
         );
-
         // 深入处理 sub 内部的代码块
         // 注意：subDecl 包含 paramList 和 functionBlock
         visitFunctionBlockContent(subNode, ctx.functionBlock());
@@ -97,6 +105,7 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
                 signature,
                 ctx.start.getStartIndex(),
                 ctx.stop.getStopIndex(),
+                ctx.start.getLine(),
                 getFullText(ctx)
         );
         // 递归处理块内部的语句
@@ -105,33 +114,12 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
     }
 
     /**
-     * 处理简单的函数调用/属性设置，例如: Height(1.0);
-     */
-    @Override
-    public ScrNode visitFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx) {
-        String funcName = ctx.Id().getText();
-        // 对于属性设置，通常只看名字。
-        // 例如 Mod 里的 Height(2.0) 应该覆盖 Base 里的 Height(1.0)。
-        // 所以签名里不应该包含参数值。
-        String signature = FUN_CALL + ":" + funcName;
-        // 特殊情况处理：
-        // 如果某些函数是允许重复的（如 AddItem, Use 等），可能需要把参数也加到签名里。
-        // 简单起见，你可以维护一个"允许重复的函数名列表"。
-        // if (isRepeatable(funcName)) { signature += ":" + params; }
-        return new ScrLeafNode(
-                signature,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
-                getFullText(ctx)
-        );
-    }
-
-    /**
      * 提取 helper：遍历 functionBlock 里的 statements 并添加到父节点
      */
     private void visitFunctionBlockContent(ScrContainerNode parent, TechlandScriptParser.FunctionBlockContext ctx) {
-        if (ctx == null || ctx.statements() == null) return;
-
+        if (ctx == null || ctx.statements() == null) {
+            return;
+        }
         for (TechlandScriptParser.StatementsContext stmt : ctx.statements()) {
             // visit(stmt) 会调用 visitStatements，然后再分发到 visitFuntionCallDecl 等
             ScrNode child = visit(stmt);
@@ -139,6 +127,40 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
                 parent.addChild(child);
             }
         }
+    }
+
+    /**
+     * 处理简单的函数调用/属性设置，例如: Height(1.0);
+     */
+    @Override
+    public ScrNode visitFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx) {
+        String funcName = ctx.Id().getText();
+        TechlandScriptParser.ValueListContext valueList = ctx.valueList();
+        ArrayList<String> argsList = new ArrayList<>();
+        String signature = null;
+        //对于一些特殊的重复函数处理（类似：Param("NewGamePlusExperienceMul", "4.00"); 我需要标记参数1也视为签名的一部分。）
+        if (valueList != null) {
+            List<TechlandScriptParser.ExpressionContext> expression = valueList.expression();
+            //说明这个函数的子变量
+            if (expression.size() > 1 && expression.getFirst().String() != null) {
+                TerminalNode string = expression.getFirst().String();
+                signature = FUN_CALL + ":" + funcName + ":" + string.getText();
+            }
+            for (TechlandScriptParser.ExpressionContext expressionContext : expression) {
+                argsList.add(expressionContext.getText());
+            }
+        }
+        if (signature == null) {
+            signature = FUN_CALL + ":" + funcName;
+        }
+        return new ScrFunCallNode(
+                signature,
+                ctx.start.getStartIndex(),
+                ctx.stop.getStopIndex(),
+                ctx.start.getLine(),
+                getFullText(ctx),
+                argsList
+        );
     }
 
     /**
@@ -175,6 +197,7 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
                 VARIABLE + ":" + name,
                 ctx.start.getStartIndex(),
                 ctx.stop.getStopIndex(),
+                ctx.start.getLine(),
                 getFullText(ctx)
         );
     }
@@ -191,6 +214,7 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
                 USE + ":" + name + ":" + cleanParams,
                 ctx.start.getStartIndex(),
                 ctx.stop.getStopIndex(),
+                ctx.start.getLine(),
                 getFullText(ctx)
         );
     }

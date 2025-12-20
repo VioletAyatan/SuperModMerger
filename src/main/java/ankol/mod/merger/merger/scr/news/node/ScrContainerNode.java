@@ -20,8 +20,8 @@ public class ScrContainerNode extends ScrNode {
      * @param stop
      * @param text
      */
-    public ScrContainerNode(String signature, int start, int stop, String text) {
-        super(signature, start, stop, text);
+    public ScrContainerNode(String signature, int start, int stop, int line, String text) {
+        super(signature, start, stop, line, text);
     }
 
     public void addChild(ScrNode node) {
