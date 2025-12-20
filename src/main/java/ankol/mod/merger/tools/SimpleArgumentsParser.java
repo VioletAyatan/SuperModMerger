@@ -1,6 +1,5 @@
-package ankol.mod.merger.core;
+package ankol.mod.merger.tools;
 
-import ankol.mod.merger.tools.ColorPrinter;
 import lombok.Data;
 
 import java.nio.file.Files;

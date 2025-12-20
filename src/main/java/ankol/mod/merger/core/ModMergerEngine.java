@@ -277,11 +277,11 @@ public class ModMergerEngine {
         ColorPrinter.info("📊 Merge Statistics:");
         ColorPrinter.info("   Total files processed: {}", totalProcessed);
         ColorPrinter.success("✓  Merged (no conflicts): {}", mergedCount);
-        ColorPrinter.warning("⚠️  Merged (with conflicts): {}", conflictCount);
+        ColorPrinter.warning("⚠️ Merged (with conflicts): {}", conflictCount);
         ColorPrinter.info("📄 Copied: {}", copiedCount);
         ColorPrinter.info("{}", "=".repeat(50));
         if (hasAnyConflict) {
-            ColorPrinter.warning("\n⚠️  WARNING: Some conflicts were resolved.");
+            ColorPrinter.warning("\n⚠️ WARNING: Some conflicts were resolved.");
             ColorPrinter.warning("   Please review the merged files carefully!");
         } else {
             ColorPrinter.success("\n✅ Merge completed successfully with no conflicts!");

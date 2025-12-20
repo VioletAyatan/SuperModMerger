@@ -69,8 +69,6 @@ public class ScrFileMerger extends IFileMerger {
         }
     }
 
-    // ...existing code...
-
     private void reduceCompare(ScrContainerScriptNode baseContainer, ScrContainerScriptNode modContainer) {
         // 遍历 Mod 的所有子节点
         for (Map.Entry<String, ScrScriptNode> entry : modContainer.getChildren().entrySet()) {
@@ -79,7 +77,7 @@ public class ScrFileMerger extends IFileMerger {
             ScrScriptNode modNode = entry.getValue();
 
             if (baseNode == null) {
-                // [新增] Base 没有这个节点 -> 插入
+                // 新增 Base 没有这个节点 -> 插入
                 handleInsertion(baseContainer, modNode);
             } else {
                 // [存在] 检查是否冲突
@@ -114,22 +112,38 @@ public class ScrFileMerger extends IFileMerger {
     private void resolveConflictsInteractively() {
         Scanner scanner = new Scanner(System.in);
         ColorPrinter.warning("\n==================== 检测到 {} 处代码冲突 ====================", conflicts.size());
+        int chose = 0;
         for (int i = 0; i < conflicts.size(); i++) {
             ConflictRecord record = conflicts.get(i);
-            ColorPrinter.info("------------------------------------------------");
-            ColorPrinter.info("[{}/{}] 文件: {}", i + 1, conflicts.size(), record.getFileName());
+            if (chose == 3) {
+                record.setUserChoice(1); //3表示用户全部选择baseMod的配置来处理
+            } else if (chose == 4) {
+                record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
+            } else {
+                ColorPrinter.info("------------------------------------------------");
+                ColorPrinter.info("[{}/{}] 文件: {}", i + 1, conflicts.size(), record.getFileName());
 //            ColorPrinter.highlight("位置签名: {}", record.getSignature());
-            ColorPrinter.warning("1. {}: Line:[{}] {}", record.getBaseModName(), record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
-            ColorPrinter.warning("2. {}: Line:[{}] {}", record.getMergeModName(), record.getModNode().getLine(), record.getModNode().getSourceText().trim());
-            ColorPrinter.info("请选择 (1/2): ");
+                ColorPrinter.warning("1. {}: Line:[{}] {}", record.getBaseModName(), record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
+                ColorPrinter.warning("2. {}: Line:[{}] {}", record.getMergeModName(), record.getModNode().getLine(), record.getModNode().getSourceText().trim());
+                ColorPrinter.info("请选择:");
+                ColorPrinter.info("1. 使用{}", record.getBaseNode().getSourceText());
+                ColorPrinter.info("2. 使用{}", record.getModNode().getSourceText());
+                ColorPrinter.info("3. 全部使用 {} 的配置", record.getBaseModName());
+                ColorPrinter.info("4. 全部使用 {} 的配置", record.getMergeModName());
 
-            while (true) {
-                String input = scanner.nextLine();
-                if (input.equals("1") || input.equals("2")) {
-                    record.setUserChoice(Integer.parseInt(input));
-                    break;
+                while (true) {
+                    String input = scanner.nextLine();
+                    if (input.equals("1") || input.equals("2")) {
+                        record.setUserChoice(Integer.parseInt(input));
+                        break;
+                    }
+                    if (input.equals("3") || input.equals("4")) {
+                        chose = Integer.parseInt(input);
+                        record.setUserChoice(chose == 3 ? 1 : 2);
+                        break;
+                    }
+                    ColorPrinter.warning("输入无效，请输入 1 或 2 或 3 或 4 ");
                 }
-                ColorPrinter.warning("输入无效，请输入 1 或 2: ");
             }
         }
         ColorPrinter.success("==================== 冲突处理完成，正在应用修改 ====================");
