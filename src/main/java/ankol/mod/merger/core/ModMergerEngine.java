@@ -68,11 +68,10 @@ public class ModMergerEngine {
             return;
         }
 
-        ColorPrinter.info("📦 Found {} mod(s) to merge:", modsToMerge.size());
+        ColorPrinter.info("Found {} mod(s) to merge:", modsToMerge.size());
         for (int i = 0; i < modsToMerge.size(); i++) {
-            ColorPrinter.info("  {}. {}", (i + 1), modsToMerge.get(i).getFileName());
+            ColorPrinter.info("{}. {}", (i + 1), modsToMerge.get(i).getFileName());
         }
-        System.out.println();
 
         try {
             //把所有文件先解压到临时文件夹，生成映射路径（包含来源信息）
