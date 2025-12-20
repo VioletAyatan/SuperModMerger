@@ -1,5 +1,7 @@
 package ankol.mod.merger.merger;
 
+import ankol.mod.merger.core.DiffResult;
+
 import java.util.ArrayList;
 import java.util.List;
 
