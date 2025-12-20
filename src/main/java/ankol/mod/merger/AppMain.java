@@ -35,7 +35,7 @@ public class AppMain {
             // 扫描需要合并的MOD目录
             List<Path> modsToMerge = Tools.scanModFiles(Tools.getMergingModDir());
             // 确定输出路径
-            Path outputPath = Path.of(System.getProperty("user.dir"), "merged_mod.pak");
+            Path outputPath = Path.of(Tools.getUserDir(), "merged_mod.pak");
             if (argParser.hasOption("o")) {
                 outputPath = Path.of(argParser.getOptionValue("o"));
             }

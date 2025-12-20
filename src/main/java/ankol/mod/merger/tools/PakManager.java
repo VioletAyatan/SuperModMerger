@@ -25,25 +25,47 @@ import java.util.zip.ZipOutputStream;
 public class PakManager {
 
     /**
-     * 从 .pak 文件中提取所有文件到临时目录
+     * 从 .pak 文件中提取所有文件到临时目录（支持递归解压嵌套压缩包）
+     * <p>
+     * 如果压缩包中包含 .pak 或 .zip 文件，会递归解压它们
+     * 这样可以处理诸如 "zip里套pak" 这样的嵌套情况
+     * <p>
+     * 返回的映射包含文件来源信息，可以追踪嵌套链
      *
      * @param pakPath pak文件路径
      * @param tempDir 临时解压目录
-     * @return 文件映射表 (相对路径 -> 实际文件路径)
+     * @return 文件映射表 (相对路径 -> FileSourceInfo)，包含来源链信息
      */
-    public static Map<String, Path> extractPak(Path pakPath, Path tempDir) throws IOException {
+    public static Map<String, FileSourceInfo> extractPak(Path pakPath, Path tempDir) throws IOException {
         Files.createDirectories(tempDir);
-        Map<String, Path> fileMap = new HashMap<>();
+        Map<String, FileSourceInfo> fileMap = new HashMap<>();
+        String archiveName = pakPath.getFileName().toString();
+        extractPakRecursive(pakPath, tempDir, fileMap, archiveName);
+        return fileMap;
+    }
 
-        try (ZipFile zipFile = new ZipFile(pakPath.toFile())) {
+    /**
+     * 递归解压压缩包（支持嵌套）
+     * <p>
+     * 当遇到 .pak 或 .zip 文件时，会递归解压，并记录来源链
+     * 例如：如果 mymod.zip 中包含 data3.pak，来源链为 ["mymod.zip", "data3.pak"]
+     *
+     * @param archivePath 压缩包路径
+     * @param outputDir   输出目录
+     * @param fileMap     文件映射表，包含来源信息
+     * @param archiveName 当前压缩包名称（用于构建来源链）
+     */
+    private static void extractPakRecursive(Path archivePath, Path outputDir, Map<String, FileSourceInfo> fileMap, String archiveName) throws IOException {
+        try (ZipFile zipFile = new ZipFile(archivePath.toFile())) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
 
                 if (entry.isDirectory()) continue;
 
-                // 创建文件的完整路径
-                Path outputPath = tempDir.resolve(entry.getName());
+                String entryName = entry.getName();
+                String fileName = entryName.substring(entryName.lastIndexOf("/") + 1).toLowerCase();
+                Path outputPath = outputDir.resolve(entryName);
                 Files.createDirectories(outputPath.getParent());
 
                 // 从 ZIP 中读取文件内容并写入
@@ -51,12 +73,30 @@ public class PakManager {
                     Files.copy(input, outputPath);
                 }
 
-                // 记录映射关系
-                fileMap.put(entry.getName(), outputPath);
+                // 检查是否是嵌套的压缩包（.pak 或 .zip）
+                if (fileName.endsWith(".pak") || fileName.endsWith(".zip")) {
+                    ColorPrinter.info("📦 Found nested archive: {} (from: {})", entryName, archiveName);
+                    // 创建嵌套压缩包的临时解压目录
+                    Path nestedTempDir = outputDir.resolve("_nested_" + System.currentTimeMillis() + "_" + fileName);
+                    Files.createDirectories(nestedTempDir);
+                    // 递归解压，传递嵌套的文件名
+                    extractPakRecursive(outputPath, nestedTempDir, fileMap, fileName);
+                } else {
+                    // 创建文件来源信息，记录来源链
+                    FileSourceInfo sourceInfo = new FileSourceInfo(outputPath);
+                    sourceInfo.addSource(archiveName);
+
+                    // 检查是否已有相同路径的文件（来自不同来源）
+                    if (fileMap.containsKey(entryName)) {
+                        FileSourceInfo existing = fileMap.get(entryName);
+                        ColorPrinter.warning("⚠️ Duplicate file: {} (from: {} and {})",
+                            entryName, existing.getSourceChainString(), sourceInfo.getSourceChainString());
+                    }
+
+                    fileMap.put(entryName, sourceInfo);
+                }
             }
         }
-
-        return fileMap;
     }
 
     /**
