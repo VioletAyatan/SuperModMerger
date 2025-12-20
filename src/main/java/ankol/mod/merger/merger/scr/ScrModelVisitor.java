@@ -28,6 +28,9 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
 
     private ScrContainerScriptNode containerNode;
 
+    /**
+     * 根文件
+     */
     @Override
     public ScrScriptNode visitFile(TechlandScriptParser.FileContext ctx) {
         ScrContainerScriptNode rootNode = new ScrContainerScriptNode("ROOT",
@@ -46,10 +49,10 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
         return rootNode;
     }
 
+    //===========================导入/导出===========================
     @Override
     public ScrScriptNode visitImportDecl(TechlandScriptParser.ImportDeclContext ctx) {
         // Import 签名示例: "import:data/scripts/inputs.scr"
-        // 这样可以防止同一个文件被 import 两次
         String path = ctx.String().getText();
         String signature = IMPORT + ":" + path;
         return new ScrLeafScriptNode(
@@ -76,12 +79,12 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
         );
     }
 
+    //===========================函数块===========================
     @Override
     public ScrScriptNode visitSubDecl(TechlandScriptParser.SubDeclContext ctx) {
         // Sub 签名示例: "sub:main"
         String name = ctx.Id().getText();
         String signature = SUB_FUN + ":" + name;
-
         // 这里的 getFullText 获取的是 "sub main() { ... }" 整个一大块字符串
         ScrContainerScriptNode subNode = new ScrContainerScriptNode(
                 signature,
@@ -96,10 +99,6 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
         return subNode;
     }
 
-    /**
-     * 处理嵌套块，例如: Jump("Normal") { ... }
-     * 这是 Techland 脚本中最关键的结构。
-     */
     @Override
     public ScrScriptNode visitFuntionBlockDecl(TechlandScriptParser.FuntionBlockDeclContext ctx) {
         String funcName = ctx.Id().getText();
@@ -121,9 +120,6 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
         return blockNode;
     }
 
-    /**
-     * 提取 helper：遍历 functionBlock 里的 statements 并添加到父节点
-     */
     private void visitFunctionBlockContent(ScrContainerScriptNode parent, TechlandScriptParser.FunctionBlockContext ctx) {
         if (ctx == null || ctx.statements() == null) {
             return;
@@ -138,7 +134,7 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
     }
 
     /**
-     * 处理简单的函数调用/属性设置，例如: Height(1.0);
+     * 函数调用的处理
      */
     @Override
     public ScrScriptNode visitFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx) {
@@ -178,10 +174,6 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
         );
     }
 
-    /**
-     * ANTLR 默认的 visitStatements 只是返回子节点的执行结果。
-     * 我们需要确保它能把结果传回来。
-     */
     @Override
     public ScrScriptNode visitStatements(TechlandScriptParser.StatementsContext ctx) {
         if (ctx.funtionCallDecl() != null) {
@@ -205,13 +197,12 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
 
     @Override
     public ScrScriptNode visitDirectiveCall(TechlandScriptParser.DirectiveCallContext ctx) {
-        // 处理预处理指令调用，例如: #define MAX_SPEED 10
+        // 处理预处理指令调用，例如: !define MAX_SPEED 10
         String directiveName = ctx.Id().getText();
-        String signature = DIRECTIVE + ":" + directiveName;
-        if (containerNode.getChildren().containsKey(signature)) {
-            //发现重复的函数调用，重新生成signature
-            ScrFunCallScriptNode funCallNode = (ScrFunCallScriptNode) containerNode.getChildren().get(signature);
-            funCallNode.setSignature(funCallNode.getSignature() + ":" + funCallNode.getArguments().getFirst());
+        TechlandScriptParser.ValueListContext valueList = ctx.valueList();
+        String signature = DIRECTIVE + ":" + directiveName + ":";
+        if (valueList != null) {
+            signature += ":" + valueList.getText();
         }
         return new ScrLeafScriptNode(
                 signature,
@@ -224,7 +215,7 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
 
     @Override
     public ScrScriptNode visitMacroDecl(TechlandScriptParser.MacroDeclContext ctx) {
-        TerminalNode macroId = ctx.MacroId();
+        TerminalNode macroId = ctx.MacroId(); //Like: $Police_parking_dead_zone
         String signature = MACRO + ":" + macroId.getText();
         return new ScrLeafScriptNode(signature,
                 ctx.start.getStartIndex(),
@@ -237,8 +228,8 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
     @Override
     public ScrScriptNode visitVariableDecl(TechlandScriptParser.VariableDeclContext ctx) {
         // 局部变量声明，如: float val = 1.0;
-        // 签名示例: "var:val"
-        String name = ctx.Id().getText();
+        // 签名示例: "variable:flot:val"
+        String name = ctx.type() + ":" + ctx.Id().getText();
         return new ScrLeafScriptNode(
                 VARIABLE + ":" + name,
                 ctx.start.getStartIndex(),
