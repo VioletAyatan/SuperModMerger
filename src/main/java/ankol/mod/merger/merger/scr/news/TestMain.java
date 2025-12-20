@@ -16,8 +16,8 @@ public class TestMain {
 
     static void main() throws IOException {
         String userDir = Tools.getUserDir();
-        String fileName = "game_tags.scr";
-        String fileName2 = "game_tags2.scr";
+        String fileName = "damagedefinitions.scr";
+        String fileName2 = "damagedefinitions2.scr";
         String baseContent = Files.readString(Path.of(userDir + "/examples/" + fileName));
         String modContent = Files.readString(Path.of(userDir + "/examples/" + fileName2));
 
@@ -26,7 +26,7 @@ public class TestMain {
 
         SourcePatchMerger merger = new SourcePatchMerger("data3.pak", "data4.pak", "player_variables.scr");
         String merged = merger.merge(baseContent, parse, parse1);
-        Files.writeString(Path.of("D:\\Projects\\ModMergerTool\\examples\\merged_jump_parameters.scr"), merged);
+        Files.writeString(Path.of("D:\\Projects\\ModMergerTool\\examples\\merged_" + fileName), merged);
     }
 
     private static ScrContainerNode parse(String content) throws IOException {
