@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "glob": "**/message*.properties"
+    },
+    {
+      "glob": "**/*.xml"
+    }
+  ]
+}
