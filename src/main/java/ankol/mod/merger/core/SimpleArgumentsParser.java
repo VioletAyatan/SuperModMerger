@@ -1,5 +1,7 @@
 package ankol.mod.merger.core;
 
+import lombok.Data;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -7,23 +9,24 @@ import java.nio.file.Paths;
 /**
  * 合并配置类 - 管理程序的配置和命令行参数解析
  */
+@Data
 public class SimpleArgumentsParser {
     /**
      * 第一个模组的目录路径（baseline）
      */
-    public Path mod1Directory;
+    private Path mod1Directory;
     /**
      * 第二个模组的目录路径（可选）
      */
-    public Path mod2Directory;
+    private Path mod2Directory;
     /**
      * 合并结果的输出目录
      */
-    public Path outputDirectory;
+    private Path outputDirectory;
     /**
      * 是否启用详细输出
      */
-    public boolean verbose;
+    private boolean verbose;
     /**
      * 需要合并的MOD目录所在文件夹
      */

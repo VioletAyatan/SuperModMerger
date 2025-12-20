@@ -14,19 +14,14 @@ import java.nio.file.Path;
 public class TestMain {
 
     static void main() throws IOException {
-        String baseContent = Files.readString(Path.of("D:\\Projects\\ModMergerTool\\examples\\jump_parameters.scr"));
-        String modContent = Files.readString(Path.of("D:\\Projects\\ModMergerTool\\examples\\jump_parameters2.scr"));
+        String baseContent = Files.readString(Path.of("D:\\Projects\\ModMergerTool\\examples\\player_variables.scr"));
+        String modContent = Files.readString(Path.of("D:\\Projects\\ModMergerTool\\examples\\player_variables2.scr"));
 
         ScrContainerNode parse = parse(baseContent);
         ScrContainerNode parse1 = parse(modContent);
-        System.out.println("parse = " + parse);
-        System.out.println("parse1 = " + parse1);
 
-        SourcePatchMerger merger = new SourcePatchMerger("jump_parameters.scr");
+        SourcePatchMerger merger = new SourcePatchMerger("data3.pak", "data4.pak", "player_variables.scr");
         String merged = merger.merge(baseContent, parse, parse1);
-
-        System.out.println("merged = " + merged);
-
         Files.writeString(Path.of("D:\\Projects\\ModMergerTool\\examples\\merged_jump_parameters.scr"), merged);
     }
 

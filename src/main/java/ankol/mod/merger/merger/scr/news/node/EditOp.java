@@ -8,7 +8,7 @@ import lombok.Data;
  * @author Ankol
  */
 @Data
-public class ConflitMark implements Comparable<ConflitMark> {
+public class EditOp implements Comparable<EditOp> {
     /**
      * 原始文本
      */
@@ -21,7 +21,7 @@ public class ConflitMark implements Comparable<ConflitMark> {
     private int end;     // start == end 为插入，start < end 为替换
     private String text; // 要写入的新文本
 
-    public ConflitMark(String originalText, String conflitText, int start, int end, String text) {
+    public EditOp(String originalText, String conflitText, int start, int end, String text) {
         this.originalText = originalText;
         this.conflitText = conflitText;
         this.start = start;
@@ -29,7 +29,7 @@ public class ConflitMark implements Comparable<ConflitMark> {
         this.text = text;
     }
 
-    public ConflitMark(int start, int end, String text) {
+    public EditOp(int start, int end, String text) {
         this.start = start;
         this.end = end;
         this.text = text;
@@ -37,7 +37,7 @@ public class ConflitMark implements Comparable<ConflitMark> {
 
     // 倒序排序：优先修改文件末尾，防止坐标偏移
     @Override
-    public int compareTo(ConflitMark other) {
+    public int compareTo(EditOp other) {
         return Integer.compare(other.start, this.start);
     }
 }
