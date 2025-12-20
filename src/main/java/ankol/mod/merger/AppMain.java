@@ -1,6 +1,7 @@
 package ankol.mod.merger;
 
 import ankol.mod.merger.core.ModMergerEngine;
+import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.SimpleArgParser;
 import ankol.mod.merger.tools.Tools;
@@ -41,21 +42,21 @@ public class AppMain {
             ModMergerEngine merger = new ModMergerEngine(modsToMerge, outputPath);
             merger.merge();
 
-            System.out.println("\n✅ Done!");
+            ColorPrinter.success("\n✅ Done!");
             System.exit(0);
 
         } catch (IllegalArgumentException e) {
             // 参数错误处理：打印错误信息，退出码1
-            System.err.println("❌ Error: " + e.getMessage());
+            ColorPrinter.error("❌ Error: {}", e.getMessage());
             System.exit(1);
         } catch (IOException e) {
             // 文件IO错误处理：打印错误信息和堆栈跟踪，退出码2
-            System.err.println("❌ IO Error: " + e.getMessage());
+            ColorPrinter.error("❌ IO Error: {}", e.getMessage());
             e.printStackTrace();
             System.exit(2);
         } catch (Exception e) {
             // 其他运行时异常处理：打印错误信息和堆栈跟踪，退出码3
-            System.err.println("❌ Error: " + e.getMessage());
+            ColorPrinter.error("❌ Error: {}", e.getMessage());
             e.printStackTrace();
             System.exit(3);
         }

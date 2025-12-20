@@ -144,12 +144,12 @@ public class SimpleArgParser {
      * 打印帮助信息
      */
     public void printHelp() {
-        System.out.println("Usage:");
+        ColorPrinter.info("Usage:");
         for (Option opt : options.values()) {
             String sName = (opt.shortName != null) ? "-" + opt.shortName : "  ";
             String lName = "--" + opt.longName;
             String valParams = opt.hasValue ? " <value>" : "";
-            System.out.printf("  %s, %-20s %s%n", sName, lName + valParams, opt.description);
+            ColorPrinter.info("  {}, {:<20} {}", sName, lName + valParams, opt.description);
         }
     }
 

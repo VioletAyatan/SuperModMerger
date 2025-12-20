@@ -127,7 +127,7 @@ public abstract class Tools {
                 if (!fileTreeMap.containsKey(fileName)) {
                     fileTreeMap.put(fileName, new FileTree(fileName, entryName));
                 } else {
-                    System.err.println("检测到相同的文件名：" + fileName + "但路径不一致：[" + entryName + "] [" + fileTreeMap.get(fileName).getFullPathName() + "]");
+                    ColorPrinter.warning("检测到相同的文件名：{}但路径不一致：[{}] [{}]", fileName, entryName, fileTreeMap.get(fileName).getFullPathName());
                 }
             }
         } catch (IOException e) {
