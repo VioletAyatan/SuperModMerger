@@ -19,7 +19,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class ScrFileMerger extends IFileMerger {
+public class ScrScriptFileMerger extends IFileMerger {
     /**
      * 标记冲突项的容器
      */
@@ -30,7 +30,7 @@ public class ScrFileMerger extends IFileMerger {
      */
     private static final Map<String, ScrContainerScriptNode> PARSE_CACHE = new WeakHashMap<>();
 
-    public ScrFileMerger(MergerContext context) {
+    public ScrScriptFileMerger(MergerContext context) {
         super(context);
     }
 
@@ -111,7 +111,7 @@ public class ScrFileMerger extends IFileMerger {
      */
     private void resolveConflictsInteractively() {
         Scanner scanner = new Scanner(System.in);
-        ColorPrinter.warning("\n==================== 检测到 {} 处代码冲突 ====================", conflicts.size());
+        ColorPrinter.warning("\n==================== 检测到 {} 处代码冲突，需要用户手动合并 ====================", conflicts.size());
         int chose = 0;
         for (int i = 0; i < conflicts.size(); i++) {
             ConflictRecord record = conflicts.get(i);
@@ -123,8 +123,8 @@ public class ScrFileMerger extends IFileMerger {
                 ColorPrinter.info("------------------------------------------------");
                 ColorPrinter.info("[{}/{}] 文件: {}", i + 1, conflicts.size(), record.getFileName());
 //            ColorPrinter.highlight("位置签名: {}", record.getSignature());
-                ColorPrinter.warning("1. {}: Line:[{}] {}", record.getBaseModName(), record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
-                ColorPrinter.warning("2. {}: Line:[{}] {}", record.getMergeModName(), record.getModNode().getLine(), record.getModNode().getSourceText().trim());
+                ColorPrinter.warning("1. {}, Line {}: {}", record.getBaseModName(), record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
+                ColorPrinter.warning("2. {}, Line {}: {}", record.getMergeModName(), record.getModNode().getLine(), record.getModNode().getSourceText().trim());
                 ColorPrinter.info("请选择:");
                 ColorPrinter.info("1. 使用{}", record.getBaseNode().getSourceText());
                 ColorPrinter.info("2. 使用{}", record.getModNode().getSourceText());

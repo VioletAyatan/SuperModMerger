@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="reachability-metadata-schema-v1.2.0">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="新建架构" />
+              <option name="name" value="reachability-metadata-schema-v1.2.0" />
+              <option name="relativePathToSchema" value="https://github.com/oracle/graal/blob/master/docs/reference-manual/native-image/assets/reachability-metadata-schema-v1.2.0.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/resources/META-INF/native-image/reachability-metadata.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>

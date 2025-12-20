@@ -3,6 +3,7 @@ package ankol.mod.merger.core;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
+import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.PakManager;
 
 import java.io.IOException;
@@ -186,12 +187,29 @@ public class ModMergerEngine {
         MergerContext context = new MergerContext();
         Optional<IFileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
 
+        //不支持冲突检测的文件类型，直接让用户选择使用哪个mod的版本
         if (mergerOptional.isEmpty()) {
+            Scanner scanner = new Scanner(System.in);
             // 不支持智能合并，使用最后一个 mod 的版本
-            FileSource lastSource = fileSources.getLast();
-            ColorPrinter.info("📄Copying (non-mergeable): {} (using {})", relPath, lastSource.sourceModName);
-            copyFile(relPath, lastSource.filePath, mergedDir);
-            return;
+            ColorPrinter.warning("\n" + Localizations.t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath));
+            ColorPrinter.warning(Localizations.t("ASSET_CHOSE_WHICH_VERSION_TO_USE"));
+            for (int i = 0; i < fileSources.size(); i++) {
+                FileSource fileSource = fileSources.get(i);
+                ColorPrinter.info("{}. {}", i + 1, fileSource.sourceModName);
+            }
+            while (true) {
+                String input = scanner.next();
+                if (input.matches("\\d+")) {
+                    int choice = Integer.parseInt(input);
+                    if (choice >= 1 && choice <= fileSources.size()) {
+                        FileSource chosenSource = fileSources.get(choice - 1);
+                        ColorPrinter.info(Localizations.t("ASSET_USER_CHOSE_COMPLTED", chosenSource.sourceModName));
+                        copyFile(relPath, chosenSource.filePath, mergedDir);
+                        return;
+                    }
+                }
+                ColorPrinter.warning(Localizations.t("ASSET_INVALID_INPUT_PLEASE_ENTER_NUMBER", 1, fileSources.size()));
+            }
         }
 
         // 智能合并脚本文件

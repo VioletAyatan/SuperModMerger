@@ -6,5 +6,19 @@
     {
       "glob": "**/*.xml"
     }
+  ],
+  "reflection": [
+    {
+      "type": "ankol.mod.merger.merger.scr.ScrScriptFileMerger",
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "ankol.mod.merger.merger.xml.XmlFileMerger",
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    }
   ]
 }

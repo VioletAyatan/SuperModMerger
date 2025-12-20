@@ -1,7 +1,6 @@
 package ankol.mod.merger.core;
 
-import ankol.mod.merger.merger.scr.ScrFileMerger;
-import ankol.mod.merger.merger.xml.XmlFileMerger;
+import ankol.mod.merger.merger.scr.ScrScriptFileMerger;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReflectUtil;
 
@@ -27,9 +26,9 @@ public class MergerFactory {
     // 静态初始化块，用于注册所有支持的合并器
     static {
         // 注册.scr格式的合并器
-        registerMerger(ScrFileMerger.class, ".scr", ".def", ".loot", ".ppfx", ".ares", ".mpcloth");
+        registerMerger(ScrScriptFileMerger.class, ".scr", ".def", ".loot", ".ppfx", ".ares", ".mpcloth");
         // 注册.xml文件的合并器
-        registerMerger(XmlFileMerger.class, ".xml");
+//        registerMerger(XmlFileMerger.class, ".xml");
     }
 
     /**
