@@ -224,7 +224,7 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
         String signature = DIRECTIVE + ":" + directiveName;
         if (containerNode.getChildren().containsKey(signature)) {
             //发现重复的函数调用，重新生成signature
-            ScrFunCallNode funCallNode = (ScrFunCallNode) containerNode.getChildren().get(funcName);
+            ScrFunCallNode funCallNode = (ScrFunCallNode) containerNode.getChildren().get(signature);
             funCallNode.setSignature(funCallNode.getSignature() + ":" + funCallNode.getArguments().getFirst());
         }
         return new ScrLeafNode(
