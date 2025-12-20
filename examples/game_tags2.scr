@@ -1,0 +1,245 @@
+// In case of any questions or issues, please contact mykyta.vyshniakov@techland.pl or adam.michalowski@techland.pl
+//
+// Please note:
+// - Tag("segment_name1.segment_name2.leaf_name"):
+//     - tag name cannot be empty
+//     - tag name can be composed of non-empty segments separated by a dot ('.') for grouping
+//     - each segment must contain only alphanumeric or underscore characters
+//     - user can use any level of hierarchy in filters (e.g., "infected" to include every infected)
+//     - only unique leaf tags (the most specific tags) are assigned a unique bit internally
+// - TagAlias("alias_name", "tag_name1;tag_name2;..."):
+//     - tag alias name cannot be empty
+//     - tag alias name must contain only alphanumeric or underscore characters
+//     - tag alias names must be unique
+//     - tag names should be valid and already defined tags
+//     - use semicolons (';') to separate multiple tags in aliases
+//     - there is no support for logic operations (e.g. negation) for alias definitions
+//     - tag names should not contain other tag alias. Technically, it is possible to use a tag alias as a "tag" in another tag alias
+//       as long as the referenced alias is registered before it is used. But let's not do it to avoid confusion and potential errors
+// - use the {TagType}TagsAliases sub to define aliases for tags of the corresponding TagType (e.g. Damage, Actor, LootUnlock).
+//
+// Currently available tags types and their maximum allowed number:
+// - DamageTags:      64
+// - ActorTags:       128
+// - LootUnlockTags:  128
+//
+// Important:
+// - Make sure to create/update proper leaf nodes.
+//   For instance, there is used tag "infected.banshee" in the game and now we would like to add a new tag "infected.banshee.halloween".
+//   The problem is that now the tag "infected.banshee" is invalidated and it becomes a non-leaf tag with the same bit as "infected.banshee.halloween".
+//   To avoid this, you should not create a tag "infected.banshee" but rather "infected.banshee.base" and then create "infected.banshee.halloween" as leaf tags.
+//   And in case of already existing tag, it should be updated as well as its usages.
+//
+// More info:
+// - https://docs.google.com/presentation/d/1AI6afaW_ThlqGVu_RmMTjcgFonLqLSO1sNb6y9_WI_A/edit?usp=sharing
+// - https://drive.google.com/file/d/1Dp-YUhcy9h6CdrcPVrcCXYbYf0uxjoen/view?usp=sharing
+
+sub DamageTags()
+{
+    Tag("fall");
+    Tag("wall_hit.animation");
+    Tag("wall_hit.ragdoll");
+    Tag("spikes.static");
+    Tag("spikes.dynamic");
+    Tag("explosive.mine");
+    Tag("explosive.remote");
+    Tag("explosive.gas_tank");
+    Tag("explosive.car_trap");
+    Tag("explosive.grenade");
+    Tag("explosive.knife");
+    Tag("electric.mine");
+    Tag("electric.fence_pb");
+    Tag("electric.arrow");
+    Tag("electric.box2");
+    Tag("plaguebearer_cloud");
+    Tag("blunt");
+    Tag("molotov_lantern_trap");
+    Tag("firearm.pistol");
+    Tag("firearm.submachine");
+    Tag("firearm.rifle");
+    Tag("firearm.shotgun");
+    Tag("player_fury");
+    Tag("player_fury_alpha_roar");
+    Tag("pursuit_attack_volatile");
+    Tag("pursuit_attack_jump_volatile");
+    Tag("vehicle_hit.collision");
+    Tag("vehicle_hit.failed_grab");
+    Tag("vehicle_hit.squish");
+    Tag("ignore_counterattack");
+    Tag("ignore_dodge");
+    Tag("weapon_throw");
+    Tag("ground_pound");
+    Tag("wrestle_kick");
+    Tag("charged_spin");
+    Tag("jump_attack.air_kick");
+}
+
+sub ActorTags()
+{
+    //Player
+    Tag("player");
+
+    //Infected
+    Tag("freak");
+    Tag("infected.banshee.base");
+    Tag("infected.banshee.hag");
+    Tag("infected.biter.base");
+    Tag("infected.bolter.base");
+    Tag("infected.charger.base");
+    Tag("infected.corruptor.base");
+    Tag("infected.demolisher.base");
+    Tag("infected.demolisher.sgt");
+    Tag("infected.goon.base");
+    Tag("infected.screamer.base");
+    Tag("infected.spitter.base");
+    Tag("infected.suicider.base");
+    Tag("infected.viral.base");
+    Tag("infected.volatile.base");
+    Tag("infected.volatile.hive");
+    Tag("infected.volatile.apex");
+    Tag("infected.volatile.tyrant.base");
+
+    //GAAS
+    ////Infected (for events)
+    Tag("infected.banshee.halloween");
+    Tag("infected.biter.halloween");
+    Tag("infected.volatile.halloween");
+    Tag("infected.volatile.tyrant.halloween");
+    Tag("infected.biter.winter");
+    Tag("infected.viral.winter");
+    Tag("infected.bolter.winter");
+    Tag("infected.demolisher.winter");
+    Tag("infected.spitter.winter");
+
+    //Humans
+    ////Standard
+    Tag("human.one_handed.base");
+    Tag("human.two_handed.base");
+    Tag("human.summoner.base");
+    Tag("human.bow.base");
+    Tag("human.spear.base");
+    Tag("human.grenadier.base");
+    Tag("human.rifle.base");
+    Tag("human.shotgun.base");
+    Tag("human.knife_thrower.base");
+    ////Factions
+    Tag("human.faction.survivor");
+    Tag("human.faction.peacekeeper");
+
+    ////Humans (for events)
+    Tag("human.two_handed.for_honor");
+    Tag("survivormissions_boss");
+    
+    //Tower Raid
+    Tag("towerraid_boss");
+
+    Tag("boss");
+}
+
+sub LootUnlockTags()
+{
+    // Items found in loot pools
+    Tag("tr.potionhealthregen.stage1");
+    Tag("tr.potionhealthregen.stage2");
+    Tag("tr.throwablemolotov.stage1");
+    Tag("tr.throwablemolotov.stage2");
+    Tag("tr.throwingknife.stage1");
+    Tag("tr.throwingknife.stage2");
+    Tag("tr.grenade.stage1");
+    Tag("tr.grenade.stage2");
+    Tag("tr.remoteexplosive.stage1");
+    Tag("tr.remoteexplosive.stage2");
+
+    // Weapons found in chests
+    Tag("tr.weapon.scythe");
+    Tag("tr.weapon.lasthope");
+    Tag("tr.weapon.reinforcedstick");
+    Tag("tr.weapon.thegrinder");
+    Tag("tr.weapon.dirtykatana");
+    Tag("tr.weapon.sawbladeaxe");
+    Tag("tr.weapon.torch");
+    Tag("tr.weapon.plumberschoice");
+    Tag("tr.weapon.discbrakegreataxe");
+    Tag("tr.weapon.jigsaw");
+    Tag("tr.weapon.duckhammer");
+    Tag("tr.weapon.flambeau");
+    Tag("tr.weapon.firemachete.t4");
+    Tag("tr.weapon.frostmachete.t4");
+    Tag("tr.weapon.shockmachete.t4");
+    Tag("tr.weapon.fireaxe.t5");
+    Tag("tr.weapon.frostaxe.t5");
+    Tag("tr.weapon.shockaxe.t5");
+    Tag("tr.weapon.firehammer.t5");
+    Tag("tr.weapon.frosthammer.t5");
+    Tag("tr.weapon.shockhammer.t5");
+    Tag("tr.weapon.firesword.t5");
+    Tag("tr.weapon.frostsword.t5");
+    Tag("tr.weapon.shocksword.t5");
+    Tag("tr.weapon.firebat.t5");
+    Tag("tr.weapon.frostbat.t5");
+    Tag("tr.weapon.shockbat.t5");
+
+    // weapons bought from onraid vendor
+    Tag("tr.weapon.warsaw");
+    Tag("tr.weapon.executionersaxe");
+    Tag("tr.weapon.meatsquasher");
+    Tag("tr.weapon.turbine");
+    Tag("tr.weapon.thirstyaxe");
+    Tag("tr.weapon.streetcleaver");
+    Tag("tr.weapon.thecrosier");
+    Tag("tr.weapon.hookstick");
+    Tag("tr.weapon.glaive");
+    Tag("tr.weapon.thingamabob");
+    Tag("tr.weapon.firemace.t7");
+    Tag("tr.weapon.frostmace.t7");
+    Tag("tr.weapon.shockmace.t7");
+    Tag("tr.weapon.fireaxe.t8");
+    Tag("tr.weapon.frostaxe.t8");
+    Tag("tr.weapon.shockaxe.t8");
+    Tag("tr.weapon.firehammer.t8");
+    Tag("tr.weapon.frosthammer.t8");
+    Tag("tr.weapon.shockhammer.t8");
+    Tag("tr.weapon.firesword.t8");
+    Tag("tr.weapon.frostsword.t8");
+    Tag("tr.weapon.shocksword.t8");
+    Tag("tr.weapon.firebat.t8");
+    Tag("tr.weapon.frostbat.t8");
+    Tag("tr.weapon.shockbat.t8");
+    Tag("tr.weapon.fireglaive.t8");
+    Tag("tr.weapon.frostglaive.t8");
+    Tag("tr.weapon.shockglaive.t8");
+    Tag("tr.weapon.firehalberd.t8");
+    Tag("tr.weapon.frosthalberd.t8");
+    Tag("tr.weapon.shockhalberd.t8");
+
+    // ammo found in loot pools and bought from onraid vendor
+    Tag("tr.ammo.pistol.stage1");
+    Tag("tr.ammo.pistol.stage2");
+    Tag("tr.ammo.smg.stage1");
+    Tag("tr.ammo.smg.stage2");
+    Tag("tr.ammo.rifle.stage1");
+    Tag("tr.ammo.rifle.stage2");
+    Tag("tr.ammo.shotgun.stage1");
+    Tag("tr.ammo.shotgun.stage2");
+}
+
+sub DamageTagsAliases()
+{
+    TagAlias("environmental", "spikes;explosive.gas_tank;explosive.car_trap;electric.fence_pb;electric.box;explosive.knife;fall");
+}
+
+sub ActorTagsAliases()
+{
+    TagAlias("human_all", "human.one_handed;human.two_handed;human.summoner;human.spear;human.bow;human.grenadier;human.rifle;human.shotgun;human.knife_thrower");
+    TagAlias("human_melee", "human.one_handed;human.two_handed;human.summoner;human.spear");
+    TagAlias("human_ranged", "human.bow;human.grenadier;human.rifle;human.shotgun;human.knife_thrower");
+    TagAlias("infected_special", "infected.banshee;infected.bolter;infected.charger;infected.corruptor;infected.demolisher;infected.goon;infected.screamer;infected.spitter;infected.suicider;infected.volatile");
+    TagAlias("infected_big", "infected.demolisher;infected.goon");
+    TagAlias("infected_heavy", "infected.demolisher;infected.goon;infected.charger");
+    TagAlias("infected_small", "infected.viral;infected.biter;infected.banshee;infected.bolter;infected.charger;infected.corruptor;infected.screamer;infected.spitter;infected.suicider;infected.volatile");
+    TagAlias("infected_vulnerable", "infected.biter;infected.banshee;infected.bolter;infected.screamer;infected.viral;infected.suicider;infected.spitter");
+    TagAlias("infected_generic", "infected.biter;infected.viral");
+    TagAlias("infected_halloween", "infected.banshee.halloween;infected.biter.halloween;infected.volatile.halloween;infected.volatile.tyrant.halloween");
+    TagAlias("infected_winter", "infected.biter.winter;infected.viral.winter;infected.bolter.winter;infected.demolisher.winter;infected.spitter.winter");
+    TagAlias("ranged", "infected.spitter;human.bow;human.grenadier;human.rifle;human.shotgun;human.knife_thrower");
+}

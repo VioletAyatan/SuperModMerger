@@ -3,6 +3,7 @@ package ankol.mod.merger.merger.scr.news;
 import ankol.mod.merger.antlr4.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import ankol.mod.merger.merger.scr.news.node.ScrContainerNode;
+import ankol.mod.merger.tools.Tools;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -14,8 +15,11 @@ import java.nio.file.Path;
 public class TestMain {
 
     static void main() throws IOException {
-        String baseContent = Files.readString(Path.of("D:\\Projects\\ModMergerTool\\examples\\player_variables.scr"));
-        String modContent = Files.readString(Path.of("D:\\Projects\\ModMergerTool\\examples\\player_variables2.scr"));
+        String userDir = Tools.getUserDir();
+        String fileName = "game_tags.scr";
+        String fileName2 = "game_tags2.scr";
+        String baseContent = Files.readString(Path.of(userDir + "/examples/" + fileName));
+        String modContent = Files.readString(Path.of(userDir + "/examples/" + fileName2));
 
         ScrContainerNode parse = parse(baseContent);
         ScrContainerNode parse1 = parse(modContent);
