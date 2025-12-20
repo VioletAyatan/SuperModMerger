@@ -8,7 +8,7 @@ sub main()
 
 	DamageMul("WeaponDamageMod_Seed_1")
 	{
-		Blunt("+0.01252");
+		Blunt("+0.0125");
 		Cut("+0.0125");
 		Physical("+0.0125");
 	}

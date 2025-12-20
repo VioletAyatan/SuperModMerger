@@ -10,7 +10,7 @@ public class ScrContainerNode extends ScrNode {
     /**
      * 子节点映射，key 是节点签名，value 是节点对象
      */
-    private final Map<String, ScrNode> children = new LinkedHashMap<>();
+    private Map<String, ScrNode> children = new LinkedHashMap<>();
 
     /**
      * 构造函数

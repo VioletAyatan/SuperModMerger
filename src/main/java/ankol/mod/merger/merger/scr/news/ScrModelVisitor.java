@@ -10,10 +10,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
     //=========================关键字=========================
@@ -27,7 +24,6 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
     private static final String DIRECTIVE = "directive";
     private static final String MACRO = "macro";
 
-    private final Set<String> marks = new HashSet<>();
     private final Set<String> repeatableFunctions = new HashSet<>();
 
     private ScrContainerNode containerNode;
@@ -95,7 +91,6 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
                 getFullText(ctx)
         );
         this.containerNode = subNode;
-        scaaningRepeatableFunctions(ctx.functionBlock());
         // 注意：subDecl 包含 paramList 和 functionBlock
         visitFunctionBlockContent(subNode, ctx.functionBlock());
         return subNode;
@@ -121,29 +116,9 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
                 getFullText(ctx)
         );
         this.containerNode = blockNode;
-        scaaningRepeatableFunctions(ctx.functionBlock());
         // 递归处理块内部的语句
         visitFunctionBlockContent(blockNode, ctx.functionBlock());
         return blockNode;
-    }
-
-    /**
-     * 预处理，获取当前函数块中重复调用过的函数名称
-     */
-    private void scaaningRepeatableFunctions(TechlandScriptParser.FunctionBlockContext ctx) {
-        if (ctx == null || ctx.statements() == null) {
-            return;
-        }
-        for (TechlandScriptParser.StatementsContext statement : ctx.statements()) {
-            if (statement.funtionCallDecl() != null) {
-                TerminalNode id = statement.funtionCallDecl().Id();
-                if (!marks.contains(id.getText())) {
-                    marks.add(id.getText());
-                } else {
-                    repeatableFunctions.add(id.getText());
-                }
-            }
-        }
     }
 
     /**
@@ -170,16 +145,27 @@ public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrNode> {
         String funcName = ctx.Id().getText();
         List<TechlandScriptParser.ExpressionContext> valueList = getValueList(ctx.valueList());
         ArrayList<String> argsList = new ArrayList<>();
-        //提取函数签名，对于特殊的重复函数需要特殊处理
-        String signature = FUN_CALL + ":" + funcName;
+
         //提取参数列表
         for (TechlandScriptParser.ExpressionContext expressionContext : valueList) {
             argsList.add(expressionContext.getText());
         }
-        if (containerNode.getChildren().containsKey(signature)) {
+        //提取函数签名，对于特殊的重复函数需要特殊处理
+        String signature = FUN_CALL + ":" + funcName;
+        if (repeatableFunctions.contains(signature)) {
+            signature = signature + ":" + argsList.getFirst();
+        } else {
+            Map<String, ScrNode> children = containerNode.getChildren();
             //发现重复的函数调用，重新生成signature
-            ScrFunCallNode funCallNode = (ScrFunCallNode) containerNode.getChildren().get(funcName);
-            funCallNode.setSignature(funCallNode.getSignature() + ":" + funCallNode.getArguments().getFirst());
+            if (children.containsKey(signature)) {
+                ScrFunCallNode funCallNode = (ScrFunCallNode) children.get(signature);
+                String newSignature = funCallNode.getSignature() + ":" + funCallNode.getArguments().getFirst();
+                funCallNode.setSignature(newSignature);
+                children.remove(signature);
+                children.put(newSignature, funCallNode);
+                repeatableFunctions.add(FUN_CALL + ":" + funcName); //标记这个函数为可重复函数，后续生成签名时需要特殊处理
+                signature = newSignature;
+            }
         }
         return new ScrFunCallNode(
                 signature,

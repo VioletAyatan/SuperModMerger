@@ -16,8 +16,10 @@ public class TestMain {
 
     static void main() throws IOException {
         String userDir = Tools.getUserDir();
-        String fileName = "damagedefinitions.scr";
-        String fileName2 = "damagedefinitions2.scr";
+//        String fileName = "damagedefinitions.scr";
+//        String fileName2 = "damagedefinitions2.scr";
+        String fileName = "player_variables.scr";
+        String fileName2 = "player_variables2.scr";
         String baseContent = Files.readString(Path.of(userDir + "/examples/" + fileName));
         String modContent = Files.readString(Path.of(userDir + "/examples/" + fileName2));
 
