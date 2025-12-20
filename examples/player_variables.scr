@@ -4,8 +4,8 @@ sub main()
 	Param("ManualSloMoCooldown", "5.0");  
 	
 	// WallRun Front
-    Param("WallRunFrontEnabled", "false");
-	Param("WallRunFrontPeakDelay", "0.5");    
+    Param("WallRunFrontEnabled", "true");
+	Param("WallRunFrontPeakDelay", "0.75");
     Param("WallRunFrontHeightNitro", "2.0");
 	Param("WallRunFrontHeight", "1.0");
     Param("WallRunFrontMinAngleToStartAscend", "90");
