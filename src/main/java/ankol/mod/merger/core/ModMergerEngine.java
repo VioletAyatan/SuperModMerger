@@ -3,7 +3,6 @@ package ankol.mod.merger.core;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.PakManager;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,8 +15,7 @@ import java.util.*;
  *
  * @author Ankol
  */
-@Slf4j
-public class ModMergerEngine {
+ public class ModMergerEngine {
 
     private final List<Path> modsToMerge;
     private final Path outputPath;
