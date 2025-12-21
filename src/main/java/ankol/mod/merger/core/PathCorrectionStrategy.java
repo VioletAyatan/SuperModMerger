@@ -47,16 +47,6 @@ public class PathCorrectionStrategy {
     public PathCorrectionStrategy() {
         this.selectedStrategy = null;
     }
-
-    /**
-     * 设置选择的策略
-     *
-     * @param strategy 要使用的策略
-     */
-    public void setStrategy(Strategy strategy) {
-        this.selectedStrategy = strategy;
-    }
-
     /**
      * 根据策略码选择策略
      *
@@ -71,37 +61,6 @@ public class PathCorrectionStrategy {
             }
         }
         return false;
-    }
-
-    /**
-     * 检查策略是否已选择
-     *
-     * @return 如果已选择策略返回true，否则返回false
-     */
-    public boolean isStrategySelected() {
-        return selectedStrategy != null;
-    }
-
-    /**
-     * 根据策略修正文件路径
-     *
-     * @param originalPath   原始路径
-     * @param correctedPath  建议的修正路径
-     * @return 根据策略返回应该使用的路径
-     */
-    public String applyStrategy(String originalPath, String correctedPath) {
-        if (selectedStrategy == null) {
-            return originalPath;
-        }
-
-        switch (selectedStrategy) {
-            case SMART_CORRECT:
-                return correctedPath;
-            case KEEP_ORIGINAL:
-                return originalPath;
-            default:
-                return originalPath;
-        }
     }
 }
 
