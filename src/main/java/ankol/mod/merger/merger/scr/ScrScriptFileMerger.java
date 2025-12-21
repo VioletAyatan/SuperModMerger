@@ -40,7 +40,6 @@ public class ScrScriptFileMerger extends IFileMerger {
         try {
             ScrContainerScriptNode baseRoot = parseWithCache(Path.of(file1.getFullPathName()));
             ScrContainerScriptNode modRoot = parseWithCache(Path.of(file2.getFullPathName()));
-            conflicts.clear();
             // 递归对比，找到冲突项
             reduceCompare(baseRoot, modRoot);
             if (!conflicts.isEmpty()) {
@@ -66,6 +65,10 @@ public class ScrScriptFileMerger extends IFileMerger {
             return new MergeResult(sb.toString(), !conflicts.isEmpty());
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            //清理状态，准备下一个文件合并
+            conflicts.clear();
+            finalEdits.clear();
         }
     }
 
