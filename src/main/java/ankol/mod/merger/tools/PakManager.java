@@ -4,7 +4,6 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,18 +65,18 @@ public class PakManager {
                 if (entry.isDirectory()) continue;
 
                 String entryName = entry.getName();
-                String fileName = entryName.substring(entryName.lastIndexOf("/") + 1).toLowerCase();
+                String fileName = extractFileName(entryName);
                 Path outputPath = outputDir.resolve(entryName);
                 Files.createDirectories(outputPath.getParent());
 
+                // 优化：直接检查size而不是先复制空流
                 if (entry.getSize() == 0) {
-                    Files.copy(new ByteArrayInputStream(new byte[0]), outputPath);
-                    continue;
-                }
-
-                // 从 ZIP 中读取文件内容并写入
-                try (InputStream input = zipFile.getInputStream(entry)) {
-                    Files.copy(input, outputPath);
+                    Files.createFile(outputPath);
+                } else {
+                    // 从 ZIP 中读取文件内容并写入
+                    try (InputStream input = zipFile.getInputStream(entry)) {
+                        Files.copy(input, outputPath);
+                    }
                 }
 
                 // 检查是否是嵌套的压缩包（.pak 或 .zip）
@@ -104,6 +103,14 @@ public class PakManager {
                 }
             }
         }
+    }
+
+    /**
+     * 提取文件名的工具方法（优化：避免重复代码）
+     */
+    private static String extractFileName(String path) {
+        int lastSlash = path.lastIndexOf("/");
+        return (lastSlash >= 0 ? path.substring(lastSlash + 1) : path).toLowerCase();
     }
 
     /**

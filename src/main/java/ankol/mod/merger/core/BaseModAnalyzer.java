@@ -113,8 +113,7 @@ public class BaseModAnalyzer {
         if (!loaded) {
             return false;
         }
-
-        String fileName = filePath.substring(filePath.lastIndexOf("/") + 1).toLowerCase();
+        String fileName = extractFileName(filePath);
         String correctPath = fileNameToPathMap.get(fileName);
 
         return correctPath != null && !correctPath.equalsIgnoreCase(filePath);
@@ -131,7 +130,7 @@ public class BaseModAnalyzer {
             return null;
         }
 
-        String fileName = filePath.substring(filePath.lastIndexOf("/") + 1).toLowerCase();
+        String fileName = extractFileName(filePath);
         return fileNameToPathMap.get(fileName);
     }
 
@@ -167,6 +166,30 @@ public class BaseModAnalyzer {
                         (a, b) -> a,
                         LinkedHashMap::new
                 ));
+    }
+
+    /**
+     * 打印基准MOD的分析报告
+     */
+    public void printAnalysisReport() {
+        if (!loaded) {
+            ColorPrinter.warning("⚠️ Base MOD not loaded");
+            return;
+        }
+
+        ColorPrinter.info("\n{}", "=".repeat(50));
+        ColorPrinter.info("📊 Base MOD Analysis Report:");
+        ColorPrinter.info("   Total files: {}", baseModFilePaths.size());
+        ColorPrinter.info("   Unique file names: {}", fileNameToPathMap.size());
+        ColorPrinter.info("{}", "=".repeat(50));
+    }
+
+    /**
+     * 提取文件名的工具方法（优化：避免重复代码）
+     */
+    private static String extractFileName(String path) {
+        int lastSlash = path.lastIndexOf("/");
+        return (lastSlash >= 0 ? path.substring(lastSlash + 1) : path).toLowerCase();
     }
 
     /**
