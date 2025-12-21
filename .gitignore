@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 .kotlin
 merged_mod
+source/data0.pak
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
