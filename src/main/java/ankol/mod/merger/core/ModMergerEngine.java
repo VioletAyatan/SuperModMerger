@@ -8,8 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -26,15 +25,14 @@ public class ModMergerEngine {
     // 基准MOD相关
     private final BaseModAnalyzer baseModAnalyzer;
     private final PathCorrectionStrategy pathCorrectionStrategy;
-    private final FileMergeTracker fileMergeTracker;
 
     // 统计信息
     private int mergedCount = 0;      // 成功合并（无冲突）的文件数
-    private int conflictCount = 0;    // 包含冲突的文件数
-    private int copiedCount = 0;      // 直接复制的文件数（不可解析）
     private int totalProcessed = 0;   // 处理的文件总数
-    private boolean hasAnyConflict = false;
     private int pathCorrectionCount = 0;  // 修正的路径数
+
+    // 全局Scanner（避免重复创建）
+    private static final Scanner SYSTEM_SCANNER = new Scanner(System.in);
 
     /**
      * 文件来源信息 - 记录文件路径及其来源的MOD压缩包名字
@@ -64,7 +62,6 @@ public class ModMergerEngine {
         this.tempDir = Path.of(Tools.getTempDir(), "ModMerger_" + System.currentTimeMillis());
         this.baseModAnalyzer = baseModPath != null ? new BaseModAnalyzer(baseModPath) : null;
         this.pathCorrectionStrategy = new PathCorrectionStrategy();
-        this.fileMergeTracker = new FileMergeTracker();
     }
 
     /**
@@ -94,30 +91,17 @@ public class ModMergerEngine {
         }
 
         try {
-            //异步执行解压任务
-            CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> {
-                try {
-                    if (baseModAnalyzer != null) {
-                        baseModAnalyzer.load();
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            if (baseModAnalyzer != null) {
+                baseModAnalyzer.load();
+                baseModAnalyzer.printAnalysisReport();
+            }
             // 把所有文件先解压到临时文件夹，生成映射路径（包含来源信息）
-            CompletableFuture<Map<String, List<FileSource>>> task2 = CompletableFuture.supplyAsync(this::extractAllMods);
-            CompletableFuture<Void> allOf = CompletableFuture.allOf(task1, task2);
-            allOf.join();
-
-            Map<String, List<FileSource>> filesByPath = task2.get(); //执行完成后获取结果
+            Map<String, List<FileSource>> filesByPath = extractAllMods();
 
             // 3. 处理路径修正（如果有基准MOD）
             if (baseModAnalyzer != null && baseModAnalyzer.isLoaded()) {
                 processPathCorrection(filesByPath);
             }
-
-            // 4. 按文件名（而不是路径）分组，支持相同名字的文件合并
-            reGroupFilesByName(filesByPath);
 
             // 5. 输出目录（临时）
             Path mergedDir = tempDir.resolve("merged");
@@ -133,7 +117,7 @@ public class ModMergerEngine {
 
             // 8. 打印统计信息
             printStatistics();
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             // 清理临时文件
@@ -175,17 +159,20 @@ public class ModMergerEngine {
         ColorPrinter.info("  1. {} (recommended)", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription());
         ColorPrinter.info("  2. {}", PathCorrectionStrategy.Strategy.KEEP_ORIGINAL.getDescription());
 
-        Scanner scanner = new Scanner(System.in);
+        // 优化：使用全局Scanner避免资源泄漏
         while (true) {
             ColorPrinter.info("Please enter your choice (1 or 2):");
-            String input = scanner.next().trim();
+            String input = SYSTEM_SCANNER.next().trim();
 
-            if (pathCorrectionStrategy.selectByCode(Integer.parseInt(input))) {
-                ColorPrinter.success("✓ Strategy selected: {}", pathCorrectionStrategy.getSelectedStrategy().getDescription());
-                break;
-            } else {
-                ColorPrinter.warning("❌ Invalid choice. Please enter 1 or 2");
+            try {
+                if (pathCorrectionStrategy.selectByCode(Integer.parseInt(input))) {
+                    ColorPrinter.success("✓ Strategy selected: {}", pathCorrectionStrategy.getSelectedStrategy().getDescription());
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                // 继续循环
             }
+            ColorPrinter.warning("❌ Invalid choice. Please enter 1 or 2");
         }
 
         // 应用路径修正
@@ -208,33 +195,18 @@ public class ModMergerEngine {
     }
 
     /**
-     * 重新按文件名（而不是路径）分组文件
-     * 这样可以处理相同文件名但来自不同路径的情况
+     * 提取文件名的工具方法（优化：避免重复代码）
      */
-    private void reGroupFilesByName(Map<String, List<FileSource>> filesByPath) {
-        ColorPrinter.info("\n📊 Grouping files by name (for merge detection)...");
-
-        for (var entry : filesByPath.entrySet()) {
-            String path = entry.getKey();
-            List<FileSource> sources = entry.getValue();
-
-            for (FileSource source : sources) {
-                // 提取文件名
-                String fileName = path.substring(path.lastIndexOf("/") + 1).toLowerCase();
-
-                // 添加到FileMergeTracker
-                fileMergeTracker.addFile(path, source.filePath, source.sourceModName, source.sourceModName);
-            }
-        }
-
-        fileMergeTracker.printReport();
+    private static String extractFileName(String path) {
+        int lastSlash = path.lastIndexOf("/");
+        return (lastSlash >= 0 ? path.substring(lastSlash + 1) : path).toLowerCase();
     }
 
     /**
      * 从所有 mod 中提取文件，按相对路径分组
      */
     private Map<String, List<FileSource>> extractAllMods() {
-        Map<String, List<FileSource>> filesByName = new LinkedHashMap<>();
+        Map<String, List<FileSource>> filesByName = new ConcurrentHashMap<>(); // 优化：使用线程安全集合
 
         AtomicInteger index = new AtomicInteger(0);
         //并发提取所有MOD文件
@@ -252,10 +224,9 @@ public class ModMergerEngine {
                     FileSourceInfo sourceInfo = entry.getValue();
 
                     // 构建完整的来源信息：记录真实的MOD压缩包名称
-                    // 如果是嵌套的，来源链为 "outer.zip -> inner.pak"，但我们记录modFileName作为源
                     String sourceChainString = sourceInfo.getSourceChainString();
 
-                    // 创建FileSource，记录文件和其来源MOD（包括嵌套链）
+                    // 创建FileSource，记录文件和其来源MOD
                     FileSource fileSource = new FileSource(sourceInfo.getFilePath(), modFileName);
                     filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(fileSource);
 
@@ -266,7 +237,7 @@ public class ModMergerEngine {
                 }
                 ColorPrinter.success("✓ Extracted {} files", extractedFiles.size());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new CompletionException("Failed to extract mod: " + modPath.getFileName(), e);
             }
         });
         return filesByName;
@@ -302,7 +273,6 @@ public class ModMergerEngine {
         Path targetPath = mergedDir.resolve(relPath);
         Files.createDirectories(targetPath.getParent());
         Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
-        copiedCount++;
     }
 
     /**
@@ -334,8 +304,7 @@ public class ModMergerEngine {
 
         //不支持冲突检测的文件类型，直接让用户选择使用哪个mod的版本
         if (mergerOptional.isEmpty()) {
-            Scanner scanner = new Scanner(System.in);
-            // 不支持智能合并，使用最后一个 mod 的版本
+            // 优化：使用全局Scanner避免资源泄漏
             ColorPrinter.warning("\n" + Localizations.t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath));
             ColorPrinter.warning(Localizations.t("ASSET_CHOSE_WHICH_VERSION_TO_USE"));
             for (int i = 0; i < fileSources.size(); i++) {
@@ -343,7 +312,7 @@ public class ModMergerEngine {
                 ColorPrinter.info("{}. {}", i + 1, fileSource.sourceModName);
             }
             while (true) {
-                String input = scanner.next();
+                String input = SYSTEM_SCANNER.next();
                 if (input.matches("\\d+")) {
                     int choice = Integer.parseInt(input);
                     if (choice >= 1 && choice <= fileSources.size()) {
@@ -378,11 +347,9 @@ public class ModMergerEngine {
                     FileSource previousSource = fileSources.get(i - 1);
                     String previousModName = previousSource.sourceModName;
 
-                    // 创建临时文件存储前面的合并结果
                     Path tempBaseFile = Files.createTempFile("merge_base_", ".tmp");
-                    Files.writeString(tempBaseFile, mergedContent);
-
                     try {
+                        Files.writeString(tempBaseFile, mergedContent);
                         // 执行合并 - 使用真实的MOD压缩包名字
                         FileTree fileBase = new FileTree(previousModName, tempBaseFile.toString());
                         FileTree fileCurrent = new FileTree(currentModName, currentModPath.toString());
@@ -392,9 +359,9 @@ public class ModMergerEngine {
                         context.setMod2Name(currentModName);
 
                         MergeResult result = merger.merge(fileBase, fileCurrent);
-                        mergedContent = result.mergedContent;
+                        mergedContent = result.mergedContent();
                     } finally {
-                        // 清理临时文件
+                        // 确保临时文件被删除
                         Files.deleteIfExists(tempBaseFile);
                     }
                 }
@@ -438,20 +405,9 @@ public class ModMergerEngine {
     private void printStatistics() {
         ColorPrinter.info("\n{}", "=".repeat(50));
         ColorPrinter.info("📊 Merge Statistics:");
-        ColorPrinter.info("   Total files processed: {}", totalProcessed);
-        ColorPrinter.success("✓  Merged (no conflicts): {}", mergedCount);
-        ColorPrinter.warning("⚠️ Merged (with conflicts): {}", conflictCount);
-        ColorPrinter.info("📄 Copied: {}", copiedCount);
-        if (pathCorrectionCount > 0) {
-            ColorPrinter.info("🔧 Path corrections applied: {}", pathCorrectionCount);
-        }
+        ColorPrinter.info("Total files processed: {}", totalProcessed);
+        ColorPrinter.success("Merged (no conflicts): {}", mergedCount);
         ColorPrinter.info("{}", "=".repeat(50));
-        if (hasAnyConflict) {
-            ColorPrinter.warning("\n⚠️ WARNING: Some conflicts were resolved.");
-            ColorPrinter.warning("   Please review the merged files carefully!");
-        } else {
-            ColorPrinter.success("\n✅ Merge completed successfully with no conflicts!");
-        }
     }
 
     /**
