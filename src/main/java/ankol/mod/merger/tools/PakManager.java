@@ -1,5 +1,10 @@
 package ankol.mod.merger.tools;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+import org.apache.commons.compress.archivers.zip.ZipFile;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,9 +16,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 /**
  * .pak 文件管理工具 - 处理.pak文件的打开、读取和写入
@@ -56,10 +58,10 @@ public class PakManager {
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
     private static void extractPakRecursive(Path archivePath, Path outputDir, Map<String, FileSourceInfo> fileMap, String archiveName) throws IOException {
-        try (ZipFile zipFile = new ZipFile(archivePath.toFile())) {
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        try (ZipFile zipFile = ZipFile.builder().setFile(archivePath.toFile()).get()) {
+            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
-                ZipEntry entry = entries.nextElement();
+                ZipArchiveEntry entry = entries.nextElement();
 
                 if (entry.isDirectory()) continue;
 
@@ -67,6 +69,11 @@ public class PakManager {
                 String fileName = entryName.substring(entryName.lastIndexOf("/") + 1).toLowerCase();
                 Path outputPath = outputDir.resolve(entryName);
                 Files.createDirectories(outputPath.getParent());
+
+                if (entry.getSize() == 0) {
+                    Files.copy(new ByteArrayInputStream(new byte[0]), outputPath);
+                    continue;
+                }
 
                 // 从 ZIP 中读取文件内容并写入
                 try (InputStream input = zipFile.getInputStream(entry)) {
@@ -90,7 +97,7 @@ public class PakManager {
                     if (fileMap.containsKey(entryName)) {
                         FileSourceInfo existing = fileMap.get(entryName);
                         ColorPrinter.warning("⚠️ Duplicate file: {} (from: {} and {})",
-                            entryName, existing.getSourceChainString(), sourceInfo.getSourceChainString());
+                                entryName, existing.getSourceChainString(), sourceInfo.getSourceChainString());
                     }
 
                     fileMap.put(entryName, sourceInfo);
@@ -108,7 +115,7 @@ public class PakManager {
     public static void createPak(Path sourceDir, Path pakPath) throws IOException {
         Files.createDirectories(pakPath.getParent());
 
-        try (ZipOutputStream zipOut = new ZipOutputStream(Files.newOutputStream(pakPath))) {
+        try (ZipArchiveOutputStream zipOut = new ZipArchiveOutputStream(pakPath.toFile())) {
             // 遍历源目录中的所有文件
             try (Stream<Path> pathStream = Files.walk(sourceDir)) {
                 pathStream.filter(Files::isRegularFile)
@@ -119,13 +126,13 @@ public class PakManager {
                                 // 使用正斜杠作为路径分隔符（ZIP 标准）
                                 entryName = entryName.replace(File.separator, "/");
 
-                                ZipEntry entry = new ZipEntry(entryName);
-                                zipOut.putNextEntry(entry);
+                                ZipArchiveEntry entry = new ZipArchiveEntry(entryName);
+                                zipOut.putArchiveEntry(entry);
 
                                 // 写入文件内容
                                 Files.copy(file, zipOut);
 
-                                zipOut.closeEntry();
+                                zipOut.closeArchiveEntry();
                             } catch (IOException e) {
                                 throw new RuntimeException("Failed to add file to PAK: " + file, e);
                             }

@@ -21,12 +21,18 @@ public class ModMergerEngine {
     private final Path outputPath;
     private final Path tempDir;
 
+    // 基准MOD相关
+    private final BaseModAnalyzer baseModAnalyzer;
+    private final PathCorrectionStrategy pathCorrectionStrategy;
+    private final FileMergeTracker fileMergeTracker;
+
     // 统计信息
     private int mergedCount = 0;      // 成功合并（无冲突）的文件数
     private int conflictCount = 0;    // 包含冲突的文件数
     private int copiedCount = 0;      // 直接复制的文件数（不可解析）
     private int totalProcessed = 0;   // 处理的文件总数
     private boolean hasAnyConflict = false;
+    private int pathCorrectionCount = 0;  // 修正的路径数
 
     /**
      * 文件来源信息 - 记录文件路径及其来源的MOD压缩包名字
@@ -44,15 +50,29 @@ public class ModMergerEngine {
 
 
     /**
-     * 构造函数 - 初始化合并引擎
+     * 构造函数 - 初始化合并引擎（带基准MOD）
+     *
+     * @param modsToMerge   要合并的 mod 列表（.pak 文件路径）
+     * @param outputPath    最终输出的 .pak 文件路径
+     * @param baseModPath   基准MOD文件路径（可为null）
+     */
+    public ModMergerEngine(List<Path> modsToMerge, Path outputPath, Path baseModPath) {
+        this.modsToMerge = modsToMerge;
+        this.outputPath = outputPath;
+        this.tempDir = Path.of(Tools.getTempDir(), "ModMerger_" + System.currentTimeMillis());
+        this.baseModAnalyzer = baseModPath != null ? new BaseModAnalyzer(baseModPath) : null;
+        this.pathCorrectionStrategy = new PathCorrectionStrategy();
+        this.fileMergeTracker = new FileMergeTracker();
+    }
+
+    /**
+     * 构造函数 - 初始化合并引擎（不使用基准MOD）
      *
      * @param modsToMerge 要合并的 mod 列表（.pak 文件路径）
      * @param outputPath  最终输出的 .pak 文件路径
      */
     public ModMergerEngine(List<Path> modsToMerge, Path outputPath) {
-        this.modsToMerge = modsToMerge;
-        this.outputPath = outputPath;
-        this.tempDir = Path.of(Tools.getTempDir(), "ModMerger_" + System.currentTimeMillis());
+        this(modsToMerge, outputPath, null);
     }
 
     /**
@@ -72,18 +92,34 @@ public class ModMergerEngine {
         }
 
         try {
-            //把所有文件先解压到临时文件夹，生成映射路径（包含来源信息）
-            Map<String, List<FileSource>> filesByName = extractAllMods();
-            //输出目录（临时）
+            // 1. 如果有基准MOD，先加载它
+            if (baseModAnalyzer != null) {
+                baseModAnalyzer.load();
+            }
+            // 2. 把所有文件先解压到临时文件夹，生成映射路径（包含来源信息）
+            Map<String, List<FileSource>> filesByPath = extractAllMods();
+
+            // 3. 处理路径修正（如果有基准MOD）
+            if (baseModAnalyzer != null && baseModAnalyzer.isLoaded()) {
+                processPathCorrection(filesByPath);
+            }
+
+            // 4. 按文件名（而不是路径）分组，支持相同名字的文件合并
+            reGroupFilesByName(filesByPath);
+
+            // 5. 输出目录（临时）
             Path mergedDir = tempDir.resolve("merged");
             Files.createDirectories(mergedDir);
-            //开始合并文件
-            processFiles(filesByName, mergedDir);
-            //合并完成，打包
+
+            // 6. 开始合并文件
+            processFiles(filesByPath, mergedDir);
+
+            // 7. 合并完成，打包
             ColorPrinter.info("📦 Creating merged PAK file...");
             PakManager.createPak(mergedDir, outputPath);
             ColorPrinter.success("✅ Merged PAK created: {}", outputPath);
-            // 5. 打印统计信息
+
+            // 8. 打印统计信息
             printStatistics();
         } finally {
             // 清理临时文件
@@ -92,9 +128,96 @@ public class ModMergerEngine {
     }
 
     /**
-     * 从所有 mod 中提取文件，按文件名分组
-     *
-     * @return Map<相对路径, List<文件来源信息>>
+     * 处理路径修正 - 根据基准MOD修正待合并MOD中的错误路径
+     */
+    private void processPathCorrection(Map<String, List<FileSource>> filesByPath) {
+        ColorPrinter.info("\n🔍 Checking for path mismatches with base MOD...");
+
+        // 查找所有需要修正的路径
+        Map<String, String> mismatches = new HashMap<>();
+        for (String path : filesByPath.keySet()) {
+            if (baseModAnalyzer.hasPathConflict(path)) {
+                String suggestedPath = baseModAnalyzer.getSuggestedPath(path);
+                mismatches.put(path, suggestedPath);
+            }
+        }
+
+        if (mismatches.isEmpty()) {
+            ColorPrinter.success("✓ No path mismatches found");
+            return;
+        }
+
+        // 发现路径冲突，提示用户选择修正策略
+        ColorPrinter.warning("\n⚠️ Found {} path mismatches with base MOD", mismatches.size());
+        ColorPrinter.warning("These files exist in mods but with different paths than base MOD:");
+
+        for (var entry : mismatches.entrySet()) {
+            ColorPrinter.warning("  ├─ Current: {}", entry.getKey());
+            ColorPrinter.warning("  └─ Suggested: {}", entry.getValue());
+        }
+
+        // 询问用户选择修正策略
+        ColorPrinter.info("\n📋 Select path correction strategy:");
+        ColorPrinter.info("  1. {} (recommended)", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription());
+        ColorPrinter.info("  2. {}", PathCorrectionStrategy.Strategy.KEEP_ORIGINAL.getDescription());
+
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            ColorPrinter.info("Please enter your choice (1 or 2):");
+            String input = scanner.next().trim();
+
+            if (pathCorrectionStrategy.selectByCode(Integer.parseInt(input))) {
+                ColorPrinter.success("✓ Strategy selected: {}", pathCorrectionStrategy.getSelectedStrategy().getDescription());
+                break;
+            } else {
+                ColorPrinter.warning("❌ Invalid choice. Please enter 1 or 2");
+            }
+        }
+
+        // 应用路径修正
+        if (pathCorrectionStrategy.getSelectedStrategy() == PathCorrectionStrategy.Strategy.SMART_CORRECT) {
+            ColorPrinter.info("\n🔧 Applying smart path correction...");
+            for (var entry : mismatches.entrySet()) {
+                String originalPath = entry.getKey();
+                String correctedPath = entry.getValue();
+
+                List<FileSource> sources = filesByPath.remove(originalPath);
+                filesByPath.put(correctedPath, sources);
+                pathCorrectionCount++;
+
+                ColorPrinter.info("  ├─ {} → {}", originalPath, correctedPath);
+            }
+            ColorPrinter.success("✓ Corrected {} paths", pathCorrectionCount);
+        } else {
+            ColorPrinter.info("ℹ️ Keeping original paths from mods");
+        }
+    }
+
+    /**
+     * 重新按文件名（而不是路径）分组文件
+     * 这样可以处理相同文件名但来自不同路径的情况
+     */
+    private void reGroupFilesByName(Map<String, List<FileSource>> filesByPath) {
+        ColorPrinter.info("\n📊 Grouping files by name (for merge detection)...");
+
+        for (var entry : filesByPath.entrySet()) {
+            String path = entry.getKey();
+            List<FileSource> sources = entry.getValue();
+
+            for (FileSource source : sources) {
+                // 提取文件名
+                String fileName = path.substring(path.lastIndexOf("/") + 1).toLowerCase();
+
+                // 添加到FileMergeTracker
+                fileMergeTracker.addFile(path, source.filePath, source.sourceModName, source.sourceModName);
+            }
+        }
+
+        fileMergeTracker.printReport();
+    }
+
+    /**
+     * 从所有 mod 中提取文件，按相对路径分组
      */
     private Map<String, List<FileSource>> extractAllMods() {
         Map<String, List<FileSource>> filesByName = new LinkedHashMap<>();
@@ -103,27 +226,28 @@ public class ModMergerEngine {
         //并发提取所有MOD文件
         modsToMerge.parallelStream().forEach((modPath) -> {
             try {
-                String modFileName = modPath.getFileName().toString(); //文件真实名称
+                String modFileName = modPath.getFileName().toString(); //文件真实名称（用作来源标识）
                 String modTempDirName = "Mod" + (index.getAndIncrement() + 1);               // 临时目录名（如 Mod1）
                 Path modTempDir = tempDir.resolve(modTempDirName);
 
                 ColorPrinter.info("Extracting {}...", modFileName);
                 Map<String, FileSourceInfo> extractedFiles = PakManager.extractPak(modPath, modTempDir);
-                // 按文件名分组，并记录来源MOD名字
+                // 按文件路径分组，并记录来源MOD名字
                 for (Map.Entry<String, FileSourceInfo> entry : extractedFiles.entrySet()) {
                     String relPath = entry.getKey();
                     FileSourceInfo sourceInfo = entry.getValue();
 
-                    // 构建完整的来源信息：如果是嵌套的，则为 "outer.zip -> inner.pak"
+                    // 构建完整的来源信息：记录真实的MOD压缩包名称
+                    // 如果是嵌套的，来源链为 "outer.zip -> inner.pak"，但我们记录modFileName作为源
                     String sourceChainString = sourceInfo.getSourceChainString();
 
                     // 创建FileSource，记录文件和其来源MOD（包括嵌套链）
-                    FileSource fileSource = new FileSource(sourceInfo.getFilePath(), sourceChainString);
+                    FileSource fileSource = new FileSource(sourceInfo.getFilePath(), modFileName);
                     filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(fileSource);
 
                     // 如果是嵌套来源，输出详细日志
                     if (sourceInfo.isFromNestedArchive()) {
-                        ColorPrinter.info("  └─ Nested: {} (from: {})", relPath, sourceChainString);
+                        ColorPrinter.info("  └─ Nested: {} (from: {} → {})", relPath, modFileName, sourceChainString);
                     }
                 }
                 ColorPrinter.success("✓ Extracted {} files", extractedFiles.size());
@@ -304,6 +428,9 @@ public class ModMergerEngine {
         ColorPrinter.success("✓  Merged (no conflicts): {}", mergedCount);
         ColorPrinter.warning("⚠️ Merged (with conflicts): {}", conflictCount);
         ColorPrinter.info("📄 Copied: {}", copiedCount);
+        if (pathCorrectionCount > 0) {
+            ColorPrinter.info("🔧 Path corrections applied: {}", pathCorrectionCount);
+        }
         ColorPrinter.info("{}", "=".repeat(50));
         if (hasAnyConflict) {
             ColorPrinter.warning("\n⚠️ WARNING: Some conflicts were resolved.");

@@ -3,6 +3,8 @@ package ankol.mod.merger.tools;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public abstract class Tools {
     @Getter
@@ -101,10 +101,10 @@ public abstract class Tools {
         Path zipTempDir = tempExpandDir.resolve("zip_" + System.currentTimeMillis());
         Files.createDirectories(zipTempDir);
 
-        try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        try (ZipFile zipFile = ZipFile.builder().setFile(zipPath.toFile()).get()) {
+            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
-                ZipEntry entry = entries.nextElement();
+                ZipArchiveEntry entry = entries.nextElement();
                 if (entry.isDirectory()) continue;
                 String entryName = entry.getName().toLowerCase();
                 // 只关心 PAK 文件
@@ -147,10 +147,10 @@ public abstract class Tools {
 
     private static Map<String, FileTree> buildFileTreeFromZip(File file) {
         Map<String, FileTree> fileTreeMap = new HashMap<>();
-        try (ZipFile zipFile = new ZipFile(file)) {
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        try (ZipFile zipFile = ZipFile.builder().setFile(file).get()) {
+            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
-                ZipEntry zipEntry = entries.nextElement();
+                ZipArchiveEntry zipEntry = entries.nextElement();
                 String entryName = zipEntry.getName();
                 String fileName = getEntryFileName(entryName);
                 if (!fileTreeMap.containsKey(fileName)) {

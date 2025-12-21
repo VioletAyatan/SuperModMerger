@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -39,8 +40,22 @@ public class AppMain {
             if (argParser.hasOption("o")) {
                 outputPath = Path.of(argParser.getOptionValue("o"));
             }
+
+            // 定位基准MOD的位置
+            Path baseModPath = null;
+            if (argParser.hasOption("b")) {
+                baseModPath = Path.of(argParser.getOptionValue("b"));
+            } else {
+                // 如果没有指定，尝试使用默认位置 source/data0.pak
+                Path defaultBaseMod = Path.of(Tools.getUserDir(), "source", "data0.pak");
+                if (Files.exists(defaultBaseMod)) {
+                    baseModPath = defaultBaseMod;
+                    ColorPrinter.info("ℹ️ Using default base MOD: {}", defaultBaseMod);
+                }
+            }
+
             // 执行合并
-            ModMergerEngine merger = new ModMergerEngine(modsToMerge, outputPath);
+            ModMergerEngine merger = new ModMergerEngine(modsToMerge, outputPath, baseModPath);
             merger.merge();
             //完成
             ColorPrinter.success("\n✅ Done!");
