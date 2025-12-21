@@ -146,17 +146,17 @@ public class ModMergerEngine {
         }
 
         // 发现路径冲突，提示用户选择修正策略
-        ColorPrinter.warning("\n⚠️ Found {} path mismatches with base MOD", mismatches.size());
+        ColorPrinter.warning("\nFound {} path mismatches with base MOD", mismatches.size());
         ColorPrinter.warning("These files exist in mods but with different paths than base MOD:");
 
         for (var entry : mismatches.entrySet()) {
             ColorPrinter.warning("  ├─ Current: {}", entry.getKey());
-            ColorPrinter.warning("  └─ Suggested: {}", entry.getValue());
+            ColorPrinter.success("  └─ Suggested: {}", entry.getValue());
         }
 
         // 询问用户选择修正策略
         ColorPrinter.info("\n📋 Select path correction strategy:");
-        ColorPrinter.info("  1. {} (recommended)", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription());
+        ColorPrinter.success("  1. {} (recommended)", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription());
         ColorPrinter.info("  2. {}", PathCorrectionStrategy.Strategy.KEEP_ORIGINAL.getDescription());
 
         // 优化：使用全局Scanner避免资源泄漏
@@ -177,7 +177,7 @@ public class ModMergerEngine {
 
         // 应用路径修正
         if (pathCorrectionStrategy.getSelectedStrategy() == PathCorrectionStrategy.Strategy.SMART_CORRECT) {
-            ColorPrinter.info("\n🔧 Applying smart path correction...");
+            ColorPrinter.info("\n🔧Applying smart path correction...");
             for (var entry : mismatches.entrySet()) {
                 String originalPath = entry.getKey();
                 String correctedPath = entry.getValue();
@@ -186,7 +186,7 @@ public class ModMergerEngine {
                 filesByPath.put(correctedPath, sources);
                 pathCorrectionCount++;
 
-                ColorPrinter.info("  ├─ {} → {}", originalPath, correctedPath);
+                ColorPrinter.success("  ├─ {} → {}", originalPath, correctedPath);
             }
             ColorPrinter.success("✓ Corrected {} paths", pathCorrectionCount);
         } else {

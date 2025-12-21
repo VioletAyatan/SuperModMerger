@@ -120,14 +120,19 @@ public class ScrScriptFileMerger extends IFileMerger {
             } else if (chose == 4) {
                 record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
             } else {
-                ColorPrinter.info("------------------------------------------------");
+                ColorPrinter.info("-".repeat(50));
                 ColorPrinter.info("[{}/{}] 文件: {}", i + 1, conflicts.size(), record.getFileName());
 //            ColorPrinter.highlight("位置签名: {}", record.getSignature());
-                ColorPrinter.warning("1. {}, Line {}: {}", record.getBaseModName(), record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
-                ColorPrinter.warning("2. {}, Line {}: {}", record.getMergeModName(), record.getModNode().getLine(), record.getModNode().getSourceText().trim());
+                //打印代码提示框
+                ColorPrinter.warning("1. {}:", record.getBaseModName());
+                ColorPrinter.bold("行: {} {}", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
+                ColorPrinter.warning("2. {}:", record.getMergeModName());
+                ColorPrinter.bold("行: {} {}", record.getModNode().getLine(), record.getModNode().getSourceText().trim());
+                ColorPrinter.info("-".repeat(50));
+                //选择对话框
                 ColorPrinter.info("请选择:");
-                ColorPrinter.info("1. 使用{}: {}", record.getBaseModName(), record.getBaseNode().getSourceText());
-                ColorPrinter.info("2. 使用{}: {}", record.getMergeModName(), record.getModNode().getSourceText());
+                ColorPrinter.info("1. 使用 {}", record.getBaseNode().getSourceText());
+                ColorPrinter.info("2. 使用 {}", record.getModNode().getSourceText());
                 ColorPrinter.info("3. 全部使用 {} 的配置", record.getBaseModName());
                 ColorPrinter.info("4. 全部使用 {} 的配置", record.getMergeModName());
 
