@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -52,9 +54,9 @@ public class ModMergerEngine {
     /**
      * 构造函数 - 初始化合并引擎（带基准MOD）
      *
-     * @param modsToMerge   要合并的 mod 列表（.pak 文件路径）
-     * @param outputPath    最终输出的 .pak 文件路径
-     * @param baseModPath   基准MOD文件路径（可为null）
+     * @param modsToMerge 要合并的 mod 列表（.pak 文件路径）
+     * @param outputPath  最终输出的 .pak 文件路径
+     * @param baseModPath 基准MOD文件路径（可为null）
      */
     public ModMergerEngine(List<Path> modsToMerge, Path outputPath, Path baseModPath) {
         this.modsToMerge = modsToMerge;
@@ -92,12 +94,22 @@ public class ModMergerEngine {
         }
 
         try {
-            // 1. 如果有基准MOD，先加载它
-            if (baseModAnalyzer != null) {
-                baseModAnalyzer.load();
-            }
-            // 2. 把所有文件先解压到临时文件夹，生成映射路径（包含来源信息）
-            Map<String, List<FileSource>> filesByPath = extractAllMods();
+            //异步执行解压任务
+            CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> {
+                try {
+                    if (baseModAnalyzer != null) {
+                        baseModAnalyzer.load();
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            // 把所有文件先解压到临时文件夹，生成映射路径（包含来源信息）
+            CompletableFuture<Map<String, List<FileSource>>> task2 = CompletableFuture.supplyAsync(this::extractAllMods);
+            CompletableFuture<Void> allOf = CompletableFuture.allOf(task1, task2);
+            allOf.join();
+
+            Map<String, List<FileSource>> filesByPath = task2.get(); //执行完成后获取结果
 
             // 3. 处理路径修正（如果有基准MOD）
             if (baseModAnalyzer != null && baseModAnalyzer.isLoaded()) {
@@ -121,6 +133,8 @@ public class ModMergerEngine {
 
             // 8. 打印统计信息
             printStatistics();
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
         } finally {
             // 清理临时文件
             cleanupTempDir();
