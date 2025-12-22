@@ -93,7 +93,7 @@ public class PakManager {
                     sourceInfo.addSource(archiveName);
 
                     // 检查是否已有相同路径的文件（来自不同来源）
-                    if (fileMap.containsKey(fileName)) {
+                    if (fileMap.containsKey(entryName)) {
                         FileSourceInfo existing = fileMap.get(fileName);
                         ColorPrinter.warning(Localizations.t("PAK_MANAGER_DUPLICATE_FILE_DETECTED",
                                 existing.getSourceChainString(),
@@ -101,9 +101,9 @@ public class PakManager {
                                 existing.getFileEnterName())
                         );
                         ColorPrinter.success(" --> 使用新路径：" + sourceInfo.getFileEnterName());
-                        fileMap.put(fileName, sourceInfo);
+                        fileMap.put(entryName, sourceInfo);
                     } else {
-                        fileMap.put(fileName, sourceInfo);
+                        fileMap.put(entryName, sourceInfo);
                     }
                 }
             }

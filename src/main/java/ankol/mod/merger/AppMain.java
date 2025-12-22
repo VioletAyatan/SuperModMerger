@@ -42,17 +42,7 @@ public class AppMain {
             }
 
             // 定位基准MOD的位置
-            Path baseModPath = null;
-            if (argParser.hasOption("b")) {
-                baseModPath = Path.of(argParser.getOptionValue("b"));
-            } else {
-                // 如果没有指定，尝试使用默认位置 source/data0.pak
-                Path defaultBaseMod = Path.of(Tools.getUserDir(), "source", "data0.pak");
-                if (Files.exists(defaultBaseMod)) {
-                    baseModPath = defaultBaseMod;
-                    ColorPrinter.info("ℹ️ Using default base MOD: {}", defaultBaseMod);
-                }
-            }
+            Path baseModPath = locateBaseModPath(argParser);
 
             // 执行合并
             ModMergerEngine merger = new ModMergerEngine(modsToMerge, outputPath, baseModPath);
@@ -75,6 +65,22 @@ public class AppMain {
             e.printStackTrace();
             System.exit(3);
         }
+    }
+
+    private static Path locateBaseModPath(SimpleArgParser argParser) {
+        Path baseModPath;
+        if (argParser.hasOption("b")) {
+            baseModPath = Path.of(argParser.getOptionValue("b"));
+        } else {
+            // 如果没有指定，尝试使用默认位置 source/data0.pak
+            Path defaultBaseMod = Path.of(Tools.getUserDir(), "source", "data0.pak");
+            if (Files.exists(defaultBaseMod)) {
+                baseModPath = defaultBaseMod;
+            } else {
+                throw new IllegalArgumentException("未找到data0.pak文件，请将此工具放于Dying Light The Beast\\ph_ft目录下，或者使用-b参数指定data0.pak位置");
+            }
+        }
+        return baseModPath;
     }
 
     private static SimpleArgParser registerArgsParser() {

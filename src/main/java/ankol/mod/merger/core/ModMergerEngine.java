@@ -94,7 +94,6 @@ public class ModMergerEngine {
             //初始化基准mod
             if (baseModAnalyzer != null) {
                 baseModAnalyzer.load();
-                baseModAnalyzer.printAnalysisReport();
             }
             // 把所有文件先解压到临时文件夹，生成映射路径（包含来源信息）
             Map<String, List<FileSource>> filesByPath = extractAllMods();
@@ -192,14 +191,6 @@ public class ModMergerEngine {
         } else {
             ColorPrinter.info("ℹ️ Keeping original paths from mods");
         }
-    }
-
-    /**
-     * 提取文件名的工具方法（优化：避免重复代码）
-     */
-    private static String extractFileName(String path) {
-        int lastSlash = path.lastIndexOf("/");
-        return (lastSlash >= 0 ? path.substring(lastSlash + 1) : path).toLowerCase();
     }
 
     /**

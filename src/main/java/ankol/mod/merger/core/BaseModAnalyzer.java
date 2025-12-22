@@ -4,17 +4,14 @@ import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Tools;
 import lombok.Getter;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 基准MOD分析器 - 负责加载和分析基准MOD（原版文件）
@@ -42,7 +39,7 @@ public class BaseModAnalyzer {
      * 值：在基准MOD中的相对路径
      */
     @Getter
-    private Map<String, String> fileNameToPathMap;
+    private Map<String, FileTree> fileNameToPathMap;
 
     /**
      * 所有文件的相对路径集合（从基准MOD中提取）
@@ -82,9 +79,8 @@ public class BaseModAnalyzer {
         }
 
         try {
-            ColorPrinter.info("📖 Loading base MOD: {}", baseModPath.getFileName());
             long startTime = System.currentTimeMillis();
-            Map<String, FileTree> fileNameToPathMap = Tools.indexPakFile(baseModPath.toFile());
+            this.fileNameToPathMap = Tools.indexPakFile(baseModPath.toFile());
             loaded = true;
             long elapsed = System.currentTimeMillis() - startTime;
             ColorPrinter.success("✓ Indexed {} files from {} in {}ms (on-demand extraction)",
@@ -98,71 +94,6 @@ public class BaseModAnalyzer {
     }
 
     /**
-     * 从基准MOD中提取指定文件的内容（按需提取）
-     *
-     * @param relPath 文件的相对路径
-     * @return 文件内容的输入流，如果文件不存在返回null
-     * @throws IOException 读取错误
-     */
-    public InputStream extractFile(String relPath) throws IOException {
-        if (!loaded) {
-            throw new IllegalStateException("Base MOD not loaded yet");
-        }
-
-        if (!baseModFilePaths.contains(relPath.toLowerCase())) {
-            return null;
-        }
-
-        try (ZipFile zipFile = ZipFile.builder().setFile(baseModPath.toFile()).get()) {
-            ZipArchiveEntry entry = zipFile.getEntry(relPath);
-            if (entry == null) {
-                return null;
-            }
-
-            // 读取整个文件到内存（因为ZipFile会在close时关闭）
-            try (InputStream inputStream = zipFile.getInputStream(entry)) {
-                byte[] bytes = inputStream.readAllBytes();
-                return new ByteArrayInputStream(bytes);
-            }
-        }
-    }
-
-    /**
-     * 从基准MOD中提取指定文件到临时文件（按需提取）
-     *
-     * @param relPath 文件的相对路径
-     * @return 临时文件路径，如果文件不存在返回null
-     * @throws IOException 读取错误
-     */
-    public Path extractFileToTemp(String relPath) throws IOException {
-        if (!loaded) {
-            throw new IllegalStateException("Base MOD not loaded yet");
-        }
-
-        if (!baseModFilePaths.contains(relPath.toLowerCase())) {
-            return null;
-        }
-
-        try (ZipFile zipFile = ZipFile.builder().setFile(baseModPath.toFile()).get()) {
-            ZipArchiveEntry entry = zipFile.getEntry(relPath);
-            if (entry == null) {
-                return null;
-            }
-
-            // 创建临时文件
-            String fileName = extractFileName(relPath);
-            Path tempFile = Files.createTempFile("baseMod_" + fileName + "_", ".tmp");
-
-            try (InputStream input = zipFile.getInputStream(entry)) {
-                Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
-            }
-
-            ColorPrinter.debug("📤 Extracted base file: {} → {}", relPath, tempFile.getFileName());
-            return tempFile;
-        }
-    }
-
-    /**
      * 判断MOD里的文件路径是否正确
      *
      * @param filePath mod文件路径
@@ -172,7 +103,7 @@ public class BaseModAnalyzer {
             return false;
         }
         String fileName = extractFileName(filePath);
-        String correctPath = fileNameToPathMap.get(fileName);
+        String correctPath = fileNameToPathMap.get(fileName).getFullPathName();
 
         return correctPath != null && !correctPath.equalsIgnoreCase(filePath);
     }
@@ -188,58 +119,7 @@ public class BaseModAnalyzer {
             return null;
         }
         String fileName = extractFileName(filePath);
-        return fileNameToPathMap.get(fileName);
-    }
-
-    /**
-     * 检查文件是否在基准MOD中存在
-     *
-     * @param filePath 文件相对路径
-     * @return 如果文件在基准MOD中存在，返回true
-     */
-    public boolean existsInBaseMod(String filePath) {
-        if (!loaded) {
-            return false;
-        }
-        return baseModFilePaths.contains(filePath.toLowerCase());
-    }
-
-    /**
-     * 获取所有需要修正的文件（同名但路径不同）
-     *
-     * @param filePaths 待检查的文件路径集合
-     * @return 需要修正的文件列表，格式：原始路径 -> 建议路径
-     */
-    public Map<String, String> findPathMismatches(Collection<String> filePaths) {
-        if (!loaded) {
-            return new HashMap<>();
-        }
-
-        return filePaths.stream()
-                .filter(this::hasPathConflict)
-                .collect(Collectors.toMap(
-                        path -> path,
-                        this::getSuggestedPath,
-                        (a, b) -> a,
-                        LinkedHashMap::new
-                ));
-    }
-
-    /**
-     * 打印基准MOD的分析报告
-     */
-    public void printAnalysisReport() {
-        if (!loaded) {
-            ColorPrinter.warning("⚠️ Base MOD not loaded");
-            return;
-        }
-
-        ColorPrinter.info("\n{}", "=".repeat(75));
-        ColorPrinter.info("📊 Base MOD Analysis Report:");
-        ColorPrinter.info("   Total files: {}", baseModFilePaths.size());
-        ColorPrinter.info("   Unique file names: {}", fileNameToPathMap.size());
-        ColorPrinter.info("   Storage: Index only (on-demand extraction)");
-        ColorPrinter.info("{}", "=".repeat(75));
+        return fileNameToPathMap.get(fileName).getFullPathName();
     }
 
     /**
