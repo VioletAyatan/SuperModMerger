@@ -1,9 +1,10 @@
 package ankol.mod.merger.tools;
 
+import lombok.Data;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 文件来源信息 - 记录文件的完整来源链
@@ -15,37 +16,26 @@ import java.util.Objects;
  *
  * @author Ankol
  */
+@Data
 public class FileSourceInfo {
 
     /**
      * 文件实际路径（解压后的物理路径）
      */
     private final Path filePath;
-
+    /**
+     * 文件在pak包中的相对路径
+     */
+    private final String fileEnterName;
     /**
      * 来源链：记录文件从外到内的所有容器
      * 例如：["mymod.zip", "data3.pak"] 表示文件来自 mymod.zip 内的 data3.pak
      */
-    private final List<String> sourceChain;
+    private final List<String> sourceChain = new ArrayList<>();
 
-    /**
-     * 构造函数：创建一个文件来源信息对象
-     *
-     * @param filePath 文件实际路径
-     */
-    public FileSourceInfo(Path filePath) {
+    public FileSourceInfo(Path filePath, String fileEnterName) {
         this.filePath = filePath;
-        this.sourceChain = new ArrayList<>();
-    }
-
-    /**
-     * 复制构造函数：基于现有的来源信息创建新对象
-     *
-     * @param source 现有的来源信息
-     */
-    public FileSourceInfo(FileSourceInfo source) {
-        this.filePath = source.filePath;
-        this.sourceChain = new ArrayList<>(source.sourceChain);
+        this.fileEnterName = fileEnterName;
     }
 
     /**
@@ -57,20 +47,6 @@ public class FileSourceInfo {
         if (!sourceChain.contains(source)) {
             sourceChain.add(source);
         }
-    }
-
-    /**
-     * 获取文件路径
-     */
-    public Path getFilePath() {
-        return filePath;
-    }
-
-    /**
-     * 获取来源链
-     */
-    public List<String> getSourceChain() {
-        return new ArrayList<>(sourceChain);
     }
 
     /**
@@ -92,7 +68,7 @@ public class FileSourceInfo {
         if (sourceChain.isEmpty()) {
             return "unknown";
         }
-        return sourceChain.get(0);
+        return sourceChain.getFirst();
     }
 
     /**
@@ -103,7 +79,7 @@ public class FileSourceInfo {
         if (sourceChain.isEmpty()) {
             return "unknown";
         }
-        return sourceChain.get(sourceChain.size() - 1);
+        return sourceChain.getLast();
     }
 
     /**
@@ -113,28 +89,6 @@ public class FileSourceInfo {
      */
     public boolean isFromNestedArchive() {
         return sourceChain.size() > 1;
-    }
-
-    @Override
-    public String toString() {
-        return "FileSourceInfo{" +
-                "filePath=" + filePath +
-                ", source='" + getSourceChainString() + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FileSourceInfo that = (FileSourceInfo) o;
-        return Objects.equals(filePath, that.filePath) &&
-                Objects.equals(sourceChain, that.sourceChain);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(filePath, sourceChain);
     }
 }
 

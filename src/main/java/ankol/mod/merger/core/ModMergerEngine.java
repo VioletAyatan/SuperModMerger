@@ -91,6 +91,7 @@ public class ModMergerEngine {
         }
 
         try {
+            //初始化基准mod
             if (baseModAnalyzer != null) {
                 baseModAnalyzer.load();
                 baseModAnalyzer.printAnalysisReport();
@@ -102,7 +103,6 @@ public class ModMergerEngine {
             if (baseModAnalyzer != null && baseModAnalyzer.isLoaded()) {
                 processPathCorrection(filesByPath);
             }
-
             // 5. 输出目录（临时）
             Path mergedDir = tempDir.resolve("merged");
             Files.createDirectories(mergedDir);
@@ -403,11 +403,11 @@ public class ModMergerEngine {
      * 打印合并统计信息
      */
     private void printStatistics() {
-        ColorPrinter.info("\n{}", "=".repeat(50));
+        ColorPrinter.info("\n{}", "=".repeat(75));
         ColorPrinter.info("📊 Merge Statistics:");
         ColorPrinter.info("Total files processed: {}", totalProcessed);
         ColorPrinter.success("Merged (no conflicts): {}", mergedCount);
-        ColorPrinter.info("{}", "=".repeat(50));
+        ColorPrinter.info("{}", "=".repeat(75));
     }
 
     /**

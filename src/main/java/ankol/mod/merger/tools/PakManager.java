@@ -4,6 +4,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,7 +66,7 @@ public class PakManager {
                 if (entry.isDirectory()) continue;
 
                 String entryName = entry.getName();
-                String fileName = extractFileName(entryName);
+                String fileName = Tools.getEntryFileName(entryName);
                 Path outputPath = outputDir.resolve(entryName);
                 Files.createDirectories(outputPath.getParent());
 
@@ -81,7 +82,6 @@ public class PakManager {
 
                 // 检查是否是嵌套的压缩包（.pak 或 .zip）
                 if (fileName.endsWith(".pak") || fileName.endsWith(".zip")) {
-                    ColorPrinter.info("📦 Found nested archive: {} (from: {})", entryName, archiveName);
                     // 创建嵌套压缩包的临时解压目录
                     Path nestedTempDir = outputDir.resolve("_nested_" + System.currentTimeMillis() + "_" + fileName);
                     Files.createDirectories(nestedTempDir);
@@ -89,28 +89,25 @@ public class PakManager {
                     extractPakRecursive(outputPath, nestedTempDir, fileMap, fileName);
                 } else {
                     // 创建文件来源信息，记录来源链
-                    FileSourceInfo sourceInfo = new FileSourceInfo(outputPath);
+                    FileSourceInfo sourceInfo = new FileSourceInfo(outputPath, entryName);
                     sourceInfo.addSource(archiveName);
 
                     // 检查是否已有相同路径的文件（来自不同来源）
-                    if (fileMap.containsKey(entryName)) {
-                        FileSourceInfo existing = fileMap.get(entryName);
-                        ColorPrinter.warning("⚠️ Duplicate file: {} (from: {} and {})",
-                                entryName, existing.getSourceChainString(), sourceInfo.getSourceChainString());
+                    if (fileMap.containsKey(fileName)) {
+                        FileSourceInfo existing = fileMap.get(fileName);
+                        ColorPrinter.warning(Localizations.t("PAK_MANAGER_DUPLICATE_FILE_DETECTED",
+                                existing.getSourceChainString(),
+                                sourceInfo.getFileEnterName(),
+                                existing.getFileEnterName())
+                        );
+                        ColorPrinter.success(" --> 使用新路径：" + sourceInfo.getFileEnterName());
+                        fileMap.put(fileName, sourceInfo);
+                    } else {
+                        fileMap.put(fileName, sourceInfo);
                     }
-
-                    fileMap.put(entryName, sourceInfo);
                 }
             }
         }
-    }
-
-    /**
-     * 提取文件名的工具方法（优化：避免重复代码）
-     */
-    private static String extractFileName(String path) {
-        int lastSlash = path.lastIndexOf("/");
-        return (lastSlash >= 0 ? path.substring(lastSlash + 1) : path).toLowerCase();
     }
 
     /**
