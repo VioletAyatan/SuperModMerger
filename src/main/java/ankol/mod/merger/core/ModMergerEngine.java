@@ -291,7 +291,7 @@ public class ModMergerEngine {
 
         // 获取合并器
         MergerContext context = new MergerContext();
-        Optional<IFileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
+        Optional<FileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
 
         //不支持冲突检测的文件类型，直接让用户选择使用哪个mod的版本
         if (mergerOptional.isEmpty()) {
@@ -321,7 +321,7 @@ public class ModMergerEngine {
         ColorPrinter.info("🔀Merging: {} ({} mods)", relPath, fileSources.size());
 
         try {
-            IFileMerger merger = mergerOptional.get();
+            FileMerger merger = mergerOptional.get();
             String mergedContent = null;
 
             // 顺序合并：FileSource[0] + FileSource[1] + FileSource[2] + ...
