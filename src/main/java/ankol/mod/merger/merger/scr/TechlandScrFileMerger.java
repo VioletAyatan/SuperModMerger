@@ -38,8 +38,8 @@ public class TechlandScrFileMerger extends FileMerger {
     @Override
     public MergeResult merge(FileTree file1, FileTree file2) {
         try {
-            ScrContainerScriptNode baseRoot = parseWithCache(Path.of(file1.getFullPathName()));
-            ScrContainerScriptNode modRoot = parseWithCache(Path.of(file2.getFullPathName()));
+            ScrContainerScriptNode baseRoot = parseTree(Path.of(file1.getFullPathName()));
+            ScrContainerScriptNode modRoot = parseTree(Path.of(file2.getFullPathName()));
             // 递归对比，找到冲突项
             reduceCompare(baseRoot, modRoot);
             if (!conflicts.isEmpty()) {
@@ -166,16 +166,13 @@ public class TechlandScrFileMerger extends FileMerger {
     }
 
     /**
-     * 带缓存的解析方法
-     * <p>
-     * 优化：计算文件内容的哈希值作为缓存键，避免解析相同内容的文件多次。
-     * 这对于包含大量重复文件的 mod 合并场景特别有效。
+     * 将MOD文件解析成语法树
      *
      * @param filePath 文件路径
      * @return 解析后的 AST 树
      * @throws IOException 如果文件不可读
      */
-    private static ScrContainerScriptNode parseWithCache(Path filePath) throws IOException {
+    private static ScrContainerScriptNode parseTree(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = computeHash(content);
         // 先查缓存
