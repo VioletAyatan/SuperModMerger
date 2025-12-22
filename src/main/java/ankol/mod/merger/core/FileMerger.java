@@ -11,13 +11,13 @@ import java.io.IOException;
  * 定义了所有文件类型合并器必须实现的方法。
  * 每个实现类负责处理一种特定的文件类型（如.scr, .xml等）。
  */
-public abstract class IFileMerger {
+public abstract class FileMerger {
     /**
      * 当前执行合并逻辑的上下文信息
      */
     protected MergerContext context;
 
-    public IFileMerger(MergerContext context) {
+    public FileMerger(MergerContext context) {
         this.context = context;
     }
 

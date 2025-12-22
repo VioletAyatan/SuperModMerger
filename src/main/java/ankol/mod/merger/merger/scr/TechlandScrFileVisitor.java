@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.*;
 
-public class ScrModelVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
+public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
     //=========================关键字=========================
     public static final String FUN_CALL = "funCall";
     public static final String FUN_BLOCK = "funBlock";

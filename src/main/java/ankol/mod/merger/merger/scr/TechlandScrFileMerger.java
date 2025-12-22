@@ -2,7 +2,7 @@ package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr4.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
-import ankol.mod.merger.core.IFileMerger;
+import ankol.mod.merger.core.FileMerger;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.*;
@@ -19,7 +19,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class ScrScriptFileMerger extends IFileMerger {
+public class TechlandScrFileMerger extends FileMerger {
     /**
      * 标记冲突项的容器
      */
@@ -30,7 +30,7 @@ public class ScrScriptFileMerger extends IFileMerger {
      */
     private static final Map<String, ScrContainerScriptNode> PARSE_CACHE = new WeakHashMap<>();
 
-    public ScrScriptFileMerger(MergerContext context) {
+    public TechlandScrFileMerger(MergerContext context) {
         super(context);
     }
 
@@ -213,7 +213,7 @@ public class ScrScriptFileMerger extends IFileMerger {
         TechlandScriptLexer lexer = new TechlandScriptLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TechlandScriptParser parser = new TechlandScriptParser(tokens);
-        ScrModelVisitor visitor = new ScrModelVisitor();
+        TechlandScrFileVisitor visitor = new TechlandScrFileVisitor();
         // 注意：visitFile 返回的一定是我们定义的 ROOT Container
         return (ScrContainerScriptNode) visitor.visitFile(parser.file());
     }
