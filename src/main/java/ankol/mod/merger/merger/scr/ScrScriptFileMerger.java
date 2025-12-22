@@ -123,7 +123,7 @@ public class ScrScriptFileMerger extends IFileMerger {
             } else if (chose == 4) {
                 record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
             } else {
-                ColorPrinter.info("-".repeat(50));
+                ColorPrinter.info("=".repeat(75));
                 ColorPrinter.info("[{}/{}] 文件: {}", i + 1, conflicts.size(), record.getFileName());
 //            ColorPrinter.highlight("位置签名: {}", record.getSignature());
                 //打印代码提示框
@@ -131,7 +131,7 @@ public class ScrScriptFileMerger extends IFileMerger {
                 ColorPrinter.bold("行: {} {}", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
                 ColorPrinter.warning("2. {}:", record.getMergeModName());
                 ColorPrinter.bold("行: {} {}", record.getModNode().getLine(), record.getModNode().getSourceText().trim());
-                ColorPrinter.info("-".repeat(50));
+                ColorPrinter.info("=".repeat(75));
                 //选择对话框
                 ColorPrinter.info("请选择:");
                 ColorPrinter.info("1. 使用 {}", record.getBaseNode().getSourceText());

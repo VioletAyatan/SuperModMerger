@@ -1,6 +1,8 @@
 package ankol.mod.merger.core;
 
 import ankol.mod.merger.tools.ColorPrinter;
+import ankol.mod.merger.tools.FileTree;
+import ankol.mod.merger.tools.Tools;
 import lombok.Getter;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
@@ -75,35 +77,23 @@ public class BaseModAnalyzer {
             ColorPrinter.warning("⚠️ Base MOD already loaded, skipping...");
             return;
         }
-
         if (!Files.exists(baseModPath)) {
             throw new IOException("Base MOD file not found: " + baseModPath);
         }
 
-        ColorPrinter.info("📖 Loading base MOD: {}", baseModPath.getFileName());
-        long startTime = System.currentTimeMillis();
-        // 优化：只读取ZIP条目，不解压文件
-        try (ZipFile zipFile = ZipFile.builder().setFile(baseModPath.toFile()).get()) {
-            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
-            int fileCount = 0;
-
-            while (entries.hasMoreElements()) {
-                ZipArchiveEntry entry = entries.nextElement();
-                if (entry.isDirectory()) continue;
-
-                String relPath = entry.getName();
-                baseModFilePaths.add(relPath.toLowerCase());
-                // 提取文件名并建立映射
-                String fileName = extractFileName(relPath);
-                // 如果有重名文件，保留第一个（虽然原版data0.pak中不会出现重复的文件名）
-                fileNameToPathMap.putIfAbsent(fileName, relPath);
-                fileCount++;
-            }
-
+        try {
+            ColorPrinter.info("📖 Loading base MOD: {}", baseModPath.getFileName());
+            long startTime = System.currentTimeMillis();
+            Map<String, FileTree> fileNameToPathMap = Tools.indexPakFile(baseModPath.toFile());
             loaded = true;
             long elapsed = System.currentTimeMillis() - startTime;
             ColorPrinter.success("✓ Indexed {} files from {} in {}ms (on-demand extraction)",
-                    fileCount, baseModPath.getFileName(), elapsed);
+                    fileNameToPathMap.size(),
+                    baseModPath.getFileName(),
+                    elapsed
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -244,12 +234,12 @@ public class BaseModAnalyzer {
             return;
         }
 
-        ColorPrinter.info("\n{}", "=".repeat(50));
+        ColorPrinter.info("\n{}", "=".repeat(75));
         ColorPrinter.info("📊 Base MOD Analysis Report:");
         ColorPrinter.info("   Total files: {}", baseModFilePaths.size());
         ColorPrinter.info("   Unique file names: {}", fileNameToPathMap.size());
         ColorPrinter.info("   Storage: Index only (on-demand extraction)");
-        ColorPrinter.info("{}", "=".repeat(50));
+        ColorPrinter.info("{}", "=".repeat(75));
     }
 
     /**

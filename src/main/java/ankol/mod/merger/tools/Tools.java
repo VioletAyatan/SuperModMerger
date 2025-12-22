@@ -8,7 +8,6 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -87,94 +86,37 @@ public abstract class Tools {
         return results;
     }
 
-    /**
-     * 从 ZIP 文件中提取所有 PAK 文件到临时目录
-     * <p>
-     * 如果 ZIP 包含嵌套的 PAK 文件，会将其提取出来作为独立的 mod
-     *
-     * @param zipPath       ZIP 文件路径
-     * @param tempExpandDir 临时展开目录
-     * @return 提取出的 PAK 文件列表
-     */
-    private static List<Path> extractNestedPaksFromZip(Path zipPath, Path tempExpandDir) throws IOException {
-        List<Path> extractedPaks = new ArrayList<>();
-        Path zipTempDir = tempExpandDir.resolve("zip_" + System.currentTimeMillis());
-        Files.createDirectories(zipTempDir);
 
-        try (ZipFile zipFile = ZipFile.builder().setFile(zipPath.toFile()).get()) {
-            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
-            while (entries.hasMoreElements()) {
-                ZipArchiveEntry entry = entries.nextElement();
-                if (entry.isDirectory()) continue;
-                String entryName = entry.getName().toLowerCase();
-                // 只关心 PAK 文件
-                if (entryName.endsWith(".pak")) {
-                    Path outputPath = zipTempDir.resolve(entry.getName());
-                    Files.createDirectories(outputPath.getParent());
-
-                    try (InputStream input = zipFile.getInputStream(entry)) {
-                        Files.copy(input, outputPath);
-                    }
-
-                    extractedPaks.add(outputPath);
-                    ColorPrinter.info("Extracted: {}", entry.getName());
-                }
-            }
-        }
-
-        return extractedPaks;
-    }
-
-    /**
-     * 构建文件树
-     *
-     * @param path 文件路径，可以是文件夹或者zip文件
-     * @return 文件树MAP key是文件名
-     */
-    public static Map<String, FileTree> buildFileTree(Path path) {
-        File file = path.toFile();
+    public static Map<String, FileTree> indexPakFile(File file) {
         if (!file.exists()) {
-            throw new IllegalArgumentException("非法参数，路径" + path + "不存在");
+            throw new IllegalArgumentException("文件不存在: " + file.getAbsolutePath());
         }
         if (file.isDirectory()) {
-            throw new IllegalArgumentException("不支持传入文件夹");
-        } else if (StrUtil.endWithAny(file.getName(), ".zip", ".pak")) {
-            return buildFileTreeFromZip(file);
-        } else {
-            throw new RuntimeException("不支持的文件格式" + file.getName());
+            throw new IllegalArgumentException("提供的路径是一个目录，而不是文件: " + file.getAbsolutePath());
         }
-    }
-
-    private static Map<String, FileTree> buildFileTreeFromZip(File file) {
-        Map<String, FileTree> fileTreeMap = new HashMap<>();
+        if (!StrUtil.endWithAny(file.getName(), ".pak")) {
+            throw new IllegalArgumentException("文件必须为.pak类型");
+        }
+        Map<String, FileTree> pakIndexMap = new HashMap<>();
         try (ZipFile zipFile = ZipFile.builder().setFile(file).get()) {
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
                 ZipArchiveEntry zipEntry = entries.nextElement();
                 String entryName = zipEntry.getName();
                 String fileName = getEntryFileName(entryName);
-                if (!fileTreeMap.containsKey(fileName)) {
-                    fileTreeMap.put(fileName, new FileTree(fileName, entryName));
+                if (!pakIndexMap.containsKey(fileName)) {
+                    pakIndexMap.put(fileName, new FileTree(fileName, entryName));
                 } else {
-                    ColorPrinter.warning("检测到相同的文件名：{}但路径不一致：[{}] [{}]", fileName, entryName, fileTreeMap.get(fileName).getFullPathName());
+                    ColorPrinter.warning("检测到相同的文件名：{}但路径不一致：[{}] [{}]", fileName, entryName, pakIndexMap.get(fileName).getFullPathName());
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return fileTreeMap;
+        return pakIndexMap;
     }
 
-    private static String getEntryFileName(String entryName) {
-        if (StrUtil.isNotBlank(entryName)) {
-            return entryName.substring(entryName.lastIndexOf("/") + 1);
-        }
-        return null;
-    }
-
-    static void main() {
-        //原版文件中是不会出现文件名重名的情况的
-        Map<String, FileTree> fileTreeMap = buildFileTree(Path.of("D:\\SteamLibrary\\steamapps\\common\\Dying Light The Beast\\ph_ft\\source\\data0.pak"));
-        System.out.println("fileTreeMap = " + fileTreeMap);
+    public static String getEntryFileName(String entryName) {
+        return entryName.substring(entryName.lastIndexOf("/") + 1);
     }
 }
