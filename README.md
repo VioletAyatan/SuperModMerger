@@ -18,10 +18,13 @@
 
 ### 🚀 快速开始
 
-#### 1. 准备 mod 文件
+#### **1、将工具放到困兽根目录/ph_ft目录下，并创建mods目录，将要合并的mod放入其中**
+
+ **准备 mod 文件，mod支持zip、pak、7z等格式**
+
 ```bash
-# 将要合并的 .pak 文件放入 mods 目录
-D:\Projects\ModMergerTool\mods\
+# 示例
+Dying Light The Beast\ph_ft\mods
 ├── mod1.pak
 ├── mod2.pak
 └── mod3.pak
@@ -29,15 +32,11 @@ D:\Projects\ModMergerTool\mods\
 
 #### 2. 运行合并程序
 ```bash
-cd D:\Projects\ModMergerTool
-java -jar target/ModMergerTool-1.0-SNAPSHOT-all.jar
+# 双击运行合并工具
 ```
 
 #### 3. 查看结果
-```bash
-# 输出文件位置
-merged_mod.pak
-```
+合并后的mod会输出到source目录下的data7.pak文件，如果你有data7.pak。注意，此工具会把旧的覆盖掉。
 
 ### 📖 文档
 
@@ -291,7 +290,14 @@ MIT License
 
 ---
 
-**Last Updated**: 2025-12-18  
+**Last Updated**: 2025-12-23  
 **Version**: 1.0-SNAPSHOT  
-**Status**: ✅ Production Ready
+**Status**: ✅ Production Ready  
+
+**Recent Updates**:
+- ✅ Three-way comparison merge logic (based on base MOD)
+- ✅ Temporary file caching mechanism, 50-75% performance improvement
+- ✅ Complete internationalization support (Chinese & English)
+- ✅ Support for .7z format and nested archives
+- ✅ Optimized path correction strategy
 
