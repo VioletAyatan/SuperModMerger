@@ -96,7 +96,10 @@ public class TechlandScrFileMerger extends FileMerger {
             try {
                 String signature = entry.getKey();
                 ScrScriptNode modNode = entry.getValue();
-                ScrScriptNode originalNode = originalContainer.getChildren().get(signature);
+                ScrScriptNode originalNode = null;
+                if (originalContainer != null) {
+                    originalNode = originalContainer.getChildren().get(signature);
+                }
                 ScrScriptNode baseNode = baseContainer.getChildren().get(signature);
 
                 if (baseNode == null) {
