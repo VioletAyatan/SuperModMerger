@@ -88,10 +88,10 @@ public abstract class Tools {
             throw new IllegalArgumentException("文件不存在: " + file.getAbsolutePath());
         }
         if (file.isDirectory()) {
-            throw new IllegalArgumentException("提供的路径是一个目录，而不是文件: " + file.getAbsolutePath());
+            throw new IllegalArgumentException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", file.getAbsolutePath()));
         }
         if (!StrUtil.endWithAny(file.getName(), ".pak")) {
-            throw new IllegalArgumentException("文件必须为.pak类型");
+            throw new IllegalArgumentException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"));
         }
         Map<String, FileTree> pakIndexMap = new HashMap<>();
         try (ZipFile zipFile = ZipFile.builder().setFile(file).get()) {
@@ -101,7 +101,7 @@ public abstract class Tools {
                 String entryName = zipEntry.getName();
                 String fileName = getEntryFileName(entryName);
                 if (pakIndexMap.containsKey(fileName)) {
-                    ColorPrinter.warning("检测到相同的文件名：{}但路径不一致：[{}] [{}]", fileName, entryName, pakIndexMap.get(fileName).getFullPathName());
+                    ColorPrinter.warning(Localizations.t("TOOLS_SAME_FILE_NAME_WARNING", fileName, entryName, pakIndexMap.get(fileName).getFullPathName()));
                 }
                 pakIndexMap.put(fileName, new FileTree(fileName, entryName));
             }

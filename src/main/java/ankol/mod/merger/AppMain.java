@@ -43,10 +43,10 @@ public class AppMain {
             ModMergerEngine merger = new ModMergerEngine(modsToMerge, outputPath, baseModPath);
             merger.merge();
             //完成
-            ColorPrinter.success("\n✅ Done!");
+            ColorPrinter.success(Localizations.t("APP_MAIN_DONE"));
             System.exit(0);
         } catch (RuntimeException | IOException e) {
-            ColorPrinter.error("错误: " + e.getMessage(), e);
+            ColorPrinter.error(Localizations.t("APP_MAIN_ERROR", e.getMessage()), e);
             System.exit(1);
         }
     }

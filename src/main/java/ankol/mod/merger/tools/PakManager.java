@@ -113,7 +113,7 @@ public class PakManager {
                                 sourceInfo.getFileEnterName(),
                                 existing.getFileEnterName())
                         );
-                        ColorPrinter.success(" --> 使用新路径：" + sourceInfo.getFileEnterName());
+                        ColorPrinter.success(Localizations.t("PAK_MANAGER_USE_NEW_PATH", sourceInfo.getFileEnterName()));
                         fileMap.put(entryName, sourceInfo);
                     } else {
                         fileMap.put(entryName, sourceInfo);
@@ -182,7 +182,7 @@ public class PakManager {
                                 sourceInfo.getFileEnterName(),
                                 existing.getFileEnterName())
                         );
-                        ColorPrinter.success(" --> 使用新路径：" + sourceInfo.getFileEnterName());
+                        ColorPrinter.success(Localizations.t("PAK_MANAGER_USE_NEW_PATH", sourceInfo.getFileEnterName()));
                         fileMap.put(entryName, sourceInfo);
                     } else {
                         fileMap.put(entryName, sourceInfo);
