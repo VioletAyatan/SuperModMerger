@@ -68,7 +68,7 @@ public abstract class Tools {
     public static List<Path> scanFiles(Path dir, String... extensions) throws IOException {
         List<Path> results = new ArrayList<>();
         if (!Files.exists(dir)) {
-            throw new IllegalArgumentException("目录不存在: " + dir);
+            throw new IllegalArgumentException("MOD合并目录mods在当前目录不存在，请创建一个mods目录");
         }
         try (Stream<Path> pathStream = Files.walk(dir)) {
             pathStream.filter(Files::isRegularFile)

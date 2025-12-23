@@ -6,10 +6,7 @@ import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.SimpleArgParser;
 import ankol.mod.merger.tools.Tools;
 
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,30 +37,17 @@ public class AppMain {
             if (argParser.hasOption("o")) {
                 outputPath = Path.of(argParser.getOptionValue("o"));
             }
-
             // 定位基准MOD的位置
             Path baseModPath = locateBaseModPath(argParser);
-
             // 执行合并
             ModMergerEngine merger = new ModMergerEngine(modsToMerge, outputPath, baseModPath);
             merger.merge();
             //完成
             ColorPrinter.success("\n✅ Done!");
             System.exit(0);
-        } catch (IllegalArgumentException e) {
-            // 参数错误处理：打印错误信息，退出码1
-            ColorPrinter.error("❌ Error: {}", e.getMessage());
+        } catch (RuntimeException | IOException e) {
+            ColorPrinter.error("错误: {}", e.getMessage());
             System.exit(1);
-        } catch (IOException e) {
-            // 文件IO错误处理：打印错误信息和堆栈跟踪，退出码2
-            ColorPrinter.error("❌ IO Error: {}", e.getMessage());
-            e.printStackTrace();
-            System.exit(2);
-        } catch (Exception e) {
-            // 其他运行时异常处理：打印错误信息和堆栈跟踪，退出码3
-            ColorPrinter.error("❌ Error: {}", e.getMessage());
-            e.printStackTrace();
-            System.exit(3);
         }
     }
 
@@ -77,7 +61,7 @@ public class AppMain {
             if (Files.exists(defaultBaseMod)) {
                 baseModPath = defaultBaseMod;
             } else {
-                throw new IllegalArgumentException("未找到data0.pak文件，请将此工具放于Dying Light The Beast\\ph_ft目录下，或者使用-b参数指定data0.pak位置");
+                throw new IllegalArgumentException("未找到data0.pak文件，请将此工具放于Dying Light The Beast" + File.separator + "ph_ft目录下，或者使用-b参数指定data0.pak位置");
             }
         }
         return baseModPath;
