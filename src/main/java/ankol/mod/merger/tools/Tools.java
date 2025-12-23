@@ -1,5 +1,6 @@
 package ankol.mod.merger.tools;
 
+import ankol.mod.merger.exception.BusinessException;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
@@ -32,13 +33,13 @@ public abstract class Tools {
             if (FileUtil.exists(defaultPath, true)) {
                 return defaultPath;
             } else {
-                throw new IllegalArgumentException(Localizations.t("TOOLS_MERGE_DIR_NOT_EXIST", defaultPath));
+                throw new BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", defaultPath));
             }
         } else {
             if (FileUtil.exists(meringModDir, true)) {
                 return meringModDir;
             } else {
-                throw new IllegalArgumentException(Localizations.t("TOOLS_MERGE_DIR_NOT_EXIST", meringModDir));
+                throw new BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", meringModDir));
             }
         }
     }
@@ -64,7 +65,7 @@ public abstract class Tools {
     public static List<Path> scanFiles(Path dir, String... extensions) throws IOException {
         List<Path> results = new ArrayList<>();
         if (!Files.exists(dir)) {
-            throw new IllegalArgumentException("MOD合并目录mods在当前目录不存在，请创建一个mods目录");
+            throw new BusinessException("MOD合并目录mods在当前目录不存在，请创建一个mods目录");
         }
         try (Stream<Path> pathStream = Files.walk(dir)) {
             pathStream.filter(Files::isRegularFile)
@@ -85,13 +86,13 @@ public abstract class Tools {
 
     public static Map<String, FileTree> indexPakFile(File file) {
         if (!file.exists()) {
-            throw new IllegalArgumentException(Localizations.t("TOOLS_FILE_NOT_EXIST", file.getAbsolutePath()));
+            throw new BusinessException(Localizations.t("TOOLS_FILE_NOT_EXIST", file.getAbsolutePath()));
         }
         if (file.isDirectory()) {
-            throw new IllegalArgumentException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", file.getAbsolutePath()));
+            throw new BusinessException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", file.getAbsolutePath()));
         }
         if (!StrUtil.endWithAny(file.getName(), ".pak")) {
-            throw new IllegalArgumentException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"));
+            throw new BusinessException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"));
         }
         Map<String, FileTree> pakIndexMap = new HashMap<>();
         try (ZipFile zipFile = ZipFile.builder().setFile(file).get()) {
@@ -124,7 +125,7 @@ public abstract class Tools {
      */
     public static String extractFileFromPak(File pakFile, String entryPath) throws IOException {
         if (!pakFile.exists()) {
-            throw new IllegalArgumentException(Localizations.t("TOOLS_FILE_NOT_EXIST", pakFile.getAbsolutePath()));
+            throw new BusinessException(Localizations.t("TOOLS_FILE_NOT_EXIST", pakFile.getAbsolutePath()));
         }
 
         try (ZipFile zipFile = ZipFile.builder().setFile(pakFile).get()) {
