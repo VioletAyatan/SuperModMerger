@@ -23,14 +23,10 @@ public abstract class Tools {
      * 获取待合并的MOD所在目录
      * 这个工具默认配置的是在mods目录下
      *
-     * @param argumentsParser 命令行参数配置，命令行传入的参数可以覆盖默认配置
+     * @param meringModDir mod合并目录地址
      * @return 待合并的MOD目录路径
      */
-    public static Path getMergingModDir(SimpleArgumentsParser argumentsParser) {
-        Path meringModDir = null;
-        if (argumentsParser != null) {
-            meringModDir = argumentsParser.meringModDir;
-        }
+    public static Path getMergingModDir(Path meringModDir) {
         if (meringModDir == null) {
             Path defaultPath = Path.of(userDir + File.separator + "mods");
             if (FileUtil.exists(defaultPath, true)) {
@@ -104,11 +100,10 @@ public abstract class Tools {
                 ZipArchiveEntry zipEntry = entries.nextElement();
                 String entryName = zipEntry.getName();
                 String fileName = getEntryFileName(entryName);
-                if (!pakIndexMap.containsKey(fileName)) {
-                    pakIndexMap.put(fileName, new FileTree(fileName, entryName));
-                } else {
+                if (pakIndexMap.containsKey(fileName)) {
                     ColorPrinter.warning("检测到相同的文件名：{}但路径不一致：[{}] [{}]", fileName, entryName, pakIndexMap.get(fileName).getFullPathName());
                 }
+                pakIndexMap.put(fileName, new FileTree(fileName, entryName));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
