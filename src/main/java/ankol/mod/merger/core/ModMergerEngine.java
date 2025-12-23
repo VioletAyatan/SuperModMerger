@@ -2,6 +2,7 @@ package ankol.mod.merger.core;
 
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.tools.*;
+import cn.hutool.core.io.FileUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -60,7 +61,7 @@ public class ModMergerEngine {
         this.modsToMerge = modsToMerge;
         this.outputPath = outputPath;
         this.tempDir = Path.of(Tools.getTempDir(), "ModMerger_" + System.currentTimeMillis());
-        this.baseModAnalyzer = baseModPath != null ? new BaseModAnalyzer(baseModPath) : null;
+        this.baseModAnalyzer = new BaseModAnalyzer(baseModPath);
         this.pathCorrectionStrategy = new PathCorrectionStrategy();
     }
 
@@ -81,7 +82,7 @@ public class ModMergerEngine {
         ColorPrinter.info("====== Techland Mod Merger ======");
 
         if (modsToMerge.isEmpty()) {
-            ColorPrinter.error("❌ No mods found to merge!");
+            ColorPrinter.error("No mods found to merge!");
             return;
         }
 
@@ -92,28 +93,23 @@ public class ModMergerEngine {
 
         try {
             //初始化基准mod
-            if (baseModAnalyzer != null) {
-                baseModAnalyzer.load();
-            }
+            baseModAnalyzer.load();
             // 把所有文件先解压到临时文件夹，生成映射路径（包含来源信息）
             Map<String, List<FileSource>> filesByPath = extractAllMods();
-
             // 3. 处理路径修正（如果有基准MOD）
-            if (baseModAnalyzer != null && baseModAnalyzer.isLoaded()) {
+            if (baseModAnalyzer.isLoaded()) {
                 processPathCorrection(filesByPath);
             }
+            JacksonUtil.toJson(filesByPath, FileUtil.getOutputStream(Tools.getUserDir() + "/test.json"));
             // 5. 输出目录（临时）
             Path mergedDir = tempDir.resolve("merged");
             Files.createDirectories(mergedDir);
-
             // 6. 开始合并文件
             processFiles(filesByPath, mergedDir);
-
             // 7. 合并完成，打包
             ColorPrinter.info("📦 Creating merged PAK file...");
             PakManager.createPak(mergedDir, outputPath);
             ColorPrinter.success("✅ Merged PAK created: {}", outputPath);
-
             // 8. 打印统计信息
             printStatistics();
         } catch (Exception e) {
