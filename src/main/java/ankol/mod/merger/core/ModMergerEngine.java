@@ -274,7 +274,7 @@ public class ModMergerEngine {
      * 这样可以处理任意数量的 mod 合并场景。
      *
      * @param relPath     相对路径
-     * @param fileSources 同名文件的来源信息列表（包含文件路径和来源MOD名字）
+     * @param fileSources 待合并的同名文件的来源
      * @param mergedDir   合并输出目录
      */
     private void mergeFiles(String relPath, List<FileSource> fileSources, Path mergedDir) throws IOException {
@@ -291,7 +291,7 @@ public class ModMergerEngine {
 
         //不支持冲突检测的文件类型，直接让用户选择使用哪个mod的版本
         if (mergerOptional.isEmpty()) {
-            // 优化：使用全局Scanner避免资源泄漏
+            //提示框，让用户选择使用哪个版本的文件
             ColorPrinter.warning("\n" + Localizations.t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath));
             ColorPrinter.warning(Localizations.t("ASSET_CHOSE_WHICH_VERSION_TO_USE"));
             for (int i = 0; i < fileSources.size(); i++) {

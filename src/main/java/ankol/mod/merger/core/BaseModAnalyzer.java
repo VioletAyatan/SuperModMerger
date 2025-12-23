@@ -40,7 +40,7 @@ public class BaseModAnalyzer {
      * 值：在基准MOD中的相对路径
      */
     @Getter
-    private Map<String, FileTree> fileNameToPathMap;
+    private Map<String, FileTree> indexedBaseModFileMap;
 
     /**
      * 所有文件的相对路径集合（从基准MOD中提取）
@@ -61,7 +61,7 @@ public class BaseModAnalyzer {
      */
     public BaseModAnalyzer(Path baseModPath) {
         this.baseModPath = baseModPath;
-        this.fileNameToPathMap = new LinkedHashMap<>();
+        this.indexedBaseModFileMap = new LinkedHashMap<>();
         this.baseModFilePaths = new LinkedHashSet<>();
     }
 
@@ -81,11 +81,11 @@ public class BaseModAnalyzer {
 
         try {
             long startTime = System.currentTimeMillis();
-            this.fileNameToPathMap = Tools.indexPakFile(baseModPath.toFile());
+            this.indexedBaseModFileMap = Tools.indexPakFile(baseModPath.toFile());
             loaded = true;
             long elapsed = System.currentTimeMillis() - startTime;
             ColorPrinter.success(Localizations.t("BASE_MOD_INDEXED_FILES",
-                    fileNameToPathMap.size(),
+                    indexedBaseModFileMap.size(),
                     baseModPath.getFileName(),
                     elapsed
             ));
@@ -104,7 +104,7 @@ public class BaseModAnalyzer {
             return false;
         }
         String fileName = extractFileName(filePath);
-        String correctPath = fileNameToPathMap.get(fileName).getFullPathName();
+        String correctPath = indexedBaseModFileMap.get(fileName).getFullPathName();
 
         return correctPath != null && !correctPath.equalsIgnoreCase(filePath);
     }
@@ -120,7 +120,7 @@ public class BaseModAnalyzer {
             return null;
         }
         String fileName = extractFileName(filePath);
-        return fileNameToPathMap.get(fileName).getFullPathName();
+        return indexedBaseModFileMap.get(fileName).getFullPathName();
     }
 
     /**
