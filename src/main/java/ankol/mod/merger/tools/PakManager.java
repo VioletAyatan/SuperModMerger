@@ -1,10 +1,11 @@
 package ankol.mod.merger.tools;
 
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
  * .pak 文件管理工具 - 处理.pak文件的打开、读取和写入
  * <p>
  * .pak 文件本质上是ZIP压缩包，因此使用ZIP相关的API处理
+ * 同时支持 7Z 格式的解压
  *
  * @author Ankol
  */
@@ -29,7 +31,7 @@ public class PakManager {
     /**
      * 从 .pak 文件中提取所有文件到临时目录（支持递归解压嵌套压缩包）
      * <p>
-     * 如果压缩包中包含 .pak 或 .zip 文件，会递归解压它们
+     * 如果压缩包中包含 .pak、.zip 或 .7z 文件，会递归解压它们
      * 这样可以处理诸如 "zip里套pak" 这样的嵌套情况
      * <p>
      * 返回的映射包含文件来源信息，可以追踪嵌套链
@@ -42,14 +44,21 @@ public class PakManager {
         Files.createDirectories(tempDir);
         Map<String, FileSourceInfo> fileMap = new HashMap<>();
         String archiveName = pakPath.getFileName().toString();
-        extractPakRecursive(pakPath, tempDir, fileMap, archiveName);
+
+        // 根据文件扩展名判断格式
+        if (archiveName.toLowerCase().endsWith(".7z")) {
+            extract7zRecursive(pakPath, tempDir, fileMap, archiveName);
+        } else {
+            extractZipRecursive(pakPath, tempDir, fileMap, archiveName);
+        }
+
         return fileMap;
     }
 
     /**
-     * 递归解压压缩包（支持嵌套）
+     * 递归解压 ZIP 格式压缩包（支持嵌套）
      * <p>
-     * 当遇到 .pak 或 .zip 文件时，会递归解压，并记录来源链
+     * 当遇到 .pak、.zip 或 .7z 文件时，会递归解压，并记录来源链
      * 例如：如果 mymod.zip 中包含 data3.pak，来源链为 ["mymod.zip", "data3.pak"]
      *
      * @param archivePath 压缩包路径
@@ -57,7 +66,7 @@ public class PakManager {
      * @param fileMap     文件映射表，包含来源信息
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
-    private static void extractPakRecursive(Path archivePath, Path outputDir, Map<String, FileSourceInfo> fileMap, String archiveName) throws IOException {
+    private static void extractZipRecursive(Path archivePath, Path outputDir, Map<String, FileSourceInfo> fileMap, String archiveName) throws IOException {
         try (ZipFile zipFile = ZipFile.builder().setFile(archivePath.toFile()).get()) {
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
@@ -80,13 +89,17 @@ public class PakManager {
                     }
                 }
 
-                // 检查是否是嵌套的压缩包（.pak 或 .zip）
-                if (fileName.endsWith(".pak") || fileName.endsWith(".zip")) {
+                // 检查是否是嵌套的压缩包（.pak、.zip 或 .7z）
+                if (isArchiveFile(fileName)) {
                     // 创建嵌套压缩包的临时解压目录
                     Path nestedTempDir = outputDir.resolve("_nested_" + System.currentTimeMillis() + "_" + fileName);
                     Files.createDirectories(nestedTempDir);
-                    // 递归解压，传递嵌套的文件名
-                    extractPakRecursive(outputPath, nestedTempDir, fileMap, fileName);
+                    // 递归解压，根据文件类型选择解压方法
+                    if (fileName.toLowerCase().endsWith(".7z")) {
+                        extract7zRecursive(outputPath, nestedTempDir, fileMap, fileName);
+                    } else {
+                        extractZipRecursive(outputPath, nestedTempDir, fileMap, fileName);
+                    }
                 } else {
                     // 创建文件来源信息，记录来源链
                     FileSourceInfo sourceInfo = new FileSourceInfo(outputPath, entryName);
@@ -108,6 +121,86 @@ public class PakManager {
                 }
             }
         }
+    }
+
+    /**
+     * 递归解压 7Z 格式压缩包（支持嵌套）
+     * <p>
+     * 当遇到 .pak、.zip 或 .7z 文件时，会递归解压，并记录来源链
+     *
+     * @param archivePath 压缩包路径
+     * @param outputDir   输出目录
+     * @param fileMap     文件映射表，包含来源信息
+     * @param archiveName 当前压缩包名称（用于构建来源链）
+     */
+    private static void extract7zRecursive(Path archivePath, Path outputDir, Map<String, FileSourceInfo> fileMap, String archiveName) throws IOException {
+        try (SevenZFile sevenZFile = SevenZFile.builder().setFile(archivePath.toFile()).get()) {
+            SevenZArchiveEntry entry;
+            while ((entry = sevenZFile.getNextEntry()) != null) {
+                if (entry.isDirectory()) continue;
+
+                String entryName = entry.getName();
+                String fileName = Tools.getEntryFileName(entryName);
+                Path outputPath = outputDir.resolve(entryName);
+                Files.createDirectories(outputPath.getParent());
+
+                // 检查文件大小
+                if (entry.getSize() == 0) {
+                    Files.createFile(outputPath);
+                } else {
+                    // 从 7Z 中读取文件内容并写入
+                    try (var output = Files.newOutputStream(outputPath)) {
+                        byte[] buffer = new byte[8192];
+                        int bytesRead;
+                        while ((bytesRead = sevenZFile.read(buffer)) != -1) {
+                            output.write(buffer, 0, bytesRead);
+                        }
+                    }
+                }
+
+                // 检查是否是嵌套的压缩包（.pak、.zip 或 .7z）
+                if (isArchiveFile(fileName)) {
+                    // 创建嵌套压缩包的临时解压目录
+                    Path nestedTempDir = outputDir.resolve("_nested_" + System.currentTimeMillis() + "_" + fileName);
+                    Files.createDirectories(nestedTempDir);
+                    // 递归解压，根据文件类型选择解压方法
+                    if (fileName.toLowerCase().endsWith(".7z")) {
+                        extract7zRecursive(outputPath, nestedTempDir, fileMap, fileName);
+                    } else {
+                        extractZipRecursive(outputPath, nestedTempDir, fileMap, fileName);
+                    }
+                } else {
+                    // 创建文件来源信息，记录来源链
+                    FileSourceInfo sourceInfo = new FileSourceInfo(outputPath, entryName);
+                    sourceInfo.addSource(archiveName);
+
+                    // 检查是否已有相同路径的文件（来自不同来源）
+                    if (fileMap.containsKey(entryName)) {
+                        FileSourceInfo existing = fileMap.get(entryName);
+                        ColorPrinter.warning(Localizations.t("PAK_MANAGER_DUPLICATE_FILE_DETECTED",
+                                existing.getSourceChainString(),
+                                sourceInfo.getFileEnterName(),
+                                existing.getFileEnterName())
+                        );
+                        ColorPrinter.success(" --> 使用新路径：" + sourceInfo.getFileEnterName());
+                        fileMap.put(entryName, sourceInfo);
+                    } else {
+                        fileMap.put(entryName, sourceInfo);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 判断文件是否是支持的压缩包格式
+     *
+     * @param fileName 文件名
+     * @return 是否是压缩包文件
+     */
+    private static boolean isArchiveFile(String fileName) {
+        String lowerName = fileName.toLowerCase();
+        return lowerName.endsWith(".pak") || lowerName.endsWith(".zip") || lowerName.endsWith(".7z");
     }
 
     /**
@@ -144,7 +237,6 @@ public class PakManager {
             }
         }
     }
-
 
     /**
      * 判断两个文件在内容上是否相同
