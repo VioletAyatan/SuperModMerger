@@ -114,4 +114,28 @@ public abstract class Tools {
     public static String getEntryFileName(String entryName) {
         return entryName.substring(entryName.lastIndexOf("/") + 1);
     }
+
+    /**
+     * 从PAK文件中提取指定文件的内容
+     *
+     * @param pakFile   PAK文件
+     * @param entryPath 文件在PAK中的相对路径
+     * @return 文件内容，如果文件不存在返回null
+     */
+    public static String extractFileFromPak(File pakFile, String entryPath) throws IOException {
+        if (!pakFile.exists()) {
+            throw new IllegalArgumentException(Localizations.t("TOOLS_FILE_NOT_EXIST", pakFile.getAbsolutePath()));
+        }
+
+        try (ZipFile zipFile = ZipFile.builder().setFile(pakFile).get()) {
+            ZipArchiveEntry entry = zipFile.getEntry(entryPath);
+            if (entry.getSize() == 0) {
+                return null;
+            }
+
+            try (var inputStream = zipFile.getInputStream(entry)) {
+                return new String(inputStream.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+            }
+        }
+    }
 }

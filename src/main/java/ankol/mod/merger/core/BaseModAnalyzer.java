@@ -9,10 +9,7 @@ import lombok.Getter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 基准MOD分析器 - 负责加载和分析基准MOD（原版文件）
@@ -55,6 +52,16 @@ public class BaseModAnalyzer {
     private boolean loaded = false;
 
     /**
+     * 临时文件缓存目录
+     */
+    private final Path cacheDir;
+
+    /**
+     * 已提取文件的缓存映射：相对路径 → 临时文件路径
+     */
+    private final Map<String, Path> extractedFileCache;
+
+    /**
      * 构造函数
      *
      * @param baseModPath 基准MOD文件路径
@@ -63,6 +70,14 @@ public class BaseModAnalyzer {
         this.baseModPath = baseModPath;
         this.indexedBaseModFileMap = new LinkedHashMap<>();
         this.baseModFilePaths = new LinkedHashSet<>();
+        this.extractedFileCache = new LinkedHashMap<>();
+        // 创建缓存目录：temp/BaseModCache_时间戳
+        this.cacheDir = Path.of(Tools.getTempDir(), "BaseModCache_" + System.currentTimeMillis());
+        try {
+            Files.createDirectories(this.cacheDir);
+        } catch (IOException e) {
+            ColorPrinter.warning("Failed to create base mod cache directory: " + e.getMessage());
+        }
     }
 
     /**
@@ -92,6 +107,59 @@ public class BaseModAnalyzer {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 从基准MOD中提取指定文件的内容（带缓存优化）
+     *
+     * @param relPath 文件在基准MOD中的相对路径
+     * @return 文件内容，如果文件不存在返回null
+     */
+    public String extractFileContent(String relPath) throws IOException {
+        if (!loaded) {
+            return null;
+        }
+
+        // 规范化路径（统一使用小写文件名查找）
+        String fileName = extractFileName(relPath).toLowerCase();
+        FileTree fileTree = indexedBaseModFileMap.get(fileName);
+
+        if (fileTree == null) {
+            return null;
+        }
+
+        String fullPath = fileTree.getFullPathName();
+
+        // 检查缓存中是否已存在
+        Path cachedFile = extractedFileCache.get(fullPath);
+        if (cachedFile != null && Files.exists(cachedFile)) {
+            // 从缓存读取
+            return Files.readString(cachedFile);
+        }
+
+        // 缓存未命中，从基准MOD的pak文件中提取文件内容
+        String content = Tools.extractFileFromPak(baseModPath.toFile(), fullPath);
+
+        if (content != null) {
+            // 保存到临时文件缓存
+            try {
+                // 使用安全的文件名（替换路径分隔符）
+                String safeFileName = fullPath.replace("/", "_").replace("\\", "_");
+                Path tempFile = cacheDir.resolve(safeFileName);
+
+                // 确保父目录存在
+                Files.createDirectories(tempFile.getParent());
+
+                // 写入缓存
+                Files.writeString(tempFile, content);
+                extractedFileCache.put(fullPath, tempFile);
+            } catch (IOException e) {
+                // 缓存失败不影响正常流程，只记录警告
+                ColorPrinter.warning("Failed to cache extracted file: " + fullPath + " - " + e.getMessage());
+            }
+        }
+
+        return content;
     }
 
     /**
@@ -130,5 +198,37 @@ public class BaseModAnalyzer {
         int lastSlash = path.lastIndexOf("/");
         return (lastSlash >= 0 ? path.substring(lastSlash + 1) : path).toLowerCase();
     }
-}
 
+    /**
+     * 清理临时文件缓存
+     * 建议在合并完成后调用此方法释放磁盘空间
+     */
+    public void clearCache() {
+        if (!Files.exists(cacheDir)) {
+            return;
+        }
+
+        try (var stream = Files.walk(cacheDir)) {
+            stream.sorted(java.util.Comparator.reverseOrder())
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path);
+                        } catch (IOException e) {
+                            // 忽略删除错误
+                        }
+                    });
+            extractedFileCache.clear();
+        } catch (IOException e) {
+            ColorPrinter.warning("Failed to clear base mod cache: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取缓存统计信息
+     *
+     * @return 缓存文件数量
+     */
+    public int getCacheSize() {
+        return extractedFileCache.size();
+    }
+}
