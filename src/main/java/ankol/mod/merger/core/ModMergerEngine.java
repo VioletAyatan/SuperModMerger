@@ -79,16 +79,16 @@ public class ModMergerEngine {
      * 执行合并操作
      */
     public void merge() throws IOException {
-        ColorPrinter.info("====== Techland Mod Merger ======");
+        ColorPrinter.info(Localizations.t("ENGINE_TITLE"));
 
         if (modsToMerge.isEmpty()) {
-            ColorPrinter.error("No mods found to merge!");
+            ColorPrinter.error(Localizations.t("ENGINE_NO_MODS_FOUND"));
             return;
         }
 
-        ColorPrinter.info("Found {} mod(s) to merge:", modsToMerge.size());
+        ColorPrinter.info(Localizations.t("ENGINE_FOUND_MODS_TO_MERGE", modsToMerge.size()));
         for (int i = 0; i < modsToMerge.size(); i++) {
-            ColorPrinter.info("{}. {}", (i + 1), modsToMerge.get(i).getFileName());
+            ColorPrinter.info(Localizations.t("ENGINE_MOD_LIST_ITEM", (i + 1), modsToMerge.get(i).getFileName()));
         }
 
         try {
@@ -107,9 +107,9 @@ public class ModMergerEngine {
             // 6. 开始合并文件
             processFiles(filesByPath, mergedDir);
             // 7. 合并完成，打包
-            ColorPrinter.info("📦 Creating merged PAK file...");
+            ColorPrinter.info(Localizations.t("ENGINE_CREATING_MERGED_PAK"));
             PakManager.createPak(mergedDir, outputPath);
-            ColorPrinter.success("✅ Merged PAK created: {}", outputPath);
+            ColorPrinter.success(Localizations.t("ENGINE_MERGED_PAK_CREATED", outputPath));
             // 8. 打印统计信息
             printStatistics();
         } catch (Exception e) {
@@ -124,22 +124,22 @@ public class ModMergerEngine {
      * 选择路径修正策略（在提取文件前）
      */
     private void selectPathCorrectionStrategy() {
-        ColorPrinter.info("\n请选择路径修正策略：");
-        ColorPrinter.success("  1. {}", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription());
-        ColorPrinter.info("  2. {}", PathCorrectionStrategy.Strategy.KEEP_ORIGINAL.getDescription());
+        ColorPrinter.info(Localizations.t("ENGINE_SELECT_PATH_CORRECTION_STRATEGY"));
+        ColorPrinter.success(Localizations.t("ENGINE_STRATEGY_OPTION_1", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription()));
+        ColorPrinter.info(Localizations.t("ENGINE_STRATEGY_OPTION_2", PathCorrectionStrategy.Strategy.KEEP_ORIGINAL.getDescription()));
         // 优化：使用全局Scanner避免资源泄漏
         while (true) {
-            ColorPrinter.info("请输入你的选择 (1 or 2):");
+            ColorPrinter.info(Localizations.t("ENGINE_INPUT_CHOICE_PROMPT"));
             String input = SYSTEM_SCANNER.next().trim();
             try {
                 if (pathCorrectionStrategy.selectByCode(Integer.parseInt(input))) {
-                    ColorPrinter.success("当前使用策略: {}", pathCorrectionStrategy.getSelectedStrategy().getDescription());
+                    ColorPrinter.success(Localizations.t("ENGINE_STRATEGY_SELECTED", pathCorrectionStrategy.getSelectedStrategy().getDescription()));
                     break;
                 }
             } catch (NumberFormatException e) {
                 // 继续循环
             }
-            ColorPrinter.warning("无效输入，请选择 1 或 2");
+            ColorPrinter.warning(Localizations.t("ENGINE_INVALID_CHOICE"));
         }
     }
 
@@ -175,9 +175,9 @@ public class ModMergerEngine {
 
         // 如果有路径被修正，输出日志
         if (!corrections.isEmpty()) {
-            ColorPrinter.info("  🔧 Path corrections for {}:", modFileName);
+            ColorPrinter.info(Localizations.t("ENGINE_PATH_CORRECTIONS_FOR_MOD", modFileName));
             for (Map.Entry<String, String> entry : corrections.entrySet()) {
-                ColorPrinter.success("    ├─ {} → {}", entry.getKey(), entry.getValue());
+                ColorPrinter.success(Localizations.t("ENGINE_PATH_CORRECTION_ITEM", entry.getKey(), entry.getValue()));
                 pathCorrectionCount++;
             }
         }
@@ -200,7 +200,7 @@ public class ModMergerEngine {
                 String modTempDirName = "Mod" + (index.getAndIncrement() + 1);               // 临时目录名（如 Mod1）
                 Path modTempDir = tempDir.resolve(modTempDirName);
 
-                ColorPrinter.info("Extracting {}...", modFileName);
+                ColorPrinter.info(Localizations.t("ENGINE_EXTRACTING_MOD", modFileName));
                 Map<String, FileSourceInfo> extractedFiles = PakManager.extractPak(modPath, modTempDir);
 
                 // 对当前MOD的文件路径进行修正（如果启用了智能修正）
@@ -220,12 +220,12 @@ public class ModMergerEngine {
 
                     // 如果是嵌套来源，输出详细日志
                     if (sourceInfo.isFromNestedArchive()) {
-                        ColorPrinter.info("  └─ Nested: {} (from: {} → {})", relPath, modFileName, sourceChainString);
+                        ColorPrinter.info(Localizations.t("ENGINE_NESTED_FILE_INFO", relPath, modFileName, sourceChainString));
                     }
                 }
-                ColorPrinter.success("✓ Extracted {} files", correctedFiles.size());
+                ColorPrinter.success(Localizations.t("ENGINE_EXTRACTED_FILES", correctedFiles.size()));
             } catch (IOException e) {
-                throw new CompletionException("Failed to extract mod: " + modPath.getFileName(), e);
+                throw new CompletionException(Localizations.t("ENGINE_EXTRACT_FAILED", modPath.getFileName()), e);
             }
         });
         return filesByName;
@@ -235,7 +235,7 @@ public class ModMergerEngine {
      * 处理所有文件（合并或复制）
      */
     private void processFiles(Map<String, List<FileSource>> filesByName, Path mergedDir) {
-        ColorPrinter.info("🔄 Processing files...");
+        ColorPrinter.info(Localizations.t("ENGINE_PROCESSING_FILES"));
 
         for (Map.Entry<String, List<FileSource>> entry : filesByName.entrySet()) {
             String relPath = entry.getKey();
@@ -249,7 +249,7 @@ public class ModMergerEngine {
                     mergeFiles(relPath, fileSources, mergedDir);
                 }
             } catch (Exception e) {
-                ColorPrinter.error("❌ ERROR processing {}: {}", relPath, e.getMessage());
+                ColorPrinter.error(Localizations.t("ENGINE_PROCESSING_ERROR", relPath, e.getMessage()));
             }
         }
     }
@@ -315,7 +315,7 @@ public class ModMergerEngine {
         }
 
         // 智能合并脚本文件
-        ColorPrinter.info("🔀Merging: {} ({} mods)", relPath, fileSources.size());
+        ColorPrinter.info(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size()));
 
         try {
             FileMerger merger = mergerOptional.get();
@@ -361,9 +361,9 @@ public class ModMergerEngine {
             Files.writeString(targetPath, mergedContent);
 
             this.mergedCount++;
-            ColorPrinter.success("✓ Merged successfully");
+            ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS"));
         } catch (Exception e) {
-            ColorPrinter.error("❌ Merge failed: {}", e.getMessage());
+            ColorPrinter.error(Localizations.t("ENGINE_MERGE_FAILED", e.getMessage()));
             e.printStackTrace();
             // 失败时使用最后一个 mod 的版本
             FileSource lastSource = fileSources.getLast();
@@ -392,11 +392,11 @@ public class ModMergerEngine {
      */
     private void printStatistics() {
         ColorPrinter.info("\n{}", "=".repeat(75));
-        ColorPrinter.info("📊 Merge Statistics:");
-        ColorPrinter.info("Total files processed: {}", totalProcessed);
-        ColorPrinter.success("Merged (no conflicts): {}", mergedCount);
+        ColorPrinter.info(Localizations.t("ENGINE_STATISTICS_TITLE"));
+        ColorPrinter.info(Localizations.t("ENGINE_TOTAL_FILES_PROCESSED", totalProcessed));
+        ColorPrinter.success(Localizations.t("ENGINE_MERGED_NO_CONFLICTS", mergedCount));
         if (pathCorrectionCount > 0) {
-            ColorPrinter.success("Path corrections applied: {}", pathCorrectionCount);
+            ColorPrinter.success(Localizations.t("ENGINE_PATH_CORRECTIONS_APPLIED", pathCorrectionCount));
         }
         ColorPrinter.info("{}", "=".repeat(75));
     }
@@ -418,7 +418,7 @@ public class ModMergerEngine {
                         });
             }
         } catch (Exception e) {
-            ColorPrinter.warning("Warning: Failed to clean temp directory: {}", e.getMessage());
+            ColorPrinter.warning(Localizations.t("ENGINE_CLEANUP_FAILED", e.getMessage()));
         }
     }
 }
