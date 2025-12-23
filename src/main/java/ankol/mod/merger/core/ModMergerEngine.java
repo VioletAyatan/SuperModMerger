@@ -94,12 +94,12 @@ public class ModMergerEngine {
         try {
             //初始化基准mod
             baseModAnalyzer.load();
-            // 把所有文件先解压到临时文件夹，生成映射路径（包含来源信息）
-            Map<String, List<FileSource>> filesByPath = extractAllMods();
-            // 3. 处理路径修正（如果有基准MOD）
+            // 如果有基准MOD，先确定路径修正策略
             if (baseModAnalyzer.isLoaded()) {
-                processPathCorrection(filesByPath);
+                selectPathCorrectionStrategy();
             }
+            // 在提取过程中对每个mod分别进行路径修正
+            Map<String, List<FileSource>> filesByPath = extractAllMods();
             JacksonUtil.toJson(filesByPath, FileUtil.getOutputStream(Tools.getUserDir() + "/test.json"));
             // 5. 输出目录（临时）
             Path mergedDir = tempDir.resolve("merged");
@@ -121,76 +121,73 @@ public class ModMergerEngine {
     }
 
     /**
-     * 处理路径修正 - 根据基准MOD修正待合并MOD中的错误路径
+     * 选择路径修正策略（在提取文件前）
      */
-    private void processPathCorrection(Map<String, List<FileSource>> filesByPath) {
-        ColorPrinter.info("\n🔍 Checking for path mismatches with base MOD...");
-
-        // 查找所有需要修正的路径
-        Map<String, String> mismatches = new HashMap<>();
-        for (String path : filesByPath.keySet()) {
-            if (baseModAnalyzer.hasPathConflict(path)) {
-                String suggestedPath = baseModAnalyzer.getSuggestedPath(path);
-                mismatches.put(path, suggestedPath);
-            }
-        }
-
-        if (mismatches.isEmpty()) {
-            ColorPrinter.success("✓ No path mismatches found");
-            return;
-        }
-
-        // 发现路径冲突，提示用户选择修正策略
-        ColorPrinter.warning("\nFound {} path mismatches with base MOD", mismatches.size());
-        ColorPrinter.warning("These files exist in mods but with different paths than base MOD:");
-
-        for (var entry : mismatches.entrySet()) {
-            ColorPrinter.warning("  ├─ Current: {}", entry.getKey());
-            ColorPrinter.success("  └─ Suggested: {}", entry.getValue());
-        }
-
-        // 询问用户选择修正策略
-        ColorPrinter.info("\n📋 Select path correction strategy:");
-        ColorPrinter.success("  1. {} (recommended)", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription());
+    private void selectPathCorrectionStrategy() {
+        ColorPrinter.info("\n请选择路径修正策略：");
+        ColorPrinter.success("  1. {}", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription());
         ColorPrinter.info("  2. {}", PathCorrectionStrategy.Strategy.KEEP_ORIGINAL.getDescription());
-
         // 优化：使用全局Scanner避免资源泄漏
         while (true) {
-            ColorPrinter.info("Please enter your choice (1 or 2):");
+            ColorPrinter.info("请输入你的选择 (1 or 2):");
             String input = SYSTEM_SCANNER.next().trim();
-
             try {
                 if (pathCorrectionStrategy.selectByCode(Integer.parseInt(input))) {
-                    ColorPrinter.success("✓ Strategy selected: {}", pathCorrectionStrategy.getSelectedStrategy().getDescription());
+                    ColorPrinter.success("当前使用策略: {}", pathCorrectionStrategy.getSelectedStrategy().getDescription());
                     break;
                 }
             } catch (NumberFormatException e) {
                 // 继续循环
             }
-            ColorPrinter.warning("❌ Invalid choice. Please enter 1 or 2");
-        }
-
-        // 应用路径修正
-        if (pathCorrectionStrategy.getSelectedStrategy() == PathCorrectionStrategy.Strategy.SMART_CORRECT) {
-            ColorPrinter.info("\n🔧Applying smart path correction...");
-            for (var entry : mismatches.entrySet()) {
-                String originalPath = entry.getKey();
-                String correctedPath = entry.getValue();
-
-                List<FileSource> sources = filesByPath.remove(originalPath);
-                filesByPath.put(correctedPath, sources);
-                pathCorrectionCount++;
-
-                ColorPrinter.success("  ├─ {} → {}", originalPath, correctedPath);
-            }
-            ColorPrinter.success("✓ Corrected {} paths", pathCorrectionCount);
-        } else {
-            ColorPrinter.info("ℹ️ Keeping original paths from mods");
+            ColorPrinter.warning("无效输入，请选择 1 或 2");
         }
     }
 
     /**
+     * 对单个MOD的文件路径进行修正
+     *
+     * @param modFileName MOD文件名
+     * @param extractedFiles 提取的文件映射（相对路径 -> FileSourceInfo）
+     * @return 修正后的文件映射
+     */
+    private Map<String, FileSourceInfo> correctPathsForMod(String modFileName, Map<String, FileSourceInfo> extractedFiles) {
+        if (!baseModAnalyzer.isLoaded() ||
+            pathCorrectionStrategy.getSelectedStrategy() != PathCorrectionStrategy.Strategy.SMART_CORRECT) {
+            return extractedFiles;
+        }
+
+        Map<String, FileSourceInfo> correctedFiles = new LinkedHashMap<>();
+        Map<String, String> corrections = new LinkedHashMap<>();
+
+        // 查找需要修正的路径
+        for (Map.Entry<String, FileSourceInfo> entry : extractedFiles.entrySet()) {
+            String originalPath = entry.getKey();
+            FileSourceInfo sourceInfo = entry.getValue();
+
+            if (baseModAnalyzer.hasPathConflict(originalPath)) {
+                String suggestedPath = baseModAnalyzer.getSuggestedPath(originalPath);
+                corrections.put(originalPath, suggestedPath);
+                correctedFiles.put(suggestedPath, sourceInfo);
+            } else {
+                correctedFiles.put(originalPath, sourceInfo);
+            }
+        }
+
+        // 如果有路径被修正，输出日志
+        if (!corrections.isEmpty()) {
+            ColorPrinter.info("  🔧 Path corrections for {}:", modFileName);
+            for (Map.Entry<String, String> entry : corrections.entrySet()) {
+                ColorPrinter.success("    ├─ {} → {}", entry.getKey(), entry.getValue());
+                pathCorrectionCount++;
+            }
+        }
+
+        return correctedFiles;
+    }
+
+    /**
      * 从所有 mod 中提取文件，按相对路径分组
+     * 在提取过程中对每个mod分别进行路径修正，避免不同mod的同名文件冲突
      */
     private Map<String, List<FileSource>> extractAllMods() {
         Map<String, List<FileSource>> filesByName = new ConcurrentHashMap<>(); // 优化：使用线程安全集合
@@ -205,8 +202,12 @@ public class ModMergerEngine {
 
                 ColorPrinter.info("Extracting {}...", modFileName);
                 Map<String, FileSourceInfo> extractedFiles = PakManager.extractPak(modPath, modTempDir);
+
+                // 对当前MOD的文件路径进行修正（如果启用了智能修正）
+                Map<String, FileSourceInfo> correctedFiles = correctPathsForMod(modFileName, extractedFiles);
+
                 // 按文件路径分组，并记录来源MOD名字
-                for (Map.Entry<String, FileSourceInfo> entry : extractedFiles.entrySet()) {
+                for (Map.Entry<String, FileSourceInfo> entry : correctedFiles.entrySet()) {
                     String relPath = entry.getKey();
                     FileSourceInfo sourceInfo = entry.getValue();
 
@@ -222,7 +223,7 @@ public class ModMergerEngine {
                         ColorPrinter.info("  └─ Nested: {} (from: {} → {})", relPath, modFileName, sourceChainString);
                     }
                 }
-                ColorPrinter.success("✓ Extracted {} files", extractedFiles.size());
+                ColorPrinter.success("✓ Extracted {} files", correctedFiles.size());
             } catch (IOException e) {
                 throw new CompletionException("Failed to extract mod: " + modPath.getFileName(), e);
             }
@@ -304,7 +305,7 @@ public class ModMergerEngine {
                     int choice = Integer.parseInt(input);
                     if (choice >= 1 && choice <= fileSources.size()) {
                         FileSource chosenSource = fileSources.get(choice - 1);
-                        ColorPrinter.info(Localizations.t("ASSET_USER_CHOSE_COMPLTED", chosenSource.sourceModName));
+                        ColorPrinter.info(Localizations.t("ASSET_USER_CHOSE_COMPLETE", chosenSource.sourceModName));
                         copyFile(relPath, chosenSource.filePath, mergedDir);
                         return;
                     }
@@ -394,6 +395,9 @@ public class ModMergerEngine {
         ColorPrinter.info("📊 Merge Statistics:");
         ColorPrinter.info("Total files processed: {}", totalProcessed);
         ColorPrinter.success("Merged (no conflicts): {}", mergedCount);
+        if (pathCorrectionCount > 0) {
+            ColorPrinter.success("Path corrections applied: {}", pathCorrectionCount);
+        }
         ColorPrinter.info("{}", "=".repeat(75));
     }
 

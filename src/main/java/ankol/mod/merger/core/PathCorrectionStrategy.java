@@ -1,5 +1,6 @@
 package ankol.mod.merger.core;
 
+import ankol.mod.merger.tools.Localizations;
 import lombok.Getter;
 
 /**
@@ -16,12 +17,12 @@ public class PathCorrectionStrategy {
         /**
          * 智能修正：使用基准MOD中的正确路径，忽略待合并MOD中的错误路径
          */
-        SMART_CORRECT(1, "Use correct path from base MOD"),
+        SMART_CORRECT(1, Localizations.t("PATH_CORRECTION_STRATEGY_SMART")),
 
         /**
          * 保留原始路径：保留待合并MOD中的原始路径，不进行修正
          */
-        KEEP_ORIGINAL(2, "Keep original path from mods");
+        KEEP_ORIGINAL(2, Localizations.t("PATH_CORRECTION_STRATEGY_KEEP"));
 
         @Getter
         private final int code;
