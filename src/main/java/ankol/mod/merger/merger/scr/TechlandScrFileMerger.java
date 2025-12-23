@@ -8,6 +8,7 @@ import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.*;
 import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
+import ankol.mod.merger.tools.Localizations;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -114,7 +115,7 @@ public class TechlandScrFileMerger extends FileMerger {
      */
     private void resolveConflictsInteractively() {
         Scanner scanner = new Scanner(System.in);
-        ColorPrinter.warning("\n==================== 检测到 {} 处代码冲突，需要用户手动合并 ====================", conflicts.size());
+        ColorPrinter.warning(Localizations.t("SCR_MERGER_CONFLICT_DETECTED", conflicts.size()));
         int chose = 0;
         for (int i = 0; i < conflicts.size(); i++) {
             ConflictRecord record = conflicts.get(i);
@@ -124,20 +125,20 @@ public class TechlandScrFileMerger extends FileMerger {
                 record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
             } else {
                 ColorPrinter.info("=".repeat(75));
-                ColorPrinter.info("[{}/{}] 文件: {}", i + 1, conflicts.size(), record.getFileName());
+                ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
 //            ColorPrinter.highlight("位置签名: {}", record.getSignature());
                 //打印代码提示框
-                ColorPrinter.warning("1. {}:", record.getBaseModName());
-                ColorPrinter.bold("行: {} {}", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim());
-                ColorPrinter.warning("2. {}:", record.getMergeModName());
-                ColorPrinter.bold("行: {} {}", record.getModNode().getLine(), record.getModNode().getSourceText().trim());
+                ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
+                ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim()));
+                ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_2", record.getMergeModName()));
+                ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLine(), record.getModNode().getSourceText().trim()));
                 ColorPrinter.info("=".repeat(75));
                 //选择对话框
-                ColorPrinter.info("请选择:");
-                ColorPrinter.info("1. 使用 {}", record.getBaseNode().getSourceText());
-                ColorPrinter.info("2. 使用 {}", record.getModNode().getSourceText());
-                ColorPrinter.info("3. 全部使用 {} 的配置", record.getBaseModName());
-                ColorPrinter.info("4. 全部使用 {} 的配置", record.getMergeModName());
+                ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
+                ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_1", record.getBaseNode().getSourceText()));
+                ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_2", record.getModNode().getSourceText()));
+                ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_1", record.getBaseModName()));
+                ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_2", record.getMergeModName()));
 
                 while (true) {
                     String input = scanner.nextLine();
@@ -150,11 +151,11 @@ public class TechlandScrFileMerger extends FileMerger {
                         record.setUserChoice(chose == 3 ? 1 : 2);
                         break;
                     }
-                    ColorPrinter.warning("输入无效，请输入 1 或 2 或 3 或 4 ");
+                    ColorPrinter.warning(Localizations.t("SCR_MERGER_INVALID_INPUT"));
                 }
             }
         }
-        ColorPrinter.success("==================== 冲突处理完成，正在应用修改 ====================");
+        ColorPrinter.success(Localizations.t("SCR_MERGER_CONFLICT_RESOLVED"));
     }
 
     private void handleInsertion(ScrContainerScriptNode baseContainer, ScrScriptNode modNode) {

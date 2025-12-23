@@ -2,6 +2,7 @@ package ankol.mod.merger.core;
 
 import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
+import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
 import lombok.Getter;
 
@@ -71,11 +72,11 @@ public class BaseModAnalyzer {
      */
     public void load() throws IOException {
         if (loaded) {
-            ColorPrinter.warning("⚠️ Base MOD already loaded, skipping...");
+            ColorPrinter.warning(Localizations.t("BASE_MOD_ALREADY_LOADED"));
             return;
         }
         if (!Files.exists(baseModPath)) {
-            throw new IOException("Base MOD file not found: " + baseModPath);
+            throw new IOException(Localizations.t("BASE_MOD_FILE_NOT_FOUND", baseModPath));
         }
 
         try {
@@ -83,11 +84,11 @@ public class BaseModAnalyzer {
             this.fileNameToPathMap = Tools.indexPakFile(baseModPath.toFile());
             loaded = true;
             long elapsed = System.currentTimeMillis() - startTime;
-            ColorPrinter.success("✓ Indexed {} files from {} in {}ms (on-demand extraction)",
+            ColorPrinter.success(Localizations.t("BASE_MOD_INDEXED_FILES",
                     fileNameToPathMap.size(),
                     baseModPath.getFileName(),
                     elapsed
-            );
+            ));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

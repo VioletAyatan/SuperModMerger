@@ -31,7 +31,8 @@ public class Localizations {
             defaultProperties = new Properties();
             defaultProperties.load(resource.getStream());
         } catch (IOException e) {
-            ColorPrinter.error("Load i18n Resources Failed! Place Concat the author! Failed Message: {}", e.getMessage());
+            // Cannot use Localizations.t() here as properties are not loaded yet
+            ColorPrinter.error("Failed to load i18n resources! Please contact the author! Error message: {}", e.getMessage());
             System.exit(-1);
         }
     }
