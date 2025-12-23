@@ -61,7 +61,7 @@ public class AppMain {
             if (Files.exists(defaultBaseMod)) {
                 baseModPath = defaultBaseMod;
             } else {
-                throw new IllegalArgumentException("未找到data0.pak文件，请将此工具放于Dying Light The Beast" + File.separator + "ph_ft目录下，或者使用-b参数指定data0.pak位置");
+                throw new IllegalArgumentException(Localizations.t("APP_MAIN_BASE_MOD_NOT_FOUND", File.separator));
             }
         }
         return baseModPath;
@@ -69,9 +69,9 @@ public class AppMain {
 
     private static SimpleArgParser registerArgsParser() {
         SimpleArgParser argParser = new SimpleArgParser();
-        argParser.addOption("o", "output", true, "指定输出 PAK 文件位置 (默认: ./merged_mod.pak)");
-        argParser.addOption("b", "base", true, "基准mod所在的位置 (可选)");
-        argParser.addOption("h", "help", false, "显示帮助信息");
+        argParser.addOption("o", "output", true, Localizations.t("APP_MAIN_OPTION_OUTPUT_DESC"));
+        argParser.addOption("b", "base", true, Localizations.t("APP_MAIN_OPTION_BASE_DESC"));
+        argParser.addOption("h", "help", false, Localizations.t("APP_MAIN_OPTION_HELP_DESC"));
         return argParser;
     }
 

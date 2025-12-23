@@ -32,13 +32,13 @@ public abstract class Tools {
             if (FileUtil.exists(defaultPath, true)) {
                 return defaultPath;
             } else {
-                throw new IllegalArgumentException("错误，合并目录[" + defaultPath + "]不存在");
+                throw new IllegalArgumentException(Localizations.t("TOOLS_MERGE_DIR_NOT_EXIST", defaultPath));
             }
         } else {
             if (FileUtil.exists(meringModDir, true)) {
                 return meringModDir;
             } else {
-                throw new IllegalArgumentException("错误，合并目录[" + meringModDir + "]不存在");
+                throw new IllegalArgumentException(Localizations.t("TOOLS_MERGE_DIR_NOT_EXIST", meringModDir));
             }
         }
     }
@@ -85,7 +85,7 @@ public abstract class Tools {
 
     public static Map<String, FileTree> indexPakFile(File file) {
         if (!file.exists()) {
-            throw new IllegalArgumentException("文件不存在: " + file.getAbsolutePath());
+            throw new IllegalArgumentException(Localizations.t("TOOLS_FILE_NOT_EXIST", file.getAbsolutePath()));
         }
         if (file.isDirectory()) {
             throw new IllegalArgumentException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", file.getAbsolutePath()));
