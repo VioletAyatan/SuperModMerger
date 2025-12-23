@@ -26,7 +26,7 @@ public class MergerFactory {
     // 静态初始化块，用于注册所有支持的合并器
     static {
         // 注册.scr格式的合并器
-        registerMerger(TechlandScrFileMerger.class, ".scr", ".def", ".loot", ".ppfx", ".ares", ".mpcloth");
+            registerMerger(TechlandScrFileMerger.class, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth");
         // 注册.xml文件的合并器
 //        registerMerger(XmlFileMerger.class, ".xml");
     }
