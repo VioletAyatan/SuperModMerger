@@ -9,13 +9,13 @@
   ],
   "reflection": [
     {
-      "type": "ankol.mod.merger.merger.scr.ScrScriptFileMerger",
+      "type": "ankol.mod.merger.merger.scr.TechlandScrFileMerger",
       "allDeclaredConstructors": true,
       "allDeclaredMethods": true,
       "allDeclaredFields": true
     },
     {
-      "type": "ankol.mod.merger.merger.xml.XmlFileMerger",
+      "type": "ankol.mod.merger.merger.scr.TechlandScrFileVisitor",
       "allDeclaredConstructors": true,
       "allDeclaredMethods": true,
       "allDeclaredFields": true
