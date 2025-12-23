@@ -94,7 +94,7 @@ public class PakManager {
 
                     // 检查是否已有相同路径的文件（来自不同来源）
                     if (fileMap.containsKey(entryName)) {
-                        FileSourceInfo existing = fileMap.get(fileName);
+                        FileSourceInfo existing = fileMap.get(entryName);
                         ColorPrinter.warning(Localizations.t("PAK_MANAGER_DUPLICATE_FILE_DETECTED",
                                 existing.getSourceChainString(),
                                 sourceInfo.getFileEnterName(),

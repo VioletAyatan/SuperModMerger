@@ -46,7 +46,7 @@ public class AppMain {
             ColorPrinter.success("\n✅ Done!");
             System.exit(0);
         } catch (RuntimeException | IOException e) {
-            ColorPrinter.error("错误: {}", e.getMessage());
+            ColorPrinter.error("错误: " + e.getMessage(), e);
             System.exit(1);
         }
     }

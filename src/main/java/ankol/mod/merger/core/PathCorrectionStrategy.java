@@ -46,8 +46,9 @@ public class PathCorrectionStrategy {
      * 构造函数 - 初始化为未选择状态
      */
     public PathCorrectionStrategy() {
-        this.selectedStrategy = null;
+        this.selectedStrategy = Strategy.SMART_CORRECT; //todo 这里先写死必须进行路径修正，后面再添加保留路径支持
     }
+
     /**
      * 根据策略码选择策略
      *

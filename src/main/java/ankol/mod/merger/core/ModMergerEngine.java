@@ -95,9 +95,9 @@ public class ModMergerEngine {
             //初始化基准mod
             baseModAnalyzer.load();
             // 如果有基准MOD，先确定路径修正策略
-            if (baseModAnalyzer.isLoaded()) {
+            /*if (baseModAnalyzer.isLoaded()) {
                 selectPathCorrectionStrategy();
-            }
+            }*/
             // 在提取过程中对每个mod分别进行路径修正
             Map<String, List<FileSource>> filesByPath = extractAllMods();
             JacksonUtil.toJson(filesByPath, FileUtil.getOutputStream(Tools.getUserDir() + "/test.json"));
@@ -146,13 +146,14 @@ public class ModMergerEngine {
     /**
      * 对单个MOD的文件路径进行修正
      *
-     * @param modFileName MOD文件名
+     * @param modFileName    MOD文件名
      * @param extractedFiles 提取的文件映射（相对路径 -> FileSourceInfo）
      * @return 修正后的文件映射
      */
     private Map<String, FileSourceInfo> correctPathsForMod(String modFileName, Map<String, FileSourceInfo> extractedFiles) {
         if (!baseModAnalyzer.isLoaded() ||
-            pathCorrectionStrategy.getSelectedStrategy() != PathCorrectionStrategy.Strategy.SMART_CORRECT) {
+                pathCorrectionStrategy.getSelectedStrategy() != PathCorrectionStrategy.Strategy.SMART_CORRECT
+        ) {
             return extractedFiles;
         }
 
@@ -200,9 +201,7 @@ public class ModMergerEngine {
                 String modTempDirName = "Mod" + (index.getAndIncrement() + 1);               // 临时目录名（如 Mod1）
                 Path modTempDir = tempDir.resolve(modTempDirName);
 
-                ColorPrinter.info(Localizations.t("ENGINE_EXTRACTING_MOD", modFileName));
                 Map<String, FileSourceInfo> extractedFiles = PakManager.extractPak(modPath, modTempDir);
-
                 // 对当前MOD的文件路径进行修正（如果启用了智能修正）
                 Map<String, FileSourceInfo> correctedFiles = correctPathsForMod(modFileName, extractedFiles);
 
