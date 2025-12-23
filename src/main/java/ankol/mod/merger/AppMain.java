@@ -1,6 +1,7 @@
 package ankol.mod.merger;
 
 import ankol.mod.merger.core.ModMergerEngine;
+import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.SimpleArgParser;
@@ -11,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,9 +46,15 @@ public class AppMain {
             merger.merge();
             //完成
             ColorPrinter.success(Localizations.t("APP_MAIN_DONE"));
+            parseAnyKeyToExit();
             System.exit(0);
-        } catch (RuntimeException | IOException e) {
+        } catch (BusinessException e) {
+            ColorPrinter.error(Localizations.t("APP_MAIN_ERROR", e.getMessage()));
+            parseAnyKeyToExit();
+            System.exit(1);
+        } catch (Exception e) {
             ColorPrinter.error(Localizations.t("APP_MAIN_ERROR", e.getMessage()), e);
+            parseAnyKeyToExit();
             System.exit(1);
         }
     }
@@ -61,7 +69,7 @@ public class AppMain {
             if (Files.exists(defaultBaseMod)) {
                 baseModPath = defaultBaseMod;
             } else {
-                throw new IllegalArgumentException(Localizations.t("APP_MAIN_BASE_MOD_NOT_FOUND", File.separator));
+                throw new BusinessException(Localizations.t("APP_MAIN_BASE_MOD_NOT_FOUND", File.separator));
             }
         }
         return baseModPath;
@@ -74,7 +82,6 @@ public class AppMain {
         argParser.addOption("h", "help", false, Localizations.t("APP_MAIN_OPTION_HELP_DESC"));
         return argParser;
     }
-
 
     private static void initCharset() {
         try {
@@ -91,5 +98,11 @@ public class AppMain {
         } catch (Exception e) {
             System.err.println("Error executing command [chcp] Skip!" + e.getMessage());
         }
+    }
+
+    private static void parseAnyKeyToExit() {
+        Scanner scanner = new Scanner(System.in);
+        ColorPrinter.error(Localizations.t("APP_MAIN_PRESS_ANY_KEY_EXIT"));
+        scanner.nextLine();
     }
 }
