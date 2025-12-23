@@ -231,7 +231,7 @@ public class PakManager {
 
                                 zipOut.closeArchiveEntry();
                             } catch (IOException e) {
-                                throw new RuntimeException("Failed to add file to PAK: " + file, e);
+                                throw new RuntimeException(Localizations.t("PAK_MANAGER_FAILED_TO_ADD_FILE", file), e);
                             }
                         });
             }
