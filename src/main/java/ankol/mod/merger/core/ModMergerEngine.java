@@ -115,6 +115,8 @@ public class ModMergerEngine {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
+            // 清理基准MOD缓存
+            baseModAnalyzer.clearCache();
             // 清理临时文件
             cleanupTempDir();
         }
@@ -320,6 +322,12 @@ public class ModMergerEngine {
             FileMerger merger = mergerOptional.get();
             String mergedContent = null;
 
+            // 从基准MOD中提取对应文件的内容（用于三方对比）
+            String originalBaseModContent = null;
+            if (baseModAnalyzer.isLoaded()) {
+                originalBaseModContent = baseModAnalyzer.extractFileContent(relPath);
+            }
+
             // 顺序合并：FileSource[0] + FileSource[1] + FileSource[2] + ...
             for (int i = 0; i < fileSources.size(); i++) {
                 FileSource currentSource = fileSources.get(i);
@@ -344,6 +352,7 @@ public class ModMergerEngine {
                         context.setFileName(relPath);
                         context.setMod1Name(previousModName);
                         context.setMod2Name(currentModName);
+                        context.setOriginalBaseModContent(originalBaseModContent); // 设置基准MOD文件内容
 
                         MergeResult result = merger.merge(fileBase, fileCurrent);
                         mergedContent = result.mergedContent();

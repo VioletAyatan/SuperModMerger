@@ -31,6 +31,11 @@ public class TechlandScrFileMerger extends FileMerger {
      */
     private static final Map<String, ScrContainerScriptNode> PARSE_CACHE = new WeakHashMap<>();
 
+    /**
+     * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
+     */
+    private ScrContainerScriptNode originalBasModRoot = null;
+
     public TechlandScrFileMerger(MergerContext context) {
         super(context);
     }
@@ -39,10 +44,21 @@ public class TechlandScrFileMerger extends FileMerger {
     @Override
     public MergeResult merge(FileTree file1, FileTree file2) {
         try {
+            // 解析基准MOD文件（如果存在）
+            if (context.getOriginalBaseModContent() != null) {
+                String contentHash = computeHash(context.getOriginalBaseModContent());
+                ScrContainerScriptNode cached = PARSE_CACHE.get(contentHash);
+                if (cached != null) {
+                    originalBasModRoot = cached;
+                } else {
+                    originalBasModRoot = parse(context.getOriginalBaseModContent());
+                    PARSE_CACHE.put(contentHash, originalBasModRoot);
+                }
+            }
             ScrContainerScriptNode baseRoot = parseTree(Path.of(file1.getFullPathName()));
             ScrContainerScriptNode modRoot = parseTree(Path.of(file2.getFullPathName()));
             // 递归对比，找到冲突项
-            reduceCompare(baseRoot, modRoot);
+            reduceCompare(originalBasModRoot, baseRoot, modRoot);
             if (!conflicts.isEmpty()) {
                 resolveConflictsInteractively();
             }
@@ -70,44 +86,111 @@ public class TechlandScrFileMerger extends FileMerger {
             //清理状态，准备下一个文件合并
             conflicts.clear();
             finalEdits.clear();
+            originalBasModRoot = null;
         }
     }
 
-    private void reduceCompare(ScrContainerScriptNode baseContainer, ScrContainerScriptNode modContainer) {
+    private void reduceCompare(ScrContainerScriptNode originalContainer, ScrContainerScriptNode baseContainer, ScrContainerScriptNode modContainer) {
         // 遍历 Mod 的所有子节点
         for (Map.Entry<String, ScrScriptNode> entry : modContainer.getChildren().entrySet()) {
-            String signature = entry.getKey();
-            ScrScriptNode baseNode = baseContainer.getChildren().get(signature);
-            ScrScriptNode modNode = entry.getValue();
+            try {
+                String signature = entry.getKey();
+                ScrScriptNode modNode = entry.getValue();
+                ScrScriptNode originalNode = originalContainer.getChildren().get(signature);
+                ScrScriptNode baseNode = baseContainer.getChildren().get(signature);
 
-            if (baseNode == null) {
-                // 新增 Base 没有这个节点 -> 插入
-                handleInsertion(baseContainer, modNode);
-            } else {
-                // [存在] 检查是否冲突
-                if (baseNode instanceof ScrContainerScriptNode && modNode instanceof ScrContainerScriptNode) {
-                    // 容器节点，递归进入内部对比
-                    reduceCompare((ScrContainerScriptNode) baseNode, (ScrContainerScriptNode) modNode);
-                }
-                //函数调用，比较参数，不对比String，因为各类mod可能会
-                else if (baseNode instanceof ScrFunCallScriptNode baseFunCall && modNode instanceof ScrFunCallScriptNode modFunCall) {
-                    if (!baseFunCall.getArguments().equals(modFunCall.getArguments())) {
-                        // 参数不一致，标记发生冲突
-                        conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
+                if (baseNode == null) {
+                    // 新增 Base 没有这个节点 -> 插入
+                    handleInsertion(baseContainer, modNode);
+                } else {
+                    // [存在] 检查是否冲突
+                    if (baseNode instanceof ScrContainerScriptNode && modNode instanceof ScrContainerScriptNode) {
+                        // 容器节点，递归进入内部对比
+                        reduceCompare((ScrContainerScriptNode) originalNode, (ScrContainerScriptNode) baseNode, (ScrContainerScriptNode) modNode);
+                    }
+                    //函数调用，比较参数，不对比String，因为对比字符会有各种空行不规范问题
+                    else if (baseNode instanceof ScrFunCallScriptNode baseFunCall && modNode instanceof ScrFunCallScriptNode modFunCall) {
+                        if (!baseFunCall.getArguments().equals(modFunCall.getArguments())) {
+                            // 参数不一致，检查是否与原始基准MOD相同
+                            if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
+                                // 与原始基准MOD不同，才标记为冲突
+                                conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
+                            }
+                        }
+                    }
+                    //普通子节点，直接处理
+                    else {
+                        // 叶子节点，对比内容
+                        String baseText = baseNode.getSourceText().trim();
+                        String modText = modNode.getSourceText().trim();
+                        //内容不一致
+                        if (!baseText.equals(modText)) {
+                            // 检查modNode是否与原始基准MOD相同
+                            if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
+                                conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
+                            }
+                        }
                     }
                 }
-                //普通子节点，直接处理
-                else {
-                    // 叶子节点，对比内容。
-                    String baseText = baseNode.getSourceText().trim();
-                    String modText = modNode.getSourceText().trim();
-                    //内容不一致，标记发生冲突
-                    if (!baseText.equals(modText)) {
-                        conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
-                    }
+            } catch (Exception e) {
+                System.err.println("Error in processing scr node with signature: '" + entry.getKey() + " Source code: " + originalContainer.getSourceText());
+            }
+        }
+    }
+
+    /**
+     * 检查节点是否与原始基准MOD中的对应节点内容相同
+     *
+     * @param originalNode 节点签名
+     * @param modNode      待检查的节点
+     * @return 如果与原始基准MOD相同返回true，否则返回false
+     */
+    private boolean isNodeSameAsOriginalBaseMod(ScrScriptNode originalNode, ScrScriptNode modNode) {
+        // 如果没有原始基准MOD，则认为不相同
+        if (originalBasModRoot == null) {
+            return false;
+        }
+
+        if (originalNode == null) {
+            // 原始基准MOD中不存在这个节点，说明是新增的
+            return false;
+        }
+
+        // 对比节点内容
+        if (modNode instanceof ScrFunCallScriptNode modFunCall && originalNode instanceof ScrFunCallScriptNode originalFunCall) {
+            // 函数调用节点，对比参数
+            return modFunCall.getArguments().equals(originalFunCall.getArguments());
+        } else {
+            // 其他节点，对比文本内容
+            return modNode.getSourceText().trim().equals(originalNode.getSourceText().trim());
+        }
+    }
+
+    /**
+     * 根据签名在容器中递归查找节点
+     *
+     * @param container 容器节点
+     * @param signature 节点签名
+     * @return 找到的节点，如果不存在返回null
+     */
+    private ScrScriptNode findNodeBySignature(ScrContainerScriptNode container, String signature) {
+        // 检查当前容器的直接子节点
+        ScrScriptNode node = container.getChildren().get(signature);
+        if (node != null) {
+            return node;
+        }
+
+        // 递归检查所有容器类型的子节点
+        for (ScrScriptNode child : container.getChildren().values()) {
+            if (child instanceof ScrContainerScriptNode childContainer) {
+                ScrScriptNode found = findNodeBySignature(childContainer, signature);
+                if (found != null) {
+                    return found;
                 }
             }
         }
+
+        return null;
     }
 
     /**

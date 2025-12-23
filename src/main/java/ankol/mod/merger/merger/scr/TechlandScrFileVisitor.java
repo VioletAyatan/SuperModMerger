@@ -104,9 +104,11 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         String funcName = ctx.Id().getText();
         // 提取参数字符串，用于区分不同的块。
         String rawParams = (ctx.valueList() != null) ? getFullText(ctx.valueList()) : "";
+        String signature = FUN_BLOCK + ":" + funcName;
         String cleanParams = rawParams.replaceAll("\\s+", "");
-        // 签名示例: "block:Jump:"Normal""
-        String signature = FUN_BLOCK + ":" + funcName + ":" + cleanParams;
+        if (!cleanParams.isEmpty()) {
+            signature += ":" + cleanParams;
+        }
         ScrContainerScriptNode blockNode = new ScrContainerScriptNode(
                 signature,
                 ctx.start.getStartIndex(),

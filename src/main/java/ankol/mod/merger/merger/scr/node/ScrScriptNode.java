@@ -1,5 +1,6 @@
 package ankol.mod.merger.merger.scr.node;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
@@ -12,6 +13,7 @@ public abstract class ScrScriptNode {
     protected int line; //行号
 
     // 新增：保存 Mod 文件里的原始文本（用于替换 Base 时直接搬运，带注释）
+    @JsonIgnore
     protected String sourceText;
 
     public ScrScriptNode(String signature, int startIndex, int stopIndex, int line, String sourceText) {
