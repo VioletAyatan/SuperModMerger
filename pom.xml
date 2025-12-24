@@ -152,6 +152,9 @@
                     <imageName>${project.build.finalName}</imageName>
                     <verbose>true</verbose>
                     <mainClass>${main.class}</mainClass>
+                    <metadataRepository>
+                        <enabled>true</enabled>
+                    </metadataRepository>
                     <agent>
                         <enabled>true</enabled>
                     </agent>
