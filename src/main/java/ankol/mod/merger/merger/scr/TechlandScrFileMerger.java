@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.TokenStreamRewriter;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,15 +31,23 @@ public class TechlandScrFileMerger extends FileMerger {
      */
     private final List<ConflictRecord> conflicts = new ArrayList<>();
     private final List<EditOp> finalEdits = new ArrayList<>();
+
     /**
      * Parse 缓存，避免重复解析相同内容的文件
+     * 存储 ParseResult 包含 AST 和 TokenStream
      */
-    private static final Map<String, ScrContainerScriptNode> PARSE_CACHE = new WeakHashMap<>();
+    private static final Map<String, ParseResult> PARSE_CACHE = new WeakHashMap<>();
 
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
      */
     private ScrContainerScriptNode originalBasModRoot = null;
+
+    /**
+     * 解析结果包装类，包含AST和TokenStream
+     */
+    private record ParseResult(ScrContainerScriptNode astNode, CommonTokenStream tokens) {
+    }
 
     public TechlandScrFileMerger(MergerContext context) {
         super(context);
@@ -50,16 +59,20 @@ public class TechlandScrFileMerger extends FileMerger {
             // 解析基准MOD文件（如果存在）
             if (context.getOriginalBaseModContent() != null) {
                 String contentHash = computeHash(context.getOriginalBaseModContent());
-                ScrContainerScriptNode cached = PARSE_CACHE.get(contentHash);
+                ParseResult cached = PARSE_CACHE.get(contentHash);
                 if (cached != null) {
-                    originalBasModRoot = cached;
+                    originalBasModRoot = cached.astNode;
                 } else {
-                    originalBasModRoot = parse(context.getOriginalBaseModContent());
-                    PARSE_CACHE.put(contentHash, originalBasModRoot);
+                    ParseResult result = parseContent(context.getOriginalBaseModContent());
+                    originalBasModRoot = result.astNode;
+                    PARSE_CACHE.put(contentHash, result);
                 }
             }
-            ScrContainerScriptNode baseRoot = parseTree(Path.of(file1.getFullPathName()));
-            ScrContainerScriptNode modRoot = parseTree(Path.of(file2.getFullPathName()));
+            // 解析base和mod文件，保留TokenStream
+            ParseResult baseResult = parseFile(Path.of(file1.getFullPathName()));
+            ParseResult modResult = parseFile(Path.of(file2.getFullPathName()));
+            ScrContainerScriptNode baseRoot = baseResult.astNode;
+            ScrContainerScriptNode modRoot = modResult.astNode;
             // 递归对比，找到冲突项
             reduceCompare(originalBasModRoot, baseRoot, modRoot);
             //第一个mod与原版文件的对比，直接使用MOD修改的版本，不提示冲突
@@ -71,24 +84,8 @@ public class TechlandScrFileMerger extends FileMerger {
                 // 正常情况下，提示用户解决冲突
                 resolveConflictsInteractively();
             }
-            // 3. 将用户选择的 Mod 代码转化为 EditOp
-            for (ConflictRecord record : conflicts) {
-                //选择第1位时不用变
-                if (record.getUserChoice() == 2) { // 用户选择了 Mod
-                    finalEdits.add(new EditOp(
-                            record.getBaseNode().getStartIndex(),
-                            record.getBaseNode().getStopIndex() + 1,
-                            record.getModNode().getSourceText()
-                    ));
-                }
-            }
-            // 4. 应用所有修改 (从后往前)
-            Collections.sort(finalEdits);
-            StringBuilder sb = new StringBuilder(baseRoot.getSourceText());
-            for (EditOp op : finalEdits) {
-                sb.replace(op.getStart(), op.getEnd(), op.getText());
-            }
-            return new MergeResult(sb.toString(), !conflicts.isEmpty());
+            String mergedContent = getMergedContent(baseResult);
+            return new MergeResult(mergedContent, !conflicts.isEmpty());
         } catch (Exception e) {
             log.error(StrUtil.format("Error during SCR file merge: {} Reason: {}", file1.getFullPathName(), e.getMessage()), e);
             throw new BusinessException("文件" + file1.getFullPathName() + "合并失败");
@@ -98,6 +95,39 @@ public class TechlandScrFileMerger extends FileMerger {
             finalEdits.clear();
             originalBasModRoot = null;
         }
+    }
+
+    private String getMergedContent(ParseResult baseResult) {
+        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
+
+        // 处理冲突节点的替换
+        for (ConflictRecord record : conflicts) {
+            if (record.getUserChoice() == 2) { // 用户选择了 Mod
+                ScrScriptNode baseNode = record.getBaseNode();
+                ScrScriptNode modNode = record.getModNode();
+
+                // 直接使用节点中存储的token索引
+                rewriter.replace(
+                        baseNode.getStartTokenIndex(),
+                        baseNode.getStopTokenIndex(),
+                        modNode.getSourceText()
+                );
+            }
+        }
+
+        // 处理新增节点（插入操作）
+        for (EditOp op : finalEdits) {
+            if (op.getStartTokenIndex() == op.getEndTokenIndex()) {
+                // 插入操作：使用字符位置找到对应的token
+                // 这里仍需要转换，因为EditOp存储的是字符索引
+                int tokenIndex = op.getStartTokenIndex();
+                if (tokenIndex >= 0) {
+                    rewriter.insertBefore(tokenIndex, op.getText());
+                }
+            }
+        }
+        // 获取重写后的文本
+        return rewriter.getText();
     }
 
     private void reduceCompare(ScrContainerScriptNode originalContainer, ScrContainerScriptNode baseContainer, ScrContainerScriptNode modContainer) {
@@ -257,7 +287,7 @@ public class TechlandScrFileMerger extends FileMerger {
     private void handleInsertion(ScrContainerScriptNode baseContainer, ScrScriptNode modNode) {
         // 插入位置：Base 容器的 '}' 之前
         // baseContainer.getStopIndex() 指向 '}' 字符的位置
-        int insertPos = baseContainer.getStopIndex();
+        int insertPos = baseContainer.getStopTokenIndex();
         String newContent = "\n    " + modNode.getSourceText();
         finalEdits.add(new EditOp(insertPos, insertPos, newContent));
     }
@@ -266,19 +296,19 @@ public class TechlandScrFileMerger extends FileMerger {
      * 将MOD文件解析成语法树
      *
      * @param filePath 文件路径
-     * @return 解析后的 AST 树
+     * @return 解析后的 ParseResult（包含AST和TokenStream）
      * @throws IOException 如果文件不可读
      */
-    private static ScrContainerScriptNode parseTree(Path filePath) throws IOException {
+    private static ParseResult parseFile(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = computeHash(content);
         // 先查缓存
-        ScrContainerScriptNode cached = PARSE_CACHE.get(contentHash);
+        ParseResult cached = PARSE_CACHE.get(contentHash);
         if (cached != null) {
             return cached;
         }
         // 缓存未命中，执行解析
-        ScrContainerScriptNode result = parse(content);
+        ParseResult result = parseContent(content);
         // 存入缓存
         PARSE_CACHE.put(contentHash, result);
         return result;
@@ -302,13 +332,44 @@ public class TechlandScrFileMerger extends FileMerger {
         }
     }
 
-    private static ScrContainerScriptNode parse(String content) throws IOException {
+    /**
+     * 解析字符串内容为ParseResult
+     */
+    private static ParseResult parseContent(String content) {
         CharStream input = CharStreams.fromString(content);
         TechlandScriptLexer lexer = new TechlandScriptLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TechlandScriptParser parser = new TechlandScriptParser(tokens);
         TechlandScrFileVisitor visitor = new TechlandScrFileVisitor();
         // 注意：visitFile 返回的一定是我们定义的 ROOT Container
-        return (ScrContainerScriptNode) visitor.visitFile(parser.file());
+        ScrContainerScriptNode ast = (ScrContainerScriptNode) visitor.visitFile(parser.file());
+        return new ParseResult(ast, tokens);
+    }
+
+    /**
+     * 根据字符位置查找对应的token索引
+     *
+     * @param tokens       TokenStream
+     * @param charPosition 字符位置
+     * @return token索引，如果找不到返回-1
+     */
+    private static int getTokenIndexAtCharPosition(CommonTokenStream tokens, int charPosition) {
+        tokens.fill(); // 确保所有token都已加载
+        for (int i = 0; i < tokens.size(); i++) {
+            org.antlr.v4.runtime.Token token = tokens.get(i);
+            int start = token.getStartIndex();
+            int stop = token.getStopIndex();
+            if (charPosition >= start && charPosition <= stop) {
+                return i;
+            }
+        }
+        // 如果找不到精确匹配，返回最接近的token
+        for (int i = 0; i < tokens.size(); i++) {
+            org.antlr.v4.runtime.Token token = tokens.get(i);
+            if (token.getStartIndex() >= charPosition) {
+                return i;
+            }
+        }
+        return tokens.size() - 1; // 返回最后一个token
     }
 }

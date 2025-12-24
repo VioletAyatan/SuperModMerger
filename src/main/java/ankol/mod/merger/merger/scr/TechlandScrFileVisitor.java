@@ -29,13 +29,27 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
     private ScrContainerScriptNode containerNode;
 
     /**
+     * 获取context的起始token索引
+     */
+    private int getStartTokenIndex(ParserRuleContext ctx) {
+        return ctx.start.getTokenIndex();
+    }
+
+    /**
+     * 获取context的结束token索引
+     */
+    private int getStopTokenIndex(ParserRuleContext ctx) {
+        return ctx.stop.getTokenIndex();
+    }
+
+    /**
      * 根文件
      */
     @Override
     public ScrScriptNode visitFile(TechlandScriptParser.FileContext ctx) {
         ScrContainerScriptNode rootNode = new ScrContainerScriptNode("ROOT",
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.getStart().getLine(),
                 getFullText(ctx)
         );
@@ -57,8 +71,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         String signature = IMPORT + ":" + path;
         return new ScrLeafScriptNode(
                 signature,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.start.getLine(),
                 getFullText(ctx)
         );
@@ -72,8 +86,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         String signature = EXPORT + ":" + name;
         return new ScrLeafScriptNode(
                 signature,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.start.getLine(),
                 getFullText(ctx)
         );
@@ -88,8 +102,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         // 这里的 getFullText 获取的是 "sub main() { ... }" 整个一大块字符串
         ScrContainerScriptNode subNode = new ScrContainerScriptNode(
                 signature,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.start.getLine(),
                 getFullText(ctx)
         );
@@ -111,8 +125,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         }
         ScrContainerScriptNode blockNode = new ScrContainerScriptNode(
                 signature,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.start.getLine(),
                 getFullText(ctx)
         );
@@ -169,6 +183,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
                 signature,
                 ctx.start.getStartIndex(),
                 ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.start.getLine(),
                 getFullText(ctx),
                 funcName,
@@ -208,8 +224,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         }
         return new ScrLeafScriptNode(
                 signature,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.start.getLine(),
                 getFullText(ctx)
         );
@@ -220,8 +236,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         TerminalNode macroId = ctx.MacroId(); //Like: $Police_parking_dead_zone
         String signature = MACRO + ":" + macroId.getText();
         return new ScrLeafScriptNode(signature,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.start.getLine(),
                 getFullText(ctx)
         );
@@ -234,8 +250,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         String name = ctx.type() + ":" + ctx.Id().getText();
         return new ScrLeafScriptNode(
                 VARIABLE + ":" + name,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.start.getLine(),
                 getFullText(ctx)
         );
@@ -251,8 +267,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
 
         return new ScrLeafScriptNode(
                 USE + ":" + name + ":" + cleanParams,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
+                getStartTokenIndex(ctx),
+                getStopTokenIndex(ctx),
                 ctx.start.getLine(),
                 getFullText(ctx)
         );
@@ -278,3 +294,4 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         return valueList;
     }
 }
+

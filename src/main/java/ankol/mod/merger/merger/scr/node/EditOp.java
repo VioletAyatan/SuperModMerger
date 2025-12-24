@@ -17,27 +17,19 @@ public class EditOp implements Comparable<EditOp> {
      * 冲突文本
      */
     private String conflitText;
-    private int start;
-    private int end;     // start == end 为插入，start < end 为替换
+    private int startTokenIndex;
+    private int endTokenIndex;     // start == end 为插入，start < end 为替换
     private String text; // 要写入的新文本
 
-    public EditOp(String originalText, String conflitText, int start, int end, String text) {
-        this.originalText = originalText;
-        this.conflitText = conflitText;
-        this.start = start;
-        this.end = end;
-        this.text = text;
-    }
-
-    public EditOp(int start, int end, String text) {
-        this.start = start;
-        this.end = end;
+    public EditOp(int startTokenIndex, int endTokenIndex, String text) {
+        this.startTokenIndex = startTokenIndex;
+        this.endTokenIndex = endTokenIndex;
         this.text = text;
     }
 
     // 倒序排序：优先修改文件末尾，防止坐标偏移
     @Override
     public int compareTo(EditOp other) {
-        return Integer.compare(other.start, this.start);
+        return Integer.compare(other.startTokenIndex, this.startTokenIndex);
     }
 }
