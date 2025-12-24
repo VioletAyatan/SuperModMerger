@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration debug="false">
     <!-- 定义变量 -->
     <property name="LOG_FILE" value="logs/app.log"/>
-    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
 
     <!-- 控制台输出（STDOUT） -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -49,19 +49,5 @@
     <!-- 特定包的日志级别 -->
     <logger name="ankol.mod.merger" level="INFO"/>
     <logger name="cn.hutool" level="WARN"/>
-
-    <!-- Spring Boot 特定配置（可选） -->
-    <springProfile name="dev">
-        <root level="DEBUG">
-            <appender-ref ref="STDOUT"/>
-            <appender-ref ref="ASYNC_FILE"/>
-        </root>
-    </springProfile>
-
-    <springProfile name="prod">
-        <root level="WARN">
-            <appender-ref ref="ASYNC_FILE"/>
-        </root>
-    </springProfile>
 </configuration>
 

@@ -5,6 +5,7 @@ import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,6 +25,7 @@ import java.util.*;
  *
  * @author Ankol
  */
+@Slf4j
 public class BaseModAnalyzer {
 
     /**
@@ -172,8 +174,12 @@ public class BaseModAnalyzer {
             return false;
         }
         String fileName = extractFileName(filePath);
-        String correctPath = indexedBaseModFileMap.get(fileName).getFullPathName();
-
+        FileTree fileTree = indexedBaseModFileMap.get(fileName);
+        if (fileTree == null) {
+            log.warn("File not found in base mod: {}-{}", filePath, fileName);
+            return false;
+        }
+        String correctPath = fileTree.getFullPathName();
         return correctPath != null && !correctPath.equalsIgnoreCase(filePath);
     }
 
