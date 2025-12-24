@@ -139,4 +139,25 @@ public abstract class Tools {
             }
         }
     }
+
+    /**
+     * 计算字符串内容的 SHA-256 哈希值
+     *
+     * @param content 要计算哈希的内容
+     * @return 哈希值的十六进制字符串
+     */
+    public static String computeHash(String content) {
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(content.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            // 作为备选方案，使用 hashCode()（虽然不如 SHA-256 安全，但足以识别大多数不同的内容）
+            return String.valueOf(content.hashCode());
+        }
+    }
 }

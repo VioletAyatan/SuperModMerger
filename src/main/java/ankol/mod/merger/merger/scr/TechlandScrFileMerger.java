@@ -10,6 +10,7 @@ import ankol.mod.merger.merger.scr.node.*;
 import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Localizations;
+import ankol.mod.merger.tools.Tools;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
@@ -20,8 +21,6 @@ import org.antlr.v4.runtime.TokenStreamRewriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Slf4j
@@ -30,7 +29,14 @@ public class TechlandScrFileMerger extends FileMerger {
      * 标记冲突项的容器
      */
     private final List<ConflictRecord> conflicts = new ArrayList<>();
-    private final List<EditOp> finalEdits = new ArrayList<>();
+
+    /**
+     * 插入操作记录
+     */
+    private record InsertOperation(int tokenIndex, String content) {
+    }
+
+    private final List<InsertOperation> insertOperations = new ArrayList<>();
 
     /**
      * Parse 缓存，避免重复解析相同内容的文件
@@ -58,7 +64,7 @@ public class TechlandScrFileMerger extends FileMerger {
         try {
             // 解析基准MOD文件（如果存在）
             if (context.getOriginalBaseModContent() != null) {
-                String contentHash = computeHash(context.getOriginalBaseModContent());
+                String contentHash = Tools.computeHash(context.getOriginalBaseModContent());
                 ParseResult cached = PARSE_CACHE.get(contentHash);
                 if (cached != null) {
                     originalBasModRoot = cached.astNode;
@@ -92,7 +98,7 @@ public class TechlandScrFileMerger extends FileMerger {
         } finally {
             //清理状态，准备下一个文件合并
             conflicts.clear();
-            finalEdits.clear();
+            insertOperations.clear();
             originalBasModRoot = null;
         }
     }
@@ -116,16 +122,10 @@ public class TechlandScrFileMerger extends FileMerger {
         }
 
         // 处理新增节点（插入操作）
-        for (EditOp op : finalEdits) {
-            if (op.getStartTokenIndex() == op.getEndTokenIndex()) {
-                // 插入操作：使用字符位置找到对应的token
-                // 这里仍需要转换，因为EditOp存储的是字符索引
-                int tokenIndex = op.getStartTokenIndex();
-                if (tokenIndex >= 0) {
-                    rewriter.insertBefore(tokenIndex, op.getText());
-                }
-            }
+        for (InsertOperation op : insertOperations) {
+            rewriter.insertBefore(op.tokenIndex, op.content);
         }
+
         // 获取重写后的文本
         return rewriter.getText();
     }
@@ -286,10 +286,9 @@ public class TechlandScrFileMerger extends FileMerger {
 
     private void handleInsertion(ScrContainerScriptNode baseContainer, ScrScriptNode modNode) {
         // 插入位置：Base 容器的 '}' 之前
-        // baseContainer.getStopIndex() 指向 '}' 字符的位置
         int insertPos = baseContainer.getStopTokenIndex();
         String newContent = "\n    " + modNode.getSourceText();
-        finalEdits.add(new EditOp(insertPos, insertPos, newContent));
+        insertOperations.add(new InsertOperation(insertPos, newContent));
     }
 
     /**
@@ -301,7 +300,7 @@ public class TechlandScrFileMerger extends FileMerger {
      */
     private static ParseResult parseFile(Path filePath) throws IOException {
         String content = Files.readString(filePath);
-        String contentHash = computeHash(content);
+        String contentHash = Tools.computeHash(content);
         // 先查缓存
         ParseResult cached = PARSE_CACHE.get(contentHash);
         if (cached != null) {
@@ -314,23 +313,6 @@ public class TechlandScrFileMerger extends FileMerger {
         return result;
     }
 
-    /**
-     * 计算字符串内容的 SHA-256 哈希值
-     */
-    private static String computeHash(String content) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(content.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hash) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            // 作为备选方案，使用 hashCode()（虽然不如 SHA-256 安全，但足以识别大多数不同的内容）
-            return String.valueOf(content.hashCode());
-        }
-    }
 
     /**
      * 解析字符串内容为ParseResult
@@ -344,32 +326,5 @@ public class TechlandScrFileMerger extends FileMerger {
         // 注意：visitFile 返回的一定是我们定义的 ROOT Container
         ScrContainerScriptNode ast = (ScrContainerScriptNode) visitor.visitFile(parser.file());
         return new ParseResult(ast, tokens);
-    }
-
-    /**
-     * 根据字符位置查找对应的token索引
-     *
-     * @param tokens       TokenStream
-     * @param charPosition 字符位置
-     * @return token索引，如果找不到返回-1
-     */
-    private static int getTokenIndexAtCharPosition(CommonTokenStream tokens, int charPosition) {
-        tokens.fill(); // 确保所有token都已加载
-        for (int i = 0; i < tokens.size(); i++) {
-            org.antlr.v4.runtime.Token token = tokens.get(i);
-            int start = token.getStartIndex();
-            int stop = token.getStopIndex();
-            if (charPosition >= start && charPosition <= stop) {
-                return i;
-            }
-        }
-        // 如果找不到精确匹配，返回最接近的token
-        for (int i = 0; i < tokens.size(); i++) {
-            org.antlr.v4.runtime.Token token = tokens.get(i);
-            if (token.getStartIndex() >= charPosition) {
-                return i;
-            }
-        }
-        return tokens.size() - 1; // 返回最后一个token
     }
 }

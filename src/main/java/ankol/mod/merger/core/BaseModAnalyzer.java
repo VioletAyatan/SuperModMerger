@@ -71,7 +71,6 @@ public class BaseModAnalyzer {
     public BaseModAnalyzer(Path baseModPath) {
         this.baseModPath = baseModPath;
         this.indexedBaseModFileMap = new LinkedHashMap<>();
-        this.baseModFilePaths = new LinkedHashSet<>();
         this.extractedFileCache = new LinkedHashMap<>();
         // 创建缓存目录：temp/BaseModCache_时间戳
         this.cacheDir = Path.of(Tools.getTempDir(), "BaseModCache_" + System.currentTimeMillis());
@@ -123,7 +122,7 @@ public class BaseModAnalyzer {
         }
 
         // 规范化路径（统一使用小写文件名查找）
-        String fileName = extractFileName(relPath).toLowerCase();
+        String fileName = Tools.getEntryFileName(relPath).toLowerCase();
         FileTree fileTree = indexedBaseModFileMap.get(fileName);
 
         if (fileTree == null) {
@@ -173,7 +172,7 @@ public class BaseModAnalyzer {
         if (!loaded) {
             return false;
         }
-        String fileName = extractFileName(filePath);
+        String fileName = Tools.getEntryFileName(filePath);
         FileTree fileTree = indexedBaseModFileMap.get(fileName);
         if (fileTree == null) {
             log.warn("File not found in base mod: {}-{}", filePath, fileName);
@@ -193,17 +192,10 @@ public class BaseModAnalyzer {
         if (!loaded) {
             return null;
         }
-        String fileName = extractFileName(filePath);
+        String fileName = Tools.getEntryFileName(filePath);
         return indexedBaseModFileMap.get(fileName).getFullPathName();
     }
 
-    /**
-     * 提取文件名的工具方法
-     */
-    private static String extractFileName(String path) {
-        int lastSlash = path.lastIndexOf("/");
-        return (lastSlash >= 0 ? path.substring(lastSlash + 1) : path).toLowerCase();
-    }
 
     /**
      * 清理临时文件缓存
