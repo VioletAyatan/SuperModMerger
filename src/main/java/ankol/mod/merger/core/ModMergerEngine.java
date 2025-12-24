@@ -1,8 +1,8 @@
 package ankol.mod.merger.core;
 
 import ankol.mod.merger.merger.MergeResult;
+import ankol.mod.merger.merger.MergerFactory;
 import ankol.mod.merger.tools.*;
-import cn.hutool.core.io.FileUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;

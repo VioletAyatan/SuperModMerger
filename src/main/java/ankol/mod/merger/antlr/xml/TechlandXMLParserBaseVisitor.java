@@ -1,5 +1,5 @@
 // Generated from xml/TechlandXMLParser.g4 by ANTLR 4.13.2
-package ankol.mod.merger.antlr4.xml;
+package ankol.mod.merger.antlr.xml;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**

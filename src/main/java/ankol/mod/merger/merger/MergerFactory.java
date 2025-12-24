@@ -1,5 +1,7 @@
-package ankol.mod.merger.core;
+package ankol.mod.merger.merger;
 
+import ankol.mod.merger.core.FileMerger;
+import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.merger.scr.TechlandScrFileMerger;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReflectUtil;

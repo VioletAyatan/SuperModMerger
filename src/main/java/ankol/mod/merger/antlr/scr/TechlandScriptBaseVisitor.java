@@ -1,5 +1,5 @@
 // Generated from TechlandScript.g4 by ANTLR 4.13.2
-package ankol.mod.merger.antlr4.scr;
+package ankol.mod.merger.antlr.scr;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
