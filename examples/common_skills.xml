@@ -1,0 +1,1096 @@
+<skill id="height_jump" cat="Agility" skill_points_type="Traversal">
+  <effect id="NormalHoldJumpTime" change="0.142" />
+  <effect id="AdvancedParkourNormalHoldJumpTime" change="0.112" />
+</skill>
+<skill id="firm_grip" cat="Agility" skill_points_type="Traversal">
+  <effect id="EdgeHeavyGrabFallHeight" change="5" />
+  <effect id="EdgeFailedGrabFallHeight" change="5" />
+  <effect id="AllowToJumpSoonerFromEdge" change="1" />
+</skill>
+<skill id="fast_climb" cat="Agility" skill_points_type="Traversal">
+</skill>
+<skill id="ledge_master" cat="Agility" skill_points_type="Traversal">
+  <effect id="ShimmyUpRange" change="0.5" />
+</skill>
+<skill id="slide_advanced" cat="Agility" skill_points_type="Traversal"> 
+  <effect id="SlideAvailable" change="1" />
+  <effect id="SlideLoopMinDuration" change="0.25" />
+  <effect id="SlideLoopMaxDuration" change="0.65" />
+  <effect id="SlideAttackLoop" change="1" />
+  <effect id="SlideStaminaUsage" change="-0.25" />
+</skill>
+<skill id="slide_jump" cat="Agility" skill_points_type="Traversal">
+  <effect id="SlideJumpAvailable" change="1" />
+</skill>
+<skill id="sleek_runner" cat="Agility" skill_points_type="Traversal">
+  <effect id="BalanceSlowdownMinDev" change="31" />
+  <effect id="CustomMoveSlowVersionIfExist" change="0" />
+  <effect id="LadderClimbSlow" change="0" />
+  <effect id="LadderSlideDownTime" dash="-0.3" />
+  <effect id="AllowSlopeStruggle" change="1.0" />
+  <effect id="MoveSlopeSpeed" change="0.35" />
+</skill>
+<skill id="dash_advanced" cat="Agility_ft" skill_points_type="Experience" skill_points="1">  
+  <skill_req
+    id="active_land" />
+  <float_var_req id="MaxStamina" val="1.8" text="&Req_Stamina_1.8&" />--> <effect
+    id="SprintNitro" change="1" />
+  <effect id="SprintNitroDuration" change="999.0" />  
+  <effect
+    id="SprintNitroStaminaConsuption" change="-0.2" />
+  <effect id="SprintNitroStartStaminaConsuption"
+    change="-0.4" />
+</skill>
+<skill id="ram" cat="Agility_ft" skill_points_type="Experience" skill_points="2"> 
+  <skill_req id="enemy_jump" />
+  <effect id="DashAttackAvailable" change="1" />
+</skill>
+<skill id="after_boost" cat="Agility_ft" skill_points_type="Experience" skill_points="2">
+  <skill_req id="enemy_jump" />
+  <effect id="AfterBoostEnabled" change="1" />
+</skill>
+<skill id="efficient_driving" cat="Survival_ft" skill_points_type="Experience" skill_points="1">
+  <skill_req id="improved_stealth" />
+  <effect id="EfficientDrivingFuelBurnMul" change="-0.5" />
+</skill>
+<skill id="enhanced_regeneration" cat="Exp" skill_points_type="Experience" skill_points="1"
+  visible="false">
+  <effect id="EnhancedRegenerationStaminaMul" change="1" />
+</skill>
+<skill id="efficient_fighting" cat="Power_ft" skill_points_type="Experience" skill_points="2">
+  <skill_req id="advanced_reload" />
+  <effect id="EfficientFightingDurabilityLostMul" change="-0.5" />
+</skill>
+<skill id="collision_expert" cat="Survival_ft" skill_points_type="Experience" skill_points="2">
+  <skill_req id="new_throwable" />
+  <effect id="CollisionExpertEnabled" change="1" />
+</skill>
+<skill id="improved_stealth" cat="Survival_ft" skill_points_type="Experience" skill_points="1">
+  <effect id="ImprovedStealthRecognitionTimeMul" change="0.5" />
+</skill>
+<skill id="camouflage_skill" cat="Survival_ft" skill_points_type="Experience" skill_points="3">
+  <skill_req_or ids="collision_expert;grenade_launcher" />
+  <effect id="CamouflageSkillEnabled" change="1" />
+</skill>
+<skill id="flamethrower" cat="Survival_ft" skill_points_type="Experience" skill_points="1">
+  <skill_req id="improved_stealth" />
+</skill>
+<skill id="grenade_launcher" cat="Survival_ft" skill_points_type="Experience" skill_points="2">
+  <skill_req id="new_throwable" />
+</skill>
+<skill id="new_throwable" cat="Survival_ft" skill_points_type="Experience" skill_points="2">
+  <skill_req_or ids="flamethrower;efficient_driving" />
+</skill>
+<skill id="charged_kick" cat="Power_ft" skill_points_type="Experience" skill_points="1">
+  <skill_req id="wrestle_kick" />
+  <effect id="ChargedKickEnabled" change="1" />
+</skill>
+<skill id="slide_kick" cat="Agility_ft" skill_points_type="Experience" skill_points="1"
+  visible="false">
+  <skill_req id="grapple_throw" />
+  <effect id="SlideKickAvailable" change="1" />
+</skill>
+<skill id="advanced_reload" cat="Power_ft" skill_points_type="Experience" skill_points="2">
+  <skill_req_or ids="charged_kick;power_shot" />
+  <effect id="AdvancedReloadEnabled" change="1" />
+</skill>
+<skill id="vertical_wall_run" cat="Agility" skill_points_type="Traversal">
+  <effect id="WallRunFrontEnabled" change="1" />
+</skill>
+<skill id="horizontal_wall_run" cat="Agility" skill_points_type="Traversal">
+  <effect id="WallRunSideEnabled" change="1" />
+</skill>
+<skill id="wall_run_jump" cat="Agility" skill_points_type="Traversal">
+  <effect id="WallJumpFrontEnabled" change="1" />
+  <effect id="WallJumpFrontRotateEnabled" change="1" />
+</skill>
+<skill id="wall_jump_sequence" cat="Agility" skill_points_type="Traversal">
+  <effect id="WallRunMaxSequence" change="1" />
+</skill>
+<skill id="active_land" cat="Agility_ft" skill_points_type="Experience" skill_points="1">
+  <effect id="EnableControlledActiveLanding" change="1" />
+</skill>
+<skill id="active_land2" cat="Agility" skill_points_type="Traversal">  
+  <effect id="HarmfulHeight" change="2" />
+  <effect id="LethalHeight" change="4" />
+  <effect id="AmortizedHarmfulHeight" change="4" />
+  <effect id="AmortizedLethalHeight" change="4" />
+  <effect id="PassiveLandingLevel1Height" change="2.5" />
+  <effect id="PassiveLandingLevel2Height" change="2.75" />
+  <effect id="PassiveLandingLevel3Height" change="3.0" />
+</skill>
+<skill id="advanced_crouch" cat="Agility" skill_points_type="Traversal">
+  <effect id="CrouchForwardMinSpeed" change="0.2" />
+  <effect id="CrouchForwardMaxSpeed" change="0.75" />
+  <effect id="CrouchBackwardMaxSpeed" change="0.8" />
+  <effect id="CrouchStrafeMinSpeed" change="0.2" />
+  <effect id="CrouchStrafeMaxSpeed" change="0.75" />
+  <effect id="CrouchAcceleration" change="5.0" />
+  <effect id="CrouchDeceleration" change="5.0" />
+  <effect id="CrouchMoveForwardDeceleration" change="4.1" />
+  <effect id="EnableMutedLanding" change="1" />
+  <effect id="AwakeFactorInCrouch" change="0.5" />
+</skill>
+<skill id="far_jump" cat="Agility" skill_points_type="Traversal">
+  <effect id="FarJumpAvailable" change="1" />
+</skill>
+<skill id="double_jump" cat="Agility" skill_points_type="Traversal">
+  <effect id="DoubleJumpInOverAndOn" change="1" />
+</skill>
+<skill id="rotate_jump" cat="Agility" skill_points_type="Traversal">
+  <effect id="JumpRotateAvailable" change="1" />
+</skill>
+<skill id="enemy_jump" cat="Agility_ft" skill_points_type="Experience" skill_points="2">
+  <skill_req_or ids="parkour_combat;dash_advanced" />
+  <effect id="BounceOffHeadInDashAvailable" change="1" />
+</skill>
+<skill id="parkour_combat" cat="Agility_ft" skill_points_type="Experience" skill_points="1"> 
+  <skill_req id="active_land" />
+  <effect id="BounceOffHeadAvailable" change="1" />
+  <effect id="VaultKickEnabled" change="1" />
+</skill>
+<skill id="perfect_block" cat="Power" skill_points_type="Combat">
+  <effect id="PerfectBlockStaminaMul" change="-1.0" />
+  <effect id="PerfectBlockStaggerDuration" change="0.1" />
+</skill>
+<skill id="jump_attack" cat="Power" skill_points_type="Combat">
+  <effect id="DropAttackEnable" change="1" />
+  <effect id="DropAttackShockwaveEnabled" change="1" />
+</skill>
+<skill id="wrestle_kick" cat="Power_ft" skill_points_type="Experience" skill_points="1"> 
+  <effect id="WrestlingKick" change="1" />
+</skill>
+<skill id="stomp" cat="Power_ft" skill_points_type="Experience" skill_points="2">
+  <skill_req id="advanced_reload" />
+  <effect id="StompLevel" change="2" />
+</skill>
+<skill id="power_attack" cat="Power" skill_points_type="Combat">
+  <effect id="ChargeAttack" change="1" />
+</skill>
+<skill id="windmill" cat="Power_ft" skill_points_type="Experience" skill_points="3">
+  <skill_req_or ids="stomp;efficient_fighting" />
+  <effect id="WhirlwindCharge" change="1" />
+</skill>
+<skill id="ground_pound" cat="Power" skill_points_type="Combat">
+  <effect id="GroundPound" change="1" />
+</skill>
+<skill id="ranged_mastery" cat="Power" skill_points_type="Combat"> 
+  <effect id="ThrowParabolaEnabled" change="1" />
+  <effect id="BowZoomEnabled" change="1" />
+  <effect id="ThrowablesSpeedFactor" change="0.30" />
+  <effect id="BowMaxThrowFactor" change="0.15" />
+  <effect id="BowAutoReleaseTime" change="-2.0" />
+  <effect id="FirearmsZoomEnabled" change="1" />
+</skill>
+<skill id="parkour_ranged" cat="Agility_ft" skill_points_type="Experience" skill_points="3"> 
+  <skill_req_or ids="ram;after_boost" />
+  <effect id="EnableSlowMoThrowingWhileParkouring" change="1" />
+  <effect id="BowEnableSlowMoShootWhileParkouring" change="1" />
+  <effect id="FirearmEnableSlowMoShootWhileParkouring" change="1" />
+</skill>
+<skill id="power_shot" cat="Power_ft" skill_points_type="Experience" skill_points="1">
+  <skill_req id="wrestle_kick" />
+  <effect id="BowSwayAmplitudeFactor" change="-0.5" />
+  <effect id="BowSwayPosTime" change="2" />
+  <effect id="BowPutArrowDuration" change="-0.233" />
+  <effect id="BowBeginDurationFactor" change="-1" />
+  <effect id="BowPenetrationEnabled" change="1" />
+  <effect id="BowEnableDamageScalingByForce" change="1" />
+  <effect id="BowPowerShotEnabled" change="1" />
+  <effect id="BowMaxThrowFactor" change="0.2" />
+  <effect id="FirearmsPowerShotEnablePenetration" change="1" />
+  <effect id="FirearmsPowerShotTime" change="0.75" />
+</skill>
+<skill id="multiple_shots" cat="Power" skill_points_type="Combat">
+  <effect id="ThrowingMultiAutoAimAngle" change="30" />
+  <effect id="ThrowingMultiSkillTargetVisConeAngle" change="25" />
+  <effect id="ThrowingMultiSkillMaxEnemies" change="2.0" />
+</skill>
+<skill id="perfect_dodge" cat="Power" skill_points_type="Combat">
+  <effect id="PerfectDodgeStaggersDuration" change="2.0" />
+</skill>
+<skill id="grapple_throw" cat="Power" skill_points_type="Combat"> 
+  <effect id="NagewazaEnable" change="1" />
+  <effect id="NagewazaThrowEnabled" change="1" />
+</skill>
+<skill id="silent_takedown" cat="Power" skill_points_type="Combat">
+  <effect id="FinisherBackWithItemEnabled" change="1" />
+</skill>
+<skill id="ledge_takedown" cat="Power" skill_points_type="Combat">
+  <effect id="FinisherBackLedgeEnabled" change="1" />
+</skill>
+<skill id="air_takedown" cat="Power" skill_points_type="Combat">
+  <effect id="AirTakedownEnabled" change="1" />
+</skill>
+<skill id="air_takedown_shockwave" cat="Power" skill_points_type="Combat">
+  <effect id="DeathFromAboveJumpAvailable" change="1" />
+</skill>
+<skill id="first_strike" cat="ItemUpgrade" visible="false">
+  <effect id="FirstStrikeEnabled" change="1" />
+</skill>
+<skill id="run_faster" cat="Agility" visible="false">
+  <effect id="MoveSprintSpeed" change="1" />
+  <effect id="MoveAcceleration" change="20" />
+</skill>
+<skill id="LevelUpDifficulty" cat="ItemUpgrade" visible="false" max_level="5"
+  serialize_on_save="false">
+  <effect id="MaxStamina" change="0.2" />
+  <effect id="MaxHealth" change="#LevelUpUpgradeHealth" />
+</skill>
+<skill id="Binoculars" cat="Tools">
+  <effect id="BinocularsLevel" change="1" />
+</skill>
+<skill id="Binoculars_2" cat="Tools">
+  <effect id="BinocularsLevel" change="1" />
+</skill>
+<skill id="Binoculars_3" cat="Tools">
+  <effect id="BinocularsLevel" change="1" />
+</skill>
+<skill id="Binoculars_4" cat="Tools">
+  <effect id="BinocularsLevel" change="1" />
+</skill>
+<skill id="UV_Flashlight" cat="Tools">
+  <effect id="UVFlashlightLevel" change="1" />
+</skill>
+<skill id="UV_Flashlight_2" cat="Tools">
+  <effect id="UVFlashlightLevel" change="1" />
+</skill>
+<skill id="UV_Flashlight_3" cat="Tools">
+  <effect id="UVFlashlightLevel" change="1" />
+</skill>
+<skill id="UV_Flashlight_4" cat="Tools">
+</skill>
+<skill id="UV_Flashlight_5" cat="Tools">
+</skill>
+<skill id="Player_Backward_Speed_Test_01" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="0.0" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="0.0" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="-0.05" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="-0.1" /> // Default 2.0 </skill>
+<skill id="Player_Backward_Speed_Test_02" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="0.0" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="0.0" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="-0.05" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="-0.2" /> // Default 2.0 </skill>
+<skill id="Player_Backward_Speed_Test_03" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="0.0" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="0.0" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="-0.05" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="-0.3" /> // Default 2.0 </skill>
+<skill id="Player_Backward_Speed_Test_04" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="0.0" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="0.0" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="-0.07" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="-0.4" /> // Default 2.0 </skill>
+<skill id="Player_Backward_Speed_Test_05" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="0.0" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="0.0" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="-0.1" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="-0.5" /> // Default 2.0 </skill>
+<skill id="Player_Backward_Speed_Test_06" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="0.0" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="0.0" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="-0.12" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="-0.6" /> // Default 2.0 </skill>
+<skill id="Player_Strafe_Speed_Test_01" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="0.0" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="-0.1" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="0.0" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="0.0" /> // Default 2.0 </skill>
+<skill id="Player_Strafe_Speed_Test_02" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="-0.05" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="-0.2" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="0.0" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="0.0" /> // Default 2.0 </skill>
+<skill id="Player_Strafe_Speed_Test_03" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="-0.06" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="-0.3" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="0.0" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="0.0" /> // Default 2.0 </skill>
+<skill id="Player_Strafe_Speed_Test_04" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="-0.08" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="-0.4" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="0.0" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="0.0" /> // Default 2.0 </skill>
+<skill id="Player_Strafe_Speed_Test_05" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="-0.1" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="-0.5" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="0.0" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="0.0" /> // Default 2.0 </skill>
+<skill id="Player_Strafe_Speed_Test_06" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="-0.1" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="-0.6" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="0.0" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="0.0" /> // Default 2.0 </skill>
+<skill id="Player_Strafe_Speed_Test_07" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="-0.1" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="-0.7" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="0.0" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="0.0" /> // Default 2.0 </skill>
+<skill id="Player_Strafe_Speed_Test_08" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="AimBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="AimBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimStrafeMaxSpeed" change="-1.25" /> // Default 2.5 <effect id="CrouchBackwardMinSpeed"
+    change="-0.5" /> // Default 1.0 <effect id="CrouchBackwardMaxSpeed" change="-0.4" /> // Default
+  0.8 <effect id="CrouchStrafeMinSpeed" change="-0.15" /> // Default 0.3 <effect
+    id="CrouchStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect id="AimCrouchBackwardMinSpeed"
+    change="-0.25" /> // Default 0.5 <effect id="AimCrouchBackwardMaxSpeed" change="-0.75" /> //
+  Default 1.5 <effect id="AimCrouchStrafeMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="AimCrouchStrafeMaxSpeed" change="-0.75" /> // Default 1.5 <effect
+    id="AttackMoveBackwardMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="AttackMoveStrafeMaxSpeed" change="-0.5" /> // Default 1.0 <effect
+    id="ChargeMoveBackwardMinSpeed" change="-0.25" /> // Default 0.5 <effect
+    id="ChargeMoveBackwardMaxSpeed" change="-1.0" /> // Default 2.0 <effect id="MoveStrafeMinSpeed"
+    change="-0.12" /> // Default 0.5 <effect id="MoveStrafeMaxSpeed" change="-0.8" /> // Default 3.0 <effect
+    id="MoveBackwardMinSpeed" change="0.0" /> // Default 0.5 <effect id="MoveBackwardMaxSpeed"
+    change="0.0" /> // Default 2.0 </skill>
+<skill id="GrappleHook" cat="Tools">
+  <effect id="GrappleSwingEnabled" change="1" />
+  <effect id="GrappleHookLevel" change="1" />
+</skill>
+<skill id="GrappleHook_2" cat="Tools">
+  <effect id="GrapplePullEnabled" change="1" />
+  <effect id="GrappleHookLevel" change="1" />
+  <skill_req id="GrappleHook" />
+</skill>
+<skill id="GrappleHook_3" cat="Tools">
+  <effect id="GrapplePullEnemyEnabled" change="1" />
+  <effect id="GrappleHookLevel" change="1" />
+  <skill_req id="GrappleHook_2" />
+</skill>
+<skill id="Loadout_1" cat="Loadout">
+  <effect id="UnlockedLoadoutsCount" change="1" />
+</skill>
+<skill id="Loadout_2" cat="Loadout">
+  <effect id="UnlockedLoadoutsCount" change="1" />
+</skill>
+<skill id="Loadout_3" cat="Loadout">
+  <effect id="UnlockedLoadoutsCount" change="1" />
+</skill>
+<skill id="Loadout_4" cat="Loadout">
+  <effect id="UnlockedLoadoutsCount" change="1" />
+</skill>
+<skill id="Loadout_5" cat="Loadout">
+  <effect id="UnlockedLoadoutsCount" change="1" />
+</skill>
+<skill id="BiohazardMask" cat="Tools" max_level="4">
+</skill>
+<skill id="SurvivalSenseSkillDisable" cat="ItemUpgrade">
+  <effect id="SurvivalSenseEnabled" change="0" />
+</skill>
+<skill id="SurvivalSenseSkillEnable" cat="ItemUpgrade">
+  <effect id="SurvivalSenseEnabled" change="1" />
+</skill>
+<skill id="NightRunnerSegment1Skill" cat="ItemUpgrade" visible="false">
+  <effect id="CanBlockBlast" change="1" />
+  <effect id="CanBlockRam" change="1" />
+  <effect id="CanBlockPowerAttack" change="1" />
+  <effect id="CanBlockWithFistsOtherWeapons" change="1" />
+  <effect id="ToxinsImmunity" change="1" />
+  <effect id="PerfectBlockActionEnabled" change="1" />
+  <effect id="ForceGivingHeavyDamage" change="1" />
+  <effect id="NightRunnerRagdollProbability" change="1.0" />
+  <effect id="NightRunnerItemForced" change="1" />
+  <effect id="ReduceReactionsSeverity" change="1" />
+  <effect id="NightVisionEnabled" change="0.1" />
+  <effect id="InfiniteStamina" change="1" />
+  <effect id="AdditionalMeleeAimTargetFinderRange" change="4.0" />
+  <effect id="BlockHitReactionKnockdown" change="1" />
+  <effect id="NightRunnerDisableSurvivalSense" change="1" />
+  <effect id="NightRunnerDisableEquipmentUse" change="1" />
+</skill>
+<skill id="NightRunnerSegment2Skill" cat="ItemUpgrade" visible="false">
+  <effect id="NightRunnerHealthRegen" change="#HealthRegenNightRunner" />
+  <effect id="NightRunnerRagdollProbability" change="0.25" />
+  <effect id="NightRunnerDamageResistance" change="#DamageResistanceNightRunner" />
+</skill>
+<skill id="NightRunnerSegment3Skill" cat="ItemUpgrade" visible="false">
+  <effect id="HiglightNearEnemies" change="0" />
+  <effect id="EnableTackleOnUseItems" change="1" />
+  <effect id="WallRunFrontHeight" change="1.5" />
+  <effect id="HarmfulHeight" change="45" />
+  <effect id="LethalHeight" change="45" />
+  <effect id="AmortizedHarmfulHeight" change="45" />
+  <effect id="AmortizedLethalHeight" change="45" />
+  <effect id="HoldJumpHeight" change="9" />
+  <effect id="NormalHoldJumpTime" change="0.33" />
+  <effect id="AdvancedParkourNormalHoldJumpTime" change="0.33" />
+  <effect id="WallrunHoldJumpTime" change="0.33" />
+  <effect id="MonkeyBarHoldJumpTime" change="0.33" />
+  <effect id="RopeHoldJumpTime" change="0.33" />
+  <effect id="MoveSprintSpeed" change="1.0" />
+  <effect id="AutoActiveLandings" change="0" />
+  <effect id="BlockHeavyEdgeGrabs" change="1" />
+  <effect id="BlockFailedEdgeGrabs" change="1" />
+  <effect id="NightRunnerFuryGroundPoundEnabled" change="1" />
+</skill>
+<skill id="NightRunnerSegment4Skill" cat="ItemUpgrade" visible="false">
+  <effect id="NightRunnerRagdollProbability" change="0.3" />
+</skill>
+<skill id="NightRunnerSegment5Skill" cat="ItemUpgrade" visible="false">
+  <effect id="NightRunnerFurySmashEnabled" change="1" />
+  <effect id="NightRunnerFuryGroundPoundEnabled" change="1" />
+</skill>
+<skill id="NightRunnerSegment6Skill" cat="ItemUpgrade" visible="false">
+</skill>
+<skill id="DisableNightRunner" cat="ItemUpgrade" visible="false">
+  <effect id="NightRunnerSegment1StartVal" change="999" />
+</skill>
+<skill id="CubeKey" cat="ItemUpgrade" visible="false" max_level="4">
+  <effect id="CubeKeyLevel" change="1.0" />
+</skill>
+<skill id="LockpickBreak" cat="ItemUpgrade" visible="false" max_level="4">
+  <effect id="LockpickBreakLevel" change="1.0" />
+</skill>
+<skill id="TEST_Appearance" cat="ItemUpgrade" visible="false">
+  <effect id="WrestlingKick" change="1" />
+</skill>
+<skill id="Test_Outfit_Skill" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="AutoActiveLandings" change="1" />
+</skill>
+<skill id="Test_OutfitSet_Skill" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="NormalHoldJumpTime" change="0.5" />
+  <effect id="AdvancedParkourNormalHoldJumpTime" change="0.5" />
+</skill>
+<skill id="hidingspots_low" cat="ItemUpgrade" visible="false">
+  <effect id="PlayerHideAreaActivationChance" val="0.2" />
+</skill>
+<skill id="hidingspots_medium" cat="ItemUpgrade" visible="false">
+  <effect id="PlayerHideAreaActivationChance" val="0.4" />
+</skill>
+<skill id="hidingspots_high" cat="ItemUpgrade" visible="false">
+  <effect id="PlayerHideAreaActivationChance" val="0.6" />
+</skill>
+<skill id="test_SurvivorSense_10" cat="ItemUpgrade" visible="false">
+  <effect id="SurvivorSenseRange" val="10.0" />
+  <effect id="SurvivorSenseAIRange" val="10.0" />
+  <effect id="SurvivorSenseRestingAIRange" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_Default" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_None" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_Fire" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_Damage" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_Water" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_Loot" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_Electricity" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_Decoy" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_Spawner" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_Inhibitor" val="10.0" />
+  <effect id="SurvivorSenseRange_IconType_AreaEntrance" val="10.0" />
+</skill>
+<skill id="test_SurvivorSense_20" cat="ItemUpgrade" visible="false">
+  <effect id="SurvivorSenseRange" val="20.0" />
+  <effect id="SurvivorSenseAIRange" val="20.0" />
+  <effect id="SurvivorSenseRestingAIRange" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Default" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_None" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Fire" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Damage" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Water" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Loot" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Electricity" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Decoy" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Spawner" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Inhibitor" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_AreaEntrance" val="20.0" />
+</skill>
+<skill id="test_SurvivorSense_30" cat="ItemUpgrade" visible="false">
+  <effect id="SurvivorSenseRange" val="30.0" />
+  <effect id="SurvivorSenseAIRange" val="30.0" />
+  <effect id="SurvivorSenseRestingAIRange" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_Default" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_None" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_Fire" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_Damage" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_Water" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_Loot" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_Electricity" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_Decoy" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_Spawner" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_Inhibitor" val="30.0" />
+  <effect id="SurvivorSenseRange_IconType_AreaEntrance" val="30.0" />
+</skill>
+<skill id="test_SurvivorSense_40" cat="ItemUpgrade" visible="false">
+  <effect id="SurvivorSenseRange" val="40.0" />
+  <effect id="SurvivorSenseAIRange" val="40.0" />
+  <effect id="SurvivorSenseRestingAIRange" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_Default" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_None" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_Fire" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_Damage" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_Water" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_Loot" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_Electricity" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_Decoy" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_Spawner" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_Inhibitor" val="40.0" />
+  <effect id="SurvivorSenseRange_IconType_AreaEntrance" val="40.0" />
+</skill>
+<skill id="test_SurvivorSense_50" cat="ItemUpgrade" visible="false">
+  <effect id="SurvivorSenseRange" val="50.0" />
+  <effect id="SurvivorSenseAIRange" val="50.0" />
+  <effect id="SurvivorSenseRestingAIRange" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_Default" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_None" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_Fire" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_Damage" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_Water" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_Loot" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_Electricity" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_Decoy" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_Spawner" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_Inhibitor" val="50.0" />
+  <effect id="SurvivorSenseRange_IconType_AreaEntrance" val="50.0" />
+</skill>
+<skill id="test_SurvivorSense_default" cat="ItemUpgrade" visible="false">
+  <effect id="SurvivorSenseRange" val="20.0" />
+  <effect id="SurvivorSenseAIRange" val="20.0" />
+  <effect id="SurvivorSenseRestingAIRange" val="17.5" />
+  <effect id="SurvivorSenseRange_IconType_Default" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_None" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Fire" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Damage" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Water" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Loot" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Electricity" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Decoy" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Spawner" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_Inhibitor" val="20.0" />
+  <effect id="SurvivorSenseRange_IconType_AreaEntrance" val="20.0" />
+</skill>
+<skill id="DoubleJump05m" cat="ItemUpgrade" visible="false">
+  <effect id="DoubleJumpHeight" change="0.5" />
+</skill>
+<skill id="DoubleJump1m" cat="ItemUpgrade" visible="false">
+  <effect id="DoubleJumpHeight" change="1.0" />
+</skill>
+<skill id="DoubleJump18m" cat="ItemUpgrade" visible="false">
+  <effect id="DoubleJumpHeight" change="1.8" />
+</skill>
+<skill id="FarJump02m" cat="ItemUpgrade" visible="false">
+  <effect id="FarJumpHeight" change="0.2" />
+</skill>
+<skill id="FarJump04m" cat="ItemUpgrade" visible="false">
+  <effect id="FarJumpHeight" change="0.4" />
+</skill>
+<skill id="FarJump06m" cat="ItemUpgrade" visible="false">
+  <effect id="FarJumpHeight" change="0.6" />
+</skill>
+<skill id="CutOffHandSkill" cat="ItemUpgrade" visible="false">
+  <effect id="LeftHandDisabled" change="1" />
+  <effect id="BlockActionEnabled" change="0" />
+  <effect id="DoorSkylightEnabled" change="0" />
+  <effect id="DoubleJumpInOverAndOn" change="0" />
+  <effect id="FarJumpAvailable" change="0" />
+  <effect id="TreeAmortizerEnabled" change="0" />
+  <effect id="WallRunSideEnabled" change="0" />
+  <effect id="WallRunFrontEnabled" change="0" />
+  <effect id="WallJumpFrontEnabled" change="0" />
+  <effect id="FastClimbEnabled" change="0" />
+  <effect id="ManualSloMoEnabled" change="0" />
+</skill>
+<skill id="DrunkLvl1" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="DrunkEffect" change="1" />
+  <effect id="DrunkEffectPPFXPower" change="0.1" />
+</skill>
+<skill id="DrunkLvl2" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="DrunkEffect" change="1" />
+  <effect id="DrunkEffectInputLagTime" change="0.75" />
+  <effect id="DrunkEffectMoveRollAngle" change="10.0" />
+  <effect id="DrunkEffectMoveRollAngleTime" change="1.0" />
+  <effect id="DrunkEffectPPFXPower" change="0.4" />
+  <effect id="LookVertAcc_Pad" change="-1900.0" />
+  <effect id="LookHorzAcc_Pad" change="-1900.0" />
+  <effect id="LookVertDec_Pad" change="-49500.0" />
+  <effect id="LookHorzDec_Pad" change="-49500.0" />
+</skill>
+<skill id="DrunkLvl3" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="DrunkEffect" change="1" />
+  <effect id="DrunkEffectInputLagTime" change="1.2" />
+  <effect id="DrunkEffectMoveRollAngle" change="20.0" />
+  <effect id="DrunkEffectMoveRollAngleTime" change="1.5" />
+  <effect id="DrunkEffectPPFXPower" change="1.0" />
+  <effect id="DrunkEffectAddVelValue" change="2.0" />
+  <effect id="LookVertAcc_Pad" change="-2250.0" />
+  <effect id="LookHorzAcc_Pad" change="-2250.0" />
+  <effect id="LookVertDec_Pad" change="-49810.0" />
+  <effect id="LookHorzDec_Pad" change="-49810.0" />
+  <effect id="MoveDeceleration" change="-118.0" />
+  <effect id="MoveSprintSpeed" change="-1.5" />
+</skill>
+<skill id="GasAttack" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="DrunkEffect" change="1" />
+  <effect id="DrunkEffectInputLagTime" change="0.75" />
+  <effect id="DrunkEffectPPFXPower" change="0.1" />
+  <effect id="LookVertAcc_Pad" change="-1100.0" />
+  <effect id="LookHorzAcc_Pad" change="-1100.0" />
+  <effect id="LookVertDec_Pad" change="-25000.0" />
+  <effect id="LookHorzDec_Pad" change="-25000.0" />
+</skill>
+<skill id="AfterGasAttack" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="DrunkEffect" change="1" />
+  <effect id="DrunkEffectPPFXPower" change="0.05" />
+</skill>
+<skill id="DrunkScarecrow" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="DrunkEffectVisualOnly" change="1" />
+  <effect id="DrunkEffectPPFXPower" change="0.05" />
+</skill>
+<skill id="coop_tank_1" cat="CoopTank" visible="false">
+</skill>
+<skill id="coop_tank_2" cat="CoopTank" visible="false">
+</skill>
+<skill id="coop_healer_1" cat="CoopHealer" visible="false">
+</skill>
+<skill id="coop_healer_2" cat="CoopHealer" visible="false">
+</skill>
+<skill id="coop_melee_1" cat="CoopMeleeDPS" visible="false">
+</skill>
+<skill id="coop_melee_2" cat="CoopMeleeDPS" visible="false">
+</skill>
+<skill id="coop_ranged_1" cat="CoopRangedDPS" visible="false">
+</skill>
+<skill id="coop_ranged_2" cat="CoopRangedDPS" visible="false">
+</skill>
+<skill id="TrippleJumpSkill" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="TrippleJump" change="1" />
+</skill>
+<skill id="EasterEgg_KacpersShoesSkill" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="AutoActiveLandings" change="1" />
+</skill>
+<skill id="EasterEgg_ManeroGlovesSkill" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="FireThrow" change="1" />
+</skill>
+<skill id="Prototype_ShieldAttack" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="PlayerShieldAttackEnabled" change="1" />
+</skill>
+<skill id="LP_fists_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LPFistsDamageBoostFactor" change="0.04" />
+</skill>
+<skill id="LP_1h_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LP1HSlashDmgBoostFactor" change="0.03" />
+  <effect id="LP1HBluntDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_15h_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LP15HSlashDmgBoostFactor" change="0.03" />
+  <effect id="LP15HBluntDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_2h_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LP2HSlashDmgBoostFactor" change="0.03" />
+  <effect id="LP2HBluntDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_firearms_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LPFirearmsDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_bow_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LPBowDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_crossbow_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LPCrossbowDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_knuckles_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LPKnucklesDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_throwables_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LPThrowablesDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_expl_throwables_dmg" cat="LegendPoints" max_level="15"
+  skill_points_type="LegendPoints">
+  <effect id="LPExplThrowablesDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_stamina_regen_boost" cat="LegendPoints" max_level="15"
+  skill_points_type="LegendPoints">
+  <effect id="LPStaminaRegenBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_health_regen_boost" cat="LegendPoints" max_level="10" skill_points_type="LegendPoints">
+  <effect id="LPHealthRegenBoostFactor" change="1.0" />
+  <effect id="LPMaxHealthRegenThresholdFactor" change="0.0" />
+</skill>
+<skill id="LP_firearms_reload_speed_boost" cat="LegendPoints" max_level="10"
+  skill_points_type="LegendPoints">
+  <effect id="LPFirearmsReloadSpeedBoostFactor" change="0.025" />
+</skill>
+<skill id="LP_firearms_ammo_loot_boost" cat="LegendPoints" max_level="10"
+  skill_points_type="LegendPoints">
+  <effect id="LPFirearmsAmmoLootBoostFactor" change="0.075" />
+</skill>
+<skill id="LP_craftparts_loot_boost" cat="LegendPoints" max_level="10"
+  skill_points_type="LegendPoints">
+  <effect id="LPCraftpartsLootBoostFactor" change="0.075" />
+</skill>
+<skill id="TIF_Googles" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="AnomalyGearEffectEnabled" change="1" />
+</skill>
+<skill id="Sun_Glasses_Dark" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="SunglassesGearEffect" change="1" />
+</skill>
+<skill id="Sun_Glasses_Dark_Gradient" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="SunglassesGearEffect" change="2" />
+</skill>
+<skill id="Sun_Glasses_Blue" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="SunglassesGearEffect" change="3" />
+</skill>
+<skill id="Sun_Glasses_Orange" cat="ItemUpgrade" visible="false" serialize_on_save="false">
+  <effect id="SunglassesGearEffect" change="4" />
+</skill>
+<skill id="Quest_TriggerRemoteTraps" cat="ItemUpgrade" visible="false">
+  <effect id="CanTriggerRemoteTraps" change="1" />
+</skill>
+<skill id="Fury_Transformation_Tier0" cat="FuryDLC2" visible="false" serialize_on_save="true">
+</skill>
+<skill id="Fury_Duration_Test" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="FuryActiveTime" change="999" />
+  <effect id="FuryMaxPoints" change="-100" />
+</skill>
+<skill id="Fury_Transformation_Showcase" cat="Debug" visible="false" serialize_on_save="true">
+  <effect id="FuryActiveTime" change="30" />
+  <effect id="FuryPointsPerHitTakenFromAI" change="3" />
+  <effect id="FuryPointsPerHitDoneToAI" change="1" />
+</skill>
+<skill id="Fury_Transformation" cat="FuryDLC2Technical" visible="false" serialize_on_save="true">
+  <effect id="FuryMasteryEnable" change="1" />
+  <effect id="FuryTransformationEnableLvl1" change="1" />
+</skill>
+<skill id="Fury_Transformation_Control" cat="FuryDLC2Technical" visible="false"
+  serialize_on_save="true">
+  <effect id="FuryTransformationControlEnable" change="1" />
+</skill>
+<skill id="FuryActivePassiveSkill" cat="FuryDLC2Dynamic" visible="false" serialize_on_save="false">
+  <effect id="FuryHoldJumpHeight" change="6" />
+  <effect id="FuryHoldJumpTime" change="0.4142" />
+  <effect id="AdvancedParkourFuryHoldJumpTime" change="0.25" />
+  <effect id="AdvancedParkourFuryJumpInHoldJumpTime" change="0.13" />
+  <effect id="HarmfulHeight" change="40" />
+  <effect id="LargeFallHeight" change="50" />
+  <effect id="LethalHeight" change="60" />
+  <effect id="MoveSprintSpeed" change="1.0" />
+  <effect id="ReduceReactionsSeverity" change="1" />
+  <effect id="BlockHitReactionKnockdown" change="1" />
+  <effect id="DamageReduction" change="#Player_Fury_Resistance" />
+  <effect id="SprintNitroMaxSpeedAdd" change="2.5" />
+  <effect id="SwimMoveSpeed" change="2" />
+  <effect id="NightVisionEnabled" change="1" />
+  <effect id="HealthPerSecond" change="#HealthRegenerationPotion_FT_T3" />
+  <effect id="HitWeaponImmersiveWeaponStop" change="1" />
+  <effect id="HitWeaponTimeToForceMoveThrough" change="x-1.0" />
+  <effect id="HitFanUseExact" change="1" />
+</skill>
+<skill id="fury_power_attack" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="1">
+  <skill_req id="Fury_Transformation_Tier0" />
+  <effect id="FuryPowerAttackEnableLvl1" change="1" />
+  <effect id="FuryPowerAttackEnableLvl2" change="1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="SwimMoveSpeed" change="0.625" />
+</skill>
+<skill id="fury_throwable" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="1">
+  <skill_req id="fury_power_attack" />
+  <effect id="FuryThrowableEnable" change="1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="SwimMoveSpeed" change="0.625" />
+</skill>
+<skill id="fury_sprint" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="1">
+  <skill_req_or ids="fury_power_attack" />
+  <effect id="FurySprintEnable" change="1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="MoveSprintSpeed" change="0.25" />
+  <effect id="BlockRunMinTimeInSprint" change="1.75" />
+</skill>
+<skill id="fury_passive_1" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="2">
+  <skill_req_or ids="fury_sprint;fury_throwable" />
+  <effect id="FuryActiveTime" change="10" />
+  <effect id="FuryAutoActivationMinEnemiesCountEnabled" change="0" />
+  <effect id="FuryTransformationControlEnable" change="1" />
+  <effect id="FuryPointsGeneralMul" change="0.05" />
+  <effect id="FuryPointsRatioWhenStopped" change="-0.1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="SprintNitroMaxSpeedAdd" change="0.25" />
+  <effect id="MaxHealthAdditionalAmount" change="50" />
+</skill>
+<skill id="fury_charge" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="1">
+  <skill_req id="fury_passive_1" />
+  <effect id="FuryChargeEnable" change="1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="MoveSprintSpeed" change="0.25" />
+  <effect id="TackleGrabEnabled" change="1" />
+</skill>
+<skill id="fury_jump" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="1">
+  <skill_req id="fury_passive_1" />
+  <effect id="FuryHoldJumpHeight" change="5" />
+  <effect id="FuryHoldJumpTime" change="0.1" />
+  <effect id="AdvancedParkourFuryHoldJumpTime" change="0.1" />
+  <effect id="AdvancedParkourFuryJumpInHoldJumpTime" change="0.128" />
+  <effect id="HarmfulHeight" change="4" />
+  <effect id="LargeFallHeight" change="3" />
+  <effect id="LethalHeight" change="6" />
+  <effect id="FuryJumpEnable" change="1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="ShimmyFastAnims" change="1" />
+  <effect id="HoldJumpHeight" change="0.5" />
+  <effect id="ActiveLandingJumpEnabled" change="1" />
+</skill>
+<skill id="fury_passive_2" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="2">
+  <skill_req_or ids="fury_charge;fury_jump" />
+  <effect id="FuryPointsGeneralMul" change="0.05" />
+  <effect id="FuryActiveTime" change="10" />
+  <effect id="FuryTransformationEnableLvl2" change="1" />
+  <effect id="FuryPointsRatioWhenStopped" change="-0.1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="SprintNitroMaxSpeedAdd" change="0.5" />
+  <effect id="MaxHealthAdditionalAmount" change="50" />
+</skill>
+<skill id="fury_ground_pound" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="2">
+  <skill_req id="fury_passive_2" />
+  <effect id="FuryGroundPoundEnableLvl1" change="1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="HoldJumpHeight" change="0.5" />
+  <effect id="HarmfulHeight" change="8" />
+  <effect id="LargeFallHeight" change="8" />
+  <effect id="LethalHeight" change="8" />
+  <effect id="GroundPoundRangeMul" change="0.325" />
+</skill>
+<skill id="fury_windmill" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="2">
+  <skill_req id="fury_passive_2" />
+  <effect id="FuryWindmillEnableLvl1" change="1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="FarJumpHeight" change="0.2" />
+</skill>
+<skill id="fury_passive_3" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="2">
+  <skill_req_or ids="fury_ground_pound;fury_windmill" />
+  <effect id="FuryPointsGeneralMul" change="0.1" />
+  <effect id="FuryAttackHeal" change="0.10" />
+  <effect id="FuryActiveTime" change="20" />
+  <effect id="FuryPointsRatioWhenStopped" change="-0.1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="MaxHealthAdditionalAmount" change="50" />
+</skill>
+<skill id="fury_grapple" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="2">
+  <skill_req id="fury_passive_3" />
+  <skill_req id="GrappleHook" />
+  <effect id="FuryGrapplingHookEnableLvl1" change="1" />
+  <effect id="FuryGrapplingHookEnableLvl2" change="1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="HarmfulHeight" change="8" />
+  <effect id="LargeFallHeight" change="8" />
+  <effect id="LethalHeight" change="8" />
+  <effect id="AutoActiveLandings" change="1" />
+</skill>
+<skill id="fury_scream" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="2">
+  <skill_req id="fury_passive_3" />
+  <effect id="FuryScreamEnableLvl1" change="1" />
+  <effect id="FuryScreamEnableLvl2" change="1" />
+  <effect id="MaxStamina" change="0.25" />
+  <effect id="DoubleJumpHeight" change="1.2" />
+  <effect id="FarJumpHeight" change="0.2" />
+</skill>
+<skill id="fury_mastery" cat="FuryDLC2" skill_points_type="FuryPoints" skill_points="3">
+  <skill_req_or ids="fury_scream;fury_grapple" />
+  <effect id="FuryTransformationPartiallyChargedEnable" change="1" />
+  <effect id="FuryPointsRatioWhenStopped" change="-0.2" />
+  <effect id="FuryActiveTime" change="30" />
+  <effect id="MaxStamina" change="0.50" />
+  <effect id="FuryPointsGeneralMul" change="0.1" />
+  <effect id="MaxHealthAdditionalAmount" change="50" />
+</skill>
+<skill id="Fury_Playtest" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="FuryActiveTime" change="9999" />
+</skill>
+<skill id="Fury_Transformation_Partially_Charged" cat="Debug" visible="false"
+  serialize_on_save="false">
+  <effect id="FuryTransformationPartiallyChargedEnable" change="1" />
+</skill>
+<skill id="Player_Lethal_DropKick" cat="Debug" visible="false" serialize_on_save="false">
+  <effect id="LethalDropKickEnabled" change="1" />
+</skill>
+<skill id="passive_improvedparkour" cat="Agility_fake_ft" skill_points_type="None" skill_points="0">
+</skill>
+<skill id="active_instantescape" cat="Power_fake_ft" skill_points_type="None" skill_points="0">
+</skill>
+<skill id="LP_knife_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LPKnifeDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_max_stamina_boost" cat="LegendPoints" max_level="10" skill_points_type="LegendPoints">
+  <effect id="LPMaxStaminaMultiplierFactor" change="0.02" />
+</skill>
+<skill id="LP_limb_cut_probability" cat="LegendPoints" max_level="10"
+  skill_points_type="LegendPoints">
+  <effect id="LPLimbCutProbabilityBoostFactor" change="0.01" />
+</skill>
+<skill id="LP_melee_attack_speed_boost" cat="LegendPoints" max_level="10"
+  skill_points_type="LegendPoints">
+  <effect id="LPMeleeAttackSpeedBoostFactor" change="0.01" />
+</skill>
+<skill id="LP_fury_duration" cat="LegendPoints" max_level="10" skill_points_type="LegendPoints">
+  <effect id="LPFuryDurationBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_fury_dmg" cat="LegendPoints" max_level="15" skill_points_type="LegendPoints">
+  <effect id="LPFuryDmgBoostFactor" change="0.03" />
+</skill>
+<skill id="LP_fury_points_boost" cat="LegendPoints" max_level="10" skill_points_type="LegendPoints">
+  <effect id="LPFuryPointsBoostFactor" change="0.02" />
+</skill>
+<skill id="LP_melee_damage_resistance" cat="LegendPoints" max_level="5"
+  skill_points_type="LegendPoints">
+  <effect id="LPMeleeDamageResistanceBoostFactor" change="0.02" />
+</skill>
+<skill id="LP_ranged_damage_resistance" cat="LegendPoints" max_level="5"
+  skill_points_type="LegendPoints">
+  <effect id="LPRangedDamageResistanceFactor" change="0.02" />
+</skill>
+<skill id="LP_fall_damage_resistance" cat="LegendPoints" max_level="5"
+  skill_points_type="LegendPoints">
+  <effect id="LPFallDamageResistance" change="0.1" />
+</skill>
