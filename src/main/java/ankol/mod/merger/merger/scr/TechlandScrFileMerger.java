@@ -4,11 +4,14 @@ import ankol.mod.merger.antlr4.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr4.scr.TechlandScriptParser;
 import ankol.mod.merger.core.FileMerger;
 import ankol.mod.merger.core.MergerContext;
+import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.*;
 import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Localizations;
+import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -20,6 +23,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+@Slf4j
 public class TechlandScrFileMerger extends FileMerger {
     /**
      * 标记冲突项的容器
@@ -40,7 +44,6 @@ public class TechlandScrFileMerger extends FileMerger {
         super(context);
     }
 
-    // 入口
     @Override
     public MergeResult merge(FileTree file1, FileTree file2) {
         try {
@@ -59,7 +62,13 @@ public class TechlandScrFileMerger extends FileMerger {
             ScrContainerScriptNode modRoot = parseTree(Path.of(file2.getFullPathName()));
             // 递归对比，找到冲突项
             reduceCompare(originalBasModRoot, baseRoot, modRoot);
-            if (!conflicts.isEmpty()) {
+            //第一个mod与原版文件的对比，直接使用MOD修改的版本，不提示冲突
+            if (context.isFirstModMergeWithBaseMod() && !conflicts.isEmpty()) {
+                for (ConflictRecord record : conflicts) {
+                    record.setUserChoice(2); // 自动选择第一个mod的版本
+                }
+            } else if (!conflicts.isEmpty()) {
+                // 正常情况下，提示用户解决冲突
                 resolveConflictsInteractively();
             }
             // 3. 将用户选择的 Mod 代码转化为 EditOp
@@ -80,8 +89,9 @@ public class TechlandScrFileMerger extends FileMerger {
                 sb.replace(op.getStart(), op.getEnd(), op.getText());
             }
             return new MergeResult(sb.toString(), !conflicts.isEmpty());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.error(StrUtil.format("Error during SCR file merge: {} Reason: {}", file1.getFullPathName(), e.getMessage()), e);
+            throw new BusinessException("文件" + file1.getFullPathName() + "合并失败");
         } finally {
             //清理状态，准备下一个文件合并
             conflicts.clear();

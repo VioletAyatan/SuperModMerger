@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 /**
  * 模组合并引擎 - 负责执行模组合并的核心逻辑
@@ -321,21 +322,46 @@ public class ModMergerEngine {
             FileMerger merger = mergerOptional.get();
             String mergedContent = null;
 
-            // 从基准MOD中提取对应文件的内容（用于三方对比）
+            // 从基准MOD（data0.pak）中提取对应文件的内容（用于三方对比）
             String originalBaseModContent = null;
             if (baseModAnalyzer.isLoaded()) {
                 originalBaseModContent = baseModAnalyzer.extractFileContent(relPath);
             }
 
-            // 顺序合并：FileSource[0] + FileSource[1] + FileSource[2] + ...
+            // 顺序合并：使用data0.pak作为基准（如果存在），然后依次合并各个mod
             for (int i = 0; i < fileSources.size(); i++) {
                 FileSource currentSource = fileSources.get(i);
                 Path currentModPath = currentSource.filePath;
                 String currentModName = currentSource.sourceModName;
 
                 if (i == 0) {
-                    // 第一个 mod，直接读取作为基准
-                    mergedContent = Files.readString(currentModPath);
+                    // 第一个 mod：如果有data0.pak基准文件，使用它作为base与第一个mod合并
+                    if (originalBaseModContent != null) {
+                        Path tempBaseFile = Files.createTempFile("merge_base_data0_", ".tmp");
+                        try {
+                            Files.writeString(tempBaseFile, originalBaseModContent);
+                            // 使用data0.pak作为基准，与第一个mod合并
+                            FileTree fileBase = new FileTree("data0.pak", tempBaseFile.toString());
+                            FileTree fileCurrent = new FileTree(currentModName, currentModPath.toString());
+
+                            context.setFileName(relPath);
+                            context.setMod1Name("data0.pak");
+                            context.setMod2Name(currentModName);
+                            context.setOriginalBaseModContent(originalBaseModContent);
+                            context.setFirstModMergeWithBaseMod(true); // 标记为第一个mod与data0.pak的合并
+
+                            MergeResult result = merger.merge(fileBase, fileCurrent);
+                            mergedContent = result.mergedContent();
+
+                            // 第一个mod与data0.pak的合并不提示冲突，直接使用合并结果
+                            // （因为第一个mod相对于原版的修改都应该被接受）
+                        } finally {
+                            Files.deleteIfExists(tempBaseFile);
+                        }
+                    } else {
+                        // 没有data0.pak基准文件，直接使用第一个mod的内容
+                        mergedContent = Files.readString(currentModPath);
+                    }
                 } else {
                     // 后续的 mod，与当前合并结果合并
                     FileSource previousSource = fileSources.get(i - 1);
@@ -352,6 +378,7 @@ public class ModMergerEngine {
                         context.setMod1Name(previousModName);
                         context.setMod2Name(currentModName);
                         context.setOriginalBaseModContent(originalBaseModContent); // 设置基准MOD文件内容
+                        context.setFirstModMergeWithBaseMod(false); // 后续合并正常处理冲突
 
                         MergeResult result = merger.merge(fileBase, fileCurrent);
                         mergedContent = result.mergedContent();
@@ -412,10 +439,9 @@ public class ModMergerEngine {
      * 清理临时文件
      */
     private void cleanupTempDir() {
-        try {
-            if (Files.exists(tempDir)) {
-                Files.walk(tempDir)
-                        .sorted(Comparator.reverseOrder())
+        if (Files.exists(tempDir)) {
+            try (Stream<Path> pathStream = Files.walk(tempDir)) {
+                pathStream.sorted(Comparator.reverseOrder())
                         .forEach(path -> {
                             try {
                                 Files.delete(path);
@@ -423,9 +449,9 @@ public class ModMergerEngine {
                                 // 忽略删除错误
                             }
                         });
+            } catch (Exception e) {
+                ColorPrinter.warning(Localizations.t("ENGINE_CLEANUP_FAILED", e.getMessage()));
             }
-        } catch (Exception e) {
-            ColorPrinter.warning(Localizations.t("ENGINE_CLEANUP_FAILED", e.getMessage()));
         }
     }
 }

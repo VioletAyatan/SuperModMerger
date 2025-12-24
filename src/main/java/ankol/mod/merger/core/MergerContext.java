@@ -21,4 +21,9 @@ public class MergerContext {
      * 如果基准MOD中不存在该文件，则为null
      */
     private String originalBaseModContent;
+    /**
+     * 是否是第一个MOD与data0.pak的合并
+     * 当为true时，第一个MOD相对于data0.pak的修改应该被自动接受，不提示冲突
+     */
+    private boolean isFirstModMergeWithBaseMod = false;
 }
