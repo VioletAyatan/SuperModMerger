@@ -266,34 +266,25 @@ public class ModMergerEngine {
 
     /**
      * 合并多个同名文件
-     * <p>
-     * 优化：支持合并 N 个文件（不仅仅是 2 个）
-     * 采用顺序合并策略：
-     * 1. Mod1 + Mod2 → 中间结果
-     * 2. 中间结果 + Mod3 → 最终结果
-     * ...依此类推
-     * <p>
-     * 这样可以处理任意数量的 mod 合并场景。
+     * 对MOD进行顺序合并
      *
      * @param relPath     相对路径
      * @param fileSources 待合并的同名文件的来源
      * @param mergedDir   合并输出目录
      */
     private void mergeFiles(String relPath, List<FileSource> fileSources, Path mergedDir) throws IOException {
-        // 检查所有文件是否相同
+        // 先简单的判断一下文件内容（计算hash值）、大小是否相同，不同肯定不一样
         if (areAllFilesIdentical(fileSources)) {
-            // 所有文件都相同，直接复制第一个
+            // 文件都一样，直接使用第一个
             copyFile(relPath, fileSources.getFirst().filePath, mergedDir);
             return;
         }
 
-        // 获取合并器
         MergerContext context = new MergerContext();
         Optional<FileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
 
-        //不支持冲突检测的文件类型，直接让用户选择使用哪个mod的版本
+        //不支持进行冲突对比的文本，让用户选择使用哪个版本
         if (mergerOptional.isEmpty()) {
-            //提示框，让用户选择使用哪个版本的文件
             ColorPrinter.warning("\n" + Localizations.t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath));
             ColorPrinter.warning(Localizations.t("ASSET_CHOSE_WHICH_VERSION_TO_USE"));
             for (int i = 0; i < fileSources.size(); i++) {
@@ -315,14 +306,12 @@ public class ModMergerEngine {
             }
         }
 
-        // 智能合并脚本文件
-        ColorPrinter.info(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size()));
-
         try {
+            // 支持合并，开始处理合并逻辑
+            ColorPrinter.info(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size()));
             FileMerger merger = mergerOptional.get();
-            String mergedContent = null;
+            String baseMergedContent = null; //基准文本内容
 
-            // 从基准MOD（data0.pak）中提取对应文件的内容（用于三方对比）
             String originalBaseModContent = null;
             if (baseModAnalyzer.isLoaded()) {
                 originalBaseModContent = baseModAnalyzer.extractFileContent(relPath);
@@ -351,7 +340,7 @@ public class ModMergerEngine {
                             context.setFirstModMergeWithBaseMod(true); // 标记为第一个mod与data0.pak的合并
 
                             MergeResult result = merger.merge(fileBase, fileCurrent);
-                            mergedContent = result.mergedContent();
+                            baseMergedContent = result.mergedContent();
 
                             // 第一个mod与data0.pak的合并不提示冲突，直接使用合并结果
                             // （因为第一个mod相对于原版的修改都应该被接受）
@@ -360,7 +349,7 @@ public class ModMergerEngine {
                         }
                     } else {
                         // 没有data0.pak基准文件，直接使用第一个mod的内容
-                        mergedContent = Files.readString(currentModPath);
+                        baseMergedContent = Files.readString(currentModPath);
                     }
                 } else {
                     // 后续的 mod，与当前合并结果合并
@@ -369,7 +358,7 @@ public class ModMergerEngine {
 
                     Path tempBaseFile = Files.createTempFile("merge_base_", ".tmp");
                     try {
-                        Files.writeString(tempBaseFile, mergedContent);
+                        Files.writeString(tempBaseFile, baseMergedContent);
                         // 执行合并 - 使用真实的MOD压缩包名字
                         FileTree fileBase = new FileTree(previousModName, tempBaseFile.toString());
                         FileTree fileCurrent = new FileTree(currentModName, currentModPath.toString());
@@ -381,7 +370,7 @@ public class ModMergerEngine {
                         context.setFirstModMergeWithBaseMod(false); // 后续合并正常处理冲突
 
                         MergeResult result = merger.merge(fileBase, fileCurrent);
-                        mergedContent = result.mergedContent();
+                        baseMergedContent = result.mergedContent();
                     } finally {
                         // 确保临时文件被删除
                         Files.deleteIfExists(tempBaseFile);
@@ -392,7 +381,7 @@ public class ModMergerEngine {
             // 写入最终合并结果
             Path targetPath = mergedDir.resolve(relPath);
             Files.createDirectories(targetPath.getParent());
-            Files.writeString(targetPath, mergedContent);
+            Files.writeString(targetPath, baseMergedContent);
 
             this.mergedCount++;
             ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS"));
