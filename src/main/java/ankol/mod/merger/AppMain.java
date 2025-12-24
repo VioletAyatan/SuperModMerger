@@ -6,6 +6,7 @@ import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.SimpleArgParser;
 import ankol.mod.merger.tools.Tools;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Techland模组合并工具 - 主应用入口类
  */
+@Slf4j
 public class AppMain {
 
     static void main(String[] args) {
@@ -53,7 +55,7 @@ public class AppMain {
             parseAnyKeyToExit();
             System.exit(1);
         } catch (Exception e) {
-            ColorPrinter.error(Localizations.t("APP_MAIN_ERROR", e.getMessage()), e);
+            log.error(e.getMessage(), e);
             parseAnyKeyToExit();
             System.exit(1);
         }

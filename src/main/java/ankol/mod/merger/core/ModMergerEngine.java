@@ -78,7 +78,7 @@ public class ModMergerEngine {
     /**
      * 执行合并操作
      */
-    public void merge() throws IOException {
+    public void merge() {
         ColorPrinter.info(Localizations.t("ENGINE_TITLE"));
 
         if (modsToMerge.isEmpty()) {
@@ -100,7 +100,6 @@ public class ModMergerEngine {
             }*/
             // 在提取过程中对每个mod分别进行路径修正
             Map<String, List<FileSource>> filesByPath = extractAllMods();
-            JacksonUtil.toJson(filesByPath, FileUtil.getOutputStream(Tools.getUserDir() + "/test.json"));
             // 5. 输出目录（临时）
             Path mergedDir = tempDir.resolve("merged");
             Files.createDirectories(mergedDir);
@@ -199,9 +198,9 @@ public class ModMergerEngine {
         //并发提取所有MOD文件
         modsToMerge.parallelStream().forEach((modPath) -> {
             try {
-                String modFileName = modPath.getFileName().toString(); //文件真实名称（用作来源标识）
-                String modTempDirName = "Mod" + (index.getAndIncrement() + 1);               // 临时目录名（如 Mod1）
-                Path modTempDir = tempDir.resolve(modTempDirName);
+                String modFileName = modPath.getFileName().toString(); //解压的压缩包真实名称
+                String modTempDirName = "Mod" + (index.getAndIncrement() + 1);
+                Path modTempDir = tempDir.resolve(modTempDirName); //生成临时目录名字
 
                 Map<String, FileSourceInfo> extractedFiles = PakManager.extractPak(modPath, modTempDir);
                 // 对当前MOD的文件路径进行修正（如果启用了智能修正）
