@@ -210,33 +210,6 @@ public class TechlandScrFileMerger extends FileMerger {
     }
 
     /**
-     * 根据签名在容器中递归查找节点
-     *
-     * @param container 容器节点
-     * @param signature 节点签名
-     * @return 找到的节点，如果不存在返回null
-     */
-    private ScrScriptNode findNodeBySignature(ScrContainerScriptNode container, String signature) {
-        // 检查当前容器的直接子节点
-        ScrScriptNode node = container.getChildren().get(signature);
-        if (node != null) {
-            return node;
-        }
-
-        // 递归检查所有容器类型的子节点
-        for (ScrScriptNode child : container.getChildren().values()) {
-            if (child instanceof ScrContainerScriptNode childContainer) {
-                ScrScriptNode found = findNodeBySignature(childContainer, signature);
-                if (found != null) {
-                    return found;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * 冲突解决
      */
     private void resolveConflictsInteractively() {
@@ -252,7 +225,6 @@ public class TechlandScrFileMerger extends FileMerger {
             } else {
                 ColorPrinter.info("=".repeat(75));
                 ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
-//            ColorPrinter.highlight("位置签名: {}", record.getSignature());
                 //打印代码提示框
                 ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
                 ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim()));
@@ -312,7 +284,6 @@ public class TechlandScrFileMerger extends FileMerger {
         PARSE_CACHE.put(contentHash, result);
         return result;
     }
-
 
     /**
      * 解析字符串内容为ParseResult
