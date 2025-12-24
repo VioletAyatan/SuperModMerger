@@ -44,7 +44,6 @@ public class PakManager {
         Files.createDirectories(tempDir);
         Map<String, FileSourceInfo> fileMap = new HashMap<>();
         String archiveName = pakPath.getFileName().toString();
-
         // 根据文件扩展名判断格式
         if (archiveName.toLowerCase().endsWith(".7z")) {
             extract7zRecursive(pakPath, tempDir, fileMap, archiveName);
@@ -79,7 +78,7 @@ public class PakManager {
                 Path outputPath = outputDir.resolve(entryName);
                 Files.createDirectories(outputPath.getParent());
 
-                // 优化：直接检查size而不是先复制空流
+                // 对于空文件直接创建空文件
                 if (entry.getSize() == 0) {
                     Files.createFile(outputPath);
                 } else {
