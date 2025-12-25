@@ -8,8 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * XML container node - represents XML tags with child elements
- * Example: <skill>...</skill>
+ * XML容器节点，标识可以有子节点的容器
+ * 例如：<skills> ... </skills>
  *
  * @author Ankol
  */
@@ -22,31 +22,15 @@ public class XmlContainerNode extends XmlNode {
      */
     private final Map<String, XmlNode> children = new LinkedHashMap<>();
 
-    /**
-     * Constructor
-     *
-     * @param signature        node signature (unique identifier)
-     * @param startTokenIndex  starting token index in TokenStream
-     * @param stopTokenIndex   ending token index in TokenStream
-     * @param line             line number
-     * @param sourceText       original source text
-     */
     public XmlContainerNode(String signature, int startTokenIndex, int stopTokenIndex, int line, String sourceText) {
         super(signature.trim(), startTokenIndex, stopTokenIndex, line, sourceText);
     }
 
     /**
-     * Add child node
+     * 添加子节点
      */
     public void addChild(XmlNode node) {
         children.put(node.getSignature(), node);
-    }
-
-    /**
-     * Get all child nodes
-     */
-    public Map<String, XmlNode> getChildren() {
-        return children;
     }
 }
 

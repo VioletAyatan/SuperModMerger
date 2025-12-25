@@ -1,0 +1,473 @@
+<!-- **************************************************************************** -->
+<!-- *******************    Positive modifiers    ******************************* -->
+<!-- **************************************************************************** -->
+
+
+<!-- Every critical hit applies blast damage and ragdoll to enemies, where applicable. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_BlastZone" serialize_on_save="false"> -->
+    <!-- <property name="ApplyRagdollOnCrit" set="true"/> -->
+<!-- </buff> -->
+
+<!-- Deal N% more damage when your health is at N% or less. -->
+<buff id="Buff_GameplayModifier_Positive_DigDeep" serialize_on_save="false">
+    <!-- Triggers when current health is less than DamageMulLowHealthThreshold * (max health) -->
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulLowHealth" value_add="0.8"/>
+</buff>
+
+<!-- Tier 2. Deal N% more damage when your health is at N% or less. -->
+<buff id="Buff_GameplayModifier_Positive_DigDeep_T2" serialize_on_save="false">
+    <!-- Triggers when current health is less than DamageMulLowHealthThreshold * (max health) -->
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulLowHealth" value_add="0.4"/>
+</buff>
+
+<!-- Deal N% more damage when your health is at 100%. -->
+<buff id="Buff_GameplayModifier_Positive_Feral" serialize_on_save="false">
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulFullHealth" value_add="0.5"/>
+</buff>
+
+<!-- Tier 2. Deal N% more damage when your health is at 100%. -->
+<buff id="Buff_GameplayModifier_Positive_Feral_T2" serialize_on_save="false">
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulFullHealth" value_add="0.4"/>
+</buff>
+
+<!-- Blunt Weapons deal N% more damage. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_BluntForce" serialize_on_save="false"> -->
+    <!-- Is applied to DamageTotalMul("BluntDamageMul") -->
+    <!-- <property name="BluntDamageMul" value_add="0.80"/> -->
+<!-- </buff> -->
+
+<!-- Tier 2. Blunt Weapons deal N% more damage. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_BluntForce_T2" serialize_on_save="false"> -->
+    <!-- Is applied to DamageTotalMul("BluntDamageMul") -->
+    <!-- <property name="BluntDamageMul" value_add="0.40"/> -->
+<!-- </buff> -->
+
+<!-- All charge attacks apply blast damage and ragdoll when your health is at 100%. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_MaximumOverdrive" serialize_on_save="false"> -->
+    <!-- <property name="ApplyRagdollOnChargeAttackWhenHealthIsFull" set="true"/> -->
+<!-- </buff> -->
+
+<!-- You experience no stamina loss when your health is at 100%. -->
+<buff id="Buff_GameplayModifier_Positive_DontHoldBack" serialize_on_save="false">
+    <property name="StaminaUsageFactorOnMaxHealth" value_mul="-1.0"/>
+</buff>
+
+<!-- You experience X% less stamina loss when your health is at 100%. -->
+<buff id="Buff_GameplayModifier_Positive_DontHoldBack_T2" serialize_on_save="false">
+    <property name="StaminaUsageFactorOnMaxHealth" value_mul="-0.33"/>
+</buff>
+
+<!-- Deal N% more damage when surrounded by N enemies or more. -->
+<buff id="Buff_GameplayModifier_Positive_MoshPit" serialize_on_save="false">
+    <!-- Triggers when there are at least DamageMulEnemiesNearbyCount enemies in DamageMulEnemiesNearbyRadius -->
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulEnemiesNearby" value_add="1.0"/>
+</buff>
+
+<!-- Deal N% more damage when surrounded by N enemies or more. -->
+<buff id="Buff_GameplayModifier_Positive_MoshPit_T2" serialize_on_save="false">
+    <!-- Triggers when there are at least DamageMulEnemiesNearbyCount enemies in DamageMulEnemiesNearbyRadius -->
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulEnemiesNearby" value_add="0.6"/>
+</buff>
+
+<!-- You experience no stamina loss when your health is at N% or lower. -->
+<buff id="Buff_GameplayModifier_Positive_LastGaspAdrenalineRush" serialize_on_save="false">
+    <!-- Triggers when current health is less than StaminaUsageFactorOnLowHealth_HealthThreshold * MaxHealth -->
+    <property name="StaminaUsageFactorOnLowHealth" value_mul="-1.0"/>
+</buff>
+
+<!-- You experience X% less stamina loss when your health is at N% or lower. -->
+<buff id="Buff_GameplayModifier_Positive_LastGaspAdrenalineRush_T2" serialize_on_save="false">
+    <!-- Triggers when current health is less than StaminaUsageFactorOnLowHealth_HealthThreshold * MaxHealth -->
+    <property name="StaminaUsageFactorOnLowHealth" value_mul="-0.33"/>
+</buff>
+
+<!-- Slashing Weapons deal N% more damage. -->
+<buff id="Buff_GameplayModifier_Positive_TheRazorsEdge" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("SlashDamageMul") -->
+    <property name="SlashDamageMul" value_add="0.50"/>
+</buff>
+
+<!-- Slashing Weapons deal N% more damage. -->
+<buff id="Buff_GameplayModifier_Positive_TheRazorsEdge_T2" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("SlashDamageMul") -->
+    <property name="SlashDamageMul" value_add="0.35"/>
+</buff>
+
+<!-- Knuckledusters deal N% more damage. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_IronFist" serialize_on_save="false"> -->
+    <!-- Is applied to DamageTotalMul("KnuckledusterDamageMul") -->
+    <!-- <property name="KnuckledusterDamageMul" value_add="0.75"/> -->
+<!-- </buff> -->
+
+<!-- Knuckledusters deal N% more damage. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_IronFist_T2" serialize_on_save="false"> -->
+    <!-- Is applied to DamageTotalMul("KnuckledusterDamageMul") -->
+    <!-- <property name="KnuckledusterDamageMul" value_add="0.5"/> -->
+<!-- </buff> -->
+
+<!-- Enemies self-inflict N% of the damage they deal. -->
+<buff id="Buff_GameplayModifier_Positive_SelfDestruction" serialize_on_save="false">
+    <!-- Applies Damage("TowerRaid_SelfSabotage") to the attacker -->
+    <!-- Is calculated as TowerRaid_SelfSabotage_Damage * (incoming damage) -->
+    <property name="TowerRaid_SelfSabotage" set="true"/>
+    <property name="TowerRaid_SelfSabotage_Damage" value_add="2.0"/>
+</buff>
+
+<!-- Enemies self-inflict N% of the damage they deal. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_SelfDestruction_T2" serialize_on_save="false"> -->
+    <!-- Applies Damage("TowerRaid_SelfSabotage") to the attacker -->
+    <!-- Is calculated as TowerRaid_SelfSabotage_Damage * (incoming damage) -->
+    <!-- <property name="TowerRaid_SelfSabotage" set="true"/> -->
+    <!-- <property name="TowerRaid_SelfSabotage_Damage" value_add="1.0"/> -->
+<!-- </buff> -->
+
+<!-- Your damage is increased by 50% for this floor. Effect is reverted at the end of the floor. -->
+<buff id="Buff_GameplayModifier_Positive_ThyArtIsMurder" serialize_on_save="false">
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulAll" value_add="0.5"/>
+</buff>
+
+<!-- Your damage is increased by N% for this floor. Effect is reverted at the end of the floor. -->
+<buff id="Buff_GameplayModifier_Positive_ThyArtIsMurder_T2" serialize_on_save="false">
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulAll" value_add="0.35"/>
+</buff>
+
+<!-- Every critical hit applies stun to enemies, where applicable. -->
+<buff id="Buff_GameplayModifier_Positive_StunningStrikes" serialize_on_save="false">
+    <property name="ApplyStunOnCrit" set="true"/>
+</buff>
+
+<!-- Deal N% more damage using ranged weapons or throwables. -->
+<buff id="Buff_GameplayModifier_Positive_LethalRange" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("BowAndCrossbowDamageMul") -->
+    <property name="BowAndCrossbowDamageMul" value_add="0.50"/>
+    <!-- Is applied to DamageTotalMul("FirearmDamageMul") -->
+    <property name="FirearmDamageMul" value_add="0.50"/>
+    <!-- Is applied to DamageTotalMul("ThrowableDamageMul") -->
+    <property name="ThrowableDamageMul" value_add="0.50"/>
+</buff>
+
+<!-- Deal N% more damage using ranged weapons or throwables. -->
+<buff id="Buff_GameplayModifier_Positive_LethalRange_T2" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("BowAndCrossbowDamageMul") -->
+    <property name="BowAndCrossbowDamageMul" value_add="0.35"/>
+    <!-- Is applied to DamageTotalMul("FirearmDamageMul") -->
+    <property name="FirearmDamageMul" value_add="0.35"/>
+    <!-- Is applied to DamageTotalMul("ThrowableDamageMul") -->
+    <property name="ThrowableDamageMul" value_add="0.35"/>
+</buff>
+
+<!-- Firearms deals N% more damage. -->
+<buff id="Buff_GameplayModifier_Positive_SteadyAim" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("FirearmDamageMul") -->
+    <property name="FirearmDamageMul" value_add="0.50"/>
+</buff>
+
+<!-- Firearms deals N% more damage. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_SteadyAim_T2" serialize_on_save="false"> -->
+    <!-- Is applied to DamageTotalMul("FirearmDamageMul") -->
+    <!-- <property name="FirearmDamageMul" value_add="0.30"/> -->
+<!-- </buff> -->
+
+<!-- Your attacks consume less stamina. -->
+<buff id="Buff_GameplayModifier_Positive_StingLikeaBee" serialize_on_save="false">
+    <property name="WeaponStaminaUsageMul" value_add="-0.50"/>
+    <property name="KickStaminaUsage" value_mul="-0.50"/>
+    <property name="AirKickStaminaUsage" value_mul="-0.50"/>
+    <property name="SlideKickStaminaUsage" value_mul="-0.50"/>
+</buff>
+
+<!-- Your attacks consume less stamina. -->
+<buff id="Buff_GameplayModifier_Positive_StingLikeaBee_T2" serialize_on_save="false">
+    <property name="WeaponStaminaUsageMul" value_add="-0.25"/>
+    <property name="KickStaminaUsage" value_mul="-0.25"/>
+    <property name="AirKickStaminaUsage" value_mul="-0.25"/>
+    <property name="SlideKickStaminaUsage" value_mul="-0.25"/>
+</buff>
+
+<!-- Your damage increases by 1.5% with every kill you make during this floor. Effect is reverted at the end of the floor. -->
+<buff id="Buff_GameplayModifier_Positive_Crescendo" serialize_on_save="false">
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulPerTowerRaidKillOnCurrentFloor" value_add="0.015"/>
+</buff>
+
+<!-- Your damage increases by 0.75% with every kill you make during this floor. Effect is reverted at the end of the floor. -->
+<buff id="Buff_GameplayModifier_Positive_Crescendo_T2" serialize_on_save="false">
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulPerTowerRaidKillOnCurrentFloor" value_add="0.01"/>
+</buff>
+
+<!-- Parkour and dodge consume N% less stamina. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_LightasaFeather" serialize_on_save="false"> -->
+   <!-- <property name="StaminaMovementDrainFactor" value_add="-0.25"/> -->
+<!-- </buff> -->
+
+<!-- Parkour and dodge consume N% less stamina. -->
+<!-- <buff id="Buff_GameplayModifier_Positive_LightasaFeather_T2" serialize_on_save="false"> -->
+   <!-- <property name="StaminaMovementDrainFactor" value_add="-0.15"/> -->
+<!-- </buff> -->
+
+<!-- You have increased resistance against all elemental attacks. -->
+<buff id="Buff_GameplayModifier_Positive_ElementalResistance" serialize_on_save="false">
+    <!-- Adds DamageResistance("TowerRaid_ElementalResistance") to all incoming attacks -->
+    <property name="TowerRaid_ElementalResistance" set="true"/>
+</buff>
+
+<!-- Clearing all the infected in one floor restores your health to 100% automatically. -->
+<buff id="Buff_GameplayModifier_Positive_Resupply" serialize_on_save="false">
+    <!-- Triggers when killing an enemy and there are no more enemies currently alive -->
+    <!-- Applies Healing("TowerRaid_WorthTheEffort") -->
+    <property name="TowerRaid_WorthTheEffort" set="true"/>
+</buff>
+
+<!-- Players have infinite ammo when using their firearms. -->
+<buff id="Buff_GameplayModifier_Positive_BottomlessClips" serialize_on_save="false">
+    <property name="FirearmsPistolInfiniteAmmo" set="true"/>
+    <property name="FirearmsRevolverInfiniteAmmo" set="true"/>
+    <property name="FirearmsRifleInfiniteAmmo" set="true"/>
+    <property name="FirearmsShotgunInfiniteAmmo" set="true"/>
+    <property name="FirearmsSMGInfiniteAmmo" set="true"/>
+</buff>
+
+
+<!-- **************************************************************************** -->
+<!-- *******************    Negative modifiers    ******************************* -->
+<!-- **************************************************************************** -->
+
+
+<!-- You deal double damage, but so does everything else. -->
+<buff id="Buff_GameplayModifier_Negative_DoubleTrouble" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulAll" value_add="1.0"/>
+    <!-- Is applied to DamageTotalMul("IncomingDamageMul") -->
+    <property name="IncomingDamageMul" value_add="1.0"/>
+</buff>
+
+<!-- You deal 50% damage, but everything else deals double. -->
+<buff id="Buff_GameplayModifier_Negative_DoubleTrouble_T2" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulAll" value_add="0.5"/>
+    <!-- Is applied to DamageTotalMul("IncomingDamageMul") -->
+    <property name="IncomingDamageMul" value_add="1.0"/>
+</buff>
+
+<!-- Enemies have increased resistance against Slashing Weapons. -->
+<buff id="Buff_GameplayModifier_Negative_SlashProof" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("SlashDamageMul") -->
+    <property name="SlashDamageMul" value_add="-0.45"/>
+</buff>
+
+<!-- Enemies have increased resistance against Slashing Weapons. -->
+<buff id="Buff_GameplayModifier_Negative_SlashProof_T2" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("SlashDamageMul") -->
+    <property name="SlashDamageMul" value_add="-0.5"/>
+</buff>
+
+<!-- Enemies have increased resistance against Firearms. -->
+<buff id="Buff_GameplayModifier_Negative_Bulletproof" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("FirearmDamageMul") -->
+    <property name="FirearmDamageMul" value_add="-0.75"/>
+</buff>
+
+<!-- Enemies have increased resistance against Firearms. -->
+<!-- <buff id="Buff_GameplayModifier_Negative_Bulletproof_T2" serialize_on_save="false"> -->
+    <!-- Is applied to DamageTotalMul("FirearmDamageMul") -->
+    <!-- <property name="FirearmDamageMul" value_add="-1.5"/> -->
+<!-- </buff> -->
+
+<!-- Enemies regenerate health over time. -->
+<!-- <buff id="Buff_GameplayModifier_Negative_RegenerationX" serialize_on_save="false"> -->
+<!-- </buff> -->
+
+<!-- You must defeat each room within a specified time. If the time is exceeded you suffer N% of Total HP every X seconds. -->
+<buff id="Buff_GameplayModifier_Negative_NoTimeToWaste" serialize_on_save="false">
+    <!-- Triggers when TowerRaid_NoTimeToWaste_Timer seconds pass on the current floor -->
+    <!-- Is calculated as TowerRaid_NoTimeToWaste_Damage * (max health) -->
+    <!-- Is applied to Damage("TowerRaid_NoTimeToWaste") -->
+    <!-- Applies Damage("TowerRaid_NoTimeToWaste") to the player every TowerRaid_NoTimeToWaste_Interval seconds -->
+    <property name="TowerRaid_NoTimeToWaste" set="true"/>
+    <property name="TowerRaid_NoTimeToWaste_Timer" value_add="420.0"/>
+    <property name="TowerRaid_NoTimeToWaste_Damage" value_add="0.05"/>
+    <property name="TowerRaid_NoTimeToWaste_Interval" value_add="30.0"/>
+</buff>
+
+<!-- You must defeat each room within a specified time. If the time is exceeded you suffer N% of Total HP every X seconds. -->
+<buff id="Buff_GameplayModifier_Negative_NoTimeToWaste_T2" serialize_on_save="false">
+    <!-- Triggers when TowerRaid_NoTimeToWaste_Timer seconds pass on the current floor -->
+    <!-- Is calculated as TowerRaid_NoTimeToWaste_Damage * (max health) -->
+    <!-- Is applied to Damage("TowerRaid_NoTimeToWaste") -->
+    <!-- Applies Damage("TowerRaid_NoTimeToWaste") to the player every TowerRaid_NoTimeToWaste_Interval seconds -->
+    <property name="TowerRaid_NoTimeToWaste" set="true"/>
+    <property name="TowerRaid_NoTimeToWaste_Timer" value_add="540.0"/>
+    <property name="TowerRaid_NoTimeToWaste_Damage" value_add="0.08"/>
+    <property name="TowerRaid_NoTimeToWaste_Interval" value_add="30.0"/>
+</buff>
+
+<!-- For this raid you have N% less HP than usual. -->
+<buff id="Buff_GameplayModifier_Negative_NotQuiteYourself" serialize_on_save="false">
+    <!-- Is applied to HealthTotalMul("Player_MaxHealthTotalMul") -->
+    <property name="MaxHealthTotalMul" value_add="-0.20"/>
+</buff>
+
+<!-- For this raid you have N% less HP than usual. -->
+<buff id="Buff_GameplayModifier_Negative_NotQuiteYourself_T2" serialize_on_save="false">
+    <!-- Is applied to HealthTotalMul("Player_MaxHealthTotalMul") -->
+    <property name="MaxHealthTotalMul" value_add="-0.35"/>
+</buff>
+
+<!-- Enemy attacks have N% chance to apply elemental damage. -->
+<buff id="Buff_GameplayModifier_Negative_ElementalAsylum" serialize_on_save="false">
+    <!-- Adds random elemental effect to any incoming attack with TowerRaid_ElementalAggression_Chance probability -->
+    <!-- Effect duration: TowerRaid_ElementalAggression_Duration -->
+    <property name="TowerRaid_ElementalAggression" set="true"/>
+    <property name="TowerRaid_ElementalAggression_Chance" value_add="0.2"/>
+</buff>
+
+<!-- Enemy attacks have N% chance to apply elemental damage. -->
+<buff id="Buff_GameplayModifier_Negative_ElementalAsylum_T2" serialize_on_save="false">
+    <!-- Adds random elemental effect to any incoming attack with TowerRaid_ElementalAggression_Chance probability -->
+    <!-- Effect duration: TowerRaid_ElementalAggression_Duration -->
+    <property name="TowerRaid_ElementalAggression" set="true"/>
+    <property name="TowerRaid_ElementalAggression_Chance" value_add="0.33"/>
+</buff>
+
+<!-- Your damage decreases by 0.5% with every kill you make during this floor. Effect is reverted at the end of the floor. -->
+<!-- <buff id="Buff_GameplayModifier_Negative_Decrescendo" serialize_on_save="false"> -->
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <!-- <property name="DamageMulPerTowerRaidKillOnCurrentFloor" value_add="-0.001"/> -->
+<!-- </buff> -->
+
+<!-- Your damage decreases by 1.5% with every kill you make during this floor. Effect is reverted at the end of the floor. -->
+<!-- <buff id="Buff_GameplayModifier_Negative_Decrescendo_T2" serialize_on_save="false"> -->
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <!-- <property name="DamageMulPerTowerRaidKillOnCurrentFloor" value_add="-0.002"/> -->
+<!-- </buff> -->
+
+<!-- You must defeat each room within a specified time. If the time is exceeded you suffer N% of HP left. -->
+<buff id="Buff_GameplayModifier_Negative_TickTock" serialize_on_save="false">
+    <!-- Triggers when TowerRaid_TimeIsRunningOut_Timer seconds pass on the current floor -->
+    <!-- Is calculated as TowerRaid_TimeIsRunningOut_Damage * (current health) -->
+    <!-- Is applied to Damage("TowerRaid_TimeIsRunningOut") -->
+    <!-- Applies Damage("TowerRaid_TimeIsRunningOut") to the player once -->
+    <property name="TowerRaid_TimeIsRunningOut" set="true"/>
+    <property name="TowerRaid_TimeIsRunningOut_Timer" value_add="420.0"/>
+    <property name="TowerRaid_TimeIsRunningOut_Damage" value_add="0.5"/>
+</buff>
+
+<!-- You must defeat each room within a specified time. If the time is exceeded you suffer N% of HP left. -->
+<buff id="Buff_GameplayModifier_Negative_TickTock_T2" serialize_on_save="false">
+    <!-- Triggers when TowerRaid_TimeIsRunningOut_Timer seconds pass on the current floor -->
+    <!-- Is calculated as TowerRaid_TimeIsRunningOut_Damage * (current health) -->
+    <!-- Is applied to Damage("TowerRaid_TimeIsRunningOut") -->
+    <!-- Applies Damage("TowerRaid_TimeIsRunningOut") to the player once -->
+    <property name="TowerRaid_TimeIsRunningOut" set="true"/>
+    <property name="TowerRaid_TimeIsRunningOut_Timer" value_add="540.0"/>
+    <property name="TowerRaid_TimeIsRunningOut_Damage" value_add="0.75"/>
+</buff>
+
+<!-- Increased Damage from enemies. -->
+<buff id="Buff_GameplayModifier_Negative_StrongerFoes" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("IncomingDamageMul") -->
+    <property name="IncomingDamageMul" value_add="0.15"/>
+</buff>
+
+<!-- Increased Damage from enemies. -->
+<buff id="Buff_GameplayModifier_Negative_StrongerFoes_T2" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("IncomingDamageMul") -->
+    <property name="IncomingDamageMul" value_add="0.25"/>
+</buff>
+
+<!-- One-Handed weapons and Long Weapons are N% less effective during this run. -->
+<buff id="Buff_GameplayModifier_Negative_PoorTools" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("OneHandedDamageMul") -->
+    <property name="OneHandedDamageMul" value_add="-0.75"/>
+    <!-- Is applied to DamageTotalMul("TwoHandedCloseStickDamageMul") -->
+    <property name="TwoHandedCloseStickDamageMul" value_add="-0.45"/>
+</buff>
+
+<!-- One-Handed weapons and Long Weapons are N% less effective during this run. -->
+<buff id="Buff_GameplayModifier_Negative_PoorTools_T2" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("OneHandedDamageMul") -->
+    <property name="OneHandedDamageMul" value_add="-0.65"/>
+    <!-- Is applied to DamageTotalMul("TwoHandedCloseStickDamageMul") -->
+    <property name="TwoHandedCloseStickDamageMul" value_add="-0.65"/>
+</buff>
+
+<!-- Your health does not regenerate automatically. -->
+<buff id="Buff_GameplayModifier_Negative_Degeneration" serialize_on_save="false">
+    <property name="HealthAutoHealEnabled" set="false"/>
+</buff>
+
+<!-- Booster effects are not applied during this floor. -->
+<buff id="Buff_GameplayModifier_Negative_JustSayNo" serialize_on_save="false">
+    <!-- Prevents any timed buff from being applied -->
+    <property name="TowerRaid_WarOnDrugs" set="true"/>
+    <!-- Removes all timed buffs from the player -->
+    <OnGain>
+        <RemoveTimedBuffs/>
+    </OnGain>
+</buff>
+
+<!-- Enemies have increased resistance against all damage. -->
+<buff id="Buff_GameplayModifier_Negative_Painkillers" serialize_on_save="false">
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulAll" value_add="-0.3"/>
+</buff>
+
+<!-- Enemies have increased resistance against all damage. -->
+<buff id="Buff_GameplayModifier_Negative_Painkillers_T2" serialize_on_save="false">
+    <!-- Is added to DamageTotalMul("DamageMulAll") -->
+    <property name="DamageMulAll" value_add="-0.50"/>
+</buff>
+
+<!-- Enemies have increased resistance against Ranged Weapons and Throwables. -->
+<buff id="Buff_GameplayModifier_Negative_UpCloseandPersonal" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("BowAndCrossbowDamageMul") -->
+    <property name="BowAndCrossbowDamageMul" value_add="-0.5"/>
+    <!-- Is applied to DamageTotalMul("FirearmDamageMul") -->
+    <property name="FirearmDamageMul" value_add="-0.5"/>
+    <!-- Is applied to DamageTotalMul("ThrowableDamageMul") -->
+    <property name="ThrowableDamageMul" value_add="-0.5"/>
+</buff>
+
+<!-- Enemies have increased resistance against Ranged Weapons and Throwables. -->
+<buff id="Buff_GameplayModifier_Negative_UpCloseandPersonal_T2" serialize_on_save="false">
+    <!-- Is applied to DamageTotalMul("BowAndCrossbowDamageMul") -->
+    <property name="BowAndCrossbowDamageMul" value_add="-0.65"/>
+    <!-- Is applied to DamageTotalMul("FirearmDamageMul") -->
+    <property name="FirearmDamageMul" value_add="-0.65"/>
+    <!-- Is applied to DamageTotalMul("ThrowableDamageMul") -->
+    <property name="ThrowableDamageMul" value_add="-0.65"/>
+</buff>
+
+<!-- Enemies have increased resistance against all elemental attacks. -->
+<!-- <buff id="Buff_GameplayModifier_Negative_ElementalHealth" serialize_on_save="false"> -->
+    <!-- Adds DamageResistance("TowerRaid_ElementalEndurance") to all player attacks -->
+    <!-- <property name="TowerRaid_ElementalEndurance" set="true"/> -->
+<!-- </buff> -->
+
+<!-- Healing Items are completely ineffective during this floor. -->
+<!-- <buff id="Buff_GameplayModifier_Negative_TheDrugsDontWork" serialize_on_save="false"> -->
+    <!-- Applies HealingMul("TowerRaid_FaultyProvisions") to all buffs' AddHealth action -->
+    <!-- <property name="TowerRaid_FaultyProvisions" set="true"/> -->
+<!-- </buff> -->
+
+<!-- Enemies take decreased dmg on their body but take increased dmg on their heads with any weapon. -->
+<buff id="Buff_GameplayModifier_Negative_TopHeavy" serialize_on_save="false">
+    <property name="WeaponDamageHeadMul" value_add="0.65"/>
+    <property name="WeaponDamageBodyMul" value_add="-0.45"/>
+</buff>
+
+<!-- Enemies take decreased dmg on their body but take increased dmg on their heads with any weapon. -->
+<buff id="Buff_GameplayModifier_Negative_TopHeavy_T2" serialize_on_save="false">
+    <property name="WeaponDamageHeadMul" value_add="0.45"/>
+    <property name="WeaponDamageBodyMul" value_add="-0.7"/>
+</buff>
+

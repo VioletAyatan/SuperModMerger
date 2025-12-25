@@ -1,0 +1,4180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<curves xmlns="urn:curves-schema">
+  <curve Name="avoid_forward_rotation_speed" NumberOfSamples="40" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="HERMITE" X="0.00933333" Y="152" />
+      <knot TypeOfSpline="HERMITE" X="0.0322" Y="296.667" />
+      <knot TypeOfSpline="HERMITE" X="0.0562333" Y="640" />
+      <knot TypeOfSpline="HERMITE" X="0.07" Y="900" />
+    </knots>
+  </curve>
+  <curve Name="blast_damage_mul" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="17.66" Y="12" />
+      <knot TypeOfSpline="HERMITE" X="27.95" Y="29.5" />
+      <knot TypeOfSpline="HERMITE" X="37.0967" Y="51.75" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="70" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="81" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="88.5" />
+    </knots>
+  </curve>
+  <curve Name="car_backward_steering_strength" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.09" Y="0.42" />
+      <knot TypeOfSpline="HERMITE" X="0.21" Y="0.723333" />
+      <knot TypeOfSpline="HERMITE" X="0.406667" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="car_forward_steering_strength" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.0233333" Y="0.466667" />
+      <knot TypeOfSpline="HERMITE" X="0.0866667" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="0.15" Y="0.996667" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="cash_amount_mult" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="13.43" Y="3.3" />
+      <knot TypeOfSpline="HERMITE" X="21.25" Y="6.6" />
+      <knot TypeOfSpline="HERMITE" X="27.54" Y="10.3" />
+      <knot TypeOfSpline="HERMITE" X="37" Y="15" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="19" />
+      <knot TypeOfSpline="HERMITE" X="62.4" Y="21.5" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="23.5" />
+    </knots>
+  </curve>
+  <curve Name="repairParts_amount_mult" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="13.43" Y="3.3" />
+      <knot TypeOfSpline="HERMITE" X="21.25" Y="6.6" />
+      <knot TypeOfSpline="HERMITE" X="27.54" Y="10.3" />
+      <knot TypeOfSpline="HERMITE" X="37" Y="15" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="19" />
+      <knot TypeOfSpline="HERMITE" X="62.4" Y="21.5" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="23.5" />
+    </knots>
+  </curve>
+  <curve Name="diff_level_distribution" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="12">
+      <knot TypeOfSpline="HERMITE" X="-100" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="-86.6667" Y="1.5" />
+      <knot TypeOfSpline="HERMITE" X="-67.3333" Y="3" />
+      <knot TypeOfSpline="HERMITE" X="-48.6667" Y="6.5" />
+      <knot TypeOfSpline="HERMITE" X="-31.3333" Y="8.83333" />
+      <knot TypeOfSpline="HERMITE" X="-16.6667" Y="10.3333" />
+      <knot TypeOfSpline="HERMITE" X="-0.666667" Y="11" />
+      <knot TypeOfSpline="HERMITE" X="9.33333" Y="7.58333" />
+      <knot TypeOfSpline="HERMITE" X="20" Y="3.75" />
+      <knot TypeOfSpline="HERMITE" X="34" Y="1.08333" />
+      <knot TypeOfSpline="HERMITE" X="61.3333" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="90.6667" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="dist_to_start_walk_per_angle" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="0" Y="500" />
+      <knot TypeOfSpline="HERMITE" X="45" Y="400" />
+      <knot TypeOfSpline="HERMITE" X="90" Y="250" />
+      <knot TypeOfSpline="HERMITE" X="135" Y="125" />
+      <knot TypeOfSpline="HERMITE" X="180" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="enemy_distance_priority" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="HERMITE" X="0" Y="1.25" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="12" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="17" Y="0.3" />
+      <knot TypeOfSpline="HERMITE" X="20" Y="0.15" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="0.1" />
+      <knot TypeOfSpline="HERMITE" X="37.8" Y="0.066" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="0.05" />
+    </knots>
+  </curve>
+  <curve Name="hit_pause_time_for_dist_mul_mp" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.05" />
+      <knot TypeOfSpline="HERMITE" X="5" Y="0.1" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="0.5" />
+      <knot TypeOfSpline="HERMITE" X="16" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="21" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="28" Y="4" />
+    </knots>
+  </curve>
+  <curve Name="hit_pause_time_for_dist_mul_sp" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.05" />
+      <knot TypeOfSpline="HERMITE" X="5" Y="0.1" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="0.5" />
+      <knot TypeOfSpline="HERMITE" X="16" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="21" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="28" Y="4" />
+    </knots>
+  </curve>
+  <curve Name="hit_pause_time_for_vis_time_mul" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="1.5" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="3" Y="0.2" />
+    </knots>
+  </curve>
+  <curve Name="human_acceleration_mult" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-0.666667" Y="0.213333" />
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.03" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.188" Y="0.716" />
+      <knot TypeOfSpline="HERMITE" X="0.404" Y="0.436" />
+      <knot TypeOfSpline="HERMITE" X="0.684" Y="0.288" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.2" />
+    </knots>
+  </curve>
+  <curve Name="human_change_cover_time" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="HERMITE" X="0" Y="3" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="human_combo_prob" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="1" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="13.09" Y="22.7333" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="60" />
+      <knot TypeOfSpline="HERMITE" X="37.74" Y="78.8333" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="90" />
+      <knot TypeOfSpline="HERMITE" X="62.6667" Y="96.6333" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="99.6667" />
+    </knots>
+  </curve>
+  <curve Name="human_counter_attack_prob" NumberOfSamples="200" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="LINE" X="0" Y="0.1" />
+      <knot TypeOfSpline="LINE" X="1" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="2" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="6" Y="0.8" />
+      <knot TypeOfSpline="LINE" X="20" Y="0.9" />
+      <knot TypeOfSpline="LINE" X="50" Y="0.9" />
+      <knot TypeOfSpline="LINE" X="80" Y="0.93" />
+    </knots>
+  </curve>
+  <curve Name="human_deceleration_mult" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.5" />
+      <knot TypeOfSpline="HERMITE" X="0.233442" Y="0.680369" />
+      <knot TypeOfSpline="HERMITE" X="0.434276" Y="0.799862" />
+      <knot TypeOfSpline="HERMITE" X="0.699293" Y="0.922076" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="human_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="HERMITE" X="1" Y="100" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="human_ko_prob" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="1" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="infected_max_speed" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="12">
+      <knot TypeOfSpline="LINE" X="-1" Y="150" />
+      <knot TypeOfSpline="LINE" X="-0.520848" Y="165.568" />
+      <knot TypeOfSpline="LINE" X="-0.178798" Y="195.222" />
+      <knot TypeOfSpline="LINE" X="0.0388694" Y="241.68" />
+      <knot TypeOfSpline="LINE" X="0.181025" Y="299.259" />
+      <knot TypeOfSpline="LINE" X="0.286219" Y="344.157" />
+      <knot TypeOfSpline="LINE" X="0.396113" Y="394.893" />
+      <knot TypeOfSpline="LINE" X="0.496113" Y="454.695" />
+      <knot TypeOfSpline="LINE" X="0.707" Y="600" />
+      <knot TypeOfSpline="LINE" X="0.831382" Y="770.346" />
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="1.1" Y="1000" />
+    </knots>
+  </curve>
+  <curve Name="human_melee_damage" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="human_melee_dodge_prob" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="9">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.1" />
+      <knot TypeOfSpline="HERMITE" X="0.17" Y="0.1" />
+      <knot TypeOfSpline="HERMITE" X="0.345" Y="0.17" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="0.24" />
+      <knot TypeOfSpline="HERMITE" X="0.69" Y="0.38" />
+      <knot TypeOfSpline="HERMITE" X="0.9" Y="0.55" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.65" />
+      <knot TypeOfSpline="HERMITE" X="1.1" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="1.2" Y="0.75" />
+    </knots>
+  </curve>
+  <curve Name="human_turn_speed" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="9">
+      <knot TypeOfSpline="HERMITE" X="-1.01933" Y="436.667" />
+      <knot TypeOfSpline="HERMITE" X="-0.652667" Y="430" />
+      <knot TypeOfSpline="HERMITE" X="-0.322667" Y="416.667" />
+      <knot TypeOfSpline="HERMITE" X="-0.066" Y="393.333" />
+      <knot TypeOfSpline="HERMITE" X="0.183333" Y="343.333" />
+      <knot TypeOfSpline="HERMITE" X="0.366667" Y="296.667" />
+      <knot TypeOfSpline="HERMITE" X="0.572" Y="226.667" />
+      <knot TypeOfSpline="HERMITE" X="0.748" Y="156.667" />
+      <knot TypeOfSpline="HERMITE" X="0.953333" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="human_weapon_throw_prob" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="0.5" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="infected_combo_prob" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="HERMITE" X="1" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="12.58" Y="21.2667" />
+      <knot TypeOfSpline="HERMITE" X="24.99" Y="46.2" />
+      <knot TypeOfSpline="HERMITE" X="37.91" Y="75.5333" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="100" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="infected_counter_attack_prob" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="80" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="thug_counter_attack_prob" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="80" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="infected_eq_gain_hi_enemy" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="0" Y="2.25" />
+      <knot TypeOfSpline="HERMITE" X="200" Y="1.8" />
+      <knot TypeOfSpline="HERMITE" X="660" Y="1.45" />
+      <knot TypeOfSpline="HERMITE" X="1100" Y="1.1" />
+      <knot TypeOfSpline="HERMITE" X="1800" Y="0.65" />
+      <knot TypeOfSpline="HERMITE" X="2600" Y="0.4" />
+      <knot TypeOfSpline="HERMITE" X="4200" Y="0.25" />
+    </knots>
+  </curve>
+  <curve Name="infected_eq_gain_hi_no_enemy" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="HERMITE" X="0" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1200" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="2600" Y="0.4" />
+      <knot TypeOfSpline="HERMITE" X="4200" Y="0.25" />
+    </knots>
+  </curve>
+  <curve Name="infected_eq_gain_lo_enemy" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="0" Y="2.25" />
+      <knot TypeOfSpline="HERMITE" X="200" Y="1.8" />
+      <knot TypeOfSpline="HERMITE" X="660" Y="1.45" />
+      <knot TypeOfSpline="HERMITE" X="1100" Y="1.15" />
+      <knot TypeOfSpline="HERMITE" X="1800" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="2600" Y="0.6" />
+      <knot TypeOfSpline="HERMITE" X="4200" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="infected_eq_gain_lo_no_enemy" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="HERMITE" X="0" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1200" Y="0.75" />
+      <knot TypeOfSpline="HERMITE" X="2200" Y="0.6" />
+      <knot TypeOfSpline="HERMITE" X="3200" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="infected_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="100" />
+      <knot TypeOfSpline="LINE" X="60" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="volatile_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="60" Y="1000" />
+    </knots>
+  </curve>
+  <curve Name="hive_brood_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="1" Y="270" />
+      <knot TypeOfSpline="HERMITE" X="2" Y="270" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="270" />
+    </knots>
+  </curve>
+  <curve Name="infected_ko_prob" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="1" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="12.41" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="24.99" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="37.91" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="infected_melee_damage" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="10" />
+      <knot TypeOfSpline="LINE" X="60" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="volatile_melee_damage" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="20" />
+      <knot TypeOfSpline="LINE" X="60" Y="20" />
+    </knots>
+  </curve>
+  <curve Name="infected_melee_dodge_prob" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="10">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.1" />
+      <knot TypeOfSpline="HERMITE" X="0.13" Y="0.1" />
+      <knot TypeOfSpline="HERMITE" X="0.285" Y="0.22" />
+      <knot TypeOfSpline="HERMITE" X="0.39" Y="0.295" />
+      <knot TypeOfSpline="HERMITE" X="0.515" Y="0.35" />
+      <knot TypeOfSpline="HERMITE" X="0.655" Y="0.4" />
+      <knot TypeOfSpline="HERMITE" X="0.9" Y="0.5" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.55" />
+      <knot TypeOfSpline="HERMITE" X="1.1" Y="0.65" />
+      <knot TypeOfSpline="HERMITE" X="1.2" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="infected_turn_speed" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="HERMITE" X="-1.012" Y="546.667" />
+      <knot TypeOfSpline="HERMITE" X="-0.696667" Y="536.667" />
+      <knot TypeOfSpline="HERMITE" X="-0.388667" Y="493.333" />
+      <knot TypeOfSpline="HERMITE" X="-0.0806667" Y="440" />
+      <knot TypeOfSpline="HERMITE" X="0.183333" Y="376.667" />
+      <knot TypeOfSpline="HERMITE" X="0.491333" Y="266.667" />
+      <knot TypeOfSpline="HERMITE" X="0.755333" Y="176.667" />
+      <knot TypeOfSpline="HERMITE" X="1.00467" Y="116.667" />
+    </knots>
+  </curve>
+  <curve Name="infected_weapon_throw_prob" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="0.5" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="item_buy_percent_value_cost" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.25" />
+      <knot TypeOfSpline="HERMITE" X="0.143333" Y="0.356667" />
+      <knot TypeOfSpline="HERMITE" X="0.31" Y="0.556667" />
+      <knot TypeOfSpline="HERMITE" X="0.44" Y="0.773333" />
+      <knot TypeOfSpline="HERMITE" X="0.613333" Y="0.953333" />
+      <knot TypeOfSpline="HERMITE" X="0.8" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="item_color_price_mult" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="0" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="3" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="4" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="item_level_distribution" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="21">
+      <knot TypeOfSpline="HERMITE" X="-10" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="-9" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="-8" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="-7" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="-6" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="-5" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="-4" Y="6.5" />
+      <knot TypeOfSpline="HERMITE" X="-3" Y="6" />
+      <knot TypeOfSpline="HERMITE" X="-2" Y="5.5" />
+      <knot TypeOfSpline="HERMITE" X="-1" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="3" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="4" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="5" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="6" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="7" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="8" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="9" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="item_price_mult" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.35" />
+      <knot TypeOfSpline="HERMITE" X="7.31" Y="1.4" />
+      <knot TypeOfSpline="HERMITE" X="14.62" Y="1.55" />
+      <knot TypeOfSpline="HERMITE" X="24.48" Y="1.96" />
+      <knot TypeOfSpline="HERMITE" X="35.7" Y="2.50667" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="2.8" />
+      <knot TypeOfSpline="HERMITE" X="64.5333" Y="2.95" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="3" />
+    </knots>
+  </curve>
+  <curve Name="xp_fighter_damage" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="15">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="5" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="15" Y="10" />
+      <knot TypeOfSpline="HERMITE" X="20" Y="11" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="12" />
+      <knot TypeOfSpline="HERMITE" X="35" Y="13" />
+      <knot TypeOfSpline="HERMITE" X="40" Y="14" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="16" />
+      <knot TypeOfSpline="HERMITE" X="70" Y="18" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="20" />
+      <knot TypeOfSpline="HERMITE" X="100" Y="22" />
+      <knot TypeOfSpline="HERMITE" X="140" Y="24" />
+      <knot TypeOfSpline="HERMITE" X="160" Y="26" />
+      <knot TypeOfSpline="HERMITE" X="200" Y="28" />
+      <knot TypeOfSpline="HERMITE" X="280" Y="30" />
+    </knots>
+  </curve>
+  <curve Name="item_quality_price_mult_common" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.75" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.85" />
+      <knot TypeOfSpline="HERMITE" X="2" Y="1.1" />
+    </knots>
+  </curve>
+  <curve Name="item_quality_price_mult_uncommon" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="0" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.1" />
+      <knot TypeOfSpline="HERMITE" X="2" Y="1.25" />
+    </knots>
+  </curve>
+  <curve Name="item_rand_distribution" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1.18" Y="0.753333" />
+      <knot TypeOfSpline="HERMITE" X="2.73733" Y="0.466667" />
+      <knot TypeOfSpline="HERMITE" X="4.80667" Y="0.12" />
+      <knot TypeOfSpline="HERMITE" X="6.3" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="item_salvage_percent_value_cost" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="10">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.05" />
+      <knot TypeOfSpline="HERMITE" X="0.13" Y="0.0566667" />
+      <knot TypeOfSpline="HERMITE" X="0.276667" Y="0.0766667" />
+      <knot TypeOfSpline="HERMITE" X="0.403333" Y="0.126667" />
+      <knot TypeOfSpline="HERMITE" X="0.516667" Y="0.21" />
+      <knot TypeOfSpline="HERMITE" X="0.58" Y="0.273333" />
+      <knot TypeOfSpline="HERMITE" X="0.65" Y="0.356667" />
+      <knot TypeOfSpline="HERMITE" X="0.74" Y="0.443333" />
+      <knot TypeOfSpline="HERMITE" X="0.856667" Y="0.516667" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.55" />
+    </knots>
+  </curve>
+  <curve Name="item_repair_percent_value_cost" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="10">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.05" />
+      <knot TypeOfSpline="HERMITE" X="0.13" Y="0.0566667" />
+      <knot TypeOfSpline="HERMITE" X="0.276667" Y="0.0766667" />
+      <knot TypeOfSpline="HERMITE" X="0.403333" Y="0.126667" />
+      <knot TypeOfSpline="HERMITE" X="0.516667" Y="0.21" />
+      <knot TypeOfSpline="HERMITE" X="0.58" Y="0.273333" />
+      <knot TypeOfSpline="HERMITE" X="0.65" Y="0.356667" />
+      <knot TypeOfSpline="HERMITE" X="0.74" Y="0.443333" />
+      <knot TypeOfSpline="HERMITE" X="0.856667" Y="0.516667" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.55" />
+    </knots>
+  </curve>
+  <curve Name="max_additional_diff_level" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="1" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="7" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="12.24" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="16.49" Y="5.66667" />
+      <knot TypeOfSpline="HERMITE" X="22" Y="6.4" />
+      <knot TypeOfSpline="HERMITE" X="30" Y="7" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="7" />
+    </knots>
+  </curve>
+  <curve Name="optimal_fight_ranges" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="LINE" X="0" Y="0.01" />
+      <knot TypeOfSpline="LINE" X="5" Y="0.4" />
+      <knot TypeOfSpline="LINE" X="8" Y="1" />
+      <knot TypeOfSpline="LINE" X="15" Y="1" />
+      <knot TypeOfSpline="LINE" X="40" Y="0.1" />
+      <knot TypeOfSpline="HERMITE" X="100" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="player_aim_look_speed_mul_" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.3" Y="0.033333" />
+      <knot TypeOfSpline="HERMITE" X="0.6" Y="0.14333" />
+      <knot TypeOfSpline="HERMITE" X="0.8" Y="0.3633" />
+      <knot TypeOfSpline="HERMITE" X="0.92" Y="0.6" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="player_look_speed_mul_" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="0.25" />
+      <knot TypeOfSpline="HERMITE" X="0.8" Y="0.61" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="ram_melee_damage" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="HERMITE" X="1" Y="28" />
+      <knot TypeOfSpline="HERMITE" X="4" Y="30" />
+      <knot TypeOfSpline="HERMITE" X="7" Y="48" />
+      <knot TypeOfSpline="HERMITE" X="12" Y="63" />
+      <knot TypeOfSpline="HERMITE" X="20" Y="85" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="130" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="140" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="150" />
+    </knots>
+  </curve>
+  <curve Name="ranged_weapon_distance_hit_mul_mp" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="5" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="8.55459" Y="1.39885" />
+      <knot TypeOfSpline="HERMITE" X="15" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="ranged_weapon_distance_hit_mul_sp" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="wheel_lat_slip_ratio" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="-0.2" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="wheel_long_slip_ratio" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.85" />
+      <knot TypeOfSpline="HERMITE" X="-0.13" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="-0.06" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.06" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.13" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.85" />
+    </knots>
+  </curve>
+  <curve Name="xp_amount_mult" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="17">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="5" Y="1.2" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="15" Y="3" />
+      <knot TypeOfSpline="HERMITE" X="20" Y="5.6" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="9" />
+      <knot TypeOfSpline="HERMITE" X="30" Y="11" />
+      <knot TypeOfSpline="HERMITE" X="35" Y="24" />
+      <knot TypeOfSpline="HERMITE" X="40" Y="37" />
+      <knot TypeOfSpline="HERMITE" X="45" Y="58" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="90" />
+      <knot TypeOfSpline="HERMITE" X="55" Y="125" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="185" />
+      <knot TypeOfSpline="HERMITE" X="65" Y="290" />
+      <knot TypeOfSpline="HERMITE" X="70" Y="460" />
+      <knot TypeOfSpline="HERMITE" X="75" Y="750" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="1220" />
+    </knots>
+  </curve>
+  <curve Name="zombie_combo_prob" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="HERMITE" X="1" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="13.09" Y="11.3667" />
+      <knot TypeOfSpline="HERMITE" X="25.67" Y="30.4333" />
+      <knot TypeOfSpline="HERMITE" X="39.61" Y="63.0667" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="100" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="zombie_counter_attack_prob" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="20" Y="0.8" />
+      <knot TypeOfSpline="LINE" X="50" Y="0.9" />
+      <knot TypeOfSpline="LINE" X="80" Y="0.95" />
+    </knots>
+  </curve>
+  <curve Name="zombie_eq_gain_hi_enemy" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="HERMITE" X="0" Y="2.25" />
+      <knot TypeOfSpline="HERMITE" X="200" Y="1.8" />
+      <knot TypeOfSpline="HERMITE" X="425" Y="1.4" />
+      <knot TypeOfSpline="HERMITE" X="800" Y="0.87" />
+      <knot TypeOfSpline="HERMITE" X="1200" Y="0.5" />
+      <knot TypeOfSpline="HERMITE" X="1700" Y="0.3" />
+    </knots>
+  </curve>
+  <curve Name="zombie_eq_gain_hi_no_enemy" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="0" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1200" Y="0.5" />
+      <knot TypeOfSpline="HERMITE" X="1700" Y="0.3" />
+    </knots>
+  </curve>
+  <curve Name="zombie_eq_gain_lo_enemy" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="HERMITE" X="0" Y="2.25" />
+      <knot TypeOfSpline="HERMITE" X="200" Y="1.8" />
+      <knot TypeOfSpline="HERMITE" X="425" Y="1.42" />
+      <knot TypeOfSpline="HERMITE" X="800" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1230" Y="0.66" />
+      <knot TypeOfSpline="HERMITE" X="1800" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="zombie_eq_gain_lo_no_enemy" NumberOfSamples="30" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="0" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1230" Y="0.66" />
+      <knot TypeOfSpline="HERMITE" X="1800" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="zombie_explosion_damage" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="LINE" X="1" Y="200" />
+      <knot TypeOfSpline="LINE" X="8" Y="200" />
+      <knot TypeOfSpline="LINE" X="9" Y="300" />
+      <knot TypeOfSpline="LINE" X="17" Y="300" />
+      <knot TypeOfSpline="LINE" X="18" Y="400" />
+      <knot TypeOfSpline="LINE" X="60" Y="400" />
+    </knots>
+  </curve>
+  <curve Name="btz_suicider_explosion_damage" NumberOfSamples="2" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="500" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="500" />
+    </knots>
+  </curve>
+  <curve Name="btz_suicider_explosion_damage_upgraded" NumberOfSamples="2" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="1200" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="1200" />
+    </knots>
+  </curve>
+  <curve Name="caster_death_explosion_damage" NumberOfSamples="80" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="10">
+      <knot TypeOfSpline="HERMITE" X="1" Y="62" />
+      <knot TypeOfSpline="HERMITE" X="5" Y="126" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="388" />
+      <knot TypeOfSpline="HERMITE" X="20" Y="1250" />
+      <knot TypeOfSpline="HERMITE" X="30" Y="3550" />
+      <knot TypeOfSpline="HERMITE" X="40" Y="10000" />
+      <knot TypeOfSpline="LINE" X="50" Y="29500" />
+      <knot TypeOfSpline="LINE" X="60" Y="29500" />
+      <knot TypeOfSpline="HERMITE" X="70" Y="29500" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="29500" />
+    </knots>
+  </curve>
+  <curve Name="zombie_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="100" />
+      <knot TypeOfSpline="LINE" X="60" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="spitter_easy_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="115" />
+      <knot TypeOfSpline="LINE" X="60" Y="115" />
+    </knots>
+  </curve>
+  <curve Name="spitter_medium_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="140" />
+      <knot TypeOfSpline="LINE" X="60" Y="140" />
+    </knots>
+  </curve>
+  <curve Name="spitter_hard_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="175" />
+      <knot TypeOfSpline="LINE" X="60" Y="175" />
+    </knots>
+  </curve>
+  <curve Name="prime_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="20" />
+      <knot TypeOfSpline="LINE" X="60" Y="20" />
+    </knots>
+  </curve>
+  <curve Name="prime_night_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="20" />
+      <knot TypeOfSpline="LINE" X="60" Y="20" />
+    </knots>
+  </curve>
+  <curve Name="suicider_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="75" />
+      <knot TypeOfSpline="LINE" X="60" Y="75" />
+    </knots>
+  </curve>
+  <curve Name="suicider_bomber_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="30" />
+      <knot TypeOfSpline="LINE" X="60" Y="30" />
+    </knots>
+  </curve>
+  <curve Name="screamer_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="125" />
+      <knot TypeOfSpline="LINE" X="60" Y="125" />
+    </knots>
+  </curve>
+  <curve Name="sniper_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="90" />
+      <knot TypeOfSpline="LINE" X="60" Y="90" />
+    </knots>
+  </curve>
+  <curve Name="boss_tahir_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="250" />
+      <knot TypeOfSpline="LINE" X="60" Y="250" />
+    </knots>
+  </curve>
+  <curve Name="boss_shooter_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="250" />
+      <knot TypeOfSpline="LINE" X="60" Y="250" />
+    </knots>
+  </curve>
+  <curve Name="shooter_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="250" />
+      <knot TypeOfSpline="LINE" X="60" Y="250" />
+    </knots>
+  </curve>
+  <curve Name="heavy_shooter_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="250" />
+      <knot TypeOfSpline="LINE" X="60" Y="250" />
+    </knots>
+  </curve>
+  <curve Name="human_melee_resident_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="110" />
+      <knot TypeOfSpline="LINE" X="60" Y="110" />
+    </knots>
+  </curve>
+  <curve Name="human_melee_fighter_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="100" />
+      <knot TypeOfSpline="LINE" X="60" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="human_melee_leader_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="100" />
+      <knot TypeOfSpline="LINE" X="60" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="thug_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="60" Y="1000" />
+    </knots>
+  </curve>
+  <curve Name="zombie_ko_prob" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="1" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="zombie_ko_prob_thug" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="1" Y="100" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="100" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="zombie_melee_damage" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="9" />
+      <knot TypeOfSpline="LINE" X="60" Y="9" />
+    </knots>
+  </curve>
+  <curve Name="venom_damage_multiplier" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="40" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="venom_force_multiplier" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="40" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="flashlight_damage_multiplier" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="40" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="zombie_turn_speed" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1.06333" Y="111" />
+      <knot TypeOfSpline="HERMITE" X="-0.528" Y="111" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="115" />
+      <knot TypeOfSpline="HERMITE" X="0.410667" Y="94" />
+      <knot TypeOfSpline="HERMITE" X="0.946" Y="50" />
+    </knots>
+  </curve>
+  <curve Name="zombie_weapon_throw_prob" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.15" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="0.5" />
+      <knot TypeOfSpline="HERMITE" X="80" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="burn_mesh_attribute" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="0.3" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="PlayerFuryEffect_Rising" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="LINE" X="1" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="Player_LowHealthEffect" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.7" Y="1" />
+      <knot TypeOfSpline="LINE" X="3.73651" Y="0.421746" />
+      <knot TypeOfSpline="LINE" X="4" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="armored_health" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="4500" />
+      <knot TypeOfSpline="LINE" X="60" Y="4500" />
+    </knots>
+  </curve>
+  <curve Name="armored_melee_damage" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="HERMITE" X="1" Y="20" />
+      <knot TypeOfSpline="HERMITE" X="60" Y="20" />
+    </knots>
+  </curve>
+  <curve Name="spitter_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="250" />
+      <knot TypeOfSpline="LINE" X="60" Y="250" />
+    </knots>
+  </curve>
+  <curve Name="spitter_damage" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="LINE" X="1" Y="12" />
+      <knot TypeOfSpline="LINE" X="8" Y="12" />
+      <knot TypeOfSpline="LINE" X="9" Y="24" />
+      <knot TypeOfSpline="LINE" X="17" Y="24" />
+      <knot TypeOfSpline="LINE" X="18" Y="36" />
+      <knot TypeOfSpline="LINE" X="60" Y="36" />
+    </knots>
+  </curve>
+  <curve Name="hive_health" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="50">
+      <knot TypeOfSpline="HERMITE" X="1" Y="500" />
+      <knot TypeOfSpline="HERMITE" X="2" Y="555.6" />
+      <knot TypeOfSpline="HERMITE" X="3" Y="617.3" />
+      <knot TypeOfSpline="HERMITE" X="4" Y="685.9" />
+      <knot TypeOfSpline="HERMITE" X="5" Y="762.1" />
+      <knot TypeOfSpline="HERMITE" X="6" Y="846.8" />
+      <knot TypeOfSpline="HERMITE" X="7" Y="940.8" />
+      <knot TypeOfSpline="HERMITE" X="8" Y="1045.4" />
+      <knot TypeOfSpline="HERMITE" X="9" Y="1161.5" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="1290.6" />
+      <knot TypeOfSpline="HERMITE" X="11" Y="1434" />
+      <knot TypeOfSpline="HERMITE" X="12" Y="1593.3" />
+      <knot TypeOfSpline="HERMITE" X="13" Y="1770.4" />
+      <knot TypeOfSpline="HERMITE" X="14" Y="1967.1" />
+      <knot TypeOfSpline="HERMITE" X="15" Y="2185.6" />
+      <knot TypeOfSpline="HERMITE" X="16" Y="2428.5" />
+      <knot TypeOfSpline="HERMITE" X="17" Y="2698.3" />
+      <knot TypeOfSpline="HERMITE" X="18" Y="2998.1" />
+      <knot TypeOfSpline="HERMITE" X="19" Y="3331.2" />
+      <knot TypeOfSpline="HERMITE" X="20" Y="3701.4" />
+      <knot TypeOfSpline="HERMITE" X="21" Y="4112.6" />
+      <knot TypeOfSpline="HERMITE" X="22" Y="4569.6" />
+      <knot TypeOfSpline="HERMITE" X="23" Y="5077.3" />
+      <knot TypeOfSpline="HERMITE" X="24" Y="5641.5" />
+      <knot TypeOfSpline="HERMITE" X="25" Y="6268.3" />
+      <knot TypeOfSpline="HERMITE" X="26" Y="6964.8" />
+      <knot TypeOfSpline="HERMITE" X="27" Y="7738.6" />
+      <knot TypeOfSpline="HERMITE" X="28" Y="8598.5" />
+      <knot TypeOfSpline="HERMITE" X="29" Y="9553.9" />
+      <knot TypeOfSpline="HERMITE" X="30" Y="10615.4" />
+      <knot TypeOfSpline="HERMITE" X="31" Y="11794.9" />
+      <knot TypeOfSpline="HERMITE" X="32" Y="13105.5" />
+      <knot TypeOfSpline="HERMITE" X="33" Y="14561.6" />
+      <knot TypeOfSpline="HERMITE" X="34" Y="16179.6" />
+      <knot TypeOfSpline="HERMITE" X="35" Y="17977.3" />
+      <knot TypeOfSpline="HERMITE" X="36" Y="19974.8" />
+      <knot TypeOfSpline="HERMITE" X="37" Y="22194.2" />
+      <knot TypeOfSpline="HERMITE" X="38" Y="24660.2" />
+      <knot TypeOfSpline="HERMITE" X="39" Y="27400.3" />
+      <knot TypeOfSpline="HERMITE" X="40" Y="30444.7" />
+      <knot TypeOfSpline="HERMITE" X="41" Y="33827.5" />
+      <knot TypeOfSpline="HERMITE" X="42" Y="37586.1" />
+      <knot TypeOfSpline="HERMITE" X="43" Y="41762.3" />
+      <knot TypeOfSpline="HERMITE" X="44" Y="46402.6" />
+      <knot TypeOfSpline="HERMITE" X="45" Y="51558.4" />
+      <knot TypeOfSpline="HERMITE" X="46" Y="57287.1" />
+      <knot TypeOfSpline="HERMITE" X="47" Y="63652.4" />
+      <knot TypeOfSpline="HERMITE" X="48" Y="70724.9" />
+      <knot TypeOfSpline="HERMITE" X="49" Y="78583.2" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="87314.6" />
+    </knots>
+  </curve>
+  <curve Name="experience_mul_per_level_diff" NumberOfSamples="2" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="-10" Y="1" />
+      <knot TypeOfSpline="LINE" X="10" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="player_melee_attack_precision_per_angle" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.4" />
+      <knot TypeOfSpline="HERMITE" X="0.414134" Y="0.351895" />
+      <knot TypeOfSpline="HERMITE" X="0.646643" Y="0.108566" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.04" />
+    </knots>
+  </curve>
+  <curve Name="volatile_combo_prob" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="LINE" X="1" Y="100" />
+      <knot TypeOfSpline="LINE" X="11.1666" Y="100" />
+      <knot TypeOfSpline="LINE" X="24.99" Y="100" />
+      <knot TypeOfSpline="LINE" X="37.91" Y="100" />
+      <knot TypeOfSpline="LINE" X="50" Y="100" />
+      <knot TypeOfSpline="LINE" X="80" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="wpn_melee_damage_spread_white" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="0" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="0.25" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="10" />
+      <knot TypeOfSpline="HERMITE" X="0.75" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="0.99" Y="2" />
+    </knots>
+  </curve>
+  <curve Name="wpn_melee_damage_spread_green" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="2" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="2.25" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="2.5" Y="10" />
+      <knot TypeOfSpline="HERMITE" X="2.75" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="2.99" Y="2" />
+    </knots>
+  </curve>
+  <curve Name="wpn_melee_damage_spread_blue" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="4" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="4.25" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="4.5" Y="10" />
+      <knot TypeOfSpline="HERMITE" X="4.75" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="4.99" Y="2" />
+    </knots>
+  </curve>
+  <curve Name="wpn_melee_damage_spread_violet" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="6" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="6.25" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="6.5" Y="10" />
+      <knot TypeOfSpline="HERMITE" X="6.75" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="6.99" Y="2" />
+    </knots>
+  </curve>
+  <curve Name="wpn_melee_damage_spread_orange" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="8" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="8.25" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="8.5" Y="10" />
+      <knot TypeOfSpline="HERMITE" X="8.75" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="8.99" Y="2" />
+    </knots>
+  </curve>
+  <curve Name="wpn_melee_damage_spread_platinum" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="10" Y="2" />
+      <knot TypeOfSpline="HERMITE" X="10.25" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="10.5" Y="10" />
+      <knot TypeOfSpline="HERMITE" X="10.75" Y="4" />
+      <knot TypeOfSpline="HERMITE" X="10.99" Y="2" />
+    </knots>
+  </curve>
+  <curve Name="IK_posture_spring_downhill" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0.4" />
+      <knot TypeOfSpline="LINE" X="1.58834" Y="0.25" />
+      <knot TypeOfSpline="LINE" X="3" Y="0.15" />
+      <knot TypeOfSpline="LINE" X="4" Y="0.123558" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="0.07" />
+    </knots>
+  </curve>
+  <curve Name="IK_posture_spring_uphill" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="2" Y="0.3" />
+      <knot TypeOfSpline="LINE" X="4" Y="0.1" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.07" />
+    </knots>
+  </curve>
+  <curve Name="IK_posture_down_shift_correction" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0.25" Y="0" />
+      <knot TypeOfSpline="LINE" X="1.5" Y="1" />
+      <knot TypeOfSpline="LINE" X="2.5" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="prime_hunting_avoid_player_coef" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="6.69611" Y="0.894563" />
+      <knot TypeOfSpline="HERMITE" X="15.5654" Y="0.28995" />
+      <knot TypeOfSpline="HERMITE" X="30" Y="0.1" />
+    </knots>
+  </curve>
+  <curve Name="prime_speed_factor" NumberOfSamples="20" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1.15" />
+      <knot TypeOfSpline="LINE" X="5" Y="1" />
+      <knot TypeOfSpline="LINE" X="9" Y="1" />
+      <knot TypeOfSpline="LINE" X="20" Y="0.85" />
+    </knots>
+  </curve>
+  <curve Name="zombie_sight_range_height_reduction_mul" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="1.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="2" Y="0.6" />
+      <knot TypeOfSpline="HERMITE" X="6" Y="0.2" />
+    </knots>
+  </curve>
+  <curve Name="infected_sight_range_height_reduction_mul" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="3" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="6" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="volatile_sight_range_height_reduction_mul" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="3" Y="0.9" />
+      <knot TypeOfSpline="HERMITE" X="6" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="human_sight_range_height_reduction_mul" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="HERMITE" X="4" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="10" Y="0.2" />
+    </knots>
+  </curve>
+  <curve Name="enc_easy_level_weigh" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="5" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="7.96113" Y="0.69374" />
+      <knot TypeOfSpline="HERMITE" X="12.0583" Y="0.500824" />
+    </knots>
+  </curve>
+  <curve Name="enc_medium_level_weigh" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="5" Y="0" />
+      <knot TypeOfSpline="LINE" X="15" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="enc_hard_level_weigh" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="0" />
+      <knot TypeOfSpline="LINE" X="15" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="weapon_deteriorate_rate" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="10" Y="2" />
+      <knot TypeOfSpline="LINE" X="30" Y="5" />
+      <knot TypeOfSpline="LINE" X="40" Y="9" />
+      <knot TypeOfSpline="LINE" X="100" Y="9" />
+    </knots>
+  </curve>
+  <curve Name="buggy_wheel_lat_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-1.1" />
+      <knot TypeOfSpline="HERMITE" X="-0.2" Y="-0.9" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.2" Y="0.9" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.1" />
+    </knots>
+  </curve>
+  <curve Name="buggy_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.85" />
+      <knot TypeOfSpline="HERMITE" X="-0.448021" Y="-0.874135" />
+      <knot TypeOfSpline="HERMITE" X="-0.06" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.06" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.37735" Y="0.869193" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.85" />
+    </knots>
+  </curve>
+  <curve Name="buggy_wheel_lat_slip_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="buggy_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="-0.2" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="buggy_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="enemy_distance_priority_HMF" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="1.1" />
+      <knot TypeOfSpline="LINE" X="4" Y="1" />
+      <knot TypeOfSpline="LINE" X="6" Y="0.3" />
+      <knot TypeOfSpline="LINE" X="8.5" Y="0.214286" />
+      <knot TypeOfSpline="LINE" X="11" Y="0.2" />
+    </knots>
+  </curve>
+  <curve Name="const_zero" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="const_one" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="10" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="enc_reward_experience_multiplier_per_level" NumberOfSamples="11" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="11">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="1" Y="1.2" />
+      <knot TypeOfSpline="LINE" X="2" Y="1.4" />
+      <knot TypeOfSpline="LINE" X="3" Y="1.6" />
+      <knot TypeOfSpline="LINE" X="4" Y="1.8" />
+      <knot TypeOfSpline="LINE" X="5" Y="2" />
+      <knot TypeOfSpline="LINE" X="6" Y="2.2" />
+      <knot TypeOfSpline="LINE" X="7" Y="2.4" />
+      <knot TypeOfSpline="LINE" X="8" Y="2.6" />
+      <knot TypeOfSpline="LINE" X="9" Y="2.8" />
+      <knot TypeOfSpline="LINE" X="10" Y="3" />
+    </knots>
+  </curve>
+  <curve Name="challenge_reward_xp_multiplier_per_level" NumberOfSamples="11" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="11">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="1" Y="1.2" />
+      <knot TypeOfSpline="LINE" X="2" Y="1.4" />
+      <knot TypeOfSpline="LINE" X="3" Y="1.6" />
+      <knot TypeOfSpline="LINE" X="4" Y="1.8" />
+      <knot TypeOfSpline="LINE" X="5" Y="2" />
+      <knot TypeOfSpline="LINE" X="6" Y="2.2" />
+      <knot TypeOfSpline="LINE" X="7" Y="2.4" />
+      <knot TypeOfSpline="LINE" X="8" Y="2.6" />
+      <knot TypeOfSpline="LINE" X="9" Y="2.8" />
+      <knot TypeOfSpline="LINE" X="10" Y="3" />
+    </knots>
+  </curve>
+  <curve Name="tarmac_buggy_wst_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="LINE" X="-1" Y="-0.8" />
+      <knot TypeOfSpline="LINE" X="-0.3" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="-0.1" Y="-0.9" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="0.9" />
+      <knot TypeOfSpline="LINE" X="0.3" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="tarmac_buggy_wst_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="9">
+      <knot TypeOfSpline="LINE" X="-1" Y="-0.7" />
+      <knot TypeOfSpline="LINE" X="-0.4" Y="-1" />
+      <knot TypeOfSpline="LINE" X="-0.3" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="-0.1" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="0.8" />
+      <knot TypeOfSpline="LINE" X="0.3" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.4" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="tarmac_buggy_wst_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.6" />
+      <knot TypeOfSpline="HERMITE" X="-0.448021" Y="-0.65" />
+      <knot TypeOfSpline="HERMITE" X="-0.06" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.06" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.37735" Y="0.869193" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.85" />
+    </knots>
+  </curve>
+  <curve Name="tarmac_buggy_wst_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="tarmac_buggy_wst_wheel_lat_slip_reduction_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="-0.1" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="tarmac_buggy_wst_wheel_vel_traction_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="20" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="ground_buggy_wst_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.9" />
+      <knot TypeOfSpline="HERMITE" X="-0.5" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.9" />
+    </knots>
+  </curve>
+  <curve Name="ground_buggy_wst_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="LINE" X="-1" Y="-0.5" />
+      <knot TypeOfSpline="LINE" X="-0.2" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="-0.1" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="0.8" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="ground_buggy_wst_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.55" />
+      <knot TypeOfSpline="HERMITE" X="-0.448021" Y="-0.6" />
+      <knot TypeOfSpline="HERMITE" X="-0.1" Y="-0.75" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.37735" Y="0.869193" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.85" />
+    </knots>
+  </curve>
+  <curve Name="ground_buggy_wst_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="ground_buggy_wst_wheel_lat_slip_reduction_rear" NumberOfSamples="200" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="-0.1" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="-0.01" Y="1" />
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.3" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="ground_buggy_wst_wheel_vel_traction_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="5" Y="1" />
+      <knot TypeOfSpline="LINE" X="20" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="sand_buggy_wst_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="-1" Y="-1.1" />
+      <knot TypeOfSpline="LINE" X="-0.5" Y="-0.7" />
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.5" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.1" />
+    </knots>
+  </curve>
+  <curve Name="sand_buggy_wst_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="LINE" X="-1" Y="-0.7" />
+      <knot TypeOfSpline="LINE" X="-0.4" Y="-0.55" />
+      <knot TypeOfSpline="LINE" X="-0.15" Y="-0.6" />
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.15" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="0.4" Y="0.55" />
+      <knot TypeOfSpline="LINE" X="1" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="sand_buggy_wst_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="HERMITE" X="-2" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.4" />
+      <knot TypeOfSpline="HERMITE" X="-0.5" Y="-0.5" />
+      <knot TypeOfSpline="HERMITE" X="-0.15" Y="-0.7" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.15" Y="0.9" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="1.1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.5" />
+    </knots>
+  </curve>
+  <curve Name="sand_buggy_wst_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="sand_buggy_wst_wheel_lat_slip_reduction_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="-0.2" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="0.85" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.85" />
+    </knots>
+  </curve>
+  <curve Name="sand_buggy_wst_wheel_vel_traction_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="8" Y="1" />
+      <knot TypeOfSpline="LINE" X="15" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="grass_buggy_wst_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="-1" Y="-1.1" />
+      <knot TypeOfSpline="LINE" X="-0.4" Y="-0.8" />
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.4" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.1" />
+    </knots>
+  </curve>
+  <curve Name="grass_buggy_wst_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="LINE" X="-1" Y="-0.9" />
+      <knot TypeOfSpline="LINE" X="-0.5" Y="-0.6" />
+      <knot TypeOfSpline="LINE" X="-0.18" Y="-0.75" />
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.18" Y="0.75" />
+      <knot TypeOfSpline="LINE" X="0.5" Y="0.6" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.9" />
+    </knots>
+  </curve>
+  <curve Name="grass_buggy_wst_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.85" />
+      <knot TypeOfSpline="HERMITE" X="-0.448021" Y="-0.874135" />
+      <knot TypeOfSpline="HERMITE" X="-0.06" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.06" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.37735" Y="0.869193" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.3" />
+    </knots>
+  </curve>
+  <curve Name="grass_buggy_wst_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="grass_buggy_wst_wheel_lat_slip_reduction_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="-0.2" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.4" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="grass_cut_buggy_wst_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="-1" Y="-1.1" />
+      <knot TypeOfSpline="LINE" X="-0.5" Y="-0.7" />
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.5" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.1" />
+    </knots>
+  </curve>
+  <curve Name="grass_cut_buggy_wst_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="LINE" X="-1" Y="-0.7" />
+      <knot TypeOfSpline="LINE" X="-0.4" Y="-0.55" />
+      <knot TypeOfSpline="LINE" X="-0.15" Y="-0.6" />
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.15" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="0.4" Y="0.55" />
+      <knot TypeOfSpline="LINE" X="1" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="grass_cut_buggy_wst_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="HERMITE" X="-2" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.4" />
+      <knot TypeOfSpline="HERMITE" X="-0.5" Y="-0.5" />
+      <knot TypeOfSpline="HERMITE" X="-0.15" Y="-0.7" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.15" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.3" />
+    </knots>
+  </curve>
+  <curve Name="grass_cut_buggy_wst_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="grass_cut_buggy_wst_wheel_lat_slip_reduction_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="-0.2" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="0.85" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.85" />
+    </knots>
+  </curve>
+  <curve Name="grass_buggy_wst_wheel_vel_traction_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="5" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="15" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="grass_high_buggy_wst_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="3" Y="0" />
+      <knot TypeOfSpline="LINE" X="9" Y="1.3" />
+      <knot TypeOfSpline="LINE" X="11" Y="2.2" />
+      <knot TypeOfSpline="LINE" X="14" Y="5" />
+      <knot TypeOfSpline="LINE" X="16" Y="15" />
+    </knots>
+  </curve>
+  <curve Name="water_buggy_wst_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-1.1" />
+      <knot TypeOfSpline="HERMITE" X="-0.3" Y="-0.9" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.3" Y="0.9" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.1" />
+    </knots>
+  </curve>
+  <curve Name="water_buggy_wst_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="-0.15" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.15" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="water_buggy_wst_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="-0.448021" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="-0.06" Y="-0.7" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.06" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="0.37735" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="water_buggy_wst_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="water_buggy_wst_wheel_lat_slip_reduction_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="water_buggy_wst_wheel_vel_traction_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="17" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="water_buggy_wst_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="5" Y="0" />
+      <knot TypeOfSpline="LINE" X="13" Y="7" />
+      <knot TypeOfSpline="LINE" X="18" Y="30" />
+    </knots>
+  </curve>
+  <curve Name="ground_truck_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.9" />
+      <knot TypeOfSpline="HERMITE" X="-0.5" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="-0.4" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.4" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.9" />
+    </knots>
+  </curve>
+  <curve Name="ground_truck_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="LINE" X="-1" Y="-0.7" />
+      <knot TypeOfSpline="LINE" X="-0.2" Y="-0.83" />
+      <knot TypeOfSpline="HERMITE" X="-0.1" Y="-0.87" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="0.87" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="0.83" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="ground_truck_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.55" />
+      <knot TypeOfSpline="HERMITE" X="-0.448021" Y="-0.6" />
+      <knot TypeOfSpline="HERMITE" X="-0.1" Y="-0.75" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.37735" Y="0.869193" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.85" />
+    </knots>
+  </curve>
+  <curve Name="ground_truck_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="ground_truck_wheel_lat_slip_reduction_rear" NumberOfSamples="200" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="-0.1" Y="0.8" />
+      <knot TypeOfSpline="LINE" X="-0.01" Y="1" />
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.3" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="ground_truck_wheel_vel_traction_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="13" Y="1.05" />
+      <knot TypeOfSpline="LINE" X="18" Y="1.25" />
+    </knots>
+  </curve>
+  <curve Name="ground_truck_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.7" />
+      <knot TypeOfSpline="LINE" X="14" Y="1.2" />
+      <knot TypeOfSpline="LINE" X="16" Y="1.8" />
+      <knot TypeOfSpline="LINE" X="20" Y="3.0" />
+    </knots>
+  </curve>
+  <curve Name="grass_truck_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="-0.5" Y="-0.9" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="0.9" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="grass_truck_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="LINE" X="-1" Y="-0.8" />
+      <knot TypeOfSpline="LINE" X="-0.2" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="-0.1" Y="-0.8" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="0.8" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="0.8" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="grass_truck_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.55" />
+      <knot TypeOfSpline="HERMITE" X="-0.448021" Y="-0.6" />
+      <knot TypeOfSpline="HERMITE" X="-0.1" Y="-0.75" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.37735" Y="0.869193" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.85" />
+    </knots>
+  </curve>
+  <curve Name="grass_truck_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="grass_truck_wheel_lat_slip_reduction_rear" NumberOfSamples="200" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="-0.1" Y="0.8" />
+      <knot TypeOfSpline="LINE" X="-0.01" Y="1" />
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.3" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="grass_truck_wheel_vel_traction_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="5" Y="1" />
+      <knot TypeOfSpline="LINE" X="10" Y="1.0" />
+    </knots>
+  </curve>
+  <curve Name="grass_truck_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="5" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="1.2" />
+      <knot TypeOfSpline="LINE" X="15" Y="2.0" />
+    </knots>
+  </curve>
+  <curve Name="water_truck_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.9" />
+      <knot TypeOfSpline="HERMITE" X="-0.3" Y="-0.7" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.3" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.9" />
+    </knots>
+  </curve>
+  <curve Name="water_truck_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-0.5" Y="-0.9" />
+      <knot TypeOfSpline="HERMITE" X="-0.15" Y="-0.7" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.15" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="0.9" />
+    </knots>
+  </curve>
+  <curve Name="water_deep_truck_wheel_lat_slip_ratio_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-0.5" />
+      <knot TypeOfSpline="HERMITE" X="-0.3" Y="-0.4" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.3" Y="0.4" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="water_deep_truck_wheel_lat_slip_ratio_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="-0.5" Y="-1.2" />
+      <knot TypeOfSpline="HERMITE" X="-0.15" Y="-0.9" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.15" Y="0.9" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="1.2" />
+    </knots>
+  </curve>
+  <curve Name="water_deep_truck_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+	  <knot TypeOfSpline="HERMITE" X="-0.5" Y="-1.5" />
+      <knot TypeOfSpline="HERMITE" X="-0.2" Y="-1.2" />
+      <knot TypeOfSpline="HERMITE" X="-0.06" Y="-0.7" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.06" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="0.2" Y="1.2" />
+	  <knot TypeOfSpline="HERMITE" X="0.5" Y="1.5" />
+    </knots>
+  </curve>
+  <curve Name="water_truck_wheel_long_slip_ratio" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="7">
+      <knot TypeOfSpline="HERMITE" X="-1" Y="-1.0" />
+      <knot TypeOfSpline="HERMITE" X="-0.6" Y="-1" />
+      <knot TypeOfSpline="HERMITE" X="-0.3" Y="-0.7" />
+      <knot TypeOfSpline="HERMITE" X="0" Y="0" />
+      <knot TypeOfSpline="HERMITE" X="0.3" Y="0.7" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="1.0" />
+    </knots>
+  </curve>
+  <curve Name="water_truck_wheel_lat_slip_reduction_front" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="water_truck_wheel_lat_slip_reduction_rear" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="water_truck_wheel_vel_traction_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="2" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="17" Y="0.7" />
+    </knots>
+  </curve>
+  <curve Name="water_truck_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="5" Y="2" />
+	  <knot TypeOfSpline="LINE" X="7" Y="4.5" />
+      <knot TypeOfSpline="LINE" X="10" Y="8" />
+	  <knot TypeOfSpline="LINE" X="15" Y="12" />
+    </knots>
+  </curve>
+  <curve Name="ground_harvester_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="4" Y="2.0" />
+      <knot TypeOfSpline="LINE" X="7" Y="4.0" />
+      <knot TypeOfSpline="LINE" X="10" Y="10.0" />
+    </knots>
+  </curve>
+  <curve Name="human_max_speed" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="12">
+      <knot TypeOfSpline="LINE" X="-1" Y="150" />
+      <knot TypeOfSpline="LINE" X="-0.520848" Y="165.568" />
+      <knot TypeOfSpline="LINE" X="-0.163251" Y="184.349" />
+      <knot TypeOfSpline="LINE" X="0.163251" Y="209.061" />
+      <knot TypeOfSpline="LINE" X="0.336502" Y="252.142" />
+      <knot TypeOfSpline="LINE" X="0.44947" Y="313.349" />
+      <knot TypeOfSpline="LINE" X="0.55" Y="409.391" />
+      <knot TypeOfSpline="LINE" X="0.62" Y="521.549" />
+      <knot TypeOfSpline="LINE" X="0.7" Y="674.629" />
+      <knot TypeOfSpline="LINE" X="0.824028" Y="858.979" />
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="1.1" Y="1000" />
+    </knots>
+  </curve>
+  <curve Name="weapon_stats_deterioration" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.8" Y="1" />
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level00_weight" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="4" Y="1" />
+      <knot TypeOfSpline="LINE" X="5" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level01_weight" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="4" Y="0" />
+      <knot TypeOfSpline="LINE" X="5" Y="1" />
+      <knot TypeOfSpline="LINE" X="6" Y="1" />
+      <knot TypeOfSpline="LINE" X="7" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level02_weight" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="6">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="6" Y="0" />
+      <knot TypeOfSpline="LINE" X="7" Y="1" />
+      <knot TypeOfSpline="LINE" X="8" Y="1" />
+      <knot TypeOfSpline="LINE" X="9" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level03_weight" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="8" Y="0" />
+      <knot TypeOfSpline="LINE" X="9" Y="1" />
+      <knot TypeOfSpline="LINE" X="10" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level04_weight" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="human_change_cover_time_fast" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="enc_reward_status_points_multiplier_per_level" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="25">
+      <knot TypeOfSpline="LINE" X="1" Y="0" />
+      <knot TypeOfSpline="LINE" X="2" Y="0" />
+      <knot TypeOfSpline="LINE" X="3" Y="0.25" />
+      <knot TypeOfSpline="LINE" X="4" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="5" Y="0.75" />
+      <knot TypeOfSpline="LINE" X="6" Y="1" />
+      <knot TypeOfSpline="LINE" X="7" Y="1.25" />
+      <knot TypeOfSpline="LINE" X="8" Y="1.5" />
+      <knot TypeOfSpline="LINE" X="9" Y="1.75" />
+      <knot TypeOfSpline="LINE" X="10" Y="2" />
+      <knot TypeOfSpline="LINE" X="11" Y="2.25" />
+      <knot TypeOfSpline="LINE" X="12" Y="2.5" />
+      <knot TypeOfSpline="LINE" X="13" Y="2.75" />
+      <knot TypeOfSpline="LINE" X="14" Y="3" />
+      <knot TypeOfSpline="LINE" X="15" Y="3.25" />
+      <knot TypeOfSpline="LINE" X="16" Y="3.5" />
+      <knot TypeOfSpline="LINE" X="17" Y="3.75" />
+      <knot TypeOfSpline="LINE" X="18" Y="4" />
+      <knot TypeOfSpline="LINE" X="19" Y="4.25" />
+      <knot TypeOfSpline="LINE" X="20" Y="4.5" />
+      <knot TypeOfSpline="LINE" X="21" Y="4.75" />
+      <knot TypeOfSpline="LINE" X="22" Y="5" />
+      <knot TypeOfSpline="LINE" X="23" Y="5.25" />
+      <knot TypeOfSpline="LINE" X="24" Y="5.5" />
+      <knot TypeOfSpline="LINE" X="25" Y="6" />
+    </knots>
+  </curve>
+  <curve Name="enc_airdrop_status_points_multiplier_per_level" NumberOfSamples="14" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="25">
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="2" Y="1" />
+      <knot TypeOfSpline="LINE" X="3" Y="1" />
+      <knot TypeOfSpline="LINE" X="4" Y="1.5" />
+      <knot TypeOfSpline="LINE" X="5" Y="2" />
+      <knot TypeOfSpline="LINE" X="6" Y="2.5" />
+      <knot TypeOfSpline="LINE" X="7" Y="3" />
+      <knot TypeOfSpline="LINE" X="8" Y="3.5" />
+      <knot TypeOfSpline="LINE" X="9" Y="4" />
+      <knot TypeOfSpline="LINE" X="10" Y="4.5" />
+      <knot TypeOfSpline="LINE" X="11" Y="5" />
+      <knot TypeOfSpline="LINE" X="12" Y="5.5" />
+      <knot TypeOfSpline="LINE" X="13" Y="6" />
+      <knot TypeOfSpline="LINE" X="14" Y="6.5" />
+      <knot TypeOfSpline="LINE" X="15" Y="7" />
+      <knot TypeOfSpline="LINE" X="16" Y="7.5" />
+      <knot TypeOfSpline="LINE" X="17" Y="8" />
+      <knot TypeOfSpline="LINE" X="18" Y="8.5" />
+      <knot TypeOfSpline="LINE" X="19" Y="9" />
+      <knot TypeOfSpline="LINE" X="20" Y="9.5" />
+      <knot TypeOfSpline="LINE" X="21" Y="10" />
+      <knot TypeOfSpline="LINE" X="22" Y="10.5" />
+      <knot TypeOfSpline="LINE" X="23" Y="11" />
+      <knot TypeOfSpline="LINE" X="24" Y="11.5" />
+      <knot TypeOfSpline="LINE" X="25" Y="12" />
+    </knots>
+  </curve>
+  <curve Name="crafting_slots_value_mul" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="2" Y="1" />
+      <knot TypeOfSpline="LINE" X="3" Y="1" />
+      <knot TypeOfSpline="LINE" X="4" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="condition_value_mul" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="0.1" />
+      <knot TypeOfSpline="LINE" X="1" Y="1.0" />
+    </knots>
+  </curve>
+  <curve Name="repairs_left_value_mul" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="2" Y="1" />
+      <knot TypeOfSpline="LINE" X="3" Y="1" />
+      <knot TypeOfSpline="LINE" X="4" Y="1" />
+      <knot TypeOfSpline="LINE" X="5" Y="1" />
+      <knot TypeOfSpline="LINE" X="6" Y="1" />
+      <knot TypeOfSpline="LINE" X="7" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="DamageAndForceSpreadCurve" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="-5" Y="1" />
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="5" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="light_intensity_0_blink" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="16">
+      <knot TypeOfSpline="LINE" X="0" Y="0.530494" />
+      <knot TypeOfSpline="LINE" X="0.21786" Y="0.668926" />
+      <knot TypeOfSpline="LINE" X="0.441279" Y="0.983543" />
+      <knot TypeOfSpline="LINE" X="0.712648" Y="0.550178" />
+      <knot TypeOfSpline="LINE" X="0.980542" Y="0.989997" />
+      <knot TypeOfSpline="HERMITE" X="1.15949" Y="0.101645" />
+      <knot TypeOfSpline="HERMITE" X="1.97741" Y="0.0119393" />
+      <knot TypeOfSpline="LINE" X="2.27936" Y="0.110035" />
+      <knot TypeOfSpline="LINE" X="2.19076" Y="0.989997" />
+      <knot TypeOfSpline="HERMITE" X="2.65983" Y="0.971281" />
+      <knot TypeOfSpline="HERMITE" X="2.99444" Y="0.545983" />
+      <knot TypeOfSpline="LINE" X="3.44302" Y="0.983866" />
+      <knot TypeOfSpline="HERMITE" X="4.69701" Y="0.167151" />
+      <knot TypeOfSpline="HERMITE" X="5.34121" Y="0.0174249" />
+      <knot TypeOfSpline="HERMITE" X="5.7943" Y="0.102614" />
+      <knot TypeOfSpline="HERMITE" X="6" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="light_intensity_1_noise" NumberOfSamples="20" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="19">
+      <knot TypeOfSpline="LINE" X="0" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="0.0541172" Y="0.573838" />
+      <knot TypeOfSpline="LINE" X="0.106715" Y="0.31646" />
+      <knot TypeOfSpline="LINE" X="0.14385" Y="0.578052" />
+      <knot TypeOfSpline="LINE" X="0.200226" Y="0.314924" />
+      <knot TypeOfSpline="LINE" X="0.248461" Y="0.581441" />
+      <knot TypeOfSpline="LINE" X="0.310044" Y="0.309059" />
+      <knot TypeOfSpline="LINE" X="0.340113" Y="0.578672" />
+      <knot TypeOfSpline="LINE" X="0.398174" Y="0.314689" />
+      <knot TypeOfSpline="LINE" X="0.430748" Y="0.586919" />
+      <knot TypeOfSpline="LINE" X="0.503803" Y="0.330561" />
+      <knot TypeOfSpline="LINE" X="0.526098" Y="0.603843" />
+      <knot TypeOfSpline="LINE" X="0.613717" Y="0.327735" />
+      <knot TypeOfSpline="LINE" X="0.694836" Y="0.589791" />
+      <knot TypeOfSpline="LINE" X="0.743168" Y="0.311545" />
+      <knot TypeOfSpline="LINE" X="0.800779" Y="0.573209" />
+      <knot TypeOfSpline="LINE" X="0.852145" Y="0.320243" />
+      <knot TypeOfSpline="LINE" X="0.895134" Y="0.572187" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="light_intensity_2_preset2" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="25">
+      <knot TypeOfSpline="LINE" X="0.0836237" Y="0.932039" />
+      <knot TypeOfSpline="LINE" X="0.205574" Y="0.752427" />
+      <knot TypeOfSpline="LINE" X="0.318815" Y="0.849514" />
+      <knot TypeOfSpline="LINE" X="0.451219" Y="0.804207" />
+      <knot TypeOfSpline="LINE" X="0.534843" Y="0.815534" />
+      <knot TypeOfSpline="LINE" X="0.58885" Y="0.872168" />
+      <knot TypeOfSpline="LINE" X="0.679442" Y="0.828479" />
+      <knot TypeOfSpline="LINE" X="0.747387" Y="0.964401" />
+      <knot TypeOfSpline="LINE" X="0.858885" Y="0.901294" />
+      <knot TypeOfSpline="LINE" X="0.942509" Y="0.964401" />
+      <knot TypeOfSpline="LINE" X="1.01045" Y="0.750809" />
+      <knot TypeOfSpline="LINE" X="1.18467" Y="0.830097" />
+      <knot TypeOfSpline="LINE" X="1.3223" Y="0.788026" />
+      <knot TypeOfSpline="LINE" X="1.38502" Y="0.902913" />
+      <knot TypeOfSpline="LINE" X="1.48955" Y="0.826861" />
+      <knot TypeOfSpline="LINE" X="1.56272" Y="0.902913" />
+      <knot TypeOfSpline="LINE" X="1.79443" Y="0.864078" />
+      <knot TypeOfSpline="LINE" X="1.8554" Y="0.920712" />
+      <knot TypeOfSpline="LINE" X="1.97561" Y="0.838188" />
+      <knot TypeOfSpline="LINE" X="2.05401" Y="0.972492" />
+      <knot TypeOfSpline="LINE" X="2.18467" Y="0.885113" />
+      <knot TypeOfSpline="LINE" X="2.2892" Y="0.846278" />
+      <knot TypeOfSpline="LINE" X="2.42509" Y="0.923948" />
+      <knot TypeOfSpline="LINE" X="2.5453" Y="0.857605" />
+      <knot TypeOfSpline="LINE" X="2.85889" Y="0.932039" />
+    </knots>
+  </curve>
+  <curve Name="light_intensity_3_preset3" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="4.62126" Y="0.125202" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="light_intensity_4_preset4" NumberOfSamples="50" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="5" Y="0.9" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="xp_runner_ladder" NumberOfSamples="5" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="3" Y="1" />
+      <knot TypeOfSpline="LINE" X="5" Y="3" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+      <knot TypeOfSpline="LINE" X="30" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="xp_runner_air" NumberOfSamples="6" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="0" />
+      <knot TypeOfSpline="LINE" X="15" Y="5" />
+      <knot TypeOfSpline="LINE" X="20" Y="10" />
+      <knot TypeOfSpline="LINE" X="30" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="DevCraft2_Dmg" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="23">
+      <knot TypeOfSpline="HERMITE" X="0" Y="35" />
+      <knot TypeOfSpline="LINE" X="1" Y="40" />
+      <knot TypeOfSpline="LINE" X="2" Y="50" />
+      <knot TypeOfSpline="LINE" X="3" Y="60" />
+      <knot TypeOfSpline="LINE" X="4" Y="70" />
+      <knot TypeOfSpline="LINE" X="5" Y="80" />
+      <knot TypeOfSpline="LINE" X="6" Y="90" />
+      <knot TypeOfSpline="LINE" X="7" Y="105" />
+      <knot TypeOfSpline="LINE" X="8" Y="120" />
+      <knot TypeOfSpline="LINE" X="9" Y="140" />
+      <knot TypeOfSpline="LINE" X="10" Y="160" />
+      <knot TypeOfSpline="LINE" X="11" Y="180" />
+      <knot TypeOfSpline="LINE" X="12" Y="210" />
+      <knot TypeOfSpline="LINE" X="13" Y="250" />
+      <knot TypeOfSpline="LINE" X="14" Y="290" />
+      <knot TypeOfSpline="LINE" X="15" Y="330" />
+      <knot TypeOfSpline="LINE" X="16" Y="380" />
+      <knot TypeOfSpline="LINE" X="17" Y="440" />
+      <knot TypeOfSpline="LINE" X="18" Y="510" />
+      <knot TypeOfSpline="LINE" X="19" Y="580" />
+      <knot TypeOfSpline="LINE" X="20" Y="666" />
+      <knot TypeOfSpline="LINE" X="21" Y="780" />
+      <knot TypeOfSpline="LINE" X="25" Y="1300" />
+    </knots>
+  </curve>
+  <curve Name="DevDmg" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="27">
+      <knot TypeOfSpline="HERMITE" X="0" Y="24" />
+      <knot TypeOfSpline="LINE" X="1" Y="30" />
+      <knot TypeOfSpline="LINE" X="2" Y="36" />
+      <knot TypeOfSpline="LINE" X="3" Y="42" />
+      <knot TypeOfSpline="LINE" X="4" Y="49" />
+      <knot TypeOfSpline="LINE" X="5" Y="58" />
+      <knot TypeOfSpline="LINE" X="6" Y="67" />
+      <knot TypeOfSpline="LINE" X="7" Y="78" />
+      <knot TypeOfSpline="LINE" X="8" Y="91" />
+      <knot TypeOfSpline="LINE" X="9" Y="105" />
+      <knot TypeOfSpline="LINE" X="10" Y="122" />
+      <knot TypeOfSpline="LINE" X="11" Y="141" />
+      <knot TypeOfSpline="LINE" X="12" Y="164" />
+      <knot TypeOfSpline="LINE" X="13" Y="190" />
+      <knot TypeOfSpline="LINE" X="14" Y="220" />
+      <knot TypeOfSpline="LINE" X="15" Y="255" />
+      <knot TypeOfSpline="LINE" X="16" Y="296" />
+      <knot TypeOfSpline="LINE" X="17" Y="343" />
+      <knot TypeOfSpline="LINE" X="18" Y="397" />
+      <knot TypeOfSpline="LINE" X="19" Y="459" />
+      <knot TypeOfSpline="LINE" X="20" Y="531" />
+      <knot TypeOfSpline="LINE" X="21" Y="614" />
+      <knot TypeOfSpline="LINE" X="22" Y="709" />
+      <knot TypeOfSpline="LINE" X="23" Y="819" />
+      <knot TypeOfSpline="LINE" X="25" Y="1337" />
+      <knot TypeOfSpline="LINE" X="26" Y="1500" />
+      <knot TypeOfSpline="LINE" X="27" Y="1700" />
+    </knots>
+  </curve>
+  <curve Name="sand_buggy_wst_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="5" Y="0" />
+      <knot TypeOfSpline="LINE" X="10.1721" Y="0.708072" />
+      <knot TypeOfSpline="LINE" X="15" Y="1.6" />
+      <knot TypeOfSpline="LINE" X="20" Y="2.2" />
+    </knots>
+  </curve>
+  <curve Name="grass_low_buggy_wst_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="1" />
+      <knot TypeOfSpline="LINE" X="18" Y="2" />
+      <knot TypeOfSpline="LINE" X="20" Y="2.5" />
+    </knots>
+  </curve>
+  <curve Name="grass_cut_buggy_wst_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="2" Y="0" />
+      <knot TypeOfSpline="LINE" X="8" Y="1" />
+      <knot TypeOfSpline="LINE" X="15" Y="2" />
+      <knot TypeOfSpline="LINE" X="20" Y="2.2" />
+    </knots>
+  </curve>
+  <curve Name="grass_cut_buggy_wst_wheel_vel_traction_reduction" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="5" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="15" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="tarmac_cut_buggy_wst_vel_drag" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.8" />
+      <knot TypeOfSpline="LINE" X="16" Y="1.1" />
+      <knot TypeOfSpline="LINE" X="20" Y="2" />
+      <knot TypeOfSpline="LINE" X="25" Y="6" />
+    </knots>
+  </curve>
+  <curve Name="buggy_wst_torque_for_rpm" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="0.9" />
+      <knot TypeOfSpline="LINE" X="0.3" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.7" Y="1" />
+      <knot TypeOfSpline="LINE" X="1.0" Y="0.8" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_default" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="9">
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="2" Y="2000" />
+      <knot TypeOfSpline="LINE" X="3" Y="3000" />
+      <knot TypeOfSpline="LINE" X="4" Y="4000" />
+      <knot TypeOfSpline="LINE" X="5" Y="5000" />
+      <knot TypeOfSpline="LINE" X="6" Y="6000" />
+      <knot TypeOfSpline="LINE" X="7" Y="7000" />
+      <knot TypeOfSpline="LINE" X="8" Y="8000" />
+      <knot TypeOfSpline="LINE" X="9" Y="9000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_basic" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="5000" />
+      <knot TypeOfSpline="LINE" X="24" Y="5000" />
+      <knot TypeOfSpline="LINE" X="25" Y="3000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_basic_bonus" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="2500" />
+      <knot TypeOfSpline="LINE" X="24" Y="2500" />
+      <knot TypeOfSpline="LINE" X="25" Y="1500" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_basic_driver" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="23" Y="1000" />
+      <knot TypeOfSpline="LINE" X="24" Y="3000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_basic_driver_bonus" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="500" />
+      <knot TypeOfSpline="LINE" X="23" Y="500" />
+      <knot TypeOfSpline="LINE" X="24" Y="1500" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_basic_agility" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="23" Y="1000" />
+      <knot TypeOfSpline="LINE" X="24" Y="3000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_basic_agility_bonus" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="500" />
+      <knot TypeOfSpline="LINE" X="23" Y="500" />
+      <knot TypeOfSpline="LINE" X="24" Y="1500" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_daily_agility" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="2000" />
+      <knot TypeOfSpline="LINE" X="23" Y="2000" />
+      <knot TypeOfSpline="LINE" X="24" Y="10000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_daily_agility_bonus" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="23" Y="1000" />
+      <knot TypeOfSpline="LINE" X="24" Y="5000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_basic_fighter" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="3000" />
+      <knot TypeOfSpline="LINE" X="23" Y="3000" />
+      <knot TypeOfSpline="LINE" X="24" Y="3000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_basic_fighter_bonus" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="1500" />
+      <knot TypeOfSpline="LINE" X="23" Y="1500" />
+      <knot TypeOfSpline="LINE" X="24" Y="1500" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_daily_fighter" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="6000" />
+      <knot TypeOfSpline="LINE" X="23" Y="6000" />
+      <knot TypeOfSpline="LINE" X="24" Y="10000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_daily_fighter_bonus" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="3000" />
+      <knot TypeOfSpline="LINE" X="23" Y="3000" />
+      <knot TypeOfSpline="LINE" X="24" Y="5000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_daily" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="10000" />
+      <knot TypeOfSpline="LINE" X="24" Y="10000" />
+      <knot TypeOfSpline="LINE" X="25" Y="10000" />
+    </knots>
+  </curve>
+  <curve Name="bounty_xp_reward_daily_bonus" NumberOfSamples="25" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="LINE" X="1" Y="5000" />
+      <knot TypeOfSpline="LINE" X="24" Y="5000" />
+      <knot TypeOfSpline="LINE" X="25" Y="5000" />
+    </knots>
+  </curve>
+  <curve Name="prime_wasteland_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="60" />
+      <knot TypeOfSpline="LINE" X="60" Y="60" />
+    </knots>
+  </curve>
+  <curve Name="bossfight_minion_health" NumberOfSamples="60" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="100" />
+      <knot TypeOfSpline="LINE" X="60" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="enc_reward_reputation_points_multiplier_per_level" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="HERMITE" X="0" Y="1" />
+      <knot TypeOfSpline="HERMITE" X="20" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="prime_wasteland_turn_speed" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="8">
+      <knot TypeOfSpline="LINE" X="-1" Y="720" />
+      <knot TypeOfSpline="LINE" X="-0.661331" Y="691.527" />
+      <knot TypeOfSpline="LINE" X="-0.374532" Y="658.078" />
+      <knot TypeOfSpline="LINE" X="-0.0629989" Y="604.745" />
+      <knot TypeOfSpline="LINE" X="0.208068" Y="524.937" />
+      <knot TypeOfSpline="LINE" X="0.523135" Y="405.052" />
+      <knot TypeOfSpline="LINE" X="0.755333" Y="310.11" />
+      <knot TypeOfSpline="LINE" X="1" Y="240" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level00_weight_survival" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="12">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="7" Y="1" />
+      <knot TypeOfSpline="LINE" X="8" Y="0.25" />
+      <knot TypeOfSpline="LINE" X="9" Y="0.25" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.2" />
+      <knot TypeOfSpline="LINE" X="11" Y="0.2" />
+      <knot TypeOfSpline="LINE" X="12" Y="0.2" />
+      <knot TypeOfSpline="LINE" X="13" Y="0.15" />
+      <knot TypeOfSpline="LINE" X="14" Y="0.15" />
+      <knot TypeOfSpline="LINE" X="15" Y="0.1" />
+      <knot TypeOfSpline="LINE" X="16" Y="0" />
+      <knot TypeOfSpline="LINE" X="25" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level01_weight_survival" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="20">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="7" Y="0" />
+      <knot TypeOfSpline="LINE" X="8" Y="0.65" />
+      <knot TypeOfSpline="LINE" X="9" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="11" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="12" Y="0.4" />
+      <knot TypeOfSpline="LINE" X="13" Y="0.4" />
+      <knot TypeOfSpline="LINE" X="14" Y="0.3" />
+      <knot TypeOfSpline="LINE" X="15" Y="0.3" />
+      <knot TypeOfSpline="LINE" X="16" Y="0.3" />
+      <knot TypeOfSpline="LINE" X="17" Y="0.25" />
+      <knot TypeOfSpline="LINE" X="18" Y="0.25" />
+      <knot TypeOfSpline="LINE" X="19" Y="0.25" />
+      <knot TypeOfSpline="LINE" X="20" Y="0.2" />
+      <knot TypeOfSpline="LINE" X="21" Y="0.2" />
+      <knot TypeOfSpline="LINE" X="22" Y="0.2" />
+      <knot TypeOfSpline="LINE" X="23" Y="0.15" />
+      <knot TypeOfSpline="LINE" X="24" Y="0.1" />
+      <knot TypeOfSpline="LINE" X="25" Y="0.05" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level02_weight_survival" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="20">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="7" Y="0" />
+      <knot TypeOfSpline="LINE" X="8" Y="0.1" />
+      <knot TypeOfSpline="LINE" X="9" Y="0.15" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.2" />
+      <knot TypeOfSpline="LINE" X="11" Y="0.3" />
+      <knot TypeOfSpline="LINE" X="12" Y="0.4" />
+      <knot TypeOfSpline="LINE" X="13" Y="0.45" />
+      <knot TypeOfSpline="LINE" X="14" Y="0.55" />
+      <knot TypeOfSpline="LINE" X="15" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="16" Y="0.65" />
+      <knot TypeOfSpline="LINE" X="17" Y="0.7" />
+      <knot TypeOfSpline="LINE" X="18" Y="0.65" />
+      <knot TypeOfSpline="LINE" X="19" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="20" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="21" Y="0.55" />
+      <knot TypeOfSpline="LINE" X="22" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="23" Y="0.45" />
+      <knot TypeOfSpline="LINE" X="24" Y="0.4" />
+      <knot TypeOfSpline="LINE" X="25" Y="0.35" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level03_weight_survival" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="12">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="15" Y="0" />
+      <knot TypeOfSpline="LINE" X="16" Y="0.05" />
+      <knot TypeOfSpline="LINE" X="17" Y="0.05" />
+      <knot TypeOfSpline="LINE" X="18" Y="0.1" />
+      <knot TypeOfSpline="LINE" X="19" Y="0.15" />
+      <knot TypeOfSpline="LINE" X="20" Y="0.2" />
+      <knot TypeOfSpline="LINE" X="21" Y="0.25" />
+      <knot TypeOfSpline="LINE" X="22" Y="0.3" />
+      <knot TypeOfSpline="LINE" X="23" Y="0.4" />
+      <knot TypeOfSpline="LINE" X="24" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="25" Y="0.6" />
+    </knots>
+  </curve>
+  <curve Name="enc_hmf_level04_weight_survival" NumberOfSamples="100" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="25" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Stamina_Cost_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="25" />
+      <knot TypeOfSpline="LINE" X="10" Y="25" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Stamina_Cost_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="50" />
+      <knot TypeOfSpline="LINE" X="10" Y="50" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Charge_Attack_Move_Speed_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="10" />
+      <knot TypeOfSpline="LINE" X="10" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Charge_Attack_Move_Speed_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="25" />
+      <knot TypeOfSpline="LINE" X="10" Y="25" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Charge_Attack_ChargeTime_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="10" />
+      <knot TypeOfSpline="LINE" X="10" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Charge_Attack_ChargeTime_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="25" />
+      <knot TypeOfSpline="LINE" X="10" Y="25" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Push_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Push_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="25" />
+      <knot TypeOfSpline="LINE" X="10" Y="25" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Damage_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="10" MinY="5">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Damage_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="20" MinY="12">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="12" />
+      <knot TypeOfSpline="LINE" X="10" Y="20" />
+    </knots>
+  </curve>
+  <curve Name="Effect_AffixLow_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="Effect_AffixLow_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="10" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="10" />
+      <knot TypeOfSpline="LINE" X="10" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="Effect_AffixMid_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="Effect_AffixMid_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="25" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="25" />
+      <knot TypeOfSpline="LINE" X="10" Y="25" />
+    </knots>
+  </curve>
+  <curve Name="Effect_AffixHigh_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="Effect_AffixHigh_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="50" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="50" />
+      <knot TypeOfSpline="LINE" X="10" Y="50" />
+    </knots>
+  </curve>
+  <curve Name="Effect_OutfitMkt_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="40" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="40" />
+	  <knot TypeOfSpline="LINE" X="4" Y="40" />
+	  <knot TypeOfSpline="LINE" X="7" Y="40" />
+      <knot TypeOfSpline="LINE" X="10" Y="40" />
+    </knots>
+  </curve>
+  <curve Name="Effect_OutfitMkt_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="90" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="40" />
+	  <knot TypeOfSpline="LINE" X="4" Y="40" />
+	  <knot TypeOfSpline="LINE" X="7" Y="40" />
+      <knot TypeOfSpline="LINE" X="10" Y="40" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit10_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="100" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="100" />
+	  <knot TypeOfSpline="LINE" X="4" Y="100" />
+	  <knot TypeOfSpline="LINE" X="7" Y="100" />
+      <knot TypeOfSpline="LINE" X="10" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit10_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="100" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="100" />
+	  <knot TypeOfSpline="LINE" X="4" Y="100" />
+	  <knot TypeOfSpline="LINE" X="7" Y="100" />
+      <knot TypeOfSpline="LINE" X="10" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit15_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="150" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="150" />
+	  <knot TypeOfSpline="LINE" X="4" Y="150" />
+	  <knot TypeOfSpline="LINE" X="7" Y="150" />
+      <knot TypeOfSpline="LINE" X="10" Y="150" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit15_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="150" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="150" />
+	  <knot TypeOfSpline="LINE" X="4" Y="150" />
+	  <knot TypeOfSpline="LINE" X="7" Y="150" />
+      <knot TypeOfSpline="LINE" X="10" Y="150" />
+    </knots>
+  </curve>	  
+  <curve Name="Effect_OutfitLow_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="40" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+	  <knot TypeOfSpline="LINE" X="4" Y="20" />
+	  <knot TypeOfSpline="LINE" X="7" Y="40" />
+      <knot TypeOfSpline="LINE" X="10" Y="40" />
+    </knots>
+  </curve>
+  <curve Name="Effect_OutfitLow_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="90" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="30" />
+	  <knot TypeOfSpline="LINE" X="4" Y="60" />
+	  <knot TypeOfSpline="LINE" X="7" Y="90" />
+      <knot TypeOfSpline="LINE" X="10" Y="90" />
+    </knots>
+  </curve>
+  <curve Name="Effect_OutfitMid_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="60" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+	  <knot TypeOfSpline="LINE" X="4" Y="30" />
+	  <knot TypeOfSpline="LINE" X="7" Y="60" />
+      <knot TypeOfSpline="LINE" X="10" Y="60" />
+    </knots>
+  </curve>
+  <curve Name="Effect_OutfitMid_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="135" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="45" />
+	  <knot TypeOfSpline="LINE" X="4" Y="90" />
+	  <knot TypeOfSpline="LINE" X="7" Y="135" />
+      <knot TypeOfSpline="LINE" X="10" Y="135" />
+    </knots>
+  </curve>
+  <curve Name="Effect_OutfitHigh_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="80" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+	  <knot TypeOfSpline="LINE" X="4" Y="40" />
+	  <knot TypeOfSpline="LINE" X="7" Y="80" />
+      <knot TypeOfSpline="LINE" X="10" Y="80" />
+    </knots>
+  </curve>
+  <curve Name="Effect_OutfitHigh_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="180" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="60" />
+	  <knot TypeOfSpline="LINE" X="4" Y="120" />
+	  <knot TypeOfSpline="LINE" X="7" Y="180" />
+      <knot TypeOfSpline="LINE" X="10" Y="180" />
+    </knots>
+  </curve>
+  <curve Name="Effect_ConditionalDamage_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="Effect_ConditionalDamage_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="15" />
+      <knot TypeOfSpline="LINE" X="10" Y="15" />
+    </knots>
+  </curve>
+  <curve Name="Effect_HardConditionalDamage_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="10" />
+      <knot TypeOfSpline="LINE" X="10" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="Effect_HardConditionalDamage_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="25" />
+      <knot TypeOfSpline="LINE" X="10" Y="25" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Push_Recover_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Push_Recover_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="20" />
+      <knot TypeOfSpline="LINE" X="10" Y="20" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Regen_OnKill_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+    </knots>
+  </curve>  
+  <curve Name="Effect_Regen_OnKill_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="25" />
+      <knot TypeOfSpline="LINE" X="10" Y="25" />
+    </knots>
+  </curve>
+    <curve Name="Effect_Weapon_Range_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="10" />
+      <knot TypeOfSpline="LINE" X="10" Y="10" />
+    </knots>
+  </curve>
+    <curve Name="Effect_Weapon_Range_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="40" />
+      <knot TypeOfSpline="LINE" X="10" Y="40" />
+    </knots>
+  </curve>  
+  <curve Name="Effect_Low_Health_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="25" />
+      <knot TypeOfSpline="LINE" X="10" Y="25" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Low_Health_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="35" />
+      <knot TypeOfSpline="LINE" X="10" Y="35" />
+    </knots>
+  </curve>
+  <curve Name="TierToAffixMinMapping" NumberOfSamples="25" MaxX="24" MinX="0" MaxY="5" MinY="0">
+    <knots Count="25">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="1" Y="0" />
+      <knot TypeOfSpline="LINE" X="2" Y="0" />
+      <knot TypeOfSpline="LINE" X="3" Y="0" />
+      <knot TypeOfSpline="LINE" X="4" Y="0" />
+      <knot TypeOfSpline="LINE" X="5" Y="0" />
+      <knot TypeOfSpline="LINE" X="6" Y="0" />
+      <knot TypeOfSpline="LINE" X="7" Y="0" />
+      <knot TypeOfSpline="LINE" X="8" Y="0" />
+      <knot TypeOfSpline="LINE" X="9" Y="0" />
+	  <knot TypeOfSpline="LINE" X="10" Y="0" />
+      <knot TypeOfSpline="LINE" X="11" Y="0" />
+      <knot TypeOfSpline="LINE" X="12" Y="0" />
+      <knot TypeOfSpline="LINE" X="13" Y="0" />
+      <knot TypeOfSpline="LINE" X="14" Y="0" />
+      <knot TypeOfSpline="LINE" X="15" Y="0" />
+      <knot TypeOfSpline="LINE" X="16" Y="0" />
+      <knot TypeOfSpline="LINE" X="17" Y="0" />
+      <knot TypeOfSpline="LINE" X="18" Y="0" />
+      <knot TypeOfSpline="LINE" X="19" Y="0" />
+	  <knot TypeOfSpline="LINE" X="20" Y="0" />
+      <knot TypeOfSpline="LINE" X="21" Y="0" />
+      <knot TypeOfSpline="LINE" X="22" Y="0" />
+      <knot TypeOfSpline="LINE" X="23" Y="0" />
+      <knot TypeOfSpline="LINE" X="24" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="TierToAffixMaxMapping" NumberOfSamples="25" MaxX="24" MinX="0" MaxY="4" MinY="0">
+    <knots Count="25">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="1" Y="0" />
+      <knot TypeOfSpline="LINE" X="2" Y="0" />
+      <knot TypeOfSpline="LINE" X="3" Y="0" />
+      <knot TypeOfSpline="LINE" X="4" Y="0" />
+      <knot TypeOfSpline="LINE" X="5" Y="0" />
+      <knot TypeOfSpline="LINE" X="6" Y="0" />
+      <knot TypeOfSpline="LINE" X="7" Y="0" />
+      <knot TypeOfSpline="LINE" X="8" Y="0" />
+      <knot TypeOfSpline="LINE" X="9" Y="0" />
+	  <knot TypeOfSpline="LINE" X="10" Y="0" />
+      <knot TypeOfSpline="LINE" X="11" Y="0" />
+      <knot TypeOfSpline="LINE" X="12" Y="0" />
+      <knot TypeOfSpline="LINE" X="13" Y="0" />
+      <knot TypeOfSpline="LINE" X="14" Y="0" />
+      <knot TypeOfSpline="LINE" X="15" Y="0" />
+      <knot TypeOfSpline="LINE" X="16" Y="0" />
+      <knot TypeOfSpline="LINE" X="17" Y="0" />
+      <knot TypeOfSpline="LINE" X="18" Y="0" />
+      <knot TypeOfSpline="LINE" X="19" Y="0" />
+	  <knot TypeOfSpline="LINE" X="20" Y="0" />
+      <knot TypeOfSpline="LINE" X="21" Y="0" />
+      <knot TypeOfSpline="LINE" X="22" Y="0" />
+      <knot TypeOfSpline="LINE" X="23" Y="0" />
+      <knot TypeOfSpline="LINE" X="24" Y="0" />
+    </knots>
+  </curve>
+  <curve Name="Experience_Levels" NumberOfSamples="14" MaxX="14" MinX="1" MaxY="470000" MinY="0">
+    <knots Count="14">
+      <knot TypeOfSpline="LINE" X="1"  Y="20000" />
+	  <knot TypeOfSpline="LINE" X="2"  Y="40000" />
+      <knot TypeOfSpline="LINE" X="3"  Y="60000" />
+      <knot TypeOfSpline="LINE" X="4"  Y="80000" />
+      <knot TypeOfSpline="LINE" X="5"  Y="110000" />
+      <knot TypeOfSpline="LINE" X="6"  Y="140000" />
+      <knot TypeOfSpline="LINE" X="7"  Y="170000" />
+      <knot TypeOfSpline="LINE" X="8"  Y="200000" />
+      <knot TypeOfSpline="LINE" X="9"  Y="230000" />
+      <knot TypeOfSpline="LINE" X="10"  Y="270000" />
+      <knot TypeOfSpline="LINE" X="11"  Y="310000" />
+      <knot TypeOfSpline="LINE" X="12"  Y="350000" />
+      <knot TypeOfSpline="LINE" X="13"  Y="410000" />
+      <knot TypeOfSpline="LINE" X="14"  Y="480000" />
+    </knots>
+  </curve>
+  <curve Name="Combat_Levels" NumberOfSamples="24" MaxX="24" MinX="1" MaxY="365000" MinY="0">
+    <knots Count="24">
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="2" Y="4000" />
+      <knot TypeOfSpline="LINE" X="3" Y="9000" />
+      <knot TypeOfSpline="LINE" X="4" Y="15000" />
+      <knot TypeOfSpline="LINE" X="5" Y="21500" />
+      <knot TypeOfSpline="LINE" X="6" Y="28500" />
+      <knot TypeOfSpline="LINE" X="7" Y="36000" />
+      <knot TypeOfSpline="LINE" X="8" Y="44000" />
+      <knot TypeOfSpline="LINE" X="9" Y="52500" />
+      <knot TypeOfSpline="LINE" X="10" Y="61500" />
+      <knot TypeOfSpline="LINE" X="11" Y="71000" />
+      <knot TypeOfSpline="LINE" X="12" Y="81000" />
+      <knot TypeOfSpline="LINE" X="13" Y="91500" />
+      <knot TypeOfSpline="LINE" X="14" Y="102500" />
+      <knot TypeOfSpline="LINE" X="15" Y="114000" />
+      <knot TypeOfSpline="LINE" X="16" Y="126000" />
+      <knot TypeOfSpline="LINE" X="17" Y="138500" />
+      <knot TypeOfSpline="LINE" X="18" Y="153000" />
+      <knot TypeOfSpline="LINE" X="19" Y="170500" />
+      <knot TypeOfSpline="LINE" X="20" Y="190500" />
+      <knot TypeOfSpline="LINE" X="21" Y="215500" />
+      <knot TypeOfSpline="LINE" X="22" Y="245500" />
+      <knot TypeOfSpline="LINE" X="23" Y="280500" />
+	  <knot TypeOfSpline="LINE" X="24" Y="330500" />
+    </knots>
+  </curve>
+  <curve Name="Parkour_Levels" NumberOfSamples="24" MaxX="24" MinX="1" MaxY="296450" MinY="0">
+    <knots Count="24">
+      <knot TypeOfSpline="LINE" X="1" Y="1000" />
+      <knot TypeOfSpline="LINE" X="2" Y="4000" />
+      <knot TypeOfSpline="LINE" X="3" Y="9000" />
+      <knot TypeOfSpline="LINE" X="4" Y="15000" />
+      <knot TypeOfSpline="LINE" X="5" Y="21500" />
+      <knot TypeOfSpline="LINE" X="6" Y="28500" />
+      <knot TypeOfSpline="LINE" X="7" Y="36000" />
+      <knot TypeOfSpline="LINE" X="8" Y="44000" />
+      <knot TypeOfSpline="LINE" X="9" Y="52500" />
+      <knot TypeOfSpline="LINE" X="10" Y="61500" />
+      <knot TypeOfSpline="LINE" X="11" Y="71000" />
+      <knot TypeOfSpline="LINE" X="12" Y="81000" />
+      <knot TypeOfSpline="LINE" X="13" Y="91500" />
+      <knot TypeOfSpline="LINE" X="14" Y="102500" />
+      <knot TypeOfSpline="LINE" X="15" Y="114000" />
+      <knot TypeOfSpline="LINE" X="16" Y="126000" />
+      <knot TypeOfSpline="LINE" X="17" Y="138500" />
+      <knot TypeOfSpline="LINE" X="18" Y="153000" />
+      <knot TypeOfSpline="LINE" X="19" Y="170500" />
+      <knot TypeOfSpline="LINE" X="20" Y="190500" />
+      <knot TypeOfSpline="LINE" X="21" Y="215500" />
+      <knot TypeOfSpline="LINE" X="22" Y="245500" />
+      <knot TypeOfSpline="LINE" X="23" Y="280500" />
+	  <knot TypeOfSpline="LINE" X="24" Y="330500" />
+    </knots>
+  </curve>
+  <curve Name="Exploration_Levels" NumberOfSamples="100" MaxX="100" MinX="1" MaxY="32000" MinY="100">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="1" Y="200" />
+      <knot TypeOfSpline="HERMITE" X="50" Y="13250" />
+      <knot TypeOfSpline="HERMITE" X="100" Y="32000" />
+    </knots>
+  </curve>
+  <curve Name="Player_Levels" NumberOfSamples="19" MaxX="19" MinX="1" MaxY="24900" MinY="300">
+    <knots Count="19">
+	   <knot TypeOfSpline="LINE" X="1" Y="300" />
+      <knot TypeOfSpline="LINE" X="2" Y="700" />
+      <knot TypeOfSpline="LINE" X="3" Y="1200" />
+      <knot TypeOfSpline="LINE" X="4" Y="1800" />
+      <knot TypeOfSpline="LINE" X="5" Y="2500" />
+      <knot TypeOfSpline="LINE" X="6" Y="3300" />
+      <knot TypeOfSpline="LINE" X="7" Y="4200" />
+      <knot TypeOfSpline="LINE" X="8" Y="5200" />
+      <knot TypeOfSpline="LINE" X="9" Y="6300" />
+      <knot TypeOfSpline="LINE" X="10" Y="7500" />
+      <knot TypeOfSpline="LINE" X="11" Y="8800" />
+      <knot TypeOfSpline="LINE" X="12" Y="10200" />
+      <knot TypeOfSpline="LINE" X="13" Y="11700" />
+      <knot TypeOfSpline="LINE" X="14" Y="13400" />
+      <knot TypeOfSpline="LINE" X="15" Y="15300" />
+      <knot TypeOfSpline="LINE" X="16" Y="17400" />
+      <knot TypeOfSpline="LINE" X="17" Y="19700" />
+      <knot TypeOfSpline="LINE" X="18" Y="22200" />
+      <knot TypeOfSpline="LINE" X="19" Y="24900" />
+    </knots> 
+  </curve>
+  <curve Name="PlayerSkillpoints" NumberOfSamples="10" MaxX="49" MinX="1" MaxY="48" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="0" />
+      <knot TypeOfSpline="LINE" X="49" Y="48" />
+    </knots>
+  </curve>
+  <curve Name="PlayerSkillpointsExperience" NumberOfSamples="15" MaxX="15" MinX="1" MaxY="36" MinY="0">
+    <knots Count="15">
+      <knot TypeOfSpline="LINE" X="1" Y="0" />
+	  <knot TypeOfSpline="LINE" X="2" Y="1" />
+	  <knot TypeOfSpline="LINE" X="3" Y="2" />
+	  <knot TypeOfSpline="LINE" X="4" Y="4" />
+	  <knot TypeOfSpline="LINE" X="5" Y="6" />
+	  <knot TypeOfSpline="LINE" X="6" Y="8" />
+	  <knot TypeOfSpline="LINE" X="7" Y="10" />
+	  <knot TypeOfSpline="LINE" X="8" Y="12" />
+	  <knot TypeOfSpline="LINE" X="9" Y="15" />
+	  <knot TypeOfSpline="LINE" X="10" Y="18" />
+      <knot TypeOfSpline="LINE" X="11" Y="21" />
+      <knot TypeOfSpline="LINE" X="12" Y="24" />
+      <knot TypeOfSpline="LINE" X="13" Y="28" />
+      <knot TypeOfSpline="LINE" X="14" Y="32" />
+      <knot TypeOfSpline="LINE" X="15" Y="36" />
+    </knots>
+  </curve>
+  <curve Name="HealthPerLevelPHFT" NumberOfSamples="15" MaxX="15" MinX="1" MaxY="700" MinY="300">
+    <knots Count="15">
+      <knot TypeOfSpline="LINE" X="1" Y="300" />
+	  <knot TypeOfSpline="LINE" X="2" Y="325" />
+	  <knot TypeOfSpline="LINE" X="3" Y="350" />
+	  <knot TypeOfSpline="LINE" X="4" Y="375" />
+	  <knot TypeOfSpline="LINE" X="5" Y="400" />
+	  <knot TypeOfSpline="LINE" X="6" Y="450" />
+	  <knot TypeOfSpline="LINE" X="7" Y="475" />
+	  <knot TypeOfSpline="LINE" X="8" Y="500" />
+	  <knot TypeOfSpline="LINE" X="9" Y="525" />
+	  <knot TypeOfSpline="LINE" X="10" Y="550" />
+      <knot TypeOfSpline="LINE" X="11" Y="600" />
+      <knot TypeOfSpline="LINE" X="12" Y="625" />
+      <knot TypeOfSpline="LINE" X="13" Y="650" />
+      <knot TypeOfSpline="LINE" X="14" Y="675" />
+      <knot TypeOfSpline="LINE" X="15" Y="700" />
+    </knots>
+  </curve>
+  <curve Name="StaminaPerLevelPHFT" NumberOfSamples="15" MaxX="15" MinX="1" MaxY="700" MinY="300">
+    <knots Count="15">
+      <knot TypeOfSpline="LINE" X="1"  Y="3.50" />
+	  <knot TypeOfSpline="LINE" X="2"  Y="3.75" />
+	  <knot TypeOfSpline="LINE" X="3"  Y="4.00" />
+	  <knot TypeOfSpline="LINE" X="4"  Y="4.25" />
+	  <knot TypeOfSpline="LINE" X="5"  Y="4.50" />
+	  <knot TypeOfSpline="LINE" X="6"  Y="4.75" />
+	  <knot TypeOfSpline="LINE" X="7"  Y="5.00" />
+	  <knot TypeOfSpline="LINE" X="8"  Y="5.25" />
+	  <knot TypeOfSpline="LINE" X="9"  Y="5.50" />
+	  <knot TypeOfSpline="LINE" X="10" Y="5.75" />
+      <knot TypeOfSpline="LINE" X="11" Y="6.00" />
+      <knot TypeOfSpline="LINE" X="12" Y="6.25" />
+      <knot TypeOfSpline="LINE" X="13" Y="6.50" />
+      <knot TypeOfSpline="LINE" X="14" Y="6.75" />
+      <knot TypeOfSpline="LINE" X="15" Y="7.00" />
+    </knots>
+  </curve>
+  <curve Name="HealthPerLevel" NumberOfSamples="10" MaxX="100" MinX="1" MaxY="300" MinY="200">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="100" />
+      <knot TypeOfSpline="LINE" X="100" Y="350" />
+    </knots>
+  </curve>
+  <curve Name="StaminaPerLevel" NumberOfSamples="10" MaxX="100" MinX="1" MaxY="3" MinY="1">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="100" Y="2" />
+    </knots>
+  </curve>
+  <curve Name="LegendPoints_HealthPerLevel" NumberOfSamples="300" MaxX="300" MinX="1" MaxY="5.5" MinY="0">
+      <knots Count="70">
+	  <knot TypeOfSpline="LINE" X="1" Y="1.014" />
+    <knot TypeOfSpline="LINE" X="10" Y="1.143" />
+    <knot TypeOfSpline="LINE" X="11" Y="1.157" />
+    <knot TypeOfSpline="LINE" X="20" Y="1.286" />
+    <knot TypeOfSpline="LINE" X="21" Y="1.300" />
+    <knot TypeOfSpline="LINE" X="29" Y="1.414" />
+    <knot TypeOfSpline="LINE" X="30" Y="1.429" />
+    <knot TypeOfSpline="LINE" X="31" Y="1.443" />
+    <knot TypeOfSpline="LINE" X="40" Y="1.571" />
+    <knot TypeOfSpline="LINE" X="41" Y="1.586" />
+    <knot TypeOfSpline="LINE" X="50" Y="1.714" />
+    <knot TypeOfSpline="LINE" X="51" Y="1.729" />
+    <knot TypeOfSpline="LINE" X="59" Y="1.843" />
+    <knot TypeOfSpline="LINE" X="60" Y="1.857" />
+    <knot TypeOfSpline="LINE" X="61" Y="1.871" />
+    <knot TypeOfSpline="LINE" X="70" Y="2.000" />
+    <knot TypeOfSpline="LINE" X="71" Y="2.014" />
+    <knot TypeOfSpline="LINE" X="80" Y="2.143" />
+    <knot TypeOfSpline="LINE" X="81" Y="2.157" />
+    <knot TypeOfSpline="LINE" X="89" Y="2.271" />
+    <knot TypeOfSpline="LINE" X="90" Y="2.286" />
+    <knot TypeOfSpline="LINE" X="91" Y="2.300" />
+    <knot TypeOfSpline="LINE" X="100" Y="2.429" />
+    <knot TypeOfSpline="LINE" X="101" Y="2.443" />
+    <knot TypeOfSpline="LINE" X="110" Y="2.571" />
+    <knot TypeOfSpline="LINE" X="111" Y="2.586" />
+    <knot TypeOfSpline="LINE" X="119" Y="2.700" />
+    <knot TypeOfSpline="LINE" X="120" Y="2.714" />
+    <knot TypeOfSpline="LINE" X="121" Y="2.729" />
+    <knot TypeOfSpline="LINE" X="130" Y="2.857" />
+    <knot TypeOfSpline="LINE" X="131" Y="2.871" />
+    <knot TypeOfSpline="LINE" X="140" Y="3.000" />
+    <knot TypeOfSpline="LINE" X="141" Y="3.014" />
+    <knot TypeOfSpline="LINE" X="149" Y="3.129" />
+    <knot TypeOfSpline="LINE" X="150" Y="3.143" />
+    <knot TypeOfSpline="LINE" X="151" Y="3.157" />
+    <knot TypeOfSpline="LINE" X="160" Y="3.286" />
+    <knot TypeOfSpline="LINE" X="161" Y="3.300" />
+    <knot TypeOfSpline="LINE" X="170" Y="3.429" />
+    <knot TypeOfSpline="LINE" X="171" Y="3.443" />
+    <knot TypeOfSpline="LINE" X="179" Y="3.557" />
+    <knot TypeOfSpline="LINE" X="180" Y="3.571" />
+    <knot TypeOfSpline="LINE" X="181" Y="3.586" />
+    <knot TypeOfSpline="LINE" X="190" Y="3.714" />
+    <knot TypeOfSpline="LINE" X="191" Y="3.729" />
+    <knot TypeOfSpline="LINE" X="200" Y="3.857" />
+    <knot TypeOfSpline="LINE" X="201" Y="3.871" />
+    <knot TypeOfSpline="LINE" X="209" Y="3.986" />
+    <knot TypeOfSpline="LINE" X="210" Y="4.000" />
+    <knot TypeOfSpline="LINE" X="211" Y="4.014" />
+    <knot TypeOfSpline="LINE" X="220" Y="4.143" />
+    <knot TypeOfSpline="LINE" X="221" Y="4.157" />
+    <knot TypeOfSpline="LINE" X="230" Y="4.286" />
+    <knot TypeOfSpline="LINE" X="231" Y="4.300" />
+    <knot TypeOfSpline="LINE" X="239" Y="4.414" />
+    <knot TypeOfSpline="LINE" X="240" Y="4.429" />
+    <knot TypeOfSpline="LINE" X="241" Y="4.443" />
+    <knot TypeOfSpline="LINE" X="250" Y="4.571" />
+    <knot TypeOfSpline="LINE" X="251" Y="4.586" />
+    <knot TypeOfSpline="LINE" X="260" Y="4.714" />
+    <knot TypeOfSpline="LINE" X="261" Y="4.729" />
+    <knot TypeOfSpline="LINE" X="269" Y="4.843" />
+    <knot TypeOfSpline="LINE" X="270" Y="4.857" />
+    <knot TypeOfSpline="LINE" X="271" Y="4.871" />
+    <knot TypeOfSpline="LINE" X="280" Y="5.000" />
+    <knot TypeOfSpline="LINE" X="281" Y="5.014" />
+    <knot TypeOfSpline="LINE" X="290" Y="5.143" />
+    <knot TypeOfSpline="LINE" X="291" Y="5.157" />
+    <knot TypeOfSpline="LINE" X="299" Y="5.271" />
+    <knot TypeOfSpline="LINE" X="300" Y="5.286" />
+      </knots>
+  </curve>
+  <curve Name="LegendPoints_WeaponDamageMultiplier" NumberOfSamples="300" MaxX="300" MinX="1" MaxY="105315.39" MinY="1.0">
+    <knots Count="70">
+    <knot TypeOfSpline="LINE" X="1" Y="1.01" />
+    <knot TypeOfSpline="LINE" X="10" Y="1.58" />
+    <knot TypeOfSpline="LINE" X="11" Y="1.60" />
+    <knot TypeOfSpline="LINE" X="20" Y="2.57" />
+    <knot TypeOfSpline="LINE" X="21" Y="2.60" />
+    <knot TypeOfSpline="LINE" X="29" Y="3.43" />
+    <knot TypeOfSpline="LINE" X="30" Y="3.46" />
+    <knot TypeOfSpline="LINE" X="31" Y="3.60" />
+    <knot TypeOfSpline="LINE" X="40" Y="4.68" />
+    <knot TypeOfSpline="LINE" X="41" Y="4.73" />
+    <knot TypeOfSpline="LINE" X="50" Y="7.60" />
+    <knot TypeOfSpline="LINE" X="51" Y="7.68" />
+    <knot TypeOfSpline="LINE" X="59" Y="10.14" />
+    <knot TypeOfSpline="LINE" X="60" Y="10.24" />
+    <knot TypeOfSpline="LINE" X="61" Y="10.64" />
+    <knot TypeOfSpline="LINE" X="70" Y="17.30" />
+    <knot TypeOfSpline="LINE" X="71" Y="17.47" />
+    <knot TypeOfSpline="LINE" X="80" Y="22.49" />
+    <knot TypeOfSpline="LINE" X="81" Y="22.71" />
+    <knot TypeOfSpline="LINE" X="89" Y="29.98" />
+    <knot TypeOfSpline="LINE" X="90" Y="30.28" />
+    <knot TypeOfSpline="LINE" X="91" Y="31.48" />
+    <knot TypeOfSpline="LINE" X="100" Y="51.16" />
+    <knot TypeOfSpline="LINE" X="101" Y="51.67" />
+    <knot TypeOfSpline="LINE" X="110" Y="66.50" />
+    <knot TypeOfSpline="LINE" X="111" Y="67.17" />
+    <knot TypeOfSpline="LINE" X="119" Y="88.67" />
+    <knot TypeOfSpline="LINE" X="120" Y="89.56" />
+    <knot TypeOfSpline="LINE" X="121" Y="93.10" />
+    <knot TypeOfSpline="LINE" X="130" Y="151.29" />
+    <knot TypeOfSpline="LINE" X="131" Y="152.82" />
+    <knot TypeOfSpline="LINE" X="140" Y="262.24" />
+    <knot TypeOfSpline="LINE" X="141" Y="264.89" />
+    <knot TypeOfSpline="LINE" X="149" Y="271.28" />
+    <knot TypeOfSpline="LINE" X="150" Y="274.02" />
+    <knot TypeOfSpline="LINE" X="151" Y="275.35" />
+    <knot TypeOfSpline="LINE" X="160" Y="447.44" />
+    <knot TypeOfSpline="LINE" X="161" Y="451.96" />
+    <knot TypeOfSpline="LINE" X="170" Y="775.57" />
+    <knot TypeOfSpline="LINE" X="171" Y="783.40" />
+    <knot TypeOfSpline="LINE" X="179" Y="802.31" />
+    <knot TypeOfSpline="LINE" X="180" Y="810.42" />
+    <knot TypeOfSpline="LINE" X="181" Y="1017.94" />
+    <knot TypeOfSpline="LINE" X="190" Y="1323.32" />
+    <knot TypeOfSpline="LINE" X="191" Y="1336.68" />
+    <knot TypeOfSpline="LINE" X="200" Y="2293.75" />
+    <knot TypeOfSpline="LINE" X="201" Y="2316.92" />
+    <knot TypeOfSpline="LINE" X="209" Y="2372.84" />
+    <knot TypeOfSpline="LINE" X="210" Y="2396.81" />
+    <knot TypeOfSpline="LINE" X="211" Y="3010.54" />
+    <knot TypeOfSpline="LINE" X="220" Y="3913.71" />
+    <knot TypeOfSpline="LINE" X="221" Y="3953.24" />
+    <knot TypeOfSpline="LINE" X="230" Y="6783.76" />
+    <knot TypeOfSpline="LINE" X="231" Y="6852.28" />
+    <knot TypeOfSpline="LINE" X="239" Y="7017.68" />
+    <knot TypeOfSpline="LINE" X="240" Y="7088.57" />
+    <knot TypeOfSpline="LINE" X="241" Y="8903.68" />
+    <knot TypeOfSpline="LINE" X="250" Y="11574.79" />
+    <knot TypeOfSpline="LINE" X="251" Y="11691.71" />
+    <knot TypeOfSpline="LINE" X="260" Y="20062.97" />
+    <knot TypeOfSpline="LINE" X="261" Y="20265.63" />
+    <knot TypeOfSpline="LINE" X="269" Y="30094.45" />
+    <knot TypeOfSpline="LINE" X="270" Y="30398.44" />
+    <knot TypeOfSpline="LINE" X="271" Y="30846.82" />
+    <knot TypeOfSpline="LINE" X="280" Y="40100.86" />
+    <knot TypeOfSpline="LINE" X="281" Y="40505.92" />
+    <knot TypeOfSpline="LINE" X="290" Y="69508.16" />
+    <knot TypeOfSpline="LINE" X="291" Y="70210.26" />
+    <knot TypeOfSpline="LINE" X="299" Y="104262.24" />
+    <knot TypeOfSpline="LINE" X="300" Y="105315.39" />
+    </knots>
+  </curve>
+  <curve Name="LegendPoints_PhysicalDamageMultiplier" NumberOfSamples="300" MaxX="300" MinX="1" MaxY="105315.39" MinY="1.0">
+    <knots Count="70">
+    <knot TypeOfSpline="LINE" X="1" Y="1.01" />
+    <knot TypeOfSpline="LINE" X="10" Y="1.58" />
+    <knot TypeOfSpline="LINE" X="11" Y="1.60" />
+    <knot TypeOfSpline="LINE" X="20" Y="2.57" />
+    <knot TypeOfSpline="LINE" X="21" Y="2.60" />
+    <knot TypeOfSpline="LINE" X="29" Y="3.43" />
+    <knot TypeOfSpline="LINE" X="30" Y="3.46" />
+    <knot TypeOfSpline="LINE" X="31" Y="3.60" />
+    <knot TypeOfSpline="LINE" X="40" Y="4.68" />
+    <knot TypeOfSpline="LINE" X="41" Y="4.73" />
+    <knot TypeOfSpline="LINE" X="50" Y="7.60" />
+    <knot TypeOfSpline="LINE" X="51" Y="7.68" />
+    <knot TypeOfSpline="LINE" X="59" Y="10.14" />
+    <knot TypeOfSpline="LINE" X="60" Y="10.24" />
+    <knot TypeOfSpline="LINE" X="61" Y="10.64" />
+    <knot TypeOfSpline="LINE" X="70" Y="17.30" />
+    <knot TypeOfSpline="LINE" X="71" Y="17.47" />
+    <knot TypeOfSpline="LINE" X="80" Y="22.49" />
+    <knot TypeOfSpline="LINE" X="81" Y="22.71" />
+    <knot TypeOfSpline="LINE" X="89" Y="29.98" />
+    <knot TypeOfSpline="LINE" X="90" Y="30.28" />
+    <knot TypeOfSpline="LINE" X="91" Y="31.48" />
+    <knot TypeOfSpline="LINE" X="100" Y="51.16" />
+    <knot TypeOfSpline="LINE" X="101" Y="51.67" />
+    <knot TypeOfSpline="LINE" X="110" Y="66.50" />
+    <knot TypeOfSpline="LINE" X="111" Y="67.17" />
+    <knot TypeOfSpline="LINE" X="119" Y="88.67" />
+    <knot TypeOfSpline="LINE" X="120" Y="89.56" />
+    <knot TypeOfSpline="LINE" X="121" Y="93.10" />
+    <knot TypeOfSpline="LINE" X="130" Y="151.29" />
+    <knot TypeOfSpline="LINE" X="131" Y="152.82" />
+    <knot TypeOfSpline="LINE" X="140" Y="262.24" />
+    <knot TypeOfSpline="LINE" X="141" Y="264.89" />
+    <knot TypeOfSpline="LINE" X="149" Y="271.28" />
+    <knot TypeOfSpline="LINE" X="150" Y="274.02" />
+    <knot TypeOfSpline="LINE" X="151" Y="275.35" />
+    <knot TypeOfSpline="LINE" X="160" Y="447.44" />
+    <knot TypeOfSpline="LINE" X="161" Y="451.96" />
+    <knot TypeOfSpline="LINE" X="170" Y="775.57" />
+    <knot TypeOfSpline="LINE" X="171" Y="783.40" />
+    <knot TypeOfSpline="LINE" X="179" Y="802.31" />
+    <knot TypeOfSpline="LINE" X="180" Y="810.42" />
+    <knot TypeOfSpline="LINE" X="181" Y="1017.94" />
+    <knot TypeOfSpline="LINE" X="190" Y="1323.32" />
+    <knot TypeOfSpline="LINE" X="191" Y="1336.68" />
+    <knot TypeOfSpline="LINE" X="200" Y="2293.75" />
+    <knot TypeOfSpline="LINE" X="201" Y="2316.92" />
+    <knot TypeOfSpline="LINE" X="209" Y="2372.84" />
+    <knot TypeOfSpline="LINE" X="210" Y="2396.81" />
+    <knot TypeOfSpline="LINE" X="211" Y="3010.54" />
+    <knot TypeOfSpline="LINE" X="220" Y="3913.71" />
+    <knot TypeOfSpline="LINE" X="221" Y="3953.24" />
+    <knot TypeOfSpline="LINE" X="230" Y="6783.76" />
+    <knot TypeOfSpline="LINE" X="231" Y="6852.28" />
+    <knot TypeOfSpline="LINE" X="239" Y="7017.68" />
+    <knot TypeOfSpline="LINE" X="240" Y="7088.57" />
+    <knot TypeOfSpline="LINE" X="241" Y="8903.68" />
+    <knot TypeOfSpline="LINE" X="250" Y="11574.79" />
+    <knot TypeOfSpline="LINE" X="251" Y="11691.71" />
+    <knot TypeOfSpline="LINE" X="260" Y="20062.97" />
+    <knot TypeOfSpline="LINE" X="261" Y="20265.63" />
+    <knot TypeOfSpline="LINE" X="269" Y="30094.45" />
+    <knot TypeOfSpline="LINE" X="270" Y="30398.44" />
+    <knot TypeOfSpline="LINE" X="271" Y="30846.82" />
+    <knot TypeOfSpline="LINE" X="280" Y="40100.86" />
+    <knot TypeOfSpline="LINE" X="281" Y="40505.92" />
+    <knot TypeOfSpline="LINE" X="290" Y="69508.16" />
+    <knot TypeOfSpline="LINE" X="291" Y="70210.26" />
+    <knot TypeOfSpline="LINE" X="299" Y="104262.24" />
+    <knot TypeOfSpline="LINE" X="300" Y="105315.39" />
+    </knots>
+  </curve>
+  <curve Name="LegendPoints_ThrowablesDamageMultiplier" NumberOfSamples="300" MaxX="300" MinX="1" MaxY="105315.39" MinY="1.0">
+    <knots Count="70">
+    <knot TypeOfSpline="LINE" X="1" Y="1.01" />
+    <knot TypeOfSpline="LINE" X="10" Y="1.58" />
+    <knot TypeOfSpline="LINE" X="11" Y="1.60" />
+    <knot TypeOfSpline="LINE" X="20" Y="2.57" />
+    <knot TypeOfSpline="LINE" X="21" Y="2.60" />
+    <knot TypeOfSpline="LINE" X="29" Y="3.43" />
+    <knot TypeOfSpline="LINE" X="30" Y="3.46" />
+    <knot TypeOfSpline="LINE" X="31" Y="3.60" />
+    <knot TypeOfSpline="LINE" X="40" Y="4.68" />
+    <knot TypeOfSpline="LINE" X="41" Y="4.73" />
+    <knot TypeOfSpline="LINE" X="50" Y="7.60" />
+    <knot TypeOfSpline="LINE" X="51" Y="7.68" />
+    <knot TypeOfSpline="LINE" X="59" Y="10.14" />
+    <knot TypeOfSpline="LINE" X="60" Y="10.24" />
+    <knot TypeOfSpline="LINE" X="61" Y="10.64" />
+    <knot TypeOfSpline="LINE" X="70" Y="17.30" />
+    <knot TypeOfSpline="LINE" X="71" Y="17.47" />
+    <knot TypeOfSpline="LINE" X="80" Y="22.49" />
+    <knot TypeOfSpline="LINE" X="81" Y="22.71" />
+    <knot TypeOfSpline="LINE" X="89" Y="29.98" />
+    <knot TypeOfSpline="LINE" X="90" Y="30.28" />
+    <knot TypeOfSpline="LINE" X="91" Y="31.48" />
+    <knot TypeOfSpline="LINE" X="100" Y="51.16" />
+    <knot TypeOfSpline="LINE" X="101" Y="51.67" />
+    <knot TypeOfSpline="LINE" X="110" Y="66.50" />
+    <knot TypeOfSpline="LINE" X="111" Y="67.17" />
+    <knot TypeOfSpline="LINE" X="119" Y="88.67" />
+    <knot TypeOfSpline="LINE" X="120" Y="89.56" />
+    <knot TypeOfSpline="LINE" X="121" Y="93.10" />
+    <knot TypeOfSpline="LINE" X="130" Y="151.29" />
+    <knot TypeOfSpline="LINE" X="131" Y="152.82" />
+    <knot TypeOfSpline="LINE" X="140" Y="262.24" />
+    <knot TypeOfSpline="LINE" X="141" Y="264.89" />
+    <knot TypeOfSpline="LINE" X="149" Y="271.28" />
+    <knot TypeOfSpline="LINE" X="150" Y="274.02" />
+    <knot TypeOfSpline="LINE" X="151" Y="275.35" />
+    <knot TypeOfSpline="LINE" X="160" Y="447.44" />
+    <knot TypeOfSpline="LINE" X="161" Y="451.96" />
+    <knot TypeOfSpline="LINE" X="170" Y="775.57" />
+    <knot TypeOfSpline="LINE" X="171" Y="783.40" />
+    <knot TypeOfSpline="LINE" X="179" Y="802.31" />
+    <knot TypeOfSpline="LINE" X="180" Y="810.42" />
+    <knot TypeOfSpline="LINE" X="181" Y="1017.94" />
+    <knot TypeOfSpline="LINE" X="190" Y="1323.32" />
+    <knot TypeOfSpline="LINE" X="191" Y="1336.68" />
+    <knot TypeOfSpline="LINE" X="200" Y="2293.75" />
+    <knot TypeOfSpline="LINE" X="201" Y="2316.92" />
+    <knot TypeOfSpline="LINE" X="209" Y="2372.84" />
+    <knot TypeOfSpline="LINE" X="210" Y="2396.81" />
+    <knot TypeOfSpline="LINE" X="211" Y="3010.54" />
+    <knot TypeOfSpline="LINE" X="220" Y="3913.71" />
+    <knot TypeOfSpline="LINE" X="221" Y="3953.24" />
+    <knot TypeOfSpline="LINE" X="230" Y="6783.76" />
+    <knot TypeOfSpline="LINE" X="231" Y="6852.28" />
+    <knot TypeOfSpline="LINE" X="239" Y="7017.68" />
+    <knot TypeOfSpline="LINE" X="240" Y="7088.57" />
+    <knot TypeOfSpline="LINE" X="241" Y="8903.68" />
+    <knot TypeOfSpline="LINE" X="250" Y="11574.79" />
+    <knot TypeOfSpline="LINE" X="251" Y="11691.71" />
+    <knot TypeOfSpline="LINE" X="260" Y="20062.97" />
+    <knot TypeOfSpline="LINE" X="261" Y="20265.63" />
+    <knot TypeOfSpline="LINE" X="269" Y="30094.45" />
+    <knot TypeOfSpline="LINE" X="270" Y="30398.44" />
+    <knot TypeOfSpline="LINE" X="271" Y="30846.82" />
+    <knot TypeOfSpline="LINE" X="280" Y="40100.86" />
+    <knot TypeOfSpline="LINE" X="281" Y="40505.92" />
+    <knot TypeOfSpline="LINE" X="290" Y="69508.16" />
+    <knot TypeOfSpline="LINE" X="291" Y="70210.26" />
+    <knot TypeOfSpline="LINE" X="299" Y="104262.24" />
+    <knot TypeOfSpline="LINE" X="300" Y="105315.39" />
+    </knots>
+  </curve>
+  <curve Name="InfectionToleranceBoost" NumberOfSamples="2" MaxX="100" MinX="1" MaxY="0.5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="0" />
+      <knot TypeOfSpline="LINE" X="100" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="Inhibitor_Levels" NumberOfSamples="157" MaxX="157" MinX="1" MaxY="157" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="157" Y="157" />
+    </knots>
+  </curve>
+  <curve Name="InhibitorSkillpoints" NumberOfSamples="157" MaxX="157" MinX="1" MaxY="156" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="0" />
+      <knot TypeOfSpline="LINE" X="157" Y="156" />
+    </knots>
+  </curve>
+  <curve Name="FuryPoints_Levels" NumberOfSamples="22" MaxX="22" MinX="1" MaxY="22" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="22" Y="22" />
+    </knots>
+  </curve>
+  <curve Name="FuryPoints_Skillpoints" NumberOfSamples="22" MaxX="22" MinX="1" MaxY="22" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="0" />
+      <knot TypeOfSpline="LINE" X="22" Y="22" />
+    </knots>
+  </curve>
+  <curve Name="LegendPoints_Levels" NumberOfSamples="299" MaxX="299" MinX="1" MaxY="22417000" MinY="0">
+    <knots Count="299">
+<knot TypeOfSpline="LINE" X="1" Y="23000" />
+<knot TypeOfSpline="LINE" X="2" Y="46000" />
+<knot TypeOfSpline="LINE" X="3" Y="69000" />
+<knot TypeOfSpline="LINE" X="4" Y="92000" />
+<knot TypeOfSpline="LINE" X="5" Y="115000" />
+<knot TypeOfSpline="LINE" X="6" Y="138000" />
+<knot TypeOfSpline="LINE" X="7" Y="161000" />
+<knot TypeOfSpline="LINE" X="8" Y="184000" />
+<knot TypeOfSpline="LINE" X="9" Y="207000" />
+<knot TypeOfSpline="LINE" X="10" Y="230000" />
+<knot TypeOfSpline="LINE" X="11" Y="253000" />
+<knot TypeOfSpline="LINE" X="12" Y="276000" />
+<knot TypeOfSpline="LINE" X="13" Y="299000" />
+<knot TypeOfSpline="LINE" X="14" Y="322000" />
+<knot TypeOfSpline="LINE" X="15" Y="345000" />
+<knot TypeOfSpline="LINE" X="16" Y="368000" />
+<knot TypeOfSpline="LINE" X="17" Y="391000" />
+<knot TypeOfSpline="LINE" X="18" Y="414000" />
+<knot TypeOfSpline="LINE" X="19" Y="437000" />
+<knot TypeOfSpline="LINE" X="20" Y="460000" />
+<knot TypeOfSpline="LINE" X="21" Y="483000" />
+<knot TypeOfSpline="LINE" X="22" Y="506000" />
+<knot TypeOfSpline="LINE" X="23" Y="529000" />
+<knot TypeOfSpline="LINE" X="24" Y="552000" />
+<knot TypeOfSpline="LINE" X="25" Y="575000" />
+<knot TypeOfSpline="LINE" X="26" Y="598000" />
+<knot TypeOfSpline="LINE" X="27" Y="621000" />
+<knot TypeOfSpline="LINE" X="28" Y="644000" />
+<knot TypeOfSpline="LINE" X="29" Y="667000" />
+<knot TypeOfSpline="LINE" X="30" Y="706000" />
+<knot TypeOfSpline="LINE" X="31" Y="745000" />
+<knot TypeOfSpline="LINE" X="32" Y="784000" />
+<knot TypeOfSpline="LINE" X="33" Y="823000" />
+<knot TypeOfSpline="LINE" X="34" Y="862000" />
+<knot TypeOfSpline="LINE" X="35" Y="901000" />
+<knot TypeOfSpline="LINE" X="36" Y="940000" />
+<knot TypeOfSpline="LINE" X="37" Y="979000" />
+<knot TypeOfSpline="LINE" X="38" Y="1018000" />
+<knot TypeOfSpline="LINE" X="39" Y="1057000" />
+<knot TypeOfSpline="LINE" X="40" Y="1096000" />
+<knot TypeOfSpline="LINE" X="41" Y="1135000" />
+<knot TypeOfSpline="LINE" X="42" Y="1174000" />
+<knot TypeOfSpline="LINE" X="43" Y="1213000" />
+<knot TypeOfSpline="LINE" X="44" Y="1252000" />
+<knot TypeOfSpline="LINE" X="45" Y="1291000" />
+<knot TypeOfSpline="LINE" X="46" Y="1330000" />
+<knot TypeOfSpline="LINE" X="47" Y="1369000" />
+<knot TypeOfSpline="LINE" X="48" Y="1408000" />
+<knot TypeOfSpline="LINE" X="49" Y="1447000" />
+<knot TypeOfSpline="LINE" X="50" Y="1486000" />
+<knot TypeOfSpline="LINE" X="51" Y="1525000" />
+<knot TypeOfSpline="LINE" X="52" Y="1564000" />
+<knot TypeOfSpline="LINE" X="53" Y="1603000" />
+<knot TypeOfSpline="LINE" X="54" Y="1642000" />
+<knot TypeOfSpline="LINE" X="55" Y="1681000" />
+<knot TypeOfSpline="LINE" X="56" Y="1720000" />
+<knot TypeOfSpline="LINE" X="57" Y="1759000" />
+<knot TypeOfSpline="LINE" X="58" Y="1798000" />
+<knot TypeOfSpline="LINE" X="59" Y="1837000" />
+<knot TypeOfSpline="LINE" X="60" Y="1889000" />
+<knot TypeOfSpline="LINE" X="61" Y="1941000" />
+<knot TypeOfSpline="LINE" X="62" Y="1993000" />
+<knot TypeOfSpline="LINE" X="63" Y="2045000" />
+<knot TypeOfSpline="LINE" X="64" Y="2097000" />
+<knot TypeOfSpline="LINE" X="65" Y="2149000" />
+<knot TypeOfSpline="LINE" X="66" Y="2201000" />
+<knot TypeOfSpline="LINE" X="67" Y="2253000" />
+<knot TypeOfSpline="LINE" X="68" Y="2305000" />
+<knot TypeOfSpline="LINE" X="69" Y="2357000" />
+<knot TypeOfSpline="LINE" X="70" Y="2409000" />
+<knot TypeOfSpline="LINE" X="71" Y="2461000" />
+<knot TypeOfSpline="LINE" X="72" Y="2513000" />
+<knot TypeOfSpline="LINE" X="73" Y="2565000" />
+<knot TypeOfSpline="LINE" X="74" Y="2617000" />
+<knot TypeOfSpline="LINE" X="75" Y="2669000" />
+<knot TypeOfSpline="LINE" X="76" Y="2721000" />
+<knot TypeOfSpline="LINE" X="77" Y="2773000" />
+<knot TypeOfSpline="LINE" X="78" Y="2825000" />
+<knot TypeOfSpline="LINE" X="79" Y="2877000" />
+<knot TypeOfSpline="LINE" X="80" Y="2929000" />
+<knot TypeOfSpline="LINE" X="81" Y="2981000" />
+<knot TypeOfSpline="LINE" X="82" Y="3033000" />
+<knot TypeOfSpline="LINE" X="83" Y="3085000" />
+<knot TypeOfSpline="LINE" X="84" Y="3137000" />
+<knot TypeOfSpline="LINE" X="85" Y="3189000" />
+<knot TypeOfSpline="LINE" X="86" Y="3241000" />
+<knot TypeOfSpline="LINE" X="87" Y="3293000" />
+<knot TypeOfSpline="LINE" X="88" Y="3345000" />
+<knot TypeOfSpline="LINE" X="89" Y="3397000" />
+<knot TypeOfSpline="LINE" X="90" Y="3459000" />
+<knot TypeOfSpline="LINE" X="91" Y="3521000" />
+<knot TypeOfSpline="LINE" X="92" Y="3583000" />
+<knot TypeOfSpline="LINE" X="93" Y="3645000" />
+<knot TypeOfSpline="LINE" X="94" Y="3707000" />
+<knot TypeOfSpline="LINE" X="95" Y="3769000" />
+<knot TypeOfSpline="LINE" X="96" Y="3831000" />
+<knot TypeOfSpline="LINE" X="97" Y="3893000" />
+<knot TypeOfSpline="LINE" X="98" Y="3955000" />
+<knot TypeOfSpline="LINE" X="99" Y="4017000" />
+<knot TypeOfSpline="LINE" X="100" Y="4079000" />
+<knot TypeOfSpline="LINE" X="101" Y="4141000" />
+<knot TypeOfSpline="LINE" X="102" Y="4203000" />
+<knot TypeOfSpline="LINE" X="103" Y="4265000" />
+<knot TypeOfSpline="LINE" X="104" Y="4327000" />
+<knot TypeOfSpline="LINE" X="105" Y="4389000" />
+<knot TypeOfSpline="LINE" X="106" Y="4451000" />
+<knot TypeOfSpline="LINE" X="107" Y="4513000" />
+<knot TypeOfSpline="LINE" X="108" Y="4575000" />
+<knot TypeOfSpline="LINE" X="109" Y="4637000" />
+<knot TypeOfSpline="LINE" X="110" Y="4699000" />
+<knot TypeOfSpline="LINE" X="111" Y="4761000" />
+<knot TypeOfSpline="LINE" X="112" Y="4823000" />
+<knot TypeOfSpline="LINE" X="113" Y="4885000" />
+<knot TypeOfSpline="LINE" X="114" Y="4947000" />
+<knot TypeOfSpline="LINE" X="115" Y="5009000" />
+<knot TypeOfSpline="LINE" X="116" Y="5071000" />
+<knot TypeOfSpline="LINE" X="117" Y="5133000" />
+<knot TypeOfSpline="LINE" X="118" Y="5195000" />
+<knot TypeOfSpline="LINE" X="119" Y="5257000" />
+<knot TypeOfSpline="LINE" X="120" Y="5327000" />
+<knot TypeOfSpline="LINE" X="121" Y="5397000" />
+<knot TypeOfSpline="LINE" X="122" Y="5467000" />
+<knot TypeOfSpline="LINE" X="123" Y="5537000" />
+<knot TypeOfSpline="LINE" X="124" Y="5607000" />
+<knot TypeOfSpline="LINE" X="125" Y="5677000" />
+<knot TypeOfSpline="LINE" X="126" Y="5747000" />
+<knot TypeOfSpline="LINE" X="127" Y="5817000" />
+<knot TypeOfSpline="LINE" X="128" Y="5887000" />
+<knot TypeOfSpline="LINE" X="129" Y="5957000" />
+<knot TypeOfSpline="LINE" X="130" Y="6027000" />
+<knot TypeOfSpline="LINE" X="131" Y="6097000" />
+<knot TypeOfSpline="LINE" X="132" Y="6167000" />
+<knot TypeOfSpline="LINE" X="133" Y="6237000" />
+<knot TypeOfSpline="LINE" X="134" Y="6307000" />
+<knot TypeOfSpline="LINE" X="135" Y="6377000" />
+<knot TypeOfSpline="LINE" X="136" Y="6447000" />
+<knot TypeOfSpline="LINE" X="137" Y="6517000" />
+<knot TypeOfSpline="LINE" X="138" Y="6587000" />
+<knot TypeOfSpline="LINE" X="139" Y="6657000" />
+<knot TypeOfSpline="LINE" X="140" Y="6727000" />
+<knot TypeOfSpline="LINE" X="141" Y="6797000" />
+<knot TypeOfSpline="LINE" X="142" Y="6867000" />
+<knot TypeOfSpline="LINE" X="143" Y="6937000" />
+<knot TypeOfSpline="LINE" X="144" Y="7007000" />
+<knot TypeOfSpline="LINE" X="145" Y="7077000" />
+<knot TypeOfSpline="LINE" X="146" Y="7147000" />
+<knot TypeOfSpline="LINE" X="147" Y="7217000" />
+<knot TypeOfSpline="LINE" X="148" Y="7287000" />
+<knot TypeOfSpline="LINE" X="149" Y="7357000" />
+<knot TypeOfSpline="LINE" X="150" Y="7439000" />
+<knot TypeOfSpline="LINE" X="151" Y="7521000" />
+<knot TypeOfSpline="LINE" X="152" Y="7603000" />
+<knot TypeOfSpline="LINE" X="153" Y="7685000" />
+<knot TypeOfSpline="LINE" X="154" Y="7767000" />
+<knot TypeOfSpline="LINE" X="155" Y="7849000" />
+<knot TypeOfSpline="LINE" X="156" Y="7931000" />
+<knot TypeOfSpline="LINE" X="157" Y="8013000" />
+<knot TypeOfSpline="LINE" X="158" Y="8095000" />
+<knot TypeOfSpline="LINE" X="159" Y="8177000" />
+<knot TypeOfSpline="LINE" X="160" Y="8259000" />
+<knot TypeOfSpline="LINE" X="161" Y="8341000" />
+<knot TypeOfSpline="LINE" X="162" Y="8423000" />
+<knot TypeOfSpline="LINE" X="163" Y="8505000" />
+<knot TypeOfSpline="LINE" X="164" Y="8587000" />
+<knot TypeOfSpline="LINE" X="165" Y="8669000" />
+<knot TypeOfSpline="LINE" X="166" Y="8751000" />
+<knot TypeOfSpline="LINE" X="167" Y="8833000" />
+<knot TypeOfSpline="LINE" X="168" Y="8915000" />
+<knot TypeOfSpline="LINE" X="169" Y="8997000" />
+<knot TypeOfSpline="LINE" X="170" Y="9079000" />
+<knot TypeOfSpline="LINE" X="171" Y="9161000" />
+<knot TypeOfSpline="LINE" X="172" Y="9243000" />
+<knot TypeOfSpline="LINE" X="173" Y="9325000" />
+<knot TypeOfSpline="LINE" X="174" Y="9407000" />
+<knot TypeOfSpline="LINE" X="175" Y="9489000" />
+<knot TypeOfSpline="LINE" X="176" Y="9571000" />
+<knot TypeOfSpline="LINE" X="177" Y="9653000" />
+<knot TypeOfSpline="LINE" X="178" Y="9735000" />
+<knot TypeOfSpline="LINE" X="179" Y="9817000" />
+<knot TypeOfSpline="LINE" X="180" Y="9907000" />
+<knot TypeOfSpline="LINE" X="181" Y="9997000" />
+<knot TypeOfSpline="LINE" X="182" Y="10087000" />
+<knot TypeOfSpline="LINE" X="183" Y="10177000" />
+<knot TypeOfSpline="LINE" X="184" Y="10267000" />
+<knot TypeOfSpline="LINE" X="185" Y="10357000" />
+<knot TypeOfSpline="LINE" X="186" Y="10447000" />
+<knot TypeOfSpline="LINE" X="187" Y="10537000" />
+<knot TypeOfSpline="LINE" X="188" Y="10627000" />
+<knot TypeOfSpline="LINE" X="189" Y="10717000" />
+<knot TypeOfSpline="LINE" X="190" Y="10807000" />
+<knot TypeOfSpline="LINE" X="191" Y="10897000" />
+<knot TypeOfSpline="LINE" X="192" Y="10987000" />
+<knot TypeOfSpline="LINE" X="193" Y="11077000" />
+<knot TypeOfSpline="LINE" X="194" Y="11167000" />
+<knot TypeOfSpline="LINE" X="195" Y="11257000" />
+<knot TypeOfSpline="LINE" X="196" Y="11347000" />
+<knot TypeOfSpline="LINE" X="197" Y="11437000" />
+<knot TypeOfSpline="LINE" X="198" Y="11527000" />
+<knot TypeOfSpline="LINE" X="199" Y="11617000" />
+<knot TypeOfSpline="LINE" X="200" Y="11707000" />
+<knot TypeOfSpline="LINE" X="201" Y="11797000" />
+<knot TypeOfSpline="LINE" X="202" Y="11887000" />
+<knot TypeOfSpline="LINE" X="203" Y="11977000" />
+<knot TypeOfSpline="LINE" X="204" Y="12067000" />
+<knot TypeOfSpline="LINE" X="205" Y="12157000" />
+<knot TypeOfSpline="LINE" X="206" Y="12247000" />
+<knot TypeOfSpline="LINE" X="207" Y="12337000" />
+<knot TypeOfSpline="LINE" X="208" Y="12427000" />
+<knot TypeOfSpline="LINE" X="209" Y="12517000" />
+<knot TypeOfSpline="LINE" X="210" Y="12617000" />
+<knot TypeOfSpline="LINE" X="211" Y="12717000" />
+<knot TypeOfSpline="LINE" X="212" Y="12817000" />
+<knot TypeOfSpline="LINE" X="213" Y="12917000" />
+<knot TypeOfSpline="LINE" X="214" Y="13017000" />
+<knot TypeOfSpline="LINE" X="215" Y="13117000" />
+<knot TypeOfSpline="LINE" X="216" Y="13217000" />
+<knot TypeOfSpline="LINE" X="217" Y="13317000" />
+<knot TypeOfSpline="LINE" X="218" Y="13417000" />
+<knot TypeOfSpline="LINE" X="219" Y="13517000" />
+<knot TypeOfSpline="LINE" X="220" Y="13617000" />
+<knot TypeOfSpline="LINE" X="221" Y="13717000" />
+<knot TypeOfSpline="LINE" X="222" Y="13817000" />
+<knot TypeOfSpline="LINE" X="223" Y="13917000" />
+<knot TypeOfSpline="LINE" X="224" Y="14017000" />
+<knot TypeOfSpline="LINE" X="225" Y="14117000" />
+<knot TypeOfSpline="LINE" X="226" Y="14217000" />
+<knot TypeOfSpline="LINE" X="227" Y="14317000" />
+<knot TypeOfSpline="LINE" X="228" Y="14417000" />
+<knot TypeOfSpline="LINE" X="229" Y="14517000" />
+<knot TypeOfSpline="LINE" X="230" Y="14617000" />
+<knot TypeOfSpline="LINE" X="231" Y="14717000" />
+<knot TypeOfSpline="LINE" X="232" Y="14817000" />
+<knot TypeOfSpline="LINE" X="233" Y="14917000" />
+<knot TypeOfSpline="LINE" X="234" Y="15017000" />
+<knot TypeOfSpline="LINE" X="235" Y="15117000" />
+<knot TypeOfSpline="LINE" X="236" Y="15217000" />
+<knot TypeOfSpline="LINE" X="237" Y="15317000" />
+<knot TypeOfSpline="LINE" X="238" Y="15417000" />
+<knot TypeOfSpline="LINE" X="239" Y="15517000" />
+<knot TypeOfSpline="LINE" X="240" Y="15627000" />
+<knot TypeOfSpline="LINE" X="241" Y="15737000" />
+<knot TypeOfSpline="LINE" X="242" Y="15847000" />
+<knot TypeOfSpline="LINE" X="243" Y="15957000" />
+<knot TypeOfSpline="LINE" X="244" Y="16067000" />
+<knot TypeOfSpline="LINE" X="245" Y="16177000" />
+<knot TypeOfSpline="LINE" X="246" Y="16287000" />
+<knot TypeOfSpline="LINE" X="247" Y="16397000" />
+<knot TypeOfSpline="LINE" X="248" Y="16507000" />
+<knot TypeOfSpline="LINE" X="249" Y="16617000" />
+<knot TypeOfSpline="LINE" X="250" Y="16727000" />
+<knot TypeOfSpline="LINE" X="251" Y="16837000" />
+<knot TypeOfSpline="LINE" X="252" Y="16947000" />
+<knot TypeOfSpline="LINE" X="253" Y="17057000" />
+<knot TypeOfSpline="LINE" X="254" Y="17167000" />
+<knot TypeOfSpline="LINE" X="255" Y="17277000" />
+<knot TypeOfSpline="LINE" X="256" Y="17387000" />
+<knot TypeOfSpline="LINE" X="257" Y="17497000" />
+<knot TypeOfSpline="LINE" X="258" Y="17607000" />
+<knot TypeOfSpline="LINE" X="259" Y="17717000" />
+<knot TypeOfSpline="LINE" X="260" Y="17827000" />
+<knot TypeOfSpline="LINE" X="261" Y="17937000" />
+<knot TypeOfSpline="LINE" X="262" Y="18047000" />
+<knot TypeOfSpline="LINE" X="263" Y="18157000" />
+<knot TypeOfSpline="LINE" X="264" Y="18267000" />
+<knot TypeOfSpline="LINE" X="265" Y="18377000" />
+<knot TypeOfSpline="LINE" X="266" Y="18487000" />
+<knot TypeOfSpline="LINE" X="267" Y="18597000" />
+<knot TypeOfSpline="LINE" X="268" Y="18707000" />
+<knot TypeOfSpline="LINE" X="269" Y="18817000" />
+<knot TypeOfSpline="LINE" X="270" Y="18937000" />
+<knot TypeOfSpline="LINE" X="271" Y="19057000" />
+<knot TypeOfSpline="LINE" X="272" Y="19177000" />
+<knot TypeOfSpline="LINE" X="273" Y="19297000" />
+<knot TypeOfSpline="LINE" X="274" Y="19417000" />
+<knot TypeOfSpline="LINE" X="275" Y="19537000" />
+<knot TypeOfSpline="LINE" X="276" Y="19657000" />
+<knot TypeOfSpline="LINE" X="277" Y="19777000" />
+<knot TypeOfSpline="LINE" X="278" Y="19897000" />
+<knot TypeOfSpline="LINE" X="279" Y="20017000" />
+<knot TypeOfSpline="LINE" X="280" Y="20137000" />
+<knot TypeOfSpline="LINE" X="281" Y="20257000" />
+<knot TypeOfSpline="LINE" X="282" Y="20377000" />
+<knot TypeOfSpline="LINE" X="283" Y="20497000" />
+<knot TypeOfSpline="LINE" X="284" Y="20617000" />
+<knot TypeOfSpline="LINE" X="285" Y="20737000" />
+<knot TypeOfSpline="LINE" X="286" Y="20857000" />
+<knot TypeOfSpline="LINE" X="287" Y="20977000" />
+<knot TypeOfSpline="LINE" X="288" Y="21097000" />
+<knot TypeOfSpline="LINE" X="289" Y="21217000" />
+<knot TypeOfSpline="LINE" X="290" Y="21337000" />
+<knot TypeOfSpline="LINE" X="291" Y="21457000" />
+<knot TypeOfSpline="LINE" X="292" Y="21577000" />
+<knot TypeOfSpline="LINE" X="293" Y="21697000" />
+<knot TypeOfSpline="LINE" X="294" Y="21817000" />
+<knot TypeOfSpline="LINE" X="295" Y="21937000" />
+<knot TypeOfSpline="LINE" X="296" Y="22057000" />
+<knot TypeOfSpline="LINE" X="297" Y="22177000" />
+<knot TypeOfSpline="LINE" X="298" Y="22297000" />
+<knot TypeOfSpline="LINE" X="299" Y="22417000" />
+    </knots>
+  </curve>
+  <curve Name="LegendPointsSkillpoints" NumberOfSamples="300" MaxX="300" MinX="1" MaxY="300" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="300" Y="300" />
+    </knots>
+  </curve>
+  <curve Name="tracking_bwd_default_horz" NumberOfSamples="5" MaxX="1" MinX="0" MaxY="1" MinY="0"  >
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.25" Y="0.07" />
+      <knot TypeOfSpline="LINE" X="0.6" Y="0.25" />
+      <knot TypeOfSpline="LINE" X="0.75" Y="0.55" />
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="tracking_bwd_default_vert" NumberOfSamples="5" MaxX="1" MinX="0" MaxY="1" MinY="0"  >
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.25" Y="0.07" />
+      <knot TypeOfSpline="LINE" X="0.6" Y="0.18" />
+      <knot TypeOfSpline="LINE" X="0.75" Y="0.7" />
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="tracking_bwd_headonly" NumberOfSamples="5" MaxX="1" MinX="0" MaxY="1" MinY="0"  >
+    <knots Count="5">
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.25" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.7" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.8" Y="0.2" />
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+    </knots>
+  </curve>
+    <curve Name="Effect_NighthunterMask_Min" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="250" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="250" />
+	  <knot TypeOfSpline="LINE" X="4" Y="250" />
+	  <knot TypeOfSpline="LINE" X="7" Y="250" />
+      <knot TypeOfSpline="LINE" X="10" Y="250" />
+    </knots>
+  </curve>
+    <curve Name="Effect_NighthunterMask_Max" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="250" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="250" />
+	  <knot TypeOfSpline="LINE" X="4" Y="250" />
+	  <knot TypeOfSpline="LINE" X="7" Y="250" />
+      <knot TypeOfSpline="LINE" X="10" Y="250" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit250" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="250" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="250" />
+      <knot TypeOfSpline="LINE" X="10" Y="250" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit25" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="250" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="25" />
+      <knot TypeOfSpline="LINE" X="10" Y="25" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit200" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="200" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="200" />
+      <knot TypeOfSpline="LINE" X="10" Y="200" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit20" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="20" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="20" />
+      <knot TypeOfSpline="LINE" X="10" Y="20" />
+    </knots>
+  </curve>
+   <curve Name="Effect_Outfit350" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="350" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="350" />
+      <knot TypeOfSpline="LINE" X="10" Y="350" />
+    </knots>
+	</curve>
+     <curve Name="Effect_Outfit35" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="35" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="35" />
+      <knot TypeOfSpline="LINE" X="10" Y="35" />
+    </knots>
+	</curve>
+  <curve Name="Effect_Outfit3" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="3" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="3" />
+      <knot TypeOfSpline="LINE" X="10" Y="3" />
+    </knots>
+	</curve>
+  <curve Name="Effect_Outfit40" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="40" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="40" />
+      <knot TypeOfSpline="LINE" X="10" Y="40" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit4" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="4" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="4" />
+      <knot TypeOfSpline="LINE" X="10" Y="4" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit45" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="45" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="45" />
+      <knot TypeOfSpline="LINE" X="10" Y="45" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit5" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="10" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit55" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="55" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="55" />
+      <knot TypeOfSpline="LINE" X="10" Y="55" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit80" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="80" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="80" />
+      <knot TypeOfSpline="LINE" X="10" Y="80" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit85" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="85" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="85" />
+      <knot TypeOfSpline="LINE" X="10" Y="85" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit70" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="70" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="70" />
+      <knot TypeOfSpline="LINE" X="10" Y="70" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit75" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="7" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="75" />
+      <knot TypeOfSpline="LINE" X="10" Y="75" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit15" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="15" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="15" />
+      <knot TypeOfSpline="LINE" X="10" Y="15" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit125" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="125" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="125" />
+      <knot TypeOfSpline="LINE" X="10" Y="125" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit135" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="135" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="135" />
+      <knot TypeOfSpline="LINE" X="10" Y="135" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit90" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="90" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="90" />
+      <knot TypeOfSpline="LINE" X="10" Y="90" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit100" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="100" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="100" />
+      <knot TypeOfSpline="LINE" X="10" Y="100" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit1" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="10" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="10" />
+      <knot TypeOfSpline="LINE" X="10" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit110" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="110" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="110" />
+      <knot TypeOfSpline="LINE" X="10" Y="110" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit115" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="115" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="115" />
+      <knot TypeOfSpline="LINE" X="10" Y="115" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit6" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="6" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="6" />
+      <knot TypeOfSpline="LINE" X="10" Y="6" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Outfit65" NumberOfSamples="10" MaxX="10" MinX="0" MaxY="65" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="65" />
+      <knot TypeOfSpline="LINE" X="10" Y="65" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Exotic_Head_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="55" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="55" />
+      <knot TypeOfSpline="LINE" X="24" Y="55" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Exotic_Head_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="75" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="75" />
+      <knot TypeOfSpline="LINE" X="24" Y="75" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Exotic_Crit_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="10" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="10" />
+      <knot TypeOfSpline="LINE" X="24" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Exotic_Crit_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="20" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="20" />
+      <knot TypeOfSpline="LINE" X="24" Y="20" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Exotic_Crit_Power_Attack_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="20" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="20" />
+      <knot TypeOfSpline="LINE" X="24" Y="20" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Exotic_Crit_Power_Attack_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="33" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="40" />
+      <knot TypeOfSpline="LINE" X="24" Y="40" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Exotic_Weapon_Stun_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="24" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Exotic_Weapon_Stun_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="10" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="10" />
+      <knot TypeOfSpline="LINE" X="24" Y="10" />
+    </knots>
+  </curve>
+    <curve Name="Effect_Night_Head_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="70" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="70" />
+      <knot TypeOfSpline="LINE" X="24" Y="70" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Head_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="85" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="85" />
+      <knot TypeOfSpline="LINE" X="24" Y="85" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Crit_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="30" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="30" />
+      <knot TypeOfSpline="LINE" X="24" Y="30" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Crit_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="50" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="50" />
+      <knot TypeOfSpline="LINE" X="24" Y="50" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Crit_Power_Attack_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="55" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="55" />
+      <knot TypeOfSpline="LINE" X="24" Y="55" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Crit_Power_Attack_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="75" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="75" />
+      <knot TypeOfSpline="LINE" X="24" Y="75" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Weapon_Drain_On_Player_Hit_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="4" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="4" />
+      <knot TypeOfSpline="LINE" X="24" Y="4" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Weapon_Drain_On_Player_Hit_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="7" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="7" />
+      <knot TypeOfSpline="LINE" X="24" Y="7" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Weapon_Drain_On_Damage_Reviced_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="8" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="8" />
+      <knot TypeOfSpline="LINE" X="24" Y="8" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Weapon_Drain_On_Damage_Reviced_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="11" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="11" />
+      <knot TypeOfSpline="LINE" X="24" Y="11" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Weapon_Experience_vs_Infected_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="33" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="33" />
+      <knot TypeOfSpline="LINE" X="24" Y="33" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Weapon_Experience_vs_Infected_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="66" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="66" />
+      <knot TypeOfSpline="LINE" X="24" Y="66" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Weapon_Heal_vs_Infected_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="3" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="3" />
+      <knot TypeOfSpline="LINE" X="24" Y="3" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Weapon_Heal_vs_Infected_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="5" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="5" />
+      <knot TypeOfSpline="LINE" X="24" Y="5" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_On_Charge_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="65" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="65" />
+      <knot TypeOfSpline="LINE" X="24" Y="65" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_On_Charge_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="75" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="75" />
+      <knot TypeOfSpline="LINE" X="24" Y="75" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_On_Virals_Banshees_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="35" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="35" />
+      <knot TypeOfSpline="LINE" X="24" Y="35" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_On_Virals_Banshees_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="45" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="45" />
+      <knot TypeOfSpline="LINE" X="24" Y="45" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_On_Demolishers_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="70" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="70" />
+      <knot TypeOfSpline="LINE" X="24" Y="70" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_On_Demolishers_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="85" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="85" />
+      <knot TypeOfSpline="LINE" X="24" Y="85" />
+    </knots>
+  </curve>  
+  <curve Name="Effect_Night_Damage_On_Volatiles_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="70" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="70" />
+      <knot TypeOfSpline="LINE" X="24" Y="70" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_On_Volatiles_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="85" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="85" />
+      <knot TypeOfSpline="LINE" X="24" Y="85" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_On_Corruptors_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="7" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="7" />
+      <knot TypeOfSpline="LINE" X="24" Y="7" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_On_Corruptors_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="10" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="10" />
+      <knot TypeOfSpline="LINE" X="24" Y="10" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_vs_Infected_Min" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="65" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="65" />
+      <knot TypeOfSpline="LINE" X="24" Y="65" />
+    </knots>
+  </curve>
+  <curve Name="Effect_Night_Damage_vs_Infected_Max" NumberOfSamples="24" MaxX="24" MinX="0" MaxY="75" MinY="0">
+    <knots Count="2">
+      <knot TypeOfSpline="LINE" X="0" Y="75" />
+      <knot TypeOfSpline="LINE" X="24" Y="75" />
+    </knots>
+  </curve>  
+  <curve Name="Explosion_Damage_Mul_Factor" NumberOfSamples="11" MaxX="1" MinX="0" MaxY="1" MinY="0">
+    <knots Count="11">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="0.3" Y="0.95" />
+      <knot TypeOfSpline="LINE" X="0.4" Y="0.9" />
+      <knot TypeOfSpline="LINE" X="0.5" Y="0.85" />
+      <knot TypeOfSpline="LINE" X="0.6" Y="0.75" />
+      <knot TypeOfSpline="LINE" X="0.7" Y="0.7" />
+      <knot TypeOfSpline="LINE" X="0.8" Y="0.65" />
+      <knot TypeOfSpline="LINE" X="0.9" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="1" Y="0.55" />
+    </knots>
+  </curve>   
+  <curve Name="Stamina_Damage_Mul_Factor" NumberOfSamples="15" MaxX="15" MinX="0" MaxY="15" MinY="0">
+    <knots Count="15">
+      <knot TypeOfSpline="LINE" X="1" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="2" Y="1.1" />
+      <knot TypeOfSpline="LINE" X="3" Y="1.2" />
+      <knot TypeOfSpline="LINE" X="4" Y="1.3" />
+      <knot TypeOfSpline="LINE" X="5" Y="1.4" />
+      <knot TypeOfSpline="LINE" X="6" Y="1.9" />
+      <knot TypeOfSpline="LINE" X="7" Y="2.0" />
+      <knot TypeOfSpline="LINE" X="8" Y="2.1" />
+      <knot TypeOfSpline="LINE" X="9" Y="2.2" />
+      <knot TypeOfSpline="LINE" X="10" Y="2.3" />
+      <knot TypeOfSpline="LINE" X="11" Y="3.5" />
+      <knot TypeOfSpline="LINE" X="12" Y="3.6" />
+      <knot TypeOfSpline="LINE" X="13" Y="3.7" />
+      <knot TypeOfSpline="LINE" X="14" Y="3.8" />
+      <knot TypeOfSpline="LINE" X="15" Y="4.0" />
+    </knots>
+  </curve>  
+  <curve Name="Thrown_Weapons_Damage_Distance_Mul" NumberOfSamples="11" MaxX="50" MinX="0" MaxY="1" MinY="0">
+    <knots Count="11">
+      <knot TypeOfSpline="LINE" X="0" Y="1" />
+      <knot TypeOfSpline="LINE" X="1" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="2" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="3" Y="0.95" />
+      <knot TypeOfSpline="LINE" X="4" Y="0.9" />
+      <knot TypeOfSpline="LINE" X="5" Y="0.85" />
+      <knot TypeOfSpline="LINE" X="6" Y="0.75" />
+      <knot TypeOfSpline="LINE" X="7" Y="0.7" />
+      <knot TypeOfSpline="LINE" X="8" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="10" Y="0.5" />
+      <knot TypeOfSpline="LINE" X="50" Y="0.1" />
+    </knots>
+  </curve> 
+  <curve Name="Progressive_Recoil_SMG_1" NumberOfSamples="30" MaxX="1" MinX="0" MaxY="1.2" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1.5" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="0.5" Y="0.75" />
+      <knot TypeOfSpline="LINE" X="1" Y="0.5" />
+    </knots>
+  </curve>   
+  <curve Name="Progressive_Recoil_SMG_2" NumberOfSamples="30" MaxX="1" MinX="0" MaxY="1.2" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1.5" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="0.5" Y="0.75" />
+      <knot TypeOfSpline="LINE" X="1" Y="0.5" />
+    </knots>
+  </curve>   
+  <curve Name="Progressive_Recoil_SMG_1_Reverse" NumberOfSamples="30" MaxX="1" MinX="0" MaxY="1.2" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="1.5" />
+      <knot TypeOfSpline="LINE" X="0.2" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="0.5" Y="0.75" />
+      <knot TypeOfSpline="LINE" X="1" Y="0.5" />
+    </knots>
+  </curve>   
+  <curve Name="Progressive_Recoil_SMG_2_Reverse" NumberOfSamples="30" MaxX="1" MinX="0" MaxY="1.2" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="HERMITE" X="0" Y="1.5" />
+      <knot TypeOfSpline="HERMITE" X="0.2" Y="1.0" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="0.75" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.5" />
+    </knots>
+  </curve>  
+
+  <curve Name="Progressive_Recoil_Rifle_1" NumberOfSamples="30" MaxX="1" MinX="0" MaxY="3" MinY="0">
+    <knots Count="3">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.75" />
+      <knot TypeOfSpline="HERMITE" X="0.15" Y="1.0" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="3.0" />
+    </knots>
+  </curve>   
+  <curve Name="Progressive_Recoil_Rifle_2" NumberOfSamples="30" MaxX="1" MinX="0" MaxY="3" MinY="0">
+    <knots Count="5">
+      <knot TypeOfSpline="HERMITE" X="0" Y="0.75" />
+      <knot TypeOfSpline="HERMITE" X="0.1" Y="1.0" />
+      <knot TypeOfSpline="HERMITE" X="0.2" Y="1.25" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="2.5" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="3.0" />
+    </knots>
+  </curve>   
+  <curve Name="Progressive_Recoil_Rifle_1_Reverse" NumberOfSamples="30" MaxX="1" MinX="0" MaxY="2.5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="LINE" X="0" Y="2.5" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="1.8" />
+      <knot TypeOfSpline="LINE" X="0.5" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="1" Y="0.5" />
+    </knots>
+  </curve>   
+  <curve Name="Progressive_Recoil_Rifle_2_Reverse" NumberOfSamples="30" MaxX="1" MinX="0" MaxY="2.5" MinY="0">
+    <knots Count="4">
+      <knot TypeOfSpline="HERMITE" X="0" Y="2.5" />
+      <knot TypeOfSpline="HERMITE" X="0.2" Y="1.8" />
+      <knot TypeOfSpline="HERMITE" X="0.5" Y="1.0" />
+      <knot TypeOfSpline="HERMITE" X="1" Y="0.5" />
+    </knots>
+  </curve>
+  <curve Name="Fury_Points_Player_Level_Mul" NumberOfSamples="15" MaxX="15" MinX="0" MaxY="30" MinY="0">
+    <knots Count="15">     
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+      <knot TypeOfSpline="LINE" X="2" Y="1.03" />
+      <knot TypeOfSpline="LINE" X="3" Y="1.07" />
+      <knot TypeOfSpline="LINE" X="4" Y="1.11" />
+      <knot TypeOfSpline="LINE" X="5" Y="1.14" />
+      <knot TypeOfSpline="LINE" X="6" Y="1.15" />
+      <knot TypeOfSpline="LINE" X="7" Y="1.18" />
+      <knot TypeOfSpline="LINE" X="8" Y="1.20" />
+      <knot TypeOfSpline="LINE" X="9" Y="1.22" />
+      <knot TypeOfSpline="LINE" X="10" Y="1.23" />
+      <knot TypeOfSpline="LINE" X="11" Y="1.28" />
+      <knot TypeOfSpline="LINE" X="12" Y="1.29" />
+      <knot TypeOfSpline="LINE" X="13" Y="1.29" />
+      <knot TypeOfSpline="LINE" X="14" Y="1.29" />
+      <knot TypeOfSpline="LINE" X="15" Y="1.29" />
+    </knots>
+  </curve>
+  <curve Name="Bow_Draw_Damage_Mul" NumberOfSamples="5" MaxX="1" MinX="0" MaxY="1" MinY="0">
+    <knots Count="5">     
+      <knot TypeOfSpline="LINE" X="0" Y="0" />
+      <knot TypeOfSpline="LINE" X="0.1" Y="0.1" />
+      <knot TypeOfSpline="LINE" X="0.8" Y="0.35" />
+      <knot TypeOfSpline="LINE" X="0.9" Y="0.6" />
+      <knot TypeOfSpline="LINE" X="1" Y="1" />
+    </knots>
+  </curve>
+  <curve Name="NG_Enemy_Max_Health_Mul_Tier_1" NumberOfSamples="10" MaxX="10" MinX="1" MaxY="100323.2" MinY="4.9">
+    <knots Count="10">     
+    <knot TypeOfSpline="LINE" X="1" Y="4.9" />
+    <knot TypeOfSpline="LINE" X="2" Y="14.6" />
+    <knot TypeOfSpline="LINE" X="3" Y="43.3" />
+    <knot TypeOfSpline="LINE" X="4" Y="128.0" />
+    <knot TypeOfSpline="LINE" X="5" Y="378.5" />
+    <knot TypeOfSpline="LINE" X="6" Y="1119.4" />
+    <knot TypeOfSpline="LINE" X="7" Y="3310.6" />
+    <knot TypeOfSpline="LINE" X="8" Y="9791.2" />
+    <knot TypeOfSpline="LINE" X="9" Y="28957.5" />
+    <knot TypeOfSpline="LINE" X="10" Y="100323.2" />
+    </knots>
+  </curve>
+  <curve Name="NG_Enemy_Max_Health_Mul_Tier_2" NumberOfSamples="10" MaxX="10" MinX="1" MaxY="71437.3" MinY="3.5">
+    <knots Count="10">     
+    <knot TypeOfSpline="LINE" X="1" Y="3.5" />
+    <knot TypeOfSpline="LINE" X="2" Y="10.4" />
+    <knot TypeOfSpline="LINE" X="3" Y="30.8" />
+    <knot TypeOfSpline="LINE" X="4" Y="91.1" />
+    <knot TypeOfSpline="LINE" X="5" Y="269.5" />
+    <knot TypeOfSpline="LINE" X="6" Y="797.1" />
+    <knot TypeOfSpline="LINE" X="7" Y="2357.4" />
+    <knot TypeOfSpline="LINE" X="8" Y="6972.0" />
+    <knot TypeOfSpline="LINE" X="9" Y="20619.8" />
+    <knot TypeOfSpline="LINE" X="10" Y="71437.3" />
+    </knots>
+  </curve>
+  <curve Name="NG_Enemy_Max_Health_Mul_Tier_3" NumberOfSamples="10" MaxX="10" MinX="1" MaxY="56889.7" MinY="2.8">
+    <knots Count="10">
+    <knot TypeOfSpline="LINE" X="1" Y="2.8" />
+    <knot TypeOfSpline="LINE" X="2" Y="8.3" />
+    <knot TypeOfSpline="LINE" X="3" Y="24.5" />
+    <knot TypeOfSpline="LINE" X="4" Y="72.6" />
+    <knot TypeOfSpline="LINE" X="5" Y="214.6" />
+    <knot TypeOfSpline="LINE" X="6" Y="634.8" />
+    <knot TypeOfSpline="LINE" X="7" Y="1877.3" />
+    <knot TypeOfSpline="LINE" X="8" Y="5552.2" />
+    <knot TypeOfSpline="LINE" X="9" Y="16420.7" />
+    <knot TypeOfSpline="LINE" X="10" Y="56889.7" />
+    </knots>
+  </curve>
+  <curve Name="NG_Enemy_Damage_Mul_Tier_1" NumberOfSamples="10" MaxX="10" MinX="1" MaxY="11.0" MinY="2.0">
+    <knots Count="10">     
+      <knot TypeOfSpline="LINE" X="1" Y="2.2" />
+      <knot TypeOfSpline="LINE" X="2" Y="3.2" />
+      <knot TypeOfSpline="LINE" X="3" Y="4.1" />
+      <knot TypeOfSpline="LINE" X="4" Y="5.0" />
+	  <knot TypeOfSpline="LINE" X="5" Y="6.0" />
+	  <knot TypeOfSpline="LINE" X="6" Y="6.9" />
+	  <knot TypeOfSpline="LINE" X="7" Y="7.8" />
+	  <knot TypeOfSpline="LINE" X="8" Y="8.8" />
+	  <knot TypeOfSpline="LINE" X="9" Y="9.7" />
+	  <knot TypeOfSpline="LINE" X="10" Y="10.7" />
+    </knots>
+  </curve>
+  <curve Name="NG_Enemy_Damage_Mul_Tier_2" NumberOfSamples="10" MaxX="10" MinX="1" MaxY="10.6" MinY="1.6">
+    <knots Count="10">     
+      <knot TypeOfSpline="LINE" X="1" Y="1.9" />
+      <knot TypeOfSpline="LINE" X="2" Y="2.6" />
+      <knot TypeOfSpline="LINE" X="3" Y="3.4" />
+      <knot TypeOfSpline="LINE" X="4" Y="4.1" />
+	  <knot TypeOfSpline="LINE" X="5" Y="4.8" />
+	  <knot TypeOfSpline="LINE" X="6" Y="5.5" />
+	  <knot TypeOfSpline="LINE" X="7" Y="6.2" />
+	  <knot TypeOfSpline="LINE" X="8" Y="6.9" />
+	  <knot TypeOfSpline="LINE" X="9" Y="7.6" />
+	  <knot TypeOfSpline="LINE" X="10" Y="8.4" />
+    </knots>
+  </curve>
+  <curve Name="NG_Enemy_Damage_Mul_Tier_3" NumberOfSamples="10" MaxX="10" MinX="1" MaxY="10.4" MinY="1.4">
+    <knots Count="10">     
+      <knot TypeOfSpline="LINE" X="1" Y="1.6" />
+      <knot TypeOfSpline="LINE" X="2" Y="2.1" />
+      <knot TypeOfSpline="LINE" X="3" Y="2.6" />
+      <knot TypeOfSpline="LINE" X="4" Y="3.1" />
+	  <knot TypeOfSpline="LINE" X="5" Y="3.6" />
+	  <knot TypeOfSpline="LINE" X="6" Y="4.1" />
+	  <knot TypeOfSpline="LINE" X="7" Y="4.6" />
+	  <knot TypeOfSpline="LINE" X="8" Y="5.1" />
+	  <knot TypeOfSpline="LINE" X="9" Y="5.7" />
+	  <knot TypeOfSpline="LINE" X="10" Y="6.2" />
+    </knots>
+  </curve>
+
+  <curve Name="NG_Vehicle_Health_Mul" NumberOfSamples="10" MaxX="10" MinX="1" MaxY="10" MinY="1">
+    <knots Count="10">
+      <knot TypeOfSpline="LINE" X="1" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="2" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="3" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="4" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="5" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="6" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="7" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="8" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="9" Y="1.0" />
+      <knot TypeOfSpline="LINE" X="10" Y="1.0" />
+    </knots>
+  </curve>
+</curves>

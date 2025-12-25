@@ -1,0 +1,6 @@
+<level id="1">
+    <!--  Do not modify this file. Use ph\source\data\Scripts\Player\player_variables.scr instead. -->
+    <!--  In future, player_variables.scr will be included as base for levels definition. -->
+    
+    <prop n="ExpToNextLevel" v="0"/>  <!--  This value must be here to avoid assertion in C++. Refactoring required! -->
+</level>

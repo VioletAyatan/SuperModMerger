@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<Node type="Actions::Group" uid="111">
+    <Logic type="Story::CampaignLogic">
+        <Attribute name="m_ShowIndicator" value="1"/>
+        <Attribute name="m_IndicatorType" value=""/>
+    </Logic>
+    <Node type="Actions::Node" uid="222">
+        <Logic type="Actions::EndLogic">
+            <Attribute name="m_IsFinishing" value="1"/>
+            <Attribute name="m_Name" value="End"/>
+        </Logic>
+        <Editor>
+            <Position x="225" y="0"/>
+        </Editor>
+    </Node>
+    <Node type="Actions::Node" uid="333">
+        <Logic type="Actions::StartLogic">
+            <Attribute name="m_Name" value="Start"/>
+        </Logic>
+        <Editor>
+            <Position x="0" y="0"/>
+        </Editor>
+    </Node>
+	<Connect start="333" output="Out" input="In" end="222">
+		<Start class="Actions::StartLogic"/>
+		<End class="Actions::EndLogic"/>
+	</Connect>
+</Node>
+

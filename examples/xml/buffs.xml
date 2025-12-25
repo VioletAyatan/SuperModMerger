@@ -1,0 +1,1189 @@
+<!-- apply_behaviour="ResetDuration" - potion time will be reset. -->
+<!-- apply_behaviour="ExtendDuration" - potion time will be added to the current one. -->
+
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- ------------------------ Outfit Affixes START ------------------------------ -->
+<!-- ---------------------------------------------------------------------------- -->
+
+
+<!-- Base Outfit Affixes -->
+
+
+<buff id="Affix_Outfit_BaseTank_DamageResistanceFactor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitDamageResistanceFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_BaseDPS_MeleeDamageBoostFactor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitMeleeDamageBoostFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_BaseRangedDPS_RangedDamageBoostFactor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitRangedDamageBoostFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_BaseHealer_HealingFactor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitHealingFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_BaseHealer_ParkourDamageBoostFactor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitParkourDamageBoostFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_BaseHealer_ParkourDamageBoostFactor_Coop" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitParkourDamageBoostFactorCoop" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_BaseDPS_OneHandedDamageBoostFactor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitOneHandedDamageBoostFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_BaseTank_TwoHandedDamageBoostFactor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitTwoHandedDamageBoostFactor" value_add ="0.001"/>
+</buff>
+
+
+<!-- Random Outfit Affixes -->
+
+<buff id="Affix_Outfit_RandomHealer_KnuckleDusterDamageBoostFactor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitKnuckleDusterDamageBoostFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfits_RandomTankMelee_HumanDamageResistance" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitHumanDamageResistanceFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfits_RandomTankMelee_InfectedDamageResistanceFactor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitInfectedDamageResistanceFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomMelee_StaminaReduceMelee" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitStaminaMeleeUsageMul" value_add ="-0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomMelee_StaminaReduceMelee_Coop" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitStaminaMeleeUsageMulCoop" value_add ="-0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomMeleeRanged_StaminaRegen" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitStaminaRegenMul" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomMeleeTank_CombatProg" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitCombatProgressionMul" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomMeleeTank_CombatProg_Coop" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitCombatProgressionMulCoop" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomRanged_StaminaReduceRanged" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitStaminaRangedUsageMul" value_add ="-0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomHealerRanged_StaminaParkourReduce" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitParkourStaminaUsageMul" value_add ="-0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomHealerRanged_RecoqnitionTimeReduce" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitAIRecognitionTimeMul" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomTank_FireDmgReduce" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitFireDamageResistanceFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomTank_PoisonDmgReduce" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitPoisonDamageResistanceFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomTank_ElectricyDmgReduce" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitElectricityDamageResistanceFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomTankHealer_DayDmgReduce" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitDaytimeDamageResistanceFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomTankHealer_NightDmgReduce" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitNighttimeDamageResistanceFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomTank_ImmunityDrainReduce" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitAntizineDrainMul" value_add ="-0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomHealer_HealingBoost" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitHealingBoostFactor" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomHealerRanged_SurvSenseRange" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitSurvivorSenseRangeMul" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomHealerRanged_SurvSenseDuration" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitSurvivorSenseDurationMul" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_Outfit_RandomHealerRanged_AgilityProgression" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitAgilityProgressionMul" value_add ="0.001"/>
+</buff>
+
+<buff id="Affix_ThrowItemDamage_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="ThrowItemDamageMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_FireDamage_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="FireDamageMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_FirearmDamage_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="FirearmDamageMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_XpGain_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="XpGainMul" value_mul ="0.01"/>
+</buff>
+
+<buff id="Outfit_Stamina_Gain_On_Kill" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="StaminaGainOnKill" value_add="0.1"/>
+</buff>
+
+<!-- Generic Affixes -->
+
+<buff id="Affix_Outfit_Armor" duration="-1" max_stacks="1000" serialize_on_save="false">
+    <property name="OutfitArmorResistanceFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Outfit_No_Ammo_Consumption" duration="-1" max_stacks="100" serialize_on_save="false">
+	<property name="OutfitNoAmmoConsumptionChance" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_Outfit_Damage_To_Infected_Multiplier" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="OutfitInfectedDamageMul" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_Damage_NextHitOnKilling" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="NextHitOnKillingDamageBoostFactor" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_Damage_LowHealth_CustomThreshold" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="LowHealthCustomThresholdDamageBoostFactor" value_add="0.01"/>
+</buff>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- ------------------------ Outfit Affixes END ------------------------------ -->
+<!-- ---------------------------------------------------------------------------- -->
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- ------------------------ Potions START ------------------------------------- -->
+<!-- ---------------------------------------------------------------------------- -->
+
+
+<buff_group>
+<buff id="Potion_StaminaUpgrade_FT_T1" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+	<property name="MaxStaminaMultiplier" value_add="0.2"/>    
+	<hud_icon val="buff_stamina"/>
+</buff>
+
+<buff id="Potion_StaminaUpgrade_FT_T2" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+	<property name="MaxStaminaMultiplier" value_add="0.3"/>    
+	<hud_icon val="buff_stamina"/>
+</buff>
+
+<buff id="Potion_StaminaUpgrade_FT_T3" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+	<property name="MaxStaminaMultiplier" value_add="0.4"/>    
+	<hud_icon val="buff_stamina"/>
+</buff>
+
+<buff id="Potion_StaminaUpgrade_FT_T4" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+	<property name="MaxStaminaMultiplier" value_add="0.5"/>    
+	<hud_icon val="buff_stamina"/>
+</buff>
+</buff_group>
+
+
+<buff_group>
+<buff id="Potion_HealthRegeneration_FT_T1" max_stacks="1" duration="300" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+   <property name="HealthPerSecond" value="HealthRegenerationPotion_FT_T1"/>
+   <hud_icon val="buff_health"/>
+</buff>
+
+<buff id="Potion_HealthRegeneration_FT_T2" max_stacks="1" duration="300" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+   <property name="HealthPerSecond" value="HealthRegenerationPotion_FT_T2"/>
+   <hud_icon val="buff_health"/>
+</buff>
+
+<buff id="Potion_HealthRegeneration_FT_T3" max_stacks="1" duration="300" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+   <property name="HealthPerSecond" value="HealthRegenerationPotion_FT_T3"/>
+   <hud_icon val="buff_health"/>
+</buff>
+
+<buff id="Potion_HealthRegeneration_FT_T4" max_stacks="1" duration="300" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+   <property name="HealthPerSecond" value="HealthRegenerationPotion_FT_T4"/>
+   <hud_icon val="buff_health"/>
+</buff>
+</buff_group>
+
+<buff_group>
+<buff id="Potion_DamageDealtBuff_FT_T1" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+    <property name="StrengthDamageMul" value="PotionDamageDealtBuff_FT_T1"/>
+    <property name="MeleeDamageMul" value="PotionDamageDealtBuff_FT_T1"/>
+    <hud_icon val="buff_damage"/>
+</buff>
+
+<buff id="Potion_DamageDealtBuff_FT_T2" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+    <property name="StrengthDamageMul" value="PotionDamageDealtBuff_FT_T2"/>
+    <property name="MeleeDamageMul" value="PotionDamageDealtBuff_FT_T2"/>
+    <hud_icon val="buff_damage"/>
+</buff>
+
+<buff id="Potion_DamageDealtBuff_FT_T3" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+    <property name="StrengthDamageMul" value="PotionDamageDealtBuff_FT_T3"/>
+    <property name="MeleeDamageMul" value="PotionDamageDealtBuff_FT_T3"/>
+    <hud_icon val="buff_damage"/>
+</buff>
+
+<buff id="Potion_DamageDealtBuff_FT_T4" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+    <property name="StrengthDamageMul" value="PotionDamageDealtBuff_FT_T4"/>
+    <property name="MeleeDamageMul" value="PotionDamageDealtBuff_FT_T4"/>
+    <hud_icon val="buff_damage"/>
+</buff>
+</buff_group>
+
+<buff_group>
+<buff id="Potion_DamageReduction_FT_T1" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+    <property name="DamageReduction" value="PotionDamageReduction_FT_T1"/>
+    <hud_icon val="buff_resistance_damage"/>	
+</buff>
+
+<buff id="Potion_DamageReduction_FT_T2" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+    <property name="DamageReduction" value="PotionDamageReduction_FT_T2"/>
+    <hud_icon val="buff_resistance_damage"/>	
+</buff>
+
+<buff id="Potion_DamageReduction_FT_T3" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+    <property name="DamageReduction" value="PotionDamageReduction_FT_T3"/>
+    <hud_icon val="buff_resistance_damage"/>	
+</buff>
+
+<buff id="Potion_DamageReduction_FT_T4" duration="300" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false" active_during_fury="false">
+    <property name="DamageReduction" value="PotionDamageReduction_FT_T4"/>
+    <hud_icon val="buff_resistance_damage"/>	
+</buff>
+</buff_group>
+
+<buff id="Immortality" max_stacks="1" duration="60" apply_behaviour="ExtendDuration" serialize_on_save="false">
+   <property name="ImmortalityBuff" set="true"/>
+   <hud_icon val="buff_health"/>
+</buff>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- ------------------------ Potions END --------------------------------------- -->
+<!-- ---------------------------------------------------------------------------- -->
+
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- ------------------------ Equipment slots ----------------------------------- -->
+<!-- ---------------------------------------------------------------------------- -->
+
+<buff id="UvFlashlightSlot" duration="-1" max_stacks="1" serialize_on_save="true" >
+    <property name="RestrictedEquipmentSlotsCount" value_add="1"/>
+</buff>
+
+<buff id="BinocularsSlot" duration="-1" max_stacks="1" serialize_on_save="true" >
+    <property name="RestrictedEquipmentSlotsCount" value_add="1"/>
+</buff>
+
+<buff id="RopeHookSlot" duration="-1" max_stacks="1" serialize_on_save="true" >
+    <property name="RestrictedEquipmentSlotsCount" value_add="1"/>
+</buff>
+
+<buff id="DetectorSlot" duration="-1" max_stacks="1" serialize_on_save="true" >
+    <property name="RestrictedEquipmentSlotsCount" value_add="1"/>
+</buff>
+
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- ------------------------ Weapon Affixes START ------------------------------ -->
+<!-- ---------------------------------------------------------------------------- -->
+
+<buff id="Affix_Block_Stamina_Cost_Reduction" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="BlockStaminaMul" value_add="-0.01"/>
+</buff>
+
+<buff id="Affix_PowerAttack_Stamina_Cost_Reduction" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="PowerAttackStaminaCostMul" value_add="-0.01"/>
+</buff>
+
+<buff id="Affix_Charge_Attack_Move_Speed" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ChargeMoveSpeedMult" value_mul ="-0.01"/>
+</buff>
+
+<buff id="Affix_Heavy_Push" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="BlockPushHeavyChance" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Push_Recover" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="BlockPushStaminaRecoverAmount" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Range" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="RangeMeleeMul" value_add ="0.01"/>
+    <property name="ChargeAdditionalRange" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="MeleeDamageMul" value ="Player_MeleeDamageMul"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_LowDurability" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="MeleeDamageLowDurabilityMul" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_HighDurability" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="MeleeDamageHighDurabilityMul" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_FullStamina" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="MeleeDamageFullStaminaMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_LowStamina" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="MeleeDamageLowStaminaMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_FullHealth" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="MeleeDamageFullHealthMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_LowHealth" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="MeleeDamageLowHealthMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Regen_Boost_Kill" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="RegenBoostOnKillChance" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Humans" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="HumanDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Humans_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="HumanDamageMulFactorCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Infected" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ZombieDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Infected_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ZombieDamageMulFactorCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_at_Day" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="DayDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_at_Day_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="DayDamageMulFactorCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_at_Night" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="NightDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_at_Night_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="NightDamageMulFactorCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_Enemy_Affected_By_Conditions" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="EnemyAffectedByConditionDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_Enemy_Affected_By_Freeze" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="EnemyAffectedByFreezeDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Outfit_Enemy_Affected_By_Burning_Damage_Buff" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="EnemyAffectedByBurningDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Electric_Mods_Damage_Buff" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ElectricModsDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Elemental_Toxic_Suffer_Damage_Buff" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="ElementalToxicSufferDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Elemental_Shock_Suffer_Damage_Buff" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="ElementalShockSufferDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Elemental_Fire_Suffer_Damage_Buff" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="ElementalFireSufferDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Elemental_Ice_Suffer_Damage_Buff" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="ElementalIceSufferDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Stamina_Regen_on_Hit" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="StaminaRegenerationFactorOnHit" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Stamina_Regen_on_Hit_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="StaminaRegenerationFactorOnHitCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Stamina_Regen_on_Charge" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="StaminaRegenerationFactorOnPowerAttack" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Stamina_Regen_on_Charge_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="StaminaRegenerationFactorOnPowerAttackCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_on_Charge" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ChargeAttackAdditionalMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_on_Charge_at_Night" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ChargeAttackAdditionalMulNight" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_on_Charge_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ChargeAttackAdditionalMulCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Health_Regen_on_Perfect_Block" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="PerfectBlockHealingFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Health_Regen_on_Perfect_Block_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="PerfectBlockHealingFactorCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Stamina_Damage_on_Hit" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ItemStaminaDamageMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Stamina_Damage_on_Hit_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ItemStaminaDamageMulCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Stamina_Damage_LowHealth" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="StaminaDamageLowHealth" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Fury_Charge_on_Hit" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="FuryChargeMultiplier" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Dropkick_Damage_Increase_On_Stamina_Percentage_Missing" duration="-1" max_stacks="1000" serialize_on_save="false" >
+	<property name="DropkickDamageIncreaseOnStaminaPercentageMissing" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Dropkick_Physical_Damage_Boost" duration="-1" max_stacks="1000" serialize_on_save="false" >
+	<property name="DropkickPhysicalDamageBoost" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_Weapon_Throw" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponDamageWeaponThrowMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Throw_Power" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponThrowPower" value_add ="1.00"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_Weapon_Throw_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponDamageWeaponThrowMulCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_Backstab" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="BackstabDamage" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_Backstab_Coop" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="BackstabDamageCoop" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_Head" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponDamageHeadMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_Head_at_Night" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponDamageHeadMulNight" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Chance_Critical_Hit" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponCriticalHitChance" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Chance_Critical_Hit_Power_Attack" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponCriticalHitPowerAttackChance" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Low_Stamina_Chance_Critical_Hit" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="WeaponLowStaminaCriticalHitChance" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Critical_Hit_Damage_Mul" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="CriticalHitDamageMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Outfits_Head_Chance_Critical_Hit" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="WeaponHeadCriticalHitChance" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Chance_Stun" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponAffixStunChance" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Immunity_Drain_Per_Second" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponAntizineDrainMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Infected_at_Night" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="ZombieNightDamageMulFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Additional_Experience_vs_Infected_at_Night" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponExperienceMulInfectedNight" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Heal_at_Infected_Slain_at_Night" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponHealAtInfectedSlainNight" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Chance_Critical_Hit_at_Night" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponCriticalHitChanceNight" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Chance_Critical_Hit_Power_Attack_at_Night" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponCriticalHitPowerAttackChanceNight" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Chance_Stun_at_Night" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponAffixStunChanceNight" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Volatiles" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponDamageVsVolatiles" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Demolishers" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponDamageVsDemolishers" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Corruptors" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponDamageVsCorruptors" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Virals" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponDamageVsVirals" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Damage_vs_Banshees" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponDamageVsBanshees" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Antizine_Drain_On_Player_Hit" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponAntizineDrainOnPlayerHit" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Antizine_Drain_On_Damage_Reviced" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="WeaponAntizineDrainOnDamageReviced" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_LimbCutDestroyProbabilityIncrease" duration="-1" serialize_on_save="false">
+    <!-- 0.3 corresponds to the additional 30% increased chance. -->
+    <property name="GeneralAttackLimbCutDestroyProbabilityMul" value_mul ="0.2"/>
+</buff>
+
+<buff id="Affix_LimbCutDestroyProbabilityIncrease_neutral" duration="-1" serialize_on_save="false">
+    <property name="GeneralAttackLimbCutDestroyProbabilityMul" value_mul ="0.0"/>
+</buff>
+
+<!--
+<buff id="Affix_MeleeDamageShockMul" duration="-1" max_stacks="100" serialize_on_save="false" >
+	<property name="MeleeDamageShockMul" value_add ="0.01"/>
+</buff>
+ -->
+
+<buff id="Affix_Outfits_CombatProgression" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="OutfitCombatProgressionMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Outfits_HumanDamageResistance" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="OutfitHumanDamageResistanceFactor" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Legend_Level_Gain_Multiplier" duration="-1" max_stacks="100" serialize_on_save="false">
+	<property name="LegendLevelGainMultiplier" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_FirearmSway_Decrease" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="FirearmSwayDecreaseMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_CommonCraftAmmountDropped_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="CommonCraftDroppedMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_UncommonCraftAmmountDropped_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="UncommonCraftDroppedMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_AmmoAmmountDropped_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="AmmoDroppedMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_FuelAmmountDropped_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="FuelDroppedMul" value_add ="0.01"/>
+</buff>
+
+
+<buff id="Affix_BowStaminaConsumption_Decrease" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="BowStaminaConsumptionMul" value_add ="-0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Bleeding_On_Power_Attack" duration="-1" max_stacks="100" serialize_on_save="false">
+	<property name="BleedingOnPowerAttackChance" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Night_Stamina_Reducer" duration="-1" max_stacks="100" serialize_on_save="false">
+	<property name="NightStaminaUsageMul" value_add="-0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Night_Stamina_Multiplier" duration="-1" max_stacks="100" serialize_on_save="false">
+	<property name="NightStaminaUsageMul" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Chase_Level_Damage_Multiplier" duration="-1" max_stacks="100" serialize_on_save="false">
+	<property name="ChaseLevelDamageMul" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Parkour_Damage_Multiplier" duration="-1" max_stacks="100" serialize_on_save="false">
+	<property name="WeaponParkourDamageMul" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_Weapon_Speed_Multiplier" duration="-1" max_stacks="100" serialize_on_save="false">
+	<property name="MovementSpeedMul" value_add="0.01"/>
+	<property name="MeleeAttackSpeedMul" value_add="0.01"/>
+</buff>
+
+<buff id="Affix_FullFuryDamage_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="FullFuryDamageMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_FuryPointsGain_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="FuryPointsGainMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_LimbCutProbability_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="LimbCutProbabilityMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_UnderStatusEffectDamage_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="UnderStatusEffectDamageMul" value_mul ="0.01"/>
+</buff>
+
+<buff id="Affix_FreakDamage_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="FreakDamageMul" value_add ="0.01"/>
+</buff>
+
+<buff id="Affix_ChainKillDamage_Increase" duration="-1" max_stacks="100" serialize_on_save="false" >
+    <property name="ChainKillDamageMul" value_add ="0.01"/>
+</buff>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- ------------------------ Weapon Affixes END -------------------------------- -->
+<!-- ---------------------------------------------------------------------------- -->
+
+<!-- this triggers hud response -->
+<buff id="MultikillHud" max_stacks="1" duration="5">
+</buff>
+
+<!-- this is added when you kill a zombie, reaching max stack will trigger the reward! -->
+<buff id="MultikillTimer" max_stacks="10" duration="2" apply_behaviour="ResetDuration">
+	<OnMaxStack>
+		<AddExp value="100" />
+		<ApplyBuff id="MultikillHud" />
+		<RemoveBuff id="MultikillTimer" />
+	</OnMaxStack>
+</buff>
+
+<!-- injector buffs -->
+<buff id="Invurnerability" duration="60">
+	<varlist_timeline var="f_game_player_injection_0">
+		<!-- t_e means time from end, t means time from beginning -->
+		<key t="0" val="0"/>
+		<key t="0.5" val="0.7"/>
+		<key t_e="-3.5" val="0.7"/>
+		<key t_e="-3" val="0.3"/>
+		<key t_e="-2.5" val="0.7"/>
+		<key t_e="-2" val="0.3"/>
+		<key t_e="-1.5" val="0.7"/>
+		<key t_e="-1" val="0.3"/>
+		<key t_e="-0.5" val="0.7"/>
+		<key t_e="0" val="0"/>
+	</varlist_timeline>
+	<!--<sound t="0" file="inv.ogg"/>
+	<sound t="22" file="inv_ending.ogg"/>
+	<sound t="25" file="inv_ended.ogg"/>-->
+</buff>
+
+<buff id="ZombieInvisibility" duration="60">
+	<varlist_timeline var="f_game_player_injection_3">
+		<key t="0" val="0"/>
+		<key t="0.5" val="0.7"/>
+		<key t_e="-3.5" val="0.7"/>
+		<key t_e="-3" val="0.3"/>
+		<key t_e="-2.5" val="0.7"/>
+		<key t_e="-2" val="0.3"/>
+		<key t_e="-1.5" val="0.7"/>
+		<key t_e="-1" val="0.3"/>
+		<key t_e="-0.5" val="0.7"/>
+		<key t_e="0" val="0"/>
+	</varlist_timeline>
+</buff>
+
+<buff id="Strength" duration="90">
+	<!-- +100% dmg, +100% force-->
+	<varlist_timeline var="f_game_player_injection_2">
+		<key t="0" val="0"/>
+		<key t="0.5" val="0.7"/>
+		<key t_e="-3.5" val="0.7"/>
+		<key t_e="-3" val="0.3"/>
+		<key t_e="-2.5" val="0.7"/>
+		<key t_e="-2" val="0.3"/>
+		<key t_e="-1.5" val="0.7"/>
+		<key t_e="-1" val="0.3"/>
+		<key t_e="-0.5" val="0.7"/>
+		<key t_e="0" val="0"/>
+	</varlist_timeline>
+</buff>
+
+<buff id="Revive_Heal" duration="0">
+    <OnGain>
+        <AddHealth value="Revive_Heal"/>
+    </OnGain>
+</buff>
+
+<buff id="Revive_Invisibility" duration="5" serialize_on_save="false">
+    <property name="PostReviveInvisibility" set="true"/>
+</buff>
+
+<buff id="TowerRaid_Revive_Invisibility" duration="3" serialize_on_save="false">
+    <property name="PostReviveInvisibility" set="true"/>
+</buff>
+
+<buff id="Revive_Invincibility" duration="3" serialize_on_save="false">
+</buff>
+
+
+<buff id="Medkit_Small" duration="0">
+    <OnGain>
+        <AddHealth value="Medkit_Small_FT_T1"/>
+    </OnGain>
+</buff>
+
+<buff id="Medkit_Small_Upgrade1" duration="0">
+    <OnGain>
+        <AddHealth value="MedKitNormal_Upgrade1"/>
+    </OnGain>
+</buff>
+
+<buff id="Medkit_Small_Upgrade2" duration="0">
+    <OnGain>
+        <AddHealth value="Medkit_Small_FT_T2"/>
+    </OnGain>
+</buff>
+
+<buff id="Medkit_Small_Upgrade3" duration="0">
+    <OnGain>
+        <AddHealth value="MedKitNormal_Upgrade3"/>
+    </OnGain>
+</buff>
+
+<buff id="Medkit_Small_Upgrade4" duration="0">
+    <OnGain>
+        <AddHealth value="MedKitNormal_Upgrade4"/>
+    </OnGain>
+</buff>
+
+<buff id="Medkit_Small_Upgrade5" duration="0">
+    <OnGain>
+        <AddHealth value="Medkit_Small_FT_T3"/>
+    </OnGain>
+</buff>
+
+<buff id="Medkit_Small_Upgrade6" duration="0">
+    <OnGain>
+        <AddHealth value="MedKitNormal_Upgrade6"/>
+    </OnGain>
+</buff>
+
+<buff id="Medkit_Small_Upgrade7" duration="0">
+    <OnGain>
+        <AddHealth value="MedKitNormal_Upgrade7"/>
+    </OnGain>
+</buff>
+
+<buff id="Medkit_Small_Upgrade8" duration="0">
+    <OnGain>
+        <AddHealth value="Medkit_Small_FT_T4"/>
+        <RemoveElementalEffects/>
+    </OnGain>
+</buff>
+
+<buff id="Medkit_Large" duration="0">
+    <OnGain>
+        <AddHealth value="MedKitStrong"/>
+        <RemoveElementalEffects/>
+    </OnGain>
+</buff>
+
+
+<buff id="FoodSmall" duration="0">
+    <OnGain>
+        <AddHealth value="FoodSmall"/>
+    </OnGain>
+</buff>
+
+<buff id="FoodNormal" duration="0">
+    <OnGain>
+        <AddHealth value="FoodNormal"/>
+    </OnGain>
+</buff>
+
+<buff id="FoodLarge" duration="0">
+    <OnGain>
+        <AddHealth value="FoodLarge"/>
+    </OnGain>
+</buff>
+
+<buff id="StaminaBoosterNormal" duration="0">
+    <OnGain>
+        <AddStaminaPercent value="1.0"/>
+		<AddStaminaDropResistance value="10"/>
+    </OnGain>
+</buff>
+
+<buff id="JumpAttackStaminaBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.33"/>
+</buff>
+<buff id="JumpAttackStaminaBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.66"/>
+</buff>
+<buff id="JumpAttackStaminaBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="1.0"/>
+</buff>
+
+<buff id="JumpAttackCritChanceBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+<buff id="JumpAttackCritChanceBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+<buff id="JumpAttackCritChanceBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+
+<buff id="DodgeDamageBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+</buff>
+<buff id="DodgeDamageBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+</buff>
+<buff id="DodgeDamageBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+</buff>
+
+<buff id="DodgeCritChanceBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+<buff id="DodgeCritChanceBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+<buff id="DodgeCritChanceBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+
+<buff id="SlideStaminaBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.1"/>
+</buff>
+<buff id="SlideStaminaBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.25"/>
+</buff>
+<buff id="SlideStaminaBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.5"/>
+</buff>
+
+<buff id="SlideDamageBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+</buff>
+<buff id="SlideDamageBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+</buff>
+<buff id="SlideDamageBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+</buff>
+
+<buff id="SlideCritChanceBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+<buff id="SlideCritChanceBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+<buff id="SlideCritChanceBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+
+<buff id="JumpOverZombieStaminaBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.1"/>
+</buff>
+<buff id="JumpOverZombieStaminaBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.25"/>
+</buff>
+<buff id="JumpOverZombieStaminaBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.5"/>
+</buff>
+
+<buff id="JumpOverZombieDamageBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+</buff>
+<buff id="JumpOverZombieDamageBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+</buff>
+<buff id="JumpOverZombieDamageBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+</buff>
+
+<buff id="JumpOverZombieCritChanceBoostLevel1" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+<buff id="JumpOverZombieCritChanceBoostLevel2" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+<buff id="JumpOverZombieCritChanceBoostLevel3" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	
+</buff>
+
+<buff id="GrapplingHookStaminaBoostLevel1" duration="8" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.1"/>
+</buff>
+<buff id="GrapplingHookStaminaBoostLevel2" duration="8" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.25"/>
+</buff>
+<buff id="GrapplingHookStaminaBoostLevel3" duration="8" max_stacks="1" apply_behaviour="ResetDuration">
+	<property name="StaminaUsageReduction" value_add="0.5"/>
+</buff>
+
+<buff id="DoubleDamageLvl1" duration="50">	
+    <hud_icon val="potion_timer_damage"/>
+</buff>
+<buff id="DoubleDamageLvl2" duration="75">	
+    <hud_icon val="potion_timer_damage"/>
+</buff>
+<buff id="DoubleDamage" duration="0">	
+    <OnGain>
+		<ApplyBuff id="DoubleDamageLvl1" />
+    </OnGain>
+    <OnGain>
+        <require>
+			<SkillReq id="BoostsExtender"/>			
+		</require>
+        <RemoveBuff id="DoubleDamageLvl1" />
+        <ApplyBuff id="DoubleDamageLvl2" />
+	</OnGain>
+</buff>
+
+<buff id="InfiniteStaminaLvl1" duration="45">	
+	<property name="StaminaTimeToRegenerate" value_add="-20.0"/>
+	<property name="StaminaRegeneration" value_add="100.0"/>	
+	<OnGain>
+		<AddStamina value="4.0"/>		
+	</OnGain>
+    <hud_icon val="potion_timer_stamina"/>
+</buff>
+<buff id="InfiniteStaminaLvl2" duration="90">	
+	<property name="StaminaTimeToRegenerate" value_add="-20.0"/>
+	<property name="StaminaRegeneration" value_add="100.0"/>	
+	<OnGain>
+		<AddStamina value="4.0"/>		
+	</OnGain>
+    <hud_icon val="potion_timer_stamina"/>
+</buff>
+
+<buff id="Cloak" duration="30">
+	<OnGain>
+		<AddCloakIgnoreAggression value="30.0"/>
+	</OnGain>
+</buff>
+
+<buff id="OnRespawnBuffs" duration="5" max_stacks="1" apply_behaviour="ResetDuration">
+	<!--<property name="DamageReduction" value_add="1.0"/> this is commented out as  DamageReduction is a string if You wan't it to work change it to vector of strings for now turned off-->
+</buff>
+
+<buff id="Booster_Camouflage" duration="20" max_stacks="1" apply_behaviour="ResetDuration">>
+	<property name="CamouflageFactor" value_add="0.5"/>
+    <hud_icon val="buff_camouflage"/>
+</buff>
+
+<buff id="HealerBuff" duration="0" max_stacks="25">
+    <OnGain>
+        <AddHealth value="HealerOnGain"/>
+    </OnGain>
+    <OnStack>
+        <AddHealth value="HealerOnStack"/>
+    </OnStack>
+</buff>
+
+<buff id="DPSBuff" duration="1" max_stacks="3">
+    <property name="MeleeDamageMul" value="DPSCoop"/>
+</buff>
+
+<buff id="DamageResistanceCoopBuff" duration="1" max_stacks="3">
+    <property name="DamageReduction" value="DmgResCoop"/>	
+</buff>
+
+<buff id="ReviveNpcCooldownPlus1" duration="600" max_stacks="1">
+    <property name="CanBeRevivedByNPC" set="false"/>	
+</buff>
+
+<buff id="ReviveNpcCooldownPlus2" duration="300" max_stacks="1">
+    <property name="CanBeRevivedByNPC" set="false"/>	
+</buff>
+
+<buff id="ReviveNpcCooldownPlus3" duration="200" max_stacks="1">
+    <property name="CanBeRevivedByNPC" set="false"/>	
+</buff>
+
+<buff id="StaminaRegain" duration="0">
+    <OnGain>
+        <AddStaminaPercent value="1000.0"/>
+    </OnGain>
+</buff>
+
+<!-- Test buff, remove when proper fury buff is added -->
+<buff id="Potion_Add_Fury_Points" duration="0">
+    <OnGain>
+        <AddFuryPoints value="55"/>
+    </OnGain>
+</buff>
+
+<!-- Test buff, remove when proper fury buff is added -->
+<buff id="Potion_Force_Activate_Fury" duration="0">
+    <OnGain>
+        <ForceActivateFury/>
+    </OnGain>
+</buff>
+
+<buff id="AdvancedReload_FirearmsDamageBuff" duration="3" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false">
+    <property name="FirearmDamageMul" value_add="0.5"/>
+    <hud_icon val="buff_AdvancedReload_FirearmsDamage_icon"/>
+</buff>
+
+<buff id="FoodRegen" duration="0">
+    <OnGain>
+        <AddHealth value="FoodRegen"/>
+    </OnGain>
+</buff>
+
+<buff id="FoodRegen_Nightmare_Small" duration="0">
+    <OnGain>
+        <ModifyHungerPoints value="200"/>
+    </OnGain>
+</buff>
+
+<buff id="FoodRegen_Nightmare_Medium" duration="0">
+    <OnGain>
+        <ModifyHungerPoints value="300"/>
+    </OnGain>
+</buff>
+
+<buff id="FoodRegen_Nightmare_Large" duration="0">
+    <OnGain>
+        <ModifyHungerPoints value="400"/>
+    </OnGain>
+</buff>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- ------------------------- Adaptive Difficulty ------------------------------ -->
+<!-- ---------------------------------------------------------------------------- -->
+
+<buff id="Difficulty_FallDamageResistance" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="FallDamageResistance" value_add ="0.15"/>
+</buff>
+
+<buff id="Difficulty_AIDamageResistance" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="AIDamageResistance" value_add ="0.15"/>
+	<property name="MeleeDamageMul" value ="DamageMulAIDamageResistance"/>
+</buff>
+
+<buff id="Difficulty_AIDamageVulnerability" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="AIDamageVulnerability" value_add ="0.1"/>
+</buff>
+
+<buff id="Difficulty_XPLossResistance" duration="-1" max_stacks="100" serialize_on_save="false">
+    <property name="DeathPenaltyXpLossResistance" value_add ="1.0"/>
+</buff>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- -------------------------------- Story ------------------------------------- -->
+<!-- ---------------------------------------------------------------------------- -->
+
+<buff id="Story_ToxinsImmunity" duration="-1" max_stacks="1"  apply_behaviour="ResetDuration" serialize_on_save="false">
+    <property name="ToxinsImmunity" set="true"/>
+</buff>
+
+<buff id="Story_GasAttack" duration="-1" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false">
+    <property name="DrunkEffect" set="true"/>
+    <property name="DrunkEffectInputLagTime" value_add="0.75"/>
+    <property name="DrunkEffectPPFXPower" value_add="0.1"/>
+    <property name="LookVertAcc_Pad" value_add="-1100.0"/>
+    <property name="LookHorzAcc_Pad" value_add="-1100.0"/>
+    <property name="LookVertDec_Pad" value_add="-25000.0"/>
+    <property name="LookHorzDec_Pad" value_add="-25000.0"/>
+</buff>
+
+<buff id="Story_AfterGasAttack" duration="-1" max_stacks="1" apply_behaviour="ResetDuration" serialize_on_save="false">
+ <!--   <property name="DrunkEffect" set="true"/>-->
+ <!--   <property name="DrunkEffectPPFXPower" value_add="0.025"/>-->
+</buff>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- -------------------------------- Hunger ------------------------------------ -->
+<!-- ---------------------------------------------------------------------------- -->
+
+<buff id="HungerStateFull" duration="-1" serialize_on_save="false">
+    <property name="HungerHealthRegenMul" value_add="1.0"/>
+    <property name="HungerStaminaRegenMul" value_add="0.3"/>
+</buff>
+
+<buff id="HungerStateHungry" duration="-1" serialize_on_save="false">
+</buff>
+
+<buff id="HungerStateVeryHungry" duration="-1" serialize_on_save="false">
+    <property name="HungerHealthRegenMul" value_add="-0.3"/>
+    <property name="HungerStaminaRegenMul" value_add="0.0"/>
+    <property name="HungerHealingEfficiency" value_add="-0.3"/>
+	
+	<property name="HungerMaxStaminaMul" value_add="-0.3"/>
+</buff>
+
+<buff id="HungerStateFamished" duration="-1" serialize_on_save="false">
+    <property name="HungerHealthRegenMul" value_add="-0.3"/>
+    <property name="HungerStaminaRegenMul" value_add="0.0"/>
+    <property name="HungerHealingEfficiency" value_add="-0.3"/>
+    
+    <property name="HungerMaxHealthMul" value_add="-0.4"/>
+    <property name="HungerMaxStaminaMul" value_add="-0.3"/>
+</buff>
+
+<buff id="HungerStateStarving" duration="-1" serialize_on_save="false">
+    <property name="HungerHealthRegenMul" value_add="-0.3"/>
+    <property name="HungerStaminaRegenMul" value_add="0.0"/>
+    <property name="HungerHealingEfficiency" value_add="-0.3"/>
+    
+    <property name="HungerMaxHealthMul" value_add="-0.4"/>
+    <property name="HungerMaxStaminaMul" value_add="-0.3"/>
+</buff>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- -------------------------------- Easter Eggs--------------------------------- -->
+<!-- ---------------------------------------------------------------------------- -->

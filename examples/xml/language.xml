@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language> 
+    <text key = "Newslletter_1st_line">
+        <default>STAY UP TO DATE</default>
+        <ar-ar>ابقَ على اطلاعٍ دائم</ar-ar>
+        <br-br>ACOMPANHE AS NOVIDADES</br-br>
+        <cn-cn>敬请关注</cn-cn>
+        <cntr-cntr>敬請關注</cntr-cntr>
+        <cz-cz>ZŮSTAŇTE V OBRAZE</cz-cz>
+        <de-de>BLEIB AUF DEM LAUFENDEN</de-de>
+        <el-el>MANTENTE AL DÍA</el-el>
+        <en-en>STAY UP TO DATE</en-en>
+        <es-es>MANTENTE AL DÍA</es-es>
+        <fr-fr>RESTEZ À JOUR</fr-fr>
+        <it-it>NON PERDERTI NEANCHE UN AGGIORNAMENTO</it-it>
+        <jp-jp>最新情報をお見逃しなく！</jp-jp>
+        <ko-ko>최신 정보</ko-ko>
+        <pl-pl>BĄDŹ NA BIEŻĄCO</pl-pl>
+        <pt-pt>ACOMPANHE AS NOVIDADES</pt-pt>
+        <ru-ru>БУДЬТЕ В КУРСЕ СОБЫТИЙ</ru-ru>
+        <tr-tr>GELİŞMELERDEN HABERDAR OL</tr-tr>
+    </text>
+
+    <text key = "Newsletter_2nd_line">
+        <default>Sign up for our newsletter to get the latest news and the Tactical Cleaver.</default>
+        <ar-ar>اشترك في نشرتنا الإخبارية لتصلك آخر الأخبار وتحصل على الساطور التكتيكي.</ar-ar>
+        <br-br>Inscreva-se no nosso boletim informativo para receber as últimas notícias e o Cutelo Tático.</br-br>
+        <cn-cn>订阅我们的新闻通讯，了解最新的新闻，获取战术切肉刀。</cn-cn>
+        <cntr-cntr>訂閱我們的新聞通訊，了解最新的新聞，獲取戰術切肉刀。</cntr-cntr>
+        <cz-cz>Přihlaste se k odběru našeho newsletteru a získejte nejnovější informace a Taktický sekáček.</cz-cz>
+        <de-de>Abonniere unseren Newsletter, um alle aktuellen Neuigkeiten und das Taktische Hackmesser zu erhalten.</de-de>
+        <el-el>Suscríbete a nuestro boletín informativo para recibir las últimas noticias y recibir la Cuchilla táctica.</el-el>
+        <en-en>Sign up for our newsletter to get the latest news and the Tactical Cleaver.</en-en>
+        <es-es>Suscríbete a nuestro boletín informativo para recibir las últimas noticias y recibir la Cuchilla táctica.</es-es>
+        <fr-fr>Inscrivez-vous à notre newsletter pour ne manquer aucune nouvelle et pour obtenir le couperet tactique.</fr-fr>
+        <it-it>Iscriviti alla nostra newsletter per ricevere le notizie più recenti e la Mannaia militare.</it-it>
+        <jp-jp>ニュースレターに登録して最新情報と「タクティカル・クリーバー」を入手しよう。</jp-jp>
+        <ko-ko>뉴스레터에 가입하시면 최신 소식과 택티컬 식칼을 받으실 수 있습니다.</ko-ko>
+        <pl-pl>Zapisz się do naszego newslettera, aby śledzić najnowsze wieści i otrzymać „Tasak taktyczny”.</pl-pl>
+        <pt-pt>Inscreva-se no nosso boletim informativo para receber as últimas notícias e o Cutelo Tático.</pt-pt>
+        <ru-ru>Подпишитесь на нашу рассылку, чтобы получать последние новости и забрать Тактический тесак.</ru-ru>
+        <tr-tr>En son gelişmeleri öğrenmek ve Taktiksel Satır'a sahip olmak için bültenimize abone ol.</tr-tr>
+    </text>
+
+    <text key = "X_button_when_there_is_last_save">
+        <default>Play game (last save)</default>
+        <ar-ar>تشغيل اللعبة (آخر حفظ)</ar-ar>
+        <br-br>Jogar (último salvamento)</br-br>
+        <cn-cn>开始游戏（最新存档）</cn-cn>
+        <cntr-cntr>開始遊戲（最新存檔）</cntr-cntr>
+        <cz-cz>Hrát hru (od posledního uložení)</cz-cz>
+        <de-de>Spiel starten (neuster Spielstand)</de-de>
+        <el-el>Jugar partida (última guardada)</el-el>
+        <en-en>Play game (last save)</en-en>
+        <es-es>Jugar partida (última guardada)</es-es>
+        <fr-fr>Jouer au jeu (dernière sauvegarde)</fr-fr>
+        <it-it>Gioca partita (ultimo salvataggio)</it-it>
+        <jp-jp>ゲームをプレイ（最新のセーブ）</jp-jp>
+        <ko-ko>게임 플레이 (마지막 저장)</ko-ko>
+        <pl-pl>Graj (od ostatniego zapisu)</pl-pl>
+        <pt-pt>Jogar (último salvamento)</pt-pt>
+        <ru-ru>Играть (последнее сохранение)</ru-ru>
+        <tr-tr>Oyunu oyna (son kayıt)</tr-tr>
+    </text>
+
+    <text key = "X_button_when_there_is_not_last_save">
+        <default>Play game</default>
+        <ar-ar>تشغيل اللعبة</ar-ar>
+        <br-br>Jogar</br-br>
+        <cn-cn>开始游戏</cn-cn>
+        <cntr-cntr>開始遊戲</cntr-cntr>
+        <cz-cz>Hrát hru</cz-cz>
+        <de-de>Spiel starten</de-de>
+        <el-el>Jugar partida</el-el>
+        <en-en>Play game</en-en>
+        <es-es>Jugar partida</es-es>
+        <fr-fr>Jouer au jeu</fr-fr>
+        <it-it>Gioca partita</it-it>
+        <jp-jp>ゲームをプレイ</jp-jp>
+        <ko-ko>게임 플레이</ko-ko>
+        <pl-pl>Graj</pl-pl>
+        <pt-pt>Jogar</pt-pt>
+        <ru-ru>Играть</ru-ru>
+        <tr-tr>Oyunu oyna</tr-tr>
+    </text>
+
+    <text key = "B_button">
+        <default>Main menu</default>
+        <ar-ar>القائمة الرئيسية</ar-ar>
+        <br-br>Menu principal</br-br>
+        <cn-cn>主菜单</cn-cn>
+        <cntr-cntr>主選單</cntr-cntr>
+        <cz-cz>Hlavní nabídka</cz-cz>
+        <de-de>Hauptmenü</de-de>
+        <el-el>Menú principal</el-el>
+        <en-en>Main menu</en-en>
+        <es-es>Menú principal</es-es>
+        <fr-fr>Menu principal</fr-fr>
+        <it-it>Menu principale</it-it>
+        <jp-jp>メインメニュー</jp-jp>
+        <ko-ko>메인 메뉴</ko-ko>
+        <pl-pl>Menu główne</pl-pl>
+        <pt-pt>Menu principal</pt-pt>
+        <ru-ru>Главное меню</ru-ru>
+        <tr-tr>Ana menü</tr-tr>
+    </text>
+
+    <text key = "A_button_(when_active_news_is_video_tile)">
+        <default>Play/Stop video</default>
+        <ar-ar>تشغيل/إيقاف الفيديو</ar-ar>
+        <br-br>reproduzir/parar vídeo</br-br>
+        <cn-cn>播放/停止视频</cn-cn>
+        <cntr-cntr>播放/停止視頻</cntr-cntr>
+        <cz-cz>přehrát/zastavit video</cz-cz>
+        <de-de>Video abspielen/anhalten</de-de>
+        <el-el>reproducir/detener vídeo</el-el>
+        <en-en>Play/Stop video</en-en>
+        <es-es>reproducir/detener vídeo</es-es>
+        <fr-fr>lancer/arrêter la vidéo</fr-fr>
+        <it-it>Riproduci/metti in pausa il video</it-it>
+        <jp-jp>動画の再生／停止</jp-jp>
+        <ko-ko>비디오 재생/정지</ko-ko>
+        <pl-pl>odtwórz/wstrzymaj film</pl-pl>
+        <pt-pt>reproduzir/parar vídeo</pt-pt>
+        <ru-ru>воспроизведение/остановка видео</ru-ru>
+        <tr-tr>videoyu oynat/durdur</tr-tr>
+    </text>
+
+    <text key = "no_connection_to_PLS_popup_1_line">
+        <default>Failed to connect</default>
+        <ar-ar>فشل الاتصال</ar-ar>
+        <br-br>Erro de conexão</br-br>
+        <cn-cn>连接失败</cn-cn>
+        <cntr-cntr>連接失敗</cntr-cntr>
+        <cz-cz>Nepodařilo se připojit</cz-cz>
+        <de-de>Verbindung fehlgeschlagen</de-de>
+        <el-el>Error al conectar</el-el>
+        <en-en>Failed to connect</en-en>
+        <es-es>Error al conectar</es-es>
+        <fr-fr>Échec de la connexion</fr-fr>
+        <it-it>Impossibile connettersi.</it-it>
+        <jp-jp>接続失敗</jp-jp>
+        <ko-ko>연결에 실패했습니다</ko-ko>
+        <pl-pl>Nie udało się nawiązać połączenia</pl-pl>
+        <pt-pt>Erro de conexão</pt-pt>
+        <ru-ru>Не удалось подключиться</ru-ru>
+        <tr-tr>Bağlantı başarısız oldu</tr-tr>
+    </text>
+
+    <text key = "no_connection_to_PLS_popup_2_line">
+        <default>You’re not connected to our Techland Services, try again later</default>
+        <ar-ar>أنت غير متصل بخدمات Techland الخاصة بنا، حاول مرة أخرى لاحقًا</ar-ar>
+        <br-br>Você não está conectado aos Serviços Techland. Tente novamente mais tarde.</br-br>
+        <cn-cn>你尚未和我们的Techland服务连接，请稍后再试</cn-cn>
+        <cntr-cntr>您尚未連接到我們的Techland服務，請稍後再試</cntr-cntr>
+        <cz-cz>Nejste připojeni k našim službám Techland, zkuste to později</cz-cz>
+        <de-de>Es besteht keine Verbindung zu den Techland-Onlineservices, bitte später erneut versuchen.</de-de>
+        <el-el>No tienes conexión a nuestros servicios de Techland, vuelve a intentarlo.</el-el>
+        <en-en>You’re not connected to our Techland Services, try again later</en-en>
+        <es-es>No tienes conexión a nuestros servicios de Techland, vuelve a intentarlo.</es-es>
+        <fr-fr>Vous n’êtes pas connecté/e aux services Techland, merci de réessayer ultérieurement</fr-fr>
+        <it-it>Non hai effettuato l’accesso ai servizi online di Techland, riprova più tardi.</it-it>
+        <jp-jp>Techlandサービスに接続できていません。もう一度お試しください。</jp-jp>
+        <ko-ko>Techland 서비스에 연결되어 있지 않습니다. 나중에 다시 시도해 주세요</ko-ko>
+        <pl-pl>Nie masz połączenia z usługami Techland, spróbuj ponownie później</pl-pl>
+        <pt-pt>Você não está conectado aos Serviços Techland. Tente novamente mais tarde.</pt-pt>
+        <ru-ru>Нет подключения к службам Techland, повторите попытку позже</ru-ru>
+        <tr-tr>Techland Servislerine bağlı değilsin, daha sonra tekrar dene</tr-tr>
+    </text>
+
+    <text key = "No_connection_to_content_server_1st_line">
+        <default>We couldn't refresh your news</default>
+        <ar-ar>لم نتمكن من تحديث أخبارك</ar-ar>
+        <br-br>Não foi possível atualizar as notícias</br-br>
+        <cn-cn>无法刷新你的新闻</cn-cn>
+        <cntr-cntr>無法刷新您的新聞</cntr-cntr>
+        <cz-cz>Nemohli jsme obnovit vaše novinky</cz-cz>
+        <de-de>Aktualisierung nicht möglich</de-de>
+        <el-el>No hemos podido actualizar las noticias</el-el>
+        <en-en>We couldn't refresh your news</en-en>
+        <es-es>No hemos podido actualizar las noticias</es-es>
+        <fr-fr>Impossible de mettre vos actualités à jour</fr-fr>
+        <it-it>Impossibile aggiornare le notizie.</it-it>
+        <jp-jp>ニュースを更新できませんでた。</jp-jp>
+        <ko-ko>뉴스를 새로 고침할 수 없습니다</ko-ko>
+        <pl-pl>Nie udało się odświeżyć wieści</pl-pl>
+        <pt-pt>Não foi possível atualizar as notícias</pt-pt>
+        <ru-ru>Не удалось обновить новости</ru-ru>
+        <tr-tr>Haberlerini yenileyemedik</tr-tr>
+    </text>
+
+    <text key = "No_connection_to_content_server_2nd_line">
+        <default>Your system couldn't sync with the latest news. We’ll attempt to update your news feed the next time you launch the game.</default>
+        <ar-ar>تعذر على نظامك المزامنة مع آخر الأخبار. سنحاول تحديث موجز الأخبار الخاص بك في المرة التالية التي تقوم فيها بتشغيل اللعبة.</ar-ar>
+        <br-br>Seu sistema não está sincronizado com as últimas notícias. Tentaremos atualizar o seu feed de notícias da próxima vez que você iniciar o jogo.</br-br>
+        <cn-cn>系统无法和最新的新闻同步。我们将在下次游戏启动时尝试更新新闻动态。</cn-cn>
+        <cntr-cntr>系統無法同步最新的新聞。我們將在下次遊戲啟動時嘗試更新新聞動態。</cntr-cntr>
+        <cz-cz>Váš systém se nemohl synchronizovat s novinkami. Při příštím spuštění hry se pokusíme váš kanál novinek aktualizovat.</cz-cz>
+        <de-de>Der Neuigkeiten-Feed konnte nicht synchronisiert werden. Beim nächsten Spielstart wird eine erneute Aktualisierung versucht.</de-de>
+        <el-el>El sistema no ha podido recopilar las últimas noticias. Intentaremos actualizarlas la próxima vez que inicies el juego.</el-el>
+        <en-en>Your system couldn't sync with the latest news. We’ll attempt to update your news feed the next time you launch the game.</en-en>
+        <es-es>El sistema no ha podido recopilar las últimas noticias. Intentaremos actualizarlas la próxima vez que inicies el juego.</es-es>
+        <fr-fr>Votre système n’a pas pu se synchroniser avec les dernières actualités. Nous essaierons d’actualiser votre fil d’actualités au prochain lancement du jeu.</fr-fr>
+        <it-it>Il tuo sistema non è riuscito a sincronizzarsi con le ultime notizie. Proveremo ad aggiornare il feed delle notizie la prossima volta che lancerai il gioco.</it-it>
+        <jp-jp>システムが最新情報と同期できませんでした。ゲームを再起動した時にニュースフィードの更新を試みます。</jp-jp>
+        <ko-ko>시스템이 최신 뉴스와 동기화되지 않았습니다. 다음에 게임을 시작할 때 뉴스 피드 업데이트를 시도하겠습니다.</ko-ko>
+        <pl-pl>Twój system nie mógł się zsynchronizować z najnowszymi wieściami. Spróbujemy zaktualizować wieści przy kolejnym uruchomieniu gry.</pl-pl>
+        <pt-pt>Seu sistema não está sincronizado com as últimas notícias. Tentaremos atualizar o seu feed de notícias da próxima vez que você iniciar o jogo.</pt-pt>
+        <ru-ru>Системе не удалось синхронизировать новости. Попытка обновления ленты новостей будет произведена при следующем запуске игры.</ru-ru>
+        <tr-tr>Sistemin en son haberler ile senkronize edilemedi. Oyunu yeniden başlattığında haber akışını güncellemeye çalışacağız.</tr-tr>
+    </text>
+
+    <text key = "B_button_on_popup">
+        <default>Back</default>
+        <ar-ar>عودة</ar-ar>
+        <br-br>Voltar</br-br>
+        <cn-cn>返回</cn-cn>
+        <cntr-cntr>返回</cntr-cntr>
+        <cz-cz>Zpět</cz-cz>
+        <de-de>Zurück</de-de>
+        <el-el>Volver</el-el>
+        <en-en>Back</en-en>
+        <es-es>Volver</es-es>
+        <fr-fr>Retour</fr-fr>
+        <it-it>Indietro</it-it>
+        <jp-jp>戻る</jp-jp>
+        <ko-ko>뒤로</ko-ko>
+        <pl-pl>Wstecz</pl-pl>
+        <pt-pt>Voltar</pt-pt>
+        <ru-ru>Назад</ru-ru>
+        <tr-tr>Geri</tr-tr>
+    </text>
+
+    <text key = "news_button">
+        <default>What's new?</default>
+        <ar-ar>ما الجديد؟</ar-ar>
+        <br-br>O que há de novo?</br-br>
+        <cn-cn>最新动态</cn-cn>
+        <cntr-cntr>最新動態</cntr-cntr>
+        <cz-cz>Co je nového?</cz-cz>
+        <de-de>Neuigkeiten</de-de>
+        <el-el>Novedades</el-el>
+        <en-en>What's new?</en-en>
+        <es-es>Novedades</es-es>
+        <fr-fr>Quoi de neuf ?</fr-fr>
+        <it-it>Cosa c’è di nuovo?</it-it>
+        <jp-jp>最新のニュースは？</jp-jp>
+        <ko-ko>새로운 소식은 무엇인가요?</ko-ko>
+        <pl-pl>Co nowego?</pl-pl>
+        <pt-pt>O que há de novo?</pt-pt>
+        <ru-ru>Что нового?</ru-ru>
+        <tr-tr>Ne yenilikler var?</tr-tr>
+    </text>
+
+    <text key = "Play_video_4K">
+        <default>Play 4K quality</default>
+        <ar-ar>شاهد بدقة K4</ar-ar>
+        <br-br>Assista em 4K</br-br>
+        <cn-cn>以4K观看</cn-cn>
+        <cntr-cntr>以 4K 觀看</cntr-cntr>
+        <cz-cz>Sledujte ve 4K</cz-cz>
+        <de-de>In 4K ansehen</de-de>
+        <el-el>Παρακολουθήστε σε 4K</el-el>
+        <en-en>Play 4K quality</en-en>
+        <es-es>Mira en 4K</es-es>
+        <fr-fr>Regarder en 4K</fr-fr>
+        <it-it>Guarda in 4K</it-it>
+        <jp-jp>4K画質で再生</jp-jp>
+        <ko-ko>4K로 시청하기</ko-ko>
+        <pl-pl>Oglądaj w 4K</pl-pl>
+        <pt-pt>Assista em 4K</pt-pt>
+        <ru-ru>Смотрите в 4K</ru-ru>
+        <tr-tr>4K izle</tr-tr>
+    </text>
+
+    <text key = "Play_video_HD">
+        <default>Play HD quality</default>
+        <ar-ar>شاهد بدقة DH</ar-ar>
+        <br-br>Assista em HD</br-br>
+        <cn-cn>以HD观看</cn-cn>
+        <cntr-cntr>以 HD 觀看</cntr-cntr>
+        <cz-cz>Sledujte ve HD</cz-cz>
+        <de-de>In HD ansehen</de-de>
+        <el-el>Παρακολουθήστε σε HD</el-el>
+        <en-en>Play HD quality</en-en>
+        <es-es>Mira en HD</es-es>
+        <fr-fr>Regarder en HD</fr-fr>
+        <it-it>Guarda in HD</it-it>
+        <jp-jp>HD画質で再生</jp-jp>
+        <ko-ko>HD로 시청하기</ko-ko>
+        <pl-pl>Oglądaj w HD</pl-pl>
+        <pt-pt>Assista em HD</pt-pt>
+        <ru-ru>Смотрите в HD</ru-ru>
+        <tr-tr>HD izle</tr-tr>
+    </text>
+
+</language>
