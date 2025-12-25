@@ -5,9 +5,11 @@ import ankol.mod.merger.antlr.xml.TechlandXMLParserBaseVisitor;
 import ankol.mod.merger.merger.xml.node.XmlContainerNode;
 import ankol.mod.merger.merger.xml.node.XmlLeafNode;
 import ankol.mod.merger.merger.xml.node.XmlNode;
+import cn.hutool.core.collection.CollUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -43,31 +45,58 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
     }
 
     /**
-     * 从attribute列表中提取id值
+     * 优先级属性名称列表 - 用于识别元素的主要标识符
      */
-    private String extractIdAttribute(List<TechlandXMLParser.AttributeContext> attributes) {
-        if (attributes == null) {
+    private static final String[] PRIORITY_ATTRIBUTE_NAMES = {
+            "id", "uid", "name", "key", "Name", "type", "property_id", "class"
+    };
+
+    /**
+     * 从attribute列表中提取识别性属性
+     * 返回格式: "attrName=attrValue" 或 null
+     */
+    private String extractIdentifyingAttribute(List<TechlandXMLParser.AttributeContext> attributes) {
+        if (CollUtil.isEmpty(attributes)) {
             return null;
         }
-        for (TechlandXMLParser.AttributeContext attr : attributes) {
-            String name = attr.Name().getText();
-            if ("id".equals(name)) {
-                String value = attr.STRING().getText();
-                // 移除引号
-                return value.replaceAll("\"", "").replaceAll("'", "");
+
+        // 1. 先尝试按优先级查找属性
+        for (String priorityName : PRIORITY_ATTRIBUTE_NAMES) {
+            for (TechlandXMLParser.AttributeContext attr : attributes) {
+                String attrName = attr.Name().getText();
+                if (priorityName.equals(attrName)) {
+                    String value = attr.STRING().getText();
+                    // 移除引号
+                    value = value.replaceAll("^\"|\"$|^'|'$", "");
+                    return attrName + "=" + value;
+                }
             }
         }
-        return null;
+
+        // 如果没有找到优先级属性，使用所有属性组合
+        // 按属性名排序以保证一致性
+        StringBuilder sb = new StringBuilder();
+        attributes.stream()
+                .sorted(Comparator.comparing(a -> a.Name().getText()))
+                .forEach(attr -> {
+                    String attrName = attr.Name().getText();
+                    String value = attr.STRING().getText();
+                    value = value.replaceAll("^\"|\"$|^'|'$", "");
+                    if (!sb.isEmpty()) {
+                        sb.append(",");
+                    }
+                    sb.append(attrName).append("=").append(value);
+                });
+
+        return !sb.isEmpty() ? sb.toString() : null;
     }
 
     /**
      * 构建element签名
-     * 格式: element:tagName:idValue (如果有id属性)
-     * 或: element:tagName:index (如果没有id属性，使用位置索引)
      */
-    private String buildSignature(String tagName, String idValue, int index) {
-        if (idValue != null && !idValue.isEmpty()) {
-            return ELEMENT + ":" + tagName + ":" + idValue;
+    private String buildSignature(String tagName, String identifyingAttr, int index) {
+        if (identifyingAttr != null && !identifyingAttr.isEmpty()) {
+            return ELEMENT + ":" + tagName + ":" + identifyingAttr;
         } else {
             return ELEMENT + ":" + tagName + ":" + index;
         }
@@ -106,9 +135,9 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
      */
     private XmlNode visitElement(TechlandXMLParser.ElementContext ctx, int index) {
         String tagName = ctx.Name().getFirst().getText();
-        List<TechlandXMLParser.AttributeContext> attributes = ctx.attribute(); //xml属性 <Skill id="xxx" cat="xxx"> 这种
-        String idValue = extractIdAttribute(attributes);
-        String signature = buildSignature(tagName, idValue, index);
+        List<TechlandXMLParser.AttributeContext> attributes = ctx.attribute();
+        String identifyingAttr = extractIdentifyingAttribute(attributes);
+        String signature = buildSignature(tagName, identifyingAttr, index);
 
         TechlandXMLParser.ContentContext content = ctx.content();
 
