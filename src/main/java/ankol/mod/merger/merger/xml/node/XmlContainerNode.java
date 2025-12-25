@@ -20,8 +20,13 @@ public class XmlContainerNode extends XmlNode {
 
     private final Map<String, XmlNode> children = new LinkedHashMap<>();
 
-    public XmlContainerNode(String signature, int startTokenIndex, int stopTokenIndex, int line, String sourceText) {
-        super(signature.trim(), startTokenIndex, stopTokenIndex, line, sourceText);
+    public XmlContainerNode(String signature,
+                            int startTokenIndex,
+                            int stopTokenIndex,
+                            int line,
+                            String sourceText,
+                            Map<String, String> attributes) {
+        super(signature, startTokenIndex, stopTokenIndex, line, sourceText, attributes);
     }
 
     /**

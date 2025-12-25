@@ -9,8 +9,7 @@ import cn.hutool.core.collection.CollUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * XML文件访问器 - 用于从ANTLR解析树构建XML AST树
@@ -87,7 +86,6 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
                     }
                     sb.append(attrName).append("=").append(value);
                 });
-
         return !sb.isEmpty() ? sb.toString() : null;
     }
 
@@ -111,7 +109,8 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                getFullText(ctx),
+                new HashMap<>()
         );
 
         List<TechlandXMLParser.ElementContext> elements = ctx.element();
@@ -136,9 +135,21 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
     private XmlNode visitElement(TechlandXMLParser.ElementContext ctx, int index) {
         String tagName = ctx.Name().getFirst().getText();
         List<TechlandXMLParser.AttributeContext> attributes = ctx.attribute();
-        String identifyingAttr = extractIdentifyingAttribute(attributes);
-        String signature = buildSignature(tagName, identifyingAttr, index);
 
+        String identifyingAttr = null;
+        Map<String, String> cleanAttributes = new LinkedHashMap<>();
+        if (attributes != null) {
+            for (TechlandXMLParser.AttributeContext attrCtx : ctx.attribute()) {
+                String attrKey = attrCtx.Name().getText();
+                String attrValue = attrCtx.STRING().getText(); // 这里拿到的是带引号的原文，如 "  5  "
+                // 清洗值：去掉引号，去掉首尾空格
+                String cleanValue = normalizeValue(attrValue);
+                cleanAttributes.put(attrKey, cleanValue);
+            }
+            identifyingAttr = extractIdentifyingAttribute(attributes);
+        }
+
+        String signature = buildSignature(tagName, identifyingAttr, index);
         TechlandXMLParser.ContentContext content = ctx.content();
 
         // 判断是否为容器节点（有子元素）
@@ -148,7 +159,8 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
                     getStartTokenIndex(ctx),
                     getStopTokenIndex(ctx),
                     ctx.start.getLine(),
-                    getFullText(ctx)
+                    getFullText(ctx),
+                    cleanAttributes
             );
 
             // 添加子元素
@@ -166,8 +178,27 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
                     getStartTokenIndex(ctx),
                     getStopTokenIndex(ctx),
                     ctx.start.getLine(),
-                    getFullText(ctx)
+                    getFullText(ctx),
+                    cleanAttributes
             );
         }
+    }
+
+    /**
+     * 标准化文本
+     */
+    private String normalizeValue(String raw) {
+        if (raw == null) return "";
+        String val = raw.trim();
+        // 去掉首尾引号
+        if (val.length() >= 2) {
+            char first = val.charAt(0);
+            char last = val.charAt(val.length() - 1);
+            if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+                val = val.substring(1, val.length() - 1);
+            }
+        }
+        // 再次去空格 (应对 id="  Value  " 的情况)
+        return val.trim();
     }
 }

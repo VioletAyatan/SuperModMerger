@@ -252,7 +252,7 @@ public class ModMergerEngine {
             List<FileSource> fileSources = entry.getValue();
             totalProcessed++;
             try {
-                if (fileSources.size() == 1) {
+                if (modsToMerge.size() == 1 && fileSources.size() == 1) {
                     // 即使只有一个mod文件，也需要与基准mod对比（如果基准mod存在）
                     processSingleFile(relPath, fileSources.getFirst(), mergedDir);
                 } else {
@@ -268,9 +268,9 @@ public class ModMergerEngine {
     /**
      * 处理单个文件（可能需要与基准mod对比）
      *
-     * @param relPath 相对路径
+     * @param relPath    相对路径
      * @param fileSource 文件来源
-     * @param mergedDir 合并输出目录
+     * @param mergedDir  合并输出目录
      */
     private void processSingleFile(String relPath, FileSource fileSource, Path mergedDir) throws IOException {
         // 如果基准mod存在，尝试与基准mod对比
