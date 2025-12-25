@@ -246,13 +246,14 @@ public class ModMergerEngine {
      */
     private void processFiles(Map<String, List<FileSource>> filesByName, Path mergedDir) {
         ColorPrinter.info(Localizations.t("ENGINE_PROCESSING_FILES"));
-
         for (Map.Entry<String, List<FileSource>> entry : filesByName.entrySet()) {
             String relPath = entry.getKey();
             List<FileSource> fileSources = entry.getValue();
             totalProcessed++;
             try {
-                if (modsToMerge.size() == 1 && fileSources.size() == 1) {
+                //todo 这里未来可以添加一个自动修正旧版本的mod的功能，因为我合并的逻辑是从基准mod里取得原文件，肯定是最新的，刚好能把一些过期mod没有的参数补上
+                //todo 但是作为代价，对于性能的消耗也会增加很多，文件越多消耗时间越久，后期看下可以做个可选开关
+                if (fileSources.size() == 1) {
                     // 即使只有一个mod文件，也需要与基准mod对比（如果基准mod存在）
                     processSingleFile(relPath, fileSources.getFirst(), mergedDir);
                 } else {
