@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 冲突记录
+ *
+ * @author Ankol
  */
 @Data
 @RequiredArgsConstructor
