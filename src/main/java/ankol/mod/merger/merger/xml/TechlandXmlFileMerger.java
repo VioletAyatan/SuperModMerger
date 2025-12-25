@@ -126,7 +126,7 @@ public class TechlandXmlFileMerger extends FileMerger {
             return new MergeResult(mergedContent, !conflicts.isEmpty());
         } catch (Exception e) {
             log.error(StrUtil.format("Error during XML file merge: {} Reason: {}", file1.getFullPathName(), e.getMessage()), e);
-            throw new BusinessException("文件" + file1.getFullPathName() + "合并失败");
+            throw new BusinessException("文件" + file1.getFileName() + "合并失败");
         } finally {
             // 清理状态，准备下一个文件合并
             conflicts.clear();

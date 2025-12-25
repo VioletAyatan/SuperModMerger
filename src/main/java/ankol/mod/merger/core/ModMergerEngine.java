@@ -325,6 +325,7 @@ public class ModMergerEngine {
             if (baseModAnalyzer.isLoaded()) {
                 originalBaseModContent = baseModAnalyzer.extractFileContent(relPath);
             }
+            String fileName = Tools.getEntryFileName(relPath);
 
             // 顺序合并：使用data0.pak作为基准（如果存在），然后依次合并各个mod
             for (int i = 0; i < fileSources.size(); i++) {
@@ -339,8 +340,8 @@ public class ModMergerEngine {
                         try {
                             Files.writeString(tempBaseFile, originalBaseModContent);
                             // 使用data0.pak作为基准，与第一个mod合并
-                            FileTree fileBase = new FileTree("data0.pak", tempBaseFile.toString());
-                            FileTree fileCurrent = new FileTree(currentModName, currentModPath.toString());
+                            FileTree fileBase = new FileTree(fileName, tempBaseFile.toString());
+                            FileTree fileCurrent = new FileTree(fileName, currentModPath.toString());
 
                             context.setFileName(relPath);
                             context.setMod1Name("data0.pak");
@@ -369,8 +370,8 @@ public class ModMergerEngine {
                     try {
                         Files.writeString(tempBaseFile, baseMergedContent);
                         // 执行合并 - 使用真实的MOD压缩包名字
-                        FileTree fileBase = new FileTree(previousModName, tempBaseFile.toString());
-                        FileTree fileCurrent = new FileTree(currentModName, currentModPath.toString());
+                        FileTree fileBase = new FileTree(fileName, tempBaseFile.toString());
+                        FileTree fileCurrent = new FileTree(fileName, currentModPath.toString());
 
                         context.setFileName(relPath);
                         context.setMod1Name(previousModName);

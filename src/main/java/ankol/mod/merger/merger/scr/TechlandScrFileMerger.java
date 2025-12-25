@@ -30,10 +30,6 @@ public class TechlandScrFileMerger extends FileMerger {
      * 标记冲突项的容器
      */
     private final List<ConflictRecord> conflicts = new ArrayList<>();
-    /**
-     * 智能合并的节点
-     */
-    private final List<ConflictRecord> automaticMergeNode = new ArrayList<>();
 
     /**
      * 插入操作记录
@@ -98,8 +94,8 @@ public class TechlandScrFileMerger extends FileMerger {
             String mergedContent = getMergedContent(baseResult);
             return new MergeResult(mergedContent, !conflicts.isEmpty());
         } catch (Exception e) {
-            log.error(StrUtil.format("Error during SCR file merge: {} Reason: {}", file1.getFullPathName(), e.getMessage()), e);
-            throw new BusinessException("文件" + file1.getFullPathName() + "合并失败");
+            log.error(StrUtil.format("Error during SCR file merge: {} Reason: {}", file1.getFileName(), e.getMessage()), e);
+            throw new BusinessException("文件" + file1.getFileName() + "合并失败");
         } finally {
             //清理状态，准备下一个文件合并
             conflicts.clear();
@@ -125,7 +121,7 @@ public class TechlandScrFileMerger extends FileMerger {
                 );
             }
         }
-        if (!automaticMergeNode.isEmpty()) {
+/*        if (!automaticMergeNode.isEmpty()) {
             ColorPrinter.success(Localizations.t("SCR_MERGER_AUTO_MERGE_COUNT", automaticMergeNode.size()));
             //智能合并节点的替换
             for (ConflictRecord record : automaticMergeNode) {
@@ -139,7 +135,7 @@ public class TechlandScrFileMerger extends FileMerger {
                         modNode.getSourceText()
                 );
             }
-        }
+        }*/
 
 
         // 处理新增节点（插入操作）
@@ -186,7 +182,8 @@ public class TechlandScrFileMerger extends FileMerger {
                                             signature,
                                             baseNode,
                                             modNode);
-                                    automaticMergeNode.add(record);
+                                    record.setUserChoice(2);
+                                    conflicts.add(record);
                                 }
                                 //当前节点不与原版相同，也不与待合并mod相同，标记为真正的冲突处
                                 else {
@@ -252,6 +249,16 @@ public class TechlandScrFileMerger extends FileMerger {
      * 冲突解决
      */
     private void resolveConflictsInteractively() {
+        List<ConflictRecord> automaticMerge = conflicts.stream()
+                .filter(conflict -> conflict.getUserChoice() != null)
+                .toList();
+        if (!automaticMerge.isEmpty()) {
+            ColorPrinter.success(Localizations.t("SCR_MERGER_AUTO_MERGE_COUNT", automaticMerge.size()));
+            conflicts.removeAll(automaticMerge);
+        }
+        if (conflicts.isEmpty()) {
+            return;
+        }
         Scanner scanner = new Scanner(System.in);
         ColorPrinter.warning(Localizations.t("SCR_MERGER_CONFLICT_DETECTED", conflicts.size()));
         int chose = 0;
