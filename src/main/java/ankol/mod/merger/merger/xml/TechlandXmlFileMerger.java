@@ -27,7 +27,6 @@ import java.util.*;
 
 /**
  * XML文件合并器
- * 支持按元素ID识别XML元素，对比子元素变化，处理合并冲突
  *
  * @author Ankol
  */

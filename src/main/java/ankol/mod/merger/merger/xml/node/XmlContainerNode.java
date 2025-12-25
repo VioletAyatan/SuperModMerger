@@ -17,9 +17,7 @@ import java.util.Map;
 @Setter
 @ToString
 public class XmlContainerNode extends XmlNode {
-    /**
-     * Child node mapping, key is node signature, value is node object
-     */
+
     private final Map<String, XmlNode> children = new LinkedHashMap<>();
 
     public XmlContainerNode(String signature, int startTokenIndex, int stopTokenIndex, int line, String sourceText) {
