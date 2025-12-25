@@ -1,19 +1,13 @@
 {
   "reflection": [
     {
-      "type": "ankol.mod.merger.AppMain",
-      "jniAccessible": true,
-      "methods": [
-        {
-          "name": "main",
-          "parameterTypes": [
-            "java.lang.String[]"
-          ]
-        }
-      ]
+      "type": "ankol.mod.merger.merger.scr.TechlandScrFileMerger",
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
-      "type": "ankol.mod.merger.merger.scr.TechlandScrFileMerger",
+      "type": "ankol.mod.merger.merger.xml.TechlandXmlFileMerger",
       "allDeclaredConstructors": true,
       "allDeclaredMethods": true,
       "allDeclaredFields": true
