@@ -30,6 +30,10 @@ public class TechlandScrFileMerger extends FileMerger {
      * 标记冲突项的容器
      */
     private final List<ConflictRecord> conflicts = new ArrayList<>();
+    /**
+     * 智能合并的节点
+     */
+    private final List<ConflictRecord> automaticMergeNode = new ArrayList<>();
 
     /**
      * 插入操作记录
@@ -121,6 +125,22 @@ public class TechlandScrFileMerger extends FileMerger {
                 );
             }
         }
+        if (!automaticMergeNode.isEmpty()) {
+            ColorPrinter.success(Localizations.t("SCR_MERGER_AUTO_MERGE_COUNT", automaticMergeNode.size()));
+            //智能合并节点的替换
+            for (ConflictRecord record : automaticMergeNode) {
+                ScrScriptNode baseNode = record.getBaseNode();
+                ScrScriptNode modNode = record.getModNode();
+
+                // 直接使用节点中存储的token索引
+                rewriter.replace(
+                        baseNode.getStartTokenIndex(),
+                        baseNode.getStopTokenIndex(),
+                        modNode.getSourceText()
+                );
+            }
+        }
+
 
         // 处理新增节点（插入操作）
         for (InsertOperation op : insertOperations) {
@@ -166,8 +186,7 @@ public class TechlandScrFileMerger extends FileMerger {
                                             signature,
                                             baseNode,
                                             modNode);
-                                    record.setUserChoice(2); //直接设置2，后续处理冲突时会直接覆盖此节点
-                                    conflicts.add(record);
+                                    automaticMergeNode.add(record);
                                 }
                                 //当前节点不与原版相同，也不与待合并mod相同，标记为真正的冲突处
                                 else {
@@ -238,10 +257,6 @@ public class TechlandScrFileMerger extends FileMerger {
         int chose = 0;
         for (int i = 0; i < conflicts.size(); i++) {
             ConflictRecord record = conflicts.get(i);
-            //抉择已被选定，不在手动选择了
-            if (record.getUserChoice() != null) {
-                continue;
-            }
             if (chose == 3) {
                 record.setUserChoice(1); //3表示用户全部选择baseMod的配置来处理
             } else if (chose == 4) {
