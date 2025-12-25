@@ -55,10 +55,6 @@ public class TechlandXmlFileMerger extends FileMerger {
             this.baseNode = baseNode;
             this.modNode = modNode;
         }
-
-        public void setUserChoice(int choice) {
-            this.userChoice = choice;
-        }
     }
 
     /**
@@ -166,10 +162,22 @@ public class TechlandXmlFileMerger extends FileMerger {
 
         // 处理新增节点的插入
         for (NewNodeRecord record : newNodes) {
-            XmlContainerNode parentContainer = record.parentContainer(); //获取父节点
+            XmlContainerNode parentContainer = record.parentContainer();
             XmlNode newNode = record.newNode();
-            int insertPosition = parentContainer.getStopTokenIndex(); //获取父节点的结尾索引，新的插在父节点后面
-            rewriter.insertBefore(insertPosition, "\n    " + newNode.getSourceText());
+
+            CommonTokenStream tokens = baseResult.tokens;
+            int stopIdx = parentContainer.getStopTokenIndex();
+            int insertPosition = stopIdx;
+            for (int i = stopIdx; i >= parentContainer.getStartTokenIndex(); i--) {
+                String tokenText = tokens.get(i).getText();
+                if (tokenText.equals("<")) {
+                    if (i + 1 <= stopIdx && tokens.get(i + 1).getText().equals("/")) {
+                        insertPosition = i;
+                        break;
+                    }
+                }
+            }
+            rewriter.insertBefore(insertPosition, newNode.getSourceText() + "\n    ");
         }
 
         return rewriter.getText();
@@ -204,9 +212,10 @@ public class TechlandXmlFileMerger extends FileMerger {
                 }
                 //子节点，对比内容
                 else if (!(baseNode instanceof XmlContainerNode) && !(modNode instanceof XmlContainerNode)) {
-                    String baseText = baseNode.getSourceText().trim();
-                    String modText = modNode.getSourceText().trim();
-                    if (!baseText.equals(modText)) {
+                    // 使用规范化文本进行对比，避免空格、换行等格式差异
+                    Map<String, String> baseAttr = baseNode.getAttributes();
+                    Map<String, String> modAttr = modNode.getAttributes();
+                    if (!baseAttr.equals(modAttr)) {
                         // 不相同，检查是否跟基准mod的一样，不一样视为冲突
                         if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
                             conflicts.add(new ConflictRecord(
@@ -246,14 +255,11 @@ public class TechlandXmlFileMerger extends FileMerger {
         if (originalBaseModRoot == null) {
             return false;
         }
-
         if (originalNode == null) {
-            // 原始基准MOD中不存在这个��点
+            // 原始基准MOD中不存在这个节点
             return false;
         }
-
-        // 对比节点内容
-        return modNode.getSourceText().trim().equals(originalNode.getSourceText().trim());
+        return modNode.getAttributes().equals(originalNode.getAttributes());
     }
 
     /**
