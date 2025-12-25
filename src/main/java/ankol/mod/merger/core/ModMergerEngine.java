@@ -253,7 +253,8 @@ public class ModMergerEngine {
             totalProcessed++;
             try {
                 if (fileSources.size() == 1) {
-                    copyFile(relPath, fileSources.getFirst().filePath, mergedDir);
+                    // 即使只有一个mod文件，也需要与基准mod对比（如果基准mod存在）
+                    processSingleFile(relPath, fileSources.getFirst(), mergedDir);
                 } else {
                     // 在多个 mod 中存在，需要合并
                     mergeFiles(relPath, fileSources, mergedDir);
@@ -262,6 +263,69 @@ public class ModMergerEngine {
                 ColorPrinter.error(Localizations.t("ENGINE_PROCESSING_ERROR", relPath, e.getMessage()));
             }
         }
+    }
+
+    /**
+     * 处理单个文件（可能需要与基准mod对比）
+     *
+     * @param relPath 相对路径
+     * @param fileSource 文件来源
+     * @param mergedDir 合并输出目录
+     */
+    private void processSingleFile(String relPath, FileSource fileSource, Path mergedDir) throws IOException {
+        // 如果基准mod存在，尝试与基准mod对比
+        if (baseModAnalyzer.isLoaded()) {
+            try {
+                String originalBaseModContent = baseModAnalyzer.extractFileContent(relPath);
+                // 基准mod中存在该文件，需要进行对比合并
+                if (originalBaseModContent != null) {
+                    MergerContext context = new MergerContext();
+                    Optional<FileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
+
+                    // 如果支持合并，进行对比合并
+                    if (mergerOptional.isPresent()) {
+                        FileMerger merger = mergerOptional.get();
+                        String fileName = Tools.getEntryFileName(relPath);
+
+                        Path tempBaseFile = Files.createTempFile("merge_base_data0_", ".tmp");
+                        try {
+                            Files.writeString(tempBaseFile, originalBaseModContent);
+
+                            FileTree fileBase = new FileTree(fileName, tempBaseFile.toString());
+                            FileTree fileCurrent = new FileTree(fileName, fileSource.filePath.toString());
+
+                            context.setFileName(relPath);
+                            context.setMod1Name("data0.pak");
+                            context.setMod2Name(fileSource.sourceModName);
+                            context.setOriginalBaseModContent(originalBaseModContent);
+                            context.setFirstModMergeWithBaseMod(true); // 标记为与data0.pak的合并
+
+                            MergeResult result = merger.merge(fileBase, fileCurrent);
+                            String mergedContent = result.mergedContent();
+
+                            // 写入合并结果
+                            Path targetPath = mergedDir.resolve(relPath);
+                            Files.createDirectories(targetPath.getParent());
+                            Files.writeString(targetPath, mergedContent);
+
+                            this.mergedCount++;
+                            ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS"));
+                            return;
+                        } finally {
+                            Files.deleteIfExists(tempBaseFile);
+                        }
+                    }
+                }
+            } catch (NoSuchFileException e) {
+                // 基准mod中不存在该文件，直接复制
+                log.debug("File '{}' not found in base mod, copying directly", relPath);
+            } catch (Exception e) {
+                ColorPrinter.warning("Failed to merge '{}' with base mod: {}, copying original file", relPath, e.getMessage());
+            }
+        }
+
+        // 没有基准mod，或者基准mod中不存在该文件，或者不支持合并，直接复制
+        copyFile(relPath, fileSource.filePath, mergedDir);
     }
 
     /**
