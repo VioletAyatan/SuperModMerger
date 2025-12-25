@@ -68,6 +68,17 @@ public class TechlandXmlFileMerger extends FileMerger {
     private final List<ConflictRecord> conflicts = new ArrayList<>();
 
     /**
+     * 新增节点记录
+     */
+    private record NewNodeRecord(XmlContainerNode parentContainer, XmlNode newNode) {
+    }
+
+    /**
+     * 新增节点列表
+     */
+    private final List<NewNodeRecord> newNodes = new ArrayList<>();
+
+    /**
      * 解析结果包装类，包含AST和TokenStream
      */
     private record ParseResult(XmlContainerNode astNode, CommonTokenStream tokens) {
@@ -130,6 +141,7 @@ public class TechlandXmlFileMerger extends FileMerger {
         } finally {
             // 清理状态，准备下一个文件合并
             conflicts.clear();
+            newNodes.clear();
             originalBaseModRoot = null;
         }
     }
@@ -145,8 +157,6 @@ public class TechlandXmlFileMerger extends FileMerger {
             if (record.getUserChoice() == 2) { // 用户选择了 Mod
                 XmlNode baseNode = record.getBaseNode();
                 XmlNode modNode = record.getModNode();
-
-                // 直接使用节点中存储的token索引
                 rewriter.replace(
                         baseNode.getStartTokenIndex(),
                         baseNode.getStopTokenIndex(),
@@ -155,7 +165,14 @@ public class TechlandXmlFileMerger extends FileMerger {
             }
         }
 
-        // 获取重写后的文本
+        // 处理新增节点的插入
+        for (NewNodeRecord record : newNodes) {
+            XmlContainerNode parentContainer = record.parentContainer(); //获取父节点
+            XmlNode newNode = record.newNode();
+            int insertPosition = parentContainer.getStopTokenIndex(); //获取父节点的结尾索引，新的插在父节点后面
+            rewriter.insertBefore(insertPosition, "\n    " + newNode.getSourceText());
+        }
+
         return rewriter.getText();
     }
 
@@ -177,22 +194,21 @@ public class TechlandXmlFileMerger extends FileMerger {
                 XmlNode baseNode = baseContainer.getChildren().get(signature);
 
                 if (baseNode == null) {
-                    // Base中不存在这个节点 - 新增节点，保留在Mod中
-                    // 由于使用TokenStreamRewriter，Mod中的新节点会自动被保留
+                    // Base中不存在这个节点 - 新增节点，需要添加到合并结果中
+                    newNodes.add(new NewNodeRecord(baseContainer, modNode));
                 } else if (baseNode instanceof XmlContainerNode && modNode instanceof XmlContainerNode) {
-                    // 容器节点，递归进入内部对比
                     reduceCompare(
                             (originalNode instanceof XmlContainerNode) ? (XmlContainerNode) originalNode : null,
                             (XmlContainerNode) baseNode,
                             (XmlContainerNode) modNode
                     );
-                } else if (!(baseNode instanceof XmlContainerNode) && !(modNode instanceof XmlContainerNode)) {
-                    // 都是叶子节点，对比内容
+                }
+                //子节点，对比内容
+                else if (!(baseNode instanceof XmlContainerNode) && !(modNode instanceof XmlContainerNode)) {
                     String baseText = baseNode.getSourceText().trim();
                     String modText = modNode.getSourceText().trim();
-
                     if (!baseText.equals(modText)) {
-                        // 内容不一致，检查是否与原始基准MOD相同
+                        // 不相同，检查是否跟基准mod的一样，不一样视为冲突
                         if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
                             conflicts.add(new ConflictRecord(
                                     context.getFileName(),
