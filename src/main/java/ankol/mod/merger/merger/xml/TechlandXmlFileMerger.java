@@ -65,7 +65,7 @@ public class TechlandXmlFileMerger extends FileMerger {
     /**
      * 新增节点记录
      */
-    private record NewNodeRecord(XmlContainerNode parentContainer, XmlNode newNode) {
+    private record NewNodeRecord(XmlContainerNode parentContainer, XmlNode previousSibling, XmlNode newNode) {
     }
 
     /**
@@ -162,22 +162,19 @@ public class TechlandXmlFileMerger extends FileMerger {
 
         // 处理新增节点的插入
         for (NewNodeRecord record : newNodes) {
-            XmlContainerNode parentContainer = record.parentContainer();
+            XmlNode previousSibling = record.previousSibling();
             XmlNode newNode = record.newNode();
 
-            CommonTokenStream tokens = baseResult.tokens;
-            int stopIdx = parentContainer.getStopTokenIndex();
-            int insertPosition = stopIdx;
-            for (int i = stopIdx; i >= parentContainer.getStartTokenIndex(); i--) {
-                String tokenText = tokens.get(i).getText();
-                if (tokenText.equals("<")) {
-                    if (i + 1 <= stopIdx && tokens.get(i + 1).getText().equals("/")) {
-                        insertPosition = i;
-                        break;
-                    }
-                }
+            int insertPosition;
+            if (previousSibling != null) {
+                // 如果有前一个兄弟节点，在其后面插入
+                // 使用stopTokenIndex + 1
+                insertPosition = previousSibling.getStopTokenIndex() + 1;
+            } else {
+                // 如果没有前一个兄弟节点（即这是第一个子节点），在父容器的结束标签前面插入
+                insertPosition = record.parentContainer().getStopTokenIndex();
             }
-            rewriter.insertBefore(insertPosition, newNode.getSourceText() + "\n    ");
+            rewriter.insertBefore(insertPosition, "\n" + newNode.getSourceText());
         }
 
         return rewriter.getText();
@@ -188,6 +185,7 @@ public class TechlandXmlFileMerger extends FileMerger {
      */
     private void reduceCompare(XmlContainerNode originalContainer, XmlContainerNode baseContainer, XmlContainerNode modContainer) {
         // 遍历Mod的所有子节点
+        XmlNode previousSiblingInBase = null;  // 追踪前一个兄弟节点
         for (Map.Entry<String, XmlNode> entry : modContainer.getChildren().entrySet()) {
             try {
                 String signature = entry.getKey();
@@ -202,21 +200,38 @@ public class TechlandXmlFileMerger extends FileMerger {
 
                 if (baseNode == null) {
                     // Base中不存在这个节点 - 新增节点，需要添加到合并结果中
-                    newNodes.add(new NewNodeRecord(baseContainer, modNode));
-                } else if (baseNode instanceof XmlContainerNode && modNode instanceof XmlContainerNode) {
-                    reduceCompare(
-                            (originalNode instanceof XmlContainerNode) ? (XmlContainerNode) originalNode : null,
-                            (XmlContainerNode) baseNode,
-                            (XmlContainerNode) modNode
-                    );
-                }
-                //子节点，对比内容
-                else if (!(baseNode instanceof XmlContainerNode) && !(modNode instanceof XmlContainerNode)) {
-                    // 使用规范化文本进行对比，避免空格、换行等格式差异
-                    Map<String, String> baseAttr = baseNode.getAttributes();
-                    Map<String, String> modAttr = modNode.getAttributes();
-                    if (!baseAttr.equals(modAttr)) {
-                        // 不相同，检查是否跟基准mod的一样，不一样视为冲突
+                    // 记录前一个兄弟节点，用于确定插入位置
+                    newNodes.add(new NewNodeRecord(baseContainer, previousSiblingInBase, modNode));
+                } else {
+                    // 更新前一个兄弟节点
+                    previousSiblingInBase = baseNode;
+                    if (baseNode instanceof XmlContainerNode && modNode instanceof XmlContainerNode) {
+                        reduceCompare(
+                                (originalNode instanceof XmlContainerNode) ? (XmlContainerNode) originalNode : null,
+                                (XmlContainerNode) baseNode,
+                                (XmlContainerNode) modNode
+                        );
+                    }
+                    //子节点，对比内容
+                    else if (!(baseNode instanceof XmlContainerNode) && !(modNode instanceof XmlContainerNode)) {
+                        // 使用规范化文本进行对比，避免空格、换行等格式差异
+                        Map<String, String> baseAttr = baseNode.getAttributes();
+                        Map<String, String> modAttr = modNode.getAttributes();
+                        if (!baseAttr.equals(modAttr)) {
+                            // 不相同，检查是否跟基准mod的一样，不一样视为冲突
+                            if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
+                                conflicts.add(new ConflictRecord(
+                                        context.getFileName(),
+                                        context.getMod1Name(),
+                                        context.getMod2Name(),
+                                        signature,
+                                        baseNode,
+                                        modNode
+                                ));
+                            }
+                        }
+                    } else {
+                        // 一个是容器，一个不是容器，这种情况下认为是冲突
                         if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
                             conflicts.add(new ConflictRecord(
                                     context.getFileName(),
@@ -227,18 +242,6 @@ public class TechlandXmlFileMerger extends FileMerger {
                                     modNode
                             ));
                         }
-                    }
-                } else {
-                    // 一个是容器，一个不是容器，这种情况下认为是冲突
-                    if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
-                        conflicts.add(new ConflictRecord(
-                                context.getFileName(),
-                                context.getMod1Name(),
-                                context.getMod2Name(),
-                                signature,
-                                baseNode,
-                                modNode
-                        ));
                     }
                 }
             } catch (Exception e) {
