@@ -1,5 +1,6 @@
-package ankol.mod.merger.merger.scr.node;
+package ankol.mod.merger.merger;
 
+import ankol.mod.merger.merger.scr.node.ScrScriptNode;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

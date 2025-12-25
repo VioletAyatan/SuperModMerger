@@ -43,12 +43,6 @@ public class BaseModAnalyzer {
     private Map<String, FileTree> indexedBaseModFileMap;
 
     /**
-     * 所有文件的相对路径集合（从基准MOD中提取）
-     */
-    @Getter
-    private Set<String> baseModFilePaths;
-
-    /**
      * 基准MOD是否已加载
      */
     @Getter

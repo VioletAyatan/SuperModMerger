@@ -5,6 +5,7 @@ import ankol.mod.merger.antlr.scr.TechlandScriptParser;
 import ankol.mod.merger.core.FileMerger;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.exception.BusinessException;
+import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.*;
 import ankol.mod.merger.tools.ColorPrinter;
