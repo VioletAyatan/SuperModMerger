@@ -3,9 +3,11 @@ package ankol.mod.merger.core;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.MergerFactory;
 import ankol.mod.merger.tools.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
@@ -18,6 +20,7 @@ import java.util.stream.Stream;
  *
  * @author Ankol
  */
+@Slf4j
 public class ModMergerEngine {
 
     private final List<Path> modsToMerge;
@@ -162,19 +165,25 @@ public class ModMergerEngine {
         Map<String, FileSourceInfo> correctedFiles = new LinkedHashMap<>();
         Map<String, String> corrections = new LinkedHashMap<>();
 
+        HashSet<String> markToRemoved = new HashSet<>();
         // 查找需要修正的路径
         for (Map.Entry<String, FileSourceInfo> entry : extractedFiles.entrySet()) {
             String originalPath = entry.getKey();
             FileSourceInfo sourceInfo = entry.getValue();
-
-            if (baseModAnalyzer.hasPathConflict(originalPath)) {
-                String suggestedPath = baseModAnalyzer.getSuggestedPath(originalPath);
-                corrections.put(originalPath, suggestedPath);
-                correctedFiles.put(suggestedPath, sourceInfo);
-            } else {
-                correctedFiles.put(originalPath, sourceInfo);
+            try {
+                if (baseModAnalyzer.hasPathConflict(originalPath)) {
+                    String suggestedPath = baseModAnalyzer.getSuggestedPath(originalPath);
+                    corrections.put(originalPath, suggestedPath);
+                    correctedFiles.put(suggestedPath, sourceInfo);
+                } else {
+                    correctedFiles.put(originalPath, sourceInfo);
+                }
+            } catch (NoSuchFileException e) {
+                markToRemoved.add(originalPath);
+                log.warn("File '{}' from mod '{}' does not exist in base mod, marking for removal.", originalPath, modFileName);
             }
         }
+        markToRemoved.forEach(extractedFiles::remove); //移除不存在于基准MOD中的文件
 
         // 如果有路径被修正，输出日志
         if (!corrections.isEmpty()) {

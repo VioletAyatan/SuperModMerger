@@ -153,11 +153,30 @@ public class TechlandScrFileMerger extends FileMerger {
                     }
                     //函数调用，比较参数，不对比String，因为对比字符会有各种空行不规范问题
                     else if (baseNode instanceof ScrFunCallScriptNode baseFunCall && modNode instanceof ScrFunCallScriptNode modFunCall) {
+                        //先检查当前待合并节点内容是否相同
                         if (!baseFunCall.getArguments().equals(modFunCall.getArguments())) {
-                            // 参数不一致，检查是否与原始基准MOD相同
-                            if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
-                                // 与原始基准MOD不同，才标记为冲突
-                                conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
+                            //两者内容不同，检查mod节点内容与原版是否相同
+                            if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
+                                //当前节点与原版一致，说明此处节点未变动，使用mod的内容
+                                if (isNodeSameAsOriginalNode(originalNode, baseFunCall)) {
+                                    ConflictRecord record = new ConflictRecord(context.getFileName(),
+                                            context.getMod1Name(),
+                                            context.getMod2Name(),
+                                            signature,
+                                            baseNode,
+                                            modNode);
+                                    record.setUserChoice(2); //直接设置2，后续处理冲突时会直接覆盖此节点
+                                    conflicts.add(record);
+                                }
+                                //当前节点不与原版相同，也不与待合并mod相同，标记为真正的冲突处
+                                else {
+                                    conflicts.add(new ConflictRecord(context.getFileName(),
+                                            context.getMod1Name(),
+                                            context.getMod2Name(),
+                                            signature,
+                                            baseNode,
+                                            modNode));
+                                }
                             }
                         }
                     }
@@ -169,7 +188,7 @@ public class TechlandScrFileMerger extends FileMerger {
                         //内容不一致
                         if (!baseText.equals(modText)) {
                             // 检查modNode是否与原始基准MOD相同
-                            if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
+                            if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
                                 conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
                             }
                         }
@@ -188,7 +207,7 @@ public class TechlandScrFileMerger extends FileMerger {
      * @param modNode      待检查的节点
      * @return 如果与原始基准MOD相同返回true，否则返回false
      */
-    private boolean isNodeSameAsOriginalBaseMod(ScrScriptNode originalNode, ScrScriptNode modNode) {
+    private boolean isNodeSameAsOriginalNode(ScrScriptNode originalNode, ScrScriptNode modNode) {
         // 如果没有原始基准MOD，则认为不相同
         if (originalBasModRoot == null) {
             return false;
@@ -218,6 +237,10 @@ public class TechlandScrFileMerger extends FileMerger {
         int chose = 0;
         for (int i = 0; i < conflicts.size(); i++) {
             ConflictRecord record = conflicts.get(i);
+            //抉择已被选定，不在手动选择了
+            if (record.getUserChoice() != null) {
+                continue;
+            }
             if (chose == 3) {
                 record.setUserChoice(1); //3表示用户全部选择baseMod的配置来处理
             } else if (chose == 4) {

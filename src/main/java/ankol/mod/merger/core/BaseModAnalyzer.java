@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -168,15 +169,15 @@ public class BaseModAnalyzer {
      *
      * @param filePath mod文件路径
      */
-    public boolean hasPathConflict(String filePath) {
+    public boolean hasPathConflict(String filePath) throws NoSuchFileException {
         if (!loaded) {
             return false;
         }
         String fileName = Tools.getEntryFileName(filePath);
         FileTree fileTree = indexedBaseModFileMap.get(fileName);
+        //有时会有一些不属于mod的文件被加入到pak中，这里查到空后说明不是原版mod支持修改的文件.
         if (fileTree == null) {
-            log.warn("File not found in base mod: {}-{}", filePath, fileName);
-            return false;
+            throw new NoSuchFileException("不支持的文件类型"); //抛出异常让外面知道，后续移除这个文件
         }
         String correctPath = fileTree.getFullPathName();
         return correctPath != null && !correctPath.equalsIgnoreCase(filePath);
