@@ -39,20 +39,6 @@ public class ModMergerEngine {
     // 全局Scanner（避免重复创建）
     private static final Scanner SYSTEM_SCANNER = new Scanner(System.in);
 
-    /**
-     * 文件来源信息 - 记录文件路径及其来源的MOD压缩包名字
-     * 用于在合并时准确识别冲突来自哪个MOD
-     *
-     * @param filePath      文件实际路径
-     * @param sourceModName 文件来源的MOD压缩包名字（如 "data2.pak"）
-     */
-    private record FileSource(Path filePath, String sourceModName) {
-        @Override
-        public String toString() {
-            return sourceModName + ": " + filePath;
-        }
-    }
-
 
     /**
      * 构造函数 - 初始化合并引擎（带基准MOD）
@@ -67,16 +53,6 @@ public class ModMergerEngine {
         this.tempDir = Path.of(Tools.getTempDir(), "ModMerger_" + System.currentTimeMillis());
         this.baseModAnalyzer = new BaseModAnalyzer(baseModPath);
         this.pathCorrectionStrategy = new PathCorrectionStrategy();
-    }
-
-    /**
-     * 构造函数 - 初始化合并引擎（不使用基准MOD）
-     *
-     * @param modsToMerge 要合并的 mod 列表（.pak 文件路径）
-     * @param outputPath  最终输出的 .pak 文件路径
-     */
-    public ModMergerEngine(List<Path> modsToMerge, Path outputPath) {
-        this(modsToMerge, outputPath, null);
     }
 
     /**

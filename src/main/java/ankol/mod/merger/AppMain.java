@@ -46,7 +46,6 @@ public class AppMain {
             // 执行合并
             ModMergerEngine merger = new ModMergerEngine(modsToMerge, outputPath, baseModPath);
             merger.merge();
-            //完成
             ColorPrinter.success(Localizations.t("APP_MAIN_DONE"));
             parseAnyKeyToExit();
             System.exit(0);
