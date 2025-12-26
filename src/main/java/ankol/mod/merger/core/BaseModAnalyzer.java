@@ -4,10 +4,14 @@ import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
+import cn.hutool.core.io.IoUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -15,14 +19,6 @@ import java.util.*;
 
 /**
  * 基准MOD分析器 - 负责加载和分析基准MOD（原版文件）
- * <p>
- * 优化：只构建文件名→路径映射，不解压文件，按需提取
- * <p>
- * 基准MOD是游戏的原版文件（如 data0.pak），用于：
- * 1. 建立"正确路径映射"（文件名 → 标准路径）
- * 2. 检测待合并MOD中的错误路径
- * 3. 提供路径修正建议
- * 4. 按需提取文件进行对比
  *
  * @author Ankol
  */
@@ -124,23 +120,22 @@ public class BaseModAnalyzer {
             return null;
         }
 
-        String fullPath = fileTree.getFullPathName();
+        String fileEntryName = fileTree.getFileEntryName();
 
         // 检查缓存中是否已存在
-        Path cachedFile = extractedFileCache.get(fullPath);
+        Path cachedFile = extractedFileCache.get(fileEntryName);
         if (cachedFile != null && Files.exists(cachedFile)) {
             // 从缓存读取
             return Files.readString(cachedFile);
         }
 
-        // 缓存未命中，从基准MOD的pak文件中提取文件内容
-        String content = Tools.extractFileFromPak(baseModPath.toFile(), fullPath);
+        String content = extractFileFromPak(baseModPath, fileEntryName);
 
         if (content != null) {
             // 保存到临时文件缓存
             try {
                 // 使用安全的文件名（替换路径分隔符）
-                String safeFileName = fullPath.replace("/", "_").replace("\\", "_");
+                String safeFileName = fileEntryName.replace("/", "_").replace("\\", "_");
                 Path tempFile = cacheDir.resolve(safeFileName);
 
                 // 确保父目录存在
@@ -148,10 +143,10 @@ public class BaseModAnalyzer {
 
                 // 写入缓存
                 Files.writeString(tempFile, content);
-                extractedFileCache.put(fullPath, tempFile);
+                extractedFileCache.put(fileEntryName, tempFile);
             } catch (IOException e) {
                 // 缓存失败不影响正常流程，只记录警告
-                ColorPrinter.warning("Failed to cache extracted file: " + fullPath + " - " + e.getMessage());
+                ColorPrinter.warning("Failed to cache extracted file: " + fileEntryName + " - " + e.getMessage());
             }
         }
 
@@ -173,7 +168,7 @@ public class BaseModAnalyzer {
         if (fileTree == null) {
             throw new NoSuchFileException("不支持的文件类型"); //抛出异常让外面知道，后续移除这个文件
         }
-        String correctPath = fileTree.getFullPathName();
+        String correctPath = fileTree.getFileEntryName();
         return correctPath != null && !correctPath.equalsIgnoreCase(filePath);
     }
 
@@ -188,7 +183,7 @@ public class BaseModAnalyzer {
             return null;
         }
         String fileName = Tools.getEntryFileName(filePath);
-        return indexedBaseModFileMap.get(fileName).getFullPathName();
+        return indexedBaseModFileMap.get(fileName).getFileEntryName();
     }
 
 
@@ -217,11 +212,23 @@ public class BaseModAnalyzer {
     }
 
     /**
-     * 获取缓存统计信息
+     * 从PAK文件中提取指定文件的内容
      *
-     * @return 缓存文件数量
+     * @param pakFile       PAK文件
+     * @param fileEntryName 文件在PAK中的相对路径
+     * @return 文件内容，如果文件不存在返回null
      */
-    public int getCacheSize() {
-        return extractedFileCache.size();
+    public String extractFileFromPak(Path pakFile, String fileEntryName) throws IOException {
+        //不需要的检查，初始化时就已经确定过基准mod在不在了
+        try (ZipFile zipFile = ZipFile.builder().setPath(pakFile).get()) {
+            ZipArchiveEntry entry = zipFile.getEntry(fileEntryName);
+            if (entry.getSize() == 0) {
+                return null;
+            }
+
+            try (var inputStream = zipFile.getInputStream(entry)) {
+                return IoUtil.read(inputStream, StandardCharsets.UTF_8);
+            }
+        }
     }
 }

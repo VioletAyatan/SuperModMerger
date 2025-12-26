@@ -27,7 +27,6 @@ public abstract class FileMerger {
      * @param file1 第一个文件（来自Mod1）的路径。
      * @param file2 第二个文件（来自Mod2）的路径。
      * @return 一个包含合并后内容和冲突信息的 {@link MergeResult} 对象。
-     * @throws IOException 如果在文件读取或处理过程中发生IO错误。
      */
     public abstract MergeResult merge(FileTree file1, FileTree file2) throws RuntimeException;
 

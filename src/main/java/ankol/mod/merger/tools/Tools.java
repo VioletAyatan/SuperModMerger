@@ -104,7 +104,7 @@ public abstract class Tools {
                 if (pakIndexMap.containsKey(fileName)) {
                     ColorPrinter.warning(Localizations.t("TOOLS_SAME_FILE_NAME_WARNING", fileName, entryName, pakIndexMap.get(fileName).getFullPathName()));
                 }
-                pakIndexMap.put(fileName, new FileTree(fileName, entryName));
+                pakIndexMap.put(fileName, new FileTree(fileName, entryName, file.getName()));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -116,29 +116,6 @@ public abstract class Tools {
         return entryName.substring(entryName.lastIndexOf("/") + 1);
     }
 
-    /**
-     * 从PAK文件中提取指定文件的内容
-     *
-     * @param pakFile   PAK文件
-     * @param entryPath 文件在PAK中的相对路径
-     * @return 文件内容，如果文件不存在返回null
-     */
-    public static String extractFileFromPak(File pakFile, String entryPath) throws IOException {
-        if (!pakFile.exists()) {
-            throw new BusinessException(Localizations.t("TOOLS_FILE_NOT_EXIST", pakFile.getAbsolutePath()));
-        }
-
-        try (ZipFile zipFile = ZipFile.builder().setFile(pakFile).get()) {
-            ZipArchiveEntry entry = zipFile.getEntry(entryPath);
-            if (entry.getSize() == 0) {
-                return null;
-            }
-
-            try (var inputStream = zipFile.getInputStream(entry)) {
-                return new String(inputStream.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
-            }
-        }
-    }
 
     /**
      * 计算字符串内容的 SHA-256 哈希值

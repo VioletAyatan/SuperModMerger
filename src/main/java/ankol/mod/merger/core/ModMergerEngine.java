@@ -103,7 +103,7 @@ public class ModMergerEngine {
                 selectPathCorrectionStrategy();
             }*/
             // 在提取过程中对每个mod分别进行路径修正
-            Map<String, List<FileSource>> filesByPath = extractAllMods();
+            Map<String, List<FileTree>> filesByPath = extractAllMods();
             // 5. 输出目录（临时）
             Path mergedDir = tempDir.resolve("merged");
             Files.createDirectories(mergedDir);
@@ -155,32 +155,32 @@ public class ModMergerEngine {
      * @param extractedFiles 提取的文件映射（相对路径 -> FileSourceInfo）
      * @return 修正后的文件映射
      */
-    private Map<String, FileSourceInfo> correctPathsForMod(String modFileName, Map<String, FileSourceInfo> extractedFiles) {
+    private Map<String, FileTree> correctPathsForMod(String modFileName, Map<String, FileTree> extractedFiles) {
         if (!baseModAnalyzer.isLoaded() ||
                 pathCorrectionStrategy.getSelectedStrategy() != PathCorrectionStrategy.Strategy.SMART_CORRECT
         ) {
             return extractedFiles;
         }
 
-        Map<String, FileSourceInfo> correctedFiles = new LinkedHashMap<>();
+        Map<String, FileTree> correctedFiles = new LinkedHashMap<>();
         Map<String, String> corrections = new LinkedHashMap<>();
 
         HashSet<String> markToRemoved = new HashSet<>();
         // 查找需要修正的路径
-        for (Map.Entry<String, FileSourceInfo> entry : extractedFiles.entrySet()) {
-            String originalPath = entry.getKey();
-            FileSourceInfo sourceInfo = entry.getValue();
+        for (Map.Entry<String, FileTree> entry : extractedFiles.entrySet()) {
+            String fileEntryName = entry.getKey();
+            FileTree sourceInfo = entry.getValue();
             try {
-                if (baseModAnalyzer.hasPathConflict(originalPath)) {
-                    String suggestedPath = baseModAnalyzer.getSuggestedPath(originalPath);
-                    corrections.put(originalPath, suggestedPath);
+                if (baseModAnalyzer.hasPathConflict(fileEntryName)) {
+                    String suggestedPath = baseModAnalyzer.getSuggestedPath(fileEntryName);
+                    corrections.put(fileEntryName, suggestedPath);
                     correctedFiles.put(suggestedPath, sourceInfo);
                 } else {
-                    correctedFiles.put(originalPath, sourceInfo);
+                    correctedFiles.put(fileEntryName, sourceInfo);
                 }
             } catch (NoSuchFileException e) {
-                markToRemoved.add(originalPath);
-                log.warn("File '{}' from mod '{}' does not exist in base mod, marking for removal.", originalPath, modFileName);
+                markToRemoved.add(fileEntryName);
+                log.warn("File '{}' from mod '{}' does not exist in base mod, marking for removal.", fileEntryName, modFileName);
             }
         }
         markToRemoved.forEach(extractedFiles::remove); //移除不存在于基准MOD中的文件
@@ -201,36 +201,24 @@ public class ModMergerEngine {
      * 从所有 mod 中提取文件，按相对路径分组
      * 在提取过程中对每个mod分别进行路径修正，避免不同mod的同名文件冲突
      */
-    private Map<String, List<FileSource>> extractAllMods() {
-        Map<String, List<FileSource>> filesByName = new ConcurrentHashMap<>(); // 优化：使用线程安全集合
-
+    private Map<String, List<FileTree>> extractAllMods() {
+        Map<String, List<FileTree>> filesByName = new ConcurrentHashMap<>(); // 优化：使用线程安全集合
         AtomicInteger index = new AtomicInteger(0);
-        //并发提取所有MOD文件
+        //并发提取所有文件
         modsToMerge.parallelStream().forEach((modPath) -> {
             try {
                 String archiveName = modPath.getFileName().toString(); //解压的压缩包真实名称
                 Path modTempDir = tempDir.resolve(archiveName + index.getAndIncrement()); //生成临时目录名字
 
-                Map<String, FileSourceInfo> extractedFiles = PakManager.extractPak(modPath, modTempDir);
-                // 对当前MOD的文件路径进行修正（如果启用了智能修正）
-                Map<String, FileSourceInfo> correctedFiles = correctPathsForMod(archiveName, extractedFiles);
+                Map<String, FileTree> extractedFiles = PakManager.extractPak(modPath, modTempDir);
+                Map<String, FileTree> correctedFiles = correctPathsForMod(archiveName, extractedFiles);
 
                 // 按文件路径分组，并记录来源MOD名字
-                for (Map.Entry<String, FileSourceInfo> entry : correctedFiles.entrySet()) {
+                for (Map.Entry<String, FileTree> entry : correctedFiles.entrySet()) {
                     String relPath = entry.getKey();
-                    FileSourceInfo sourceInfo = entry.getValue();
-
-                    // 构建完整的来源信息：记录真实的MOD压缩包名称
-                    String sourceChainString = sourceInfo.getSourceChainString();
-
+                    FileTree sourceInfo = entry.getValue();
                     // 创建FileSource，记录文件和其来源MOD
-                    FileSource fileSource = new FileSource(sourceInfo.getFilePath(), archiveName);
-                    filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(fileSource);
-
-                    // 如果是嵌套来源，输出详细日志
-                    if (sourceInfo.isFromNestedArchive()) {
-                        ColorPrinter.info(Localizations.t("ENGINE_NESTED_FILE_INFO", relPath, archiveName, sourceChainString));
-                    }
+                    filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(sourceInfo);
                 }
                 ColorPrinter.success(Localizations.t("ENGINE_EXTRACTED_FILES", correctedFiles.size()));
             } catch (IOException e) {
@@ -243,15 +231,15 @@ public class ModMergerEngine {
     /**
      * 处理所有文件（合并或复制）
      */
-    private void processFiles(Map<String, List<FileSource>> filesByName, Path mergedDir) {
+    private void processFiles(Map<String, List<FileTree>> filesByName, Path mergedDir) {
         ColorPrinter.info(Localizations.t("ENGINE_PROCESSING_FILES"));
-        for (Map.Entry<String, List<FileSource>> entry : filesByName.entrySet()) {
+        for (Map.Entry<String, List<FileTree>> entry : filesByName.entrySet()) {
             String relPath = entry.getKey();
-            List<FileSource> fileSources = entry.getValue();
+            List<FileTree> fileSources = entry.getValue();
             totalProcessed++;
             try {
                 //todo 这里未来可以添加一个自动修正旧版本的mod的功能，因为我合并的逻辑是从基准mod里取得原文件，肯定是最新的，刚好能把一些过期mod没有的参数补上
-                //todo 但是作为代价，对于性能的消耗也会增加很多，文件越多消耗时间越久，后期看下可以做个可选开关
+                //todo 但是对于性能的消耗也会增加很多，文件越多消耗时间越久，后期看下可以做个可选开关
                 if (fileSources.size() == 1) {
                     // 即使只有一个mod文件，也需要与基准mod对比（如果基准mod存在）
                     processSingleFile(relPath, fileSources.getFirst(), mergedDir);
@@ -272,7 +260,7 @@ public class ModMergerEngine {
      * @param fileSource 文件来源
      * @param mergedDir  合并输出目录
      */
-    private void processSingleFile(String relPath, FileSource fileSource, Path mergedDir) throws IOException {
+    private void processSingleFile(String relPath, FileTree fileSource, Path mergedDir) throws IOException {
         // 如果基准mod存在，尝试与基准mod对比
         if (baseModAnalyzer.isLoaded()) {
             try {
@@ -291,8 +279,8 @@ public class ModMergerEngine {
                         try {
                             Files.writeString(tempBaseFile, originalBaseModContent);
 
-                            FileTree fileBase = new FileTree(fileName, tempBaseFile.toString(), fileSource.sourceModName);
-                            FileTree fileCurrent = new FileTree(fileName, fileSource.filePath.toString(), fileSource.sourceModName);
+                            FileTree fileBase = new FileTree(fileName, tempBaseFile.toString());
+                            FileTree fileCurrent = new FileTree(fileName, fileSource.filePath.toString());
 
                             context.setFileName(relPath);
                             context.setMod1Name("data0.pak");
@@ -345,7 +333,7 @@ public class ModMergerEngine {
      * @param fileSources 待合并的同名文件的来源
      * @param mergedDir   合并输出目录
      */
-    private void mergeFiles(String relPath, List<FileSource> fileSources, Path mergedDir) throws IOException {
+    private void mergeFiles(String relPath, List<FileTree> fileSources, Path mergedDir) throws IOException {
         // 先简单的判断一下文件内容（计算hash值）、大小是否相同，不同肯定不一样
         if (areAllFilesIdentical(fileSources)) {
             // 文件都一样，直接使用第一个

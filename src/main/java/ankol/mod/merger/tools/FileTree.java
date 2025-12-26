@@ -2,6 +2,8 @@ package ankol.mod.merger.tools;
 
 import lombok.Data;
 
+import java.nio.file.Path;
+
 @Data
 public class FileTree {
     /**
@@ -9,21 +11,27 @@ public class FileTree {
      */
     private String fileName;
     /**
-     * 带文件路径的文件名
+     * 文件名，在压缩包中的相对路径
      */
-    private String fullPathName;
+    private String fileEntryName;
     /**
      * 文件来自哪个mod包（如果是压缩包嵌套的话，使用 mod.zip -> mod.pak 这样的名字显示）
      */
     private String archiveFileName;
+    /**
+     * 解压出来后的文件路径
+     */
+    private Path fullPathName;
 
-    public FileTree(String fileName, String fullPathName) {
+    public FileTree(String fileName, String fileEntryName, String archiveFileName) {
         this.fileName = fileName;
-        this.fullPathName = fullPathName;
+        this.fileEntryName = fileEntryName;
+        this.archiveFileName = archiveFileName;
     }
 
-    public FileTree(String fileName, String fullPathName, String archiveFileName) {
+    public FileTree(String fileName, String fileEntryName, String archiveFileName, Path fullPathName) {
         this.fileName = fileName;
+        this.fileEntryName = fileEntryName;
         this.fullPathName = fullPathName;
         this.archiveFileName = archiveFileName;
     }
