@@ -208,13 +208,12 @@ public class ModMergerEngine {
         //并发提取所有MOD文件
         modsToMerge.parallelStream().forEach((modPath) -> {
             try {
-                String modFileName = modPath.getFileName().toString(); //解压的压缩包真实名称
-                String modTempDirName = "Mod" + (index.getAndIncrement() + 1);
-                Path modTempDir = tempDir.resolve(modTempDirName); //生成临时目录名字
+                String archiveName = modPath.getFileName().toString(); //解压的压缩包真实名称
+                Path modTempDir = tempDir.resolve(archiveName + index.getAndIncrement()); //生成临时目录名字
 
                 Map<String, FileSourceInfo> extractedFiles = PakManager.extractPak(modPath, modTempDir);
                 // 对当前MOD的文件路径进行修正（如果启用了智能修正）
-                Map<String, FileSourceInfo> correctedFiles = correctPathsForMod(modFileName, extractedFiles);
+                Map<String, FileSourceInfo> correctedFiles = correctPathsForMod(archiveName, extractedFiles);
 
                 // 按文件路径分组，并记录来源MOD名字
                 for (Map.Entry<String, FileSourceInfo> entry : correctedFiles.entrySet()) {
@@ -225,12 +224,12 @@ public class ModMergerEngine {
                     String sourceChainString = sourceInfo.getSourceChainString();
 
                     // 创建FileSource，记录文件和其来源MOD
-                    FileSource fileSource = new FileSource(sourceInfo.getFilePath(), modFileName);
+                    FileSource fileSource = new FileSource(sourceInfo.getFilePath(), archiveName);
                     filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(fileSource);
 
                     // 如果是嵌套来源，输出详细日志
                     if (sourceInfo.isFromNestedArchive()) {
-                        ColorPrinter.info(Localizations.t("ENGINE_NESTED_FILE_INFO", relPath, modFileName, sourceChainString));
+                        ColorPrinter.info(Localizations.t("ENGINE_NESTED_FILE_INFO", relPath, archiveName, sourceChainString));
                     }
                 }
                 ColorPrinter.success(Localizations.t("ENGINE_EXTRACTED_FILES", correctedFiles.size()));
@@ -292,8 +291,8 @@ public class ModMergerEngine {
                         try {
                             Files.writeString(tempBaseFile, originalBaseModContent);
 
-                            FileTree fileBase = new FileTree(fileName, tempBaseFile.toString());
-                            FileTree fileCurrent = new FileTree(fileName, fileSource.filePath.toString());
+                            FileTree fileBase = new FileTree(fileName, tempBaseFile.toString(), fileSource.sourceModName);
+                            FileTree fileCurrent = new FileTree(fileName, fileSource.filePath.toString(), fileSource.sourceModName);
 
                             context.setFileName(relPath);
                             context.setMod1Name("data0.pak");
