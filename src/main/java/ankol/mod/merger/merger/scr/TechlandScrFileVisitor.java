@@ -24,7 +24,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
     private static final String DIRECTIVE = "directive";
     private static final String MACRO = "macro";
 
-    private final Set<String> repeatableFunctions = new HashSet<>();
+    private final Map<String, Set<String>> repeatableFunctions = new HashMap<>();
+    private String currentFunBlockSignature = "EMPTY";
 
     private ScrContainerScriptNode containerNode;
 
@@ -131,6 +132,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
                 getFullText(ctx)
         );
         this.containerNode = blockNode;
+        this.currentFunBlockSignature = signature;
         // 递归处理块内部的语句
         visitFunctionBlockContent(blockNode, ctx.functionBlock());
         return blockNode;
@@ -164,7 +166,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         }
         //提取函数签名，对于特殊的重复函数需要特殊处理
         String signature = FUN_CALL + ":" + funcName;
-        if (repeatableFunctions.contains(signature)) {
+        Set<String> signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, new HashSet<>());
+        if (signatures.contains(signature)) {
             signature = signature + ":" + argsList.getFirst();
         } else {
             Map<String, ScrScriptNode> children = containerNode.getChildren();
@@ -175,10 +178,11 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
                 funCallNode.setSignature(newSignature);
                 children.remove(signature);
                 children.put(newSignature, funCallNode);
-                repeatableFunctions.add(FUN_CALL + ":" + funcName); //标记这个函数为可重复函数，后续生成签名时需要特殊处理
+                signatures.add(FUN_CALL + ":" + funcName); //标记这个函数为可重复函数，后续生成签名时需要特殊处理
                 signature = newSignature;
             }
         }
+        repeatableFunctions.put(currentFunBlockSignature, signatures);
         return new ScrFunCallScriptNode(
                 signature,
                 ctx.start.getStartIndex(),
