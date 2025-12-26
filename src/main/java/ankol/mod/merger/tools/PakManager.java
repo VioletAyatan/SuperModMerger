@@ -282,7 +282,7 @@ public class PakManager {
     private static String getFileHash(Path file) throws IOException {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] buffer = new byte[BUFFER_SIZE]; // 使用统一的 64KB 缓冲区
+            byte[] buffer = new byte[BUFFER_SIZE];
             int bytesRead;
             try (InputStream fis = Files.newInputStream(file)) {
                 while ((bytesRead = fis.read(buffer)) != -1) {
@@ -291,7 +291,6 @@ public class PakManager {
             }
             return bytesToHex(digest.digest());
         } catch (NoSuchAlgorithmException e) {
-            // SHA-256 在所有 Java 实现中都应该可用
             throw new IOException("SHA-256 algorithm not available", e);
         }
     }
