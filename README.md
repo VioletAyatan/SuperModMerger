@@ -4,7 +4,8 @@
 
 ### 📋 项目简介
 
-**ModMergerTool** 是一个专为 Techland 游戏（如 Dying Light 系列）设计的模组智能合并工具。它能够将多个游戏模组文件（.pak 格式）合并为单一文件，并通过 ANTLR4 语法解析实现脚本文件的智能对比和冲突解决。
+**ModMergerTool** 是一个专为 Techland 游戏（如 Dying Light 系列）设计的模组智能合并工具。它能够将多个游戏模组文件（.pak
+格式）合并为单一文件，并通过 ANTLR4 语法解析实现脚本文件的智能对比和冲突解决。
 
 ### ✨ 主要特性
 
@@ -13,17 +14,24 @@
 - 🔍 **冲突检测**：使用AST语法树进行深度对比
 - 👤 **用户交互**：清晰的命令行界面提示用户选择冲突解决方案
 - 📊 **详细统计**：合并后提供详细的处理统计信息
-- 🌍 **国际化**：同时支持中文和英文
+- 支持SCR结构化脚本合并和XML文件合并，支持逐行合并与冲突检测功能
+- 合并逻辑基于原版文件进行合并，大概能修复一些过期MOD的问题，但是仅限多个MOD中有重名文件的情况下，因为不重复的文件工具会直接复制，不会进行解析。但还是尽量不要合并过期MOD，以免出现奇怪的问题。
+- 🌍 **国际化**：目前支持中文和英文，英文并非我母语，所以如果有语法错误请多包涵，或者在我的GitHub仓库中提交PR。
 
 ### 项目简介
 
 我做这个工具的初衷一开始是为了解决我自己使用多个MOD之间的各种冲突问题。
 
-最初，我发现了 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** 这款工具，虽然也很不错。但是有一些小问题和一些不支持的特性，所以我自己制作了这款全新的工具，基于AST语法树进行脚本分析，能够智能识别代码中冲突的地方，智能进行合并。即使是报错的情况下也不会破坏文件结构。同时，也感谢 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** 这款工具作者的辛苦付出，我的一些合并思路也参考了他的工具。
+最初，我发现了 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)**
+这款工具，虽然也很不错。但是有一些小问题和一些不支持的特性，所以我自己制作了这款全新的工具，基于AST语法树进行脚本分析，能够智能识别代码中冲突的地方，智能进行合并。即使是报错的情况下也不会破坏文件结构。同时，也感谢
+**[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** 这款工具作者的辛苦付出，我的一些合并思路也参考了他的工具。
 
-因此本工具的基础使用方法也完全兼容 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** ，并且不需要安装任何运行库，直接即可使用。
+因此本工具的基础使用方法也完全兼容 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)**
+，并且不需要安装任何运行库，直接即可使用。
 
-**工具支持智能合并.scr, .loot, .def 等scr脚本结构的文件和.xml文件，不局限于常见的player_variables.scr文件的合并，语法解析已经对整个原版data0.pak文件进行过实验，确保没有任何冲突。理论上，只要正确的scr语法的文件，工具都能识别并合并。**
+**工具支持智能合并.scr, .loot, .def
+等scr脚本结构的文件和.xml文件，不局限于常见的player_variables.scr文件的合并，语法解析已经对整个原版data0.pak文件进行过实验，确保没有任何冲突。理论上，只要正确的scr语法的文件，工具都能识别并合并。
+**
 
 理论上也支持消光2的MOD合并，因为消光2的目录结构和困兽完全一样。消光1应该也可以支持，只要它们的scr语法能够兼容，工具都能正确识别，但是消光1需要通过命令行手动指令一下基准mod的位置。
 
@@ -41,7 +49,7 @@
 
 #### **1、将工具放到困兽根目录/ph_ft目录下，并创建mods目录，将要合并的mod放入其中**
 
- **准备 mod 文件，mod支持zip、pak、7z等格式**
+**准备 mod 文件，mod支持zip、pak、7z等格式**
 
 ```bash
 # 示例
@@ -52,9 +60,11 @@ Dying Light The Beast\ph_ft\mods
 ```
 
 #### 2. 运行合并程序
+
 ```bash
 # 双击运行合并工具
 ```
 
 #### 3. 查看结果
+
 合并后的mod会输出到source目录下的data7.pak文件，如果你有data7.pak。注意，此工具会把旧的覆盖掉。
