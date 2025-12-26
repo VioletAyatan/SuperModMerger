@@ -256,11 +256,11 @@ public class ModMergerEngine {
     /**
      * 处理单个文件（可能需要与基准mod对比）
      *
-     * @param relPath    相对路径
-     * @param fileSource 文件来源
-     * @param mergedDir  合并输出目录
+     * @param relPath         相对路径
+     * @param fileCurrent     文件来源
+     * @param mergedOutputDir 合并输出目录
      */
-    private void processSingleFile(String relPath, FileTree fileSource, Path mergedDir) throws IOException {
+    private void processSingleFile(String relPath, FileTree fileCurrent, Path mergedOutputDir) throws IOException {
         // 如果基准mod存在，尝试与基准mod对比
         if (baseModAnalyzer.isLoaded()) {
             try {
@@ -279,12 +279,11 @@ public class ModMergerEngine {
                         try {
                             Files.writeString(tempBaseFile, originalBaseModContent);
 
-                            FileTree fileBase = new FileTree(fileName, tempBaseFile.toString());
-                            FileTree fileCurrent = new FileTree(fileName, fileSource.filePath.toString());
+                            FileTree fileBase = new FileTree(fileName, relPath, "data0.pak", tempBaseFile);
 
                             context.setFileName(relPath);
                             context.setMod1Name("data0.pak");
-                            context.setMod2Name(fileSource.sourceModName);
+                            context.setMod2Name(fileCurrent.getArchiveFileName());
                             context.setOriginalBaseModContent(originalBaseModContent);
                             context.setFirstModMergeWithBaseMod(true); // 标记为与data0.pak的合并
 
@@ -292,7 +291,7 @@ public class ModMergerEngine {
                             String mergedContent = result.mergedContent();
 
                             // 写入合并结果
-                            Path targetPath = mergedDir.resolve(relPath);
+                            Path targetPath = mergedOutputDir.resolve(relPath);
                             Files.createDirectories(targetPath.getParent());
                             Files.writeString(targetPath, mergedContent);
 
@@ -311,16 +310,15 @@ public class ModMergerEngine {
                 ColorPrinter.warning("Failed to merge '{}' with base mod: {}, copying original file", relPath, e.getMessage());
             }
         }
-
         // 没有基准mod，或者基准mod中不存在该文件，或者不支持合并，直接复制
-        copyFile(relPath, fileSource.filePath, mergedDir);
+        copyFile(relPath, fileCurrent.getFullPathName(), mergedOutputDir);
     }
 
     /**
      * 复制单个文件
      */
-    private void copyFile(String relPath, Path sourcePath, Path mergedDir) throws IOException {
-        Path targetPath = mergedDir.resolve(relPath);
+    private void copyFile(String relPath, Path sourcePath, Path mergedOutputDir) throws IOException {
+        Path targetPath = mergedOutputDir.resolve(relPath);
         Files.createDirectories(targetPath.getParent());
         Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
     }
@@ -337,7 +335,7 @@ public class ModMergerEngine {
         // 先简单的判断一下文件内容（计算hash值）、大小是否相同，不同肯定不一样
         if (areAllFilesIdentical(fileSources)) {
             // 文件都一样，直接使用第一个
-            copyFile(relPath, fileSources.getFirst().filePath, mergedDir);
+            copyFile(relPath, fileSources.getFirst().getFullPathName(), mergedDir);
             return;
         }
 
@@ -349,17 +347,17 @@ public class ModMergerEngine {
             ColorPrinter.warning("\n" + Localizations.t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath));
             ColorPrinter.warning(Localizations.t("ASSET_CHOSE_WHICH_VERSION_TO_USE"));
             for (int i = 0; i < fileSources.size(); i++) {
-                FileSource fileSource = fileSources.get(i);
-                ColorPrinter.info("{}. {}", i + 1, fileSource.sourceModName);
+                FileTree fileTree = fileSources.get(i);
+                ColorPrinter.info("{}. {}", i + 1, fileTree.getArchiveFileName());
             }
             while (true) {
                 String input = SYSTEM_SCANNER.next();
                 if (input.matches("\\d+")) {
                     int choice = Integer.parseInt(input);
                     if (choice >= 1 && choice <= fileSources.size()) {
-                        FileSource chosenSource = fileSources.get(choice - 1);
-                        ColorPrinter.info(Localizations.t("ASSET_USER_CHOSE_COMPLETE", chosenSource.sourceModName));
-                        copyFile(relPath, chosenSource.filePath, mergedDir);
+                        FileTree chosenSource = fileSources.get(choice - 1);
+                        ColorPrinter.info(Localizations.t("ASSET_USER_CHOSE_COMPLETE", chosenSource.getArchiveFileName()));
+                        copyFile(relPath, chosenSource.getFullPathName(), mergedDir);
                         return;
                     }
                 }
@@ -371,7 +369,7 @@ public class ModMergerEngine {
             // 支持合并，开始处理合并逻辑
             ColorPrinter.info(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size()));
             FileMerger merger = mergerOptional.get();
-            String baseMergedContent = null; //基准文本内容
+            String baseMergedContent = ""; //基准文本内容
 
             String originalBaseModContent = null;
             if (baseModAnalyzer.isLoaded()) {
@@ -381,9 +379,9 @@ public class ModMergerEngine {
 
             // 顺序合并：使用data0.pak作为基准（如果存在），然后依次合并各个mod
             for (int i = 0; i < fileSources.size(); i++) {
-                FileSource currentSource = fileSources.get(i);
-                Path currentModPath = currentSource.filePath;
-                String currentModName = currentSource.sourceModName;
+                FileTree fileCurrent = fileSources.get(i); //当前处理的合并文件
+                Path currentModPath = fileCurrent.getFullPathName();
+                String currentModName = fileCurrent.getArchiveFileName();
 
                 if (i == 0) {
                     // 第一个 mod：如果有data0.pak基准文件，使用它作为base与第一个mod合并
@@ -391,9 +389,7 @@ public class ModMergerEngine {
                         Path tempBaseFile = Files.createTempFile("merge_base_data0_", ".tmp");
                         try {
                             Files.writeString(tempBaseFile, originalBaseModContent);
-                            // 使用data0.pak作为基准，与第一个mod合并
-                            FileTree fileBase = new FileTree(fileName, tempBaseFile.toString());
-                            FileTree fileCurrent = new FileTree(fileName, currentModPath.toString());
+                            FileTree fileBase = new FileTree(fileName, relPath, "data0.pak", tempBaseFile);
 
                             context.setFileName(relPath);
                             context.setMod1Name("data0.pak");
@@ -415,15 +411,14 @@ public class ModMergerEngine {
                     }
                 } else {
                     // 后续的 mod，与当前合并结果合并
-                    FileSource previousSource = fileSources.get(i - 1);
-                    String previousModName = previousSource.sourceModName;
+                    FileTree previousSource = fileSources.get(i - 1);
+                    String previousModName = previousSource.getArchiveFileName();
 
                     Path tempBaseFile = Files.createTempFile("merge_base_", ".tmp");
                     try {
                         Files.writeString(tempBaseFile, baseMergedContent);
                         // 执行合并 - 使用真实的MOD压缩包名字
-                        FileTree fileBase = new FileTree(fileName, tempBaseFile.toString());
-                        FileTree fileCurrent = new FileTree(fileName, currentModPath.toString());
+                        FileTree fileBase = new FileTree(fileName, relPath, "data0.pak", tempBaseFile);
 
                         context.setFileName(relPath);
                         context.setMod1Name(previousModName);
@@ -449,23 +444,23 @@ public class ModMergerEngine {
             ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS"));
         } catch (Exception e) {
             ColorPrinter.error(Localizations.t("ENGINE_MERGE_FAILED", e.getMessage()));
-            e.printStackTrace();
+            log.error("Failed to merge file '{}': {}", relPath, e.getMessage());
             // 失败时使用最后一个 mod 的版本
-            FileSource lastSource = fileSources.getLast();
-            copyFile(relPath, lastSource.filePath, mergedDir);
+            FileTree lastSource = fileSources.getLast();
+            copyFile(relPath, lastSource.getFullPathName(), mergedDir);
         }
     }
 
     /**
      * 检查多个文件是否内容相同
      */
-    private boolean areAllFilesIdentical(List<FileSource> fileSources) throws IOException {
+    private boolean areAllFilesIdentical(List<FileTree> fileSources) throws IOException {
         if (fileSources.size() <= 1) {
             return true;
         }
-        Path first = fileSources.getFirst().filePath;
+        Path first = fileSources.getFirst().getFullPathName();
         for (int i = 1; i < fileSources.size(); i++) {
-            if (!PakManager.areFilesIdentical(first, fileSources.get(i).filePath)) {
+            if (!PakManager.areFilesIdentical(first, fileSources.get(i).getFullPathName())) {
                 return false;
             }
         }

@@ -110,8 +110,8 @@ public class TechlandXmlFileMerger extends FileMerger {
             }
 
             // 解析base和mod文件
-            ParseResult baseResult = parseFile(Path.of(file1.getFullPathName()));
-            ParseResult modResult = parseFile(Path.of(file2.getFullPathName()));
+            ParseResult baseResult = parseFile(file1.getFullPathName());
+            ParseResult modResult = parseFile(file2.getFullPathName());
             XmlContainerNode baseRoot = baseResult.astNode;
             XmlContainerNode modRoot = modResult.astNode;
 

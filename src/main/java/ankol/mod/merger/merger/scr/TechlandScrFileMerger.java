@@ -76,8 +76,8 @@ public class TechlandScrFileMerger extends FileMerger {
                 }
             }
             // 解析base和mod文件，保留TokenStream
-            ParseResult baseResult = parseFile(Path.of(file1.getFullPathName()));
-            ParseResult modResult = parseFile(Path.of(file2.getFullPathName()));
+            ParseResult baseResult = parseFile(file1.getFullPathName());
+            ParseResult modResult = parseFile(file2.getFullPathName());
             ScrContainerScriptNode baseRoot = baseResult.astNode;
             ScrContainerScriptNode modRoot = modResult.astNode;
             // 递归对比，找到冲突项

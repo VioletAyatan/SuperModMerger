@@ -88,7 +88,7 @@ public class BaseModAnalyzer {
 
         try {
             long startTime = System.currentTimeMillis();
-            this.indexedBaseModFileMap = Tools.indexPakFile(baseModPath.toFile());
+            this.indexedBaseModFileMap = Tools.indexPakFile(baseModPath.toFile()); //这里构建的索引MAP里还没有真正解压出来文件
             loaded = true;
             long elapsed = System.currentTimeMillis() - startTime;
             ColorPrinter.success(Localizations.t("BASE_MOD_INDEXED_FILES",
