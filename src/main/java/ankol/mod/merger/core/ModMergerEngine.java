@@ -242,7 +242,8 @@ public class ModMergerEngine {
                 //todo 但是对于性能的消耗也会增加很多，文件越多消耗时间越久，后期看下可以做个可选开关
                 if (fileSources.size() == 1) {
                     // 即使只有一个mod文件，也需要与基准mod对比（如果基准mod存在）
-                    processSingleFile(relPath, fileSources.getFirst(), mergedDir);
+                    copyFile(relPath, fileSources.getFirst().getFullPathName(), mergedDir);
+//                    processSingleFile(relPath, fileSources.getFirst(), mergedDir);
                 } else {
                     // 在多个 mod 中存在，需要合并
                     mergeFiles(relPath, fileSources, mergedDir);
