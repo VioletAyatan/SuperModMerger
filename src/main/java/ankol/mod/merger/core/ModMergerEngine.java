@@ -376,9 +376,6 @@ public class ModMergerEngine {
 
                             MergeResult result = merger.merge(fileBase, fileCurrent);
                             baseMergedContent = result.mergedContent();
-
-                            // 第一个mod与data0.pak的合并不提示冲突，直接使用合并结果
-                            // （因为第一个mod相对于原版的修改都应该被接受）
                         } finally {
                             Files.deleteIfExists(tempBaseFile);
                         }

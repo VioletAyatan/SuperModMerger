@@ -7,11 +7,15 @@ import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
-import ankol.mod.merger.merger.scr.node.*;
+import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode;
+import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode;
+import ankol.mod.merger.merger.scr.node.ScrScriptNode;
 import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
+import cn.hutool.cache.Cache;
+import cn.hutool.cache.CacheUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
@@ -43,7 +47,7 @@ public class TechlandScrFileMerger extends FileMerger {
      * Parse 缓存，避免重复解析相同内容的文件
      * 存储 ParseResult 包含 AST 和 TokenStream
      */
-    private static final Map<String, ParseResult> PARSE_CACHE = new WeakHashMap<>();
+    private static final Cache<String, ParseResult> PARSE_CACHE = CacheUtil.newWeakCache(60 * 1000);
 
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
