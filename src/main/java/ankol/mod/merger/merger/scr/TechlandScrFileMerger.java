@@ -121,21 +121,6 @@ public class TechlandScrFileMerger extends FileMerger {
                 );
             }
         }
-/*        if (!automaticMergeNode.isEmpty()) {
-            ColorPrinter.success(Localizations.t("SCR_MERGER_AUTO_MERGE_COUNT", automaticMergeNode.size()));
-            //智能合并节点的替换
-            for (ConflictRecord record : automaticMergeNode) {
-                ScrScriptNode baseNode = record.getBaseNode();
-                ScrScriptNode modNode = record.getModNode();
-
-                // 直接使用节点中存储的token索引
-                rewriter.replace(
-                        baseNode.getStartTokenIndex(),
-                        baseNode.getStopTokenIndex(),
-                        modNode.getSourceText()
-                );
-            }
-        }*/
 
 
         // 处理新增节点（插入操作）
@@ -254,6 +239,9 @@ public class TechlandScrFileMerger extends FileMerger {
                 .filter(conflict -> conflict.getUserChoice() != null)
                 .toList();
         if (!automaticMerge.isEmpty()) {
+            for (ConflictRecord record : automaticMerge) {
+                log.info("AutoMerging code line: {} -> {}", record.getBaseNode().getSourceText(), record.getModNode().getSourceText());
+            }
             ColorPrinter.success(Localizations.t("SCR_MERGER_AUTO_MERGE_COUNT", automaticMerge.size()));
             conflicts.removeAll(automaticMerge);
         }
