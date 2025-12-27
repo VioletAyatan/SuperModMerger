@@ -6,10 +6,13 @@ import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
+import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -30,7 +33,6 @@ import java.util.stream.Stream;
  */
 @Slf4j
 public class PakManager {
-
     // 缓冲区大小常量 - 64KB 适合现代磁盘I/O
     private static final int BUFFER_SIZE = 65536;
 
@@ -74,7 +76,8 @@ public class PakManager {
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
     private static void extractZipRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
-        try (ZipFile zipFile = ZipFile.builder().setPath(archivePath).get()) {
+        Charset charset = detectZipCharset(archivePath);
+        try (ZipFile zipFile = ZipFile.builder().setPath(archivePath).setCharset(charset).get()) {
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
                 ZipArchiveEntry entry = entries.nextElement();
@@ -96,10 +99,8 @@ public class PakManager {
                         Files.copy(input, outputPath);
                     }
                 }
-
-                // 检查是否是嵌套的压缩包（.pak、.zip 或 .7z）
+                //处理嵌套压缩包
                 if (isArchiveFile(fileName)) {
-                    // 创建嵌套压缩包的临时解压目录，使用原子计数器确保唯一性
                     String sanitizedFileName = fileName.replaceAll("[^a-zA-Z0-9._-]", "_");
                     Path nestedTempDir = outputDir.resolve(String.format("_nested_%d_%d_%s",
                             System.currentTimeMillis(),
@@ -144,7 +145,8 @@ public class PakManager {
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
     private static void extract7zRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
-        try (SevenZFile sevenZFile = SevenZFile.builder().setFile(archivePath.toFile()).get()) {
+        Charset charset = detectZipCharset(archivePath);
+        try (SevenZFile sevenZFile = SevenZFile.builder().setPath(archivePath).setCharset(charset).get()) {
             SevenZArchiveEntry entry;
             while ((entry = sevenZFile.getNextEntry()) != null) {
                 if (entry.isDirectory()) continue;
@@ -294,9 +296,7 @@ public class PakManager {
     }
 
     /**
-     * 将字节数组转换为十六进制字符串（优化版本，使用查表法）
-     * <p>
-     * 相比 String.format 方式，性能提升 10-20 倍
+     * 将字节数组转换为十六进制字符串
      *
      * @param bytes 字节数组
      * @return 十六进制字符串
@@ -311,54 +311,35 @@ public class PakManager {
         return new String(hexChars);
     }
 
-/*    private static Charset detectZipCharset(Path archivePath) {
-        // 常见编码列表（按优先级排序）
-        Charset defaultCharset = Charset.defaultCharset();
-        Charset[] candidateCharsets = {
-                StandardCharsets.UTF_8,           // 国际标准
-                Charset.forName("GBK"),           // 中文 Windows
-                Charset.forName("GB18030"),       // 扩展中文编码
-                Charset.forName("Big5"),          // 繁体中文
-                Charset.forName("Shift_JIS"),     // 日文
-                Charset.forName("EUC-KR"),        // 韩文
-                Charset.forName("CP437"),         // DOS 编码
-                defaultCharset          // 系统默认
-        };
-        for (Charset charset : candidateCharsets) {
-            try (ZipFile testZip = ZipFile.builder()
-                    .setPath(archivePath)
-                    .setCharset(charset)
-                    .get()) {
-                // 验证编码是否正确
-                if (isValidCharset(testZip)) {
-                    return charset;
-                }
-            } catch (Exception ignored) {
-                // 当前编码不适用，继续尝试
+    /**
+     * 智能检测 ZIP 文件的文件名编码
+     *
+     * @param archivePath 压缩包路径
+     * @return 最可能的编码
+     */
+    private static Charset detectZipCharset(Path archivePath) {
+        UniversalDetector detector = new UniversalDetector();
+        try (ZipFile zipFile = ZipFile.builder()
+                .setPath(archivePath)
+                .setCharset(StandardCharsets.ISO_8859_1)
+                .get()) {
+            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
+            int checkCount = 0;
+            // 检查前10个文件即可，没必要遍历整个包，提高效率
+            while (entries.hasMoreElements() && checkCount < 10) {
+                ZipArchiveEntry entry = entries.nextElement();
+                String entryName = entry.getName();
+                detector.handleData(entryName.getBytes(StandardCharsets.ISO_8859_1));
+                checkCount++;
             }
+            detector.dataEnd();
+            String charset = detector.getDetectedCharset();
+            if (charset != null) {
+                return Charset.forName(charset);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        log.error("未识别的编码格式，回退到系统默认编码：{}", defaultCharset.name());
-        return defaultCharset;
+        return StandardCharsets.UTF_8;
     }
-
-    private static boolean isValidCharset(ZipFile zipFile) {
-        Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
-        int checkedCount = 0;
-        while (entries.hasMoreElements() && checkedCount < 10) { // 检查前10个条目
-            ZipArchiveEntry entry = entries.nextElement();
-            String name = entry.getName();
-            //包含乱码字符（可替换字符）
-            if (name.contains("\uFFFD")) {
-                return false;
-            }
-            for (char c : name.toCharArray()) {
-                if (Character.isISOControl(c) && c != '/' && c != '\\') {
-                    return false;
-                }
-            }
-            checkedCount++;
-        }
-
-        return true;
-    }*/
 }
