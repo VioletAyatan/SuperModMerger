@@ -1,5 +1,6 @@
 package ankol.mod.merger.tools;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -27,6 +28,7 @@ import java.util.stream.Stream;
  *
  * @author Ankol
  */
+@Slf4j
 public class PakManager {
 
     // 缓冲区大小常量 - 64KB 适合现代磁盘I/O
@@ -64,19 +66,15 @@ public class PakManager {
     }
 
     /**
-     * 递归解压 ZIP 格式压缩包（支持嵌套）
-     * <p>
-     * 当遇到 .pak、.zip 或 .7z 文件时，会递归解压，并记录来源链
-     * 例如：如果 mymod.zip 中包含 data3.pak，来源链为 ["mymod.zip", "data3.pak"]
+     * 递归解压ZIP格式压缩包
      *
      * @param archivePath 压缩包路径
      * @param outputDir   输出目录
-     * @param fileTreeMap
+     * @param fileTreeMap 文件树映射表
      * @param archiveName 当前压缩包名称（用于构建来源链）
-     * @return 解压后的文件索引MAP，Key是entryName，FileTree是文件详细信息
      */
     private static void extractZipRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
-        try (ZipFile zipFile = ZipFile.builder().setFile(archivePath.toFile()).get()) {
+        try (ZipFile zipFile = ZipFile.builder().setPath(archivePath).get()) {
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
                 ZipArchiveEntry entry = entries.nextElement();
@@ -312,4 +310,55 @@ public class PakManager {
         }
         return new String(hexChars);
     }
+
+/*    private static Charset detectZipCharset(Path archivePath) {
+        // 常见编码列表（按优先级排序）
+        Charset defaultCharset = Charset.defaultCharset();
+        Charset[] candidateCharsets = {
+                StandardCharsets.UTF_8,           // 国际标准
+                Charset.forName("GBK"),           // 中文 Windows
+                Charset.forName("GB18030"),       // 扩展中文编码
+                Charset.forName("Big5"),          // 繁体中文
+                Charset.forName("Shift_JIS"),     // 日文
+                Charset.forName("EUC-KR"),        // 韩文
+                Charset.forName("CP437"),         // DOS 编码
+                defaultCharset          // 系统默认
+        };
+        for (Charset charset : candidateCharsets) {
+            try (ZipFile testZip = ZipFile.builder()
+                    .setPath(archivePath)
+                    .setCharset(charset)
+                    .get()) {
+                // 验证编码是否正确
+                if (isValidCharset(testZip)) {
+                    return charset;
+                }
+            } catch (Exception ignored) {
+                // 当前编码不适用，继续尝试
+            }
+        }
+        log.error("未识别的编码格式，回退到系统默认编码：{}", defaultCharset.name());
+        return defaultCharset;
+    }
+
+    private static boolean isValidCharset(ZipFile zipFile) {
+        Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
+        int checkedCount = 0;
+        while (entries.hasMoreElements() && checkedCount < 10) { // 检查前10个条目
+            ZipArchiveEntry entry = entries.nextElement();
+            String name = entry.getName();
+            //包含乱码字符（可替换字符）
+            if (name.contains("\uFFFD")) {
+                return false;
+            }
+            for (char c : name.toCharArray()) {
+                if (Character.isISOControl(c) && c != '/' && c != '\\') {
+                    return false;
+                }
+            }
+            checkedCount++;
+        }
+
+        return true;
+    }*/
 }
