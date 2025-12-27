@@ -178,13 +178,12 @@ public class ModMergerEngine {
      * 在提取过程中对每个mod分别进行路径修正，避免不同mod的同名文件冲突
      */
     private Map<String, List<FileTree>> extractAllMods() {
-        Map<String, List<FileTree>> filesByName = new ConcurrentHashMap<>(); // 优化：使用线程安全集合
+        Map<String, List<FileTree>> filesByPath = new ConcurrentHashMap<>();
         AtomicInteger index = new AtomicInteger(0);
-        //并发提取所有文件
         modsToMerge.parallelStream().forEach((modPath) -> {
             try {
-                String archiveName = modPath.getFileName().toString(); //解压的压缩包真实名称
-                Path modTempDir = tempDir.resolve(archiveName + index.getAndIncrement()); //生成临时目录名字
+                String archiveName = modPath.getFileName().toString(); // 解压的压缩包真实名称
+                Path modTempDir = tempDir.resolve(archiveName + index.getAndIncrement()); // 生成临时目录名字
 
                 Map<String, FileTree> extractedFiles = PakManager.extractPak(modPath, modTempDir);
                 Map<String, FileTree> correctedFiles = correctPathsForMod(archiveName, extractedFiles);
@@ -193,15 +192,14 @@ public class ModMergerEngine {
                 for (Map.Entry<String, FileTree> entry : correctedFiles.entrySet()) {
                     String relPath = entry.getKey();
                     FileTree sourceInfo = entry.getValue();
-                    // 创建FileSource，记录文件和其来源MOD
-                    filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(sourceInfo);
+                    filesByPath.computeIfAbsent(relPath, k -> Collections.synchronizedList(new ArrayList<>())).add(sourceInfo);
                 }
                 ColorPrinter.success(Localizations.t("ENGINE_EXTRACTED_FILES", correctedFiles.size()));
             } catch (IOException e) {
                 throw new CompletionException(Localizations.t("ENGINE_EXTRACT_FAILED", modPath.getFileName()), e);
             }
         });
-        return filesByName;
+        return filesByPath;
     }
 
     /**
