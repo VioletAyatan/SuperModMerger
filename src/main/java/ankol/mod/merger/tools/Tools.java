@@ -124,10 +124,7 @@ public abstract class Tools {
 
 
     /**
-     * 计算字符串内容的 SHA-256 哈希值
-     *
-     * @param content 要计算哈希的内容
-     * @return 哈希值的十六进制字符串
+     * 计算文件hash值
      */
     public static String computeHash(String content) {
         try {
