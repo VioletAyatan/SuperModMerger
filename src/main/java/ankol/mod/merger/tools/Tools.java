@@ -9,8 +9,11 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -19,6 +22,9 @@ public abstract class Tools {
     private static final String userDir = System.getProperty("user.dir");
     @Getter
     private static final String tempDir = System.getProperty("java.io.tmpdir");
+
+    // 复用十六进制表，避免 String.format 带来的巨大开销
+    private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
 
     /**
      * 获取待合并的MOD所在目录
@@ -125,16 +131,21 @@ public abstract class Tools {
      */
     public static String computeHash(String content) {
         try {
-            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(content.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hash) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (java.security.NoSuchAlgorithmException e) {
-            // 作为备选方案，使用 hashCode()（虽然不如 SHA-256 安全，但足以识别大多数不同的内容）
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(content.getBytes(StandardCharsets.UTF_8));
+            return bytesToHex(hash);
+        } catch (NoSuchAlgorithmException e) {
             return String.valueOf(content.hashCode());
         }
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int v = bytes[i] & 0xFF;
+            hexChars[i * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 }

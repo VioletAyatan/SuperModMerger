@@ -12,6 +12,8 @@ import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
+import cn.hutool.cache.Cache;
+import cn.hutool.cache.CacheUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -79,10 +81,7 @@ public class TechlandXmlFileMerger extends FileMerger {
     private record ParseResult(XmlContainerNode astNode, CommonTokenStream tokens) {
     }
 
-    /**
-     * Parse 缓存
-     */
-    private static final Map<String, ParseResult> PARSE_CACHE = new WeakHashMap<>();
+    private static final Cache<String, ParseResult> PARSE_CACHE = CacheUtil.newWeakCache(30 * 1000);
 
     /**
      * 原始基准MOD对应文件的语法树

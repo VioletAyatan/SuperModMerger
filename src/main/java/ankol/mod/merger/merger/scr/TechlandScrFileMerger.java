@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.Objects;
 
 @Slf4j
 public class TechlandScrFileMerger extends FileMerger {
@@ -188,11 +189,10 @@ public class TechlandScrFileMerger extends FileMerger {
                     }
                     //普通子节点，直接处理
                     else {
-                        // 叶子节点，对比内容
-                        String baseText = baseNode.getSourceText().trim();
-                        String modText = modNode.getSourceText().trim();
+                        String baseText = baseNode.getSourceText();
+                        String modText = modNode.getSourceText();
                         //内容不一致
-                        if (!baseText.equals(modText)) {
+                        if (!equalsTrimmed(baseText, modText)) {
                             // 检查modNode是否与原始基准MOD相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
                                 conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
@@ -201,18 +201,11 @@ public class TechlandScrFileMerger extends FileMerger {
                     }
                 }
             } catch (Exception e) {
-                System.err.println("Error in processing scr node with signature: '" + entry.getKey() + " Source code: " + originalContainer.getSourceText());
+                log.error("Error in processing scr node with signature: " + entry.getKey(), e);
             }
         }
     }
 
-    /**
-     * 检查节点是否与原始基准MOD中的对应节点内容相同
-     *
-     * @param originalNode 节点签名
-     * @param modNode      待检查的节点
-     * @return 如果与原始基准MOD相同返回true，否则返回false
-     */
     private boolean isNodeSameAsOriginalNode(ScrScriptNode originalNode, ScrScriptNode modNode) {
         // 如果没有原始基准MOD，则认为不相同
         if (originalBasModRoot == null) {
@@ -229,8 +222,7 @@ public class TechlandScrFileMerger extends FileMerger {
             // 函数调用节点，对比参数
             return modFunCall.getArguments().equals(originalFunCall.getArguments());
         } else {
-            // 其他节点，对比文本内容
-            return modNode.getSourceText().trim().equals(originalNode.getSourceText().trim());
+            return equalsTrimmed(modNode.getSourceText(), originalNode.getSourceText());
         }
     }
 
@@ -338,5 +330,51 @@ public class TechlandScrFileMerger extends FileMerger {
         // 注意：visitFile 返回的一定是我们定义的 ROOT Container
         ScrContainerScriptNode ast = (ScrContainerScriptNode) visitor.visitFile(parser.file());
         return new ParseResult(ast, tokens);
+    }
+
+    /**
+     * 比较两段文本在忽略所有空白字符后的内容是否相同（避免创建新字符串）
+     * <p>
+     * 空白字符定义：Character.isWhitespace(c) 为 true 的字符（空格、Tab、换行等）。
+     */
+    private static boolean equalsTrimmed(String a, String b) {
+        // 快路径：同一引用或 equals（完全一致时直接返回，避免扫描）
+        if (Objects.equals(a, b)) {
+            return true;
+        }
+        if (a == null || b == null) {
+            return false;
+        }
+
+        int ai = 0;
+        int bi = 0;
+        int alen = a.length();
+        int blen = b.length();
+
+        while (true) {
+            // 跳过 a 的所有空白
+            while (ai < alen && Character.isWhitespace(a.charAt(ai))) {
+                ai++;
+            }
+            // 跳过 b 的所有空白
+            while (bi < blen && Character.isWhitespace(b.charAt(bi))) {
+                bi++;
+            }
+
+            // 两边都到尾了 -> 相等
+            if (ai >= alen || bi >= blen) {
+                // 需要确保剩余部分也都是空白
+                while (ai < alen && Character.isWhitespace(a.charAt(ai))) ai++;
+                while (bi < blen && Character.isWhitespace(b.charAt(bi))) bi++;
+                return ai >= alen && bi >= blen;
+            }
+
+            // 比较当前非空白字符
+            if (a.charAt(ai) != b.charAt(bi)) {
+                return false;
+            }
+            ai++;
+            bi++;
+        }
     }
 }
