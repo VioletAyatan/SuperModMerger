@@ -179,6 +179,8 @@
                         <!-- 启用优化 -->
                         <buildArg>-Os</buildArg>
                         <buildArg>-O3</buildArg>
+                        <!-- 添加完整字符集支持 -->
+                        <buildArg>-H:+AddAllCharsets</buildArg>
                     </buildArgs>
                 </configuration>
             </plugin>
