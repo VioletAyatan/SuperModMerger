@@ -11,9 +11,7 @@ import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.xml.node.XmlContainerNode;
 import ankol.mod.merger.merger.xml.node.XmlNode;
-import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
-import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
@@ -30,7 +28,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * XML文件合并器
@@ -78,14 +75,8 @@ public class TechlandXmlAbstractFileMerger extends AbstractFileMerger {
             // 解析原始基准MOD文件（如果存在）
             if (context.getOriginalBaseModContent() != null) {
                 String contentHash = Tools.computeHash(context.getOriginalBaseModContent());
-                ParseResult cached = PARSE_CACHE.get(contentHash);
-                if (cached != null) {
-                    originalBaseModRoot = cached.astNode;
-                } else {
-                    ParseResult result = parseContent(context.getOriginalBaseModContent());
-                    originalBaseModRoot = result.astNode;
-                    PARSE_CACHE.put(contentHash, result);
-                }
+                ParseResult parseResult = PARSE_CACHE.get(contentHash, () -> parseContent(context.getOriginalBaseModContent()));
+                originalBaseModRoot = parseResult.astNode;
             }
 
             // 解析base和mod文件
