@@ -243,11 +243,11 @@ public class ModMergerEngine {
                 // 基准mod中存在该文件，需要进行对比合并
                 if (originalBaseModContent != null) {
                     MergerContext context = new MergerContext();
-                    Optional<FileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
+                    Optional<AbstractFileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
 
                     // 如果支持合并，进行对比合并
                     if (mergerOptional.isPresent()) {
-                        FileMerger merger = mergerOptional.get();
+                        AbstractFileMerger merger = mergerOptional.get();
                         String fileName = Tools.getEntryFileName(relPath);
 
                         Path tempBaseFile = Files.createTempFile("merge_base_data0_", ".tmp");
@@ -315,7 +315,7 @@ public class ModMergerEngine {
         }
 
         MergerContext context = new MergerContext();
-        Optional<FileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
+        Optional<AbstractFileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
 
         //不支持进行冲突对比的文本，让用户选择使用哪个版本
         if (mergerOptional.isEmpty()) {
@@ -343,7 +343,7 @@ public class ModMergerEngine {
         try {
             // 支持合并，开始处理合并逻辑
             ColorPrinter.info(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size()));
-            FileMerger merger = mergerOptional.get();
+            AbstractFileMerger merger = mergerOptional.get();
             String baseMergedContent = ""; //基准文本内容
 
             String originalBaseModContent = null;

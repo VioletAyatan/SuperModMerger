@@ -3,7 +3,7 @@ package ankol.mod.merger.merger.scr;
 import ankol.mod.merger.antlr.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr.scr.TechlandScriptParser;
 import ankol.mod.merger.core.ConflictResolver;
-import ankol.mod.merger.core.FileMerger;
+import ankol.mod.merger.core.AbstractFileMerger;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.merger.ConflictRecord;
@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public class TechlandScrFileMerger extends FileMerger {
+public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
     /**
      * 标记冲突项的容器
      */
@@ -62,7 +62,7 @@ public class TechlandScrFileMerger extends FileMerger {
     private record ParseResult(ScrContainerScriptNode astNode, CommonTokenStream tokens) {
     }
 
-    public TechlandScrFileMerger(MergerContext context) {
+    public TechlandScrAbstractFileMerger(MergerContext context) {
         super(context);
     }
 
