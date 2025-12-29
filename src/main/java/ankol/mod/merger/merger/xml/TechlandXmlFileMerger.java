@@ -35,7 +35,7 @@ import java.util.Map;
  * @author Ankol
  */
 @Slf4j
-public class TechlandXmlAbstractFileMerger extends AbstractFileMerger {
+public class TechlandXmlFileMerger extends AbstractFileMerger {
     /**
      * 冲突项列表
      */
@@ -65,7 +65,7 @@ public class TechlandXmlAbstractFileMerger extends AbstractFileMerger {
      */
     private XmlContainerNode originalBaseModRoot = null;
 
-    public TechlandXmlAbstractFileMerger(MergerContext context) {
+    public TechlandXmlFileMerger(MergerContext context) {
         super(context);
     }
 

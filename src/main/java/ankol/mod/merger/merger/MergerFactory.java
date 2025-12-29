@@ -2,8 +2,8 @@ package ankol.mod.merger.merger;
 
 import ankol.mod.merger.core.AbstractFileMerger;
 import ankol.mod.merger.core.MergerContext;
-import ankol.mod.merger.merger.scr.TechlandScrAbstractFileMerger;
-import ankol.mod.merger.merger.xml.TechlandXmlAbstractFileMerger;
+import ankol.mod.merger.merger.scr.TechlandScrFileMerger;
+import ankol.mod.merger.merger.xml.TechlandXmlFileMerger;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReflectUtil;
 
@@ -22,9 +22,9 @@ public class MergerFactory {
 
     static {
         // 注册.scr格式的合并器
-        registerMerger(TechlandScrAbstractFileMerger.class, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth");
+        registerMerger(TechlandScrFileMerger.class, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth");
         // 注册.xml文件的合并器
-        registerMerger(TechlandXmlAbstractFileMerger.class, ".xml");
+        registerMerger(TechlandXmlFileMerger.class, ".xml");
     }
 
     /**

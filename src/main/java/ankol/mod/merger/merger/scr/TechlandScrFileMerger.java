@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
+public class TechlandScrFileMerger extends AbstractFileMerger {
     /**
      * 标记冲突项的容器
      */
@@ -62,7 +62,7 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
     private record ParseResult(ScrContainerScriptNode astNode, CommonTokenStream tokens) {
     }
 
-    public TechlandScrAbstractFileMerger(MergerContext context) {
+    public TechlandScrFileMerger(MergerContext context) {
         super(context);
     }
 
