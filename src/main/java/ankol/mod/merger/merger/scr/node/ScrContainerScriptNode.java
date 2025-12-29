@@ -5,6 +5,7 @@ import ankol.mod.merger.core.BaseTreeNode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,8 +19,8 @@ public class ScrContainerScriptNode extends BaseTreeNode {
      */
     private final Map<String, BaseTreeNode> children = new LinkedHashMap<>();
 
-    public ScrContainerScriptNode(String signature, int startTokenIndex, int stopTokenIndex, int line, String text) {
-        super(signature.trim(), startTokenIndex, stopTokenIndex, line, text);
+    public ScrContainerScriptNode(String signature, int startTokenIndex, int stopTokenIndex, int line, CommonTokenStream tokenStream) {
+        super(signature.trim(), startTokenIndex, stopTokenIndex, line, tokenStream);
     }
 
     public void addChild(BaseTreeNode node) {

@@ -6,6 +6,7 @@ import ankol.mod.merger.merger.xml.node.XmlContainerNode;
 import ankol.mod.merger.merger.xml.node.XmlLeafNode;
 import ankol.mod.merger.merger.xml.node.XmlNode;
 import cn.hutool.core.collection.CollUtil;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 
@@ -18,6 +19,15 @@ import java.util.*;
  */
 public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode> {
     public static final String ELEMENT = "element";
+
+    /**
+     * Token流引用（用于按需提取源文本）
+     */
+    private final CommonTokenStream tokenStream;
+
+    public TechlandXmlFileVisitor(CommonTokenStream tokenStream) {
+        this.tokenStream = tokenStream;
+    }
 
     /**
      * 获取context的起始token索引
@@ -109,7 +119,7 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx),
+                tokenStream,
                 new HashMap<>()
         );
 
@@ -159,7 +169,7 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
                     getStartTokenIndex(ctx),
                     getStopTokenIndex(ctx),
                     ctx.start.getLine(),
-                    getFullText(ctx),
+                    tokenStream,
                     cleanAttributes
             );
 
@@ -178,7 +188,7 @@ public class TechlandXmlFileVisitor extends TechlandXMLParserBaseVisitor<XmlNode
                     getStartTokenIndex(ctx),
                     getStopTokenIndex(ctx),
                     ctx.start.getLine(),
-                    getFullText(ctx),
+                    tokenStream,
                     cleanAttributes
             );
         }

@@ -6,6 +6,7 @@ import ankol.mod.merger.core.BaseTreeNode;
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrLeafScriptNode;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -31,6 +32,15 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
     private ScrContainerScriptNode containerNode;
 
     /**
+     * Token流引用（用于按需提取源文本）
+     */
+    private final CommonTokenStream tokenStream;
+
+    public TechlandScrFileVisitor(CommonTokenStream tokenStream) {
+        this.tokenStream = tokenStream;
+    }
+
+    /**
      * 获取context的起始token索引
      */
     private int getStartTokenIndex(ParserRuleContext ctx) {
@@ -53,7 +63,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.getStart().getLine(),
-                getFullText(ctx)
+                tokenStream
         );
         this.containerNode = rootNode;
         for (TechlandScriptParser.DefinitionContext defCtx : ctx.definition()) {
@@ -76,7 +86,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
@@ -91,7 +101,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
@@ -106,7 +116,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
         this.containerNode = subNode;
         // 注意：subDecl 包含 paramList 和 functionBlock
@@ -128,7 +138,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
         this.containerNode = blockNode;
         this.currentFunBlockSignature = signature;
@@ -183,12 +193,10 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
         repeatableFunctions.put(currentFunBlockSignature, signatures);
         return new ScrFunCallScriptNode(
                 signature,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx),
+                tokenStream,
                 funcName,
                 argsList
         );
@@ -229,7 +237,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
@@ -241,7 +249,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
@@ -255,7 +263,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
@@ -272,7 +280,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 

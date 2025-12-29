@@ -251,7 +251,7 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
         TechlandXMLLexer lexer = new TechlandXMLLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TechlandXMLParser parser = new TechlandXMLParser(tokens);
-        TechlandXmlFileVisitor visitor = new TechlandXmlFileVisitor();
+        TechlandXmlFileVisitor visitor = new TechlandXmlFileVisitor(tokens);
         // 访问document节点，应该返回ROOT容器
         XmlNode root = visitor.visitDocument(parser.document());
         XmlContainerNode containerRoot = (XmlContainerNode) root;

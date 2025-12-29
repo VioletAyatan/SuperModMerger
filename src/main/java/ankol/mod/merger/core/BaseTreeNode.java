@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.Interval;
 
 /**
  * 基础树节点
@@ -30,11 +32,12 @@ public abstract class BaseTreeNode {
      * 当前行号
      */
     protected int lineNumber;
+
     /**
-     * 保存 Mod 文件里的原始文本（用于替换 Base 时直接搬运，带注释）
+     * Token流引用（用于按需提取源文本）
      */
     @JsonIgnore
-    protected String sourceText;
+    protected transient CommonTokenStream tokenStream;
 
     /**
      * 构造函数
@@ -43,13 +46,26 @@ public abstract class BaseTreeNode {
      * @param startTokenIndex token起始索引
      * @param stopTokenIndex  token结束索引
      * @param lineNumber      行号
-     * @param sourceText      源文本，用于执行替换
+     * @param tokenStream     token流（用于按需提取源文本）
      */
-    public BaseTreeNode(String signature, int startTokenIndex, int stopTokenIndex, int lineNumber, String sourceText) {
+    public BaseTreeNode(String signature, int startTokenIndex, int stopTokenIndex, int lineNumber, CommonTokenStream tokenStream) {
         this.signature = signature;
         this.startTokenIndex = startTokenIndex;
         this.stopTokenIndex = stopTokenIndex;
         this.lineNumber = lineNumber;
-        this.sourceText = sourceText;
+        this.tokenStream = tokenStream;
+    }
+
+    /**
+     * 获取源文本
+     * 从原始TokenStream里获取
+     */
+    public String getSourceText() {
+        if (tokenStream == null) {
+            return "";
+        }
+        int startIndex = tokenStream.get(startTokenIndex).getStartIndex();
+        int stopIndex = tokenStream.get(stopTokenIndex).getStopIndex();
+        return tokenStream.getTokenSource().getInputStream().getText(new Interval(startIndex, stopIndex));
     }
 }

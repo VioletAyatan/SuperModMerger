@@ -179,8 +179,6 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
             if (record.getUserChoice() == 2) { // 用户选择了 Mod
                 BaseTreeNode baseNode = record.getBaseNode();
                 BaseTreeNode modNode = record.getModNode();
-
-                // 直接使用节点中存储的token索引
                 rewriter.replace(
                         baseNode.getStartTokenIndex(),
                         baseNode.getStopTokenIndex(),
@@ -188,7 +186,6 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
                 );
             }
         }
-        // 处理新增节点（插入操作）
         for (InsertOperation op : insertOperations) {
             rewriter.insertBefore(op.tokenIndex, op.content);
         }
@@ -235,7 +232,7 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         TechlandScriptLexer lexer = new TechlandScriptLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TechlandScriptParser parser = new TechlandScriptParser(tokens);
-        TechlandScrFileVisitor visitor = new TechlandScrFileVisitor();
+        TechlandScrFileVisitor visitor = new TechlandScrFileVisitor(tokens);
         // 注意：visitFile 返回的一定是我们定义的 ROOT Container
         ScrContainerScriptNode ast = (ScrContainerScriptNode) visitor.visitFile(parser.file());
         return new ParseResult(ast, tokens);
