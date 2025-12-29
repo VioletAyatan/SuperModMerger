@@ -45,18 +45,20 @@ public class ConflictResolver {
                 } else if (chose == 4) {
                     record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
                 } else {
+                    String baseNodeSource = record.getBaseNode().getSourceText().trim();
+                    String modNodeSource = record.getModNode().getSourceText().trim();
+                    //打印代码提示框
                     ColorPrinter.info("=".repeat(75));
                     ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
-                    //打印代码提示框
                     ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLineNumber(), record.getBaseNode().getSourceText().trim()));
+                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLineNumber(), baseNodeSource));
                     ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_2", record.getMergeModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLineNumber(), record.getModNode().getSourceText().trim()));
+                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLineNumber(), modNodeSource));
                     ColorPrinter.info("=".repeat(75));
                     //选择对话框
                     ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_1", record.getBaseNode().getSourceText()));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_2", record.getModNode().getSourceText()));
+                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_1", baseNodeSource));
+                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_2", modNodeSource));
                     ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_1", record.getBaseModName()));
                     ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_2", record.getMergeModName()));
 
