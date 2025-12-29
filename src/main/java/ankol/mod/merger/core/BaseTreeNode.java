@@ -17,19 +17,19 @@ public abstract class BaseTreeNode {
     /**
      * 当前节点签名（确保在同一树层级下保持唯一，方便进行多文件对比）
      */
-    private String signature;
+    protected String signature;
     /**
      * 当前节点起始TOKEN索引
      */
-    private int startTokenIndex;
+    protected int startTokenIndex;
     /**
      * 当前节点结束TOKEN索引
      */
-    private int stopTokenIndex;
+    protected int stopTokenIndex;
     /**
      * 当前行号
      */
-    private int lineNumber;
+    protected int lineNumber;
     /**
      * 保存 Mod 文件里的原始文本（用于替换 Base 时直接搬运，带注释）
      */
