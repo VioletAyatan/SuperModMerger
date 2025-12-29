@@ -24,8 +24,9 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
     private static final String DIRECTIVE = "directive";
     private static final String MACRO = "macro";
 
+    //检测重复函数的东西
     private final Map<String, Set<String>> repeatableFunctions = new HashMap<>();
-    private String currentFunBlockSignature = "EMPTY";
+    private String currentFunBlockSignature = "EMPTY"; //标记当前处理到哪个函数块了，重复函数签名生成仅限自己对应的函数块内
 
     private ScrContainerScriptNode containerNode;
 
@@ -100,7 +101,6 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         // Sub 签名示例: "sub:main"
         String name = ctx.Id().getText();
         String signature = SUB_FUN + ":" + name;
-        // 这里的 getFullText 获取的是 "sub main() { ... }" 整个一大块字符串
         ScrContainerScriptNode subNode = new ScrContainerScriptNode(
                 signature,
                 getStartTokenIndex(ctx),
@@ -117,7 +117,6 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
     @Override
     public ScrScriptNode visitFuntionBlockDecl(TechlandScriptParser.FuntionBlockDeclContext ctx) {
         String funcName = ctx.Id().getText();
-        // 提取参数字符串，用于区分不同的块。
         String rawParams = (ctx.valueList() != null) ? getFullText(ctx.valueList()) : "";
         String signature = FUN_BLOCK + ":" + funcName;
         String cleanParams = rawParams.replaceAll("\\s+", "");
@@ -133,7 +132,6 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         );
         this.containerNode = blockNode;
         this.currentFunBlockSignature = signature;
-        // 递归处理块内部的语句
         visitFunctionBlockContent(blockNode, ctx.functionBlock());
         return blockNode;
     }
