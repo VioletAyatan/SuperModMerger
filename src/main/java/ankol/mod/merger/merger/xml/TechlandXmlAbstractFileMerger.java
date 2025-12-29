@@ -180,7 +180,7 @@ public class TechlandXmlAbstractFileMerger extends AbstractFileMerger {
     }
 
     /**
-     * 递归对比三个版本的XML树
+     * 递归对比树节点
      */
     private void reduceCompare(XmlContainerNode originalContainer, XmlContainerNode baseContainer, XmlContainerNode modContainer) {
         // 遍历Mod的所有子节点
@@ -204,11 +204,11 @@ public class TechlandXmlAbstractFileMerger extends AbstractFileMerger {
                 } else {
                     // 更新前一个兄弟节点
                     previousSiblingInBase = baseNode;
-                    if (baseNode instanceof XmlContainerNode && modNode instanceof XmlContainerNode) {
+                    if (baseNode instanceof XmlContainerNode baseContainerNode && modNode instanceof XmlContainerNode modContainerNode) {
                         reduceCompare(
                                 (originalNode instanceof XmlContainerNode) ? (XmlContainerNode) originalNode : null,
-                                (XmlContainerNode) baseNode,
-                                (XmlContainerNode) modNode
+                                baseContainerNode,
+                                modContainerNode
                         );
                     }
                     //子节点，对比内容
@@ -284,10 +284,10 @@ public class TechlandXmlAbstractFileMerger extends AbstractFileMerger {
                 ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
 
                 ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
-                ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim()));
+                ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLineNumber(), record.getBaseNode().getSourceText().trim()));
 
                 ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_2", record.getMergeModName()));
-                ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLine(), record.getModNode().getSourceText().trim()));
+                ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLineNumber(), record.getModNode().getSourceText().trim()));
 
                 ColorPrinter.info("=".repeat(75));
                 ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
