@@ -1,14 +1,18 @@
 package ankol.mod.merger.tools;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
+import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -27,8 +31,8 @@ import java.util.stream.Stream;
  *
  * @author Ankol
  */
+@Slf4j
 public class PakManager {
-
     // 缓冲区大小常量 - 64KB 适合现代磁盘I/O
     private static final int BUFFER_SIZE = 65536;
 
@@ -64,19 +68,16 @@ public class PakManager {
     }
 
     /**
-     * 递归解压 ZIP 格式压缩包（支持嵌套）
-     * <p>
-     * 当遇到 .pak、.zip 或 .7z 文件时，会递归解压，并记录来源链
-     * 例如：如果 mymod.zip 中包含 data3.pak，来源链为 ["mymod.zip", "data3.pak"]
+     * 递归解压ZIP格式压缩包
      *
      * @param archivePath 压缩包路径
      * @param outputDir   输出目录
-     * @param fileTreeMap
+     * @param fileTreeMap 文件树映射表
      * @param archiveName 当前压缩包名称（用于构建来源链）
-     * @return 解压后的文件索引MAP，Key是entryName，FileTree是文件详细信息
      */
     private static void extractZipRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
-        try (ZipFile zipFile = ZipFile.builder().setFile(archivePath.toFile()).get()) {
+        Charset charset = detectZipCharset(archivePath);
+        try (ZipFile zipFile = ZipFile.builder().setPath(archivePath).setCharset(charset).get()) {
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
                 ZipArchiveEntry entry = entries.nextElement();
@@ -98,10 +99,8 @@ public class PakManager {
                         Files.copy(input, outputPath);
                     }
                 }
-
-                // 检查是否是嵌套的压缩包（.pak、.zip 或 .7z）
+                //处理嵌套压缩包
                 if (isArchiveFile(fileName)) {
-                    // 创建嵌套压缩包的临时解压目录，使用原子计数器确保唯一性
                     String sanitizedFileName = fileName.replaceAll("[^a-zA-Z0-9._-]", "_");
                     Path nestedTempDir = outputDir.resolve(String.format("_nested_%d_%d_%s",
                             System.currentTimeMillis(),
@@ -146,7 +145,8 @@ public class PakManager {
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
     private static void extract7zRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
-        try (SevenZFile sevenZFile = SevenZFile.builder().setFile(archivePath.toFile()).get()) {
+        Charset charset = detectZipCharset(archivePath);
+        try (SevenZFile sevenZFile = SevenZFile.builder().setPath(archivePath).setCharset(charset).get()) {
             SevenZArchiveEntry entry;
             while ((entry = sevenZFile.getNextEntry()) != null) {
                 if (entry.isDirectory()) continue;
@@ -296,9 +296,7 @@ public class PakManager {
     }
 
     /**
-     * 将字节数组转换为十六进制字符串（优化版本，使用查表法）
-     * <p>
-     * 相比 String.format 方式，性能提升 10-20 倍
+     * 将字节数组转换为十六进制字符串
      *
      * @param bytes 字节数组
      * @return 十六进制字符串
@@ -311,5 +309,37 @@ public class PakManager {
             hexChars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
         }
         return new String(hexChars);
+    }
+
+    /**
+     * 智能检测 ZIP 文件的文件名编码
+     *
+     * @param archivePath 压缩包路径
+     * @return 最可能的编码
+     */
+    private static Charset detectZipCharset(Path archivePath) {
+        UniversalDetector detector = new UniversalDetector();
+        try (ZipFile zipFile = ZipFile.builder()
+                .setPath(archivePath)
+                .setCharset(StandardCharsets.ISO_8859_1)
+                .get()) {
+            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
+            int checkCount = 0;
+            // 检查前10个文件即可，没必要遍历整个包，提高效率
+            while (entries.hasMoreElements() && checkCount < 10) {
+                ZipArchiveEntry entry = entries.nextElement();
+                String entryName = entry.getName();
+                detector.handleData(entryName.getBytes(StandardCharsets.ISO_8859_1));
+                checkCount++;
+            }
+            detector.dataEnd();
+            String charset = detector.getDetectedCharset();
+            if (charset != null) {
+                return Charset.forName(charset);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return StandardCharsets.UTF_8;
     }
 }

@@ -115,41 +115,28 @@ public class BaseModAnalyzer {
         // 规范化路径（统一使用小写文件名查找）
         String fileName = Tools.getEntryFileName(relPath).toLowerCase();
         FileTree fileTree = indexedBaseModFileMap.get(fileName);
-
         if (fileTree == null) {
             return null;
         }
 
         String fileEntryName = fileTree.getFileEntryName();
-
-        // 检查缓存中是否已存在
         Path cachedFile = extractedFileCache.get(fileEntryName);
         if (cachedFile != null && Files.exists(cachedFile)) {
-            // 从缓存读取
             return Files.readString(cachedFile);
         }
 
         String content = extractFileFromPak(baseModPath, fileEntryName);
-
         if (content != null) {
-            // 保存到临时文件缓存
             try {
-                // 使用安全的文件名（替换路径分隔符）
                 String safeFileName = fileEntryName.replace("/", "_").replace("\\", "_");
                 Path tempFile = cacheDir.resolve(safeFileName);
-
-                // 确保父目录存在
                 Files.createDirectories(tempFile.getParent());
-
-                // 写入缓存
                 Files.writeString(tempFile, content);
                 extractedFileCache.put(fileEntryName, tempFile);
             } catch (IOException e) {
-                // 缓存失败不影响正常流程，只记录警告
                 ColorPrinter.warning("Failed to cache extracted file: " + fileEntryName + " - " + e.getMessage());
             }
         }
-
         return content;
     }
 
@@ -219,7 +206,6 @@ public class BaseModAnalyzer {
      * @return 文件内容，如果文件不存在返回null
      */
     public String extractFileFromPak(Path pakFile, String fileEntryName) throws IOException {
-        //不需要的检查，初始化时就已经确定过基准mod在不在了
         try (ZipFile zipFile = ZipFile.builder().setPath(pakFile).get()) {
             ZipArchiveEntry entry = zipFile.getEntry(fileEntryName);
             if (entry.getSize() == 0) {
