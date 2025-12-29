@@ -49,12 +49,12 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
      * Parse 缓存，避免重复解析相同内容的文件
      * 存储 ParseResult 包含 AST 和 TokenStream
      */
-    private static final Cache<String, ParseResult> PARSE_CACHE = CacheUtil.newWeakCache(60 * 1000);
+    private static final Cache<String, ParseResult> PARSE_CACHE = CacheUtil.newWeakCache(30 * 1000);
 
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
      */
-    private ScrContainerScriptNode originalBasModRoot = null;
+    private ScrContainerScriptNode originalBaseModRoot = null;
 
     /**
      * 解析结果包装类，包含AST和TokenStream
@@ -72,14 +72,8 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
             // 解析基准MOD文件（如果存在）
             if (context.getOriginalBaseModContent() != null) {
                 String contentHash = Tools.computeHash(context.getOriginalBaseModContent());
-                ParseResult cached = PARSE_CACHE.get(contentHash);
-                if (cached != null) {
-                    originalBasModRoot = cached.astNode;
-                } else {
-                    ParseResult result = parseContent(context.getOriginalBaseModContent());
-                    originalBasModRoot = result.astNode;
-                    PARSE_CACHE.put(contentHash, result);
-                }
+                ParseResult parseResult = PARSE_CACHE.get(contentHash, () -> parseContent(context.getOriginalBaseModContent()));
+                originalBaseModRoot = parseResult.astNode;
             }
             // 解析base和mod文件，保留TokenStream
             ParseResult baseResult = parseFile(file1.getFullPathName());
@@ -87,7 +81,7 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
             ScrContainerScriptNode baseRoot = baseResult.astNode;
             ScrContainerScriptNode modRoot = modResult.astNode;
             // 递归对比，找到冲突项
-            reduceCompare(originalBasModRoot, baseRoot, modRoot);
+            reduceCompare(originalBaseModRoot, baseRoot, modRoot);
             //第一个mod与原版文件的对比，直接使用MOD修改的版本，不提示冲突
             if (context.isFirstModMergeWithBaseMod() && !conflicts.isEmpty()) {
                 for (ConflictRecord record : conflicts) {
@@ -106,7 +100,7 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
             //清理状态，准备下一个文件合并
             conflicts.clear();
             insertOperations.clear();
-            originalBasModRoot = null;
+            originalBaseModRoot = null;
         }
     }
 
@@ -206,7 +200,7 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
 
     private boolean isNodeSameAsOriginalNode(BaseTreeNode originalNode, BaseTreeNode modNode) {
         // 如果没有原始基准MOD，则认为不相同
-        if (originalBasModRoot == null) {
+        if (originalBaseModRoot == null) {
             return false;
         }
 
