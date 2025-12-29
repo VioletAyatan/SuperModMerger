@@ -39,20 +39,6 @@ public class ModMergerEngine {
     // 全局Scanner（避免重复创建）
     private static final Scanner SYSTEM_SCANNER = new Scanner(System.in);
 
-    /**
-     * 文件来源信息 - 记录文件路径及其来源的MOD压缩包名字
-     * 用于在合并时准确识别冲突来自哪个MOD
-     *
-     * @param filePath      文件实际路径
-     * @param sourceModName 文件来源的MOD压缩包名字（如 "data2.pak"）
-     */
-    private record FileSource(Path filePath, String sourceModName) {
-        @Override
-        public String toString() {
-            return sourceModName + ": " + filePath;
-        }
-    }
-
 
     /**
      * 构造函数 - 初始化合并引擎（带基准MOD）
@@ -67,16 +53,6 @@ public class ModMergerEngine {
         this.tempDir = Path.of(Tools.getTempDir(), "ModMerger_" + System.currentTimeMillis());
         this.baseModAnalyzer = new BaseModAnalyzer(baseModPath);
         this.pathCorrectionStrategy = new PathCorrectionStrategy();
-    }
-
-    /**
-     * 构造函数 - 初始化合并引擎（不使用基准MOD）
-     *
-     * @param modsToMerge 要合并的 mod 列表（.pak 文件路径）
-     * @param outputPath  最终输出的 .pak 文件路径
-     */
-    public ModMergerEngine(List<Path> modsToMerge, Path outputPath) {
-        this(modsToMerge, outputPath, null);
     }
 
     /**
@@ -202,13 +178,12 @@ public class ModMergerEngine {
      * 在提取过程中对每个mod分别进行路径修正，避免不同mod的同名文件冲突
      */
     private Map<String, List<FileTree>> extractAllMods() {
-        Map<String, List<FileTree>> filesByName = new ConcurrentHashMap<>(); // 优化：使用线程安全集合
+        Map<String, List<FileTree>> filesByPath = new ConcurrentHashMap<>();
         AtomicInteger index = new AtomicInteger(0);
-        //并发提取所有文件
         modsToMerge.parallelStream().forEach((modPath) -> {
             try {
-                String archiveName = modPath.getFileName().toString(); //解压的压缩包真实名称
-                Path modTempDir = tempDir.resolve(archiveName + index.getAndIncrement()); //生成临时目录名字
+                String archiveName = modPath.getFileName().toString(); // 解压的压缩包真实名称
+                Path modTempDir = tempDir.resolve(archiveName + index.getAndIncrement()); // 生成临时目录名字
 
                 Map<String, FileTree> extractedFiles = PakManager.extractPak(modPath, modTempDir);
                 Map<String, FileTree> correctedFiles = correctPathsForMod(archiveName, extractedFiles);
@@ -217,15 +192,14 @@ public class ModMergerEngine {
                 for (Map.Entry<String, FileTree> entry : correctedFiles.entrySet()) {
                     String relPath = entry.getKey();
                     FileTree sourceInfo = entry.getValue();
-                    // 创建FileSource，记录文件和其来源MOD
-                    filesByName.computeIfAbsent(relPath, k -> new ArrayList<>()).add(sourceInfo);
+                    filesByPath.computeIfAbsent(relPath, k -> Collections.synchronizedList(new ArrayList<>())).add(sourceInfo);
                 }
                 ColorPrinter.success(Localizations.t("ENGINE_EXTRACTED_FILES", correctedFiles.size()));
             } catch (IOException e) {
                 throw new CompletionException(Localizations.t("ENGINE_EXTRACT_FAILED", modPath.getFileName()), e);
             }
         });
-        return filesByName;
+        return filesByPath;
     }
 
     /**
@@ -400,9 +374,6 @@ public class ModMergerEngine {
 
                             MergeResult result = merger.merge(fileBase, fileCurrent);
                             baseMergedContent = result.mergedContent();
-
-                            // 第一个mod与data0.pak的合并不提示冲突，直接使用合并结果
-                            // （因为第一个mod相对于原版的修改都应该被接受）
                         } finally {
                             Files.deleteIfExists(tempBaseFile);
                         }
