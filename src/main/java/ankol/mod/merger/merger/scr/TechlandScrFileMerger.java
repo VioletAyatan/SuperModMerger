@@ -103,31 +103,6 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         }
     }
 
-    private String getMergedContent(ParseResult baseResult) {
-        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
-        // 处理冲突节点的替换
-        for (ConflictRecord record : conflicts) {
-            if (record.getUserChoice() == 2) { // 用户选择了 Mod
-                BaseTreeNode baseNode = record.getBaseNode();
-                BaseTreeNode modNode = record.getModNode();
-
-                // 直接使用节点中存储的token索引
-                rewriter.replace(
-                        baseNode.getStartTokenIndex(),
-                        baseNode.getStopTokenIndex(),
-                        modNode.getSourceText()
-                );
-            }
-        }
-        // 处理新增节点（插入操作）
-        for (InsertOperation op : insertOperations) {
-            rewriter.insertBefore(op.tokenIndex, op.content);
-        }
-
-        // 获取重写后的文本
-        return rewriter.getText();
-    }
-
     private void reduceCompare(ScrContainerScriptNode originalContainer, ScrContainerScriptNode baseContainer, ScrContainerScriptNode modContainer) {
         // 遍历 Mod 的所有子节点
         for (Map.Entry<String, BaseTreeNode> entry : modContainer.getChildren().entrySet()) {
@@ -197,6 +172,31 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         }
     }
 
+    private String getMergedContent(ParseResult baseResult) {
+        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
+        // 处理冲突节点的替换
+        for (ConflictRecord record : conflicts) {
+            if (record.getUserChoice() == 2) { // 用户选择了 Mod
+                BaseTreeNode baseNode = record.getBaseNode();
+                BaseTreeNode modNode = record.getModNode();
+
+                // 直接使用节点中存储的token索引
+                rewriter.replace(
+                        baseNode.getStartTokenIndex(),
+                        baseNode.getStopTokenIndex(),
+                        modNode.getSourceText()
+                );
+            }
+        }
+        // 处理新增节点（插入操作）
+        for (InsertOperation op : insertOperations) {
+            rewriter.insertBefore(op.tokenIndex, op.content);
+        }
+
+        // 获取重写后的文本
+        return rewriter.getText();
+    }
+
     private boolean isNodeSameAsOriginalNode(BaseTreeNode originalNode, BaseTreeNode modNode) {
         // 如果没有原始基准MOD，则认为不相同
         if (originalBaseModRoot == null) {
@@ -217,13 +217,6 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         }
     }
 
-    /**
-     * 冲突解决
-     */
-    private void resolveConflictsInteractively() {
-
-    }
-
     private void handleInsertion(ScrContainerScriptNode baseContainer, BaseTreeNode modNode) {
         // 插入位置：Base 容器的 '}' 之前
         int insertPos = baseContainer.getStopTokenIndex();
@@ -231,22 +224,12 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         insertOperations.add(new InsertOperation(insertPos, newContent));
     }
 
-    /**
-     * 将MOD文件解析成语法树
-     *
-     * @param filePath 文件路径
-     * @return 解析后的 ParseResult（包含AST和TokenStream）
-     * @throws IOException 如果文件不可读
-     */
     private static ParseResult parseFile(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = Tools.computeHash(content);
         return PARSE_CACHE.get(contentHash, () -> parseContent(content));
     }
 
-    /**
-     * 解析字符串内容为ParseResult
-     */
     private static ParseResult parseContent(String content) {
         CharStream input = CharStreams.fromString(content);
         TechlandScriptLexer lexer = new TechlandScriptLexer(input);
@@ -258,11 +241,6 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         return new ParseResult(ast, tokens);
     }
 
-    /**
-     * 比较两段文本在忽略所有空白字符后的内容是否相同（避免创建新字符串）
-     * <p>
-     * 空白字符定义：Character.isWhitespace(c) 为 true 的字符（空格、Tab、换行等）。
-     */
     private static boolean equalsTrimmed(String a, String b) {
         // 快路径：同一引用或 equals（完全一致时直接返回，避免扫描）
         if (Objects.equals(a, b)) {
