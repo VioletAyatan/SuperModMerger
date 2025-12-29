@@ -2,7 +2,7 @@ package ankol.mod.merger.merger.xml;
 
 import ankol.mod.merger.antlr.xml.TechlandXMLLexer;
 import ankol.mod.merger.antlr.xml.TechlandXMLParser;
-import ankol.mod.merger.core.FileMerger;
+import ankol.mod.merger.core.AbstractFileMerger;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.merger.MergeResult;
@@ -33,7 +33,7 @@ import java.util.*;
  * @author Ankol
  */
 @Slf4j
-public class TechlandXmlFileMerger extends FileMerger {
+public class TechlandXmlAbstractFileMerger extends AbstractFileMerger {
     /**
      * 冲突记录
      */
@@ -88,7 +88,7 @@ public class TechlandXmlFileMerger extends FileMerger {
      */
     private XmlContainerNode originalBaseModRoot = null;
 
-    public TechlandXmlFileMerger(MergerContext context) {
+    public TechlandXmlAbstractFileMerger(MergerContext context) {
         super(context);
     }
 
@@ -320,13 +320,11 @@ public class TechlandXmlFileMerger extends FileMerger {
     private static ParseResult parseFile(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = Tools.computeHash(content);
-
         // 先查缓存
         ParseResult cached = PARSE_CACHE.get(contentHash);
         if (cached != null) {
             return cached;
         }
-
         // 缓存未命中，执行解析
         ParseResult result = parseContent(content);
         // 存入缓存
@@ -343,7 +341,6 @@ public class TechlandXmlFileMerger extends FileMerger {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TechlandXMLParser parser = new TechlandXMLParser(tokens);
         TechlandXmlFileVisitor visitor = new TechlandXmlFileVisitor();
-
         // 访问document节点，应该返回ROOT容器
         XmlNode root = visitor.visitDocument(parser.document());
         XmlContainerNode containerRoot = (XmlContainerNode) root;

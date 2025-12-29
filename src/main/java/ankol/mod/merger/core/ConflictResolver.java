@@ -44,7 +44,7 @@ public class ConflictResolver {
                 } else if (chose == 4) {
                     record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
                 } else {
-                    ColorPrinter.info("=".repeat(75));
+                    ColorPrinter.info("\n=".repeat(75));
                     ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
                     //打印代码提示框
                     ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
@@ -74,7 +74,6 @@ public class ConflictResolver {
                     }
                 }
             }
-            conflicts.addAll(automaticMerge);  //智能合并的节点加回去，这里注意是为了不出现冲突提示
             ColorPrinter.success(Localizations.t("SCR_MERGER_CONFLICT_RESOLVED"));
         }
         //最后把自动合并的节点加回去，让后续处理合并的逻辑使用同一个容器
