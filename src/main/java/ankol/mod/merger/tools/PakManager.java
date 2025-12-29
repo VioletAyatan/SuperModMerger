@@ -107,9 +107,9 @@ public class PakManager {
                     // 递归解压，根据文件类型选择解压方法，缓存 toLowerCase 结果
                     String lowerFileName = fileName.toLowerCase();
                     if (lowerFileName.endsWith(".7z")) {
-                        extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, fileName);
+                        extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
                     } else {
-                        extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, fileName);
+                        extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
                     }
                 }
                 // 创建文件来源信息，记录来源链

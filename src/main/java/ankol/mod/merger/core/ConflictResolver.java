@@ -35,6 +35,7 @@ public class ConflictResolver {
         //对于真正的冲突项，提示用户选择使用哪一个版本解决
         if (!conflicts.isEmpty()) {
             Scanner scanner = new Scanner(System.in);
+            System.out.println(); //换行
             ColorPrinter.warning(Localizations.t("SCR_MERGER_CONFLICT_DETECTED", conflicts.size()));
             int chose = 0;
             for (int i = 0; i < conflicts.size(); i++) {
@@ -44,7 +45,7 @@ public class ConflictResolver {
                 } else if (chose == 4) {
                     record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
                 } else {
-                    ColorPrinter.info("\n=".repeat(75));
+                    ColorPrinter.info("=".repeat(75));
                     ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
                     //打印代码提示框
                     ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
