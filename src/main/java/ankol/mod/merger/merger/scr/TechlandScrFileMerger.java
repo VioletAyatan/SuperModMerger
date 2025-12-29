@@ -2,6 +2,7 @@ package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr.scr.TechlandScriptParser;
+import ankol.mod.merger.core.ConflictResolver;
 import ankol.mod.merger.core.FileMerger;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.exception.BusinessException;
@@ -10,9 +11,7 @@ import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrScriptNode;
-import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
-import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
@@ -26,7 +25,9 @@ import org.antlr.v4.runtime.TokenStreamRewriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -94,7 +95,7 @@ public class TechlandScrFileMerger extends FileMerger {
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
-                resolveConflictsInteractively();
+                ConflictResolver.resolveConflict(conflicts);
             }
             String mergedContent = getMergedContent(baseResult);
             return new MergeResult(mergedContent, !conflicts.isEmpty());
@@ -111,7 +112,6 @@ public class TechlandScrFileMerger extends FileMerger {
 
     private String getMergedContent(ParseResult baseResult) {
         TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
-
         // 处理冲突节点的替换
         for (ConflictRecord record : conflicts) {
             if (record.getUserChoice() == 2) { // 用户选择了 Mod
@@ -126,8 +126,6 @@ public class TechlandScrFileMerger extends FileMerger {
                 );
             }
         }
-
-
         // 处理新增节点（插入操作）
         for (InsertOperation op : insertOperations) {
             rewriter.insertBefore(op.tokenIndex, op.content);
@@ -230,63 +228,7 @@ public class TechlandScrFileMerger extends FileMerger {
      * 冲突解决
      */
     private void resolveConflictsInteractively() {
-        //筛选出智能合并的节点
-        List<ConflictRecord> automaticMerge = conflicts.stream()
-                .filter(conflict -> conflict.getUserChoice() != null)
-                .toList();
-        if (!automaticMerge.isEmpty()) {
-            for (ConflictRecord record : automaticMerge) {
-                log.info("AutoMerging code line: {} -> {}", record.getBaseNode().getSourceText(), record.getModNode().getSourceText());
-            }
-            ColorPrinter.success(Localizations.t("SCR_MERGER_AUTO_MERGE_COUNT", automaticMerge.size()));
-            conflicts.removeAll(automaticMerge);
-        }
-        if (conflicts.isEmpty()) {
-            conflicts.addAll(automaticMerge); //智能合并的节点加回去，这里注意是为了不出现冲突提示
-        } else {
-            Scanner scanner = new Scanner(System.in);
-            ColorPrinter.warning(Localizations.t("SCR_MERGER_CONFLICT_DETECTED", conflicts.size()));
-            int chose = 0;
-            for (int i = 0; i < conflicts.size(); i++) {
-                ConflictRecord record = conflicts.get(i);
-                if (chose == 3) {
-                    record.setUserChoice(1); //3表示用户全部选择baseMod的配置来处理
-                } else if (chose == 4) {
-                    record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
-                } else {
-                    ColorPrinter.info("=".repeat(75));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
-                    //打印代码提示框
-                    ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim()));
-                    ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_2", record.getMergeModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLine(), record.getModNode().getSourceText().trim()));
-                    ColorPrinter.info("=".repeat(75));
-                    //选择对话框
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_1", record.getBaseNode().getSourceText()));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_2", record.getModNode().getSourceText()));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_1", record.getBaseModName()));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_2", record.getMergeModName()));
 
-                    while (true) {
-                        String input = scanner.nextLine();
-                        if (input.equals("1") || input.equals("2")) {
-                            record.setUserChoice(Integer.parseInt(input));
-                            break;
-                        }
-                        if (input.equals("3") || input.equals("4")) {
-                            chose = Integer.parseInt(input);
-                            record.setUserChoice(chose == 3 ? 1 : 2);
-                            break;
-                        }
-                        ColorPrinter.warning(Localizations.t("SCR_MERGER_INVALID_INPUT"));
-                    }
-                }
-            }
-            conflicts.addAll(automaticMerge);  //智能合并的节点加回去，这里注意是为了不出现冲突提示
-            ColorPrinter.success(Localizations.t("SCR_MERGER_CONFLICT_RESOLVED"));
-        }
     }
 
     private void handleInsertion(ScrContainerScriptNode baseContainer, ScrScriptNode modNode) {
