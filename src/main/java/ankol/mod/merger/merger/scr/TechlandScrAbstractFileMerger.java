@@ -2,15 +2,15 @@ package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr.scr.TechlandScriptParser;
-import ankol.mod.merger.core.ConflictResolver;
 import ankol.mod.merger.core.AbstractFileMerger;
+import ankol.mod.merger.core.BaseTreeNode;
+import ankol.mod.merger.core.ConflictResolver;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode;
-import ankol.mod.merger.merger.scr.node.ScrScriptNode;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Tools;
 import cn.hutool.cache.Cache;
@@ -115,8 +115,8 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
         // 处理冲突节点的替换
         for (ConflictRecord record : conflicts) {
             if (record.getUserChoice() == 2) { // 用户选择了 Mod
-                ScrScriptNode baseNode = record.getBaseNode();
-                ScrScriptNode modNode = record.getModNode();
+                BaseTreeNode baseNode = record.getBaseNode();
+                BaseTreeNode modNode = record.getModNode();
 
                 // 直接使用节点中存储的token索引
                 rewriter.replace(
@@ -137,15 +137,15 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
 
     private void reduceCompare(ScrContainerScriptNode originalContainer, ScrContainerScriptNode baseContainer, ScrContainerScriptNode modContainer) {
         // 遍历 Mod 的所有子节点
-        for (Map.Entry<String, ScrScriptNode> entry : modContainer.getChildren().entrySet()) {
+        for (Map.Entry<String, BaseTreeNode> entry : modContainer.getChildren().entrySet()) {
             try {
                 String signature = entry.getKey();
-                ScrScriptNode modNode = entry.getValue();
-                ScrScriptNode originalNode = null;
+                BaseTreeNode modNode = entry.getValue();
+                BaseTreeNode originalNode = null;
                 if (originalContainer != null) {
                     originalNode = originalContainer.getChildren().get(signature);
                 }
-                ScrScriptNode baseNode = baseContainer.getChildren().get(signature);
+                BaseTreeNode baseNode = baseContainer.getChildren().get(signature);
 
                 if (baseNode == null) {
                     // 新增 Base 没有这个节点 -> 插入
@@ -204,7 +204,7 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
         }
     }
 
-    private boolean isNodeSameAsOriginalNode(ScrScriptNode originalNode, ScrScriptNode modNode) {
+    private boolean isNodeSameAsOriginalNode(BaseTreeNode originalNode, BaseTreeNode modNode) {
         // 如果没有原始基准MOD，则认为不相同
         if (originalBasModRoot == null) {
             return false;
@@ -231,7 +231,7 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
 
     }
 
-    private void handleInsertion(ScrContainerScriptNode baseContainer, ScrScriptNode modNode) {
+    private void handleInsertion(ScrContainerScriptNode baseContainer, BaseTreeNode modNode) {
         // 插入位置：Base 容器的 '}' 之前
         int insertPos = baseContainer.getStopTokenIndex();
         String newContent = "\n    " + modNode.getSourceText();
