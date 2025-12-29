@@ -240,15 +240,7 @@ public class TechlandXmlAbstractFileMerger extends AbstractFileMerger {
         String content = Files.readString(filePath);
         String contentHash = Tools.computeHash(content);
         // 先查缓存
-        ParseResult cached = PARSE_CACHE.get(contentHash);
-        if (cached != null) {
-            return cached;
-        }
-        // 缓存未命中，执行解析
-        ParseResult result = parseContent(content);
-        // 存入缓存
-        PARSE_CACHE.put(contentHash, result);
-        return result;
+        return PARSE_CACHE.get(contentHash, () -> parseContent(content));
     }
 
     /**

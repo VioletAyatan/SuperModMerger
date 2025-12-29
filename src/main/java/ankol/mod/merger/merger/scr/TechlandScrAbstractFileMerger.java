@@ -91,8 +91,7 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
                 // 正常情况下，提示用户解决冲突
                 ConflictResolver.resolveConflict(conflicts);
             }
-            String mergedContent = getMergedContent(baseResult);
-            return new MergeResult(mergedContent, !conflicts.isEmpty());
+            return new MergeResult(getMergedContent(baseResult), !conflicts.isEmpty());
         } catch (Exception e) {
             log.error(StrUtil.format("Error during SCR file merge: {} Reason: {}", file1.getFileName(), e.getMessage()), e);
             throw new BusinessException("文件" + file1.getFileName() + "合并失败");
@@ -242,16 +241,7 @@ public class TechlandScrAbstractFileMerger extends AbstractFileMerger {
     private static ParseResult parseFile(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = Tools.computeHash(content);
-        // 先查缓存
-        ParseResult cached = PARSE_CACHE.get(contentHash);
-        if (cached != null) {
-            return cached;
-        }
-        // 缓存未命中，执行解析
-        ParseResult result = parseContent(content);
-        // 存入缓存
-        PARSE_CACHE.put(contentHash, result);
-        return result;
+        return PARSE_CACHE.get(contentHash, () -> parseContent(content));
     }
 
     /**
