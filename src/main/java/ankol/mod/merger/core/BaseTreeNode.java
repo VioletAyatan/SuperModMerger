@@ -36,6 +36,15 @@ public abstract class BaseTreeNode {
     @JsonIgnore
     protected String sourceText;
 
+    /**
+     * 构造函数
+     *
+     * @param signature       签名
+     * @param startTokenIndex token起始索引
+     * @param stopTokenIndex  token结束索引
+     * @param lineNumber      行号
+     * @param sourceText      源文本，用于执行替换
+     */
     public BaseTreeNode(String signature, int startTokenIndex, int stopTokenIndex, int lineNumber, String sourceText) {
         this.signature = signature;
         this.startTokenIndex = startTokenIndex;

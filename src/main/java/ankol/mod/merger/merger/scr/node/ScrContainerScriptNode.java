@@ -18,15 +18,6 @@ public class ScrContainerScriptNode extends BaseTreeNode {
      */
     private final Map<String, BaseTreeNode> children = new LinkedHashMap<>();
 
-    /**
-     * 构造函数
-     *
-     * @param signature
-     * @param startTokenIndex
-     * @param stopTokenIndex
-     * @param line
-     * @param text
-     */
     public ScrContainerScriptNode(String signature, int startTokenIndex, int stopTokenIndex, int line, String text) {
         super(signature.trim(), startTokenIndex, stopTokenIndex, line, text);
     }
