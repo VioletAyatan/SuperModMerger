@@ -1,6 +1,6 @@
 package ankol.mod.merger.merger;
 
-import ankol.mod.merger.merger.scr.node.ScrScriptNode;
+import ankol.mod.merger.core.BaseTreeNode;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +21,8 @@ public class ConflictRecord {
      * 冲突的签名
      */
     private final String signature;
-    private final ScrScriptNode baseNode;
-    private final ScrScriptNode modNode;
+    private final BaseTreeNode baseNode;
+    private final BaseTreeNode modNode;
     /**
      * 用户选择
      */

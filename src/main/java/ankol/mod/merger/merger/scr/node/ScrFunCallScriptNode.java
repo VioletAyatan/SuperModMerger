@@ -1,5 +1,6 @@
 package ankol.mod.merger.merger.scr.node;
 
+import ankol.mod.merger.core.BaseTreeNode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class ScrFunCallScriptNode extends ScrScriptNode {
+public class ScrFunCallScriptNode extends BaseTreeNode {
     private final String functionName;
     private final List<String> arguments;
 

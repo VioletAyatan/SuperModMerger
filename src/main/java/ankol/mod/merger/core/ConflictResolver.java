@@ -48,9 +48,9 @@ public class ConflictResolver {
                     ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
                     //打印代码提示框
                     ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim()));
+                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLineNumber(), record.getBaseNode().getSourceText().trim()));
                     ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_2", record.getMergeModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLine(), record.getModNode().getSourceText().trim()));
+                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLineNumber(), record.getModNode().getSourceText().trim()));
                     ColorPrinter.info("=".repeat(75));
                     //选择对话框
                     ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
