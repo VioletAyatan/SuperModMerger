@@ -74,10 +74,6 @@ public class ModMergerEngine {
         try {
             //初始化基准mod
             baseModAnalyzer.load();
-            // 如果有基准MOD，先确定路径修正策略
-            /*if (baseModAnalyzer.isLoaded()) {
-                selectPathCorrectionStrategy();
-            }*/
             // 在提取过程中对每个mod分别进行路径修正
             Map<String, List<FileTree>> filesByPath = extractAllMods();
             // 5. 输出目录（临时）
@@ -98,29 +94,6 @@ public class ModMergerEngine {
             baseModAnalyzer.clearCache();
             // 清理临时文件
             cleanupTempDir();
-        }
-    }
-
-    /**
-     * 选择路径修正策略（在提取文件前）
-     */
-    private void selectPathCorrectionStrategy() {
-        ColorPrinter.info(Localizations.t("ENGINE_SELECT_PATH_CORRECTION_STRATEGY"));
-        ColorPrinter.success(Localizations.t("ENGINE_STRATEGY_OPTION_1", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription()));
-        ColorPrinter.info(Localizations.t("ENGINE_STRATEGY_OPTION_2", PathCorrectionStrategy.Strategy.KEEP_ORIGINAL.getDescription()));
-        // 优化：使用全局Scanner避免资源泄漏
-        while (true) {
-            ColorPrinter.info(Localizations.t("ENGINE_INPUT_CHOICE_PROMPT"));
-            String input = SYSTEM_SCANNER.next().trim();
-            try {
-                if (pathCorrectionStrategy.selectByCode(Integer.parseInt(input))) {
-                    ColorPrinter.success(Localizations.t("ENGINE_STRATEGY_SELECTED", pathCorrectionStrategy.getSelectedStrategy().getDescription()));
-                    break;
-                }
-            } catch (NumberFormatException e) {
-                // 继续循环
-            }
-            ColorPrinter.warning(Localizations.t("ENGINE_INVALID_CHOICE"));
         }
     }
 
