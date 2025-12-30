@@ -13,9 +13,9 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 基准MOD分析器 - 负责加载和分析基准MOD（原版文件）
@@ -145,7 +145,7 @@ public class BaseModAnalyzer {
      *
      * @param filePath mod文件路径
      */
-    public boolean hasPathConflict(String filePath) throws NoSuchFileException {
+    public boolean hasPathConflict(String filePath) {
         if (!loaded) {
             return false;
         }

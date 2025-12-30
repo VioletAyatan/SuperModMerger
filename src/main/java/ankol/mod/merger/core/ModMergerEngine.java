@@ -119,18 +119,12 @@ public class ModMergerEngine {
         for (Map.Entry<String, FileTree> entry : extractedFiles.entrySet()) {
             String fileEntryName = entry.getKey();
             FileTree sourceInfo = entry.getValue();
-            try {
-                if (baseModAnalyzer.hasPathConflict(fileEntryName)) {
-                    String suggestedPath = baseModAnalyzer.getSuggestedPath(fileEntryName);
-                    corrections.put(fileEntryName, suggestedPath);
-                    correctedFiles.put(suggestedPath, sourceInfo);
-                } else {
-                    correctedFiles.put(fileEntryName, sourceInfo);
-                }
-            } catch (NoSuchFileException e) {
-                // todo 这里的逻辑看样子还得优化一下，可能会误杀一些作者新增的文件
-//                markToRemoved.add(fileEntryName);
-                log.warn("File '{}' from mod '{}' does not exist in base mod, marking for removal.", fileEntryName, modFileName);
+            if (baseModAnalyzer.hasPathConflict(fileEntryName)) {
+                String suggestedPath = baseModAnalyzer.getSuggestedPath(fileEntryName);
+                corrections.put(fileEntryName, suggestedPath);
+                correctedFiles.put(suggestedPath, sourceInfo);
+            } else {
+                correctedFiles.put(fileEntryName, sourceInfo);
             }
         }
 //        markToRemoved.forEach(extractedFiles::remove); //移除不存在于基准MOD中的文件
@@ -154,7 +148,7 @@ public class ModMergerEngine {
     private Map<String, List<FileTree>> extractAllMods() {
         Map<String, List<FileTree>> filesByPath = new ConcurrentHashMap<>();
         AtomicInteger index = new AtomicInteger(0);
-        modsToMerge.forEach((modPath) -> {
+        modsToMerge.parallelStream().forEach((modPath) -> {
             try {
                 String archiveName = modPath.getFileName().toString(); // 解压的压缩包真实名称
                 Path modTempDir = tempDir.resolve(archiveName + index.getAndIncrement()); // 生成临时目录名字
