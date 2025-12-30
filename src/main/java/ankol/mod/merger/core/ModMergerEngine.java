@@ -3,6 +3,7 @@ package ankol.mod.merger.core;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.MergerFactory;
 import ankol.mod.merger.tools.*;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -114,7 +115,7 @@ public class ModMergerEngine {
         Map<String, FileTree> correctedFiles = new LinkedHashMap<>();
         Map<String, String> corrections = new LinkedHashMap<>();
 
-//        HashSet<String> markToRemoved = new HashSet<>();
+        HashSet<String> markToRemoved = new HashSet<>();
         // 查找需要修正的路径
         for (Map.Entry<String, FileTree> entry : extractedFiles.entrySet()) {
             String fileEntryName = entry.getKey();
@@ -123,11 +124,16 @@ public class ModMergerEngine {
                 String suggestedPath = baseModAnalyzer.getSuggestedPath(fileEntryName);
                 corrections.put(fileEntryName, suggestedPath);
                 correctedFiles.put(suggestedPath, sourceInfo);
+            }
+            //作者偶尔会在压缩包放一些说明的文本文件，检测txt或md后缀的文件移除掉
+            else if (StrUtil.endWithAny(fileEntryName, ".txt", ".md")) {
+                markToRemoved.add(fileEntryName);
+                log.warn("Unsupported text file: {}, Marking to removal.", fileEntryName);
             } else {
                 correctedFiles.put(fileEntryName, sourceInfo);
             }
         }
-//        markToRemoved.forEach(extractedFiles::remove); //移除不存在于基准MOD中的文件
+        markToRemoved.forEach(extractedFiles::remove); //移除不存在于基准MOD中的文件
 
         // 如果有路径被修正，输出日志
         if (!corrections.isEmpty()) {
