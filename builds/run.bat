@@ -1,4 +1,4 @@
-rcedit-x64.exe .\SuperModMerger-1.1.0-SNAPSHOT.exe --set-icon .\wukong.ico ^
+rcedit-x64.exe .\SuperModMerger-1.2.0-SNAPSHOT.exe --set-icon .\wukong.ico ^
 --set-file-version 1.1.0 ^
 --set-product-version 1.1.0 ^
 --set-version-string ProductName "Super Mod Merger" ^
