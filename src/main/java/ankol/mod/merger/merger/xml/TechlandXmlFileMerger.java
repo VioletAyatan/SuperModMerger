@@ -78,16 +78,13 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
                 ParseResult parseResult = PARSE_CACHE.get(contentHash, () -> parseContent(context.getOriginalBaseModContent()));
                 originalBaseModRoot = parseResult.astNode;
             }
-
             // 解析base和mod文件
             ParseResult baseResult = parseFile(file1.getFullPathName());
             ParseResult modResult = parseFile(file2.getFullPathName());
             XmlContainerNode baseRoot = baseResult.astNode;
             XmlContainerNode modRoot = modResult.astNode;
-
             // 递归对比，找到冲突项
             reduceCompare(originalBaseModRoot, baseRoot, modRoot);
-
             // 第一个mod与原版文件的对比，直接通过，不提示冲突
             if (context.isFirstModMergeWithBaseMod() && !conflicts.isEmpty()) {
                 for (ConflictRecord record : conflicts) {
@@ -107,45 +104,6 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
             newNodes.clear();
             originalBaseModRoot = null;
         }
-    }
-
-    /**
-     * 获取合并后的内容
-     */
-    private String getMergedContent(ParseResult baseResult) {
-        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
-
-        // 处理冲突节点的替换
-        for (ConflictRecord record : conflicts) {
-            if (record.getUserChoice() == 2) { // 用户选择了 Mod
-                BaseTreeNode baseNode = record.getBaseNode();
-                BaseTreeNode modNode = record.getModNode();
-                rewriter.replace(
-                        baseNode.getStartTokenIndex(),
-                        baseNode.getStopTokenIndex(),
-                        modNode.getSourceText()
-                );
-            }
-        }
-
-        // 处理新增节点的插入
-        for (NewNodeRecord record : newNodes) {
-            XmlNode previousSibling = record.previousSibling();
-            XmlNode newNode = record.newNode();
-
-            int insertPosition;
-            if (previousSibling != null) {
-                // 如果有前一个兄弟节点，在其后面插入
-                // 使用stopTokenIndex + 1
-                insertPosition = previousSibling.getStopTokenIndex() + 1;
-            } else {
-                // 如果没有前一个兄弟节点（即这是第一个子节点），在父容器的结束标签前面插入
-                insertPosition = record.parentContainer().getStopTokenIndex();
-            }
-            rewriter.insertBefore(insertPosition, "\n" + newNode.getSourceText());
-        }
-
-        return rewriter.getText();
     }
 
     /**
@@ -219,6 +177,44 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
     }
 
     /**
+     * 获取合并后的内容
+     */
+    private String getMergedContent(ParseResult baseResult) {
+        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
+        // 处理冲突节点的替换
+        for (ConflictRecord record : conflicts) {
+            if (record.getUserChoice() == 2) { // 用户选择了 Mod
+                BaseTreeNode baseNode = record.getBaseNode();
+                BaseTreeNode modNode = record.getModNode();
+                rewriter.replace(
+                        baseNode.getStartTokenIndex(),
+                        baseNode.getStopTokenIndex(),
+                        modNode.getSourceText()
+                );
+            }
+        }
+
+        // 处理新增节点的插入
+        for (NewNodeRecord record : newNodes) {
+            XmlNode previousSibling = record.previousSibling();
+            XmlNode newNode = record.newNode();
+
+            int insertPosition;
+            if (previousSibling != null) {
+                // 如果有前一个兄弟节点，在其后面插入
+                // 使用stopTokenIndex + 1
+                insertPosition = previousSibling.getStopTokenIndex() + 1;
+            } else {
+                // 如果没有前一个兄弟节点（即这是第一个子节点），在父容器的结束标签前面插入
+                insertPosition = record.parentContainer().getStopTokenIndex();
+            }
+            rewriter.insertBefore(insertPosition, "\n" + newNode.getSourceText());
+        }
+
+        return rewriter.getText();
+    }
+
+    /**
      * 检查节点是否与原始基准MOD中的对应节点内容相同
      */
     private boolean isNodeSameAsOriginalBaseMod(XmlNode originalNode, XmlNode modNode) {
@@ -252,7 +248,6 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TechlandXMLParser parser = new TechlandXMLParser(tokens);
         TechlandXmlFileVisitor visitor = new TechlandXmlFileVisitor(tokens);
-        // 访问document节点，应该返回ROOT容器
         XmlNode root = visitor.visitDocument(parser.document());
         XmlContainerNode containerRoot = (XmlContainerNode) root;
         return new ParseResult(containerRoot, tokens);
