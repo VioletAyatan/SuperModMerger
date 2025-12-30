@@ -2,17 +2,13 @@ package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr.scr.TechlandScriptLexer;
 import ankol.mod.merger.antlr.scr.TechlandScriptParser;
-import ankol.mod.merger.core.FileMerger;
-import ankol.mod.merger.core.MergerContext;
+import ankol.mod.merger.core.*;
 import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode;
-import ankol.mod.merger.merger.scr.node.ScrScriptNode;
-import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
-import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
@@ -26,11 +22,13 @@ import org.antlr.v4.runtime.TokenStreamRewriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public class TechlandScrFileMerger extends FileMerger {
+public class TechlandScrFileMerger extends AbstractFileMerger {
     /**
      * 标记冲突项的容器
      */
@@ -48,12 +46,12 @@ public class TechlandScrFileMerger extends FileMerger {
      * Parse 缓存，避免重复解析相同内容的文件
      * 存储 ParseResult 包含 AST 和 TokenStream
      */
-    private static final Cache<String, ParseResult> PARSE_CACHE = CacheUtil.newWeakCache(60 * 1000);
+    private static final Cache<String, ParseResult> PARSE_CACHE = CacheUtil.newWeakCache(30 * 1000);
 
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
      */
-    private ScrContainerScriptNode originalBasModRoot = null;
+    private ScrContainerScriptNode originalBaseModRoot = null;
 
     /**
      * 解析结果包装类，包含AST和TokenStream
@@ -71,14 +69,8 @@ public class TechlandScrFileMerger extends FileMerger {
             // 解析基准MOD文件（如果存在）
             if (context.getOriginalBaseModContent() != null) {
                 String contentHash = Tools.computeHash(context.getOriginalBaseModContent());
-                ParseResult cached = PARSE_CACHE.get(contentHash);
-                if (cached != null) {
-                    originalBasModRoot = cached.astNode;
-                } else {
-                    ParseResult result = parseContent(context.getOriginalBaseModContent());
-                    originalBasModRoot = result.astNode;
-                    PARSE_CACHE.put(contentHash, result);
-                }
+                ParseResult parseResult = PARSE_CACHE.get(contentHash, () -> parseContent(context.getOriginalBaseModContent()));
+                originalBaseModRoot = parseResult.astNode;
             }
             // 解析base和mod文件，保留TokenStream
             ParseResult baseResult = parseFile(file1.getFullPathName());
@@ -86,7 +78,7 @@ public class TechlandScrFileMerger extends FileMerger {
             ScrContainerScriptNode baseRoot = baseResult.astNode;
             ScrContainerScriptNode modRoot = modResult.astNode;
             // 递归对比，找到冲突项
-            reduceCompare(originalBasModRoot, baseRoot, modRoot);
+            reduceCompare(originalBaseModRoot, baseRoot, modRoot);
             //第一个mod与原版文件的对比，直接使用MOD修改的版本，不提示冲突
             if (context.isFirstModMergeWithBaseMod() && !conflicts.isEmpty()) {
                 for (ConflictRecord record : conflicts) {
@@ -94,10 +86,9 @@ public class TechlandScrFileMerger extends FileMerger {
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
-                resolveConflictsInteractively();
+                ConflictResolver.resolveConflict(conflicts);
             }
-            String mergedContent = getMergedContent(baseResult);
-            return new MergeResult(mergedContent, !conflicts.isEmpty());
+            return new MergeResult(getMergedContent(baseResult), !conflicts.isEmpty());
         } catch (Exception e) {
             log.error(StrUtil.format("Error during SCR file merge: {} Reason: {}", file1.getFileName(), e.getMessage()), e);
             throw new BusinessException("文件" + file1.getFileName() + "合并失败");
@@ -105,49 +96,21 @@ public class TechlandScrFileMerger extends FileMerger {
             //清理状态，准备下一个文件合并
             conflicts.clear();
             insertOperations.clear();
-            originalBasModRoot = null;
+            originalBaseModRoot = null;
         }
-    }
-
-    private String getMergedContent(ParseResult baseResult) {
-        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
-
-        // 处理冲突节点的替换
-        for (ConflictRecord record : conflicts) {
-            if (record.getUserChoice() == 2) { // 用户选择了 Mod
-                ScrScriptNode baseNode = record.getBaseNode();
-                ScrScriptNode modNode = record.getModNode();
-
-                // 直接使用节点中存储的token索引
-                rewriter.replace(
-                        baseNode.getStartTokenIndex(),
-                        baseNode.getStopTokenIndex(),
-                        modNode.getSourceText()
-                );
-            }
-        }
-
-
-        // 处理新增节点（插入操作）
-        for (InsertOperation op : insertOperations) {
-            rewriter.insertBefore(op.tokenIndex, op.content);
-        }
-
-        // 获取重写后的文本
-        return rewriter.getText();
     }
 
     private void reduceCompare(ScrContainerScriptNode originalContainer, ScrContainerScriptNode baseContainer, ScrContainerScriptNode modContainer) {
         // 遍历 Mod 的所有子节点
-        for (Map.Entry<String, ScrScriptNode> entry : modContainer.getChildren().entrySet()) {
+        for (Map.Entry<String, BaseTreeNode> entry : modContainer.getChildren().entrySet()) {
             try {
                 String signature = entry.getKey();
-                ScrScriptNode modNode = entry.getValue();
-                ScrScriptNode originalNode = null;
+                BaseTreeNode modNode = entry.getValue();
+                BaseTreeNode originalNode = null;
                 if (originalContainer != null) {
                     originalNode = originalContainer.getChildren().get(signature);
                 }
-                ScrScriptNode baseNode = baseContainer.getChildren().get(signature);
+                BaseTreeNode baseNode = baseContainer.getChildren().get(signature);
 
                 if (baseNode == null) {
                     // 新增 Base 没有这个节点 -> 插入
@@ -206,9 +169,31 @@ public class TechlandScrFileMerger extends FileMerger {
         }
     }
 
-    private boolean isNodeSameAsOriginalNode(ScrScriptNode originalNode, ScrScriptNode modNode) {
+    private String getMergedContent(ParseResult baseResult) {
+        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
+        // 处理冲突节点的替换
+        for (ConflictRecord record : conflicts) {
+            if (record.getUserChoice() == 2) { // 用户选择了 Mod
+                BaseTreeNode baseNode = record.getBaseNode();
+                BaseTreeNode modNode = record.getModNode();
+                rewriter.replace(
+                        baseNode.getStartTokenIndex(),
+                        baseNode.getStopTokenIndex(),
+                        modNode.getSourceText()
+                );
+            }
+        }
+        for (InsertOperation op : insertOperations) {
+            rewriter.insertBefore(op.tokenIndex, op.content);
+        }
+
+        // 获取重写后的文本
+        return rewriter.getText();
+    }
+
+    private boolean isNodeSameAsOriginalNode(BaseTreeNode originalNode, BaseTreeNode modNode) {
         // 如果没有原始基准MOD，则认为不相同
-        if (originalBasModRoot == null) {
+        if (originalBaseModRoot == null) {
             return false;
         }
 
@@ -226,117 +211,30 @@ public class TechlandScrFileMerger extends FileMerger {
         }
     }
 
-    /**
-     * 冲突解决
-     */
-    private void resolveConflictsInteractively() {
-        //筛选出智能合并的节点
-        List<ConflictRecord> automaticMerge = conflicts.stream()
-                .filter(conflict -> conflict.getUserChoice() != null)
-                .toList();
-        if (!automaticMerge.isEmpty()) {
-            for (ConflictRecord record : automaticMerge) {
-                log.info("AutoMerging code line: {} -> {}", record.getBaseNode().getSourceText(), record.getModNode().getSourceText());
-            }
-            ColorPrinter.success(Localizations.t("SCR_MERGER_AUTO_MERGE_COUNT", automaticMerge.size()));
-            conflicts.removeAll(automaticMerge);
-        }
-        if (conflicts.isEmpty()) {
-            conflicts.addAll(automaticMerge); //智能合并的节点加回去，这里注意是为了不出现冲突提示
-        } else {
-            Scanner scanner = new Scanner(System.in);
-            ColorPrinter.warning(Localizations.t("SCR_MERGER_CONFLICT_DETECTED", conflicts.size()));
-            int chose = 0;
-            for (int i = 0; i < conflicts.size(); i++) {
-                ConflictRecord record = conflicts.get(i);
-                if (chose == 3) {
-                    record.setUserChoice(1); //3表示用户全部选择baseMod的配置来处理
-                } else if (chose == 4) {
-                    record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
-                } else {
-                    ColorPrinter.info("=".repeat(75));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
-                    //打印代码提示框
-                    ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim()));
-                    ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_2", record.getMergeModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLine(), record.getModNode().getSourceText().trim()));
-                    ColorPrinter.info("=".repeat(75));
-                    //选择对话框
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_1", record.getBaseNode().getSourceText()));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_2", record.getModNode().getSourceText()));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_1", record.getBaseModName()));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_2", record.getMergeModName()));
-
-                    while (true) {
-                        String input = scanner.nextLine();
-                        if (input.equals("1") || input.equals("2")) {
-                            record.setUserChoice(Integer.parseInt(input));
-                            break;
-                        }
-                        if (input.equals("3") || input.equals("4")) {
-                            chose = Integer.parseInt(input);
-                            record.setUserChoice(chose == 3 ? 1 : 2);
-                            break;
-                        }
-                        ColorPrinter.warning(Localizations.t("SCR_MERGER_INVALID_INPUT"));
-                    }
-                }
-            }
-            conflicts.addAll(automaticMerge);  //智能合并的节点加回去，这里注意是为了不出现冲突提示
-            ColorPrinter.success(Localizations.t("SCR_MERGER_CONFLICT_RESOLVED"));
-        }
-    }
-
-    private void handleInsertion(ScrContainerScriptNode baseContainer, ScrScriptNode modNode) {
+    private void handleInsertion(ScrContainerScriptNode baseContainer, BaseTreeNode modNode) {
         // 插入位置：Base 容器的 '}' 之前
         int insertPos = baseContainer.getStopTokenIndex();
         String newContent = "\n    " + modNode.getSourceText();
         insertOperations.add(new InsertOperation(insertPos, newContent));
     }
 
-    /**
-     * 将MOD文件解析成语法树
-     *
-     * @param filePath 文件路径
-     * @return 解析后的 ParseResult（包含AST和TokenStream）
-     * @throws IOException 如果文件不可读
-     */
     private static ParseResult parseFile(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = Tools.computeHash(content);
-        // 先查缓存
-        ParseResult cached = PARSE_CACHE.get(contentHash);
-        if (cached != null) {
-            return cached;
-        }
-        // 缓存未命中，执行解析
-        ParseResult result = parseContent(content);
-        // 存入缓存
-        PARSE_CACHE.put(contentHash, result);
-        return result;
+        return PARSE_CACHE.get(contentHash, () -> parseContent(content));
     }
 
-    /**
-     * 解析字符串内容为ParseResult
-     */
     private static ParseResult parseContent(String content) {
         CharStream input = CharStreams.fromString(content);
         TechlandScriptLexer lexer = new TechlandScriptLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TechlandScriptParser parser = new TechlandScriptParser(tokens);
-        TechlandScrFileVisitor visitor = new TechlandScrFileVisitor();
+        TechlandScrFileVisitor visitor = new TechlandScrFileVisitor(tokens);
         // 注意：visitFile 返回的一定是我们定义的 ROOT Container
         ScrContainerScriptNode ast = (ScrContainerScriptNode) visitor.visitFile(parser.file());
         return new ParseResult(ast, tokens);
     }
 
-    /**
-     * 比较两段文本在忽略所有空白字符后的内容是否相同（避免创建新字符串）
-     * <p>
-     * 空白字符定义：Character.isWhitespace(c) 为 true 的字符（空格、Tab、换行等）。
-     */
     private static boolean equalsTrimmed(String a, String b) {
         // 快路径：同一引用或 equals（完全一致时直接返回，避免扫描）
         if (Objects.equals(a, b)) {

@@ -2,17 +2,18 @@ package ankol.mod.merger.merger.scr;
 
 import ankol.mod.merger.antlr.scr.TechlandScriptBaseVisitor;
 import ankol.mod.merger.antlr.scr.TechlandScriptParser;
+import ankol.mod.merger.core.BaseTreeNode;
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrLeafScriptNode;
-import ankol.mod.merger.merger.scr.node.ScrScriptNode;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.*;
 
-public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptNode> {
+public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNode> {
     //=========================关键字=========================
     public static final String FUN_CALL = "funCall";
     public static final String FUN_BLOCK = "funBlock";
@@ -24,10 +25,20 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
     private static final String DIRECTIVE = "directive";
     private static final String MACRO = "macro";
 
+    //检测重复函数的东西
     private final Map<String, Set<String>> repeatableFunctions = new HashMap<>();
-    private String currentFunBlockSignature = "EMPTY";
+    private String currentFunBlockSignature = "EMPTY"; //标记当前处理到哪个函数块了，重复函数签名生成仅限自己对应的函数块内
 
     private ScrContainerScriptNode containerNode;
+
+    /**
+     * Token流引用（用于按需提取源文本）
+     */
+    private final CommonTokenStream tokenStream;
+
+    public TechlandScrFileVisitor(CommonTokenStream tokenStream) {
+        this.tokenStream = tokenStream;
+    }
 
     /**
      * 获取context的起始token索引
@@ -47,16 +58,16 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
      * 根文件
      */
     @Override
-    public ScrScriptNode visitFile(TechlandScriptParser.FileContext ctx) {
+    public BaseTreeNode visitFile(TechlandScriptParser.FileContext ctx) {
         ScrContainerScriptNode rootNode = new ScrContainerScriptNode("ROOT",
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.getStart().getLine(),
-                getFullText(ctx)
+                tokenStream
         );
         this.containerNode = rootNode;
         for (TechlandScriptParser.DefinitionContext defCtx : ctx.definition()) {
-            ScrScriptNode childNode = visit(defCtx);
+            BaseTreeNode childNode = visit(defCtx);
             if (childNode != null) {
                 rootNode.addChild(childNode);
             }
@@ -66,7 +77,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
 
     //===========================导入/导出===========================
     @Override
-    public ScrScriptNode visitImportDecl(TechlandScriptParser.ImportDeclContext ctx) {
+    public BaseTreeNode visitImportDecl(TechlandScriptParser.ImportDeclContext ctx) {
         // Import 签名示例: "import:data/scripts/inputs.scr"
         String path = ctx.String().getText();
         String signature = IMPORT + ":" + path;
@@ -75,12 +86,12 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
     @Override
-    public ScrScriptNode visitExportDecl(TechlandScriptParser.ExportDeclContext ctx) {
+    public BaseTreeNode visitExportDecl(TechlandScriptParser.ExportDeclContext ctx) {
         // Export 签名示例: "export:EJumpMaintainedSpeedSource_MoveController"
         // 这样 Mod 修改同一个变量时，能通过签名找到并覆盖它
         String name = ctx.Id().getText();
@@ -90,23 +101,22 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
     //===========================函数块===========================
     @Override
-    public ScrScriptNode visitSubDecl(TechlandScriptParser.SubDeclContext ctx) {
+    public BaseTreeNode visitSubDecl(TechlandScriptParser.SubDeclContext ctx) {
         // Sub 签名示例: "sub:main"
         String name = ctx.Id().getText();
         String signature = SUB_FUN + ":" + name;
-        // 这里的 getFullText 获取的是 "sub main() { ... }" 整个一大块字符串
         ScrContainerScriptNode subNode = new ScrContainerScriptNode(
                 signature,
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
         this.containerNode = subNode;
         // 注意：subDecl 包含 paramList 和 functionBlock
@@ -115,9 +125,8 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
     }
 
     @Override
-    public ScrScriptNode visitFuntionBlockDecl(TechlandScriptParser.FuntionBlockDeclContext ctx) {
+    public BaseTreeNode visitFuntionBlockDecl(TechlandScriptParser.FuntionBlockDeclContext ctx) {
         String funcName = ctx.Id().getText();
-        // 提取参数字符串，用于区分不同的块。
         String rawParams = (ctx.valueList() != null) ? getFullText(ctx.valueList()) : "";
         String signature = FUN_BLOCK + ":" + funcName;
         String cleanParams = rawParams.replaceAll("\\s+", "");
@@ -129,11 +138,10 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
         this.containerNode = blockNode;
         this.currentFunBlockSignature = signature;
-        // 递归处理块内部的语句
         visitFunctionBlockContent(blockNode, ctx.functionBlock());
         return blockNode;
     }
@@ -144,7 +152,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         }
         for (TechlandScriptParser.StatementsContext statement : ctx.statements()) {
             // visit(stmt) 会调用 visitStatements，然后再分发到 visitFuntionCallDecl 等
-            ScrScriptNode child = visit(statement);
+            BaseTreeNode child = visit(statement);
             if (child != null) {
                 parent.addChild(child);
             }
@@ -155,7 +163,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
      * 函数调用的处理
      */
     @Override
-    public ScrScriptNode visitFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx) {
+    public BaseTreeNode visitFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx) {
         String funcName = ctx.Id().getText();
         List<TechlandScriptParser.ExpressionContext> valueList = getValueList(ctx.valueList());
         ArrayList<String> argsList = new ArrayList<>();
@@ -170,7 +178,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         if (signatures.contains(signature)) {
             signature = signature + ":" + argsList.getFirst();
         } else {
-            Map<String, ScrScriptNode> children = containerNode.getChildren();
+            Map<String, BaseTreeNode> children = containerNode.getChildren();
             //发现重复的函数调用，重新生成signature
             if (children.containsKey(signature)) {
                 ScrFunCallScriptNode funCallNode = (ScrFunCallScriptNode) children.get(signature);
@@ -185,19 +193,17 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
         repeatableFunctions.put(currentFunBlockSignature, signatures);
         return new ScrFunCallScriptNode(
                 signature,
-                ctx.start.getStartIndex(),
-                ctx.stop.getStopIndex(),
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx),
+                tokenStream,
                 funcName,
                 argsList
         );
     }
 
     @Override
-    public ScrScriptNode visitStatements(TechlandScriptParser.StatementsContext ctx) {
+    public BaseTreeNode visitStatements(TechlandScriptParser.StatementsContext ctx) {
         if (ctx.funtionCallDecl() != null) {
             return visit(ctx.funtionCallDecl());
         }
@@ -218,7 +224,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
     }
 
     @Override
-    public ScrScriptNode visitDirectiveCall(TechlandScriptParser.DirectiveCallContext ctx) {
+    public BaseTreeNode visitDirectiveCall(TechlandScriptParser.DirectiveCallContext ctx) {
         // 处理预处理指令调用，例如: !define MAX_SPEED 10
         String directiveName = ctx.Id().getText();
         TechlandScriptParser.ValueListContext valueList = ctx.valueList();
@@ -231,24 +237,24 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
     @Override
-    public ScrScriptNode visitMacroDecl(TechlandScriptParser.MacroDeclContext ctx) {
+    public BaseTreeNode visitMacroDecl(TechlandScriptParser.MacroDeclContext ctx) {
         TerminalNode macroId = ctx.MacroId(); //Like: $Police_parking_dead_zone
         String signature = MACRO + ":" + macroId.getText();
         return new ScrLeafScriptNode(signature,
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
     @Override
-    public ScrScriptNode visitVariableDecl(TechlandScriptParser.VariableDeclContext ctx) {
+    public BaseTreeNode visitVariableDecl(TechlandScriptParser.VariableDeclContext ctx) {
         // 局部变量声明，如: float val = 1.0;
         // 签名示例: "variable:flot:val"
         String name = ctx.type() + ":" + ctx.Id().getText();
@@ -257,12 +263,12 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 
     @Override
-    public ScrScriptNode visitUseDecl(TechlandScriptParser.UseDeclContext ctx) {
+    public BaseTreeNode visitUseDecl(TechlandScriptParser.UseDeclContext ctx) {
         // use 语句，例如: use Input();
         // use 语句通常是可以重复的（追加模式），所以把参数也放进签名里
         String name = ctx.Id().getText();
@@ -274,7 +280,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<ScrScriptN
                 getStartTokenIndex(ctx),
                 getStopTokenIndex(ctx),
                 ctx.start.getLine(),
-                getFullText(ctx)
+                tokenStream
         );
     }
 

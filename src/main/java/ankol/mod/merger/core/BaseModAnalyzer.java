@@ -13,9 +13,9 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 基准MOD分析器 - 负责加载和分析基准MOD（原版文件）
@@ -145,7 +145,7 @@ public class BaseModAnalyzer {
      *
      * @param filePath mod文件路径
      */
-    public boolean hasPathConflict(String filePath) throws NoSuchFileException {
+    public boolean hasPathConflict(String filePath) {
         if (!loaded) {
             return false;
         }
@@ -153,7 +153,7 @@ public class BaseModAnalyzer {
         FileTree fileTree = indexedBaseModFileMap.get(fileName);
         //有时会有一些不属于mod的文件被加入到pak中，这里查到空后说明不是原版mod支持修改的文件.
         if (fileTree == null) {
-            throw new NoSuchFileException("不支持的文件类型"); //抛出异常让外面知道，后续移除这个文件
+            return false;
         }
         String correctPath = fileTree.getFileEntryName();
         return correctPath != null && !correctPath.equalsIgnoreCase(filePath);

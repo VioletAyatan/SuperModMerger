@@ -6,12 +6,10 @@ import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -76,8 +74,7 @@ public class PakManager {
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
     private static void extractZipRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
-        Charset charset = detectZipCharset(archivePath);
-        try (ZipFile zipFile = ZipFile.builder().setPath(archivePath).setCharset(charset).get()) {
+        try (ZipFile zipFile = ZipFile.builder().setPath(archivePath).setCharset(StandardCharsets.UTF_8).get()) {
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
                 ZipArchiveEntry entry = entries.nextElement();
@@ -110,9 +107,9 @@ public class PakManager {
                     // 递归解压，根据文件类型选择解压方法，缓存 toLowerCase 结果
                     String lowerFileName = fileName.toLowerCase();
                     if (lowerFileName.endsWith(".7z")) {
-                        extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, fileName);
+                        extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
                     } else {
-                        extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, fileName);
+                        extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
                     }
                 }
                 // 创建文件来源信息，记录来源链
@@ -145,8 +142,10 @@ public class PakManager {
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
     private static void extract7zRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
-        Charset charset = detectZipCharset(archivePath);
-        try (SevenZFile sevenZFile = SevenZFile.builder().setPath(archivePath).setCharset(charset).get()) {
+        try (SevenZFile sevenZFile = SevenZFile.builder().setPath(archivePath)
+                .setCharset(StandardCharsets.UTF_8)
+                .get()
+        ) {
             SevenZArchiveEntry entry;
             while ((entry = sevenZFile.getNextEntry()) != null) {
                 if (entry.isDirectory()) continue;
@@ -309,37 +308,5 @@ public class PakManager {
             hexChars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
         }
         return new String(hexChars);
-    }
-
-    /**
-     * 智能检测 ZIP 文件的文件名编码
-     *
-     * @param archivePath 压缩包路径
-     * @return 最可能的编码
-     */
-    private static Charset detectZipCharset(Path archivePath) {
-        UniversalDetector detector = new UniversalDetector();
-        try (ZipFile zipFile = ZipFile.builder()
-                .setPath(archivePath)
-                .setCharset(StandardCharsets.ISO_8859_1)
-                .get()) {
-            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
-            int checkCount = 0;
-            // 检查前10个文件即可，没必要遍历整个包，提高效率
-            while (entries.hasMoreElements() && checkCount < 10) {
-                ZipArchiveEntry entry = entries.nextElement();
-                String entryName = entry.getName();
-                detector.handleData(entryName.getBytes(StandardCharsets.ISO_8859_1));
-                checkCount++;
-            }
-            detector.dataEnd();
-            String charset = detector.getDetectedCharset();
-            if (charset != null) {
-                return Charset.forName(charset);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return StandardCharsets.UTF_8;
     }
 }

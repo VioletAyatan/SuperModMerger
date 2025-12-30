@@ -2,20 +2,20 @@ package ankol.mod.merger.merger.xml;
 
 import ankol.mod.merger.antlr.xml.TechlandXMLLexer;
 import ankol.mod.merger.antlr.xml.TechlandXMLParser;
-import ankol.mod.merger.core.FileMerger;
+import ankol.mod.merger.core.AbstractFileMerger;
+import ankol.mod.merger.core.BaseTreeNode;
+import ankol.mod.merger.core.ConflictResolver;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.exception.BusinessException;
+import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.xml.node.XmlContainerNode;
 import ankol.mod.merger.merger.xml.node.XmlNode;
-import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
-import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.core.util.StrUtil;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -25,7 +25,9 @@ import org.antlr.v4.runtime.TokenStreamRewriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * XML文件合并器
@@ -33,32 +35,7 @@ import java.util.*;
  * @author Ankol
  */
 @Slf4j
-public class TechlandXmlFileMerger extends FileMerger {
-    /**
-     * 冲突记录
-     */
-    @Data
-    private static class ConflictRecord {
-        // getters
-        private final String fileName;
-        private final String baseModName;
-        private final String mergeModName;
-        private final String signature;
-        private final XmlNode baseNode;
-        private final XmlNode modNode;
-        private int userChoice = 0; // 1: 选择base, 2: 选择mod
-
-        ConflictRecord(String fileName, String baseModName, String mergeModName,
-                       String signature, XmlNode baseNode, XmlNode modNode) {
-            this.fileName = fileName;
-            this.baseModName = baseModName;
-            this.mergeModName = mergeModName;
-            this.signature = signature;
-            this.baseNode = baseNode;
-            this.modNode = modNode;
-        }
-    }
-
+public class TechlandXmlFileMerger extends AbstractFileMerger {
     /**
      * 冲突项列表
      */
@@ -98,25 +75,16 @@ public class TechlandXmlFileMerger extends FileMerger {
             // 解析原始基准MOD文件（如果存在）
             if (context.getOriginalBaseModContent() != null) {
                 String contentHash = Tools.computeHash(context.getOriginalBaseModContent());
-                ParseResult cached = PARSE_CACHE.get(contentHash);
-                if (cached != null) {
-                    originalBaseModRoot = cached.astNode;
-                } else {
-                    ParseResult result = parseContent(context.getOriginalBaseModContent());
-                    originalBaseModRoot = result.astNode;
-                    PARSE_CACHE.put(contentHash, result);
-                }
+                ParseResult parseResult = PARSE_CACHE.get(contentHash, () -> parseContent(context.getOriginalBaseModContent()));
+                originalBaseModRoot = parseResult.astNode;
             }
-
             // 解析base和mod文件
             ParseResult baseResult = parseFile(file1.getFullPathName());
             ParseResult modResult = parseFile(file2.getFullPathName());
             XmlContainerNode baseRoot = baseResult.astNode;
             XmlContainerNode modRoot = modResult.astNode;
-
             // 递归对比，找到冲突项
             reduceCompare(originalBaseModRoot, baseRoot, modRoot);
-
             // 第一个mod与原版文件的对比，直接通过，不提示冲突
             if (context.isFirstModMergeWithBaseMod() && !conflicts.isEmpty()) {
                 for (ConflictRecord record : conflicts) {
@@ -124,11 +92,9 @@ public class TechlandXmlFileMerger extends FileMerger {
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
-                resolveConflictsInteractively();
+                ConflictResolver.resolveConflict(conflicts);
             }
-
-            String mergedContent = getMergedContent(baseResult);
-            return new MergeResult(mergedContent, !conflicts.isEmpty());
+            return new MergeResult(getMergedContent(baseResult), !conflicts.isEmpty());
         } catch (Exception e) {
             log.error(StrUtil.format("Error during XML file merge: {} Reason: {}", file1.getFullPathName(), e.getMessage()), e);
             throw new BusinessException("文件" + file1.getFileName() + "合并失败");
@@ -141,46 +107,7 @@ public class TechlandXmlFileMerger extends FileMerger {
     }
 
     /**
-     * 获取合并后的内容
-     */
-    private String getMergedContent(ParseResult baseResult) {
-        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
-
-        // 处理冲突节点的替换
-        for (ConflictRecord record : conflicts) {
-            if (record.getUserChoice() == 2) { // 用户选择了 Mod
-                XmlNode baseNode = record.getBaseNode();
-                XmlNode modNode = record.getModNode();
-                rewriter.replace(
-                        baseNode.getStartTokenIndex(),
-                        baseNode.getStopTokenIndex(),
-                        modNode.getSourceText()
-                );
-            }
-        }
-
-        // 处理新增节点的插入
-        for (NewNodeRecord record : newNodes) {
-            XmlNode previousSibling = record.previousSibling();
-            XmlNode newNode = record.newNode();
-
-            int insertPosition;
-            if (previousSibling != null) {
-                // 如果有前一个兄弟节点，在其后面插入
-                // 使用stopTokenIndex + 1
-                insertPosition = previousSibling.getStopTokenIndex() + 1;
-            } else {
-                // 如果没有前一个兄弟节点（即这是第一个子节点），在父容器的结束标签前面插入
-                insertPosition = record.parentContainer().getStopTokenIndex();
-            }
-            rewriter.insertBefore(insertPosition, "\n" + newNode.getSourceText());
-        }
-
-        return rewriter.getText();
-    }
-
-    /**
-     * 递归对比三个版本的XML树
+     * 递归对比树节点
      */
     private void reduceCompare(XmlContainerNode originalContainer, XmlContainerNode baseContainer, XmlContainerNode modContainer) {
         // 遍历Mod的所有子节点
@@ -204,11 +131,11 @@ public class TechlandXmlFileMerger extends FileMerger {
                 } else {
                     // 更新前一个兄弟节点
                     previousSiblingInBase = baseNode;
-                    if (baseNode instanceof XmlContainerNode && modNode instanceof XmlContainerNode) {
+                    if (baseNode instanceof XmlContainerNode baseContainerNode && modNode instanceof XmlContainerNode modContainerNode) {
                         reduceCompare(
                                 (originalNode instanceof XmlContainerNode) ? (XmlContainerNode) originalNode : null,
-                                (XmlContainerNode) baseNode,
-                                (XmlContainerNode) modNode
+                                baseContainerNode,
+                                modContainerNode
                         );
                     }
                     //子节点，对比内容
@@ -250,6 +177,44 @@ public class TechlandXmlFileMerger extends FileMerger {
     }
 
     /**
+     * 获取合并后的内容
+     */
+    private String getMergedContent(ParseResult baseResult) {
+        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
+        // 处理冲突节点的替换
+        for (ConflictRecord record : conflicts) {
+            if (record.getUserChoice() == 2) { // 用户选择了 Mod
+                BaseTreeNode baseNode = record.getBaseNode();
+                BaseTreeNode modNode = record.getModNode();
+                rewriter.replace(
+                        baseNode.getStartTokenIndex(),
+                        baseNode.getStopTokenIndex(),
+                        modNode.getSourceText()
+                );
+            }
+        }
+
+        // 处理新增节点的插入
+        for (NewNodeRecord record : newNodes) {
+            XmlNode previousSibling = record.previousSibling();
+            XmlNode newNode = record.newNode();
+
+            int insertPosition;
+            if (previousSibling != null) {
+                // 如果有前一个兄弟节点，在其后面插入
+                // 使用stopTokenIndex + 1
+                insertPosition = previousSibling.getStopTokenIndex() + 1;
+            } else {
+                // 如果没有前一个兄弟节点（即这是第一个子节点），在父容器的结束标签前面插入
+                insertPosition = record.parentContainer().getStopTokenIndex();
+            }
+            rewriter.insertBefore(insertPosition, "\n" + newNode.getSourceText());
+        }
+
+        return rewriter.getText();
+    }
+
+    /**
      * 检查节点是否与原始基准MOD中的对应节点内容相同
      */
     private boolean isNodeSameAsOriginalBaseMod(XmlNode originalNode, XmlNode modNode) {
@@ -265,73 +230,13 @@ public class TechlandXmlFileMerger extends FileMerger {
     }
 
     /**
-     * 交互式解决冲突
-     */
-    private void resolveConflictsInteractively() {
-        Scanner scanner = new Scanner(System.in);
-        ColorPrinter.warning(Localizations.t("SCR_MERGER_CONFLICT_DETECTED", conflicts.size()));
-        int chose = 0;
-
-        for (int i = 0; i < conflicts.size(); i++) {
-            ConflictRecord record = conflicts.get(i);
-
-            if (chose == 3) {
-                record.setUserChoice(1); // 全部选择base的配置
-            } else if (chose == 4) {
-                record.setUserChoice(2); // 全部选择merge mod的配置
-            } else {
-                ColorPrinter.info("=".repeat(75));
-                ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
-
-                ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
-                ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLine(), record.getBaseNode().getSourceText().trim()));
-
-                ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_2", record.getMergeModName()));
-                ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLine(), record.getModNode().getSourceText().trim()));
-
-                ColorPrinter.info("=".repeat(75));
-                ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
-                ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_1", record.getBaseNode().getSourceText().trim()));
-                ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_2", record.getModNode().getSourceText().trim()));
-                ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_1", record.getBaseModName()));
-                ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_2", record.getMergeModName()));
-
-                while (true) {
-                    String input = scanner.nextLine();
-                    if (input.equals("1") || input.equals("2")) {
-                        record.setUserChoice(Integer.parseInt(input));
-                        break;
-                    }
-                    if (input.equals("3") || input.equals("4")) {
-                        chose = Integer.parseInt(input);
-                        record.setUserChoice(chose == 3 ? 1 : 2);
-                        break;
-                    }
-                    ColorPrinter.warning(Localizations.t("SCR_MERGER_INVALID_INPUT"));
-                }
-            }
-        }
-        ColorPrinter.success(Localizations.t("SCR_MERGER_CONFLICT_RESOLVED"));
-    }
-
-    /**
      * 将XML文件解析成语法树
      */
     private static ParseResult parseFile(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = Tools.computeHash(content);
-
         // 先查缓存
-        ParseResult cached = PARSE_CACHE.get(contentHash);
-        if (cached != null) {
-            return cached;
-        }
-
-        // 缓存未命中，执行解析
-        ParseResult result = parseContent(content);
-        // 存入缓存
-        PARSE_CACHE.put(contentHash, result);
-        return result;
+        return PARSE_CACHE.get(contentHash, () -> parseContent(content));
     }
 
     /**
@@ -342,9 +247,7 @@ public class TechlandXmlFileMerger extends FileMerger {
         TechlandXMLLexer lexer = new TechlandXMLLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TechlandXMLParser parser = new TechlandXMLParser(tokens);
-        TechlandXmlFileVisitor visitor = new TechlandXmlFileVisitor();
-
-        // 访问document节点，应该返回ROOT容器
+        TechlandXmlFileVisitor visitor = new TechlandXmlFileVisitor(tokens);
         XmlNode root = visitor.visitDocument(parser.document());
         XmlContainerNode containerRoot = (XmlContainerNode) root;
         return new ParseResult(containerRoot, tokens);

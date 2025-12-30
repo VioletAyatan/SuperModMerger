@@ -3,6 +3,7 @@ package ankol.mod.merger.merger.xml.node;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,9 +25,9 @@ public class XmlContainerNode extends XmlNode {
                             int startTokenIndex,
                             int stopTokenIndex,
                             int line,
-                            String sourceText,
+                            CommonTokenStream tokenStream,
                             Map<String, String> attributes) {
-        super(signature, startTokenIndex, stopTokenIndex, line, sourceText, attributes);
+        super(signature, startTokenIndex, stopTokenIndex, line, tokenStream, attributes);
     }
 
     /**

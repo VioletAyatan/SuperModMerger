@@ -74,10 +74,6 @@ public class ModMergerEngine {
         try {
             //初始化基准mod
             baseModAnalyzer.load();
-            // 如果有基准MOD，先确定路径修正策略
-            /*if (baseModAnalyzer.isLoaded()) {
-                selectPathCorrectionStrategy();
-            }*/
             // 在提取过程中对每个mod分别进行路径修正
             Map<String, List<FileTree>> filesByPath = extractAllMods();
             // 5. 输出目录（临时）
@@ -102,29 +98,6 @@ public class ModMergerEngine {
     }
 
     /**
-     * 选择路径修正策略（在提取文件前）
-     */
-    private void selectPathCorrectionStrategy() {
-        ColorPrinter.info(Localizations.t("ENGINE_SELECT_PATH_CORRECTION_STRATEGY"));
-        ColorPrinter.success(Localizations.t("ENGINE_STRATEGY_OPTION_1", PathCorrectionStrategy.Strategy.SMART_CORRECT.getDescription()));
-        ColorPrinter.info(Localizations.t("ENGINE_STRATEGY_OPTION_2", PathCorrectionStrategy.Strategy.KEEP_ORIGINAL.getDescription()));
-        // 优化：使用全局Scanner避免资源泄漏
-        while (true) {
-            ColorPrinter.info(Localizations.t("ENGINE_INPUT_CHOICE_PROMPT"));
-            String input = SYSTEM_SCANNER.next().trim();
-            try {
-                if (pathCorrectionStrategy.selectByCode(Integer.parseInt(input))) {
-                    ColorPrinter.success(Localizations.t("ENGINE_STRATEGY_SELECTED", pathCorrectionStrategy.getSelectedStrategy().getDescription()));
-                    break;
-                }
-            } catch (NumberFormatException e) {
-                // 继续循环
-            }
-            ColorPrinter.warning(Localizations.t("ENGINE_INVALID_CHOICE"));
-        }
-    }
-
-    /**
      * 对单个MOD的文件路径进行修正
      *
      * @param modFileName    MOD文件名
@@ -141,25 +114,20 @@ public class ModMergerEngine {
         Map<String, FileTree> correctedFiles = new LinkedHashMap<>();
         Map<String, String> corrections = new LinkedHashMap<>();
 
-        HashSet<String> markToRemoved = new HashSet<>();
+//        HashSet<String> markToRemoved = new HashSet<>();
         // 查找需要修正的路径
         for (Map.Entry<String, FileTree> entry : extractedFiles.entrySet()) {
             String fileEntryName = entry.getKey();
             FileTree sourceInfo = entry.getValue();
-            try {
-                if (baseModAnalyzer.hasPathConflict(fileEntryName)) {
-                    String suggestedPath = baseModAnalyzer.getSuggestedPath(fileEntryName);
-                    corrections.put(fileEntryName, suggestedPath);
-                    correctedFiles.put(suggestedPath, sourceInfo);
-                } else {
-                    correctedFiles.put(fileEntryName, sourceInfo);
-                }
-            } catch (NoSuchFileException e) {
-                markToRemoved.add(fileEntryName);
-                log.warn("File '{}' from mod '{}' does not exist in base mod, marking for removal.", fileEntryName, modFileName);
+            if (baseModAnalyzer.hasPathConflict(fileEntryName)) {
+                String suggestedPath = baseModAnalyzer.getSuggestedPath(fileEntryName);
+                corrections.put(fileEntryName, suggestedPath);
+                correctedFiles.put(suggestedPath, sourceInfo);
+            } else {
+                correctedFiles.put(fileEntryName, sourceInfo);
             }
         }
-        markToRemoved.forEach(extractedFiles::remove); //移除不存在于基准MOD中的文件
+//        markToRemoved.forEach(extractedFiles::remove); //移除不存在于基准MOD中的文件
 
         // 如果有路径被修正，输出日志
         if (!corrections.isEmpty()) {
@@ -243,11 +211,11 @@ public class ModMergerEngine {
                 // 基准mod中存在该文件，需要进行对比合并
                 if (originalBaseModContent != null) {
                     MergerContext context = new MergerContext();
-                    Optional<FileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
+                    Optional<AbstractFileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
 
                     // 如果支持合并，进行对比合并
                     if (mergerOptional.isPresent()) {
-                        FileMerger merger = mergerOptional.get();
+                        AbstractFileMerger merger = mergerOptional.get();
                         String fileName = Tools.getEntryFileName(relPath);
 
                         Path tempBaseFile = Files.createTempFile("merge_base_data0_", ".tmp");
@@ -315,7 +283,7 @@ public class ModMergerEngine {
         }
 
         MergerContext context = new MergerContext();
-        Optional<FileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
+        Optional<AbstractFileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
 
         //不支持进行冲突对比的文本，让用户选择使用哪个版本
         if (mergerOptional.isEmpty()) {
@@ -343,7 +311,7 @@ public class ModMergerEngine {
         try {
             // 支持合并，开始处理合并逻辑
             ColorPrinter.info(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size()));
-            FileMerger merger = mergerOptional.get();
+            AbstractFileMerger merger = mergerOptional.get();
             String baseMergedContent = ""; //基准文本内容
 
             String originalBaseModContent = null;
