@@ -12,9 +12,17 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class ConflictRecord {
+    /**
+     * 冲突的文件名
+     */
     private final String fileName;
-
+    /**
+     * 基础模组名称
+     */
     private final String baseModName;
+    /**
+     * 合并模组名称
+     */
     private final String mergeModName;
 
     /**
@@ -27,4 +35,14 @@ public class ConflictRecord {
      * 用户选择
      */
     private Integer userChoice;
+
+    public ConflictRecord(String fileName, String baseModName, String mergeModName, String signature, BaseTreeNode baseNode, BaseTreeNode modNode, Integer userChoice) {
+        this.fileName = fileName;
+        this.baseModName = baseModName;
+        this.mergeModName = mergeModName;
+        this.signature = signature;
+        this.baseNode = baseNode;
+        this.modNode = modNode;
+        this.userChoice = userChoice;
+    }
 }
