@@ -153,7 +153,7 @@ public class BaseModAnalyzer {
         FileTree fileTree = indexedBaseModFileMap.get(fileName);
         //有时会有一些不属于mod的文件被加入到pak中，这里查到空后说明不是原版mod支持修改的文件.
         if (fileTree == null) {
-            throw new NoSuchFileException("不支持的文件类型"); //抛出异常让外面知道，后续移除这个文件
+            return false;
         }
         String correctPath = fileTree.getFileEntryName();
         return correctPath != null && !correctPath.equalsIgnoreCase(filePath);
