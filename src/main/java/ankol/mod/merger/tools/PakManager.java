@@ -1,9 +1,6 @@
 package ankol.mod.merger.tools;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.junrar.Archive;
-import com.github.junrar.rarfile.FileHeader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
@@ -11,7 +8,9 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -56,8 +55,6 @@ public class PakManager {
         // 根据文件扩展名判断格式
         if (StrUtil.endWithIgnoreCase(archiveName, ".7z")) {
             extract7zRecursive(pakPath, tempDir, fileTreeMap, archiveName);
-        } else if (StrUtil.endWithIgnoreCase(archiveName, ".rar")) {
-            extractRarRecursive(pakPath, tempDir, fileTreeMap, archiveName);
         } else {
             extractZipRecursive(pakPath, tempDir, fileTreeMap, archiveName);
         }
@@ -107,8 +104,6 @@ public class PakManager {
                     String lowerFileName = fileName.toLowerCase();
                     if (lowerFileName.endsWith(".7z")) {
                         extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
-                    } else if (lowerFileName.endsWith(".rar")) {
-                        extractRarRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
                     } else {
                         extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
                     }
@@ -183,8 +178,6 @@ public class PakManager {
                     String lowerFileName = fileName.toLowerCase();
                     if (lowerFileName.endsWith(".7z")) {
                         extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, fileName);
-                    } else if (lowerFileName.endsWith(".rar")) {
-                        extractRarRecursive(outputPath, nestedTempDir, fileTreeMap, fileName);
                     } else {
                         extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, fileName);
                     }
@@ -205,73 +198,6 @@ public class PakManager {
                     fileTreeMap.put(entryName, current);
                 }
             }
-        }
-    }
-
-    /**
-     * 递归解压 RAR 格式压缩包（支持嵌套）
-     *
-     * @param archivePath 压缩包路径
-     * @param outputDir   输出目录
-     * @param fileTreeMap 文件映射表，包含来源信息
-     * @param archiveName 当前压缩包名称（用于构建来源链）
-     */
-    private static void extractRarRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
-        try (Archive archive = new Archive(archivePath.toFile())) {
-            FileHeader fileHeader;
-            while ((fileHeader = archive.nextFileHeader()) != null) {
-                if (fileHeader.isDirectory()) continue;
-
-                String entryName = fileHeader.getFileName().replace('\\', '/');
-                String fileName = Tools.getEntryFileName(entryName);
-                Path outputPath = outputDir.resolve(entryName);
-                Files.createDirectories(outputPath.getParent());
-
-                // 检查文件大小
-                if (fileHeader.getFullUnpackSize() == 0) {
-                    Files.createFile(outputPath);
-                } else {
-                    // 从 RAR 中读取文件内容并写入
-                    try (OutputStream output = FileUtil.getOutputStream(outputPath)) {
-                        archive.extractFile(fileHeader, output);
-                    }
-                }
-
-                // 检查是否是嵌套的压缩包
-                if (isArchiveFile(fileName)) {
-                    // 创建嵌套压缩包的临时解压目录，使用原子计数器确保唯一性
-                    String sanitizedFileName = fileName.replaceAll("[^a-zA-Z0-9._-]", "_");
-                    Path nestedTempDir = outputDir.resolve(String.format("_nested_%d_%d_%s",
-                            System.currentTimeMillis(),
-                            NESTED_COUNTER.getAndIncrement(),
-                            sanitizedFileName));
-                    Files.createDirectories(nestedTempDir);
-                    // 递归解压，根据文件类型选择解压方法
-                    if (fileName.endsWith(".7z")) {
-                        extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
-                    } else if (fileName.endsWith(".rar")) {
-                        extractRarRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
-                    } else {
-                        extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
-                    }
-                } else {
-                    // 创建文件来源信息，记录来源链
-                    FileTree current = new FileTree(fileName, entryName, archiveName, outputPath);
-                    // 检查是否已有相同路径的文件（来自不同来源）
-                    if (fileTreeMap.containsKey(entryName)) {
-                        FileTree existing = fileTreeMap.get(entryName);
-                        ColorPrinter.warning(Localizations.t("PAK_MANAGER_DUPLICATE_FILE_DETECTED",
-                                existing.getArchiveFileName(),
-                                current.getFileEntryName(),
-                                existing.getFileEntryName())
-                        );
-                        ColorPrinter.success(Localizations.t("PAK_MANAGER_USE_NEW_PATH", current.getFileEntryName()));
-                    }
-                    fileTreeMap.put(entryName, current);
-                }
-            }
-        } catch (com.github.junrar.exception.RarException e) {
-            throw new IOException("Failed to extract RAR archive: " + archivePath, e);
         }
     }
 
