@@ -1,6 +1,7 @@
 package ankol.mod.merger.tools;
 
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 控制台彩色打印工具类
@@ -15,6 +16,7 @@ import cn.hutool.core.util.StrUtil;
  *
  * @author Ankol
  */
+@Slf4j
 public class ColorPrinter {
 
     // ANSI 颜色代码
@@ -98,13 +100,14 @@ public class ColorPrinter {
      */
     public static void info(String message) {
         System.out.println(applyColor(message, BRIGHT_BLUE));
+        log.debug(message);
     }
 
     /**
      * 打印 INFO 级别日志（蓝色），带格式化参数
      */
     public static void info(String format, Object... args) {
-        System.out.println(applyColor(StrUtil.format(format, args), BRIGHT_BLUE));
+        info(StrUtil.format(format, args));
     }
 
     /**
@@ -112,13 +115,14 @@ public class ColorPrinter {
      */
     public static void success(String message) {
         System.out.println(applyColor(message, BRIGHT_GREEN));
+        log.debug(message);
     }
 
     /**
      * 打印成功消息（绿色），带格式化参数
      */
     public static void success(String format, Object... args) {
-        System.out.println(applyColor(StrUtil.format(format, args), BRIGHT_GREEN));
+        success(StrUtil.format(format, args));
     }
 
     /**
@@ -126,13 +130,14 @@ public class ColorPrinter {
      */
     public static void warning(String message) {
         System.out.println(applyColor(message, BRIGHT_YELLOW));
+        log.debug(message);
     }
 
     /**
      * 打印警告消息（黄色），带格式化参数
      */
     public static void warning(String format, Object... args) {
-        System.out.println(applyColor(StrUtil.format(format, args), BRIGHT_YELLOW));
+        warning(StrUtil.format(format, args));
     }
 
     /**
@@ -140,13 +145,7 @@ public class ColorPrinter {
      */
     public static void error(String message) {
         System.err.println(applyColor(message, BRIGHT_RED));
-    }
-
-    /**
-     * 打印错误消息（红色），带格式化参数
-     */
-    public static void error(String format, Object... args) {
-        System.err.println(applyColor(StrUtil.format(format, args), BRIGHT_RED));
+        log.error(message);
     }
 
     /**
@@ -154,7 +153,14 @@ public class ColorPrinter {
      */
     public static void error(String message, Throwable e) {
         System.err.println(applyColor(message, BRIGHT_RED));
-        e.printStackTrace();
+        log.error(message, e);
+    }
+
+    /**
+     * 打印错误消息（红色），带格式化参数
+     */
+    public static void error(String format, Object... args) {
+        error(StrUtil.format(format, args));
     }
 
     /**
@@ -162,13 +168,14 @@ public class ColorPrinter {
      */
     public static void debug(String message) {
         System.out.println(applyColor(message, BRIGHT_CYAN));
+        log.debug(message);
     }
 
     /**
      * 打印调试消息（青色），带格式化参数
      */
     public static void debug(String format, Object... args) {
-        System.out.println(applyColor(StrUtil.format(format, args), BRIGHT_CYAN));
+        debug(StrUtil.format(format, args));
     }
 
     /**
@@ -176,13 +183,14 @@ public class ColorPrinter {
      */
     public static void print(String message) {
         System.out.println(applyColor(message, WHITE));
+        log.debug(message);
     }
 
     /**
      * 打印普通消息（白色），带格式化参数
      */
     public static void print(String format, Object... args) {
-        System.out.println(applyColor(StrUtil.format(format, args), WHITE));
+        print(StrUtil.format(format, args));
     }
 
     /**
@@ -190,13 +198,14 @@ public class ColorPrinter {
      */
     public static void bold(String message) {
         System.out.println(applyColor(BOLD + message, RESET));
+        log.debug(message);
     }
 
     /**
      * 打印加粗消息（白色加粗），带格式化参数
      */
     public static void bold(String format, Object... args) {
-        System.out.println(applyColor(BOLD + StrUtil.format(format, args), RESET));
+        bold(StrUtil.format(format, args));
     }
 
     /**
