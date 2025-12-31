@@ -127,8 +127,8 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
                         if (!baseFunCall.getArguments().equals(modFunCall.getArguments())) {
                             //两者内容不同，检查mod节点内容与原版是否相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                //当前节点与原版一致，说明此处节点未变动，使用mod的内容
-                                if (isNodeSameAsOriginalNode(originalNode, baseFunCall)) {
+                                //当前节点与原版一致，说明此处节点未变动，使用mod的内容（开启了智能合并的情况下）
+                                if (isNodeSameAsOriginalNode(originalNode, baseFunCall) && GlobalMergingStrategy.isAutoMergingCodeLine()) {
                                     ConflictRecord record = new ConflictRecord(context.getFileName(),
                                             context.getMod1Name(),
                                             context.getMod2Name(),

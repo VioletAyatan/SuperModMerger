@@ -4,13 +4,16 @@ import cn.hutool.core.util.StrUtil;
 
 /**
  * 控制台彩色打印工具类
- * 支持 ANSI 彩色输出，仅在 Windows 10+ 和 Unix-like 系统中有效
+ * <p>
+ * 支持ANSI彩色输出，仅在Windows10+和Unix-like系统中有效，使用示例：
+ * <ui>
+ * <li>ColorPrinter.info("This is info message");</li>
+ * <li>ColorPrinter.success("Operation successful");</li>
+ * <li>ColorPrinter.warning("Warning message");</li>
+ * <li>ColorPrinter.error("Error occurred");</li>
+ * </ui>
  *
- * 使用示例：
- *   ColorPrinter.info("This is info message");
- *   ColorPrinter.success("Operation successful");
- *   ColorPrinter.warning("Warning message");
- *   ColorPrinter.error("Error occurred");
+ * @author Ankol
  */
 public class ColorPrinter {
 
@@ -213,7 +216,7 @@ public class ColorPrinter {
     /**
      * 自定义颜色打印
      *
-     * @param message 消息内容
+     * @param message   消息内容
      * @param colorCode ANSI 颜色代码（如 ColorPrinter.RED）
      */
     public static void printWithColor(String message, String colorCode) {
