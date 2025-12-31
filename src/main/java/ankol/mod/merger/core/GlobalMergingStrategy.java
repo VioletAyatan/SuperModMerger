@@ -17,7 +17,7 @@ public class GlobalMergingStrategy {
      * 是否自动合并不冲突的代码行
      */
     @Getter
-    private static boolean autoMergingCodeLine = false;
+    private static boolean autoMergingCodeLine = true;
     /**
      * 是否自动修正错误的文件路径
      */

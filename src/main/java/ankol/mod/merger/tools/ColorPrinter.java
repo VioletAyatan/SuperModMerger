@@ -153,7 +153,7 @@ public class ColorPrinter {
      */
     public static void error(String message, Throwable e) {
         System.err.println(applyColor(message, BRIGHT_RED));
-        log.error(message, e);
+        log.debug(message, e);
     }
 
     /**
