@@ -1,7 +1,7 @@
 package ankol.mod.merger;
 
 import ankol.mod.merger.core.GlobalMergingStrategy;
-import ankol.mod.merger.core.ModMergerEngine;
+import ankol.mod.merger.core.FileMergerEngine;
 import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.Localizations;
@@ -47,7 +47,7 @@ public class AppMain {
             //询问自动合并代码策略
             GlobalMergingStrategy.askAutoMergingCode();
             // 执行合并
-            ModMergerEngine merger = new ModMergerEngine(modsToMerge, outputPath, baseModPath);
+            FileMergerEngine merger = new FileMergerEngine(modsToMerge, outputPath, baseModPath);
             merger.merge();
             ColorPrinter.success(Localizations.t("APP_MAIN_DONE"));
             parseAnyKeyToExit();

@@ -4,6 +4,8 @@ import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
+import cn.hutool.cache.Cache;
+import cn.hutool.cache.CacheUtil;
 import cn.hutool.core.io.IoUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 基准MOD分析器 - 负责加载和分析基准MOD（原版文件）
@@ -23,7 +26,7 @@ import java.util.Map;
  * @author Ankol
  */
 @Slf4j
-public class BaseModAnalyzer {
+public class BaseModManager {
 
     /**
      * 基准MOD文件路径
@@ -53,13 +56,15 @@ public class BaseModAnalyzer {
      * 已提取文件的缓存映射：相对路径 → 临时文件路径
      */
     private final Map<String, Path> extractedFileCache;
+    @SuppressWarnings("rawtypes")
+    private final Cache<String, ParsedResult> BASE_TREE_CACHE = CacheUtil.newWeakCache(30 * 1000);
 
     /**
      * 构造函数
      *
      * @param baseModPath 基准MOD文件路径
      */
-    public BaseModAnalyzer(Path baseModPath) {
+    public BaseModManager(Path baseModPath) {
         this.baseModPath = baseModPath;
         this.indexedBaseModFileMap = new LinkedHashMap<>();
         this.extractedFileCache = new LinkedHashMap<>();
@@ -173,7 +178,6 @@ public class BaseModAnalyzer {
         return indexedBaseModFileMap.get(fileName).getFileEntryName();
     }
 
-
     /**
      * 清理临时文件缓存
      * 建议在合并完成后调用此方法释放磁盘空间
@@ -196,6 +200,25 @@ public class BaseModAnalyzer {
         } catch (IOException e) {
             ColorPrinter.warning("Failed to clear base mod cache: " + e.getMessage());
         }
+    }
+
+    /**
+     * 从基准MOD获得解析后的语法树节点，带缓存机制
+     *
+     * @param fileEntryName 文件在压缩包中的全路径
+     * @param function      解析语法树使用的函数
+     * @return 解析结果，如果文件不存在返回null
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends BaseTreeNode> ParsedResult<T> parseForm(String fileEntryName, Function<String, ParsedResult<T>> function) {
+        return BASE_TREE_CACHE.get(fileEntryName,
+                () -> {
+                    String content = extractFileContent(fileEntryName);
+                    if (content == null) {
+                        return null;
+                    }
+                    return function.apply(content);
+                });
     }
 
     /**
