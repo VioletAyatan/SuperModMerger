@@ -3,8 +3,7 @@
                xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
     <!-- 定义变量 -->
     <timestamp key="bySecond" datePattern="yyyyMMdd-HHmmss"/>
-    <property name="LOG_FILE" value="logs/app-${bySecond}.log"/>
-    <property name="DEBUG_LOG_FILE" value="logs/debug-${bySecond}.log"/>
+    <property name="DEBUG_LOG_FILE" value="logs/app-${bySecond}.log"/>
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
 
     <!-- 控制台输出（STDOUT） -->
@@ -19,19 +18,6 @@
         </filter>
     </appender>
 
-    <!-- INFO级别日志文件输出 -->
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${LOG_FILE}</file>
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-        <!-- 只记录 INFO 及以上级别 -->
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
-    </appender>
-
     <!-- DEBUG级别日志文件输出 -->
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.FileAppender">
         <file>${DEBUG_LOG_FILE}</file>
@@ -39,15 +25,6 @@
             <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-    </appender>
-
-    <!-- 异步追加器，提升性能 -->
-    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
-        <!-- 队列深度 -->
-        <queueSize>512</queueSize>
-        <!-- 丢弃日志阈值 -->
-        <discardingThreshold>0</discardingThreshold>
-        <appender-ref ref="FILE"/>
     </appender>
 
     <!-- DEBUG 日志异步追加器 -->
@@ -62,7 +39,6 @@
     <!-- 根日志级别设置为 DEBUG，以便捕获所有日志 -->
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="ASYNC_FILE"/>
         <appender-ref ref="ASYNC_DEBUG_FILE"/>
     </root>
 

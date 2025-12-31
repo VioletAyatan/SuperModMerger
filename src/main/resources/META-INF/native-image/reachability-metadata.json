@@ -1,6 +1,13 @@
 {
   "reflection": [
     {
+      "type": "ankol.mod.merger.AppMain",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
       "type": "ankol.mod.merger.merger.scr.TechlandScrFileMerger",
       "allDeclaredConstructors": true,
       "allDeclaredMethods": true,
@@ -27,6 +34,21 @@
         {
           "name": "<init>",
           "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "ch.qos.logback.classic.filter.ThresholdFilter",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        },
+        {
+          "name": "setLevel",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
         }
       ]
     },
@@ -78,18 +100,22 @@
       ]
     },
     {
-      "type": "ch.qos.logback.core.FileAppender"
+      "type": "ch.qos.logback.core.FileAppender",
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.core.OutputStreamAppender",
-      "methods": [
-        {
-          "name": "setEncoder",
-          "parameterTypes": [
-            "ch.qos.logback.core.encoder.Encoder"
-          ]
-        }
-      ]
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "ch.qos.logback.core.UnsynchronizedAppenderBase",
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.core.encoder.Encoder"
@@ -112,96 +138,19 @@
       ]
     },
     {
+      "type": "ch.qos.logback.core.filter.Filter",
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
       "type": "ch.qos.logback.core.pattern.PatternLayoutEncoderBase",
-      "methods": [
-        {
-          "name": "setPattern",
-          "parameterTypes": [
-            "java.lang.String"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "ch.qos.logback.core.rolling.RollingFileAppender",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        },
-        {
-          "name": "setFile",
-          "parameterTypes": [
-            "java.lang.String"
-          ]
-        },
-        {
-          "name": "setRollingPolicy",
-          "parameterTypes": [
-            "ch.qos.logback.core.rolling.RollingPolicy"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "ch.qos.logback.core.rolling.RollingPolicy"
-    },
-    {
-      "type": "ch.qos.logback.core.rolling.RollingPolicyBase",
-      "methods": [
-        {
-          "name": "setFileNamePattern",
-          "parameterTypes": [
-            "java.lang.String"
-          ]
-        },
-        {
-          "name": "setParent",
-          "parameterTypes": [
-            "ch.qos.logback.core.FileAppender"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        },
-        {
-          "name": "setMaxFileSize",
-          "parameterTypes": [
-            "ch.qos.logback.core.util.FileSize"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "ch.qos.logback.core.rolling.TimeBasedRollingPolicy",
-      "methods": [
-        {
-          "name": "setMaxHistory",
-          "parameterTypes": [
-            "int"
-          ]
-        }
-      ]
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.core.spi.ContextAware"
-    },
-    {
-      "type": "ch.qos.logback.core.util.FileSize",
-      "methods": [
-        {
-          "name": "valueOf",
-          "parameterTypes": [
-            "java.lang.String"
-          ]
-        }
-      ]
     },
     {
       "type": "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
@@ -281,7 +230,19 @@
       "type": "sun.text.resources.cldr.FormatData"
     },
     {
+      "type": "sun.text.resources.cldr.FormatData_en"
+    },
+    {
       "type": "sun.util.resources.cldr.CalendarData"
+    },
+    {
+      "type": "sun.util.resources.cldr.TimeZoneNames"
+    },
+    {
+      "type": "sun.util.resources.cldr.TimeZoneNames_en"
+    },
+    {
+      "type": "sun.util.resources.cldr.TimeZoneNames_en_US"
     }
   ],
   "resources": [
