@@ -22,14 +22,14 @@ import java.util.stream.Stream;
  * @author Ankol
  */
 @Slf4j
-public class ModMergerEngine {
+public class FileMergerEngine {
 
     private final List<Path> modsToMerge;
     private final Path outputPath;
     private final Path tempDir;
 
     // 基准MOD相关
-    private final BaseModAnalyzer baseModAnalyzer;
+    private final BaseModManager baseModManager;
     private final PathCorrectionStrategy pathCorrectionStrategy;
 
     // 统计信息
@@ -48,11 +48,11 @@ public class ModMergerEngine {
      * @param outputPath  最终输出的 .pak 文件路径
      * @param baseModPath 基准MOD文件路径（可为null）
      */
-    public ModMergerEngine(List<Path> modsToMerge, Path outputPath, Path baseModPath) {
+    public FileMergerEngine(List<Path> modsToMerge, Path outputPath, Path baseModPath) {
         this.modsToMerge = modsToMerge;
         this.outputPath = outputPath;
         this.tempDir = Path.of(Tools.getTempDir(), "ModMerger_" + System.currentTimeMillis());
-        this.baseModAnalyzer = new BaseModAnalyzer(baseModPath);
+        this.baseModManager = new BaseModManager(baseModPath);
         this.pathCorrectionStrategy = new PathCorrectionStrategy();
     }
 
@@ -74,7 +74,7 @@ public class ModMergerEngine {
 
         try {
             //初始化基准mod
-            baseModAnalyzer.load();
+            baseModManager.load();
             // 在提取过程中对每个mod分别进行路径修正
             Map<String, List<FileTree>> filesByPath = extractAllMods();
             // 5. 输出目录（临时）
@@ -92,7 +92,7 @@ public class ModMergerEngine {
             throw new RuntimeException(e);
         } finally {
             // 清理基准MOD缓存
-            baseModAnalyzer.clearCache();
+            baseModManager.clearCache();
             // 清理临时文件
             cleanupTempDir();
         }
@@ -106,7 +106,7 @@ public class ModMergerEngine {
      * @return 修正后的文件映射
      */
     private Map<String, FileTree> correctPathsForMod(String modFileName, Map<String, FileTree> extractedFiles) {
-        if (!baseModAnalyzer.isLoaded() ||
+        if (!baseModManager.isLoaded() ||
                 pathCorrectionStrategy.getSelectedStrategy() != PathCorrectionStrategy.Strategy.SMART_CORRECT
         ) {
             return extractedFiles;
@@ -120,8 +120,8 @@ public class ModMergerEngine {
         for (Map.Entry<String, FileTree> entry : extractedFiles.entrySet()) {
             String fileEntryName = entry.getKey();
             FileTree sourceInfo = entry.getValue();
-            if (baseModAnalyzer.hasPathConflict(fileEntryName)) {
-                String suggestedPath = baseModAnalyzer.getSuggestedPath(fileEntryName);
+            if (baseModManager.hasPathConflict(fileEntryName)) {
+                String suggestedPath = baseModManager.getSuggestedPath(fileEntryName);
                 corrections.put(fileEntryName, suggestedPath);
                 correctedFiles.put(suggestedPath, sourceInfo);
             }
@@ -211,9 +211,9 @@ public class ModMergerEngine {
      */
     private void processSingleFile(String relPath, FileTree fileCurrent, Path mergedOutputDir) throws IOException {
         // 如果基准mod存在，尝试与基准mod对比
-        if (baseModAnalyzer.isLoaded()) {
+        if (baseModManager.isLoaded()) {
             try {
-                String originalBaseModContent = baseModAnalyzer.extractFileContent(relPath);
+                String originalBaseModContent = baseModManager.extractFileContent(relPath);
                 // 基准mod中存在该文件，需要进行对比合并
                 if (originalBaseModContent != null) {
                     MergerContext context = new MergerContext();
@@ -233,7 +233,6 @@ public class ModMergerEngine {
                             context.setFileName(relPath);
                             context.setMod1Name("data0.pak");
                             context.setMod2Name(fileCurrent.getArchiveFileName());
-                            context.setOriginalBaseModContent(originalBaseModContent);
                             context.setFirstModMergeWithBaseMod(true); // 标记为与data0.pak的合并
 
                             MergeResult result = merger.merge(fileBase, fileCurrent);
@@ -289,6 +288,7 @@ public class ModMergerEngine {
         }
 
         MergerContext context = new MergerContext();
+        context.setBaseModManager(baseModManager);
         Optional<AbstractFileMerger> mergerOptional = MergerFactory.getMerger(relPath, context);
 
         //不支持进行冲突对比的文本，让用户选择使用哪个版本
@@ -321,8 +321,8 @@ public class ModMergerEngine {
             String baseMergedContent = ""; //基准文本内容
 
             String originalBaseModContent = null;
-            if (baseModAnalyzer.isLoaded()) {
-                originalBaseModContent = baseModAnalyzer.extractFileContent(relPath);
+            if (baseModManager.isLoaded()) {
+                originalBaseModContent = baseModManager.extractFileContent(relPath);
             }
             String fileName = Tools.getEntryFileName(relPath);
 
@@ -343,7 +343,6 @@ public class ModMergerEngine {
                             context.setFileName(relPath);
                             context.setMod1Name("data0.pak");
                             context.setMod2Name(currentModName);
-                            context.setOriginalBaseModContent(originalBaseModContent);
                             context.setFirstModMergeWithBaseMod(true); // 标记为第一个mod与data0.pak的合并
 
                             MergeResult result = merger.merge(fileBase, fileCurrent);
@@ -369,7 +368,6 @@ public class ModMergerEngine {
                         context.setFileName(relPath);
                         context.setMod1Name(previousModName);
                         context.setMod2Name(currentModName);
-                        context.setOriginalBaseModContent(originalBaseModContent); // 设置基准MOD文件内容
                         context.setFirstModMergeWithBaseMod(false); // 后续合并正常处理冲突
 
                         MergeResult result = merger.merge(fileBase, fileCurrent);

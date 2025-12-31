@@ -46,18 +46,12 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
      * Parse 缓存，避免重复解析相同内容的文件
      * 存储 ParseResult 包含 AST 和 TokenStream
      */
-    private static final Cache<String, ParseResult> PARSE_CACHE = CacheUtil.newWeakCache(30 * 1000);
+    private static final Cache<String, ParsedResult<ScrContainerScriptNode>> PARSE_CACHE = CacheUtil.newWeakCache(30 * 1000);
 
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
      */
     private ScrContainerScriptNode originalBaseModRoot = null;
-
-    /**
-     * 解析结果包装类，包含AST和TokenStream
-     */
-    private record ParseResult(ScrContainerScriptNode astNode, CommonTokenStream tokens) {
-    }
 
     public TechlandScrFileMerger(MergerContext context) {
         super(context);
@@ -66,17 +60,17 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
     @Override
     public MergeResult merge(FileTree file1, FileTree file2) {
         try {
+            ParsedResult<ScrContainerScriptNode> parsedResult = context.getBaseModManager()
+                    .parseForm(file1.getFileEntryName(), this::parseContent);
             // 解析基准MOD文件（如果存在）
-            if (context.getOriginalBaseModContent() != null) {
-                String contentHash = Tools.computeHash(context.getOriginalBaseModContent());
-                ParseResult parseResult = PARSE_CACHE.get(contentHash, () -> parseContent(context.getOriginalBaseModContent()));
-                originalBaseModRoot = parseResult.astNode;
+            if (parsedResult != null) {
+                originalBaseModRoot = parsedResult.astNode();
             }
             // 解析base和mod文件，保留TokenStream
-            ParseResult baseResult = parseFile(file1.getFullPathName());
-            ParseResult modResult = parseFile(file2.getFullPathName());
-            ScrContainerScriptNode baseRoot = baseResult.astNode;
-            ScrContainerScriptNode modRoot = modResult.astNode;
+            ParsedResult<ScrContainerScriptNode> baseResult = parseFile(file1.getFullPathName());
+            ParsedResult<ScrContainerScriptNode> modResult = parseFile(file2.getFullPathName());
+            ScrContainerScriptNode baseRoot = baseResult.astNode();
+            ScrContainerScriptNode modRoot = modResult.astNode();
             // 递归对比，找到冲突项
             reduceCompare(originalBaseModRoot, baseRoot, modRoot);
             //第一个mod与原版文件的对比，直接使用MOD修改的版本，不提示冲突
@@ -169,8 +163,8 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         }
     }
 
-    private String getMergedContent(ParseResult baseResult) {
-        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
+    private String getMergedContent(ParsedResult<ScrContainerScriptNode> baseResult) {
+        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokenStream());
         // 处理冲突节点的替换
         for (ConflictRecord record : conflicts) {
             if (record.getUserChoice() == 2) { // 用户选择了 Mod
@@ -218,13 +212,13 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         insertOperations.add(new InsertOperation(insertPos, newContent));
     }
 
-    private static ParseResult parseFile(Path filePath) throws IOException {
+    private ParsedResult<ScrContainerScriptNode> parseFile(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = Tools.computeHash(content);
         return PARSE_CACHE.get(contentHash, () -> parseContent(content));
     }
 
-    private static ParseResult parseContent(String content) {
+    private ParsedResult<ScrContainerScriptNode> parseContent(String content) {
         CharStream input = CharStreams.fromString(content);
         TechlandScriptLexer lexer = new TechlandScriptLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -232,7 +226,7 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         TechlandScrFileVisitor visitor = new TechlandScrFileVisitor(tokens);
         // 注意：visitFile 返回的一定是我们定义的 ROOT Container
         ScrContainerScriptNode ast = (ScrContainerScriptNode) visitor.visitFile(parser.file());
-        return new ParseResult(ast, tokens);
+        return new ParsedResult<>(ast, tokens);
     }
 
     private static boolean equalsTrimmed(String a, String b) {

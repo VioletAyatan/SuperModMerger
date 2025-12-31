@@ -2,10 +2,7 @@ package ankol.mod.merger.merger.xml;
 
 import ankol.mod.merger.antlr.xml.TechlandXMLLexer;
 import ankol.mod.merger.antlr.xml.TechlandXMLParser;
-import ankol.mod.merger.core.AbstractFileMerger;
-import ankol.mod.merger.core.BaseTreeNode;
-import ankol.mod.merger.core.ConflictResolver;
-import ankol.mod.merger.core.MergerContext;
+import ankol.mod.merger.core.*;
 import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
@@ -46,19 +43,12 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
      */
     private record NewNodeRecord(XmlContainerNode parentContainer, XmlNode previousSibling, XmlNode newNode) {
     }
-
     /**
      * 新增节点列表
      */
     private final List<NewNodeRecord> newNodes = new ArrayList<>();
 
-    /**
-     * 解析结果包装类，包含AST和TokenStream
-     */
-    private record ParseResult(XmlContainerNode astNode, CommonTokenStream tokens) {
-    }
-
-    private static final Cache<String, ParseResult> PARSE_CACHE = CacheUtil.newWeakCache(30 * 1000);
+    private static final Cache<String, ParsedResult<XmlContainerNode>> PARSE_CACHE = CacheUtil.newWeakCache(30 * 1000);
 
     /**
      * 原始基准MOD对应文件的语法树
@@ -72,17 +62,17 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
     @Override
     public MergeResult merge(FileTree file1, FileTree file2) {
         try {
+            ParsedResult<XmlContainerNode> parsedResult = context.getBaseModManager()
+                    .parseForm(file1.getFileEntryName(), this::parseContent);
             // 解析原始基准MOD文件（如果存在）
-            if (context.getOriginalBaseModContent() != null) {
-                String contentHash = Tools.computeHash(context.getOriginalBaseModContent());
-                ParseResult parseResult = PARSE_CACHE.get(contentHash, () -> parseContent(context.getOriginalBaseModContent()));
-                originalBaseModRoot = parseResult.astNode;
+            if (parsedResult != null) {
+                originalBaseModRoot = parsedResult.astNode();
             }
             // 解析base和mod文件
-            ParseResult baseResult = parseFile(file1.getFullPathName());
-            ParseResult modResult = parseFile(file2.getFullPathName());
-            XmlContainerNode baseRoot = baseResult.astNode;
-            XmlContainerNode modRoot = modResult.astNode;
+            ParsedResult<XmlContainerNode> baseResult = parseFile(file1.getFullPathName());
+            ParsedResult<XmlContainerNode> modResult = parseFile(file2.getFullPathName());
+            XmlContainerNode baseRoot = baseResult.astNode();
+            XmlContainerNode modRoot = modResult.astNode();
             // 递归对比，找到冲突项
             reduceCompare(originalBaseModRoot, baseRoot, modRoot);
             // 第一个mod与原版文件的对比，直接通过，不提示冲突
@@ -179,8 +169,8 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
     /**
      * 获取合并后的内容
      */
-    private String getMergedContent(ParseResult baseResult) {
-        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokens);
+    private String getMergedContent(ParsedResult<?> baseResult) {
+        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokenStream());
         // 处理冲突节点的替换
         for (ConflictRecord record : conflicts) {
             if (record.getUserChoice() == 2) { // 用户选择了 Mod
@@ -232,7 +222,7 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
     /**
      * 将XML文件解析成语法树
      */
-    private static ParseResult parseFile(Path filePath) throws IOException {
+    private ParsedResult<XmlContainerNode> parseFile(Path filePath) throws IOException {
         String content = Files.readString(filePath);
         String contentHash = Tools.computeHash(content);
         // 先查缓存
@@ -242,7 +232,7 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
     /**
      * 解析字符串内容为ParseResult
      */
-    private static ParseResult parseContent(String content) {
+    private ParsedResult<XmlContainerNode> parseContent(String content) {
         CharStream input = CharStreams.fromString(content);
         TechlandXMLLexer lexer = new TechlandXMLLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -250,6 +240,6 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
         TechlandXmlFileVisitor visitor = new TechlandXmlFileVisitor(tokens);
         XmlNode root = visitor.visitDocument(parser.document());
         XmlContainerNode containerRoot = (XmlContainerNode) root;
-        return new ParseResult(containerRoot, tokens);
+        return new ParsedResult<>(containerRoot, tokens);
     }
 }
