@@ -57,7 +57,7 @@ public class BaseModManager {
      */
     private final Map<String, Path> extractedFileCache;
     @SuppressWarnings("rawtypes")
-    private final Cache<String, ParsedResult> BASE_TREE_CACHE = CacheUtil.newWeakCache(30 * 1000);
+    private final Cache<String, ParsedResult> BASE_TREE_CACHE = CacheUtil.newFIFOCache(100, 30 * 1000);
 
     /**
      * 构造函数
