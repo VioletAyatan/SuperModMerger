@@ -5,6 +5,7 @@ import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.Localizations;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,7 +28,7 @@ public class ConflictResolver {
                 .toList();
         if (!automaticMerge.isEmpty()) {
             for (ConflictRecord item : automaticMerge) {
-                log.info("AutoMerging Code-line: {} -> {}", item.getBaseNode().getSourceText(), item.getModNode().getSourceText());
+                ColorPrinter.print("Auto merging code-line: {}: {} -> {}: {}", item.getBaseModName(), item.getBaseNode().getSourceText(), item.getMergeModName(), item.getModNode().getSourceText());
             }
             ColorPrinter.success(Localizations.t("SCR_MERGER_AUTO_MERGE_COUNT", automaticMerge.size()));
             conflicts.removeAll(automaticMerge); //暂时移除，主要是为了不出现冲突提示.
