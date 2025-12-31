@@ -3,31 +3,49 @@
                xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
     <!-- 定义变量 -->
     <timestamp key="bySecond" datePattern="yyyyMMdd-HHmmss"/>
-    <property name="DEBUG_LOG_FILE" value="logs/app-${bySecond}.log"/>
+    <property name="LOG_DIR" value="logs"/>
+    <property name="DEBUG_LOG_FILE" value="${LOG_DIR}/app-${bySecond}.log"/>
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
 
-    <!-- 控制台输出（STDOUT） -->
+    <property name="MAX_HISTORY" value="30"/>
+    <property name="TOTAL_SIZE_CAP" value="1GB"/>
+    <property name="MAX_FILE_SIZE" value="10MB"/>
+
+    <!-- 控制台输出-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <!-- 控制台只输出 INFO 及以上级别 -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
     </appender>
 
-    <!-- DEBUG级别日志文件输出 -->
-    <appender name="DEBUG_FILE" class="ch.qos.logback.core.FileAppender">
+    <!-- 文件输出 -->
+    <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${DEBUG_LOG_FILE}</file>
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
+
+        <!-- 滚动策略：基于时间和大小 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 归档日志文件的命名模式 -->
+            <fileNamePattern>${LOG_DIR}/archive/app-%d{yyyyMMdd}.%i.log.gz</fileNamePattern>
+            <!-- 单个日志文件的最大大小 -->
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <!-- 保留的日志文件天数 -->
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <!-- 所有日志文件的总大小上限 -->
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+            <!-- 启动时清理过期的日志文件 -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
     </appender>
 
-    <!-- DEBUG 日志异步追加器 -->
+    <!-- 日志异步追加器 -->
     <appender name="ASYNC_DEBUG_FILE" class="ch.qos.logback.classic.AsyncAppender">
         <!-- 队列深度 -->
         <queueSize>512</queueSize>
@@ -36,13 +54,11 @@
         <appender-ref ref="DEBUG_FILE"/>
     </appender>
 
-    <!-- 根日志级别设置为 DEBUG，以便捕获所有日志 -->
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ASYNC_DEBUG_FILE"/>
     </root>
 
-    <!-- 特定包的日志级别 -->
     <logger name="ankol.mod.merger" level="DEBUG"/>
     <logger name="cn.hutool" level="WARN"/>
 </configuration>
