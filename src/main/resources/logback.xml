@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
     <!-- 定义变量 -->
-    <property name="LOG_FILE" value="logs/app.log"/>
+    <timestamp key="bySecond" datePattern="yyyyMMdd-HHmmss"/>
+    <property name="LOG_FILE" value="logs/app-${bySecond}.log"/>
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
 
     <!-- 控制台输出（STDOUT） -->
@@ -13,21 +14,12 @@
     </appender>
 
     <!-- 文件输出（FILE） -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>${LOG_FILE}</file>
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <!-- 滚动策略 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- 日志文件的命名和保存位置 -->
-            <fileNamePattern>logs/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <!-- 单个日志文件的最大大小 -->
-            <maxFileSize>10MB</maxFileSize>
-            <!-- 日志文件的最大保留天数 -->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
     </appender>
 
     <!-- 异步追加器，提升性能 -->
