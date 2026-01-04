@@ -142,7 +142,6 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -188,8 +187,9 @@
                     <!-- https://www.graalvm.org/latest/reference-manual/native-image/overview/Options/ -->
                     <buildArgs>
                         <buildArg>-march=compatibility</buildArg>
-                        <!-- 启用优化 -->
-                        <buildArg>-Os</buildArg>
+                        <!-- 启用优化 os编译选项减少体积，但会降低性能-->
+<!--                        <buildArg>-Os</buildArg>-->
+                        <!-- 启用全部优化-->
                         <buildArg>-O3</buildArg>
                         <!-- 添加完整字符集支持 -->
                         <buildArg>-H:+AddAllCharsets</buildArg>

@@ -32,7 +32,6 @@ public abstract class BaseTreeNode {
      * 当前行号
      */
     protected int lineNumber;
-    private final StableValue<String> sourceTextCache = StableValue.of();
     /**
      * Token流引用
      */
@@ -61,10 +60,8 @@ public abstract class BaseTreeNode {
      * 从原始TokenStream里获取
      */
     public String getSourceText() {
-        return sourceTextCache.orElseSet(() -> {
-            int startIndex = tokenStream.get(startTokenIndex).getStartIndex();
-            int stopIndex = tokenStream.get(stopTokenIndex).getStopIndex();
-            return tokenStream.getTokenSource().getInputStream().getText(new Interval(startIndex, stopIndex));
-        });
+        int startIndex = tokenStream.get(startTokenIndex).getStartIndex();
+        int stopIndex = tokenStream.get(stopTokenIndex).getStopIndex();
+        return tokenStream.getTokenSource().getInputStream().getText(new Interval(startIndex, stopIndex));
     }
 }
