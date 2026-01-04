@@ -17,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -108,8 +107,7 @@ public class AppMain {
     }
 
     private static void parseAnyKeyToExit() {
-        Scanner scanner = new Scanner(System.in);
         ColorPrinter.success(Localizations.t("APP_MAIN_PRESS_ANY_KEY_EXIT"));
-        scanner.nextLine();
+        IO.readln();
     }
 }

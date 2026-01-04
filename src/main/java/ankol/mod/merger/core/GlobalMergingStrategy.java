@@ -4,15 +4,12 @@ import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.Localizations;
 import lombok.Getter;
 
-import java.util.Scanner;
-
 /**
  * 全局合并策略
  *
  * @author Ankol
  */
 public class GlobalMergingStrategy {
-    private static final Scanner SCANNER = new Scanner(System.in);
     /**
      * 是否自动合并不冲突的代码行
      */
@@ -32,7 +29,7 @@ public class GlobalMergingStrategy {
         ColorPrinter.print("=".repeat(75));
         ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
         while (true) {
-            String input = SCANNER.next();
+            String input = IO.readln();
             if (input.equals("1")) {
                 autoMergingCodeLine = true;
                 break;
