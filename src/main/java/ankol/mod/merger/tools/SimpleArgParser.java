@@ -149,7 +149,7 @@ public class SimpleArgParser {
             String sName = (opt.shortName != null) ? "-" + opt.shortName : "  ";
             String lName = "--" + opt.longName;
             String valParams = opt.hasValue ? " <value>" : "";
-            ColorPrinter.info("  {}, {:<20} {}", sName, lName + valParams, opt.description);
+            ColorPrinter.info("  {}, {} {}", sName, lName + valParams, opt.description);
         }
     }
 
