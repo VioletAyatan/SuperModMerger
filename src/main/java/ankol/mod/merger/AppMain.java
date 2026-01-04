@@ -26,7 +26,9 @@ import java.util.concurrent.TimeUnit;
 public class AppMain {
 
     static void main(String[] args) {
+        int exitCode = 0;
         try {
+            long start = System.currentTimeMillis();
             initCharset(); //初始化控制台字符集为UTF-8
             Localizations.init(); //初始化国际化文件
             //解析命令行参数
@@ -52,16 +54,15 @@ public class AppMain {
             FileMergerEngine merger = new FileMergerEngine(modsToMerge, outputPath, baseModPath);
             merger.merge();
             ColorPrinter.success(Localizations.t("APP_MAIN_DONE"));
-            parseAnyKeyToExit();
-            System.exit(0);
-        } catch (BusinessException e) {
-            ColorPrinter.error(Localizations.t("APP_MAIN_ERROR", e.getMessage()));
-            parseAnyKeyToExit();
-            System.exit(1);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            parseAnyKeyToExit();
-            System.exit(1);
+            exitCode = 1;
+            if (e instanceof BusinessException) {
+                ColorPrinter.error(Localizations.t("APP_MAIN_ERROR", e.getMessage()));
+            } else {
+                log.error(e.getMessage(), e);
+            }
+        } finally {
+            parseAnyKeyToExit(exitCode);
         }
     }
 
@@ -106,8 +107,9 @@ public class AppMain {
         }
     }
 
-    private static void parseAnyKeyToExit() {
+    private static void parseAnyKeyToExit(int exitCode) {
         ColorPrinter.success(Localizations.t("APP_MAIN_PRESS_ANY_KEY_EXIT"));
         IO.readln();
+        System.exit(exitCode);
     }
 }
