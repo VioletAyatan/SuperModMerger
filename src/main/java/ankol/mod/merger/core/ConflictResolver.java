@@ -5,9 +5,7 @@ import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.Localizations;
 import lombok.extern.slf4j.Slf4j;
 
-import java.awt.*;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * 冲突解决器
@@ -35,7 +33,6 @@ public class ConflictResolver {
         }
         //对于真正的冲突项，提示用户选择使用哪一个版本解决
         if (!conflicts.isEmpty()) {
-            Scanner scanner = new Scanner(System.in);
             System.out.println(); //换行
             ColorPrinter.warning(Localizations.t("SCR_MERGER_CONFLICT_DETECTED", conflicts.size()));
             int chose = 0;
@@ -64,7 +61,7 @@ public class ConflictResolver {
                     ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_2", record.getMergeModName()));
 
                     while (true) {
-                        String input = scanner.nextLine();
+                        String input = IO.readln();
                         if (input.equals("1") || input.equals("2")) {
                             record.setUserChoice(Integer.parseInt(input));
                             break;

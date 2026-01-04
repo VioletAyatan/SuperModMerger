@@ -12,7 +12,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -36,9 +37,6 @@ public class FileMergerEngine {
     private int mergedCount = 0;      // 成功合并（无冲突）的文件数
     private int totalProcessed = 0;   // 处理的文件总数
     private int pathCorrectionCount = 0;  // 修正的路径数
-
-    // 全局Scanner（避免重复创建）
-    private static final Scanner SYSTEM_SCANNER = new Scanner(System.in);
 
 
     /**
@@ -300,7 +298,7 @@ public class FileMergerEngine {
                 ColorPrinter.info("{}. {}", i + 1, fileTree.getArchiveFileName());
             }
             while (true) {
-                String input = SYSTEM_SCANNER.next();
+                String input = IO.readln();
                 if (input.matches("\\d+")) {
                     int choice = Integer.parseInt(input);
                     if (choice >= 1 && choice <= fileSources.size()) {
