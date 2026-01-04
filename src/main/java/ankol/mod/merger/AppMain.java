@@ -28,7 +28,6 @@ public class AppMain {
     static void main(String[] args) {
         int exitCode = 0;
         try {
-            long start = System.currentTimeMillis();
             initCharset(); //初始化控制台字符集为UTF-8
             Localizations.init(); //初始化国际化文件
             //解析命令行参数
@@ -51,6 +50,7 @@ public class AppMain {
             //询问自动合并代码策略
             GlobalMergingStrategy.askAutoMergingCode();
             // 执行合并
+            long start = System.currentTimeMillis();
             FileMergerEngine merger = new FileMergerEngine(modsToMerge, outputPath, baseModPath);
             merger.merge();
             long end = System.currentTimeMillis();
