@@ -39,10 +39,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
 
     override fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult {
         try {
-            val parsedResult =
-                context.baseModManager.parseForm<ScrContainerScriptNode>(file1.getFileEntryName()) { content: String ->
-                    this.parseContent(content)
-                }
+            val parsedResult = context.baseModManager
+                .parseForm(file1.getFileEntryName()) { parseContent(it) }
             // 解析基准MOD文件（如果存在）
             if (parsedResult != null) {
                 originalBaseModRoot = parsedResult.astNode
@@ -91,67 +89,59 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 }
                 val baseNode = baseContainer.children[signature]
 
+                //baseNode没有，说明此节点是mod新增，加入新增表中
                 if (baseNode == null) {
-                    // 新增 Base 没有这个节点 -> 插入
                     handleInsertion(baseContainer, modNode)
-                } else {
-                    // [存在] 检查是否冲突
-                    if (baseNode is ScrContainerScriptNode && modNode is ScrContainerScriptNode) {
-                        // 容器节点，递归进入内部对比
-                        reduceCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
-                    } else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
-                        //先检查当前待合并节点内容是否相同
-                        if (baseNode.arguments != modNode.arguments) {
-                            //两者内容不同，检查mod节点内容与原版是否相同
-                            if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                //当前节点与原版一致，说明此处节点未变动，使用mod的内容（开启了智能合并的情况下）
-                                if (isNodeSameAsOriginalNode(
-                                        originalNode,
-                                        baseNode
-                                    ) && GlobalMergingStrategy.isAutoMergingCodeLine()
-                                ) {
-                                    val record = ConflictRecord(
-                                        context.fileName,
-                                        context.mod1Name,
-                                        context.mod2Name,
-                                        signature,
-                                        baseNode,
-                                        modNode
-                                    )
-                                    record.userChoice = 2
-                                    conflicts.add(record)
-                                } else {
-                                    conflicts.add(
-                                        ConflictRecord(
-                                            context.fileName,
-                                            context.mod1Name,
-                                            context.mod2Name,
-                                            signature,
-                                            baseNode,
-                                            modNode
-                                        )
-                                    )
-                                }
-                            }
+                }
+                //两者都是容器节点，递归匹配
+                else if (baseNode is ScrContainerScriptNode && modNode is ScrContainerScriptNode) {
+                    reduceCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
+                }
+                //funCall节点，对比签名和参数
+                else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
+                    //先检查当前待合并节点内容是否相同
+                    if (baseNode.arguments != modNode.arguments && GlobalMergingStrategy.isAutoMergingCodeLine()) {
+                        //智能判断，mod节点与原版不一致，base与原版一致，直接用mod改的内容
+                        if (!isNodeSameAsOriginalNode(originalNode, modNode) && isNodeSameAsOriginalNode(originalNode, baseNode)) {
+                            val record = ConflictRecord(
+                                context.fileName,
+                                context.mod1Name,
+                                context.mod2Name,
+                                signature,
+                                baseNode,
+                                modNode
+                            )
+                            record.userChoice = 2
+                            conflicts.add(record)
                         }
-                    } else {
-                        val baseText = baseNode.getSourceText()
-                        val modText = modNode.getSourceText()
-                        //内容不一致
-                        if (!equalsTrimmed(baseText, modText)) {
-                            // 检查modNode是否与原始基准MOD相同
-                            if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                conflicts.add(
-                                    ConflictRecord(
-                                        context.getFileName(),
-                                        context.getMod1Name(),
-                                        context.getMod2Name(),
-                                        signature,
-                                        baseNode,
-                                        modNode
-                                    )
+                    }
+                    conflicts.add(
+                        ConflictRecord(
+                            context.fileName,
+                            context.mod1Name,
+                            context.mod2Name,
+                            signature,
+                            baseNode,
+                            modNode
+                        )
+                    )
+                } else {
+                    val baseText = baseNode.getSourceText()
+                    val modText = modNode.getSourceText()
+                    //内容不一致
+                    if (!equalsTrimmed(baseText, modText)) {
+                        // 检查modNode是否与原始基准MOD相同
+                        if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
+                            conflicts.add(
+                                ConflictRecord(
+                                    context.getFileName(),
+                                    context.getMod1Name(),
+                                    context.getMod2Name(),
+                                    signature,
+                                    baseNode,
+                                    modNode
                                 )
-                            }
+                            )
                         }
                     }
                 }
