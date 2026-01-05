@@ -5,6 +5,7 @@ import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.merger.MergerFactory
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Tools.getEntryFileName
+import cn.hutool.core.io.FileUtil
 import cn.hutool.core.util.StrUtil
 import java.io.IOException
 import java.nio.file.Files
@@ -417,21 +418,6 @@ class FileMergerEngine(
      * 清理临时文件
      */
     private fun cleanupTempDir() {
-        if (Files.exists(tempDir)) {
-            try {
-                Files.walk(tempDir).use { pathStream ->
-                    pathStream.sorted(Comparator.reverseOrder<Path>())
-                        .forEach { path: Path ->
-                            try {
-                                Files.delete(path)
-                            } catch (e: IOException) {
-                                // 忽略删除错误
-                            }
-                        }
-                }
-            } catch (e: Exception) {
-                ColorPrinter.warning(Localizations.t("ENGINE_CLEANUP_FAILED", e.message))
-            }
-        }
+        FileUtil.del(tempDir)
     }
 }
