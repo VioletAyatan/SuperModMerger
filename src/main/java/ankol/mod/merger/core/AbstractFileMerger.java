@@ -1,7 +1,6 @@
 package ankol.mod.merger.core;
 
 import ankol.mod.merger.merger.MergeResult;
-import ankol.mod.merger.tools.FileTree;
 
 /**
  * 文件合并器通用接口
@@ -26,5 +25,5 @@ public abstract class AbstractFileMerger {
      * @param file2 第二个文件（来自Mod2）的路径。
      * @return 一个包含合并后内容和冲突信息的 {@link MergeResult} 对象。
      */
-    public abstract MergeResult merge(FileTree file1, FileTree file2) throws RuntimeException;
+    public abstract MergeResult merge(AbstractFileTree file1, AbstractFileTree file2) throws RuntimeException;
 }

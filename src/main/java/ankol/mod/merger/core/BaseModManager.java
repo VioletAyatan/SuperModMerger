@@ -1,7 +1,6 @@
 package ankol.mod.merger.core;
 
 import ankol.mod.merger.tools.ColorPrinter;
-import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Localizations;
 import ankol.mod.merger.tools.Tools;
 import cn.hutool.cache.Cache;
@@ -39,7 +38,7 @@ public class BaseModManager {
      * 值：在基准MOD中的相对路径
      */
     @Getter
-    private Map<String, FileTree> indexedBaseModFileMap;
+    private Map<String, PathFileTree> indexedBaseModFileMap;
 
     /**
      * 基准MOD是否已加载
@@ -93,7 +92,7 @@ public class BaseModManager {
 
         try {
             long startTime = System.currentTimeMillis();
-            this.indexedBaseModFileMap = Tools.indexPakFile(baseModPath.toFile()); //这里构建的索引MAP里还没有真正解压出来文件
+            this.indexedBaseModFileMap = Tools.indexPakFile(baseModPath); //这里构建的索引MAP里还没有真正解压出来文件
             loaded = true;
             long elapsed = System.currentTimeMillis() - startTime;
             ColorPrinter.success(Localizations.t("BASE_MOD_INDEXED_FILES",
@@ -119,12 +118,12 @@ public class BaseModManager {
 
         // 规范化路径（统一使用小写文件名查找）
         String fileName = Tools.getEntryFileName(relPath).toLowerCase();
-        FileTree fileTree = indexedBaseModFileMap.get(fileName);
-        if (fileTree == null) {
+        PathFileTree pathFileTree = indexedBaseModFileMap.get(fileName);
+        if (pathFileTree == null) {
             return null;
         }
 
-        String fileEntryName = fileTree.getFileEntryName();
+        String fileEntryName = pathFileTree.getFileEntryName();
         Path cachedFile = extractedFileCache.get(fileEntryName);
         if (cachedFile != null && Files.exists(cachedFile)) {
             return Files.readString(cachedFile);
@@ -155,12 +154,12 @@ public class BaseModManager {
             return false;
         }
         String fileName = Tools.getEntryFileName(filePath);
-        FileTree fileTree = indexedBaseModFileMap.get(fileName);
+        PathFileTree pathFileTree = indexedBaseModFileMap.get(fileName);
         //有时会有一些不属于mod的文件被加入到pak中，这里查到空后说明不是原版mod支持修改的文件.
-        if (fileTree == null) {
+        if (pathFileTree == null) {
             return false;
         }
-        String correctPath = fileTree.getFileEntryName();
+        String correctPath = pathFileTree.getFileEntryName();
         return correctPath != null && !correctPath.equalsIgnoreCase(filePath);
     }
 

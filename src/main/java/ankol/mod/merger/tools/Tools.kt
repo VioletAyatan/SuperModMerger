@@ -1,51 +1,53 @@
-package ankol.mod.merger.tools;
+package ankol.mod.merger.tools
 
-import ankol.mod.merger.exception.BusinessException;
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.StrUtil;
-import lombok.Getter;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipFile;
+import ankol.mod.merger.core.PathFileTree
+import ankol.mod.merger.exception.BusinessException
+import cn.hutool.core.io.FileUtil
+import cn.hutool.core.util.StrUtil
+import org.apache.commons.compress.archivers.zip.ZipFile
+import java.io.File
+import java.io.IOException
+import java.nio.charset.StandardCharsets
+import java.nio.file.Path
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import kotlin.io.path.Path
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.notExists
+import kotlin.io.path.walk
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
-import java.util.stream.Stream;
+object Tools {
+    @JvmStatic
+    val userDir: String = System.getProperty("user.dir")
 
-public abstract class Tools {
-    @Getter
-    private static final String userDir = System.getProperty("user.dir");
-    @Getter
-    private static final String tempDir = System.getProperty("java.io.tmpdir");
+    @JvmStatic
+    val tempDir: String = System.getProperty("java.io.tmpdir")
 
-    // 复用十六进制表，避免 String.format 带来的巨大开销
-    private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
+    private val HEX_ARRAY = "0123456789abcdef".toCharArray()
 
     /**
      * 获取待合并的MOD所在目录
      * 这个工具默认配置的是在mods目录下
-     *
+     * 
      * @param meringModDir mod合并目录地址
      * @return 待合并的MOD目录路径
      */
-    public static Path getMergingModDir(Path meringModDir) {
-        if (meringModDir == null) {
-            Path defaultPath = Path.of(userDir + File.separator + "mods");
+    fun getMergingModDir(meringModDir: Path?): Path {
+        return if (meringModDir == null) {
+            val defaultPath = Path(userDir + File.separator + "mods")
             if (FileUtil.exists(defaultPath, true)) {
-                return defaultPath;
+                defaultPath
             } else {
-                throw new BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", defaultPath));
+                throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", defaultPath))
             }
         } else {
             if (FileUtil.exists(meringModDir, true)) {
-                return meringModDir;
+                meringModDir
             } else {
-                throw new BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", meringModDir));
+                throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", meringModDir))
             }
         }
     }
@@ -56,93 +58,106 @@ public abstract class Tools {
      *
      * @return 待合并的MOD目录路径
      */
-    public static Path getMergingModDir() {
-        return getMergingModDir(null);
+    fun getMergingModDir(): Path {
+        return getMergingModDir(null)
     }
 
     /**
      * 扫描指定目录中的所有文件，按扩展名过滤
-     *
-     * @param dir        目录路径
+     * 
+     * @param mergedDirPath        目录路径
      * @param extensions 要查找的扩展名（如 ".pak", ".zip"）
      * @return 匹配的文件列表
      * @throws IOException 如果目录不存在或无法访问
      */
-    public static List<Path> scanFiles(Path dir, String... extensions) throws IOException {
-        List<Path> results = new ArrayList<>();
-        if (!Files.exists(dir)) {
-            throw new BusinessException("MOD合并目录mods在当前目录不存在，请创建一个mods目录");
+    fun scanFiles(mergedDirPath: Path, vararg extensions: String): MutableList<Path> {
+        val results = ArrayList<Path>()
+        if (!mergedDirPath.exists()) {
+            throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST"))
         }
-        try (Stream<Path> pathStream = Files.walk(dir)) {
-            pathStream.filter(Files::isRegularFile)
-                    .filter(file -> {
-                        String filename = file.getFileName().toString();
-                        for (String ext : extensions) {
-                            if (filename.endsWith(ext)) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    })
-                    .forEach(results::add);
-        }
-        return results;
-    }
-
-
-    public static Map<String, FileTree> indexPakFile(File file) {
-        if (!file.exists()) {
-            throw new BusinessException(Localizations.t("TOOLS_FILE_NOT_EXIST", file.getAbsolutePath()));
-        }
-        if (file.isDirectory()) {
-            throw new BusinessException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", file.getAbsolutePath()));
-        }
-        if (!StrUtil.endWithAny(file.getName(), ".pak")) {
-            throw new BusinessException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"));
-        }
-        Map<String, FileTree> pakIndexMap = new HashMap<>();
-        try (ZipFile zipFile = ZipFile.builder().setFile(file).get()) {
-            Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
-            while (entries.hasMoreElements()) {
-                ZipArchiveEntry zipEntry = entries.nextElement();
-                String entryName = zipEntry.getName();
-                String fileName = getEntryFileName(entryName);
-                if (pakIndexMap.containsKey(fileName)) {
-                    ColorPrinter.warning(Localizations.t("TOOLS_SAME_FILE_NAME_WARNING", fileName, entryName, pakIndexMap.get(fileName).getFullPathName()));
+        mergedDirPath.walk().forEach { file: Path ->
+            if (file.isRegularFile()) {
+                val filename = file.fileName.toString()
+                for (ext in extensions) {
+                    if (filename.endsWith(ext)) {
+                        results.add(file)
+                    }
                 }
-                pakIndexMap.put(fileName, new FileTree(fileName, entryName, file.getName()));
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-        return pakIndexMap;
+        return results
     }
 
-    public static String getEntryFileName(String entryName) {
-        return entryName.substring(entryName.lastIndexOf("/") + 1);
+    /**
+     * 索引基准MOD，建立一个索引MAP，方便后续进行文件路径修正和对比使用
+     * @param filePath 基准MOD路径
+     */
+    @JvmStatic
+    fun indexPakFile(filePath: Path): MutableMap<String, PathFileTree> {
+        if (filePath.notExists()) {
+            throw BusinessException(Localizations.t("TOOLS_FILE_NOT_EXIST", filePath.absolutePathString()))
+        }
+        if (filePath.isDirectory()) {
+            throw BusinessException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", filePath.absolutePathString()))
+        }
+        if (!StrUtil.endWithAny(filePath.fileName.toString(), ".pak")) {
+            throw BusinessException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"))
+        }
+        val pakIndexMap = HashMap<String, PathFileTree>()
+        try {
+            ZipFile.builder().setPath(filePath).get().use { zipFile ->
+                val entries = zipFile.entries
+                while (entries.hasMoreElements()) {
+                    val zipEntry = entries.nextElement()
+                    val entryName = zipEntry.name
+                    val fileName = getEntryFileName(entryName)
+                    //重复文件的识别
+                    if (fileName in pakIndexMap) {
+                        ColorPrinter.warning(
+                            Localizations.t(
+                                "TOOLS_SAME_FILE_NAME_WARNING",
+                                fileName,
+                                entryName,
+                                pakIndexMap[fileName]?.fullPathName
+                            )
+                        )
+                    }
+                    pakIndexMap[fileName] = PathFileTree(fileName, entryName, filePath.fileName.toString())
+                }
+            }
+        } catch (e: IOException) {
+            throw RuntimeException(e)
+        }
+        return pakIndexMap
+    }
+
+    @JvmStatic
+    fun getEntryFileName(entryName: String): String {
+        return entryName.substring(entryName.lastIndexOf("/") + 1)
     }
 
 
     /**
      * 计算文件hash值
      */
-    public static String computeHash(String content) {
+    @JvmStatic
+    fun computeHash(content: String): String {
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(content.getBytes(StandardCharsets.UTF_8));
-            return bytesToHex(hash);
-        } catch (NoSuchAlgorithmException e) {
-            return String.valueOf(content.hashCode());
+            val digest = MessageDigest.getInstance("SHA-256")
+            val hash = digest.digest(content.toByteArray(StandardCharsets.UTF_8))
+            return bytesToHex(hash)
+        } catch (e: NoSuchAlgorithmException) {
+            return content.hashCode().toString()
         }
     }
 
-    private static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for (int i = 0; i < bytes.length; i++) {
-            int v = bytes[i] & 0xFF;
-            hexChars[i * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
+    private fun bytesToHex(bytes: ByteArray): String {
+        val hexChars = CharArray(bytes.size * 2)
+        for (i in bytes.indices) {
+            val v = bytes[i].toInt() and 0xFF
+            hexChars[i * 2] = HEX_ARRAY[v ushr 4]
+            hexChars[i * 2 + 1] = HEX_ARRAY[v and 0x0F]
         }
-        return new String(hexChars);
+        return String(hexChars)
     }
 }

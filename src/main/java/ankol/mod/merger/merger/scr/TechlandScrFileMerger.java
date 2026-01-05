@@ -8,7 +8,6 @@ import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode;
-import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Tools;
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
@@ -19,9 +18,6 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenStreamRewriter;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +54,7 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
     }
 
     @Override
-    public MergeResult merge(FileTree file1, FileTree file2) {
+    public MergeResult merge(AbstractFileTree file1, AbstractFileTree file2) {
         try {
             ParsedResult<ScrContainerScriptNode> parsedResult = context.getBaseModManager()
                     .parseForm(file1.getFileEntryName(), this::parseContent);
@@ -67,8 +63,8 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
                 originalBaseModRoot = parsedResult.astNode();
             }
             // 解析base和mod文件，保留TokenStream
-            ParsedResult<ScrContainerScriptNode> baseResult = parseFile(file1.getFullPathName());
-            ParsedResult<ScrContainerScriptNode> modResult = parseFile(file2.getFullPathName());
+            ParsedResult<ScrContainerScriptNode> baseResult = parseFile(file1);
+            ParsedResult<ScrContainerScriptNode> modResult = parseFile(file2);
             ScrContainerScriptNode baseRoot = baseResult.astNode();
             ScrContainerScriptNode modRoot = modResult.astNode();
             // 递归对比，找到冲突项
@@ -212,8 +208,8 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
         insertOperations.add(new InsertOperation(insertPos, newContent));
     }
 
-    private ParsedResult<ScrContainerScriptNode> parseFile(Path filePath) throws IOException {
-        String content = Files.readString(filePath);
+    private ParsedResult<ScrContainerScriptNode> parseFile(AbstractFileTree fileTree) {
+        String content = fileTree.getContent();
         String contentHash = Tools.computeHash(content);
         return PARSE_CACHE.get(contentHash, () -> parseContent(content));
     }
