@@ -8,11 +8,13 @@
             <SchemaInfo>
               <option name="generatedName" value="新建架构" />
               <option name="name" value="reachability-metadata-schema-v1.2.0" />
-              <option name="relativePathToSchema" value="https://github.com/oracle/graal/blob/master/docs/reference-manual/native-image/assets/reachability-metadata-schema-v1.2.0.json" />
+              <option name="relativePathToSchema" value="$USER_HOME$/Documents/JsonSchema/reachability-metadata-schema-v1.2.0.json" />
               <option name="patterns">
                 <list>
                   <Item>
-                    <option name="path" value="src/main/resources/META-INF/native-image/reachability-metadata.json" />
+                    <option name="pattern" value="true" />
+                    <option name="path" value="reachability-metadata.json" />
+                    <option name="mappingKind" value="Pattern" />
                   </Item>
                 </list>
               </option>
