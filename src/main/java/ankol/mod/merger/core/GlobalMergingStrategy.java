@@ -2,7 +2,6 @@ package ankol.mod.merger.core;
 
 import ankol.mod.merger.tools.ColorPrinter;
 import ankol.mod.merger.tools.Localizations;
-import lombok.Getter;
 
 /**
  * 全局合并策略
@@ -13,12 +12,10 @@ public class GlobalMergingStrategy {
     /**
      * 是否自动合并不冲突的代码行
      */
-    @Getter
     private static boolean autoMergingCodeLine = true;
     /**
      * 是否自动修正错误的文件路径
      */
-    @Getter
     private static boolean autoFixPath = true;
 
     public static void askAutoMergingCode() {
@@ -40,5 +37,13 @@ public class GlobalMergingStrategy {
                 ColorPrinter.error(Localizations.t("ASSET_INVALID_INPUT_PLEASE_ENTER_NUMBER", "1", "2"));
             }
         }
+    }
+
+    public static boolean isAutoMergingCodeLine() {
+        return autoMergingCodeLine;
+    }
+
+    public static boolean isAutoFixPath() {
+        return autoFixPath;
     }
 }

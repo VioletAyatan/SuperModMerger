@@ -28,7 +28,7 @@ import kotlin.io.path.readText
 class FileMergerEngine(
     private val modsToMerge: List<Path>,
     private val outputPath: Path,
-    private val baseModPath: Path?
+    private val baseModPath: Path
 ) {
     private val log = logger()
     private val tempDir = Path(Tools.tempDir, "ModMerger_" + System.currentTimeMillis())
@@ -191,7 +191,7 @@ class FileMergerEngine(
      */
     private fun processSingleFile(relPath: String, fileCurrent: PathFileTree, mergedOutputDir: Path) {
         // 如果基准mod存在，尝试与基准mod对比
-        if (baseModManager.isLoaded) {
+        if (baseModManager.loaded) {
             try {
                 val originalBaseModContent = baseModManager.extractFileContent(relPath)
                 // 基准mod中存在该文件，需要进行对比合并
@@ -279,7 +279,7 @@ class FileMergerEngine(
             var baseMergedContent = "" //基准文本内容
 
             var originalBaseModContent: String? = null
-            if (baseModManager.isLoaded) {
+            if (baseModManager.loaded) {
                 originalBaseModContent = baseModManager.extractFileContent(relPath)
             }
             val fileName = getEntryFileName(relPath)
