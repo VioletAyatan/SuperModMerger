@@ -181,10 +181,11 @@
                     <metadataRepository>
                         <enabled>true</enabled>
                     </metadataRepository>
-                    <quickBuild>true</quickBuild>
                     <!-- https://www.graalvm.org/latest/reference-manual/native-image/overview/Options/ -->
                     <buildArgs>
+                        <buildArg>--future-defaults=all</buildArg>
                         <buildArg>-march=compatibility</buildArg>
+                        <buildArg>--pgo=${project.basedir}/default.iprof</buildArg>
                         <!-- 启用优化 os编译选项减少体积，但会降低性能-->
 <!--                        <buildArg>-Os</buildArg>-->
                         <!-- 启用全部优化-->
@@ -220,9 +221,33 @@
                 <version>3.6.3</version>
                 <configuration>
                     <mainClass>${mainClass}</mainClass>
+                    <commandlineArgs>
+                        -b 'D:\SteamLibrary\steamapps\common\Dying Light The Beast\ph_ft\source\data0.pak'
+                    </commandlineArgs>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>native-instrument</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <configuration>
+                            <buildArgs>
+                                <buildArg>--pgo-instrument</buildArg>
+                                <buildArg>-H:-SamplingCollect</buildArg>
+                            </buildArgs>
+                            <imageName>${project.build.finalName}-pgoinstrument</imageName>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
