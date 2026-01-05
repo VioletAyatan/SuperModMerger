@@ -3,6 +3,7 @@ package ankol.mod.merger.merger.xml;
 import ankol.mod.merger.antlr.xml.TechlandXMLLexer;
 import ankol.mod.merger.antlr.xml.TechlandXMLParser;
 import ankol.mod.merger.core.*;
+import ankol.mod.merger.core.filetrees.AbstractFileTree;
 import ankol.mod.merger.exception.BusinessException;
 import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
@@ -18,8 +19,6 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenStreamRewriter;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

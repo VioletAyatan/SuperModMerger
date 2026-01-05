@@ -1,5 +1,10 @@
-package ankol.mod.merger.core;
+package ankol.mod.merger.core.filetrees;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public abstract class AbstractFileTree {
     /**
      * 文件名（不带路径）
@@ -21,28 +26,4 @@ public abstract class AbstractFileTree {
     }
 
     public abstract String getContent();
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getFileEntryName() {
-        return fileEntryName;
-    }
-
-    public void setFileEntryName(String fileEntryName) {
-        this.fileEntryName = fileEntryName;
-    }
-
-    public String getArchiveFileName() {
-        return archiveFileName;
-    }
-
-    public void setArchiveFileName(String archiveFileName) {
-        this.archiveFileName = archiveFileName;
-    }
 }

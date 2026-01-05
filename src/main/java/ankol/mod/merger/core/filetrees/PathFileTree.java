@@ -1,4 +1,4 @@
-package ankol.mod.merger.core;
+package ankol.mod.merger.core.filetrees;
 
 import lombok.Data;
 

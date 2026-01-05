@@ -1,5 +1,7 @@
 package ankol.mod.merger.core
 
+import ankol.mod.merger.core.filetrees.MemoryFileTree
+import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.merger.MergerFactory
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Tools.getEntryFileName
@@ -14,7 +16,6 @@ import java.util.concurrent.CompletionException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.io.path.Path
-import kotlin.io.path.deleteIfExists
 import kotlin.io.path.readText
 
 /**
