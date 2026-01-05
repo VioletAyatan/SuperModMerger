@@ -4,6 +4,10 @@ import ankol.mod.merger.core.AbstractFileMerger;
 import ankol.mod.merger.core.MergerContext;
 import ankol.mod.merger.merger.scr.TechlandScrFileMerger;
 import ankol.mod.merger.merger.xml.TechlandXmlFileMerger;
+import ankol.mod.merger.tools.DebugTool;
+import cn.hutool.cache.Cache;
+import cn.hutool.cache.CacheUtil;
+import cn.hutool.cache.impl.AbstractCache;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReflectUtil;
 
@@ -19,12 +23,16 @@ import java.util.Optional;
 public class MergerFactory {
 
     private static final Map<String, Class<? extends AbstractFileMerger>> mergerMap = new HashMap<>();
+    private static final Cache<Class<?>, AbstractFileMerger> mergerCache = CacheUtil.newLFUCache(20, 30 * 1000);
 
     static {
         // 注册.scr格式的合并器
         registerMerger(TechlandScrFileMerger.class, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth");
         // 注册.xml文件的合并器
         registerMerger(TechlandXmlFileMerger.class, ".xml");
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            DebugTool.printCacheUseRate("mergerCache", (AbstractCache) mergerCache);
+        }));
     }
 
     /**
@@ -51,7 +59,7 @@ public class MergerFactory {
         if (aClass == null) {
             return Optional.empty();
         } else {
-            return Optional.of(ReflectUtil.newInstance(aClass, context));
+            return Optional.of(mergerCache.get(aClass, () -> ReflectUtil.newInstance(aClass, context)));
         }
     }
 }

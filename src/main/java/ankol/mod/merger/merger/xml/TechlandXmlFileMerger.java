@@ -9,9 +9,6 @@ import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.xml.node.XmlContainerNode;
 import ankol.mod.merger.merger.xml.node.XmlNode;
-import ankol.mod.merger.tools.Tools;
-import cn.hutool.cache.Cache;
-import cn.hutool.cache.CacheUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
@@ -40,12 +37,11 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
      */
     private record NewNodeRecord(XmlContainerNode parentContainer, XmlNode previousSibling, XmlNode newNode) {
     }
+
     /**
      * 新增节点列表
      */
     private final List<NewNodeRecord> newNodes = new ArrayList<>();
-
-    private static final Cache<String, ParsedResult<XmlContainerNode>> PARSE_CACHE = CacheUtil.newWeakCache(30 * 1000);
 
     /**
      * 原始基准MOD对应文件的语法树
@@ -220,10 +216,7 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
      * 将XML文件解析成语法树
      */
     private ParsedResult<XmlContainerNode> parseFile(AbstractFileTree filePath) {
-        String content = filePath.getContent();
-        String contentHash = Tools.computeHash(content);
-        // 先查缓存
-        return PARSE_CACHE.get(contentHash, () -> parseContent(content));
+        return parseContent(filePath.getContent());
     }
 
     /**

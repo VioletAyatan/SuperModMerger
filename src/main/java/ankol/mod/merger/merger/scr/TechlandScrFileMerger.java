@@ -9,9 +9,6 @@ import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode;
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode;
-import ankol.mod.merger.tools.Tools;
-import cn.hutool.cache.Cache;
-import cn.hutool.cache.CacheUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
@@ -38,12 +35,6 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
     }
 
     private final List<InsertOperation> insertOperations = new ArrayList<>();
-
-    /**
-     * Parse 缓存，避免重复解析相同内容的文件
-     * 存储 ParseResult 包含 AST 和 TokenStream
-     */
-    private static final Cache<String, ParsedResult<ScrContainerScriptNode>> PARSE_CACHE = CacheUtil.newWeakCache(30 * 1000);
 
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
@@ -210,9 +201,7 @@ public class TechlandScrFileMerger extends AbstractFileMerger {
     }
 
     private ParsedResult<ScrContainerScriptNode> parseFile(AbstractFileTree fileTree) {
-        String content = fileTree.getContent();
-        String contentHash = Tools.computeHash(content);
-        return PARSE_CACHE.get(contentHash, () -> parseContent(content));
+        return parseContent(fileTree.getContent());
     }
 
     private ParsedResult<ScrContainerScriptNode> parseContent(String content) {
