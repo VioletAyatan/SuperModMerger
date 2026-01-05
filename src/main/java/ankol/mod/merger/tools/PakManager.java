@@ -1,6 +1,6 @@
 package ankol.mod.merger.tools;
 
-import ankol.mod.merger.core.PathFileTree;
+import ankol.mod.merger.core.filetrees.PathFileTree;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;

@@ -1,5 +1,6 @@
 package ankol.mod.merger.core;
 
+import ankol.mod.merger.core.filetrees.AbstractFileTree;
 import ankol.mod.merger.merger.MergeResult;
 
 /**
