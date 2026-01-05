@@ -20,7 +20,6 @@ import org.antlr.v4.runtime.TokenStreamRewriter;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -68,8 +67,8 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
                 originalBaseModRoot = parsedResult.astNode();
             }
             // 解析base和mod文件
-            ParsedResult<XmlContainerNode> baseResult = parseFile(file1.getFullPathName());
-            ParsedResult<XmlContainerNode> modResult = parseFile(file2.getFullPathName());
+            ParsedResult<XmlContainerNode> baseResult = parseFile(file1);
+            ParsedResult<XmlContainerNode> modResult = parseFile(file2);
             XmlContainerNode baseRoot = baseResult.astNode();
             XmlContainerNode modRoot = modResult.astNode();
             // 递归对比，找到冲突项
@@ -85,7 +84,7 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
             }
             return new MergeResult(getMergedContent(baseResult), !conflicts.isEmpty());
         } catch (Exception e) {
-            log.error(StrUtil.format("Error during XML file merge: {} Reason: {}", file1.getFullPathName(), e.getMessage()), e);
+            log.error(StrUtil.format("Error during XML file merge: {} Reason: {}", file1.getFileName(), e.getMessage()), e);
             throw new BusinessException("文件" + file1.getFileName() + "合并失败");
         } finally {
             // 清理状态，准备下一个文件合并
@@ -221,8 +220,8 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
     /**
      * 将XML文件解析成语法树
      */
-    private ParsedResult<XmlContainerNode> parseFile(Path filePath) throws IOException {
-        String content = Files.readString(filePath);
+    private ParsedResult<XmlContainerNode> parseFile(AbstractFileTree filePath) {
+        String content = filePath.getContent();
         String contentHash = Tools.computeHash(content);
         // 先查缓存
         return PARSE_CACHE.get(contentHash, () -> parseContent(content));

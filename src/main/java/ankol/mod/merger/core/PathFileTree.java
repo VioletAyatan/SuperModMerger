@@ -18,6 +18,10 @@ public class PathFileTree extends AbstractFileTree {
      */
     private Path fullPathName;
 
+    public PathFileTree(String fileName, String fileEntryName, String archiveFileName) {
+        super(fileName, fileEntryName, archiveFileName);
+    }
+
     public PathFileTree(String fileName, String fileEntryName, String archiveFileName, Path fullPathName) {
         super(fileName, fileEntryName, archiveFileName);
         this.fullPathName = fullPathName;
