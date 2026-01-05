@@ -1,5 +1,6 @@
 package ankol.mod.merger.tools;
 
+import ankol.mod.merger.core.PathFileTree;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
@@ -48,10 +49,10 @@ public class PakManager {
      * @param tempDir 临时解压目录
      * @return 文件映射表 (相对路径 -> FileSourceInfo)，包含来源链信息
      */
-    public static Map<String, FileTree> extractPak(Path pakPath, Path tempDir) throws IOException {
+    public static Map<String, PathFileTree> extractPak(Path pakPath, Path tempDir) throws IOException {
         Files.createDirectories(tempDir);
         String archiveName = pakPath.getFileName().toString();
-        HashMap<String, FileTree> fileTreeMap = new HashMap<>(20);
+        HashMap<String, PathFileTree> fileTreeMap = new HashMap<>(20);
         // 根据文件扩展名判断格式
         if (StrUtil.endWithIgnoreCase(archiveName, ".7z")) {
             extract7zRecursive(pakPath, tempDir, fileTreeMap, archiveName);
@@ -69,7 +70,7 @@ public class PakManager {
      * @param fileTreeMap 文件树映射表
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
-    private static void extractZipRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
+    private static void extractZipRecursive(Path archivePath, Path outputDir, HashMap<String, PathFileTree> fileTreeMap, String archiveName) throws IOException {
         try (ZipFile zipFile = ZipFile.builder().setPath(archivePath).setCharset(StandardCharsets.UTF_8).get()) {
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
@@ -110,10 +111,10 @@ public class PakManager {
                 }
                 // 创建文件来源信息，记录来源链
                 else {
-                    FileTree current = new FileTree(fileName, entryName, archiveName, outputPath);
+                    PathFileTree current = new PathFileTree(fileName, entryName, archiveName, outputPath);
                     // 检查是否已有相同路径的文件
                     if (fileTreeMap.containsKey(entryName)) {
-                        FileTree existing = fileTreeMap.get(entryName);
+                        PathFileTree existing = fileTreeMap.get(entryName);
                         ColorPrinter.warning(Localizations.t("PAK_MANAGER_DUPLICATE_FILE_DETECTED",
                                 existing.getArchiveFileName(),
                                 current.getFileEntryName(),
@@ -137,7 +138,7 @@ public class PakManager {
      * @param fileTreeMap 文件映射表，包含来源信息
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
-    private static void extract7zRecursive(Path archivePath, Path outputDir, HashMap<String, FileTree> fileTreeMap, String archiveName) throws IOException {
+    private static void extract7zRecursive(Path archivePath, Path outputDir, HashMap<String, PathFileTree> fileTreeMap, String archiveName) throws IOException {
         try (SevenZFile sevenZFile = SevenZFile.builder().setPath(archivePath)
                 .setCharset(StandardCharsets.UTF_8)
                 .get()
@@ -183,11 +184,11 @@ public class PakManager {
                     }
                 } else {
                     // 创建文件来源信息，记录来源链
-                    FileTree current = new FileTree(fileName, entryName, archiveName, outputPath);
+                    PathFileTree current = new PathFileTree(fileName, entryName, archiveName, outputPath);
 
                     // 检查是否已有相同路径的文件（来自不同来源）
                     if (fileTreeMap.containsKey(entryName)) {
-                        FileTree existing = fileTreeMap.get(entryName);
+                        PathFileTree existing = fileTreeMap.get(entryName);
                         ColorPrinter.warning(Localizations.t("PAK_MANAGER_DUPLICATE_FILE_DETECTED",
                                 existing.getArchiveFileName(),
                                 current.getFileEntryName(),
@@ -256,11 +257,11 @@ public class PakManager {
      * @throws IOException 如果文件不可读
      */
     public static boolean areFilesIdentical(Path file1, Path file2) throws IOException {
-        // 快速判断：文件大小不同，肯定内容不同
+        // 快速判断，文件大小不同，肯定内容不同
         if (Files.size(file1) != Files.size(file2)) {
             return false;
         } else {
-            // 文件大小相同的情况下，对比文件HASH值，更快速且节省内存
+            //计算文件hash进行对比，更快且内存占用低
             return getFileHash(file1).equals(getFileHash(file2));
         }
     }

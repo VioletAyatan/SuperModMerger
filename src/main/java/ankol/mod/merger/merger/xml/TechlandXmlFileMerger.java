@@ -8,7 +8,6 @@ import ankol.mod.merger.merger.ConflictRecord;
 import ankol.mod.merger.merger.MergeResult;
 import ankol.mod.merger.merger.xml.node.XmlContainerNode;
 import ankol.mod.merger.merger.xml.node.XmlNode;
-import ankol.mod.merger.tools.FileTree;
 import ankol.mod.merger.tools.Tools;
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
@@ -60,7 +59,7 @@ public class TechlandXmlFileMerger extends AbstractFileMerger {
     }
 
     @Override
-    public MergeResult merge(FileTree file1, FileTree file2) {
+    public MergeResult merge(AbstractFileTree file1, AbstractFileTree file2) {
         try {
             ParsedResult<XmlContainerNode> parsedResult = context.getBaseModManager()
                     .parseForm(file1.getFileEntryName(), this::parseContent);
