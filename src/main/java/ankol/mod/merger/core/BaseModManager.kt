@@ -7,6 +7,7 @@ import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.Tools.indexPakFile
 import ankol.mod.merger.tools.Tools.tempDir
 import cn.hutool.cache.CacheUtil
+import cn.hutool.core.io.FileUtil
 import cn.hutool.core.io.IoUtil
 import cn.hutool.core.lang.func.Func0
 import lombok.extern.slf4j.Slf4j
@@ -18,8 +19,6 @@ import java.nio.file.Path
 import java.util.*
 import java.util.function.Function
 import kotlin.io.path.Path
-import kotlin.io.path.deleteIfExists
-import kotlin.io.path.walk
 
 /**
  * 基准MOD分析器 - 负责加载和分析基准MOD（原版文件）
@@ -167,12 +166,7 @@ class BaseModManager(
      * 建议在合并完成后调用此方法释放磁盘空间
      */
     fun clearCache() {
-        if (!Files.exists(cacheDir)) {
-            return
-        }
-        cacheDir.walk().forEach { path: Path ->
-            path.deleteIfExists()
-        }
+        FileUtil.del(cacheDir)
     }
 
     /**
