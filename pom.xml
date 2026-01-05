@@ -6,14 +6,14 @@
 
     <groupId>ankol.mod.merger</groupId>
     <artifactId>SuperModMerger</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <main.class>ankol.mod.merger.AppMain</main.class>
+        <mainClass>ankol.mod.merger.AppMain</mainClass>
         <antlr4.version>4.13.2</antlr4.version>
         <lombok.version>1.18.42</lombok.version>
         <slf4j.version>2.0.9</slf4j.version>
@@ -160,7 +160,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>${main.class}</mainClass>
+                                    <mainClass>${mainClass}</mainClass>
                                 </transformer>
                             </transformers>
                             <!-- 输出带 -all 后缀的 fat-jar，便于识别 -->
@@ -177,13 +177,11 @@
                 <configuration>
                     <imageName>${project.build.finalName}</imageName>
                     <verbose>true</verbose>
-                    <mainClass>${main.class}</mainClass>
+                    <mainClass>${mainClass}</mainClass>
                     <metadataRepository>
                         <enabled>true</enabled>
                     </metadataRepository>
-                    <agent>
-                        <enabled>true</enabled>
-                    </agent>
+                    <quickBuild>true</quickBuild>
                     <!-- https://www.graalvm.org/latest/reference-manual/native-image/overview/Options/ -->
                     <buildArgs>
                         <buildArg>-march=compatibility</buildArg>
@@ -215,6 +213,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <mainClass>${mainClass}</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
