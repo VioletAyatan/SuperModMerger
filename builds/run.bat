@@ -21,8 +21,8 @@ echo 找到目标文件：%target_exe%
 echo 正在修改exe属性...
 
 rcedit-x64.exe "%target_exe%" --set-icon .\icon.ico ^
---set-file-version 1.2.0 ^
---set-product-version 1.2.0 ^
+--set-file-version 1.3.0 ^
+--set-product-version 1.3.0 ^
 --set-version-string ProductName "Super Mod Merger" ^
 --set-version-string FileDescription "Super Mod Merger" ^
 --set-version-string CompanyName "Ankol" ^
