@@ -3,12 +3,7 @@ package ankol.mod.merger
 import ankol.mod.merger.core.FileMergerEngine
 import ankol.mod.merger.core.GlobalMergingStrategy
 import ankol.mod.merger.exception.BusinessException
-import ankol.mod.merger.tools.ColorPrinter
-import ankol.mod.merger.tools.Localizations
-import ankol.mod.merger.tools.SimpleArgParser
-import ankol.mod.merger.tools.Tools
-import ankol.mod.merger.tools.logger
-import lombok.extern.slf4j.Slf4j
+import ankol.mod.merger.tools.*
 import java.io.File
 import java.io.FileDescriptor
 import java.io.FileOutputStream
@@ -17,6 +12,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
+import kotlin.io.path.Path
 import kotlin.system.exitProcess
 
 /**
@@ -43,9 +39,9 @@ class AppMain {
                 // 扫描需要合并的MOD目录
                 val modsToMerge = Tools.scanFiles(Tools.getMergingModDir(), ".pak", ".zip", ".7z")
                 // 确定输出路径
-                var outputPath = Path.of(Tools.userDir, "source", "data7.pak")
+                var outputPath = Path(Tools.userDir, "source", "data7.pak")
                 if (argParser.hasOption("o")) {
-                    outputPath = Path.of(argParser.getOptionValue("o"))
+                    outputPath = Path(argParser.getOptionValue("o"))
                 }
                 // 定位基准MOD的位置
                 val baseModPath = locateBaseModPath(argParser)

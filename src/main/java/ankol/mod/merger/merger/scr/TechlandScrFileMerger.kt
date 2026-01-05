@@ -1,258 +1,270 @@
-package ankol.mod.merger.merger.scr;
+package ankol.mod.merger.merger.scr
 
-import ankol.mod.merger.antlr.scr.TechlandScriptLexer;
-import ankol.mod.merger.antlr.scr.TechlandScriptParser;
-import ankol.mod.merger.core.*;
-import ankol.mod.merger.core.filetrees.AbstractFileTree;
-import ankol.mod.merger.exception.BusinessException;
-import ankol.mod.merger.merger.ConflictRecord;
-import ankol.mod.merger.merger.MergeResult;
-import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode;
-import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode;
-import cn.hutool.core.util.StrUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.TokenStreamRewriter;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import ankol.mod.merger.antlr.scr.TechlandScriptLexer
+import ankol.mod.merger.antlr.scr.TechlandScriptParser
+import ankol.mod.merger.core.*
+import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.exception.BusinessException
+import ankol.mod.merger.merger.ConflictRecord
+import ankol.mod.merger.merger.MergeResult
+import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
+import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode
+import ankol.mod.merger.tools.logger
+import lombok.extern.slf4j.Slf4j
+import org.antlr.v4.runtime.CharStream
+import org.antlr.v4.runtime.CharStreams
+import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.TokenStreamRewriter
 
 @Slf4j
-public class TechlandScrFileMerger extends AbstractFileMerger {
+class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context) {
+    private val log = logger()
+
     /**
      * 标记冲突项的容器
      */
-    private final List<ConflictRecord> conflicts = new ArrayList<>();
+    private val conflicts = ArrayList<ConflictRecord>()
 
     /**
      * 插入操作记录
      */
-    private record InsertOperation(int tokenIndex, String content) {
-    }
+    private data class InsertOperation(val tokenIndex: Int, val content: String)
 
-    private final List<InsertOperation> insertOperations = new ArrayList<>();
+    private val insertOperations = ArrayList<InsertOperation>()
 
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
      */
-    private ScrContainerScriptNode originalBaseModRoot = null;
+    private var originalBaseModRoot: ScrContainerScriptNode? = null
 
-    public TechlandScrFileMerger(MergerContext context) {
-        super(context);
-    }
-
-    @Override
-    public MergeResult merge(AbstractFileTree file1, AbstractFileTree file2) {
+    override fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult {
         try {
-            ParsedResult<ScrContainerScriptNode> parsedResult = context.getBaseModManager()
-                    .parseForm(file1.getFileEntryName(), this::parseContent);
+            val parsedResult =
+                context.baseModManager.parseForm<ScrContainerScriptNode>(file1.getFileEntryName()) { content: String ->
+                    this.parseContent(content)
+                }
             // 解析基准MOD文件（如果存在）
             if (parsedResult != null) {
-                originalBaseModRoot = parsedResult.astNode();
+                originalBaseModRoot = parsedResult.astNode
             }
             // 解析base和mod文件，保留TokenStream
-            ParsedResult<ScrContainerScriptNode> baseResult = parseFile(file1);
-            ParsedResult<ScrContainerScriptNode> modResult = parseFile(file2);
-            ScrContainerScriptNode baseRoot = baseResult.astNode();
-            ScrContainerScriptNode modRoot = modResult.astNode();
+            val baseResult = parseFile(file1)
+            val modResult = parseFile(file2)
+            val baseRoot = baseResult.astNode
+            val modRoot = modResult.astNode
             // 递归对比，找到冲突项
-            reduceCompare(originalBaseModRoot, baseRoot, modRoot);
+            reduceCompare(originalBaseModRoot, baseRoot, modRoot)
             //第一个mod与原版文件的对比，直接使用MOD修改的版本，不提示冲突
-            if (context.isFirstModMergeWithBaseMod() && !conflicts.isEmpty()) {
-                for (ConflictRecord record : conflicts) {
-                    record.setUserChoice(2); // 自动选择第一个mod的版本
+            if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
+                for (record in conflicts) {
+                    record.userChoice = 2 // 自动选择第一个mod的版本
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
-                ConflictResolver.resolveConflict(conflicts);
+                ConflictResolver.resolveConflict(conflicts)
             }
-            return new MergeResult(getMergedContent(baseResult), !conflicts.isEmpty());
-        } catch (Exception e) {
-            log.error(StrUtil.format("Error during SCR file merge: {} Reason: {}", file1.getFileName(), e.getMessage()), e);
-            throw new BusinessException("文件" + file1.getFileName() + "合并失败");
+            return MergeResult(getMergedContent(baseResult), !conflicts.isEmpty())
+        } catch (e: Exception) {
+            log.error("Error during SCR file merge: ${file1.getFileName()} Reason: ${e.message}", e)
+            throw BusinessException("文件" + file1.getFileName() + "合并失败")
         } finally {
             //清理状态，准备下一个文件合并
-            conflicts.clear();
-            insertOperations.clear();
-            originalBaseModRoot = null;
+            conflicts.clear()
+            insertOperations.clear()
+            originalBaseModRoot = null
         }
     }
 
-    private void reduceCompare(ScrContainerScriptNode originalContainer, ScrContainerScriptNode baseContainer, ScrContainerScriptNode modContainer) {
+    private fun reduceCompare(
+        originalContainer: ScrContainerScriptNode?,
+        baseContainer: ScrContainerScriptNode,
+        modContainer: ScrContainerScriptNode
+    ) {
         // 遍历 Mod 的所有子节点
-        for (Map.Entry<String, BaseTreeNode> entry : modContainer.getChildren().entrySet()) {
+        for (entry in modContainer.children.entries) {
             try {
-                String signature = entry.getKey();
-                BaseTreeNode modNode = entry.getValue();
-                BaseTreeNode originalNode = null;
+                val signature = entry.key
+                val modNode = entry.value
+                var originalNode: BaseTreeNode? = null
                 if (originalContainer != null) {
-                    originalNode = originalContainer.getChildren().get(signature);
+                    originalNode = originalContainer.children[signature]
                 }
-                BaseTreeNode baseNode = baseContainer.getChildren().get(signature);
+                val baseNode = baseContainer.children[signature]
 
                 if (baseNode == null) {
                     // 新增 Base 没有这个节点 -> 插入
-                    handleInsertion(baseContainer, modNode);
+                    handleInsertion(baseContainer, modNode)
                 } else {
                     // [存在] 检查是否冲突
-                    if (baseNode instanceof ScrContainerScriptNode && modNode instanceof ScrContainerScriptNode) {
+                    if (baseNode is ScrContainerScriptNode && modNode is ScrContainerScriptNode) {
                         // 容器节点，递归进入内部对比
-                        reduceCompare((ScrContainerScriptNode) originalNode, (ScrContainerScriptNode) baseNode, (ScrContainerScriptNode) modNode);
-                    }
-                    //函数调用，比较参数，不对比String，因为对比字符会有各种空行不规范问题
-                    else if (baseNode instanceof ScrFunCallScriptNode baseFunCall && modNode instanceof ScrFunCallScriptNode modFunCall) {
+                        reduceCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
+                    } else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
                         //先检查当前待合并节点内容是否相同
-                        if (!baseFunCall.getArguments().equals(modFunCall.getArguments())) {
+                        if (baseNode.arguments != modNode.arguments) {
                             //两者内容不同，检查mod节点内容与原版是否相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
                                 //当前节点与原版一致，说明此处节点未变动，使用mod的内容（开启了智能合并的情况下）
-                                if (isNodeSameAsOriginalNode(originalNode, baseFunCall) && GlobalMergingStrategy.isAutoMergingCodeLine()) {
-                                    ConflictRecord record = new ConflictRecord(context.getFileName(),
-                                            context.getMod1Name(),
-                                            context.getMod2Name(),
+                                if (isNodeSameAsOriginalNode(
+                                        originalNode,
+                                        baseNode
+                                    ) && GlobalMergingStrategy.isAutoMergingCodeLine()
+                                ) {
+                                    val record = ConflictRecord(
+                                        context.fileName,
+                                        context.mod1Name,
+                                        context.mod2Name,
+                                        signature,
+                                        baseNode,
+                                        modNode
+                                    )
+                                    record.userChoice = 2
+                                    conflicts.add(record)
+                                } else {
+                                    conflicts.add(
+                                        ConflictRecord(
+                                            context.fileName,
+                                            context.mod1Name,
+                                            context.mod2Name,
                                             signature,
                                             baseNode,
-                                            modNode);
-                                    record.setUserChoice(2);
-                                    conflicts.add(record);
-                                }
-                                //当前节点不与原版相同，也不与待合并mod相同，标记为真正的冲突处
-                                else {
-                                    conflicts.add(new ConflictRecord(context.getFileName(),
-                                            context.getMod1Name(),
-                                            context.getMod2Name(),
-                                            signature,
-                                            baseNode,
-                                            modNode));
+                                            modNode
+                                        )
+                                    )
                                 }
                             }
                         }
-                    }
-                    //普通子节点，直接处理
-                    else {
-                        String baseText = baseNode.getSourceText();
-                        String modText = modNode.getSourceText();
+                    } else {
+                        val baseText = baseNode.getSourceText()
+                        val modText = modNode.getSourceText()
                         //内容不一致
                         if (!equalsTrimmed(baseText, modText)) {
                             // 检查modNode是否与原始基准MOD相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                conflicts.add(new ConflictRecord(context.getFileName(), context.getMod1Name(), context.getMod2Name(), signature, baseNode, modNode));
+                                conflicts.add(
+                                    ConflictRecord(
+                                        context.getFileName(),
+                                        context.getMod1Name(),
+                                        context.getMod2Name(),
+                                        signature,
+                                        baseNode,
+                                        modNode
+                                    )
+                                )
                             }
                         }
                     }
                 }
-            } catch (Exception e) {
-                log.error("Error in processing scr node with signature: " + entry.getKey(), e);
+            } catch (e: Exception) {
+                log.error("Error in processing scr node with signature: ${entry.key}", e)
             }
         }
     }
 
-    private String getMergedContent(ParsedResult<ScrContainerScriptNode> baseResult) {
-        TokenStreamRewriter rewriter = new TokenStreamRewriter(baseResult.tokenStream());
+    private fun getMergedContent(baseResult: ParsedResult<ScrContainerScriptNode>): String? {
+        val rewriter = TokenStreamRewriter(baseResult.tokenStream)
         // 处理冲突节点的替换
-        for (ConflictRecord record : conflicts) {
+        for (record in conflicts) {
             if (record.getUserChoice() == 2) { // 用户选择了 Mod
-                BaseTreeNode baseNode = record.getBaseNode();
-                BaseTreeNode modNode = record.getModNode();
+                val baseNode = record.getBaseNode()
+                val modNode = record.getModNode()
                 rewriter.replace(
-                        baseNode.getStartTokenIndex(),
-                        baseNode.getStopTokenIndex(),
-                        modNode.getSourceText()
-                );
+                    baseNode.getStartTokenIndex(),
+                    baseNode.getStopTokenIndex(),
+                    modNode.getSourceText()
+                )
             }
         }
-        for (InsertOperation op : insertOperations) {
-            rewriter.insertBefore(op.tokenIndex, op.content);
+        for (op in insertOperations) {
+            rewriter.insertBefore(op.tokenIndex, op.content)
         }
 
         // 获取重写后的文本
-        return rewriter.getText();
+        return rewriter.getText()
     }
 
-    private boolean isNodeSameAsOriginalNode(BaseTreeNode originalNode, BaseTreeNode modNode) {
+    private fun isNodeSameAsOriginalNode(originalNode: BaseTreeNode?, modNode: BaseTreeNode): Boolean {
         // 如果没有原始基准MOD，则认为不相同
         if (originalBaseModRoot == null) {
-            return false;
+            return false
         }
 
         if (originalNode == null) {
             // 原始基准MOD中不存在这个节点，说明是新增的
-            return false;
+            return false
         }
 
         // 对比节点内容
-        if (modNode instanceof ScrFunCallScriptNode modFunCall && originalNode instanceof ScrFunCallScriptNode originalFunCall) {
+        if (modNode is ScrFunCallScriptNode && originalNode is ScrFunCallScriptNode) {
             // 函数调用节点，对比参数
-            return modFunCall.getArguments().equals(originalFunCall.getArguments());
+            return modNode.getArguments() == originalNode.getArguments()
         } else {
-            return equalsTrimmed(modNode.getSourceText(), originalNode.getSourceText());
+            return equalsTrimmed(modNode.getSourceText(), originalNode.getSourceText())
         }
     }
 
-    private void handleInsertion(ScrContainerScriptNode baseContainer, BaseTreeNode modNode) {
+    private fun handleInsertion(baseContainer: ScrContainerScriptNode, modNode: BaseTreeNode) {
         // 插入位置：Base 容器的 '}' 之前
-        int insertPos = baseContainer.getStopTokenIndex();
-        String newContent = "\n    " + modNode.getSourceText();
-        insertOperations.add(new InsertOperation(insertPos, newContent));
+        val insertPos = baseContainer.getStopTokenIndex()
+        val newContent = "\n    " + modNode.getSourceText()
+        insertOperations.add(InsertOperation(insertPos, newContent))
     }
 
-    private ParsedResult<ScrContainerScriptNode> parseFile(AbstractFileTree fileTree) {
-        return parseContent(fileTree.getContent());
+    private fun parseFile(fileTree: AbstractFileTree): ParsedResult<ScrContainerScriptNode> {
+        return parseContent(fileTree.getContent())
     }
 
-    private ParsedResult<ScrContainerScriptNode> parseContent(String content) {
-        CharStream input = CharStreams.fromString(content);
-        TechlandScriptLexer lexer = new TechlandScriptLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        TechlandScriptParser parser = new TechlandScriptParser(tokens);
-        TechlandScrFileVisitor visitor = new TechlandScrFileVisitor(tokens);
+    private fun parseContent(content: String): ParsedResult<ScrContainerScriptNode> {
+        val input: CharStream = CharStreams.fromString(content)
+        val lexer = TechlandScriptLexer(input)
+        val tokens = CommonTokenStream(lexer)
+        val parser = TechlandScriptParser(tokens)
+        val visitor = TechlandScrFileVisitor(tokens)
         // 注意：visitFile 返回的一定是我们定义的 ROOT Container
-        ScrContainerScriptNode ast = (ScrContainerScriptNode) visitor.visitFile(parser.file());
-        return new ParsedResult<>(ast, tokens);
+        val ast = visitor.visitFile(parser.file()) as ScrContainerScriptNode
+        return ParsedResult(ast, tokens)
     }
 
-    private static boolean equalsTrimmed(String a, String b) {
-        // 快路径：同一引用或 equals（完全一致时直接返回，避免扫描）
-        if (Objects.equals(a, b)) {
-            return true;
-        }
-        if (a == null || b == null) {
-            return false;
-        }
-
-        int ai = 0;
-        int bi = 0;
-        int alen = a.length();
-        int blen = b.length();
-
-        while (true) {
-            // 跳过 a 的所有空白
-            while (ai < alen && Character.isWhitespace(a.charAt(ai))) {
-                ai++;
+    companion object {
+        private fun equalsTrimmed(a: String?, b: String?): Boolean {
+            // 快路径：同一引用或 equals（完全一致时直接返回，避免扫描）
+            if (a == b) {
+                return true
             }
-            // 跳过 b 的所有空白
-            while (bi < blen && Character.isWhitespace(b.charAt(bi))) {
-                bi++;
+            if (a == null || b == null) {
+                return false
             }
 
-            // 两边都到尾了 -> 相等
-            if (ai >= alen || bi >= blen) {
-                // 需要确保剩余部分也都是空白
-                while (ai < alen && Character.isWhitespace(a.charAt(ai))) ai++;
-                while (bi < blen && Character.isWhitespace(b.charAt(bi))) bi++;
-                return ai >= alen && bi >= blen;
-            }
+            var ai = 0
+            var bi = 0
+            val alen = a.length
+            val blen = b.length
 
-            // 比较当前非空白字符
-            if (a.charAt(ai) != b.charAt(bi)) {
-                return false;
+            while (true) {
+                // 跳过 a 的所有空白
+                while (ai < alen && Character.isWhitespace(a.get(ai))) {
+                    ai++
+                }
+                // 跳过 b 的所有空白
+                while (bi < blen && Character.isWhitespace(b.get(bi))) {
+                    bi++
+                }
+
+                // 两边都到尾了 -> 相等
+                if (ai >= alen || bi >= blen) {
+                    // 需要确保剩余部分也都是空白
+                    while (ai < alen && Character.isWhitespace(a.get(ai))) ai++
+                    while (bi < blen && Character.isWhitespace(b.get(bi))) bi++
+                    return ai >= alen && bi >= blen
+                }
+
+                // 比较当前非空白字符
+                if (a.get(ai) != b.get(bi)) {
+                    return false
+                }
+                ai++
+                bi++
             }
-            ai++;
-            bi++;
         }
     }
 }

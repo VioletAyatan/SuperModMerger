@@ -94,7 +94,7 @@ class FileMergerEngine(
         extractedFiles: MutableMap<String, PathFileTree>
     ): MutableMap<String, PathFileTree> {
         //如果没有基准MOD或者合并策略指定了不修正路径
-        if (!baseModManager.isLoaded || pathCorrectionStrategy.selectedStrategy != PathCorrectionStrategy.Strategy.SMART_CORRECT) {
+        if (!baseModManager.loaded || pathCorrectionStrategy.selectedStrategy != PathCorrectionStrategy.Strategy.SMART_CORRECT) {
             return extractedFiles
         }
 
@@ -105,7 +105,7 @@ class FileMergerEngine(
         // 查找需要修正的路径
         for ((fileEntryName, sourceInfo) in extractedFiles) {
             if (baseModManager.hasPathConflict(fileEntryName)) {
-                val suggestedPath = baseModManager.getSuggestedPath(fileEntryName)
+                val suggestedPath: String = baseModManager.getSuggestedPath(fileEntryName)!!
                 corrections[fileEntryName] = suggestedPath
                 correctedFiles[suggestedPath] = sourceInfo
             }
