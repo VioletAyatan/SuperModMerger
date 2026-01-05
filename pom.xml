@@ -177,15 +177,7 @@
                     </metadataRepository>
                     <!-- https://www.graalvm.org/latest/reference-manual/native-image/overview/Options/ -->
                     <buildArgs>
-                        <buildArg>--future-defaults=all</buildArg>
-                        <buildArg>-march=compatibility</buildArg>
-                        <buildArg>--pgo=${project.basedir}/default.iprof</buildArg>
-                        <!-- 启用优化 os编译选项减少体积，但会降低性能-->
-                        <!--                        <buildArg>-Os</buildArg>-->
-                        <!-- 启用全部优化-->
-                        <buildArg>-O3</buildArg>
-                        <!-- 添加完整字符集支持 -->
-                        <buildArg>-H:+AddAllCharsets</buildArg>
+
                     </buildArgs>
                 </configuration>
             </plugin>
@@ -213,12 +205,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.6.3</version>
-                <configuration>
-                    <mainClass>${mainClass}</mainClass>
-                    <commandlineArgs>
-                        -b 'D:\SteamLibrary\steamapps\common\Dying Light The Beast\ph_ft\source\data0.pak'
-                    </commandlineArgs>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -334,6 +320,76 @@
                             </buildArgs>
                             <imageName>${project.build.finalName}-pgoinstrument</imageName>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <configuration>
+                            <buildArgs>
+                                <buildArg>--future-defaults=all</buildArg>
+                                <buildArg>-march=compatibility</buildArg>
+                                <buildArg>--pgo=${project.basedir}/default.iprof</buildArg>
+                                <!-- 启用优化 os编译选项减少体积，但会降低性能-->
+                                <!--<buildArg>-Os</buildArg>-->
+                                <!-- 启用全部优化-->
+                                <!-- <buildArg>-O3</buildArg>-->
+                                <!-- 添加完整字符集支持 -->
+                                <buildArg>-H:+AddAllCharsets</buildArg>
+                            </buildArgs>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>build-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>set-exe-icon-and-version</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${project.basedir}/builds/rcedit-x64.exe</executable>
+                                    <arguments>
+                                        <argument>${project.build.directory}/${project.build.finalName}.exe</argument>
+                                        <argument>--set-icon</argument>
+                                        <argument>${project.basedir}/builds/icon.ico</argument>
+                                        <argument>--set-file-version</argument>
+                                        <argument>${project.version}</argument>
+                                        <argument>--set-product-version</argument>
+                                        <argument>${project.version}</argument>
+                                        <argument>--set-version-string</argument>
+                                        <argument>ProductName</argument>
+                                        <argument>${project.artifactId}</argument>
+                                        <argument>--set-version-string</argument>
+                                        <argument>FileDescription</argument>
+                                        <argument>${project.artifactId}</argument>
+                                        <argument>--set-version-string</argument>
+                                        <argument>CompanyName</argument>
+                                        <argument>Ankol</argument>
+                                        <argument>--set-version-string</argument>
+                                        <argument>LegalCopyright</argument>
+                                        <argument>Copyright (C) 2025 Ankol</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
