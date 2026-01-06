@@ -36,7 +36,6 @@ class FileMergerEngine(
 
     // 基准MOD相关
     private val baseModManager: BaseModManager = BaseModManager(baseModPath)
-    private val pathCorrectionStrategy: PathCorrectionStrategy = PathCorrectionStrategy()
 
     // 统计信息
     private var mergedCount = 0 // 成功合并（无冲突）的文件数
@@ -95,7 +94,7 @@ class FileMergerEngine(
         extractedFiles: MutableMap<String, PathFileTree>
     ): MutableMap<String, PathFileTree> {
         //如果没有基准MOD或者合并策略指定了不修正路径
-        if (!baseModManager.loaded || pathCorrectionStrategy.selectedStrategy != PathCorrectionStrategy.Strategy.SMART_CORRECT) {
+        if (!baseModManager.loaded || !GlobalMergingStrategy.isAutoFixPath()) {
             return extractedFiles
         }
 
