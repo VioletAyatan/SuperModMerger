@@ -94,7 +94,7 @@ class FileMergerEngine(
         extractedFiles: MutableMap<String, PathFileTree>
     ): MutableMap<String, PathFileTree> {
         //如果没有基准MOD或者合并策略指定了不修正路径
-        if (!baseModManager.loaded || !GlobalMergingStrategy.isAutoFixPath()) {
+        if (!baseModManager.loaded || !GlobalMergingStrategy.autoFixPath) {
             return extractedFiles
         }
 
