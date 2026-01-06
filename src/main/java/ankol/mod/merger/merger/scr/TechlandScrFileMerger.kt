@@ -79,13 +79,13 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         modContainer: ScrContainerScriptNode
     ) {
         // 遍历 Mod 的所有子节点
-        for ((signature, modNode) in modContainer.children) {
+        for ((signature, modNode) in modContainer.childrens) {
             try {
                 var originalNode: BaseTreeNode? = null
                 if (originalContainer != null) {
-                    originalNode = originalContainer.children[signature]
+                    originalNode = originalContainer.childrens[signature]
                 }
-                val baseNode = baseContainer.children[signature]
+                val baseNode = baseContainer.childrens[signature]
 
                 if (baseNode == null) {
                     // 新增 Base 没有这个节点 -> 插入

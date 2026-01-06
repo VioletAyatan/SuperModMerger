@@ -178,7 +178,7 @@ public class TechlandScrFileVisitor extends TechlandScriptBaseVisitor<BaseTreeNo
         if (signatures.contains(signature)) {
             signature = signature + ":" + argsList.getFirst();
         } else {
-            Map<String, BaseTreeNode> children = containerNode.getChildren();
+            Map<String, BaseTreeNode> children = containerNode.getChildrens();
             //发现重复的函数调用，重新生成signature
             if (children.containsKey(signature)) {
                 ScrFunCallScriptNode funCallNode = (ScrFunCallScriptNode) children.get(signature);

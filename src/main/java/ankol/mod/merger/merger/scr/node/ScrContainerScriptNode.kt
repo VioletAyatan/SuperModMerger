@@ -1,30 +1,30 @@
-package ankol.mod.merger.merger.scr.node;
+package ankol.mod.merger.merger.scr.node
 
+import ankol.mod.merger.core.BaseTreeNode
+import org.antlr.v4.runtime.CommonTokenStream
 
-import ankol.mod.merger.core.BaseTreeNode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.antlr.v4.runtime.CommonTokenStream;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-@Getter
-@Setter
-@ToString
-public class ScrContainerScriptNode extends BaseTreeNode {
+/**
+ * SCR容器节点，标识语法树中含有子节点的节点
+ *
+ * 对应到SCR语法中即为包含其他语句的代码块，如函数体、条件语句体等
+ * @author Ankol
+ */
+class ScrContainerScriptNode(
+    signature: String,
+    startTokenIndex: Int,
+    stopTokenIndex: Int,
+    line: Int,
+    tokenStream: CommonTokenStream
+) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
     /**
      * 子节点映射，key 是节点签名，value 是节点对象
      */
-    private final Map<String, BaseTreeNode> children = new LinkedHashMap<>();
+    val childrens = LinkedHashMap<String, BaseTreeNode>()
 
-    public ScrContainerScriptNode(String signature, int startTokenIndex, int stopTokenIndex, int line, CommonTokenStream tokenStream) {
-        super(signature.trim(), startTokenIndex, stopTokenIndex, line, tokenStream);
+    /**
+     * 添加子节点
+     */
+    fun addChild(node: BaseTreeNode) {
+        childrens[node.signature] = node
     }
-
-    public void addChild(BaseTreeNode node) {
-        children.put(node.getSignature(), node);
-    }
-
 }
