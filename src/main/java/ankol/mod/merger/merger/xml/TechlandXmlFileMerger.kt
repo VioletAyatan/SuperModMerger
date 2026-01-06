@@ -97,15 +97,15 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     ) {
         // 遍历Mod的所有子节点
         var previousSiblingInBase: XmlNode? = null // 追踪前一个兄弟节点
-        for ((signature, modNode) in modContainer.children) {
+        for ((signature, modNode) in modContainer.childrens) {
             try {
                 var originalNode: XmlNode? = null
 
                 if (originalContainer != null) {
-                    originalNode = originalContainer.children[signature]
+                    originalNode = originalContainer.childrens[signature]
                 }
 
-                val baseNode = baseContainer.children[signature]
+                val baseNode = baseContainer.childrens[signature]
 
                 if (baseNode == null) {
                     // Base中不存在这个节点 - 新增节点，需要添加到合并结果中
@@ -121,8 +121,8 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                     //叶子节点，对比属性
                     else if (baseNode !is XmlContainerNode && modNode !is XmlContainerNode) {
                         // 使用规范化文本进行对比，避免空格、换行等格式差异
-                        val baseAttr = baseNode.getAttributes()
-                        val modAttr = modNode.getAttributes()
+                        val baseAttr = baseNode.attributes
+                        val modAttr = modNode.attributes
                         if (baseAttr != modAttr) {
                             // 不相同，检查是否跟基准mod的一样，不一样视为冲突
                             if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
@@ -208,7 +208,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 原始基准MOD中不存在这个节点
             return false
         }
-        return modNode.getAttributes() == originalNode.getAttributes()
+        return modNode.attributes == originalNode.attributes
     }
 
     /**
