@@ -19,7 +19,7 @@ class ScrContainerScriptNode(
     /**
      * 子节点映射，key 是节点签名，value 是节点对象
      */
-    val childrens = LinkedHashMap<String, BaseTreeNode>()
+    val childrens: MutableMap<String, BaseTreeNode> = LinkedHashMap()
 
     /**
      * 添加子节点
