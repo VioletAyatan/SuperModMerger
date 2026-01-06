@@ -1,67 +1,67 @@
 # ModMergerTool
 
-**中文 | [English](README_EN.md)**
+**[中文](README_CN.md) | English**
 
-## 游戏模组合并工具
+## Game Mod Merge Tool
 
-### 📋 项目简介
+### 📋 Introduction
 
-**ModMergerTool** 是一个专为消光系列（Dying Light）游戏设计的模组智能合并工具，目前主要是消光困兽和消光2。它能够将多个游戏模组文件（.pak
-格式）合并为单一文件，并通过 AST 语法树分析实现脚本文件的智能对比和冲突解决。
+**ModMergerTool** is an intelligent mod merging tool designed specifically for the Dying Light series, primarily for Dying Light: The Beast and Dying Light 2. It can merge multiple game mod files (.pak format) into a single file, using AST (Abstract Syntax Tree) analysis to achieve intelligent comparison and conflict resolution for script files.
 
-### ✨ 主要特性
+### ✨ Key Features
 
-- 🔀 **智能合并**：支持无限数量的模组文件合并
-- 🔧 **路径修正**：基于原版文件对mod中的错误文件路径进行修正
-- 🔍 **冲突检测**：使用AST语法树进行深度对比
-- 👤 **用户交互**：清晰的命令行界面提示用户选择冲突解决方案
-- 📊 **详细统计**：合并后提供详细的处理统计信息
-- 🌍 **国际化**：目前支持中文和英文，英文并非我母语，所以如果有语法错误请多包涵，或者在我的GitHub仓库中提交PR。
-- 支持SCR结构化脚本合并和XML文件合并，支持逐行合并与冲突检测功能
-- 合并逻辑基于原版文件进行合并，大概能修复一些过期MOD的问题，但是仅限多个MOD中有重名文件的情况下，因为不重复的文件工具会直接复制，不会进行解析。但还是尽量不要合并过期MOD，以免出现奇怪的问题。
+- 🔀 **Smart Merging**: Support for merging unlimited number of mod files
+- 🔧 **Path Correction**: Automatically corrects incorrect file paths in mods based on original game files
+- 🔍 **Conflict Detection**: Deep comparison using AST syntax tree analysis
+- 👤 **User Interaction**: Clear command-line interface for user to choose conflict resolution options
+- 📊 **Detailed Statistics**: Provides detailed processing statistics after merging
+- 🌍 **Internationalization**: Currently supports Chinese and English. English is not my native language, so please bear with any grammatical errors, or feel free to submit a PR on my GitHub repository.
+- Supports SCR structured script merging and XML file merging, with line-by-line merging and conflict detection
+- Merging is based on original game files, which may fix some issues with outdated mods (only when multiple mods have files with the same name, as non-duplicate files are copied directly without parsing). However, try to avoid merging outdated mods to prevent unexpected issues.
 
-### 项目简介
+### About This Project
 
-我做这个工具的初衷一开始是为了解决我自己使用多个MOD之间的各种冲突问题。
+I created this tool initially to solve conflict issues when using multiple mods myself.
 
-最初，我发现了 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** 这款工具，虽然也很不错。但是有一些小问题和一些不支持的特性，所以我自己制作了这款全新的工具，基于AST语法树进行脚本分析，能够智能识别代码中冲突的地方，智能进行合并。即使是报错的情况下也不会破坏文件结构。同时，也感谢 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** 这款工具作者的辛苦付出，我的一些合并思路也参考了他的工具。
+At first, I discovered **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)**, which is also a great tool. However, it had some minor issues and lacked certain features, so I created this brand new tool based on AST syntax tree analysis. It can intelligently identify conflicts in code and perform smart merging. Even in case of errors, it won't break the file structure. I also want to thank the author of **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** for their hard work - some of my merging concepts were inspired by their tool.
 
-因此本工具的基础使用方法也完全兼容 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)**，并且不需要安装任何运行库，直接即可使用。
+Therefore, the basic usage of this tool is fully compatible with **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)**, and no runtime libraries need to be installed - it works out of the box.
 
-**工具支持智能合并 .scr, .loot, .def .phx .ppfx 及更多scr语法结构的文件和 .xml 文件，不局限于常见的player_variables.scr文件的合并，语法解析已经对整个原版data0.pak文件进行过实验，确保没有任何冲突。理论上，只要正确的scr语法的文件，工具都能识别并合并。**
+**The tool supports smart merging of .scr, .loot, .def, .phx, .ppfx and more SCR syntax structure files, as well as .xml files. It's not limited to common player_variables.scr file merging. The syntax parser has been tested against the entire original data0.pak file to ensure no conflicts. In theory, any file with correct SCR syntax can be recognized and merged by this tool.**
 
-理论上也支持消光2的MOD合并，因为消光2的目录结构和困兽完全一样。消光1应该也可以支持，只要它们的scr语法能够兼容，工具都能正确识别，但是消光1需要通过命令行手动指令一下基准mod的位置。
+It should theoretically support Dying Light 2 mod merging as well, since Dying Light 2's directory structure is identical to The Beast. Dying Light 1 should also be supported as long as the SCR syntax is compatible, but for Dying Light 1, you'll need to manually specify the base mod location via command line.
 
-### 问题反馈
+### Bug Reports
 
-如果你发现了任何问题，请及时反馈给我，并提供你合并的mod信息等等。
+If you find any issues, please report them to me promptly and provide information about the mods you're trying to merge.
 
-### 支持的操作系统
+### Supported Operating Systems
 
 - **Windows 10**
 - **Windows 11**
-- 其他版本的windows系统未经过测试。
+- Other Windows versions have not been tested.
 
-### 🚀 快速开始
+### 🚀 Quick Start
 
-#### **1、将工具放到困兽根目录/ph_ft目录下，并创建mods目录，将要合并的mod放入其中**
+#### **1. Place the tool in the game's root directory/ph_ft folder, create a mods directory, and put the mods you want to merge inside**
 
-**准备 mod 文件，mod支持zip、pak、7z等格式**
+**Prepare mod files - supports zip, pak, 7z and other formats**
 
 ```bash
-# 示例
+# Example
 Dying Light The Beast\ph_ft\mods
 ├── mod1.pak
 ├── mod2.pak
 └── mod3.pak
 ```
 
-#### 2. 运行合并程序
+#### 2. Run the Merge Program
 
 ```bash
-# 双击运行合并工具
+# Double-click to run the merge tool
 ```
 
-#### 3. 查看结果
+#### 3. View Results
 
-合并后的mod会输出到source目录下的data7.pak文件，如果你有data7.pak。注意，此工具会把旧的覆盖掉。
+The merged mod will be output to the data7.pak file in the source directory. Note: if you already have a data7.pak file, this tool will overwrite it.
+
