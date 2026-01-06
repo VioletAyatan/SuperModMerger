@@ -163,9 +163,9 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         val rewriter = TokenStreamRewriter(baseResult.tokenStream)
         // 处理冲突节点的替换
         for (record in conflicts) {
-            if (record.getUserChoice() == 2) { // 用户选择了 Mod
-                val baseNode = record.getBaseNode()
-                val modNode = record.getModNode()
+            if (record.userChoice == 2) { // 用户选择了 Mod
+                val baseNode = record.baseNode
+                val modNode = record.modNode
                 rewriter.replace(
                     baseNode.getStartTokenIndex(),
                     baseNode.getStopTokenIndex(),
@@ -178,7 +178,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
 
         // 获取重写后的文本
-        return rewriter.getText()
+        return rewriter.text
     }
 
     private fun isNodeSameAsOriginalNode(originalNode: BaseTreeNode?, modNode: BaseTreeNode): Boolean {
@@ -195,7 +195,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         // 对比节点内容
         if (modNode is ScrFunCallScriptNode && originalNode is ScrFunCallScriptNode) {
             // 函数调用节点，对比参数
-            return modNode.getArguments() == originalNode.getArguments()
+            return modNode.arguments == originalNode.arguments
         } else {
             return equalsTrimmed(modNode.getSourceText(), originalNode.getSourceText())
         }
@@ -223,46 +223,44 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         return ParsedResult(ast, tokens)
     }
 
-    companion object {
-        private fun equalsTrimmed(a: String?, b: String?): Boolean {
-            // 快路径：同一引用或 equals（完全一致时直接返回，避免扫描）
-            if (a == b) {
-                return true
-            }
-            if (a == null || b == null) {
-                return false
-            }
+    private fun equalsTrimmed(a: String?, b: String?): Boolean {
+        // 快路径：同一引用或 equals（完全一致时直接返回，避免扫描）
+        if (a == b) {
+            return true
+        }
+        if (a == null || b == null) {
+            return false
+        }
 
-            var ai = 0
-            var bi = 0
-            val alen = a.length
-            val blen = b.length
+        var ai = 0
+        var bi = 0
+        val alen = a.length
+        val blen = b.length
 
-            while (true) {
-                // 跳过 a 的所有空白
-                while (ai < alen && Character.isWhitespace(a.get(ai))) {
-                    ai++
-                }
-                // 跳过 b 的所有空白
-                while (bi < blen && Character.isWhitespace(b.get(bi))) {
-                    bi++
-                }
-
-                // 两边都到尾了 -> 相等
-                if (ai >= alen || bi >= blen) {
-                    // 需要确保剩余部分也都是空白
-                    while (ai < alen && Character.isWhitespace(a.get(ai))) ai++
-                    while (bi < blen && Character.isWhitespace(b.get(bi))) bi++
-                    return ai >= alen && bi >= blen
-                }
-
-                // 比较当前非空白字符
-                if (a.get(ai) != b.get(bi)) {
-                    return false
-                }
+        while (true) {
+            // 跳过 a 的所有空白
+            while (ai < alen && Character.isWhitespace(a[ai])) {
                 ai++
+            }
+            // 跳过 b 的所有空白
+            while (bi < blen && Character.isWhitespace(b[bi])) {
                 bi++
             }
+
+            // 两边都到尾了 -> 相等
+            if (ai >= alen || bi >= blen) {
+                // 需要确保剩余部分也都是空白
+                while (ai < alen && Character.isWhitespace(a[ai])) ai++
+                while (bi < blen && Character.isWhitespace(b[bi])) bi++
+                return ai >= alen && bi >= blen
+            }
+
+            // 比较当前非空白字符
+            if (a[ai] != b[bi]) {
+                return false
+            }
+            ai++
+            bi++
         }
     }
 }

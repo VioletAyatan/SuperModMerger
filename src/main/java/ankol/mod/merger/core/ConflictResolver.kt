@@ -1,83 +1,98 @@
-package ankol.mod.merger.core;
+package ankol.mod.merger.core
 
-import ankol.mod.merger.merger.ConflictRecord;
-import ankol.mod.merger.tools.ColorPrinter;
-import ankol.mod.merger.tools.Localizations;
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
+import ankol.mod.merger.merger.ConflictRecord
+import ankol.mod.merger.tools.ColorPrinter
+import ankol.mod.merger.tools.Localizations
+import ankol.mod.merger.tools.logger
 
 /**
  * 冲突解决器
- *
+ * 
  * @author Ankol
  */
-@Slf4j
-public class ConflictResolver {
+object ConflictResolver {
+    private val log = logger()
+
     /**
      * 交互式解决冲突
-     *
+     * 
      * @param conflicts 冲突项目
      */
-    public static void resolveConflict(List<ConflictRecord> conflicts) {
+    fun resolveConflict(conflicts: MutableList<ConflictRecord>) {
         //筛选出智能合并的节点
-        List<ConflictRecord> automaticMerge = conflicts.stream()
-                .filter(conflict -> conflict.getUserChoice() != null)
-                .toList();
+        val automaticMerge = conflicts.filter { it.userChoice != null }
         if (!automaticMerge.isEmpty()) {
-            for (ConflictRecord item : automaticMerge) {
-                ColorPrinter.print("Auto merging code-line: {}: {} -> {}: {}", item.getBaseModName(), item.getBaseNode().getSourceText(), item.getMergeModName(), item.getModNode().getSourceText());
+            for (item in automaticMerge) {
+                ColorPrinter.print(
+                    "Auto merging code-line: {}: {} -> {}: {}",
+                    item.baseModName,
+                    item.baseNode.getSourceText(),
+                    item.mergeModName,
+                    item.modNode.getSourceText()
+                )
             }
-            ColorPrinter.success(Localizations.t("SCR_MERGER_AUTO_MERGE_COUNT", automaticMerge.size()));
-            conflicts.removeAll(automaticMerge); //暂时移除，主要是为了不出现冲突提示.
+            ColorPrinter.success(Localizations.t("CRESOLVER_AUTO_MERGE_COUNT", automaticMerge.size))
+            conflicts.removeAll(automaticMerge) //暂时移除，主要是为了不出现冲突提示.
         }
         //对于真正的冲突项，提示用户选择使用哪一个版本解决
         if (!conflicts.isEmpty()) {
-            System.out.println(); //换行
-            ColorPrinter.warning(Localizations.t("SCR_MERGER_CONFLICT_DETECTED", conflicts.size()));
-            int chose = 0;
-            for (int i = 0; i < conflicts.size(); i++) {
-                ConflictRecord record = conflicts.get(i);
+            println() //换行
+            ColorPrinter.warning(Localizations.t("CRESOLVER_CONFLICT_DETECTED", conflicts.size))
+            var chose = 0
+            for (i in conflicts.indices) {
+                val record = conflicts[i]
                 if (chose == 3) {
-                    record.setUserChoice(1); //3表示用户全部选择baseMod的配置来处理
+                    record.userChoice = 1 //3表示用户全部选择baseMod的配置来处理
                 } else if (chose == 4) {
-                    record.setUserChoice(2); //4表示用户全部选择mergeMod的配置来处理
+                    record.userChoice = 2 //4表示用户全部选择mergeMod的配置来处理
                 } else {
-                    String baseNodeSource = record.getBaseNode().getSourceText().trim();
-                    String modNodeSource = record.getModNode().getSourceText().trim();
+                    val baseNodeSource = record.baseNode.getSourceText().trim()
+                    val modNodeSource = record.modNode.getSourceText().trim()
                     //打印代码提示框
-                    ColorPrinter.info("=".repeat(75));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_FILE_INFO", i + 1, conflicts.size(), record.getFileName()));
-                    ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_1", record.getBaseModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getBaseNode().getLineNumber(), baseNodeSource));
-                    ColorPrinter.warning(Localizations.t("SCR_MERGER_MOD_VERSION_2", record.getMergeModName()));
-                    ColorPrinter.bold(Localizations.t("SCR_MERGER_LINE_INFO", record.getModNode().getLineNumber(), modNodeSource));
-                    ColorPrinter.info("=".repeat(75));
+                    ColorPrinter.info("=".repeat(75))
+                    ColorPrinter.info(Localizations.t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
+                    ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_1", record.baseModName))
+                    ColorPrinter.bold(
+                        Localizations.t(
+                            "CRESOLVER_LINE_INFO",
+                            record.baseNode.getLineNumber(),
+                            baseNodeSource
+                        )
+                    )
+                    ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_2", record.mergeModName))
+                    ColorPrinter.bold(
+                        Localizations.t(
+                            "CRESOLVER_LINE_INFO",
+                            record.modNode.getLineNumber(),
+                            modNodeSource
+                        )
+                    )
+                    ColorPrinter.info("=".repeat(75))
                     //选择对话框
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_1", baseNodeSource));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_OPTION_2", modNodeSource));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_1", record.getBaseModName()));
-                    ColorPrinter.info(Localizations.t("SCR_MERGER_USE_ALL_FROM_MOD_2", record.getMergeModName()));
+                    ColorPrinter.info(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
+                    ColorPrinter.info(Localizations.t("CRESOLVER_USE_OPTION_1", baseNodeSource))
+                    ColorPrinter.info(Localizations.t("CRESOLVER_USE_OPTION_2", modNodeSource))
+                    ColorPrinter.info(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_1", record.baseModName))
+                    ColorPrinter.info(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_2", record.mergeModName))
 
                     while (true) {
-                        String input = IO.readln();
-                        if (input.equals("1") || input.equals("2")) {
-                            record.setUserChoice(Integer.parseInt(input));
-                            break;
+                        val input = readln()
+                        if (input == "1" || input == "2") {
+                            record.userChoice = input.toInt()
+                            break
                         }
-                        if (input.equals("3") || input.equals("4")) {
-                            chose = Integer.parseInt(input);
-                            record.setUserChoice(chose == 3 ? 1 : 2);
-                            break;
+                        if (input == "3" || input == "4") {
+                            chose = input.toInt()
+                            record.userChoice = if (chose == 3) 1 else 2
+                            break
                         }
-                        ColorPrinter.warning(Localizations.t("SCR_MERGER_INVALID_INPUT"));
+                        ColorPrinter.warning(Localizations.t("CRESOLVER_INVALID_INPUT"))
                     }
                 }
             }
-            ColorPrinter.success(Localizations.t("SCR_MERGER_CONFLICT_RESOLVED"));
+            ColorPrinter.success(Localizations.t("CRESOLVER_CONFLICT_RESOLVED"))
         }
         //最后把自动合并的节点加回去，让后续处理合并的逻辑使用同一个容器
-        conflicts.addAll(automaticMerge);
+        conflicts.addAll(automaticMerge)
     }
 }

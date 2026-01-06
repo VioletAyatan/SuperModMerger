@@ -24,7 +24,7 @@ public class GlobalMergingStrategy {
         ColorPrinter.success(Localizations.t("GLOBAL_STRATEGY_OPTION_1"));
         ColorPrinter.info(Localizations.t("GLOBAL_STRATEGY_OPTION_2"));
         ColorPrinter.print("=".repeat(75));
-        ColorPrinter.info(Localizations.t("SCR_MERGER_CHOOSE_PROMPT"));
+        ColorPrinter.info(Localizations.t("CRESOLVER_CHOOSE_PROMPT"));
         while (true) {
             String input = IO.readln();
             if (input.equals("1")) {
