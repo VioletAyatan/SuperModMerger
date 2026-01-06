@@ -10,7 +10,6 @@ import cn.hutool.cache.CacheUtil
 import cn.hutool.core.io.FileUtil
 import cn.hutool.core.io.IoUtil
 import cn.hutool.core.lang.func.Func0
-import lombok.extern.slf4j.Slf4j
 import org.apache.commons.compress.archivers.zip.ZipFile
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -26,7 +25,6 @@ import kotlin.io.path.Path
  * @param baseModPath 基准MOD文件路径
  * @author Ankol
  */
-@Slf4j
 class BaseModManager(
     private val baseModPath: Path
 ) {

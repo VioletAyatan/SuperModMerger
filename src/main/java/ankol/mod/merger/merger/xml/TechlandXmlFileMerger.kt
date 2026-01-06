@@ -229,6 +229,6 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
         val visitor = TechlandXmlFileVisitor(tokens)
         val root = visitor.visitDocument(parser.document())
         val containerRoot = root as XmlContainerNode?
-        return ParsedResult<XmlContainerNode>(containerRoot, tokens)
+        return ParsedResult(containerRoot, tokens)
     }
 }
