@@ -26,9 +26,9 @@ object ConflictResolver {
                 ColorPrinter.print(
                     "Auto merging code-line: {}: {} -> {}: {}",
                     item.baseModName,
-                    item.baseNode.getSourceText(),
+                    item.baseNode.sourceText,
                     item.mergeModName,
-                    item.modNode.getSourceText()
+                    item.modNode.sourceText
                 )
             }
             ColorPrinter.success(Localizations.t("CRESOLVER_AUTO_MERGE_COUNT", automaticMerge.size))
@@ -46,26 +46,18 @@ object ConflictResolver {
                 } else if (chose == 4) {
                     record.userChoice = 2 //4表示用户全部选择mergeMod的配置来处理
                 } else {
-                    val baseNodeSource = record.baseNode.getSourceText().trim()
-                    val modNodeSource = record.modNode.getSourceText().trim()
+                    val baseNodeSource = record.baseNode.sourceText.trim()
+                    val modNodeSource = record.modNode.sourceText.trim()
                     //打印代码提示框
                     ColorPrinter.info("=".repeat(75))
                     ColorPrinter.info(Localizations.t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
                     ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_1", record.baseModName))
                     ColorPrinter.bold(
-                        Localizations.t(
-                            "CRESOLVER_LINE_INFO",
-                            record.baseNode.getLineNumber(),
-                            baseNodeSource
-                        )
+                        Localizations.t("CRESOLVER_LINE_INFO", record.baseNode.lineNumber, baseNodeSource)
                     )
                     ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_2", record.mergeModName))
                     ColorPrinter.bold(
-                        Localizations.t(
-                            "CRESOLVER_LINE_INFO",
-                            record.modNode.getLineNumber(),
-                            modNodeSource
-                        )
+                        Localizations.t("CRESOLVER_LINE_INFO", record.modNode.lineNumber, modNodeSource)
                     )
                     ColorPrinter.info("=".repeat(75))
                     //选择对话框
