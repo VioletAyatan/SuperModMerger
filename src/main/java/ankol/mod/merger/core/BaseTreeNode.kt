@@ -1,67 +1,46 @@
-package ankol.mod.merger.core;
+package ankol.mod.merger.core
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.misc.Interval;
+import com.fasterxml.jackson.annotation.JsonIgnore
+import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * 基础树节点
- *
+ * 
  * @author Ankol
  */
-@Getter
-@Setter
-@ToString
-public abstract class BaseTreeNode {
+abstract class BaseTreeNode(
     /**
      * 当前节点签名（确保在同一树层级下保持唯一，方便进行多文件对比）
      */
-    protected String signature;
+    var signature: String,
     /**
      * 当前节点起始TOKEN索引
      */
-    protected int startTokenIndex;
+    val startTokenIndex: Int,
     /**
      * 当前节点结束TOKEN索引
      */
-    protected int stopTokenIndex;
+    val stopTokenIndex: Int,
     /**
      * 当前行号
      */
-    protected int lineNumber;
+    val lineNumber: Int,
     /**
      * Token流引用
      */
-    @JsonIgnore
-    protected transient CommonTokenStream tokenStream;
-
+    @field:Transient
+    @field:JsonIgnore
+    val tokenStream: CommonTokenStream
+) {
     /**
-     * 构造函数
-     *
-     * @param signature       签名
-     * @param startTokenIndex token起始索引
-     * @param stopTokenIndex  token结束索引
-     * @param lineNumber      行号
-     * @param tokenStream     token流（用于按需提取源文本）
+     * 当前节点存储的源文本
+     * kt的lazy加载类型java的单例，这里主要是为了利用这个机制进行缓存，避免反复获取源文本
+     * LazyThreadSafetyMode.PUBLICATION 允许多个线程同时初始化，但只会有一个结果被使用
      */
-    public BaseTreeNode(String signature, int startTokenIndex, int stopTokenIndex, int lineNumber, CommonTokenStream tokenStream) {
-        this.signature = signature;
-        this.startTokenIndex = startTokenIndex;
-        this.stopTokenIndex = stopTokenIndex;
-        this.lineNumber = lineNumber;
-        this.tokenStream = tokenStream;
-    }
-
-    /**
-     * 获取源文本
-     * 从原始TokenStream里获取
-     */
-    public String getSourceText() {
-        int startIndex = tokenStream.get(startTokenIndex).getStartIndex();
-        int stopIndex = tokenStream.get(stopTokenIndex).getStopIndex();
-        return tokenStream.getTokenSource().getInputStream().getText(new Interval(startIndex, stopIndex));
+    val sourceText: String by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        val startIndex = tokenStream.get(startTokenIndex).startIndex
+        val stopIndex = tokenStream.get(stopTokenIndex).stopIndex
+        return@lazy tokenStream.getTokenSource().inputStream.getText(Interval(startIndex, stopIndex))
     }
 }

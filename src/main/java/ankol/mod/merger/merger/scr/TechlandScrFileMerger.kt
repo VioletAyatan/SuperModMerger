@@ -79,10 +79,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         modContainer: ScrContainerScriptNode
     ) {
         // 遍历 Mod 的所有子节点
-        for (entry in modContainer.children.entries) {
+        for ((signature, modNode) in modContainer.children) {
             try {
-                val signature = entry.key
-                val modNode = entry.value
                 var originalNode: BaseTreeNode? = null
                 if (originalContainer != null) {
                     originalNode = originalContainer.children[signature]
@@ -133,8 +131,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                             }
                         }
                     } else {
-                        val baseText = baseNode.getSourceText()
-                        val modText = modNode.getSourceText()
+                        val baseText = baseNode.sourceText
+                        val modText = modNode.sourceText
                         //内容不一致
                         if (!equalsTrimmed(baseText, modText)) {
                             // 检查modNode是否与原始基准MOD相同
@@ -154,7 +152,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                     }
                 }
             } catch (e: Exception) {
-                log.error("Error in processing scr node with signature: ${entry.key}", e)
+                log.error("Error in processing scr node with signature: '${signature}'", e)
             }
         }
     }
@@ -167,9 +165,9 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 val baseNode = record.baseNode
                 val modNode = record.modNode
                 rewriter.replace(
-                    baseNode.getStartTokenIndex(),
-                    baseNode.getStopTokenIndex(),
-                    modNode.getSourceText()
+                    baseNode.startTokenIndex,
+                    baseNode.stopTokenIndex,
+                    modNode.sourceText
                 )
             }
         }
@@ -197,14 +195,14 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 函数调用节点，对比参数
             return modNode.arguments == originalNode.arguments
         } else {
-            return equalsTrimmed(modNode.getSourceText(), originalNode.getSourceText())
+            return equalsTrimmed(modNode.sourceText, originalNode.sourceText)
         }
     }
 
     private fun handleInsertion(baseContainer: ScrContainerScriptNode, modNode: BaseTreeNode) {
         // 插入位置：Base 容器的 '}' 之前
-        val insertPos = baseContainer.getStopTokenIndex()
-        val newContent = "\n    " + modNode.getSourceText()
+        val insertPos = baseContainer.stopTokenIndex
+        val newContent = "\n    " + modNode.sourceText
         insertOperations.add(InsertOperation(insertPos, newContent))
     }
 
