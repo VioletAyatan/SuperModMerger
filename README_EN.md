@@ -33,7 +33,7 @@ It should theoretically support Dying Light 2 mod merging as well, since Dying L
 
 ### Bug Reports
 
-This tool is currently in its first version and may have bugs. If you find any issues, please report them to me promptly and provide information about the mods you're trying to merge.
+If you find any issues, please report them to me promptly and provide information about the mods you're trying to merge.
 
 ### Supported Operating Systems
 
