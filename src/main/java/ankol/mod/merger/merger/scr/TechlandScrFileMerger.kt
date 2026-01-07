@@ -48,8 +48,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 解析base和mod文件，保留TokenStream
             val baseResult = parseFile(file1)
             val modResult = parseFile(file2)
-            val baseRoot = baseResult.astNode
-            val modRoot = modResult.astNode
+            val baseRoot: ScrContainerScriptNode = baseResult.astNode!!
+            val modRoot: ScrContainerScriptNode = modResult.astNode!!
             // 递归对比，找到冲突项
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
             //第一个mod与原版文件的对比，直接使用MOD修改的版本，不提示冲突

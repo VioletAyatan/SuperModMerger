@@ -62,8 +62,8 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 解析base和mod文件
             val baseResult = parseFile(file1)
             val modResult = parseFile(file2)
-            val baseRoot = baseResult.astNode
-            val modRoot = modResult.astNode
+            val baseRoot = baseResult.astNode!!
+            val modRoot = modResult.astNode!!
             // 递归对比，找到冲突项
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
             // 第一个mod与原版文件的对比，直接通过，不提示冲突
@@ -228,7 +228,6 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
         val parser = TechlandXMLParser(tokens)
         val visitor = TechlandXmlFileVisitor(tokens)
         val root = visitor.visitDocument(parser.document())
-        val containerRoot = root as XmlContainerNode?
-        return ParsedResult(containerRoot, tokens)
+        return ParsedResult(root as XmlContainerNode, tokens)
     }
 }

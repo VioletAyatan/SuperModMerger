@@ -175,7 +175,7 @@ class BaseModManager(
      * @return 解析结果，如果文件不存在返回null
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T : BaseTreeNode?> parseForm(
+    fun <T : BaseTreeNode> parseForm(
         fileEntryName: String,
         function: Function<String, ParsedResult<T>>
     ): ParsedResult<T>? {
