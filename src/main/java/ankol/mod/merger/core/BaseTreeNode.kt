@@ -1,6 +1,5 @@
 package ankol.mod.merger.core
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.misc.Interval
 
@@ -19,7 +18,6 @@ abstract class BaseTreeNode(
     val stopTokenIndex: Int,
     val lineNumber: Int,
     @field:Transient
-    @field:JsonIgnore
     val tokenStream: CommonTokenStream
 ) {
     private val _sourceText: String by lazy {

@@ -60,7 +60,16 @@ public class MergerFactory {
         if (aClass == null) {
             return Optional.empty();
         } else {
-            return Optional.of(mergerCache.get(aClass, () -> ReflectUtil.newInstance(aClass, context)));
+            AbstractFileMerger fileMerger = mergerCache.get(aClass);
+            if (fileMerger == null) {
+                synchronized (MergerFactory.class) {
+                    fileMerger = ReflectUtil.newInstance(aClass, context);
+                    mergerCache.put(aClass, fileMerger);
+                }
+            } else {
+                fileMerger.setContext(context);
+            }
+            return Optional.of(fileMerger);
         }
     }
 }

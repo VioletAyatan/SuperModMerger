@@ -64,7 +64,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             return MergeResult(getMergedContent(baseResult), !conflicts.isEmpty())
         } catch (e: Exception) {
             log.error("Error during SCR file merge: ${file1.getFileName()} Reason: ${e.message}", e)
-            throw BusinessException("文件" + file1.getFileName() + "合并失败")
+            throw BusinessException("文件${file1.fileName}合并失败")
         } finally {
             //清理状态，准备下一个文件合并
             conflicts.clear()

@@ -139,7 +139,7 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         //提取函数签名，对于特殊的重复函数需要特殊处理
         var signature = "$FUN_CALL:$funcName"
         val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
-        if (signatures.contains(signature)) {
+        if (signatures.contains(signature) && argsList.isNotEmpty()) {
             signature = signature + ":" + argsList.first()
         } else {
             val children: MutableMap<String, BaseTreeNode> = containerNode!!.childrens
@@ -269,9 +269,11 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         return ctx.start.inputStream.getText(Interval(a, b))
     }
 
-    private fun getValueList(context: ValueListContext): MutableList<ExpressionContext> {
+    private fun getValueList(context: ValueListContext?): MutableList<ExpressionContext> {
         val valueList = ArrayList<ExpressionContext>()
-        valueList.addAll(context.expression())
+        if (context != null) {
+            valueList.addAll(context.expression())
+        }
         return valueList
     }
 }
