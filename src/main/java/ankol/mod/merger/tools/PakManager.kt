@@ -7,6 +7,7 @@ import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.compress.archivers.zip.ZipFile
+import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.Strings
 import java.io.File
 import java.io.IOException
@@ -115,10 +116,8 @@ object PakManager {
 
     /**
      * 递归解压 7Z 格式压缩包（支持嵌套）
-     * 
-     * 
+     *
      * 当遇到 .pak、.zip、.7z 或 .rar 文件时，会递归解压，并记录来源链
-     * 
      * @param archivePath 压缩包路径
      * @param outputDir   输出目录
      * @param fileTreeMap 文件映射表，包含来源信息
@@ -149,9 +148,10 @@ object PakManager {
                             0L -> Files.createFile(outputPath)
                             else -> Files.newOutputStream(outputPath).use { output ->
                                 val buffer = ByteArray(BUFFER_SIZE)
-                                generateSequence { sevenZFile.read(buffer) }
-                                    .takeWhile { it != -1 }
-                                    .forEach { bytesRead -> output.write(buffer, 0, bytesRead) }
+                                while (sevenZFile.read(buffer) != -1) {
+                                    // 读取文件内容
+                                    IOUtils.write(buffer, output)
+                                }
                             }
                         }
 
@@ -179,15 +179,20 @@ object PakManager {
         val nestedTempDir = outputDir.resolve(
             "_nested_${System.currentTimeMillis()}_${NESTED_COUNTER.getAndIncrement()}_$sanitizedFileName"
         )
-        Files.createDirectories(nestedTempDir)
-
+        nestedTempDir.createDirectories()
         archiveNames.add(fileName)
         when {
-            fileName.endsWith(".7z", ignoreCase = true) ->
+            fileName.endsWith(".7z") -> {
                 extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, archiveNames)
+            }
 
-            else ->
+            Strings.CI.endsWithAny(fileName, ".zip", ".pak") -> {
                 extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, archiveNames)
+            }
+
+            else -> {
+                throw IllegalArgumentException("Invalid archive name: $fileName")
+            }
         }
     }
 
@@ -236,7 +241,6 @@ object PakManager {
      * @param sourceDir 源目录（包含所有要打包的文件）
      * @param pakPath   输出 pak 文件路径
      */
-    @Throws(IOException::class)
     fun createPak(sourceDir: Path, pakPath: Path) {
         Files.createDirectories(pakPath.parent)
 
@@ -244,14 +248,14 @@ object PakManager {
             Files.walk(sourceDir).use { pathStream ->
                 pathStream
                     .filter { Files.isRegularFile(it) }
-                    .forEach { file ->
+                    .forEach { file: Path ->
                         try {
                             // 计算相对路径，使用正斜杠作为路径分隔符（ZIP 标准）
                             val entryName = sourceDir.relativize(file)
                                 .toString()
                                 .replace(File.separator, "/")
 
-                            ZipArchiveEntry(entryName).also { entry ->
+                            ZipArchiveEntry(entryName).also { entry: ZipArchiveEntry ->
                                 zipOut.putArchiveEntry(entry)
                                 Files.copy(file, zipOut)
                                 zipOut.closeArchiveEntry()
@@ -272,7 +276,6 @@ object PakManager {
      * @return 两个文件内容是否相同
      * @throws IOException 如果文件不可读
      */
-    @Throws(IOException::class)
     fun areFilesIdentical(file1: Path, file2: Path): Boolean =
         Files.size(file1) == Files.size(file2) && getFileHash(file1) == getFileHash(file2)
 
@@ -286,7 +289,6 @@ object PakManager {
      * @return 十六进制格式的哈希值
      * @throws IOException 如果文件不可读
      */
-    @Throws(IOException::class)
     private fun getFileHash(file: Path): String =
         try {
             MessageDigest.getInstance("SHA-256").let { digest ->
