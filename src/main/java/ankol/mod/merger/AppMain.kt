@@ -4,15 +4,14 @@ import ankol.mod.merger.core.FileMergerEngine
 import ankol.mod.merger.core.GlobalMergingStrategy
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.tools.*
-import java.io.File
 import java.io.FileDescriptor
 import java.io.FileOutputStream
 import java.io.PrintStream
 import java.nio.charset.StandardCharsets
-import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.Path
+import kotlin.io.path.notExists
 import kotlin.system.exitProcess
 
 /**
@@ -64,18 +63,17 @@ class AppMain {
             }
         }
 
+        /**
+         * 定位基准MOD所在位置
+         */
         private fun locateBaseModPath(argParser: SimpleArgParser): Path {
-            val baseModPath: Path
-            if (argParser.hasOption("b")) {
-                baseModPath = Path.of(argParser.getOptionValue("b"))
+            val baseModPath: Path = if (argParser.hasOption("b")) {
+                Path.of(argParser.getOptionValue("b"))
             } else {
-                // 如果没有指定，尝试使用默认位置 source/data0.pak
-                val defaultBaseMod = Path.of(Tools.userDir, "source", "data0.pak")
-                if (Files.exists(defaultBaseMod)) {
-                    baseModPath = defaultBaseMod
-                } else {
-                    throw BusinessException(Localizations.t("APP_MAIN_BASE_MOD_NOT_FOUND", File.separator))
-                }
+                Path.of(Tools.userDir, "source", "data0.pak")
+            }
+            if (baseModPath.notExists()) {
+                throw BusinessException(Localizations.t("APP_MAIN_BASE_MOD_NOT_FOUND"))
             }
             return baseModPath
         }
