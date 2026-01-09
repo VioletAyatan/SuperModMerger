@@ -75,9 +75,7 @@ class FileMergerEngine(
         } catch (e: Exception) {
             throw RuntimeException(e)
         } finally {
-            // 清理基准MOD缓存
             baseModManager.clearCache()
-            // 清理临时文件
             cleanupTempDir()
         }
     }

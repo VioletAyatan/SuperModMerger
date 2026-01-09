@@ -96,14 +96,14 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                         // 容器节点，递归进入内部对比
                         reduceCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
                     } else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
-                        //先检查当前待合并节点内容是否相同
                         if (baseNode.arguments != modNode.arguments) {
                             //两者内容不同，检查mod节点内容与原版是否相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                //当前节点与原版一致，说明此处节点未变动，使用mod的内容（开启了智能合并的情况下）
+                                //检查base节点是否与原版相同
                                 if (isNodeSameAsOriginalNode(originalNode, baseNode)
                                     && GlobalMergingStrategy.autoMergingCodeLine
                                 ) {
+                                    //base节点与原版一致，说明base节点未变动，使用mod的内容（开启了智能合并的情况下）
                                     val record = ConflictRecord(
                                         context.fileName,
                                         context.mod1Name,
@@ -115,6 +115,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     record.userChoice = 2
                                     conflicts.add(record)
                                 } else {
+                                    //真正的冲突，记录
                                     conflicts.add(
                                         ConflictRecord(
                                             context.fileName,
