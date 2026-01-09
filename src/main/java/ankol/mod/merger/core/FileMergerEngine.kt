@@ -387,9 +387,9 @@ class FileMergerEngine(
         if (fileSources.size <= 1) {
             return true
         }
-        val first = fileSources.first().fullPathName
+        val first = fileSources.first().safeGetFullPathName()
         for (i in 1 until fileSources.size) {
-            if (!PakManager.areFilesIdentical(first, fileSources[i].fullPathName)) {
+            if (!PakManager.areFilesIdentical(first, fileSources[i].safeGetFullPathName())) {
                 return false
             }
         }
