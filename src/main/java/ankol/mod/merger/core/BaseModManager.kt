@@ -3,16 +3,13 @@ package ankol.mod.merger.core
 import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations
+import ankol.mod.merger.tools.Tools
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.Tools.indexPakFile
 import ankol.mod.merger.tools.Tools.tempDir
-import cn.hutool.cache.CacheUtil
-import cn.hutool.core.io.FileUtil
-import cn.hutool.core.io.IoUtil
-import cn.hutool.core.lang.func.Func0
 import org.apache.commons.compress.archivers.zip.ZipFile
+import org.apache.commons.io.IOUtils
 import java.io.IOException
-import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
@@ -49,7 +46,7 @@ class BaseModManager(
      * 已提取文件的缓存映射：相对路径 → 临时文件路径
      */
     private val extractedFileCache: MutableMap<String, Path>
-    private val baseTreeCache = CacheUtil.newFIFOCache<String, ParsedResult<*>>(100, (30 * 1000).toLong())
+    private val baseTreeCache = HashMap<String, ParsedResult<*>?>()
 
     //初始化逻辑
     init {
@@ -164,7 +161,7 @@ class BaseModManager(
      * 建议在合并完成后调用此方法释放磁盘空间
      */
     fun clearCache() {
-        FileUtil.del(cacheDir)
+        Tools.deleteRecursively(cacheDir)
     }
 
     /**
@@ -179,12 +176,10 @@ class BaseModManager(
         fileEntryName: String,
         function: Function<String, ParsedResult<T>>
     ): ParsedResult<T>? {
-        return baseTreeCache.get(
-            fileEntryName,
-            Func0 {
-                val content = extractFileContent(fileEntryName) ?: return@Func0 null
-                function.apply(content)
-            }) as ParsedResult<T>?
+        return baseTreeCache.computeIfAbsent(fileEntryName) {
+            val content = extractFileContent(fileEntryName) ?: return@computeIfAbsent null
+            function.apply(content)
+        } as ParsedResult<T>?
     }
 
     /**
@@ -201,7 +196,7 @@ class BaseModManager(
                 return null
             }
             zipFile.getInputStream(entry).use { inputStream ->
-                return IoUtil.read(inputStream, StandardCharsets.UTF_8)
+                return IOUtils.toString(inputStream, Charsets.UTF_8)
             }
         }
     }

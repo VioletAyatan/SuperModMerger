@@ -2,22 +2,13 @@ package ankol.mod.merger.tools
 
 import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.exception.BusinessException
-import cn.hutool.core.io.FileUtil
-import cn.hutool.core.util.StrUtil
 import org.apache.commons.compress.archivers.zip.ZipFile
-import java.io.File
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import kotlin.io.path.Path
-import kotlin.io.path.absolutePathString
-import kotlin.io.path.exists
-import kotlin.io.path.isDirectory
-import kotlin.io.path.isRegularFile
-import kotlin.io.path.notExists
-import kotlin.io.path.walk
+import kotlin.io.path.*
 
 object Tools {
     @JvmStatic
@@ -32,34 +23,24 @@ object Tools {
      * 获取待合并的MOD所在目录
      * 这个工具默认配置的是在mods目录下
      * 
-     * @param meringModDir mod合并目录地址
+     * @param meringModDir mod合并目录地址，可用于修改默认合并目录
      * @return 待合并的MOD目录路径
      */
-    fun getMergingModDir(meringModDir: Path?): Path {
+    fun getMergingModDir(meringModDir: Path? = null): Path {
         return if (meringModDir == null) {
-            val defaultPath = Path(userDir + File.separator + "mods")
-            if (FileUtil.exists(defaultPath, true)) {
+            val defaultPath = Path(userDir, "mods")
+            if (defaultPath.exists()) {
                 defaultPath
             } else {
                 throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", defaultPath))
             }
         } else {
-            if (FileUtil.exists(meringModDir, true)) {
+            if (meringModDir.exists()) {
                 meringModDir
             } else {
                 throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", meringModDir))
             }
         }
-    }
-
-    /**
-     * 获取待合并的MOD所在目录
-     * 这个工具默认配置的是在mods目录下
-     *
-     * @return 待合并的MOD目录路径
-     */
-    fun getMergingModDir(): Path {
-        return getMergingModDir(null)
     }
 
     /**
@@ -100,7 +81,7 @@ object Tools {
         if (filePath.isDirectory()) {
             throw BusinessException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", filePath.absolutePathString()))
         }
-        if (!StrUtil.endWithAny(filePath.fileName.toString(), ".pak")) {
+        if (!filePath.fileName.endsWith(".pak")) {
             throw BusinessException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"))
         }
         val pakIndexMap = HashMap<String, PathFileTree>()
@@ -149,6 +130,23 @@ object Tools {
         } catch (e: NoSuchAlgorithmException) {
             return content.hashCode().toString()
         }
+    }
+
+    /**
+     * 递归删除指定路径及其下的所有文件和目录
+     * @param path 要删除的路径
+     */
+    @JvmStatic
+    fun deleteRecursively(path: Path) {
+        if (path.notExists()) {
+            return
+        }
+        if (path.isDirectory()) {
+            path.listDirectoryEntries().forEach { child ->
+                deleteRecursively(child)
+            }
+        }
+        path.deleteIfExists()
     }
 
     private fun bytesToHex(bytes: ByteArray): String {

@@ -5,8 +5,7 @@ import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.merger.MergerFactory
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Tools.getEntryFileName
-import cn.hutool.core.io.FileUtil
-import cn.hutool.core.util.StrUtil
+import org.apache.commons.lang3.Strings
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.NoSuchFileException
@@ -108,7 +107,7 @@ class FileMergerEngine(
                 correctedFiles[suggestedPath] = sourceInfo
             }
             //文本类型的文件，直接标记为删除，这些往往是mod作者自己添加的描述文件
-            else if (StrUtil.endWithAny(fileEntryName, ".txt", ".md")) {
+            else if (Strings.CI.endsWithAny(fileEntryName, ".txt", ".md")) {
                 markToRemoved.add(fileEntryName)
                 log.warn("Unsupported text file: {}, Marking to removal.", fileEntryName)
             } else {
@@ -415,6 +414,6 @@ class FileMergerEngine(
      * 清理临时文件
      */
     private fun cleanupTempDir() {
-        FileUtil.del(tempDir)
+        Tools.deleteRecursively(tempDir)
     }
 }

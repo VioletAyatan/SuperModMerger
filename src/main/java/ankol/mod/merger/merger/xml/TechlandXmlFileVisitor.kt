@@ -7,7 +7,6 @@ import ankol.mod.merger.antlr.xml.TechlandXMLParserBaseVisitor
 import ankol.mod.merger.merger.xml.node.XmlContainerNode
 import ankol.mod.merger.merger.xml.node.XmlLeafNode
 import ankol.mod.merger.merger.xml.node.XmlNode
-import cn.hutool.core.collection.CollUtil
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.ParserRuleContext
 import java.util.function.Function
@@ -77,7 +76,7 @@ class TechlandXmlFileVisitor(val tokenStream: CommonTokenStream) : TechlandXMLPa
      * 返回格式: "attrName=attrValue" 或 null
      */
     private fun extractIdentifyingAttribute(attributes: MutableList<TechlandXMLParser.AttributeContext>): String? {
-        if (CollUtil.isEmpty(attributes)) {
+        if (attributes.isEmpty()) {
             return null
         }
 
