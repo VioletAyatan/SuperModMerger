@@ -1,13 +1,13 @@
 package ankol.mod.merger.tools;
 
 import ankol.mod.merger.core.filetrees.PathFileTree;
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
+import org.apache.commons.lang3.Strings;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class PakManager {
         String archiveName = pakPath.getFileName().toString();
         HashMap<String, PathFileTree> fileTreeMap = new HashMap<>(20);
         // 根据文件扩展名判断格式
-        if (StrUtil.endWithIgnoreCase(archiveName, ".7z")) {
+        if (Strings.CI.endsWith(archiveName, ".7z")) {
             extract7zRecursive(pakPath, tempDir, fileTreeMap, archiveName);
         } else {
             extractZipRecursive(pakPath, tempDir, fileTreeMap, archiveName);
@@ -210,7 +210,7 @@ public class PakManager {
      */
     private static boolean isArchiveFile(String fileName) {
         String lowerName = fileName.toLowerCase();
-        return StrUtil.endWithAny(lowerName, ".pak", ".zip", ".7z", ".rar");
+        return Strings.CI.endsWithAny(lowerName, ".pak", ".zip", ".7z", ".rar");
     }
 
     /**

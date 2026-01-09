@@ -1,36 +1,30 @@
-package ankol.mod.merger.merger;
+package ankol.mod.merger.merger
 
-import ankol.mod.merger.core.AbstractFileMerger;
-import ankol.mod.merger.core.MergerContext;
-import ankol.mod.merger.merger.scr.TechlandScrFileMerger;
-import ankol.mod.merger.merger.xml.TechlandXmlFileMerger;
-import cn.hutool.cache.Cache;
-import cn.hutool.cache.CacheUtil;
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.ReflectUtil;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import ankol.mod.merger.core.AbstractFileMerger
+import ankol.mod.merger.core.MergerContext
+import ankol.mod.merger.merger.scr.TechlandScrFileMerger
+import ankol.mod.merger.merger.xml.TechlandXmlFileMerger
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * 合并器获取工厂，通过判断文件扩展名来获取对应支持的合并器
- *
+ * 
  * @author Ankol
  */
-public class MergerFactory {
+object MergerFactory {
+    private val mergerMap: MutableMap<String, Class<out AbstractFileMerger>> = HashMap()
 
-    private static final Map<String, Class<? extends AbstractFileMerger>> mergerMap = new HashMap<>();
     /**
      * 实例化后的实例存储在缓存里，不去反复构造实例
      */
-    private static final Cache<Class<?>, AbstractFileMerger> mergerCache = CacheUtil.newLFUCache(5);
+    private val mergerCache: MutableMap<Class<*>, AbstractFileMerger> = ConcurrentHashMap()
 
-    static {
+    init {
         // 注册.scr格式的合并器
-        registerMerger(TechlandScrFileMerger.class, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth");
+        registerMerger(TechlandScrFileMerger::class.java, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth")
         // 注册.xml文件的合并器
-        registerMerger(TechlandXmlFileMerger.class, ".xml");
+        registerMerger(TechlandXmlFileMerger::class.java, ".xml")
         /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DebugTool.printCacheUseRate("mergerCache", (AbstractCache) mergerCache);
         }));*/
@@ -38,38 +32,38 @@ public class MergerFactory {
 
     /**
      * 注册一个合并器，并关联一个或多个文件扩展名。
-     *
+     * 
      * @param merger     合并器实例。
      * @param extensions 要关联的文件扩展名（例如 ".txt", ".xml"）。
      */
-    private static void registerMerger(Class<? extends AbstractFileMerger> merger, String... extensions) {
-        for (String ext : extensions) {
-            mergerMap.put(ext.toLowerCase(), merger);
+    private fun registerMerger(merger: Class<out AbstractFileMerger>, vararg extensions: String) {
+        for (ext in extensions) {
+            mergerMap[ext.lowercase(Locale.getDefault())] = merger
         }
     }
 
     /**
      * 根据文件名获取对应的合并器。
-     *
+     * 
      * @param fileName 文件名（包含扩展名）
-     * @return 一个包含合并器实例的 {@link Optional}；如果找不到合适的合并器，则为空。
+     * @return 一个包含合并器实例的 [Optional]；如果找不到合适的合并器，则为空。
      */
-    public static Optional<AbstractFileMerger> getMerger(String fileName, MergerContext context) {
-        String extension = "." + FileUtil.extName(fileName);
-        Class<? extends AbstractFileMerger> aClass = mergerMap.get(extension.toLowerCase());
+    fun getMerger(fileName: String, context: MergerContext): Optional<AbstractFileMerger> {
+        val extension = "." + fileName.substringBeforeLast(".")
+        val aClass = mergerMap[extension.lowercase(Locale.getDefault())]
         if (aClass == null) {
-            return Optional.empty();
+            return Optional.empty()
         } else {
-            AbstractFileMerger fileMerger = mergerCache.get(aClass);
+            val fileMerger = mergerCache[aClass]
             if (fileMerger == null) {
-                synchronized (MergerFactory.class) {
-                    fileMerger = ReflectUtil.newInstance(aClass, context);
-                    mergerCache.put(aClass, fileMerger);
+                synchronized(MergerFactory::class.java) {
+                    val fileMerger = aClass.getConstructor(context.javaClass).newInstance(context)
+                    mergerCache[aClass] = fileMerger
                 }
             } else {
-                fileMerger.setContext(context);
+                fileMerger.context = context
             }
-            return Optional.of(fileMerger);
+            return Optional.of(fileMerger!!)
         }
     }
 }

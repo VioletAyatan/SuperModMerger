@@ -1,11 +1,10 @@
 package tool;
 
-import cn.hutool.core.io.FileUtil;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public abstract class TestTool {
         StringBuilder dltbPath = new StringBuilder(String.join(File.separator, "steamapps", "common", "Dying Light The Beast"));
         List<String> libraryFolders = getLibraryFolders(steamInstallPath);
         for (String libraryFolder : libraryFolders) {
-            if (FileUtil.exist(libraryFolder + File.separator + dltbPath)) {
+            if (Files.exists(Path.of(libraryFolder, dltbPath.toString()))) {
                 dltbPath.insert(0, libraryFolder + File.separator);
                 System.out.println("找到困兽主目录：" + dltbPath);
                 dltbFound = true;

@@ -4,10 +4,7 @@ import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.exception.BusinessException
 import org.apache.commons.compress.archivers.zip.ZipFile
 import java.io.IOException
-import java.nio.charset.StandardCharsets
 import java.nio.file.Path
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import kotlin.io.path.*
 
 object Tools {
@@ -16,6 +13,8 @@ object Tools {
 
     @JvmStatic
     val tempDir: String = System.getProperty("java.io.tmpdir")
+
+    private val strFormatRegex = Regex("\\{}")
 
     private val HEX_ARRAY = "0123456789abcdef".toCharArray()
 
@@ -117,21 +116,6 @@ object Tools {
         return entryName.substring(entryName.lastIndexOf("/") + 1)
     }
 
-
-    /**
-     * 计算文件hash值
-     */
-    @JvmStatic
-    fun computeHash(content: String): String {
-        try {
-            val digest = MessageDigest.getInstance("SHA-256")
-            val hash = digest.digest(content.toByteArray(StandardCharsets.UTF_8))
-            return bytesToHex(hash)
-        } catch (e: NoSuchAlgorithmException) {
-            return content.hashCode().toString()
-        }
-    }
-
     /**
      * 递归删除指定路径及其下的所有文件和目录
      * @param path 要删除的路径
@@ -147,6 +131,21 @@ object Tools {
             }
         }
         path.deleteIfExists()
+    }
+
+    /**
+     * 格式化字符串，将 {} 占位符替换为参数值
+     * @param template 模板字符串，如 "Hello {} World {}"
+     * @param args 参数列表
+     * @return 格式化后的字符串
+     */
+    @JvmStatic
+    fun format(template: String, vararg args: Any?): String {
+        if (args.isEmpty()) return template
+        var index = 0
+        return template.replace(strFormatRegex) {
+            if (index < args.size) args[index++]?.toString() ?: "null" else "{}"
+        }
     }
 
     private fun bytesToHex(bytes: ByteArray): String {

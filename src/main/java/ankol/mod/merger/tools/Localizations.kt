@@ -16,8 +16,6 @@ object Localizations {
     private val locale: Locale = Locale.getDefault()
     private var langCode: String = locale.language
 
-    private val strFormatRegex = Regex("\\{}")
-
     private val translator: Properties
         get() {
             return if (langCode.equals("zh", ignoreCase = true)) {
@@ -70,21 +68,7 @@ object Localizations {
                 return key
             }
         }
-        return format(text, *args)
-    }
-
-    /**
-     * 格式化字符串，将 {} 占位符替换为参数值
-     * @param template 模板字符串，如 "Hello {} World {}"
-     * @param args 参数列表
-     * @return 格式化后的字符串
-     */
-    private fun format(template: String, vararg args: Any?): String {
-        if (args.isEmpty()) return template
-        var index = 0
-        return template.replace(strFormatRegex) {
-            if (index < args.size) args[index++]?.toString() ?: "null" else "{}"
-        }
+        return Tools.format(text, *args)
     }
 
     fun setLangCode(langCode: String) {

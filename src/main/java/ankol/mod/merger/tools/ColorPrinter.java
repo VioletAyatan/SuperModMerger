@@ -1,6 +1,5 @@
 package ankol.mod.merger.tools;
 
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -107,7 +106,7 @@ public class ColorPrinter {
      * 打印 INFO 级别日志（蓝色），带格式化参数
      */
     public static void info(String format, Object... args) {
-        info(StrUtil.format(format, args));
+        info(Tools.format(format, args));
     }
 
     /**
@@ -122,7 +121,7 @@ public class ColorPrinter {
      * 打印成功消息（绿色），带格式化参数
      */
     public static void success(String format, Object... args) {
-        success(StrUtil.format(format, args));
+        success(Tools.format(format, args));
     }
 
     /**
@@ -137,7 +136,7 @@ public class ColorPrinter {
      * 打印警告消息（黄色），带格式化参数
      */
     public static void warning(String format, Object... args) {
-        warning(StrUtil.format(format, args));
+        warning(Tools.format(format, args));
     }
 
     /**
@@ -160,7 +159,7 @@ public class ColorPrinter {
      * 打印错误消息（红色），带格式化参数
      */
     public static void error(String format, Object... args) {
-        error(StrUtil.format(format, args));
+        error(Tools.format(format, args));
     }
 
     /**
@@ -175,7 +174,7 @@ public class ColorPrinter {
      * 打印调试消息（青色），带格式化参数
      */
     public static void debug(String format, Object... args) {
-        debug(StrUtil.format(format, args));
+        debug(Tools.format(format, args));
     }
 
     /**
@@ -190,7 +189,7 @@ public class ColorPrinter {
      * 打印普通消息（白色），带格式化参数
      */
     public static void print(String format, Object... args) {
-        print(StrUtil.format(format, args));
+        print(Tools.format(format, args));
     }
 
     /**
@@ -205,7 +204,7 @@ public class ColorPrinter {
      * 打印加粗消息（白色加粗），带格式化参数
      */
     public static void bold(String format, Object... args) {
-        bold(StrUtil.format(format, args));
+        bold(Tools.format(format, args));
     }
 
     /**
@@ -219,7 +218,7 @@ public class ColorPrinter {
      * 打印强调消息（洋红色），带格式化参数
      */
     public static void highlight(String format, Object... args) {
-        System.out.println(applyColor(StrUtil.format(format, args), BRIGHT_MAGENTA));
+        System.out.println(applyColor(Tools.format(format, args), BRIGHT_MAGENTA));
     }
 
     /**
