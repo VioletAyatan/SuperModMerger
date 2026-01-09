@@ -80,7 +80,7 @@ object Tools {
         if (filePath.isDirectory()) {
             throw BusinessException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", filePath.absolutePathString()))
         }
-        if (!filePath.fileName.endsWith(".pak")) {
+        if (!filePath.fileName.toString().endsWith(".pak")) {
             throw BusinessException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"))
         }
         val pakIndexMap = HashMap<String, PathFileTree>()

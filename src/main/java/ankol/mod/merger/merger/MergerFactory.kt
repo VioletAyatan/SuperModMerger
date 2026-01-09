@@ -49,15 +49,15 @@ object MergerFactory {
      * @return 一个包含合并器实例的 [Optional]；如果找不到合适的合并器，则为空。
      */
     fun getMerger(fileName: String, context: MergerContext): Optional<AbstractFileMerger> {
-        val extension = "." + fileName.substringBeforeLast(".")
+        val extension = "." + fileName.substringAfterLast(".")
         val aClass = mergerMap[extension.lowercase(Locale.getDefault())]
         if (aClass == null) {
             return Optional.empty()
         } else {
-            val fileMerger = mergerCache[aClass]
+            var fileMerger = mergerCache[aClass]
             if (fileMerger == null) {
                 synchronized(MergerFactory::class.java) {
-                    val fileMerger = aClass.getConstructor(context.javaClass).newInstance(context)
+                    fileMerger = aClass.getConstructor(context.javaClass).newInstance(context)
                     mergerCache[aClass] = fileMerger
                 }
             } else {
