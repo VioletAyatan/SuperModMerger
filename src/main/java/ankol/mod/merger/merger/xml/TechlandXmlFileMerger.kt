@@ -163,7 +163,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 获取合并后的内容
      */
-    private fun getMergedContent(baseResult: ParsedResult<*>): String? {
+    private fun getMergedContent(baseResult: ParsedResult<*>): String {
         val rewriter = TokenStreamRewriter(baseResult.tokenStream)
         // 处理冲突节点的替换
         for (record in conflicts) {

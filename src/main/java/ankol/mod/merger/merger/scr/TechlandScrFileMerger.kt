@@ -156,7 +156,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
     }
 
-    private fun getMergedContent(baseResult: ParsedResult<ScrContainerScriptNode>): String? {
+    private fun getMergedContent(baseResult: ParsedResult<ScrContainerScriptNode>): String {
         val rewriter = TokenStreamRewriter(baseResult.tokenStream)
         // 处理冲突节点的替换
         for (record in conflicts) {
