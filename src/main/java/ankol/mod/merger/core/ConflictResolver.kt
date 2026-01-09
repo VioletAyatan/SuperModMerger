@@ -3,7 +3,6 @@ package ankol.mod.merger.core
 import ankol.mod.merger.merger.ConflictRecord
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations
-import ankol.mod.merger.tools.logger
 
 /**
  * 冲突解决器
@@ -11,8 +10,6 @@ import ankol.mod.merger.tools.logger
  * @author Ankol
  */
 object ConflictResolver {
-    private val log = logger()
-
     /**
      * 交互式解决冲突
      * 
@@ -20,20 +17,7 @@ object ConflictResolver {
      */
     fun resolveConflict(conflicts: MutableList<ConflictRecord>) {
         //筛选出智能合并的节点
-        val automaticMerge = conflicts.filter { it.userChoice != null }
-        if (!automaticMerge.isEmpty()) {
-            for (item in automaticMerge) {
-                ColorPrinter.print(
-                    "Auto merging code-line: {}: {} -> {}: {}",
-                    item.baseModName,
-                    item.baseNode.sourceText,
-                    item.mergeModName,
-                    item.modNode.sourceText
-                )
-            }
-            ColorPrinter.success(Localizations.t("CRESOLVER_AUTO_MERGE_COUNT", automaticMerge.size))
-            conflicts.removeAll(automaticMerge) //暂时移除，主要是为了不出现冲突提示.
-        }
+        val automaticMerge = handleAutoMergingCode(conflicts)
         //对于真正的冲突项，提示用户选择使用哪一个版本解决
         if (!conflicts.isEmpty()) {
             println() //换行
@@ -86,5 +70,28 @@ object ConflictResolver {
         }
         //最后把自动合并的节点加回去，让后续处理合并的逻辑使用同一个容器
         conflicts.addAll(automaticMerge)
+    }
+
+    /**
+     * 处理自动合并的代码
+     */
+    private fun handleAutoMergingCode(conflicts: MutableList<ConflictRecord>): List<ConflictRecord> {
+        val automaticMerge = conflicts.filter { it.userChoice != null }
+        if (!automaticMerge.isEmpty()) {
+            for (item in automaticMerge) {
+                ColorPrinter.print(
+                    Localizations.t(
+                        "CRESOLVER_AUTO_MERGE_CODELINE",
+                        item.baseModName,
+                        item.baseNode.sourceText,
+                        item.mergeModName,
+                        item.modNode.sourceText
+                    )
+                )
+            }
+            ColorPrinter.success(Localizations.t("CRESOLVER_AUTO_MERGE_COUNT", automaticMerge.size))
+            conflicts.removeAll(automaticMerge) //暂时移除，主要是为了不出现冲突提示.
+        }
+        return automaticMerge
     }
 }

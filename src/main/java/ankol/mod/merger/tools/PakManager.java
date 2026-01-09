@@ -17,9 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -54,10 +52,12 @@ public class PakManager {
         String archiveName = pakPath.getFileName().toString();
         HashMap<String, PathFileTree> fileTreeMap = new HashMap<>(20);
         // 根据文件扩展名判断格式
+        List<String> archiveNameChina = new ArrayList<>();
+        archiveNameChina.add(archiveName);
         if (Strings.CI.endsWith(archiveName, ".7z")) {
-            extract7zRecursive(pakPath, tempDir, fileTreeMap, archiveName);
+            extract7zRecursive(pakPath, tempDir, fileTreeMap, archiveNameChina);
         } else {
-            extractZipRecursive(pakPath, tempDir, fileTreeMap, archiveName);
+            extractZipRecursive(pakPath, tempDir, fileTreeMap, archiveNameChina);
         }
         return fileTreeMap;
     }
@@ -70,7 +70,7 @@ public class PakManager {
      * @param fileTreeMap 文件树映射表
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
-    private static void extractZipRecursive(Path archivePath, Path outputDir, HashMap<String, PathFileTree> fileTreeMap, String archiveName) throws IOException {
+    private static void extractZipRecursive(Path archivePath, Path outputDir, HashMap<String, PathFileTree> fileTreeMap, List<String> archiveName) throws IOException {
         try (ZipFile zipFile = ZipFile.builder().setPath(archivePath).setCharset(StandardCharsets.UTF_8).get()) {
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
@@ -103,10 +103,11 @@ public class PakManager {
                     Files.createDirectories(nestedTempDir);
                     // 递归解压，根据文件类型选择解压方法，缓存 toLowerCase 结果
                     String lowerFileName = fileName.toLowerCase();
+                    archiveName.add(fileName);
                     if (lowerFileName.endsWith(".7z")) {
-                        extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
+                        extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName);
                     } else {
-                        extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName + " -> " + fileName);
+                        extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName);
                     }
                 }
                 // 创建文件来源信息，记录来源链
@@ -116,7 +117,7 @@ public class PakManager {
                     if (fileTreeMap.containsKey(entryName)) {
                         PathFileTree existing = fileTreeMap.get(entryName);
                         ColorPrinter.warning(Localizations.t("PAK_MANAGER_DUPLICATE_FILE_DETECTED",
-                                existing.getArchiveFileName(),
+                                existing.getArchiveFileNames(),
                                 current.getFileEntryName(),
                                 existing.getFileEntryName())
                         );
@@ -138,7 +139,7 @@ public class PakManager {
      * @param fileTreeMap 文件映射表，包含来源信息
      * @param archiveName 当前压缩包名称（用于构建来源链）
      */
-    private static void extract7zRecursive(Path archivePath, Path outputDir, HashMap<String, PathFileTree> fileTreeMap, String archiveName) throws IOException {
+    private static void extract7zRecursive(Path archivePath, Path outputDir, HashMap<String, PathFileTree> fileTreeMap, List<String> archiveName) throws IOException {
         try (SevenZFile sevenZFile = SevenZFile.builder().setPath(archivePath)
                 .setCharset(StandardCharsets.UTF_8)
                 .get()
@@ -177,10 +178,11 @@ public class PakManager {
                     Files.createDirectories(nestedTempDir);
                     // 递归解压，根据文件类型选择解压方法，缓存 toLowerCase 结果
                     String lowerFileName = fileName.toLowerCase();
+                    archiveName.add(fileName);
                     if (lowerFileName.endsWith(".7z")) {
-                        extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, fileName);
+                        extract7zRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName);
                     } else {
-                        extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, fileName);
+                        extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, archiveName);
                     }
                 } else {
                     // 创建文件来源信息，记录来源链
@@ -190,7 +192,7 @@ public class PakManager {
                     if (fileTreeMap.containsKey(entryName)) {
                         PathFileTree existing = fileTreeMap.get(entryName);
                         ColorPrinter.warning(Localizations.t("PAK_MANAGER_DUPLICATE_FILE_DETECTED",
-                                existing.getArchiveFileName(),
+                                existing.getArchiveFileNames(),
                                 current.getFileEntryName(),
                                 existing.getFileEntryName())
                         );

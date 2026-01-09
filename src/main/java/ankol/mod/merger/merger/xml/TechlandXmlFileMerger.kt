@@ -53,8 +53,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
 
     override fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult {
         try {
-            val parsedResult = context.baseModManager
-                .parseForm(file1.getFileEntryName()) { parseContent(it) }
+            val parsedResult = context.baseModManager.parseForm(file1.fileEntryName) { parseContent(it) }
             // 解析原始基准MOD文件（如果存在）
             if (parsedResult != null) {
                 originalBaseModRoot = parsedResult.astNode
@@ -77,8 +76,8 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             }
             return MergeResult(getMergedContent(baseResult), !conflicts.isEmpty())
         } catch (e: Exception) {
-            log.error("Error during XML file merge: ${file1.getFileName()} Reason: ${e.message}", e)
-            throw BusinessException("文件" + file1.getFileName() + "合并失败")
+            log.error("Error during XML file merge: ${file1.fileName} Reason: ${e.message}", e)
+            throw BusinessException("文件${file1.fileName}合并失败")
         } finally {
             // 清理状态，准备下一个文件合并
             conflicts.clear()

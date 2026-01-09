@@ -101,7 +101,7 @@ class BaseModManager(
         val fileName = getEntryFileName(relPath).lowercase(Locale.getDefault())
         val pathFileTree = indexedBaseModFileMap[fileName] ?: return null
 
-        val fileEntryName = pathFileTree.getFileEntryName()
+        val fileEntryName = pathFileTree.fileEntryName
         val cachedFile = extractedFileCache[fileEntryName] //先取缓存
         if (cachedFile != null && Files.exists(cachedFile)) {
             return Files.readString(cachedFile)
@@ -133,13 +133,10 @@ class BaseModManager(
             return false
         }
         val fileName = getEntryFileName(filePath)
-        val pathFileTree = indexedBaseModFileMap[fileName]
+        val pathFileTree = indexedBaseModFileMap[fileName] ?: return false
         //有时会有一些不属于mod的文件被加入到pak中，这里查到空后说明不是原版mod支持修改的文件.
-        if (pathFileTree == null) {
-            return false
-        }
-        val correctPath = pathFileTree.getFileEntryName()
-        return correctPath != null && !correctPath.equals(filePath, ignoreCase = true)
+        val correctPath = pathFileTree.fileEntryName
+        return !correctPath.equals(filePath, ignoreCase = true)
     }
 
     /**
@@ -153,7 +150,7 @@ class BaseModManager(
             return null
         }
         val fileName = getEntryFileName(filePath)
-        return indexedBaseModFileMap[fileName]?.getFileEntryName()
+        return indexedBaseModFileMap[fileName]?.fileEntryName
     }
 
     /**

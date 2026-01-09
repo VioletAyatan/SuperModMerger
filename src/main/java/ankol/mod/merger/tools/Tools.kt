@@ -102,7 +102,11 @@ object Tools {
                             )
                         )
                     }
-                    pakIndexMap[fileName] = PathFileTree(fileName, entryName, filePath.fileName.toString())
+                    pakIndexMap[fileName] = PathFileTree(
+                        fileName,
+                        entryName,
+                        mutableListOf(filePath.fileName.toString()),
+                    )
                 }
             }
         } catch (e: IOException) {

@@ -167,7 +167,7 @@ class FileMergerEngine(
                 //todo 这里未来可以添加一个自动修正旧版本的mod的功能，因为我合并的逻辑是从基准mod里取得原文件，肯定是最新的，刚好能把一些过期mod没有的参数补上
                 //todo 但是对于性能的消耗也会增加很多，文件越多消耗时间越久，后期看下可以做个可选开关
                 if (fileSources.size == 1) {
-                    copyFile(relPath, fileSources.first().fullPathName, mergedDir)
+                    copyFile(relPath, fileSources.first().safeGetFullPathName(), mergedDir)
 //                    processSingleFile(relPath, fileSources.getFirst(), mergedDir);
                 } else {
                     // 在多个 mod 中存在，需要合并
@@ -205,11 +205,11 @@ class FileMergerEngine(
                         try {
                             Files.writeString(tempBaseFile, originalBaseModContent)
 
-                            val fileBase = PathFileTree(fileName, relPath, "data0.pak", tempBaseFile)
+                            val fileBase = PathFileTree(fileName, relPath, mutableListOf("data0.pak"), tempBaseFile)
 
                             context.fileName = relPath
                             context.mod1Name = "data0.pak"
-                            context.mod2Name = fileCurrent.archiveFileName
+                            context.mod2Name = fileCurrent.getFirstArchiveFileName()
                             context.isFirstModMergeWithBaseMod = true // 标记为与data0.pak的合并
 
                             val result = merger.merge(fileBase, fileCurrent)
@@ -240,7 +240,7 @@ class FileMergerEngine(
             }
         }
         // 没有基准mod，或者基准mod中不存在该文件，或者不支持合并，直接复制
-        copyFile(relPath, fileCurrent.fullPathName, mergedOutputDir)
+        copyFile(relPath, fileCurrent.safeGetFullPathName(), mergedOutputDir)
     }
 
     /**
@@ -255,7 +255,7 @@ class FileMergerEngine(
         // 先简单的判断一下文件内容（计算hash值）、大小是否相同，不同肯定不一样
         if (areAllFilesIdentical(fileSources)) {
             // 文件都一样，直接使用第一个
-            copyFile(relPath, fileSources.first().fullPathName, mergedDir)
+            copyFile(relPath, fileSources.first().safeGetFullPathName(), mergedDir)
             return
         }
 
@@ -283,13 +283,14 @@ class FileMergerEngine(
 
             // 顺序合并：使用data0.pak作为基准（如果存在），然后依次合并各个mod
             for ((i, fileCurrent) in fileSources.withIndex()) {
-                val currentModPath = fileCurrent.fullPathName
-                val currentModName = fileCurrent.archiveFileName
+                val currentModPath = fileCurrent.safeGetFullPathName()
+                val currentModName = fileCurrent.getFirstArchiveFileName()
 
                 // 第一个 mod：如果有data0.pak基准文件，使用它作为base与第一个mod合并
                 if (i == 0) {
                     if (originalBaseModContent != null) {
-                        val fileBase = MemoryFileTree(fileName, relPath, "data0.pak", originalBaseModContent)
+                        val fileBase =
+                            MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
 
                         context.fileName = relPath
                         context.mod1Name = "data0.pak"
@@ -305,10 +306,10 @@ class FileMergerEngine(
                 } else {
                     // 后续的 mod，与当前合并结果合并
                     val previousSource = fileSources[i - 1]
-                    val previousModName = previousSource.archiveFileName
+                    val previousModName = previousSource.getFirstArchiveFileName()
 
                     // 执行合并 - 使用真实的MOD压缩包名字
-                    val fileBase = MemoryFileTree(fileName, relPath, "data0.pak", baseMergedContent)
+                    val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), baseMergedContent)
 
                     context.fileName = relPath
                     context.mod1Name = previousModName
@@ -332,7 +333,7 @@ class FileMergerEngine(
             log.error("Failed to merge file '{}': {}", relPath, e.message)
             // 失败时使用最后一个 mod 的版本
             val lastSource: PathFileTree = fileSources.last()
-            copyFile(relPath, lastSource.fullPathName, mergedDir)
+            copyFile(relPath, lastSource.safeGetFullPathName(), mergedDir)
         }
     }
 
@@ -356,9 +357,8 @@ class FileMergerEngine(
     ) {
         ColorPrinter.warning("\n${Localizations.t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath)}")
         ColorPrinter.warning(Localizations.t("ASSET_CHOSE_WHICH_VERSION_TO_USE"))
-        for (i in fileSources.indices) {
-            val fileTree = fileSources[i]
-            ColorPrinter.info("{}. {}", i + 1, fileTree.archiveFileName)
+        for ((i, fileTree) in fileSources.withIndex()) {
+            ColorPrinter.info("{}. {}", i + 1, fileTree.getFirstArchiveFileName())
         }
         while (true) {
             val input = readln()
@@ -369,10 +369,10 @@ class FileMergerEngine(
                     ColorPrinter.info(
                         Localizations.t(
                             "ASSET_USER_CHOSE_COMPLETE",
-                            chosenSource.archiveFileName
+                            chosenSource.getFirstArchiveFileName(),
                         )
                     )
-                    copyFile(relPath, chosenSource.fullPathName, mergedDir)
+                    copyFile(relPath, chosenSource.safeGetFullPathName(), mergedDir)
                     return
                 }
             }

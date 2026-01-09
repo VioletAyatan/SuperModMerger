@@ -1,51 +1,37 @@
-package ankol.mod.merger.core.filetrees;
+package ankol.mod.merger.core.filetrees
 
-import lombok.Data;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Path
 
 /**
  * 路径文件树，当文件是在某文件路径时的表示
- *
+ * 
  * @author Ankol
  */
-@Data
-public class PathFileTree extends AbstractFileTree {
+class PathFileTree(
+    fileName: String,
+    fileEntryName: String,
+    archiveFileName: MutableList<String>,
     /**
      * 解压出来后的文件路径
      */
-    private Path fullPathName;
+    var fullPathName: Path? = null
+) : AbstractFileTree(fileName, fileEntryName, archiveFileName) {
 
-    public PathFileTree(String fileName, String fileEntryName, String archiveFileName) {
-        super(fileName, fileEntryName, archiveFileName);
-    }
-
-    public PathFileTree(String fileName, String fileEntryName, String archiveFileName, Path fullPathName) {
-        super(fileName, fileEntryName, archiveFileName);
-        this.fullPathName = fullPathName;
-    }
-
-    @Override
-    public String getContent() {
+    override fun getContent(): String {
         try {
-            return Files.readString(fullPathName);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            return fullPathName?.let { Files.readString(it) }
+                ?: throw IllegalArgumentException("Error, fullPathName is null")
+        } catch (e: IOException) {
+            throw RuntimeException(e)
         }
     }
 
     /**
-     * 拼接ArchiveFileName
-     *
-     * @param archiveFileName 压缩包名称
+     * 安全获取FullPathName，为空的情况下会抛出异常
      */
-    public void appendArchiveFileName(String archiveFileName) {
-        if (this.archiveFileName == null || this.archiveFileName.isEmpty()) {
-            this.archiveFileName = archiveFileName;
-        } else {
-            this.archiveFileName = this.archiveFileName + " -> " + archiveFileName;
-        }
+    fun safeGetFullPathName(): Path {
+        return fullPathName ?: throw IllegalArgumentException("Error, fullPathName is null")
     }
 }
