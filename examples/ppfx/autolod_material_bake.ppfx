@@ -1,0 +1,33 @@
+import "EngineDefs.mth"
+import "common.ppfx"
+
+sub autolod_store_gbuffer()
+{
+	If ("i_autolod_material_bake")
+	{
+		PushMarker("AutoLod Store Buffers");
+
+			BufferScreenFormat("AM_NRM", 1, "R8G8B8A8_UNORM", "");
+				SetRenderTargets("AM_NRM", "");
+					SetBuffer(USERMAP_TMP_0, "1_RGB10A2_NRM");
+						Mesh("tri_screen.msh", "copy$filla.mat", "std");
+			ModifyRenderTargets("AM_NRM", "s_autolod_filename", "savedds");
+			Release("AM_NRM");
+
+			BufferScreenFormat("AM_DIF", 1, "R8G8B8A8_UNORM", "");
+				SetRenderTargets("AM_DIF", "");
+					SetBuffer(USERMAP_TMP_0, "1_RGBA8_DIF");
+						Mesh("tri_screen.msh", "copy$filla.mat", "std");
+			ModifyRenderTargets("AM_DIF", "s_autolod_filename", "savedds");
+			Release("AM_DIF");
+
+			BufferScreenFormat("AM_CLP", 1, "R8G8B8A8_UNORM", "");
+				SetRenderTargets("AM_CLP", "");
+					SetBuffer(USERMAP_TMP_0, "ZBUFFER");
+						Mesh("tri_screen.msh", "copy$filla.mat", "std");
+			ModifyRenderTargets("AM_CLP", "s_autolod_filename", "savedds");
+			Release("AM_CLP");
+
+		PopMarker();
+	}
+}

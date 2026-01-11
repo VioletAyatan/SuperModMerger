@@ -1,0 +1,59 @@
+import "backbuffer.ppfx"
+import "common.ppfx"
+import "gui.ppfx"
+import "dxrt.ppfx"
+
+extern int HW_PLATFORM;
+extern bool DUALSCREEN_ON;
+extern bool HDR_ON;
+
+string SDR_A = "1_RGBA8_A";
+
+sub Buffers()
+{
+    use backbuffer();
+    BufferScreenFormat(SDR_A, 1, "R8G8B8A8_UNORM",  "ui esram ua");
+}
+
+sub OnBuffersCreated()
+{
+}
+
+sub buffers_init(string s_buf = "")
+{
+	if (DUALSCREEN_ON)
+	{
+		SetClearColor(0.0, 0.0, 0.0, 0.0);
+		SetRenderTargets("backbuffer_ui_secondary", "color");
+	}
+
+    // Needs initial clear
+    SetClearColor(0.0, 0.0, 0.0, 0.0);
+    SetRenderTargets("backbuffer_ui", "color");
+
+    use clear_rtv_color(s_buf = s_buf);
+}
+
+sub show_helpers()
+{
+    PushMarker("Show Helpers");
+        SetRenderView("DEBUG_RENDERING");
+            SetRenderTargets("backbuffer_3d", "");
+                Scene("ALL");
+    PopMarker();
+}
+
+sub Ppfx()
+{
+    use buffers_init(s_buf = SDR_A);
+
+    use dxrt_update_async();
+
+    UpdateVideos();
+
+    use gui(s_in = SDR_A, s_allow_framegen = false);
+
+    use copy_ui_to_window();
+
+    use backbuffer_restore();
+}

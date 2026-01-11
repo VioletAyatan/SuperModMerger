@@ -1,0 +1,46 @@
+import "render_loop.ppfx"
+import "baked_heightmaps.ppfx"
+import "technique_filters_common.ppfx"
+import "stencil.ppfx"
+import "hsm.ppfx"
+import "wind_compute.ppfx"
+import "foliage_bend.ppfx"
+import "waterbox.ppfx"
+
+sub TechniqueFilters()
+{
+    use technique_filters_common();
+}
+
+sub Buffers()
+{
+	use buffers_common();
+    
+    use baked_heightmap_buffers();
+}
+
+sub OnBuffersCreated()
+{
+	use buffers_init_common();
+}
+
+sub Ppfx()
+{
+    SetRenderView("SCENE");
+    use usermaps_init_common();
+    use baked_heightmap_usermaps();
+	use wind_volume_bind_usermaps();
+	use foliage_bend_bind_usermaps();
+	use water_fft_async_begin();
+	use wind_update_simple();
+	use gpufx_update_sync();
+	SaveUsermaps(USERMAPS_ASYNC_OPQ);
+	BeginAsync("HSM_OPQ_Async");
+    use gbuffer_fill();
+	use join_indirect_specular_outdoor_gen();
+	use bake_heightmap();
+	use dpt_2_release();
+	use dpt_4_release();
+	use gbuffer_all_release();
+	use backbuffer_restore();
+}

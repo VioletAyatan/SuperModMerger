@@ -1,0 +1,70 @@
+
+import "common.ppfx"
+import "render_loop.ppfx"
+import "bake_heightmap_lighting.ppfx"
+import "technique_filters_common.ppfx"
+
+export int HLI_MAP_MERGED_RESOLUTION = HMAP_DIAMETER * 2;
+
+sub TechniqueFilters()
+{
+    use technique_filters_common();
+}
+
+sub Buffers()
+{
+    use buffers_common();
+    
+    BufferFormat("HGT", HGT_MAP_MERGED_RESOLUTION, HGT_MAP_MERGED_RESOLUTION, "R8_UNORM", "");
+    BufferFormat("HCL", HLI_MAP_MERGED_RESOLUTION, HLI_MAP_MERGED_RESOLUTION, "R8G8B8A8_UNORM", "");
+    BufferFormat("HNM", HLI_MAP_MERGED_RESOLUTION, HLI_MAP_MERGED_RESOLUTION, "R8G8B8A8_UNORM", "");
+	BufferFormat("HSH", HGT_MAP_MERGED_RESOLUTION, HGT_MAP_MERGED_RESOLUTION, "R8_UNORM", "");
+    BufferFormat("HSH_TMP", HGT_MAP_MERGED_RESOLUTION, HGT_MAP_MERGED_RESOLUTION, "R8_UNORM", "");
+	BufferFormat("HWD", HWD_MAP_MERGED_RESOLUTION, HWD_MAP_MERGED_RESOLUTION, "R8_UNORM", "");
+}
+
+sub OnBuffersCreated()
+{
+	use buffers_init_common();
+}
+
+sub Ppfx()
+{   
+	use usermaps_init_common();
+
+    use calculate_oem();
+    
+    Switch("i_bake_heightmap_post_mode")
+    {
+        Case(0)
+        {
+            use load_merged_source_buffers();
+        } 
+        Case(1)
+        {
+            use load_hnm_buffer();
+        }
+        Case(2)
+        {
+            use load_hsh_buffer();
+        }
+        Case(3)
+        {
+            use generate_merged_hnm();
+        } 
+        Case(4)
+        {
+            use create_merged_shadow_map_for_current_time_weather();
+        }
+        Case(6)
+        {
+            use create_merged_wind_obstruction_map();
+        }
+        Case(7)
+        {
+            // yield state. mostly used for streaming update
+        }
+    }
+
+    use backbuffer_restore();
+}

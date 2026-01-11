@@ -1,0 +1,193 @@
+import "EngineDefs.mth"
+import "common.ppfx"
+
+extern int HW_PLATFORM;
+extern int COLORBLIND_MODE;
+extern bool DUALSCREEN_ON;
+extern bool NATIVE_RESOLUTION_ON;
+extern int UPSCALER;
+extern bool DLSS_G_ON;
+extern bool XESS_FG_ON;
+extern bool FSR3_FRAME_GEN_ON;
+extern bool HDR_ON;
+
+sub copy2backbuffer(string buffer = "", string material = "copy.mat", string condition = "f_pp_direct_backbufer_on")
+{
+	If(condition)
+	{
+		SetRenderTargets("backbuffer_3d", "");
+			SetBuffer(USERMAP_TMP_0, buffer);
+			Mesh("tri_screen.msh", material, "std");
+	}
+}
+
+sub copy2backbuffer_uav(string s_uav = "", string material = "copy.mat", string condition = "f_pp_direct_backbufer_on")
+{
+	If(condition)
+	{
+		SetRenderTargets("backbuffer_3d", "");
+			SetBuffer(UAV_0, s_uav);
+			Mesh("tri_screen.msh", material, "std");
+		FreeUAVs();
+	}
+}
+
+sub copy2backbuffer_platform(string buffer = "", string material = "copy.mat")
+{
+	if ((HW_PLATFORM & PLATFORM_ORBIS) == 0) //already copied on Orbis
+	{
+		SetRenderTargets("backbuffer_3d", "");
+			SetBuffer(USERMAP_TMP_0, buffer);
+				Mesh("tri_screen.msh", material, "std");
+	}
+}
+
+sub copy2backbuffer_gamma_mode(string s_gamma_mode = "")
+{
+	if (COLORBLIND_MODE > 0)
+	{
+		Mesh("tri_screen.msh", "copy$colorblind_" + s_gamma_mode + ".mat", "std");
+	}
+	else
+	{
+		Mesh("tri_screen.msh", "copy$" + s_gamma_mode + ".mat", "std");
+	}
+}
+
+sub copy2backbuffer_select_gamma_mode(bool b_fullscreen = FALSE, bool b_hdr_output = FALSE)
+{
+	if (HDR_ON) //If HDR (on xbox make sure the output is also hdr)
+	{
+		use copy2backbuffer_gamma_mode(s_gamma_mode = "pq");
+	}
+	else
+	{
+		if ((HW_PLATFORM & (PLATFORM_PC_DX12 | PLATFORM_XBOX | PLATFORM_PC_DX11)) > 0)
+		{
+			use copy2backbuffer_gamma_mode(s_gamma_mode = (b_hdr_output ? "gamma_on_linear" : "gamma_win"));
+		}
+		else
+		{
+			use copy2backbuffer_gamma_mode(s_gamma_mode = "srgb");
+		}
+	}
+}
+
+sub copy2backbuffer_gamma()
+{
+
+	If("fullscreen")
+	{
+		If("i_hdroutput")
+		{
+			use copy2backbuffer_select_gamma_mode(b_fullscreen = TRUE, b_hdr_output = TRUE);
+		}
+		Else()
+		{
+			use copy2backbuffer_select_gamma_mode(b_fullscreen = TRUE, b_hdr_output = FALSE);
+		}
+	}
+ 	Else()
+	{
+		If("i_hdroutput")
+		{
+			use copy2backbuffer_select_gamma_mode(b_fullscreen = FALSE, b_hdr_output = TRUE);
+		}
+		Else()
+		{
+			use copy2backbuffer_select_gamma_mode(b_fullscreen = FALSE, b_hdr_output = FALSE);
+		}
+	}
+}
+
+sub copy2backbufferui_gamma_platform(string buffer = "")
+{
+	If("f_pp_direct_backbufer_off")
+	{
+		if ((HW_PLATFORM & PLATFORM_ORBIS) == 0) //already copied on Orbis
+		{
+			SetRenderTargets("backbuffer_ui", "");
+				SetBuffer(USERMAP_TMP_0, buffer);
+					use copy2backbuffer_gamma();
+		}
+	}
+}
+
+sub copy_ui_to_window()
+{
+	if (((HW_PLATFORM & PLATFORM_PC) > 0) && !NATIVE_RESOLUTION_ON)
+	{
+		SetRenderTargets("backbuffer_window", "");
+		SetBuffer(USERMAP_TMP_0, "FAKE_BACKBUFFER_UI");
+			Mesh("tri_screen.msh", "copy_preserve_aspect_ratio.mat", "std");
+	}
+	// else
+	// backbuffer_ui is real back buffer -> nothing to do
+}
+
+sub backbuffer()
+{
+	// kmarecki: backbuffer_3d no longer exist on durango, so it can be removed entirely
+	if(DURANGO_ON)
+	{
+        RenderTargetsView("backbuffer_ui", "hw_backbuffer_ui f:srgb");
+        RenderTargetsView("backbuffer_3d", "hw_backbuffer_ui f:srgb");
+	}
+	else
+	{
+		if (((HW_PLATFORM & PLATFORM_PC) > 0) && !NATIVE_RESOLUTION_ON)
+		{
+			BufferScreenFormat("FAKE_BACKBUFFER_UI", 1, "R8G8B8A8_UNORM", "ua ui");
+			RenderTargetsView("backbuffer_ui", "FAKE_BACKBUFFER_UI f:srgb");
+			RenderTargetsView("backbuffer_3d", "FAKE_BACKBUFFER_UI");
+			
+			RenderTargetsView("backbuffer_window", "hw_backbuffer_ui f:srgb");
+		}
+		else
+		{
+			if (HDR_ON && ((HW_PLATFORM & PLATFORM_PROSPERO) > 0))
+			{
+				RenderTargetsView("backbuffer_ui", "hw_backbuffer_ui");
+			}
+			else
+			{
+				RenderTargetsView("backbuffer_ui", "hw_backbuffer_ui f:srgb");
+			}
+			RenderTargetsView("backbuffer_3d", "hw_backbuffer_ui");
+
+		}
+
+		if (DUALSCREEN_ON)
+		{
+			RenderTargetsView("backbuffer_ui_secondary", "hw_backbuffer_ui_secondary f:srgb");
+		}
+	}
+}
+
+sub backbuffer_restore()
+{
+	if(DURANGO_ON)
+	{
+		SetRenderTargets("backbuffer_3d", "");
+	}
+	else
+	{
+		if (((HW_PLATFORM & PLATFORM_PC) > 0) && !NATIVE_RESOLUTION_ON)
+		{
+			SetRenderTargets("backbuffer_window", "");
+		}
+		else
+		{
+			SetRenderTargets("backbuffer_3d", "");
+		}
+	}
+}
+
+sub engine_overlay(string s_dst = DUALSCREEN_ON ? "backbuffer_ui_secondary" : "backbuffer_ui")
+{
+	PushMarker("Engine Overlay");
+		SetRenderView("ENGINE_OVERLAY");
+			SetRenderTargets(s_dst, "");
+			Scene("ALL");
+	PopMarker();
+}

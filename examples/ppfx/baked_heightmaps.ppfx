@@ -1,0 +1,53 @@
+import "EngineDefs.mth"
+
+export int HMAP_CAPTURE_DIAMETER = 512;
+export int HGT_CAPTURE_RESOLUTION = HMAP_CAPTURE_DIAMETER + 1;
+export int HCL_CAPTURE_RESOLUTION = HMAP_CAPTURE_DIAMETER * 2;
+
+sub baked_heightmap_buffers()
+{
+    BufferFormat("HGT", HGT_CAPTURE_RESOLUTION, HGT_CAPTURE_RESOLUTION, "R8_UNORM", "");
+    BufferFormat("HCL", HCL_CAPTURE_RESOLUTION, HCL_CAPTURE_RESOLUTION, "R8G8B8A8_UNORM", "");
+}
+
+sub baked_heightmap_usermaps()
+{
+    SetBuffer(USERMAP_HEIGHTMAP_HGT, "HGT");
+    SetBuffer(USERMAP_HEIGHTMAP_HCL, "HCL");
+}
+
+sub bake_heightmap_hgt(string hgt_render_target = "", string temp_buffer_suffix = "_0")
+{
+    string buffer_name = "HGT_X4_R8" + temp_buffer_suffix;
+    BufferFormat(buffer_name, HGT_CAPTURE_RESOLUTION * 4, HGT_CAPTURE_RESOLUTION * 4, "R8_UNORM", "");
+
+    SetRenderTargets(buffer_name, "");
+        Mesh("tri_screen.msh", "baked_heightmap_hgt.mat", "std");
+
+    SetRenderTargets(hgt_render_target, "");
+    SetBuffer(USERMAP_TMP_0, buffer_name);
+        Mesh("tri_screen.msh", "copy_4.mat", "std");
+
+    Release(buffer_name);
+
+    ModifyRenderTargets(hgt_render_target, "s_heightmaps_hmap_filename", "savebin");
+
+}
+
+sub bake_heightmap()
+{
+    PushMarker("Heightmap HGT+HCL Generation");
+        use bake_heightmap_hgt(hgt_render_target = "HGT", temp_buffer_suffix = "_0");
+
+        BufferFormat("HCL_X4_RGBA8", HCL_CAPTURE_RESOLUTION * 4, HCL_CAPTURE_RESOLUTION * 4, "R8G8B8A8_UNORM", "");
+        SetRenderTargets("HCL_X4_RGBA8", "");
+            Mesh("tri_screen.msh", "baked_heightmap_hcl.mat", "std");
+
+        SetRenderTargets("HCL", "");
+        SetBuffer(USERMAP_TMP_0, "HCL_X4_RGBA8");
+            Mesh("tri_screen.msh", "copy_4.mat", "std");
+        Release("HCL_X4_RGBA8");
+
+        ModifyRenderTargets("HCL", "s_heightmaps_albedo_filename", "savebin");
+    PopMarker();
+}

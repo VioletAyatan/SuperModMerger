@@ -1,0 +1,27 @@
+import "EngineDefs.mth"
+import "common.ppfx"
+
+extern bool HDR_ON;
+
+sub barrel(string s_dst = "", string s_tmp = "")
+{
+	If("f_lens_distort_on")
+	{
+		PushMarker("Barrel Pincushion Distortion"); 
+			SetRenderTargets(s_tmp + S_SRGB_NOHDR, "");
+				SetBuffer(USERMAP_TMP_0, s_dst);
+					If("f_pincushion_on")
+					{
+						Mesh("tri_screen.msh", "barrel_lens_distortion$pincushion.mat", "std");
+					}
+					Else()
+					{
+						Mesh("tri_screen.msh", "barrel_lens_distortion.mat", "std");
+					}
+
+			SetRenderTargets(s_dst + S_SRGB_NOHDR, "");
+				SetBuffer(USERMAP_TMP_0, s_tmp);
+					Mesh("tri_screen.msh", "copy" + (HDR_ON ? "" : "$srgb") + ".mat", "std");
+		PopMarker();
+	}
+}

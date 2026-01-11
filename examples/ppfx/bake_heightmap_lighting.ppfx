@@ -1,0 +1,194 @@
+import "common.ppfx"
+
+export int HMAP_DIAMETER = 5120;
+export int HGT_MAP_MERGED_RESOLUTION = HMAP_DIAMETER + 1;
+export int HWD_MAP_MERGED_RESOLUTION = HGT_MAP_MERGED_RESOLUTION;
+
+sub generate_merged_hnm()
+{
+    SetRenderTargets("HNM", "");
+        SetBuffer(USERMAP_TMP_1, "HGT");
+            Mesh("tri_screen.msh", "baked_heightmap_hnm.mat", "std");            
+        ModifyRenderTargets("HNM", "s_heightmaps_normal_filename", "savebin");
+		// debug
+        //ModifyRenderTargets("HNM", "s_heightmaps_dump_filename", "savepng");   
+}
+
+sub load_merged_source_buffers()
+{
+    SetRenderTargets("HGT", "");
+        ModifyRenderTargets("HGT", "s_heightmaps_hmap_filename", "loadbin");
+		// debug
+        //ModifyRenderTargets("HGT", "s_heightmaps_dump_filename", "savepng");   
+
+    SetRenderTargets("HCL", "");         
+        ModifyRenderTargets("HCL", "s_heightmaps_albedo_filename", "loadbin");
+		// debug
+        //ModifyRenderTargets("HCL", "s_heightmaps_dump_filename", "savepng");   
+}
+
+sub load_hnm_buffer()
+{
+    SetRenderTargets("HNM", "");
+        ModifyRenderTargets("HNM", "s_heightmaps_normal_filename", "loadbin");
+        // debug
+        //ModifyRenderTargets("HNM", "s_heightmaps_normal_filename", "savepng");
+}
+
+sub load_hsh_buffer()
+{
+    SetRenderTargets("HSH", "");
+        ModifyRenderTargets("HSH", "s_heightmaps_shadow_filename", "loadbin");
+        // debug
+        //ModifyRenderTargets("HSH", "s_heightmaps_shadow_filename", "savepng");
+}
+
+sub calculate_oem()
+{
+
+    // 256 (128 + border)
+    BufferFormat("IL_128x128_RG11B10F_A", 128, 128, "R11G11B10_FLOAT", "");
+    SetRenderTargets("IL_128x128_RG11B10F_A", "");
+    
+        Mesh("tri_screen.msh", "ambient_global_oem_fill.mat", "std");
+
+    SetRenderTargets("256x256_GIL_OEM", "", 0);
+        SetBuffer(USERMAP_TMP_0, "IL_128x128_RG11B10F_A");
+            Mesh("oem_border.msh", "oem_border.mat", "std");
+
+    // string downsample_mat = "copy$blinn.mat";
+    string downsample_mat = "copy_4$smooth.mat";
+    // string downsample_mat = "copy.mat";
+
+    SetRenderTargets("IL_128x128_RG11B10F_A", "");
+        SetBuffer(USERMAP_TMP_0, "256x256_GIL_OEM");
+            Mesh("tri_screen.msh", downsample_mat, "std");
+
+    BufferFormat("IL_64x64_RG11B10F_A", 64, 64, "R11G11B10_FLOAT", "");
+    SetRenderTargets("IL_64x64_RG11B10F_A", "");
+        SetBuffer(USERMAP_TMP_0, "IL_128x128_RG11B10F_A");
+            Mesh("tri_screen.msh", downsample_mat, "std");
+
+    BufferFormat("IL_32x32_RG11B10F_A", 32, 32, "R11G11B10_FLOAT", "");
+    SetRenderTargets("IL_32x32_RG11B10F_A", "");
+        SetBuffer(USERMAP_TMP_0, "IL_64x64_RG11B10F_A");
+            Mesh("tri_screen.msh", downsample_mat, "std");
+
+    BufferFormat("IL_16x16_RG11B10F_A", 16, 16, "R11G11B10_FLOAT", "");
+    SetRenderTargets("IL_16x16_RG11B10F_A", "");
+        SetBuffer(USERMAP_TMP_0, "IL_32x32_RG11B10F_A");
+            Mesh("tri_screen.msh", downsample_mat, "std");
+
+    // string copy_mat = "copy.mat";
+    string copy_mat = "copy_4$smooth.mat";
+    // string copy_mat = "oem_copy_mip.mat";
+
+    SetRenderTargets("256x256_GIL_OEM", "", 1);
+        SetBuffer(USERMAP_TMP_0, "IL_128x128_RG11B10F_A");
+            Mesh("tri_screen.msh", copy_mat, "std");
+    Release("IL_128x128_RG11B10F_A");
+
+    SetRenderTargets("256x256_GIL_OEM", "", 2);
+        SetBuffer(USERMAP_TMP_0, "IL_64x64_RG11B10F_A");
+            Mesh("tri_screen.msh", copy_mat, "std");
+    Release("IL_64x64_RG11B10F_A");
+
+    SetRenderTargets("256x256_GIL_OEM", "", 3);
+        SetBuffer(USERMAP_TMP_0, "IL_32x32_RG11B10F_A");
+            Mesh("tri_screen.msh", copy_mat, "std");
+    Release("IL_32x32_RG11B10F_A");
+
+    SetRenderTargets("256x256_GIL_OEM", "", 4);
+        SetBuffer(USERMAP_TMP_0, "IL_16x16_RG11B10F_A");
+            Mesh("tri_screen.msh", copy_mat, "std");                
+    Release("IL_16x16_RG11B10F_A");
+}
+
+sub create_merged_shadow_map_for_current_time_weather()
+{                       
+    SetRenderTargets("HSH HSH_TMP", "");
+        SetBuffer(USERMAP_OEM, "256x256_GIL_OEM");
+        SetBuffer(USERMAP_HEIGHTMAP_HGT, "HGT");
+        SetBuffer(USERMAP_HEIGHTMAP_HCL, "HCL");    
+        SetBuffer(USERMAP_HEIGHTMAP_HNM, "HNM");  
+            Mesh("tri_screen.msh", "heightmap_shadow_offset_0.mat", "std");
+
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_1.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_2.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_3.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_4.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_5.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_6.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_7.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_8.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_9.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_10.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_11.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_12.mat");
+        use tri(src = "HSH",     dst = "HSH_TMP", mat = "copy.mat");
+        use tri(src = "HSH_TMP", dst = "HSH",     mat = "heightmap_shadow_offset_13.mat");
+
+        ModifyRenderTargets("HSH", "s_heightmaps_shadow_filename", "savebin");
+		// debug
+        //ModifyRenderTargets("HSH", "s_heightmaps_dump_filename", "savepng");   
+}
+
+
+sub create_merged_wind_obstruction_map()
+{                       
+    BufferFormat("HWD_TMP", HWD_MAP_MERGED_RESOLUTION, HWD_MAP_MERGED_RESOLUTION, "R8_UNORM", "");
+
+	SetBuffer(USERMAP_OEM, "256x256_GIL_OEM");
+	SetBuffer(USERMAP_HEIGHTMAP_HGT, "HGT");
+	SetBuffer(USERMAP_HEIGHTMAP_HCL, "HCL");    
+	SetBuffer(USERMAP_HEIGHTMAP_HNM, "HNM");  
+
+    SetRenderTargets("HWD HWD_TMP", "");
+            Mesh("tri_screen.msh", "baked_heightmap_hwd$fill.mat", "std");
+
+	string a = "HWD";
+	string b = "HWD_TMP";
+	string copy_mat = "copy.mat";
+
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$1.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$2.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$3.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$4.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$5.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$6.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$7.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$8.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$9.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$10.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$11.mat");
+	use tri(src = a, dst = b, mat = copy_mat);
+	use tri(src = b, dst = a, mat = "baked_heightmap_hwd$12.mat");
+
+	ModifyRenderTargets("HWD", "s_heightmaps_wind_filename", "savebin");
+	// debug
+	//ModifyRenderTargets("HWD", "s_heightmaps_dump_filename", "savepng");   
+
+	Release("HWD_TMP");
+}
+
