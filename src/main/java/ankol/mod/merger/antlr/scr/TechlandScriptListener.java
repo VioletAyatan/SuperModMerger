@@ -1,5 +1,4 @@
-// Generated from TechlandScript.g4 by ANTLR 4.13.2
-package ankol.mod.merger.antlr.scr;
+package ankol.mod.merger.antlr.scr;// Generated from TechlandScript.g4 by ANTLR 4.13.2
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
