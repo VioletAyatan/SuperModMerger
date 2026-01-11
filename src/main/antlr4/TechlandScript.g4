@@ -9,6 +9,7 @@ file
 definition
     : importDecl
     | exportDecl
+    | externDecl
     | subDecl
     | directiveCall
     | macroDecl
