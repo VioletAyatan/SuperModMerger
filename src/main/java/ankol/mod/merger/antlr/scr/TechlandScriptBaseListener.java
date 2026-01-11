@@ -221,13 +221,13 @@ public class TechlandScriptBaseListener implements TechlandScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethodReflectFunCallDelc(TechlandScriptParser.MethodReflectFunCallDelcContext ctx) { }
+	@Override public void enterMethodReferenceFunCallDecl(TechlandScriptParser.MethodReferenceFunCallDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethodReflectFunCallDelc(TechlandScriptParser.MethodReflectFunCallDelcContext ctx) { }
+	@Override public void exitMethodReferenceFunCallDecl(TechlandScriptParser.MethodReferenceFunCallDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

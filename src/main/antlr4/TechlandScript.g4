@@ -15,6 +15,7 @@ definition
     | macroDecl
     | variableDecl
     | funtionCallDecl
+    | methodReferenceFunCallDecl
     | funtionBlockDecl
     ;
 //导入导出声明
@@ -65,6 +66,7 @@ functionBlock
 
 statements
     : funtionCallDecl
+    | methodReferenceFunCallDecl
     | funtionBlockDecl
     | useDecl
     | variableDecl
@@ -81,7 +83,10 @@ variableDecl
 // 函数调用 (例如: Set("f_pp_light_leak", light_leak);)
 funtionCallDecl
     : Id LParen valueList? RParen Semicolon? //传统函数调用
-    | Id DoubleColon Id LParen valueList? RParen Semicolon? //类似方法引用的::支持
+    ;
+
+methodReferenceFunCallDecl
+    : Id DoubleColon Id LParen valueList? RParen Semicolon? //类似方法引用的::支持
     ;
 
 //函数块 (例如: Item(...) {...})

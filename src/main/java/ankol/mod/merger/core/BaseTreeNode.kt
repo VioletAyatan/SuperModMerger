@@ -1,6 +1,6 @@
 package ankol.mod.merger.core
 
-import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.misc.Interval
 
 /**
@@ -18,13 +18,13 @@ abstract class BaseTreeNode(
     val stopTokenIndex: Int,
     val lineNumber: Int,
     @field:Transient
-    val tokenStream: CommonTokenStream
+    val tokenStream: TokenStream
 ) {
     private val _sourceText: String by lazy {
         val startIndex = tokenStream.get(startTokenIndex).startIndex
         val stopIndex = tokenStream.get(stopTokenIndex).stopIndex
 //        calcCount++
-        return@lazy tokenStream.getTokenSource().inputStream.getText(Interval(startIndex, stopIndex))
+        return@lazy tokenStream.tokenSource.inputStream.getText(Interval(startIndex, stopIndex))
     }
 
     val sourceText: String
