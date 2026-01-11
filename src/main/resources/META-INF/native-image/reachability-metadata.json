@@ -20,6 +20,12 @@
       "allDeclaredFields": true
     },
     {
+      "type": "ankol.mod.merger.merger.json.TechlandJsonFileMerger",
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
       "type": "ch.qos.logback.core.ConsoleAppender",
       "allDeclaredConstructors": true,
       "allDeclaredFields": true,
