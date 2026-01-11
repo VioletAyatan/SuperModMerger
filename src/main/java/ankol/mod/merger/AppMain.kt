@@ -48,7 +48,7 @@ class AppMain {
                 GlobalMergingStrategy.askAutoMergingCode()
                 // 执行合并
                 val start = System.currentTimeMillis()
-                FileMergerEngine(modsToMerge, outputPath, baseModPath).merge()
+                FileMergerEngine(modsToMerge, outputPath, baseModPath, argParser).merge()
                 val end = System.currentTimeMillis()
                 ColorPrinter.success(Localizations.t("APP_MAIN_DONE", end - start))
             } catch (e: Exception) {
@@ -83,6 +83,7 @@ class AppMain {
             argParser.addOption("o", "output", true, Localizations.t("APP_MAIN_OPTION_OUTPUT_DESC"))
             argParser.addOption("b", "base", true, Localizations.t("APP_MAIN_OPTION_BASE_DESC"))
             argParser.addOption("h", "help", false, Localizations.t("APP_MAIN_OPTION_HELP_DESC"))
+            argParser.addOption("f", "fix", false, "启用全局文件修复模式，这可能能够修复一些过期mod的问题，但会花费更多时间")
             return argParser
         }
 
