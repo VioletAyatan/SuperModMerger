@@ -1,5 +1,6 @@
 package ankol.mod.merger.merger
 
+import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
 
 /**
@@ -30,5 +31,5 @@ data class ConflictRecord(
     /**
      * 用户选择
      */
-    var userChoice: Int? = null,
+    var userChoice: UserChoice? = null,
 )

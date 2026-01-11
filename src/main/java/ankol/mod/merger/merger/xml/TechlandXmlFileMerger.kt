@@ -2,6 +2,7 @@ package ankol.mod.merger.merger.xml
 
 import ankol.mod.merger.antlr.xml.TechlandXMLLexer
 import ankol.mod.merger.antlr.xml.TechlandXMLParser
+import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.AbstractFileMerger
 import ankol.mod.merger.core.ConflictResolver.resolveConflict
 import ankol.mod.merger.core.MergerContext
@@ -63,17 +64,20 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             val modResult = parseFile(file2)
             val baseRoot = baseResult.astNode!!
             val modRoot = modResult.astNode!!
-            // 递归对比，找到冲突项
+
+            // 递归对比
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
+
             // 第一个mod与原版文件的对比，直接通过，不提示冲突
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
                 for (record in conflicts) {
-                    record.userChoice = 2 // 自动选择第一个mod的版本
+                    record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
                 resolveConflict(conflicts)
             }
+
             return MergeResult(getMergedContent(baseResult), !conflicts.isEmpty())
         } catch (e: Exception) {
             log.error("Error during XML file merge: ${file1.fileName} Reason: ${e.message}", e)
@@ -166,7 +170,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
         val rewriter = TokenStreamRewriter(baseResult.tokenStream)
         // 处理冲突节点的替换
         for (record in conflicts) {
-            if (record.userChoice == 2) { // 用户选择了 Mod
+            if (record.userChoice == UserChoice.MERGE_MOD) { // 用户选择了 Mod
                 val baseNode = record.baseNode
                 val modNode = record.modNode
                 rewriter.replace(

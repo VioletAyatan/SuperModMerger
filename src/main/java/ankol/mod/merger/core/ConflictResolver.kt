@@ -1,5 +1,7 @@
 package ankol.mod.merger.core
 
+import ankol.mod.merger.constants.UserChoice
+import ankol.mod.merger.constants.UserChoice.Companion.findByOrder
 import ankol.mod.merger.merger.ConflictRecord
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations
@@ -22,13 +24,15 @@ object ConflictResolver {
         if (!conflicts.isEmpty()) {
             println() //换行
             ColorPrinter.warning(Localizations.t("CRESOLVER_CONFLICT_DETECTED", conflicts.size))
-            var chose = 0
+
+            var userChose: UserChoice? = null //用户选择项
             for (i in conflicts.indices) {
                 val record = conflicts[i]
-                if (chose == 3) {
-                    record.userChoice = 1 //3表示用户全部选择baseMod的配置来处理
-                } else if (chose == 4) {
-                    record.userChoice = 2 //4表示用户全部选择mergeMod的配置来处理
+
+                if (userChose == UserChoice.USE_ALL_BASE) {
+                    record.userChoice = UserChoice.BASE_MOD //3表示用户全部选择baseMod的配置来处理
+                } else if (userChose == UserChoice.USE_ALL_MERGE) {
+                    record.userChoice = UserChoice.MERGE_MOD //4表示用户全部选择mergeMod的配置来处理
                 } else {
                     val baseNodeSource = record.baseNode.sourceText.trim()
                     val modNodeSource = record.modNode.sourceText.trim()
@@ -53,16 +57,15 @@ object ConflictResolver {
 
                     while (true) {
                         val input = readln()
-                        if (input == "1" || input == "2") {
-                            record.userChoice = input.toInt()
+                        val choice = findByOrder(input.toIntOrNull())
+                        if (choice == null) {
+                            ColorPrinter.warning(Localizations.t("CRESOLVER_INVALID_INPUT"))
+                            break
+                        } else {
+                            userChose = choice
+                            record.userChoice = choice
                             break
                         }
-                        if (input == "3" || input == "4") {
-                            chose = input.toInt()
-                            record.userChoice = if (chose == 3) 1 else 2
-                            break
-                        }
-                        ColorPrinter.warning(Localizations.t("CRESOLVER_INVALID_INPUT"))
                     }
                 }
             }
