@@ -167,8 +167,8 @@ class FileMergerEngine(
                 //todo 这里未来可以添加一个自动修正旧版本的mod的功能，因为我合并的逻辑是从基准mod里取得原文件，肯定是最新的，刚好能把一些过期mod没有的参数补上
                 //todo 但是对于性能的消耗也会增加很多，文件越多消耗时间越久，后期看下可以做个可选开关
                 if (fileSources.size == 1) {
-//                    copyFile(relPath, fileSources.first().safeGetFullPathName(), mergedDir)
-                    processSingleFile(relPath, fileSources.first(), mergedDir);
+                    copyFile(relPath, fileSources.first().safeGetFullPathName(), mergedDir)
+//                    processSingleFile(relPath, fileSources.first(), mergedDir) //做压力测试的时候把这个打开
                 } else {
                     // 在多个 mod 中存在，需要合并
                     mergeFiles(relPath, fileSources, mergedDir)
