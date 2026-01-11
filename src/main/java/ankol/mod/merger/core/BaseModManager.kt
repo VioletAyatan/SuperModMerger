@@ -48,6 +48,11 @@ class BaseModManager(
     private val extractedFileCache: MutableMap<String, Path>
     private val baseTreeCache = HashMap<String, ParsedResult<*>?>()
 
+    /**
+     * 复用的 ZipFile 连接，避免频繁打开关闭
+     */
+    private lateinit var zipFileConnection: ZipFile
+
     //初始化逻辑
     init {
         this.indexedBaseModFileMap = LinkedHashMap()
@@ -76,6 +81,8 @@ class BaseModManager(
         try {
             val startTime = System.currentTimeMillis()
             this.indexedBaseModFileMap = indexPakFile(baseModPath) //这里构建的索引MAP里还没有真正解压出来文件
+            zipFileConnection = ZipFile.builder().setPath(baseModPath).get() //建立ZipFile连接，使用完成后关闭
+
             loaded = true
             val timetake = System.currentTimeMillis() - startTime
             ColorPrinter.success(
@@ -108,7 +115,7 @@ class BaseModManager(
         }
 
         //没有缓存临时文件路径，从压缩包里提取出来
-        val content = extractFileFromPak(baseModPath, fileEntryName)
+        val content = extractFileFromPak(fileEntryName)
         if (content != null) {
             try {
                 val safeFileName = getEntryFileName(fileEntryName)
@@ -154,16 +161,8 @@ class BaseModManager(
     }
 
     /**
-     * 清理临时文件缓存
-     * 建议在合并完成后调用此方法释放磁盘空间
-     */
-    fun clearCache() {
-        Tools.deleteRecursively(cacheDir)
-    }
-
-    /**
      * 从基准MOD获得解析后的语法树节点，带缓存机制
-     * 
+     *
      * @param fileEntryName 文件在压缩包中的全路径
      * @param function      解析语法树使用的函数
      * @return 解析结果，如果文件不存在返回null
@@ -180,21 +179,45 @@ class BaseModManager(
     }
 
     /**
-     * 从PAK文件中提取指定文件的内容
-     * 
-     * @param pakFile       PAK文件
+     * 清理临时文件缓存并关闭 ZipFile 连接
+     * 建议在合并完成后调用此方法释放资源
+     */
+    fun close() {
+        // 关闭 ZipFile 连接
+        try {
+            zipFileConnection.close()
+        } catch (e: IOException) {
+            ColorPrinter.warning("Failed to close ZipFile connection: " + e.message)
+        }
+
+        // 清理临时文件缓存
+        Tools.deleteRecursively(cacheDir)
+
+        // 清空缓存
+        extractedFileCache.clear()
+        baseTreeCache.clear()
+    }
+
+    /**
+     * 从PAK文件中提取指定文件的内容（复用 ZipFile 连接）
+     *
      * @param fileEntryName 文件在PAK中的相对路径
      * @return 文件内容，如果文件不存在返回null
      */
-    fun extractFileFromPak(pakFile: Path, fileEntryName: String): String? {
-        ZipFile.builder().setPath(pakFile).get().use { zipFile ->
-            val entry = zipFile.getEntry(fileEntryName)
+    private fun extractFileFromPak(fileEntryName: String): String? {
+        val zipFile = zipFileConnection ?: return null
+
+        try {
+            val entry = zipFile.getEntry(fileEntryName) ?: return null
             if (entry.size == 0L) {
                 return null
             }
             zipFile.getInputStream(entry).use { inputStream ->
                 return IOUtils.toString(inputStream, Charsets.UTF_8)
             }
+        } catch (e: IOException) {
+            ColorPrinter.warning("Failed to extract file from PAK: $fileEntryName - ${e.message}")
+            return null
         }
     }
 }
