@@ -178,6 +178,16 @@ public interface TechlandScriptListener extends ParseTreeListener {
 	 */
 	void exitFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TechlandScriptParser#methodReflectFunCallDelc}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodReflectFunCallDelc(TechlandScriptParser.MethodReflectFunCallDelcContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TechlandScriptParser#methodReflectFunCallDelc}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodReflectFunCallDelc(TechlandScriptParser.MethodReflectFunCallDelcContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TechlandScriptParser#funtionBlockDecl}.
 	 * @param ctx the parse tree
 	 */

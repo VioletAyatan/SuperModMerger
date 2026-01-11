@@ -29,7 +29,97 @@ public class TechlandScriptLexer extends Lexer {
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};
+
+	/**
+	 * @deprecated Use {@link #VOCABULARY} instead.
+	 */
+	@Deprecated
+	public static final String[] tokenNames;
 	public static final String[] ruleNames = makeRuleNames();
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
+	public TechlandScriptLexer(CharStream input) {
+		super(input);
+		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
+	}
+
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf", "KwElse",
+			"LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma", "Equals",
+			"LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus", "Mul",
+			"Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
+			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "TRUE_LITERAL", "FALSE_LITERAL",
+			"Bool", "Id", "MacroId", "Number", "EXPONENT", "String", "LineComment",
+			"BlockComment", "WhiteSpaces"
+		};
+	}
+
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "'import'", "'extern'", "'export'", "'sub'", "'use'", "'!'", null,
+			null, "'('", "')'", "'{'", "'}'", "';'", "','", "'='", "'['", "']'",
+			"'.'", "'::'", "'+'", "'-'", "'*'", "'/'", "'&&'", "'||'", "'|'", "'&'",
+			"'~'", "'?'", "':'", "'>'", "'<'", "'=='", "'!='", "'>='", "'<='"
+		};
+	}
+
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf",
+			"KwElse", "LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma",
+			"Equals", "LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus",
+			"Mul", "Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
+			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "Bool", "Id", "MacroId",
+			"Number", "String", "LineComment", "BlockComment", "WhiteSpaces"
+		};
+	}
+
+	@Override
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
+
+	@Override
+	public String getGrammarFileName() { return "TechlandScript.g4"; }
+
+	@Override
+	public String[] getRuleNames() { return ruleNames; }
+
+	@Override
+	public String getSerializedATN() { return _serializedATN; }
+
+	@Override
+	public String[] getChannelNames() { return channelNames; }
+
+	@Override
+	public String[] getModeNames() { return modeNames; }
+
+	@Override
+	public ATN getATN() { return _ATN; }
+
 	public static final String _serializedATN =
 		"\u0004\u0000,\u014a\u0006\uffff\uffff\u0002\u0000\u0007\u0000\u0002\u0001"+
 		"\u0007\u0001\u0002\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004"+
@@ -239,96 +329,6 @@ public class TechlandScriptLexer extends Lexer {
 		"\u0000\u0149^\u0001\u0000\u0000\u0000\u0016\u0000\u0082\u008c\u00da\u00e0"+
 		"\u00e8\u00f1\u00f6\u00fc\u00ff\u0102\u0108\u010b\u010d\u0111\u0116\u011c"+
 		"\u0124\u0128\u0130\u013b\u0146\u0001\u0000\u0001\u0000";
-	private static final String[] _LITERAL_NAMES = makeLiteralNames();
-
-	private static String[] makeRuleNames() {
-		return new String[] {
-			"Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf", "KwElse",
-			"LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma", "Equals",
-			"LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus", "Mul",
-			"Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
-			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "TRUE_LITERAL", "FALSE_LITERAL",
-			"Bool", "Id", "MacroId", "Number", "EXPONENT", "String", "LineComment",
-			"BlockComment", "WhiteSpaces"
-		};
-	}
-
-	private static String[] makeLiteralNames() {
-		return new String[] {
-			null, "'import'", "'extern'", "'export'", "'sub'", "'use'", "'!'", null,
-			null, "'('", "')'", "'{'", "'}'", "';'", "','", "'='", "'['", "']'",
-			"'.'", "'::'", "'+'", "'-'", "'*'", "'/'", "'&&'", "'||'", "'|'", "'&'",
-			"'~'", "'?'", "':'", "'>'", "'<'", "'=='", "'!='", "'>='", "'<='"
-		};
-	}
-	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
-	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
-
-	/**
-	 * @deprecated Use {@link #VOCABULARY} instead.
-	 */
-	@Deprecated
-	public static final String[] tokenNames;
-	static {
-		tokenNames = new String[_SYMBOLIC_NAMES.length];
-		for (int i = 0; i < tokenNames.length; i++) {
-			tokenNames[i] = VOCABULARY.getLiteralName(i);
-			if (tokenNames[i] == null) {
-				tokenNames[i] = VOCABULARY.getSymbolicName(i);
-			}
-
-			if (tokenNames[i] == null) {
-				tokenNames[i] = "<INVALID>";
-			}
-		}
-	}
-
-	@Override
-	@Deprecated
-	public String[] getTokenNames() {
-		return tokenNames;
-	}
-
-	@Override
-
-	public Vocabulary getVocabulary() {
-		return VOCABULARY;
-	}
-
-
-	public TechlandScriptLexer(CharStream input) {
-		super(input);
-		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
-	}
-
-	@Override
-	public String getGrammarFileName() { return "TechlandScript.g4"; }
-
-	@Override
-	public String[] getRuleNames() { return ruleNames; }
-
-	@Override
-	public String getSerializedATN() { return _serializedATN; }
-
-	@Override
-	public String[] getChannelNames() { return channelNames; }
-
-	@Override
-	public String[] getModeNames() { return modeNames; }
-
-	@Override
-	public ATN getATN() { return _ATN; }
-
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, "Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf",
-			"KwElse", "LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma",
-			"Equals", "LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus",
-			"Mul", "Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
-			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "Bool", "Id", "MacroId",
-			"Number", "String", "LineComment", "BlockComment", "WhiteSpaces"
-		};
-	}
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

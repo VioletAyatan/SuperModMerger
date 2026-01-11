@@ -113,6 +113,12 @@ public interface TechlandScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TechlandScriptParser#methodReflectFunCallDelc}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMethodReflectFunCallDelc(TechlandScriptParser.MethodReflectFunCallDelcContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TechlandScriptParser#funtionBlockDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
