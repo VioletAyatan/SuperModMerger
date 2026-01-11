@@ -15,17 +15,5 @@ class JsonPairNode(
 ) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, lineNumber, tokenStream) {
 
     var value: BaseTreeNode? = null
-
-    /**
-     * 设置值节点
-     */
-    fun setValue(node: BaseTreeNode) {
-        value = node
-    }
-
-    /**
-     * 获取值节点
-     */
-    fun getValue(): BaseTreeNode? = value
 }
 
