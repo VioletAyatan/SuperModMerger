@@ -61,7 +61,7 @@ class FileMergerEngine(
             // 在提取过程中对每个mod分别进行路径修正
             val filesByPath = extractAllMods()
             // 输出目录（临时）
-            val mergedDir: Path = tempDir.resolve("merged")
+            val mergedDir = tempDir.resolve("merged")
             Files.createDirectories(mergedDir)
             // 开始合并文件
             processFiles(filesByPath, mergedDir)
@@ -74,7 +74,7 @@ class FileMergerEngine(
         } catch (e: Exception) {
             throw RuntimeException(e)
         } finally {
-            baseModManager.clearCache()
+            baseModManager.close()
             cleanupTempDir()
         }
     }
@@ -167,8 +167,8 @@ class FileMergerEngine(
                 //todo 这里未来可以添加一个自动修正旧版本的mod的功能，因为我合并的逻辑是从基准mod里取得原文件，肯定是最新的，刚好能把一些过期mod没有的参数补上
                 //todo 但是对于性能的消耗也会增加很多，文件越多消耗时间越久，后期看下可以做个可选开关
                 if (fileSources.size == 1) {
-                    copyFile(relPath, fileSources.first().safeGetFullPathName(), mergedDir)
-//                    processSingleFile(relPath, fileSources.getFirst(), mergedDir);
+//                    copyFile(relPath, fileSources.first().safeGetFullPathName(), mergedDir)
+                    processSingleFile(relPath, fileSources.first(), mergedDir);
                 } else {
                     // 在多个 mod 中存在，需要合并
                     mergeFiles(relPath, fileSources, mergedDir)
@@ -193,7 +193,7 @@ class FileMergerEngine(
                 val originalBaseModContent = baseModManager.extractFileContent(relPath)
                 // 基准mod中存在该文件，需要进行对比合并
                 if (originalBaseModContent != null) {
-                    val context = MergerContext()
+                    val context = MergerContext().also { it.baseModManager = baseModManager }
                     val mergerOptional = MergerFactory.getMerger(relPath, context)
 
                     // 如果支持合并，进行对比合并

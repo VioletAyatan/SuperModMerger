@@ -145,7 +145,11 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             //发现重复的函数调用，重新生成signature
             if (children.containsKey(signature)) {
                 val funCallNode = children[signature] as ScrFunCallScriptNode
-                val newSignature = funCallNode.signature + ":" + funCallNode.arguments.first()
+                val newSignature = if (funCallNode.arguments.isNotEmpty()) {
+                    funCallNode.signature + ":" + funCallNode.arguments.first()
+                } else {
+                    funCallNode.signature
+                }
                 funCallNode.signature = newSignature
                 children.remove(signature)
                 children[newSignature] = funCallNode
