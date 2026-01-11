@@ -30,12 +30,12 @@ public class TechlandScriptLexer extends Lexer {
 		"DEFAULT_MODE"
 	};
 
+	public static final String[] ruleNames = makeRuleNames();
 	/**
 	 * @deprecated Use {@link #VOCABULARY} instead.
 	 */
 	@Deprecated
 	public static final String[] tokenNames;
-	public static final String[] ruleNames = makeRuleNames();
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
@@ -79,17 +79,6 @@ public class TechlandScriptLexer extends Lexer {
 		};
 	}
 
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, "Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf",
-			"KwElse", "LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma",
-			"Equals", "LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus",
-			"Mul", "Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
-			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "Bool", "Id", "MacroId",
-			"Number", "String", "LineComment", "BlockComment", "WhiteSpaces"
-		};
-	}
-
 	@Override
 	@Deprecated
 	public String[] getTokenNames() {
@@ -100,6 +89,17 @@ public class TechlandScriptLexer extends Lexer {
 
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
+	}
+
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf",
+			"KwElse", "LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma",
+			"Equals", "LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus",
+			"Mul", "Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
+			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "Bool", "Id", "MacroId",
+			"Number", "String", "LineComment", "BlockComment", "WhiteSpaces"
+		};
 	}
 
 	@Override

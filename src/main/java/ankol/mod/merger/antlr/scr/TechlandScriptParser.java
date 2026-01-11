@@ -32,7 +32,7 @@ public class TechlandScriptParser extends Parser {
 		RULE_externDecl = 4, RULE_directiveCall = 5, RULE_macroDecl = 6, RULE_subDecl = 7, 
 		RULE_logicControlDecl = 8, RULE_elseIfClause = 9, RULE_elseClause = 10, 
 		RULE_paramList = 11, RULE_param = 12, RULE_functionBlock = 13, RULE_statements = 14, 
-		RULE_variableDecl = 15, RULE_funtionCallDecl = 16, RULE_methodReflectFunCallDelc = 17, 
+		RULE_variableDecl = 15, RULE_funtionCallDecl = 16, RULE_methodReferenceFunCallDecl = 17, 
 		RULE_funtionBlockDecl = 18, RULE_useDecl = 19, RULE_valueList = 20, RULE_type = 21, 
 		RULE_expression = 22, RULE_fieldAccess = 23, RULE_arrayValue = 24;
 	public static final String[] ruleNames = makeRuleNames();
@@ -249,8 +249,8 @@ public class TechlandScriptParser extends Parser {
 			"file", "definition", "importDecl", "exportDecl", "externDecl", "directiveCall",
 			"macroDecl", "subDecl", "logicControlDecl", "elseIfClause", "elseClause",
 			"paramList", "param", "functionBlock", "statements", "variableDecl",
-			"funtionCallDecl", "methodReflectFunCallDelc", "funtionBlockDecl", "useDecl",
-			"valueList", "type", "expression", "fieldAccess", "arrayValue"
+			"funtionCallDecl", "methodReferenceFunCallDecl", "funtionBlockDecl",
+			"useDecl", "valueList", "type", "expression", "fieldAccess", "arrayValue"
 		};
 	}
 
@@ -427,7 +427,7 @@ public class TechlandScriptParser extends Parser {
 				enterOuterAlt(_localctx, 9);
 				{
 				setState(66);
-				methodReflectFunCallDelc();
+				methodReferenceFunCallDecl();
 				}
 				break;
 			case 10:
@@ -448,412 +448,6 @@ public class TechlandScriptParser extends Parser {
 			exitRule();
 		}
 		return _localctx;
-	}
-
-	public final ImportDeclContext importDecl() throws RecognitionException {
-		ImportDeclContext _localctx = new ImportDeclContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_importDecl);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(70);
-			match(Import);
-			setState(71);
-			match(String);
-			setState(73);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==Semicolon) {
-				{
-				setState(72);
-				match(Semicolon);
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ImportDeclContext extends ParserRuleContext {
-		public TerminalNode Import() { return getToken(TechlandScriptParser.Import, 0); }
-		public TerminalNode String() { return getToken(TechlandScriptParser.String, 0); }
-		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
-		public ImportDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_importDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterImportDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitImportDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitImportDecl(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final ExportDeclContext exportDecl() throws RecognitionException {
-		ExportDeclContext _localctx = new ExportDeclContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_exportDecl);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(75);
-			match(Export);
-			setState(76);
-			type();
-			setState(77);
-			match(Id);
-			setState(78);
-			match(Equals);
-			setState(79);
-			expression(0);
-			setState(81);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==Semicolon) {
-				{
-				setState(80);
-				match(Semicolon);
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ExportDeclContext extends ParserRuleContext {
-		public TerminalNode Export() { return getToken(TechlandScriptParser.Export, 0); }
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
-		}
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode Equals() { return getToken(TechlandScriptParser.Equals, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
-		public ExportDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_exportDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterExportDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitExportDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitExportDecl(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final ExternDeclContext externDecl() throws RecognitionException {
-		ExternDeclContext _localctx = new ExternDeclContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_externDecl);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(83);
-			match(Extern);
-			setState(84);
-			type();
-			setState(85);
-			match(Id);
-			setState(87);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==Semicolon) {
-				{
-				setState(86);
-				match(Semicolon);
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ExternDeclContext extends ParserRuleContext {
-		public TerminalNode Extern() { return getToken(TechlandScriptParser.Extern, 0); }
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
-		}
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
-		public ExternDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_externDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterExternDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitExternDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitExternDecl(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final DirectiveCallContext directiveCall() throws RecognitionException {
-		DirectiveCallContext _localctx = new DirectiveCallContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_directiveCall);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(89);
-			match(Exclamation);
-			setState(90);
-			match(Id);
-			setState(91);
-			match(LParen);
-			setState(93);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
-				{
-				setState(92);
-				valueList();
-				}
-			}
-
-			setState(95);
-			match(RParen);
-			setState(97);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==Semicolon) {
-				{
-				setState(96);
-				match(Semicolon);
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class DirectiveCallContext extends ParserRuleContext {
-		public TerminalNode Exclamation() { return getToken(TechlandScriptParser.Exclamation, 0); }
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public ValueListContext valueList() {
-			return getRuleContext(ValueListContext.class,0);
-		}
-		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
-		public DirectiveCallContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_directiveCall; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterDirectiveCall(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitDirectiveCall(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitDirectiveCall(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final MacroDeclContext macroDecl() throws RecognitionException {
-		MacroDeclContext _localctx = new MacroDeclContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_macroDecl);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(99);
-			match(MacroId);
-			setState(100);
-			match(LParen);
-			setState(101);
-			valueList();
-			setState(102);
-			match(RParen);
-			setState(104);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==Semicolon) {
-				{
-				setState(103);
-				match(Semicolon);
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class MacroDeclContext extends ParserRuleContext {
-		public TerminalNode MacroId() { return getToken(TechlandScriptParser.MacroId, 0); }
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public ValueListContext valueList() {
-			return getRuleContext(ValueListContext.class,0);
-		}
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
-		public MacroDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_macroDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterMacroDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitMacroDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitMacroDecl(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final SubDeclContext subDecl() throws RecognitionException {
-		SubDeclContext _localctx = new SubDeclContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_subDecl);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(106);
-			match(Sub);
-			setState(107);
-			match(Id);
-			setState(108);
-			match(LParen);
-			setState(110);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==Id) {
-				{
-				setState(109);
-				paramList();
-				}
-			}
-
-			setState(112);
-			match(RParen);
-			setState(113);
-			functionBlock();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class SubDeclContext extends ParserRuleContext {
-		public TerminalNode Sub() { return getToken(TechlandScriptParser.Sub, 0); }
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public FunctionBlockContext functionBlock() {
-			return getRuleContext(FunctionBlockContext.class,0);
-		}
-		public ParamListContext paramList() {
-			return getRuleContext(ParamListContext.class,0);
-		}
-		public SubDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_subDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterSubDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitSubDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitSubDecl(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final LogicControlDeclContext logicControlDecl() throws RecognitionException {
@@ -913,195 +507,6 @@ public class TechlandScriptParser extends Parser {
 		return _localctx;
 	}
 
-	public final ElseIfClauseContext elseIfClause() throws RecognitionException {
-		ElseIfClauseContext _localctx = new ElseIfClauseContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_elseIfClause);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(129);
-			match(KwElse);
-			setState(130);
-			match(KwIf);
-			setState(131);
-			match(LParen);
-			setState(132);
-			expression(0);
-			setState(133);
-			match(RParen);
-			setState(134);
-			functionBlock();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public final ElseClauseContext elseClause() throws RecognitionException {
-		ElseClauseContext _localctx = new ElseClauseContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_elseClause);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(136);
-			match(KwElse);
-			setState(142);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==LParen) {
-				{
-				setState(137);
-				match(LParen);
-				setState(139);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
-					{
-					setState(138);
-					expression(0);
-					}
-				}
-
-				setState(141);
-				match(RParen);
-				}
-			}
-
-			setState(144);
-			functionBlock();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public final ParamListContext paramList() throws RecognitionException {
-		ParamListContext _localctx = new ParamListContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_paramList);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(146);
-			param();
-			setState(151);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==Comma) {
-				{
-				{
-				setState(147);
-				match(Comma);
-				setState(148);
-				param();
-				}
-				}
-				setState(153);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public final ParamContext param() throws RecognitionException {
-		ParamContext _localctx = new ParamContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_param);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(154);
-			type();
-			setState(155);
-			match(Id);
-			setState(158);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==Equals) {
-				{
-				setState(156);
-				match(Equals);
-				setState(157);
-				expression(0);
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public final FunctionBlockContext functionBlock() throws RecognitionException {
-		FunctionBlockContext _localctx = new FunctionBlockContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_functionBlock);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(160);
-			match(LBrace);
-			setState(164);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 824633720996L) != 0)) {
-				{
-				{
-				setState(161);
-				statements();
-				}
-				}
-				setState(166);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(167);
-			match(RBrace);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
 	public final StatementsContext statements() throws RecognitionException {
 		StatementsContext _localctx = new StatementsContext(_ctx, getState());
 		enterRule(_localctx, 28, RULE_statements);
@@ -1120,7 +525,7 @@ public class TechlandScriptParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(170);
-				methodReflectFunCallDelc();
+				methodReferenceFunCallDecl();
 				}
 				break;
 			case 3:
@@ -1178,35 +583,23 @@ public class TechlandScriptParser extends Parser {
 		return _localctx;
 	}
 
-	public final VariableDeclContext variableDecl() throws RecognitionException {
-		VariableDeclContext _localctx = new VariableDeclContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_variableDecl);
+	public final ImportDeclContext importDecl() throws RecognitionException {
+		ImportDeclContext _localctx = new ImportDeclContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_importDecl);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(179);
-			type();
-			setState(180);
-			match(Id);
-			setState(183);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==Equals) {
-				{
-				setState(181);
-				match(Equals);
-				setState(182);
-				expression(0);
-				}
-			}
-
-			setState(186);
+			setState(70);
+			match(Import);
+			setState(71);
+			match(String);
+			setState(73);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==Semicolon) {
 				{
-				setState(185);
+				setState(72);
 				match(Semicolon);
 				}
 			}
@@ -1224,55 +617,9 @@ public class TechlandScriptParser extends Parser {
 		return _localctx;
 	}
 
-	public final FuntionCallDeclContext funtionCallDecl() throws RecognitionException {
-		FuntionCallDeclContext _localctx = new FuntionCallDeclContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_funtionCallDecl);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(188);
-			match(Id);
-			setState(189);
-			match(LParen);
-			setState(191);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
-				{
-				setState(190);
-				valueList();
-				}
-			}
-
-			setState(193);
-			match(RParen);
-			setState(195);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==Semicolon) {
-				{
-				setState(194);
-				match(Semicolon);
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public final MethodReflectFunCallDelcContext methodReflectFunCallDelc() throws RecognitionException {
-		MethodReflectFunCallDelcContext _localctx = new MethodReflectFunCallDelcContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_methodReflectFunCallDelc);
+	public final MethodReferenceFunCallDeclContext methodReferenceFunCallDecl() throws RecognitionException {
+		MethodReferenceFunCallDeclContext _localctx = new MethodReferenceFunCallDeclContext(_ctx, getState());
+		enterRule(_localctx, 34, RULE_methodReferenceFunCallDecl);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1320,75 +667,29 @@ public class TechlandScriptParser extends Parser {
 		return _localctx;
 	}
 
-	public final FuntionBlockDeclContext funtionBlockDecl() throws RecognitionException {
-		FuntionBlockDeclContext _localctx = new FuntionBlockDeclContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_funtionBlockDecl);
+	public final ExportDeclContext exportDecl() throws RecognitionException {
+		ExportDeclContext _localctx = new ExportDeclContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_exportDecl);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(208);
+			setState(75);
+			match(Export);
+			setState(76);
+			type();
+			setState(77);
 			match(Id);
-			setState(209);
-			match(LParen);
-			setState(211);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
-				{
-				setState(210);
-				valueList();
-				}
-			}
-
-			setState(213);
-			match(RParen);
-			setState(214);
-			functionBlock();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public final UseDeclContext useDecl() throws RecognitionException {
-		UseDeclContext _localctx = new UseDeclContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_useDecl);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(216);
-			match(Use);
-			setState(217);
-			match(Id);
-			setState(218);
-			match(LParen);
-			setState(220);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
-				{
-				setState(219);
-				valueList();
-				}
-			}
-
-			setState(222);
-			match(RParen);
-			setState(224);
+			setState(78);
+			match(Equals);
+			setState(79);
+			expression(0);
+			setState(81);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==Semicolon) {
 				{
-				setState(223);
+				setState(80);
 				match(Semicolon);
 				}
 			}
@@ -1404,69 +705,6 @@ public class TechlandScriptParser extends Parser {
 			exitRule();
 		}
 		return _localctx;
-	}
-
-	public final ValueListContext valueList() throws RecognitionException {
-		ValueListContext _localctx = new ValueListContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_valueList);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(226);
-			expression(0);
-			setState(231);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==Comma) {
-				{
-				{
-				setState(227);
-				match(Comma);
-				setState(228);
-				expression(0);
-				}
-				}
-				setState(233);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public final TypeContext type() throws RecognitionException {
-		TypeContext _localctx = new TypeContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_type);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(234);
-			match(Id);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public final ExpressionContext expression() throws RecognitionException {
-		return expression(0);
 	}
 
 	private ExpressionContext expression(int _p) throws RecognitionException {
@@ -1735,6 +973,42 @@ public class TechlandScriptParser extends Parser {
 		return _localctx;
 	}
 
+	public final ExternDeclContext externDecl() throws RecognitionException {
+		ExternDeclContext _localctx = new ExternDeclContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_externDecl);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(83);
+			match(Extern);
+			setState(84);
+			type();
+			setState(85);
+			match(Id);
+			setState(87);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Semicolon) {
+				{
+				setState(86);
+				match(Semicolon);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public final FieldAccessContext fieldAccess() throws RecognitionException {
 		FieldAccessContext _localctx = new FieldAccessContext(_ctx, getState());
 		enterRule(_localctx, 46, RULE_fieldAccess);
@@ -1773,6 +1047,1496 @@ public class TechlandScriptParser extends Parser {
 			exitRule();
 		}
 		return _localctx;
+	}
+
+	public final DirectiveCallContext directiveCall() throws RecognitionException {
+		DirectiveCallContext _localctx = new DirectiveCallContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_directiveCall);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(89);
+			match(Exclamation);
+			setState(90);
+			match(Id);
+			setState(91);
+			match(LParen);
+			setState(93);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
+				{
+				setState(92);
+				valueList();
+				}
+			}
+
+			setState(95);
+			match(RParen);
+			setState(97);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Semicolon) {
+				{
+				setState(96);
+				match(Semicolon);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class FileContext extends ParserRuleContext {
+		public FileContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode EOF() { return getToken(TechlandScriptParser.EOF, 0); }
+
+		public List<DefinitionContext> definition() {
+			return getRuleContexts(DefinitionContext.class);
+		}
+
+		public DefinitionContext definition(int i) {
+			return getRuleContext(DefinitionContext.class,i);
+		}
+
+		@Override public int getRuleIndex() { return RULE_file; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFile(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFile(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFile(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final MacroDeclContext macroDecl() throws RecognitionException {
+		MacroDeclContext _localctx = new MacroDeclContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_macroDecl);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(99);
+			match(MacroId);
+			setState(100);
+			match(LParen);
+			setState(101);
+			valueList();
+			setState(102);
+			match(RParen);
+			setState(104);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Semicolon) {
+				{
+				setState(103);
+				match(Semicolon);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class DefinitionContext extends ParserRuleContext {
+		public DefinitionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public ImportDeclContext importDecl() {
+			return getRuleContext(ImportDeclContext.class,0);
+		}
+
+		public ExportDeclContext exportDecl() {
+			return getRuleContext(ExportDeclContext.class,0);
+		}
+
+		public ExternDeclContext externDecl() {
+			return getRuleContext(ExternDeclContext.class,0);
+		}
+
+		public SubDeclContext subDecl() {
+			return getRuleContext(SubDeclContext.class,0);
+		}
+
+		public DirectiveCallContext directiveCall() {
+			return getRuleContext(DirectiveCallContext.class,0);
+		}
+
+		public MacroDeclContext macroDecl() {
+			return getRuleContext(MacroDeclContext.class,0);
+		}
+
+		public VariableDeclContext variableDecl() {
+			return getRuleContext(VariableDeclContext.class,0);
+		}
+
+		public FuntionCallDeclContext funtionCallDecl() {
+			return getRuleContext(FuntionCallDeclContext.class,0);
+		}
+
+		public MethodReferenceFunCallDeclContext methodReferenceFunCallDecl() {
+			return getRuleContext(MethodReferenceFunCallDeclContext.class,0);
+		}
+
+		public FuntionBlockDeclContext funtionBlockDecl() {
+			return getRuleContext(FuntionBlockDeclContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_definition; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterDefinition(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitDefinition(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitDefinition(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final SubDeclContext subDecl() throws RecognitionException {
+		SubDeclContext _localctx = new SubDeclContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_subDecl);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(106);
+			match(Sub);
+			setState(107);
+			match(Id);
+			setState(108);
+			match(LParen);
+			setState(110);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Id) {
+				{
+				setState(109);
+				paramList();
+				}
+			}
+
+			setState(112);
+			match(RParen);
+			setState(113);
+			functionBlock();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ImportDeclContext extends ParserRuleContext {
+		public ImportDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode Import() { return getToken(TechlandScriptParser.Import, 0); }
+
+		public TerminalNode String() { return getToken(TechlandScriptParser.String, 0); }
+
+		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
+
+		@Override public int getRuleIndex() { return RULE_importDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterImportDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitImportDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitImportDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExportDeclContext extends ParserRuleContext {
+		public ExportDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode Export() { return getToken(TechlandScriptParser.Export, 0); }
+
+		public TypeContext type() {
+			return getRuleContext(TypeContext.class,0);
+		}
+
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		public TerminalNode Equals() { return getToken(TechlandScriptParser.Equals, 0); }
+		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
+
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_exportDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterExportDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitExportDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitExportDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExternDeclContext extends ParserRuleContext {
+		public ExternDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		public TypeContext type() {
+			return getRuleContext(TypeContext.class,0);
+		}
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
+
+		public TerminalNode Extern() { return getToken(TechlandScriptParser.Extern, 0); }
+
+		@Override public int getRuleIndex() { return RULE_externDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterExternDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitExternDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitExternDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ElseIfClauseContext elseIfClause() throws RecognitionException {
+		ElseIfClauseContext _localctx = new ElseIfClauseContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_elseIfClause);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(129);
+			match(KwElse);
+			setState(130);
+			match(KwIf);
+			setState(131);
+			match(LParen);
+			setState(132);
+			expression(0);
+			setState(133);
+			match(RParen);
+			setState(134);
+			functionBlock();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class DirectiveCallContext extends ParserRuleContext {
+		public DirectiveCallContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		public TerminalNode Exclamation() { return getToken(TechlandScriptParser.Exclamation, 0); }
+
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
+
+		public ValueListContext valueList() {
+			return getRuleContext(ValueListContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_directiveCall; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterDirectiveCall(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitDirectiveCall(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitDirectiveCall(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ElseClauseContext elseClause() throws RecognitionException {
+		ElseClauseContext _localctx = new ElseClauseContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_elseClause);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(136);
+			match(KwElse);
+			setState(142);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==LParen) {
+				{
+				setState(137);
+				match(LParen);
+				setState(139);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
+					{
+					setState(138);
+					expression(0);
+					}
+				}
+
+				setState(141);
+				match(RParen);
+				}
+			}
+
+			setState(144);
+			functionBlock();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class MacroDeclContext extends ParserRuleContext {
+		public MacroDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+		public ValueListContext valueList() {
+			return getRuleContext(ValueListContext.class,0);
+		}
+
+		public TerminalNode MacroId() { return getToken(TechlandScriptParser.MacroId, 0); }
+		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
+
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+
+		@Override public int getRuleIndex() { return RULE_macroDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterMacroDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitMacroDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitMacroDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ParamListContext paramList() throws RecognitionException {
+		ParamListContext _localctx = new ParamListContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_paramList);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(146);
+			param();
+			setState(151);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==Comma) {
+				{
+				{
+				setState(147);
+				match(Comma);
+				setState(148);
+				param();
+				}
+				}
+				setState(153);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class SubDeclContext extends ParserRuleContext {
+		public SubDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode Sub() { return getToken(TechlandScriptParser.Sub, 0); }
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		public FunctionBlockContext functionBlock() {
+			return getRuleContext(FunctionBlockContext.class,0);
+		}
+
+		public ParamListContext paramList() {
+			return getRuleContext(ParamListContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_subDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterSubDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitSubDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitSubDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ParamContext param() throws RecognitionException {
+		ParamContext _localctx = new ParamContext(_ctx, getState());
+		enterRule(_localctx, 24, RULE_param);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(154);
+			type();
+			setState(155);
+			match(Id);
+			setState(158);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Equals) {
+				{
+				setState(156);
+				match(Equals);
+				setState(157);
+				expression(0);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class LogicControlDeclContext extends ParserRuleContext {
+		public LogicControlDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+
+		public TerminalNode KwIf() { return getToken(TechlandScriptParser.KwIf, 0); }
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+		public FunctionBlockContext functionBlock() {
+			return getRuleContext(FunctionBlockContext.class,0);
+		}
+
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+
+		public List<ElseIfClauseContext> elseIfClause() {
+			return getRuleContexts(ElseIfClauseContext.class);
+		}
+
+		public ElseIfClauseContext elseIfClause(int i) {
+			return getRuleContext(ElseIfClauseContext.class,i);
+		}
+
+		public ElseClauseContext elseClause() {
+			return getRuleContext(ElseClauseContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_logicControlDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterLogicControlDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitLogicControlDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitLogicControlDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final FunctionBlockContext functionBlock() throws RecognitionException {
+		FunctionBlockContext _localctx = new FunctionBlockContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_functionBlock);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(160);
+			match(LBrace);
+			setState(164);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 824633720996L) != 0)) {
+				{
+				{
+				setState(161);
+				statements();
+				}
+				}
+				setState(166);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(167);
+			match(RBrace);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ElseIfClauseContext extends ParserRuleContext {
+		public ElseIfClauseContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode KwElse() { return getToken(TechlandScriptParser.KwElse, 0); }
+
+		public TerminalNode KwIf() { return getToken(TechlandScriptParser.KwIf, 0); }
+
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+
+		public FunctionBlockContext functionBlock() {
+			return getRuleContext(FunctionBlockContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_elseIfClause; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterElseIfClause(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitElseIfClause(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitElseIfClause(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ElseClauseContext extends ParserRuleContext {
+		public ElseClauseContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode KwElse() { return getToken(TechlandScriptParser.KwElse, 0); }
+
+		public FunctionBlockContext functionBlock() {
+			return getRuleContext(FunctionBlockContext.class,0);
+		}
+
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_elseClause; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterElseClause(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitElseClause(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitElseClause(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ParamListContext extends ParserRuleContext {
+		public ParamListContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public List<ParamContext> param() {
+			return getRuleContexts(ParamContext.class);
+		}
+
+		public ParamContext param(int i) {
+			return getRuleContext(ParamContext.class,i);
+		}
+
+		public List<TerminalNode> Comma() { return getTokens(TechlandScriptParser.Comma); }
+
+		public TerminalNode Comma(int i) {
+			return getToken(TechlandScriptParser.Comma, i);
+		}
+
+		@Override public int getRuleIndex() { return RULE_paramList; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterParamList(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitParamList(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitParamList(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final VariableDeclContext variableDecl() throws RecognitionException {
+		VariableDeclContext _localctx = new VariableDeclContext(_ctx, getState());
+		enterRule(_localctx, 30, RULE_variableDecl);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(179);
+			type();
+			setState(180);
+			match(Id);
+			setState(183);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Equals) {
+				{
+				setState(181);
+				match(Equals);
+				setState(182);
+				expression(0);
+				}
+			}
+
+			setState(186);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Semicolon) {
+				{
+				setState(185);
+				match(Semicolon);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ParamContext extends ParserRuleContext {
+		public ParamContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TypeContext type() {
+			return getRuleContext(TypeContext.class,0);
+		}
+
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		public TerminalNode Equals() { return getToken(TechlandScriptParser.Equals, 0); }
+
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_param; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterParam(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitParam(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitParam(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final FuntionCallDeclContext funtionCallDecl() throws RecognitionException {
+		FuntionCallDeclContext _localctx = new FuntionCallDeclContext(_ctx, getState());
+		enterRule(_localctx, 32, RULE_funtionCallDecl);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(188);
+			match(Id);
+			setState(189);
+			match(LParen);
+			setState(191);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
+				{
+				setState(190);
+				valueList();
+				}
+			}
+
+			setState(193);
+			match(RParen);
+			setState(195);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Semicolon) {
+				{
+				setState(194);
+				match(Semicolon);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class FunctionBlockContext extends ParserRuleContext {
+		public FunctionBlockContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode LBrace() { return getToken(TechlandScriptParser.LBrace, 0); }
+
+		public TerminalNode RBrace() { return getToken(TechlandScriptParser.RBrace, 0); }
+
+		public List<StatementsContext> statements() {
+			return getRuleContexts(StatementsContext.class);
+		}
+
+		public StatementsContext statements(int i) {
+			return getRuleContext(StatementsContext.class,i);
+		}
+
+		@Override public int getRuleIndex() { return RULE_functionBlock; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFunctionBlock(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFunctionBlock(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFunctionBlock(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class StatementsContext extends ParserRuleContext {
+		public StatementsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public FuntionCallDeclContext funtionCallDecl() {
+			return getRuleContext(FuntionCallDeclContext.class,0);
+		}
+
+		public MethodReferenceFunCallDeclContext methodReferenceFunCallDecl() {
+			return getRuleContext(MethodReferenceFunCallDeclContext.class,0);
+		}
+
+		public FuntionBlockDeclContext funtionBlockDecl() {
+			return getRuleContext(FuntionBlockDeclContext.class,0);
+		}
+
+		public UseDeclContext useDecl() {
+			return getRuleContext(UseDeclContext.class,0);
+		}
+
+		public VariableDeclContext variableDecl() {
+			return getRuleContext(VariableDeclContext.class,0);
+		}
+
+		public ExternDeclContext externDecl() {
+			return getRuleContext(ExternDeclContext.class,0);
+		}
+
+		public LogicControlDeclContext logicControlDecl() {
+			return getRuleContext(LogicControlDeclContext.class,0);
+		}
+
+		public MacroDeclContext macroDecl() {
+			return getRuleContext(MacroDeclContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_statements; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterStatements(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitStatements(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitStatements(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class VariableDeclContext extends ParserRuleContext {
+		public VariableDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TypeContext type() {
+			return getRuleContext(TypeContext.class,0);
+		}
+
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		public TerminalNode Equals() { return getToken(TechlandScriptParser.Equals, 0); }
+
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+
+		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
+
+		@Override public int getRuleIndex() { return RULE_variableDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterVariableDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitVariableDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitVariableDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final FuntionBlockDeclContext funtionBlockDecl() throws RecognitionException {
+		FuntionBlockDeclContext _localctx = new FuntionBlockDeclContext(_ctx, getState());
+		enterRule(_localctx, 36, RULE_funtionBlockDecl);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(208);
+			match(Id);
+			setState(209);
+			match(LParen);
+			setState(211);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
+				{
+				setState(210);
+				valueList();
+				}
+			}
+
+			setState(213);
+			match(RParen);
+			setState(214);
+			functionBlock();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class FuntionCallDeclContext extends ParserRuleContext {
+		public FuntionCallDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+
+		public ValueListContext valueList() {
+			return getRuleContext(ValueListContext.class,0);
+		}
+
+		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
+
+		@Override public int getRuleIndex() { return RULE_funtionCallDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFuntionCallDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFuntionCallDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFuntionCallDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final UseDeclContext useDecl() throws RecognitionException {
+		UseDeclContext _localctx = new UseDeclContext(_ctx, getState());
+		enterRule(_localctx, 38, RULE_useDecl);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(216);
+			match(Use);
+			setState(217);
+			match(Id);
+			setState(218);
+			match(LParen);
+			setState(220);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 3711122342464L) != 0)) {
+				{
+				setState(219);
+				valueList();
+				}
+			}
+
+			setState(222);
+			match(RParen);
+			setState(224);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Semicolon) {
+				{
+				setState(223);
+				match(Semicolon);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class MethodReferenceFunCallDeclContext extends ParserRuleContext {
+		public MethodReferenceFunCallDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public List<TerminalNode> Id() { return getTokens(TechlandScriptParser.Id); }
+
+		public TerminalNode Id(int i) {
+			return getToken(TechlandScriptParser.Id, i);
+		}
+
+		public TerminalNode DoubleColon() { return getToken(TechlandScriptParser.DoubleColon, 0); }
+
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+
+		public ValueListContext valueList() {
+			return getRuleContext(ValueListContext.class,0);
+		}
+
+		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
+
+		@Override public int getRuleIndex() { return RULE_methodReferenceFunCallDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterMethodReferenceFunCallDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitMethodReferenceFunCallDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitMethodReferenceFunCallDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ValueListContext valueList() throws RecognitionException {
+		ValueListContext _localctx = new ValueListContext(_ctx, getState());
+		enterRule(_localctx, 40, RULE_valueList);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(226);
+			expression(0);
+			setState(231);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==Comma) {
+				{
+				{
+				setState(227);
+				match(Comma);
+				setState(228);
+				expression(0);
+				}
+				}
+				setState(233);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class FuntionBlockDeclContext extends ParserRuleContext {
+		public FuntionBlockDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+
+		public FunctionBlockContext functionBlock() {
+			return getRuleContext(FunctionBlockContext.class,0);
+		}
+
+		public ValueListContext valueList() {
+			return getRuleContext(ValueListContext.class,0);
+		}
+
+		@Override public int getRuleIndex() { return RULE_funtionBlockDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFuntionBlockDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFuntionBlockDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFuntionBlockDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final TypeContext type() throws RecognitionException {
+		TypeContext _localctx = new TypeContext(_ctx, getState());
+		enterRule(_localctx, 42, RULE_type);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(234);
+			match(Id);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class UseDeclContext extends ParserRuleContext {
+		public UseDeclContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode Use() { return getToken(TechlandScriptParser.Use, 0); }
+
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+
+		public ValueListContext valueList() {
+			return getRuleContext(ValueListContext.class,0);
+		}
+
+		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
+
+		@Override public int getRuleIndex() { return RULE_useDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterUseDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitUseDecl(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitUseDecl(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ExpressionContext expression() throws RecognitionException {
+		return expression(0);
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ValueListContext extends ParserRuleContext {
+		public ValueListContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+
+		public List<TerminalNode> Comma() { return getTokens(TechlandScriptParser.Comma); }
+
+		public TerminalNode Comma(int i) {
+			return getToken(TechlandScriptParser.Comma, i);
+		}
+
+		@Override public int getRuleIndex() { return RULE_valueList; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterValueList(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitValueList(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitValueList(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class TypeContext extends ParserRuleContext {
+		public TypeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		@Override public int getRuleIndex() { return RULE_type; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterType(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitType(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitType(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionContext extends ParserRuleContext {
+		public ExpressionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
+
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+
+		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
+
+		public FieldAccessContext fieldAccess() {
+			return getRuleContext(FieldAccessContext.class,0);
+		}
+
+		public ValueListContext valueList() {
+			return getRuleContext(ValueListContext.class,0);
+		}
+
+		public TerminalNode Number() { return getToken(TechlandScriptParser.Number, 0); }
+
+		public TerminalNode String() { return getToken(TechlandScriptParser.String, 0); }
+
+		public TerminalNode Bool() { return getToken(TechlandScriptParser.Bool, 0); }
+
+		public ArrayValueContext arrayValue() {
+			return getRuleContext(ArrayValueContext.class,0);
+		}
+
+		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
+
+		public TerminalNode Equals() { return getToken(TechlandScriptParser.Equals, 0); }
+
+		public TerminalNode BitNot() { return getToken(TechlandScriptParser.BitNot, 0); }
+
+		public TerminalNode Exclamation() { return getToken(TechlandScriptParser.Exclamation, 0); }
+
+		public TerminalNode Minus() { return getToken(TechlandScriptParser.Minus, 0); }
+
+		public TerminalNode Mul() { return getToken(TechlandScriptParser.Mul, 0); }
+
+		public TerminalNode Div() { return getToken(TechlandScriptParser.Div, 0); }
+
+		public TerminalNode Plus() { return getToken(TechlandScriptParser.Plus, 0); }
+
+		public TerminalNode BitOr() { return getToken(TechlandScriptParser.BitOr, 0); }
+
+		public TerminalNode BitAnd() { return getToken(TechlandScriptParser.BitAnd, 0); }
+
+		public TerminalNode Gt() { return getToken(TechlandScriptParser.Gt, 0); }
+
+		public TerminalNode Lt() { return getToken(TechlandScriptParser.Lt, 0); }
+
+		public TerminalNode Gte() { return getToken(TechlandScriptParser.Gte, 0); }
+
+		public TerminalNode Lte() { return getToken(TechlandScriptParser.Lte, 0); }
+
+		public TerminalNode Eq() { return getToken(TechlandScriptParser.Eq, 0); }
+
+		public TerminalNode NotEq() { return getToken(TechlandScriptParser.NotEq, 0); }
+
+		public TerminalNode LogicAnd() { return getToken(TechlandScriptParser.LogicAnd, 0); }
+
+		public TerminalNode LogicOr() { return getToken(TechlandScriptParser.LogicOr, 0); }
+
+		public TerminalNode Question() { return getToken(TechlandScriptParser.Question, 0); }
+
+		public TerminalNode Colon() { return getToken(TechlandScriptParser.Colon, 0); }
+
+		@Override public int getRuleIndex() { return RULE_expression; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitExpression(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitExpression(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class FieldAccessContext extends ParserRuleContext {
+		public FieldAccessContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+
+		public List<TerminalNode> Id() { return getTokens(TechlandScriptParser.Id); }
+
+		public TerminalNode Id(int i) {
+			return getToken(TechlandScriptParser.Id, i);
+		}
+
+		public List<TerminalNode> Dot() { return getTokens(TechlandScriptParser.Dot); }
+
+		public TerminalNode Dot(int i) {
+			return getToken(TechlandScriptParser.Dot, i);
+		}
+
+		@Override public int getRuleIndex() { return RULE_fieldAccess; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFieldAccess(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFieldAccess(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFieldAccess(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ArrayValueContext arrayValue() throws RecognitionException {
@@ -1815,629 +2579,6 @@ public class TechlandScriptParser extends Parser {
 			return expression_sempred((ExpressionContext)_localctx, predIndex);
 		}
 		return true;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class FileContext extends ParserRuleContext {
-		public FileContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-
-		public TerminalNode EOF() { return getToken(TechlandScriptParser.EOF, 0); }
-
-		public List<DefinitionContext> definition() {
-			return getRuleContexts(DefinitionContext.class);
-		}
-
-		public DefinitionContext definition(int i) {
-			return getRuleContext(DefinitionContext.class,i);
-		}
-
-		@Override public int getRuleIndex() { return RULE_file; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFile(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFile(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFile(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class DefinitionContext extends ParserRuleContext {
-		public DefinitionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-
-		public ImportDeclContext importDecl() {
-			return getRuleContext(ImportDeclContext.class,0);
-		}
-
-		public ExportDeclContext exportDecl() {
-			return getRuleContext(ExportDeclContext.class,0);
-		}
-
-		public ExternDeclContext externDecl() {
-			return getRuleContext(ExternDeclContext.class,0);
-		}
-
-		public SubDeclContext subDecl() {
-			return getRuleContext(SubDeclContext.class,0);
-		}
-
-		public DirectiveCallContext directiveCall() {
-			return getRuleContext(DirectiveCallContext.class,0);
-		}
-
-		public MacroDeclContext macroDecl() {
-			return getRuleContext(MacroDeclContext.class,0);
-		}
-
-		public VariableDeclContext variableDecl() {
-			return getRuleContext(VariableDeclContext.class,0);
-		}
-
-		public FuntionCallDeclContext funtionCallDecl() {
-			return getRuleContext(FuntionCallDeclContext.class,0);
-		}
-
-		public MethodReflectFunCallDelcContext methodReflectFunCallDelc() {
-			return getRuleContext(MethodReflectFunCallDelcContext.class,0);
-		}
-
-		public FuntionBlockDeclContext funtionBlockDecl() {
-			return getRuleContext(FuntionBlockDeclContext.class,0);
-		}
-
-		@Override public int getRuleIndex() { return RULE_definition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitDefinition(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitDefinition(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class LogicControlDeclContext extends ParserRuleContext {
-		public TerminalNode KwIf() { return getToken(TechlandScriptParser.KwIf, 0); }
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public FunctionBlockContext functionBlock() {
-			return getRuleContext(FunctionBlockContext.class,0);
-		}
-		public List<ElseIfClauseContext> elseIfClause() {
-			return getRuleContexts(ElseIfClauseContext.class);
-		}
-		public ElseIfClauseContext elseIfClause(int i) {
-			return getRuleContext(ElseIfClauseContext.class,i);
-		}
-		public ElseClauseContext elseClause() {
-			return getRuleContext(ElseClauseContext.class,0);
-		}
-		public LogicControlDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_logicControlDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterLogicControlDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitLogicControlDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitLogicControlDecl(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ElseIfClauseContext extends ParserRuleContext {
-		public TerminalNode KwElse() { return getToken(TechlandScriptParser.KwElse, 0); }
-		public TerminalNode KwIf() { return getToken(TechlandScriptParser.KwIf, 0); }
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public FunctionBlockContext functionBlock() {
-			return getRuleContext(FunctionBlockContext.class,0);
-		}
-		public ElseIfClauseContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_elseIfClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterElseIfClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitElseIfClause(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitElseIfClause(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ElseClauseContext extends ParserRuleContext {
-		public TerminalNode KwElse() { return getToken(TechlandScriptParser.KwElse, 0); }
-		public FunctionBlockContext functionBlock() {
-			return getRuleContext(FunctionBlockContext.class,0);
-		}
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public ElseClauseContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_elseClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterElseClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitElseClause(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitElseClause(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ParamListContext extends ParserRuleContext {
-		public List<ParamContext> param() {
-			return getRuleContexts(ParamContext.class);
-		}
-		public ParamContext param(int i) {
-			return getRuleContext(ParamContext.class,i);
-		}
-		public List<TerminalNode> Comma() { return getTokens(TechlandScriptParser.Comma); }
-		public TerminalNode Comma(int i) {
-			return getToken(TechlandScriptParser.Comma, i);
-		}
-		public ParamListContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_paramList; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterParamList(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitParamList(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitParamList(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ParamContext extends ParserRuleContext {
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
-		}
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode Equals() { return getToken(TechlandScriptParser.Equals, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public ParamContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_param; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterParam(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitParam(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitParam(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class FunctionBlockContext extends ParserRuleContext {
-		public TerminalNode LBrace() { return getToken(TechlandScriptParser.LBrace, 0); }
-		public TerminalNode RBrace() { return getToken(TechlandScriptParser.RBrace, 0); }
-		public List<StatementsContext> statements() {
-			return getRuleContexts(StatementsContext.class);
-		}
-		public StatementsContext statements(int i) {
-			return getRuleContext(StatementsContext.class,i);
-		}
-		public FunctionBlockContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_functionBlock; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFunctionBlock(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFunctionBlock(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFunctionBlock(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class StatementsContext extends ParserRuleContext {
-		public FuntionCallDeclContext funtionCallDecl() {
-			return getRuleContext(FuntionCallDeclContext.class,0);
-		}
-		public StatementsContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		public FuntionBlockDeclContext funtionBlockDecl() {
-			return getRuleContext(FuntionBlockDeclContext.class,0);
-		}
-		public UseDeclContext useDecl() {
-			return getRuleContext(UseDeclContext.class,0);
-		}
-		public VariableDeclContext variableDecl() {
-			return getRuleContext(VariableDeclContext.class,0);
-		}
-		public ExternDeclContext externDecl() {
-			return getRuleContext(ExternDeclContext.class,0);
-		}
-		public LogicControlDeclContext logicControlDecl() {
-			return getRuleContext(LogicControlDeclContext.class,0);
-		}
-		public MacroDeclContext macroDecl() {
-			return getRuleContext(MacroDeclContext.class,0);
-		}
-
-		public MethodReflectFunCallDelcContext methodReflectFunCallDelc() {
-			return getRuleContext(MethodReflectFunCallDelcContext.class,0);
-		}
-		@Override public int getRuleIndex() { return RULE_statements; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterStatements(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitStatements(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitStatements(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class VariableDeclContext extends ParserRuleContext {
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
-		}
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode Equals() { return getToken(TechlandScriptParser.Equals, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
-		public VariableDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_variableDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterVariableDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitVariableDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitVariableDecl(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class FuntionCallDeclContext extends ParserRuleContext {
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public ValueListContext valueList() {
-			return getRuleContext(ValueListContext.class,0);
-		}
-		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
-		public FuntionCallDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_funtionCallDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFuntionCallDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFuntionCallDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFuntionCallDecl(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class MethodReflectFunCallDelcContext extends ParserRuleContext {
-		public List<TerminalNode> Id() { return getTokens(TechlandScriptParser.Id); }
-		public TerminalNode Id(int i) {
-			return getToken(TechlandScriptParser.Id, i);
-		}
-		public MethodReflectFunCallDelcContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public ValueListContext valueList() {
-			return getRuleContext(ValueListContext.class,0);
-		}
-		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
-
-		public TerminalNode DoubleColon() { return getToken(TechlandScriptParser.DoubleColon, 0); }
-
-		@Override public int getRuleIndex() { return RULE_methodReflectFunCallDelc; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterMethodReflectFunCallDelc(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitMethodReflectFunCallDelc(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitMethodReflectFunCallDelc(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class FuntionBlockDeclContext extends ParserRuleContext {
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public FunctionBlockContext functionBlock() {
-			return getRuleContext(FunctionBlockContext.class,0);
-		}
-		public ValueListContext valueList() {
-			return getRuleContext(ValueListContext.class,0);
-		}
-		public FuntionBlockDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_funtionBlockDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFuntionBlockDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFuntionBlockDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFuntionBlockDecl(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class UseDeclContext extends ParserRuleContext {
-		public TerminalNode Use() { return getToken(TechlandScriptParser.Use, 0); }
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public ValueListContext valueList() {
-			return getRuleContext(ValueListContext.class,0);
-		}
-		public TerminalNode Semicolon() { return getToken(TechlandScriptParser.Semicolon, 0); }
-		public UseDeclContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_useDecl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterUseDecl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitUseDecl(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitUseDecl(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ValueListContext extends ParserRuleContext {
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
-		public List<TerminalNode> Comma() { return getTokens(TechlandScriptParser.Comma); }
-		public TerminalNode Comma(int i) {
-			return getToken(TechlandScriptParser.Comma, i);
-		}
-		public ValueListContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_valueList; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterValueList(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitValueList(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitValueList(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class TypeContext extends ParserRuleContext {
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TypeContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_type; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitType(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitType(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ExpressionContext extends ParserRuleContext {
-		public TerminalNode LParen() { return getToken(TechlandScriptParser.LParen, 0); }
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
-		public TerminalNode RParen() { return getToken(TechlandScriptParser.RParen, 0); }
-		public FieldAccessContext fieldAccess() {
-			return getRuleContext(FieldAccessContext.class,0);
-		}
-		public ValueListContext valueList() {
-			return getRuleContext(ValueListContext.class,0);
-		}
-		public TerminalNode Number() { return getToken(TechlandScriptParser.Number, 0); }
-		public TerminalNode String() { return getToken(TechlandScriptParser.String, 0); }
-		public TerminalNode Bool() { return getToken(TechlandScriptParser.Bool, 0); }
-		public ArrayValueContext arrayValue() {
-			return getRuleContext(ArrayValueContext.class,0);
-		}
-		public TerminalNode Id() { return getToken(TechlandScriptParser.Id, 0); }
-		public TerminalNode Equals() { return getToken(TechlandScriptParser.Equals, 0); }
-		public TerminalNode BitNot() { return getToken(TechlandScriptParser.BitNot, 0); }
-		public TerminalNode Exclamation() { return getToken(TechlandScriptParser.Exclamation, 0); }
-		public TerminalNode Minus() { return getToken(TechlandScriptParser.Minus, 0); }
-		public TerminalNode Mul() { return getToken(TechlandScriptParser.Mul, 0); }
-		public TerminalNode Div() { return getToken(TechlandScriptParser.Div, 0); }
-		public TerminalNode Plus() { return getToken(TechlandScriptParser.Plus, 0); }
-		public TerminalNode BitOr() { return getToken(TechlandScriptParser.BitOr, 0); }
-		public TerminalNode BitAnd() { return getToken(TechlandScriptParser.BitAnd, 0); }
-		public TerminalNode Gt() { return getToken(TechlandScriptParser.Gt, 0); }
-		public TerminalNode Lt() { return getToken(TechlandScriptParser.Lt, 0); }
-		public TerminalNode Gte() { return getToken(TechlandScriptParser.Gte, 0); }
-		public TerminalNode Lte() { return getToken(TechlandScriptParser.Lte, 0); }
-		public TerminalNode Eq() { return getToken(TechlandScriptParser.Eq, 0); }
-		public TerminalNode NotEq() { return getToken(TechlandScriptParser.NotEq, 0); }
-		public TerminalNode LogicAnd() { return getToken(TechlandScriptParser.LogicAnd, 0); }
-		public TerminalNode LogicOr() { return getToken(TechlandScriptParser.LogicOr, 0); }
-		public TerminalNode Question() { return getToken(TechlandScriptParser.Question, 0); }
-		public TerminalNode Colon() { return getToken(TechlandScriptParser.Colon, 0); }
-		public ExpressionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_expression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class FieldAccessContext extends ParserRuleContext {
-		public List<TerminalNode> Id() { return getTokens(TechlandScriptParser.Id); }
-		public TerminalNode Id(int i) {
-			return getToken(TechlandScriptParser.Id, i);
-		}
-		public List<TerminalNode> Dot() { return getTokens(TechlandScriptParser.Dot); }
-		public TerminalNode Dot(int i) {
-			return getToken(TechlandScriptParser.Dot, i);
-		}
-		public FieldAccessContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_fieldAccess; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).enterFieldAccess(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof TechlandScriptListener ) ((TechlandScriptListener)listener).exitFieldAccess(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof TechlandScriptVisitor ) return ((TechlandScriptVisitor<? extends T>)visitor).visitFieldAccess(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {

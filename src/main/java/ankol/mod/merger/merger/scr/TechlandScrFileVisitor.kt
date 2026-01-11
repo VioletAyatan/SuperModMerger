@@ -6,11 +6,11 @@ import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode
 import ankol.mod.merger.merger.scr.node.ScrLeafScriptNode
-import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.ParserRuleContext
+import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.misc.Interval
 
-class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : TechlandScriptBaseVisitor<BaseTreeNode>() {
+class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScriptBaseVisitor<BaseTreeNode>() {
     //检测重复函数的东西
     private val repeatableFunctions: MutableMap<String, MutableSet<String>> = HashMap()
     private var currentFunBlockSignature = "EMPTY" //标记当前处理到哪个函数块了，重复函数签名生成仅限自己对应的函数块内
@@ -30,7 +30,7 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
     }
 
     /**
-     * 根文件
+     * 文件根节点
      */
     override fun visitFile(ctx: FileContext): BaseTreeNode {
         val rootNode = ScrContainerScriptNode(
@@ -50,7 +50,9 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         return rootNode
     }
 
-    //===========================导入/导出===========================
+    /**
+     * 导入声明
+     */
     override fun visitImportDecl(ctx: ImportDeclContext): BaseTreeNode {
         // Import 签名示例: "import:data/scripts/inputs.scr"
         val path = ctx.String().text
@@ -64,6 +66,9 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         )
     }
 
+    /**
+     * 导出声明
+     */
     override fun visitExportDecl(ctx: ExportDeclContext): BaseTreeNode {
         // Export 签名示例: "export:EJumpMaintainedSpeedSource_MoveController"
         // 这样 Mod 修改同一个变量时，能通过签名找到并覆盖它
@@ -78,7 +83,9 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         )
     }
 
-    //===========================函数块===========================
+    /**
+     * sub函数块
+     */
     override fun visitSubDecl(ctx: SubDeclContext): BaseTreeNode {
         // Sub 签名示例: "sub:main"
         val name = ctx.Id().text
@@ -96,6 +103,9 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         return subNode
     }
 
+    /**
+     * 函数块声明
+     */
     override fun visitFuntionBlockDecl(ctx: FuntionBlockDeclContext): BaseTreeNode {
         val funcName = ctx.Id().text
         val rawParams = if (ctx.valueList() != null) getFullText(ctx.valueList()) else ""
@@ -117,21 +127,8 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         return blockNode
     }
 
-    private fun visitFunctionBlockContent(parent: ScrContainerScriptNode, ctx: FunctionBlockContext?) {
-        if (ctx == null || ctx.statements() == null) {
-            return
-        }
-        for (statement in ctx.statements()) {
-            // visit(stmt) 会调用 visitStatements，然后再分发到 visitFuntionCallDecl 等
-            val child = visit(statement)
-            if (child != null) {
-                parent.addChild(child)
-            }
-        }
-    }
-
     /**
-     * 函数调用的处理
+     * 函数调用
      */
     override fun visitFuntionCallDecl(ctx: FuntionCallDeclContext): BaseTreeNode {
         val funcName = ctx.Id().text
@@ -169,7 +166,7 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
     /**
      * 方法引用
      */
-    override fun visitMethodReflectFunCallDelc(ctx: MethodReflectFunCallDelcContext): BaseTreeNode? {
+    override fun visitMethodReferenceFunCallDecl(ctx: MethodReferenceFunCallDeclContext): BaseTreeNode {
         val referanceName = ctx.Id(0).text
         val funName = ctx.Id(1).text
         val signature = "${METHOD_REFERENCE}:${referanceName}:${funName}"
@@ -184,26 +181,9 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         )
     }
 
-    override fun visitStatements(ctx: StatementsContext): BaseTreeNode? {
-        if (ctx.funtionCallDecl() != null) {
-            return visit(ctx.funtionCallDecl())
-        }
-        if (ctx.funtionBlockDecl() != null) {
-            return visit(ctx.funtionBlockDecl())
-        }
-        if (ctx.variableDecl() != null) {
-            return visit(ctx.variableDecl())
-        }
-        if (ctx.useDecl() != null) {
-            return visit(ctx.useDecl())
-        }
-        // 如果有 externDecl 或其他未处理的类型，会返回 null，意味着我们在合并时忽略它们（或需要补充处理逻辑）
-        if (ctx.externDecl() != null) {
-            return visit(ctx.externDecl())
-        }
-        return null
-    }
-
+    /**
+     * 预处理指令调用
+     */
     override fun visitDirectiveCall(ctx: DirectiveCallContext): BaseTreeNode {
         // 处理预处理指令调用，例如: !define MAX_SPEED 10
         val directiveName = ctx.Id().text
@@ -221,6 +201,9 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         )
     }
 
+    /**
+     * 宏声明
+     */
     override fun visitMacroDecl(ctx: MacroDeclContext): BaseTreeNode {
         val macroId = ctx.MacroId() //Like: $Police_parking_dead_zone
         val signature: String = MACRO + ":" + macroId.text
@@ -233,6 +216,9 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         )
     }
 
+    /**
+     * 变量声明
+     */
     override fun visitVariableDecl(ctx: VariableDeclContext): BaseTreeNode {
         // 局部变量声明，如: float val = 1.0;
         // 签名示例: "variable:flot:val"
@@ -246,6 +232,9 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
         )
     }
 
+    /**
+     * use语句
+     */
     override fun visitUseDecl(ctx: UseDeclContext): BaseTreeNode {
         // use 语句，例如: use Input();
         // use 语句通常是可以重复的（追加模式），所以把参数也放进签名里
@@ -260,6 +249,22 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
             ctx.start.line,
             tokenStream
         )
+    }
+
+    /**
+     * 访问函数块内容
+     */
+    private fun visitFunctionBlockContent(parent: ScrContainerScriptNode, ctx: FunctionBlockContext?) {
+        if (ctx == null || ctx.statements() == null) {
+            return
+        }
+        for (statement in ctx.statements()) {
+            // visit(stmt) 会调用 visitStatements，然后再分发到 visitFuntionCallDecl 等
+            val child = visit(statement)
+            if (child != null) {
+                parent.addChild(child)
+            }
+        }
     }
 
     /**

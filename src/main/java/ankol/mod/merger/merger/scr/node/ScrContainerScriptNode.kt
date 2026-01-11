@@ -1,7 +1,7 @@
 package ankol.mod.merger.merger.scr.node
 
 import ankol.mod.merger.core.BaseTreeNode
-import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.TokenStream
 
 /**
  * SCR容器节点，标识语法树中含有子节点的节点
@@ -14,7 +14,7 @@ class ScrContainerScriptNode(
     startTokenIndex: Int,
     stopTokenIndex: Int,
     line: Int,
-    tokenStream: CommonTokenStream
+    tokenStream: TokenStream
 ) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
     /**
      * 子节点映射，key 是节点签名，value 是节点对象
