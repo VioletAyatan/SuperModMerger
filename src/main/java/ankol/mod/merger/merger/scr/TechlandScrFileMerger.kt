@@ -29,9 +29,18 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 插入操作记录
      */
-    private data class InsertOperation(val tokenIndex: Int, val content: String)
+    private data class InsertOperation(val tokenIndex: Int, val content: String, val nodeType: NodeType = NodeType.OTHER)
 
     private val insertOperations = ArrayList<InsertOperation>()
+
+    /**
+     * 节点类型，用于确定插入位置的优先级
+     */
+    private enum class NodeType {
+        IMPORT,  // import 语句 - 最高优先级，放在文件最前
+        SUB,     // sub 函数声明 - 次高优先级，放在 import 之后
+        OTHER    // 其他声明 - 最低优先级
+    }
 
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
@@ -188,7 +197,19 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 )
             }
         }
-        for (op in insertOperations) {
+
+        // 对插入操作按照优先级和位置排序
+        // 优先级：IMPORT > SUB > OTHER
+        // 同一优先级内按照 tokenIndex 升序排序（从前往后插入）
+        val sortedOperations = insertOperations.sortedWith(compareBy<InsertOperation> { op ->
+            when (op.nodeType) {
+                NodeType.IMPORT -> 0
+                NodeType.SUB -> 1
+                NodeType.OTHER -> 2
+            }
+        }.thenBy { it.tokenIndex })
+
+        for (op in sortedOperations) {
             rewriter.insertBefore(op.tokenIndex, op.content)
         }
 
@@ -217,10 +238,72 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     }
 
     private fun handleInsertion(baseContainer: ScrContainerScriptNode, modNode: BaseTreeNode) {
-        // 插入位置：Base 容器的 '}' 之前
-        val insertPos = baseContainer.stopTokenIndex
+        // 根据节点签名确定节点类型
+        val nodeType = when {
+            modNode.signature.startsWith("import:") -> NodeType.IMPORT
+            modNode.signature.startsWith("sub:") -> NodeType.SUB
+            else -> NodeType.OTHER
+        }
+
+        // 选择合适的插入位置
+        val insertPos = when (nodeType) {
+            NodeType.IMPORT -> {
+                // import 语句应该插入到最前面（在第一个非import节点之前）
+                findInsertPositionForImport(baseContainer)
+            }
+            NodeType.SUB -> {
+                // sub 函数应该插入到所有import之后，但在第一个非import、非sub节点之前
+                findInsertPositionForSub(baseContainer)
+            }
+            NodeType.OTHER -> {
+                // 其他节点直接插在容器的 '}' 之前
+                baseContainer.stopTokenIndex
+            }
+        }
+
         val newContent = "\n    " + modNode.sourceText
-        insertOperations.add(InsertOperation(insertPos, newContent))
+        insertOperations.add(InsertOperation(insertPos, newContent, nodeType))
+    }
+
+    /**
+     * 找到import语句的插入位置：在所有现有import之后，或者在第一个非import节点之前
+     */
+    private fun findInsertPositionForImport(container: ScrContainerScriptNode): Int {
+        var lastImportStopIndex: Int? = null
+
+        for ((_, node) in container.childrens) {
+            if (node.signature.startsWith("import:")) {
+                lastImportStopIndex = node.stopTokenIndex
+            } else {
+                // 遇到第一个非import节点，如果有import就插在最后import之后，否则插在该节点之前
+                return lastImportStopIndex?.let { it + 1 } ?: node.startTokenIndex
+            }
+        }
+
+        // 所有节点都是import，或者没有节点，返回容器结束位置
+        return lastImportStopIndex?.let { it + 1 } ?: container.stopTokenIndex
+    }
+
+    /**
+     * 找到sub函数的插入位置：在所有import和sub之后，但在其他节点之前
+     */
+    private fun findInsertPositionForSub(container: ScrContainerScriptNode): Int {
+        var lastSubOrImportStopIndex: Int? = null
+
+        for ((_, node) in container.childrens) {
+            val isSub = node.signature.startsWith("sub:")
+            val isImport = node.signature.startsWith("import:")
+
+            if (isSub || isImport) {
+                lastSubOrImportStopIndex = node.stopTokenIndex
+            } else {
+                // 遇到第一个既不是import也不是sub的节点
+                return lastSubOrImportStopIndex?.let { it + 1 } ?: node.startTokenIndex
+            }
+        }
+
+        // 所有节点都是import或sub，返回容器结束位置
+        return lastSubOrImportStopIndex?.let { it + 1 } ?: container.stopTokenIndex
     }
 
     private fun parseFile(fileTree: AbstractFileTree): ParsedResult<ScrContainerScriptNode> {
