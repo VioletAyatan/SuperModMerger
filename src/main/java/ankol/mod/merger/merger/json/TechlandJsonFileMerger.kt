@@ -116,28 +116,51 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
     ) {
         var previousSiblingInBase: BaseTreeNode? = null
 
-        // 遍历mod中的所有键值对
         for ((signature, modChild) in modContainer.childerns) {
             val originalChild = originalContainer?.childerns?.get(signature)
             val baseChild = baseContainer.childerns[signature]
 
+            //不存在，新增
             if (baseChild == null) {
-                // Base中不存在这个键值对 - 新增节点
                 newNodes.add(NewNodeRecord(baseContainer, previousSiblingInBase, modChild))
             } else {
                 previousSiblingInBase = baseChild
 
-                // 递归对比子节点
                 if (modChild is JsonPairNode && baseChild is JsonPairNode) {
                     val modValue = modChild.value
                     val baseValue = baseChild.value
 
                     if (modValue != null && baseValue != null) {
-                        reduceCompare(
-                            (originalChild as? JsonPairNode)?.value,
-                            baseValue,
-                            modValue
-                        )
+                        when (baseValue) {
+                            // 对象节点对比
+                            is JsonContainerNode if modValue is JsonContainerNode -> {
+                                reduceCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
+                            }
+                            // 数组节点对比
+                            is JsonArrayNode if modValue is JsonArrayNode -> {
+                                reduceCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
+                            }
+                            // 叶子节点，直接比较文本
+                            else -> {
+                                if (baseValue.sourceText != modValue.sourceText) {
+                                    // 检查是否与原始基准MOD相同
+                                    val originalValue = (originalChild as? JsonPairNode)?.value
+                                    if (originalValue == null || originalValue.sourceText != modValue.sourceText) {
+                                        // 发生冲突，记录完整的PairNode（包含key和value）
+                                        conflicts.add(
+                                            ConflictRecord(
+                                                context.fileName,
+                                                context.mod1Name,
+                                                context.mod2Name,
+                                                baseChild.signature,
+                                                baseChild,  // 完整的PairNode
+                                                modChild    // 完整的PairNode
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                 } else {
                     reduceCompare(originalChild, baseChild, modChild)
