@@ -88,6 +88,36 @@ public interface TechlandScriptListener extends ParseTreeListener {
 	 */
 	void exitSubDecl(TechlandScriptParser.SubDeclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TechlandScriptParser#logicControlDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogicControlDecl(TechlandScriptParser.LogicControlDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TechlandScriptParser#logicControlDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogicControlDecl(TechlandScriptParser.LogicControlDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TechlandScriptParser#elseIfClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseIfClause(TechlandScriptParser.ElseIfClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TechlandScriptParser#elseIfClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseIfClause(TechlandScriptParser.ElseIfClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TechlandScriptParser#elseClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseClause(TechlandScriptParser.ElseClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TechlandScriptParser#elseClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseClause(TechlandScriptParser.ElseClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TechlandScriptParser#paramList}.
 	 * @param ctx the parse tree
 	 */

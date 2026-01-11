@@ -40,6 +40,16 @@ macroDecl
 subDecl
     : Sub Id LParen paramList? RParen functionBlock
     ;
+//逻辑控制语句
+logicControlDecl
+    : KwIf LParen expression RParen functionBlock elseIfClause* elseClause?
+    ;
+elseIfClause
+    : KwElse KwIf LParen expression RParen functionBlock  // 支持 else if
+    ;
+elseClause
+    : KwElse (LParen expression? RParen)? functionBlock  // else 块
+    ;
 
 paramList
     : param (Comma param)*
@@ -59,6 +69,8 @@ statements
     | useDecl
     | variableDecl
     | externDecl
+    | logicControlDecl
+    | macroDecl
     ;
 
 // 变量声明 (带类型, 例如: float health_critical = ...;)
@@ -104,6 +116,7 @@ expression
     | Id Equals expression
     // 一元运算符
     | BitNot expression
+    | Exclamation expression
     | Minus expression
     // 乘除运算
     | expression (Mul | Div) expression
@@ -115,6 +128,10 @@ expression
     | expression BitAnd expression
     // 比较运算符
     | expression (Gt | Lt | Gte | Lte | Eq | NotEq) expression
+    // 逻辑与运算
+    | expression LogicAnd expression
+    // 逻辑或运算
+    | expression LogicOr expression
     // 三元运算符
     | expression Question expression Colon expression
     ;
@@ -136,6 +153,9 @@ Export: 'export';
 Sub: 'sub';
 Use: 'use';
 Exclamation: '!';
+//逻辑判读关键字
+KwIf: 'if' | 'If';
+KwElse: 'else' | 'Else';
 
 LParen: '(';
 RParen: ')';
@@ -153,6 +173,9 @@ Plus: '+';
 Minus: '-';
 Mul: '*';
 Div: '/';
+//逻辑运算符
+LogicAnd: '&&';
+LogicOr: '||';
 //位运算符
 BitOr: '|';
 BitAnd: '&';

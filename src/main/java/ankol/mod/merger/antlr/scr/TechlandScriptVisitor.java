@@ -59,6 +59,24 @@ public interface TechlandScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSubDecl(TechlandScriptParser.SubDeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TechlandScriptParser#logicControlDecl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLogicControlDecl(TechlandScriptParser.LogicControlDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TechlandScriptParser#elseIfClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseIfClause(TechlandScriptParser.ElseIfClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TechlandScriptParser#elseClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseClause(TechlandScriptParser.ElseClauseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TechlandScriptParser#paramList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
