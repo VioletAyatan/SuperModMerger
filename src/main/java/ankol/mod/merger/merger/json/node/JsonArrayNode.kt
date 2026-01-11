@@ -4,7 +4,7 @@ import ankol.mod.merger.core.BaseTreeNode
 import org.antlr.v4.runtime.TokenStream
 
 /**
- * JSON数组节点 - 表示数组容器
+ * JSON数组节点
  */
 class JsonArrayNode(
     signature: String,

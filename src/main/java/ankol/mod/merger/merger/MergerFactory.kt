@@ -2,6 +2,7 @@ package ankol.mod.merger.merger
 
 import ankol.mod.merger.core.AbstractFileMerger
 import ankol.mod.merger.core.MergerContext
+import ankol.mod.merger.merger.json.TechlandJsonFileMerger
 import ankol.mod.merger.merger.scr.TechlandScrFileMerger
 import ankol.mod.merger.merger.xml.TechlandXmlFileMerger
 import java.util.*
@@ -21,10 +22,12 @@ object MergerFactory {
     private val mergerCache: MutableMap<Class<*>, AbstractFileMerger> = ConcurrentHashMap()
 
     init {
-        // 注册.scr格式的合并器
+        //.scr格式的合并器
         registerMerger(TechlandScrFileMerger::class.java, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth")
-        // 注册.xml文件的合并器
+        //.xml文件的合并器
         registerMerger(TechlandXmlFileMerger::class.java, ".xml")
+        //json格式合并器
+        registerMerger(TechlandJsonFileMerger::class.java, ".gui")
         /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DebugTool.printCacheUseRate("mergerCache", (AbstractCache) mergerCache);
         }));*/

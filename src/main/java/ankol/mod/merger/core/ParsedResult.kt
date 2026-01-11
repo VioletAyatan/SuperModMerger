@@ -9,4 +9,4 @@ import org.antlr.v4.runtime.TokenStream
  * @param tokenStream 原始Token流
  * @author Ankol
  */
-data class ParsedResult<T : BaseTreeNode>(val astNode: T?, val tokenStream: TokenStream)
+data class ParsedResult<N : BaseTreeNode>(val astNode: N?, val tokenStream: TokenStream)
