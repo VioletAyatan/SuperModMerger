@@ -27,6 +27,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         private const val EXPORT: String = "export"
         private const val DIRECTIVE = "directive"
         private const val MACRO = "macro"
+        private const val EXTERN = "extern"
     }
 
     /**
@@ -220,11 +221,24 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 变量声明
      */
     override fun visitVariableDecl(ctx: VariableDeclContext): BaseTreeNode {
-        // 局部变量声明，如: float val = 1.0;
         // 签名示例: "variable:flot:val"
-        val name = ctx.type().toString() + ":" + ctx.Id().text
+        val signature = "${VARIABLE}:${ctx.type().text}:${ctx.Id().text}"
         return ScrLeafScriptNode(
-            "$VARIABLE:$name",
+            signature,
+            getStartTokenIndex(ctx),
+            getStopTokenIndex(ctx),
+            ctx.start.line,
+            tokenStream
+        )
+    }
+
+    /**
+     * extern声明
+     */
+    override fun visitExternDecl(ctx: ExternDeclContext): BaseTreeNode {
+        val signature = "${EXTERN}:${ctx.type().text}:${ctx.Id().text}"
+        return ScrLeafScriptNode(
+            signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
             ctx.start.line,
