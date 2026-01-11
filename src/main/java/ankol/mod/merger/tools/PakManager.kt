@@ -101,7 +101,9 @@ object PakManager {
                         // 解压文件
                         when (entry.size) {
                             0L -> outputPath.createFile()
-                            else -> zipFile.getInputStream(entry).use { Files.copy(it, outputPath) }
+                            else -> zipFile.getInputStream(entry).use {
+                                Files.copy(it, outputPath)
+                            }
                         }
 
                         // 处理嵌套压缩包

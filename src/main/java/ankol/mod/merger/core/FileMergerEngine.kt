@@ -10,7 +10,6 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.NoSuchFileException
 import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 import java.util.*
 import java.util.concurrent.CompletionException
 import java.util.concurrent.ConcurrentHashMap
@@ -167,7 +166,7 @@ class FileMergerEngine(
                 //todo 这里未来可以添加一个自动修正旧版本的mod的功能，因为我合并的逻辑是从基准mod里取得原文件，肯定是最新的，刚好能把一些过期mod没有的参数补上
                 //todo 但是对于性能的消耗也会增加很多，文件越多消耗时间越久，后期看下可以做个可选开关
                 if (fileSources.size == 1) {
-                    copyFile(relPath, fileSources.first().safeGetFullPathName(), mergedDir)
+                    Tools.zeroCopy(fileSources.first().safeGetFullPathName(), mergedDir.resolve(relPath))
 //                    processSingleFile(relPath, fileSources.first(), mergedDir) //做压力测试的时候把这个打开
                 } else {
                     // 在多个 mod 中存在，需要合并
@@ -240,7 +239,7 @@ class FileMergerEngine(
             }
         }
         // 没有基准mod，或者基准mod中不存在该文件，或者不支持合并，直接复制
-        copyFile(relPath, fileCurrent.safeGetFullPathName(), mergedOutputDir)
+        Tools.zeroCopy(fileCurrent.safeGetFullPathName(), mergedOutputDir.resolve(relPath))
     }
 
     /**
@@ -255,7 +254,7 @@ class FileMergerEngine(
         // 先简单的判断一下文件内容（计算hash值）、大小是否相同，不同肯定不一样
         if (areAllFilesIdentical(fileSources)) {
             // 文件都一样，直接使用第一个
-            copyFile(relPath, fileSources.first().safeGetFullPathName(), mergedDir)
+            Tools.zeroCopy(fileSources.first().safeGetFullPathName(), mergedDir.resolve(relPath))
             return
         }
 
@@ -333,19 +332,10 @@ class FileMergerEngine(
             log.error("Failed to merge file '{}': {}", relPath, e.message)
             // 失败时使用最后一个 mod 的版本
             val lastSource: PathFileTree = fileSources.last()
-            copyFile(relPath, lastSource.safeGetFullPathName(), mergedDir)
+            Tools.zeroCopy(lastSource.safeGetFullPathName(), mergedDir.resolve(relPath))
         }
     }
 
-    /**
-     * 复制单个文件
-     */
-    @Throws(IOException::class)
-    private fun copyFile(relPath: String, sourcePath: Path, mergedOutputDir: Path) {
-        val targetPath = mergedOutputDir.resolve(relPath)
-        Files.createDirectories(targetPath.parent)
-        Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING)
-    }
 
     /**
      * 不支持合并的文件类型，让用户选择使用哪个版本
@@ -372,7 +362,7 @@ class FileMergerEngine(
                             chosenSource.getFirstArchiveFileName(),
                         )
                     )
-                    copyFile(relPath, chosenSource.safeGetFullPathName(), mergedDir)
+                    Tools.zeroCopy(chosenSource.safeGetFullPathName(), mergedDir.resolve(relPath))
                     return
                 }
             }

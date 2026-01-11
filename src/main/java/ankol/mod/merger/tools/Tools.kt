@@ -4,7 +4,9 @@ import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.exception.BusinessException
 import org.apache.commons.compress.archivers.zip.ZipFile
 import java.io.IOException
+import java.nio.channels.FileChannel
 import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 import kotlin.io.path.*
 
 object Tools {
@@ -135,6 +137,28 @@ object Tools {
             }
         }
         path.deleteIfExists()
+    }
+
+    /**
+     * 拷贝文件，使用零拷贝方式提高效率
+     * @param sourcePath 源文件路径
+     * @param targetPath 目标文件路径
+     * @param createParentDirs 是否自动创建父目录，默认为 true
+     */
+    fun zeroCopy(sourcePath: Path, targetPath: Path, createParentDirs: Boolean = true) {
+        if (createParentDirs) {
+            targetPath.parent?.createDirectories()
+        }
+        FileChannel.open(sourcePath).use { sourceChannel ->
+            FileChannel.open(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE).use { targetChannel ->
+                var position = 0L
+                val size = sourceChannel.size()
+                while (position < size) {
+                    // transferTo 可能无法一次传输所有数据，需要循环处理
+                    position += sourceChannel.transferTo(position, size - position, targetChannel)
+                }
+            }
+        }
     }
 
     /**
