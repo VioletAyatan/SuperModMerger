@@ -18,6 +18,7 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
 
     companion object {
         private const val FUN_CALL: String = "funCall"
+        private const val METHOD_REFERENCE: String = "methodReference"
         private const val FUN_BLOCK: String = "funBlock"
         private const val SUB_FUN: String = "sub"
         private const val VARIABLE: String = "variable"
@@ -161,8 +162,25 @@ class TechlandScrFileVisitor(private val tokenStream: CommonTokenStream) : Techl
             getStopTokenIndex(ctx),
             ctx.start.line,
             tokenStream,
-            funcName,
             argsList
+        )
+    }
+
+    /**
+     * 方法引用
+     */
+    override fun visitMethodReflectFunCallDelc(ctx: MethodReflectFunCallDelcContext): BaseTreeNode? {
+        val referanceName = ctx.Id(0).text
+        val funName = ctx.Id(1).text
+        val signature = "${METHOD_REFERENCE}:${referanceName}:${funName}"
+
+        return ScrFunCallScriptNode(
+            signature,
+            getStartTokenIndex(ctx),
+            getStopTokenIndex(ctx),
+            ctx.start.line,
+            tokenStream,
+            getValueList(ctx.valueList()).map { it.text }
         )
     }
 
