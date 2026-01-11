@@ -4,7 +4,7 @@ import ankol.mod.merger.core.BaseTreeNode
 import org.antlr.v4.runtime.TokenStream
 
 /**
- * JSON键值对节点 - 表示对象中的一个属性
+ * JSON键值对节点
  */
 class JsonPairNode(
     signature: String,

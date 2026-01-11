@@ -5,6 +5,7 @@ import ankol.mod.merger.antlr.json.JSONParser
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.merger.json.node.JsonArrayNode
 import ankol.mod.merger.merger.json.node.JsonContainerNode
+import ankol.mod.merger.merger.json.node.JsonLeafNode
 import ankol.mod.merger.merger.json.node.JsonPairNode
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.TokenStream
@@ -18,6 +19,7 @@ class TechlandJsonFileVisitor(val tokenStream: TokenStream) : JSONBaseVisitor<Ba
     companion object {
         private const val OBJECT = "OBJECT"
         private const val ARRAY = "ARRAY"
+        private const val VALUE = "value"
     }
 
     /**
@@ -89,6 +91,37 @@ class TechlandJsonFileVisitor(val tokenStream: TokenStream) : JSONBaseVisitor<Ba
         }
 
         return arrNode
+    }
+
+    /**
+     * 访问值节点 - 根据类型返回对应节点
+     */
+    override fun visitValue(ctx: JSONParser.ValueContext): BaseTreeNode {
+        return when {
+            // 对象类型
+            ctx.obj() != null -> visit(ctx.obj())
+            // 数组类型
+            ctx.arr() != null -> visit(ctx.arr())
+            // 字符串类型
+            ctx.STRING() != null -> createLeafNode(ctx, ctx.STRING().text)
+            // 数字类型
+            ctx.NUMBER() != null -> createLeafNode(ctx, ctx.NUMBER().text)
+            // 布尔值和null
+            else -> createLeafNode(ctx, ctx.text)
+        }
+    }
+
+    /**
+     * 创建叶子节点
+     */
+    private fun createLeafNode(ctx: JSONParser.ValueContext, value: String): BaseTreeNode {
+        return JsonLeafNode(
+            "${VALUE}:$value",
+            getStartTokenIndex(ctx),
+            getStopTokenIndex(ctx),
+            ctx.start.line,
+            tokenStream
+        )
     }
 
     /**

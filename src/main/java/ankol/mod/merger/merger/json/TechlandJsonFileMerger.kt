@@ -55,30 +55,25 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
 
     override fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult {
         try {
-            val parsedResult = context.baseModManager.parseForm<BaseTreeNode>(file1.fileEntryName) { parseContent(it) }
-            // 解析原始基准MOD文件（如果存在）
+            //解析基准文件
+            val parsedResult = context.baseModManager.parseForm(file1.fileEntryName) { parseContent(it) }
             if (parsedResult != null) {
                 originalBaseModRoot = parsedResult.astNode
             }
-            // 解析base和mod文件
             val baseResult = parseFile(file1)
             val modResult = parseFile(file2)
             val baseRoot = baseResult.astNode!!
             val modRoot = modResult.astNode!!
-
-            // 递归对比
+            //深度对比
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
-
-            // 第一个mod与原版文件的对比，直接通过，不提示冲突
+            //冲突解决
             if (context.isFirstModMergeWithBaseMod && conflicts.isNotEmpty()) {
                 for (record in conflicts) {
                     record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (conflicts.isNotEmpty()) {
-                // 正常情况下，提示用户解决冲突
                 resolveConflict(conflicts)
             }
-
             return MergeResult(getMergedContent(baseResult), conflicts.isNotEmpty())
         } catch (e: Exception) {
             log.error("Error during JSON file merge: ${file1.fileName} Reason: ${e.message}", e)
@@ -91,24 +86,21 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
         }
     }
 
-    /**
-     * 递归对比树节点
-     */
     private fun reduceCompare(
         originalNode: BaseTreeNode?,
         baseNode: BaseTreeNode,
         modNode: BaseTreeNode
     ) {
-        when {
-            // JSON对象节点比较
-            baseNode is JsonContainerNode && modNode is JsonContainerNode -> {
+        when (baseNode) {
+            //对象节点
+            is JsonContainerNode if modNode is JsonContainerNode -> {
                 compareContainers(originalNode as? JsonContainerNode, baseNode, modNode)
             }
-            // JSON数组节点比较
-            baseNode is JsonArrayNode && modNode is JsonArrayNode -> {
+            //数组节点
+            is JsonArrayNode if modNode is JsonArrayNode -> {
                 compareArrays(originalNode as? JsonArrayNode, baseNode, modNode)
             }
-            // 叶子节点比较
+            //叶子节点
             else -> {
                 compareLeafNodes(originalNode, baseNode, modNode)
             }
@@ -255,11 +247,11 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
 
             if (previousSibling != null) {
                 // 在前一个兄弟节点后插入
-                val insertText = buildInsertText(parentContainer, newNode, false)
+                val insertText = buildInsertText(newNode, false)
                 rewriter.insertAfter(previousSibling.stopTokenIndex, insertText)
             } else {
                 // 作为第一个子节点插入
-                val insertText = buildInsertText(parentContainer, newNode, true)
+                val insertText = buildInsertText(newNode, true)
                 when (parentContainer) {
                     is JsonContainerNode -> {
                         // 在对象的左花括号后插入
@@ -280,7 +272,6 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
      * 构建插入文本
      */
     private fun buildInsertText(
-        @Suppress("UNUSED_PARAMETER") parentContainer: BaseTreeNode,
         newNode: BaseTreeNode,
         isFirstChild: Boolean
     ): String {
@@ -298,23 +289,15 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
         }
     }
 
-    /**
-     * 解析文件内容
-     */
     private fun parseFile(fileTree: AbstractFileTree): ParsedResult<BaseTreeNode> {
         return parseContent(fileTree.getContent())
     }
 
-    /**
-     * 解析内容为AST树
-     */
     private fun parseContent(content: String): ParsedResult<BaseTreeNode> {
         val charStream = CharStreams.fromString(content)
         val lexer = JSONLexer(charStream)
         val tokenStream = CommonTokenStream(lexer)
         val parser = JSONParser(tokenStream)
-
-        // 解析JSON
         val jsonContext = parser.json()
 
         // 使用Visitor转换为节点树
