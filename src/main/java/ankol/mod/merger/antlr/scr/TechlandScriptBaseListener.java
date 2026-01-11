@@ -1,4 +1,5 @@
-package ankol.mod.merger.antlr.scr;// Generated from TechlandScript.g4 by ANTLR 4.13.2
+// Generated from TechlandScript.g4 by ANTLR 4.13.2
+package ankol.mod.merger.antlr.scr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;

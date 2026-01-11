@@ -80,7 +80,8 @@ variableDecl
 
 // 函数调用 (例如: Set("f_pp_light_leak", light_leak);)
 funtionCallDecl
-    : Id LParen valueList? RParen Semicolon?
+    : Id LParen valueList? RParen Semicolon? //传统函数调用
+    | Id DoubleColon Id LParen valueList? RParen Semicolon? //类似方法引用的::支持
     ;
 
 //函数块 (例如: Item(...) {...})
@@ -168,6 +169,7 @@ LBracket: '[';
 RBracket: ']';
 
 Dot: '.';
+DoubleColon: '::';  // 作用域解析符，支持 EDiscoverableType::HUB 这样的语法
 // 运算符
 Plus: '+';
 Minus: '-';
