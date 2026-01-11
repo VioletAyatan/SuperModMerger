@@ -75,7 +75,7 @@ statements
 
 // 变量声明 (带类型, 例如: float health_critical = ...;)
 variableDecl
-    : type? Id (Equals expression)? Semicolon?
+    : type Id (Equals expression)? Semicolon?
     ;
 
 // 函数调用 (例如: Set("f_pp_light_leak", light_leak);)
