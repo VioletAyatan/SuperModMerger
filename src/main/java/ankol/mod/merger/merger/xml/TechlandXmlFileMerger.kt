@@ -35,7 +35,6 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 新增节点记录
      */
-    @JvmRecord
     private data class NewNodeRecord(
         val parentContainer: XmlContainerNode,
         val previousSibling: XmlNode?,

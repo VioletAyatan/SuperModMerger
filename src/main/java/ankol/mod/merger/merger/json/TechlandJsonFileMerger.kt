@@ -36,7 +36,6 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
     /**
      * 新增节点记录
      */
-    @JvmRecord
     private data class NewNodeRecord(
         val parentContainer: BaseTreeNode,
         val previousSibling: BaseTreeNode?,
