@@ -2,20 +2,21 @@ package ankol.mod.merger.tools
 
 import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.tools.Localizations.t
+import ankol.mod.merger.tools.Tools.bytesToHex
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.compress.archivers.zip.ZipFile
-import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.Strings
 import java.io.File
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.DigestInputStream
+import java.security.DigestOutputStream
 import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
@@ -26,14 +27,6 @@ import kotlin.io.path.createFile
  * @author Ankol
  */
 object PakManager {
-    private val log = logger()
-
-    // 解压用的缓冲区
-    private const val BUFFER_SIZE = 65536
-
-    // 十六进制字符数组，用于快速转换
-    private val HEX_ARRAY = "0123456789abcdef".toCharArray()
-
     // 嵌套解压计数器，确保目录名唯一性
     private val NESTED_COUNTER = AtomicInteger(0)
 
@@ -89,28 +82,27 @@ object PakManager {
             .setCharset(StandardCharsets.UTF_8)
             .get()
             .use { zipFile ->
+                val digest = MessageDigest.getInstance("SHA-256")
                 zipFile.entries.asSequence()
                     .filterNot { it.isDirectory }
                     .forEach { entry ->
                         val entryName = entry.name
                         val fileName = getEntryFileName(entryName)
                         val outputPath = outputDir.resolve(entryName)
-
                         outputPath.parent?.createDirectories()
-
                         // 解压文件
                         when (entry.size) {
                             0L -> outputPath.createFile()
-                            else -> zipFile.getInputStream(entry).use {
-                                Files.copy(it, outputPath)
+                            else -> zipFile.getInputStream(entry).use { zin ->
+                                DigestInputStream(zin, digest).use { din -> Files.copy(din, outputPath) }
                             }
                         }
-
+                        val hash = bytesToHex(digest.digest())
                         // 处理嵌套压缩包
                         if (isArchiveFile(fileName)) {
                             handleNestedArchive(fileName, outputPath, outputDir, fileTreeMap, archiveNames)
                         } else {
-                            addFileToTree(fileName, entryName, archiveNames, outputPath, fileTreeMap)
+                            addFileToTree(fileName, entryName, archiveNames, hash, outputPath, fileTreeMap)
                         }
                     }
             }
@@ -136,32 +128,36 @@ object PakManager {
             .setCharset(StandardCharsets.UTF_8)
             .get()
             .use { sevenZFile ->
+                val digest = MessageDigest.getInstance("SHA-256")
                 generateSequence { sevenZFile.nextEntry }
                     .filterNot { it.isDirectory }
                     .forEach { entry ->
                         val entryName = entry.name
                         val fileName = getEntryFileName(entryName)
                         val outputPath = outputDir.resolve(entryName)
-
                         outputPath.parent?.createDirectories()
 
                         // 写入文件内容
                         when (entry.size) {
                             0L -> Files.createFile(outputPath)
                             else -> Files.newOutputStream(outputPath).use { output ->
-                                val buffer = ByteArray(BUFFER_SIZE)
-                                while (sevenZFile.read(buffer) != -1) {
-                                    // 读取文件内容
-                                    IOUtils.write(buffer, output)
+                                DigestOutputStream(output, digest).use { dos ->
+                                    val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                                    while (sevenZFile.read(buffer) != -1) {
+                                        //写入文件内容，顺便计算哈希
+                                        dos.write(buffer, 0, buffer.size)
+                                    }
                                 }
                             }
                         }
+
+                        val hash = bytesToHex(digest.digest())
 
                         // 处理嵌套压缩包
                         if (isArchiveFile(fileName)) {
                             handleNestedArchive(fileName, outputPath, outputDir, fileTreeMap, archiveNames)
                         } else {
-                            addFileToTree(fileName, entryName, archiveNames, outputPath, fileTreeMap)
+                            addFileToTree(fileName, entryName, archiveNames, hash, outputPath, fileTreeMap)
                         }
                     }
             }
@@ -205,10 +201,11 @@ object PakManager {
         fileName: String,
         entryName: String,
         archiveNames: MutableList<String>,
+        hash: String,
         outputPath: Path,
         fileTreeMap: MutableMap<String, PathFileTree>
     ) {
-        val current = PathFileTree(fileName, entryName, archiveNames, outputPath)
+        val current = PathFileTree(fileName, entryName, archiveNames, hash, outputPath)
 
         fileTreeMap[entryName]?.let { existing ->
             ColorPrinter.warning(
@@ -221,7 +218,6 @@ object PakManager {
             )
             ColorPrinter.success(t("PAK_MANAGER_USE_NEW_PATH", current.fileEntryName))
         }
-
         fileTreeMap[entryName] = current
     }
 
@@ -278,47 +274,8 @@ object PakManager {
      * @return 两个文件内容是否相同
      * @throws IOException 如果文件不可读
      */
-    fun areFilesIdentical(file1: Path, file2: Path): Boolean =
-        Files.size(file1) == Files.size(file2) && getFileHash(file1) == getFileHash(file2)
-
-    /**
-     * 计算文件的 SHA-256 哈希值（流式处理）
-     * 
-     * 
-     * 使用 64KB 缓冲区逐块处理，即使对于 1GB 的文件也只占用恒定的内存。
-     * 
-     * @param file 要计算哈希的文件
-     * @return 十六进制格式的哈希值
-     * @throws IOException 如果文件不可读
-     */
-    private fun getFileHash(file: Path): String =
-        try {
-            MessageDigest.getInstance("SHA-256").let { digest ->
-                val buffer = ByteArray(BUFFER_SIZE)
-                Files.newInputStream(file).use { fis ->
-                    generateSequence { fis.read(buffer) }
-                        .takeWhile { it != -1 }
-                        .forEach { bytesRead -> digest.update(buffer, 0, bytesRead) }
-                }
-                bytesToHex(digest.digest())
-            }
-        } catch (e: NoSuchAlgorithmException) {
-            throw IOException("SHA-256 algorithm not available", e)
-        }
-
-    /**
-     * 将字节数组转换为十六进制字符串
-     * 
-     * @param bytes 字节数组
-     * @return 十六进制字符串
-     */
-    private fun bytesToHex(bytes: ByteArray): String {
-        val hexChars = CharArray(bytes.size * 2)
-        for (i in bytes.indices) {
-            val v = bytes[i].toInt() and 0xFF
-            hexChars[i * 2] = HEX_ARRAY[v ushr 4]
-            hexChars[i * 2 + 1] = HEX_ARRAY[v and 0x0F]
-        }
-        return String(hexChars)
+    fun areFilesIdentical(file1: PathFileTree, file2: PathFileTree): Boolean {
+        return Files.size(file1.safeGetFullPathName()) == Files.size(file2.safeGetFullPathName())
+                && file1.fileHash == file2.fileHash
     }
 }

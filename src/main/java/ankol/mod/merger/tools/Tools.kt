@@ -104,11 +104,7 @@ object Tools {
                             )
                         )
                     }
-                    pakIndexMap[fileName] = PathFileTree(
-                        fileName,
-                        entryName,
-                        mutableListOf(filePath.fileName.toString()),
-                    )
+                    pakIndexMap[fileName] = PathFileTree(fileName, entryName, mutableListOf(filePath.fileName.toString()))
                 }
             }
         } catch (e: IOException) {
@@ -176,7 +172,13 @@ object Tools {
         }
     }
 
-    private fun bytesToHex(bytes: ByteArray): String {
+    /**
+     * 将字节数组转换为十六进制字符串
+     *
+     * @param bytes 字节数组
+     * @return 十六进制字符串
+     */
+    fun bytesToHex(bytes: ByteArray): String {
         val hexChars = CharArray(bytes.size * 2)
         for (i in bytes.indices) {
             val v = bytes[i].toInt() and 0xFF

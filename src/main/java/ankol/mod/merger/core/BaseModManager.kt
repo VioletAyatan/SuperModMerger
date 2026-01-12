@@ -8,13 +8,15 @@ import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.Tools.indexPakFile
 import ankol.mod.merger.tools.Tools.tempDir
 import org.apache.commons.compress.archivers.zip.ZipFile
-import org.apache.commons.io.IOUtils
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.DigestInputStream
+import java.security.MessageDigest
 import java.util.*
 import java.util.function.Function
 import kotlin.io.path.Path
+import kotlin.io.path.createDirectories
 
 /**
  * 基准MOD分析器 - 负责加载和分析基准MOD（原版文件）
@@ -85,9 +87,7 @@ class BaseModManager(
 
             loaded = true
             val timetake = System.currentTimeMillis() - startTime
-            ColorPrinter.success(
-                Localizations.t("BASE_MOD_INDEXED_FILES", indexedBaseModFileMap.size, baseModPath.fileName, timetake)
-            )
+            ColorPrinter.success(Localizations.t("BASE_MOD_INDEXED_FILES", indexedBaseModFileMap.size, baseModPath.fileName, timetake))
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
@@ -108,26 +108,21 @@ class BaseModManager(
         val fileName = getEntryFileName(relPath).lowercase(Locale.getDefault())
         val pathFileTree = indexedBaseModFileMap[fileName] ?: return null
 
-        val fileEntryName = pathFileTree.fileEntryName
-        val cachedFile = extractedFileCache[fileEntryName] //先取缓存
-        if (cachedFile != null && Files.exists(cachedFile)) {
-            return Files.readString(cachedFile)
+        val fullPathName = pathFileTree.fullPathName
+        if (fullPathName != null) {
+            return Files.readString(fullPathName, Charsets.UTF_8)
         }
 
-        //没有缓存临时文件路径，从压缩包里提取出来
-        val content = extractFileFromPak(fileEntryName)
-        if (content != null) {
-            try {
-                val safeFileName = getEntryFileName(fileEntryName)
-                val tempFile = cacheDir.resolve(safeFileName)
-                Files.createDirectories(tempFile.parent)
-                Files.writeString(tempFile, content)
-                extractedFileCache[fileEntryName] = tempFile
-            } catch (e: IOException) {
-                ColorPrinter.warning("Failed to cache extracted file: " + fileEntryName + " - " + e.message)
-            }
+        //没有初始化内容，从压缩包里提取出来
+        val fileEntryName = pathFileTree.fileEntryName
+        val (filePath, fileHash) = extractFileFromPak(fileEntryName) //todo 这里可以考虑改为读取的内容就保存到内存里，不要每次都去硬盘读了
+        pathFileTree.fullPathName = filePath
+        pathFileTree.fileHash = fileHash
+        //返回的hash值为空，说明文件大小为0
+        if (fileHash.isEmpty()) {
+            return null
         }
-        return content
+        return Files.readString(filePath)
     }
 
     /**
@@ -199,25 +194,27 @@ class BaseModManager(
     }
 
     /**
-     * 从PAK文件中提取指定文件的内容（复用 ZipFile 连接）
-     *
-     * @param fileEntryName 文件在PAK中的相对路径
-     * @return 文件内容，如果文件不存在返回null
+     * 从PAK文件中提取指定文件的内容
+     * @return 包含了文件路径和hash的Pair
      */
-    private fun extractFileFromPak(fileEntryName: String): String? {
-        val zipFile = zipFileConnection ?: return null
-
-        try {
-            val entry = zipFile.getEntry(fileEntryName) ?: return null
-            if (entry.size == 0L) {
-                return null
+    private fun extractFileFromPak(fileEntryName: String): Pair<Path, String> {
+        val zipFile = zipFileConnection
+        val digest = MessageDigest.getInstance("SHA-256")
+        val entry = zipFile.getEntry(fileEntryName)
+        val outputPath = cacheDir.resolve(fileEntryName)
+        outputPath.parent.createDirectories()
+        //大小为0
+        if (entry.size == 0L) {
+            Files.createFile(outputPath)
+            return Pair(outputPath, "")
+        } else {
+            zipFile.getInputStream(entry).use { zin ->
+                DigestInputStream(zin, digest).use { din ->
+                    Files.copy(din, outputPath)
+                }
             }
-            zipFile.getInputStream(entry).use { inputStream ->
-                return IOUtils.toString(inputStream, Charsets.UTF_8)
-            }
-        } catch (e: IOException) {
-            ColorPrinter.warning("Failed to extract file from PAK: $fileEntryName - ${e.message}")
-            return null
         }
+        val fileHash = Tools.bytesToHex(digest.digest())
+        return Pair(outputPath, fileHash)
     }
 }
