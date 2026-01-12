@@ -58,7 +58,6 @@ class FileMergerEngine(
         }
         //开始合并
         try {
-            baseModManager.load()
             // 在提取过程中对每个mod分别进行路径修正
             val filesByPath = extractAllMods()
             // 输出目录（临时）

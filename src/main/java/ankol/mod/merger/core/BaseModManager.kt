@@ -6,7 +6,6 @@ import ankol.mod.merger.tools.Localizations
 import ankol.mod.merger.tools.Tools
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.Tools.indexPakFile
-import ankol.mod.merger.tools.Tools.tempDir
 import org.apache.commons.compress.archivers.zip.ZipFile
 import java.io.IOException
 import java.nio.file.Files
@@ -19,7 +18,8 @@ import kotlin.io.path.Path
 import kotlin.io.path.createDirectories
 
 /**
- * 基准MOD分析器 - 负责加载和分析基准MOD（原版文件）
+ * 基准MOD管理器
+ * 负责基准MOD相关操作
  *
  * @param baseModPath 基准MOD文件路径
  * @author Ankol
@@ -32,7 +32,7 @@ class BaseModManager(
      * 键：文件名（小写）
      * 值：在基准MOD中的相对路径
      */
-    var indexedBaseModFileMap: MutableMap<String, PathFileTree>
+    var indexedBaseModFileMap: MutableMap<String, PathFileTree> = mutableMapOf()
 
     /**
      * 基准MOD是否已加载
@@ -42,12 +42,8 @@ class BaseModManager(
     /**
      * 临时文件缓存目录
      */
-    private val cacheDir: Path
+    private val cacheDir: Path = Path(Tools.tempDir, "BaseModCache_" + System.currentTimeMillis())
 
-    /**
-     * 已提取文件的缓存映射：相对路径 → 临时文件路径
-     */
-    private val extractedFileCache: MutableMap<String, Path>
     private val baseTreeCache = HashMap<String, ParsedResult<*>?>()
 
     /**
@@ -57,12 +53,8 @@ class BaseModManager(
 
     //初始化逻辑
     init {
-        this.indexedBaseModFileMap = LinkedHashMap()
-        this.extractedFileCache = LinkedHashMap()
-        // 创建缓存目录：temp/BaseModCache_时间戳
-        this.cacheDir = Path(tempDir, "BaseModCache_" + System.currentTimeMillis())
         try {
-            Files.createDirectories(this.cacheDir)
+            cacheDir.createDirectories()
         } catch (e: IOException) {
             ColorPrinter.warning("Failed to create base mod cache directory: " + e.message)
         }
@@ -187,9 +179,6 @@ class BaseModManager(
 
         // 清理临时文件缓存
         Tools.deleteRecursively(cacheDir)
-
-        // 清空缓存
-        extractedFileCache.clear()
         baseTreeCache.clear()
     }
 
