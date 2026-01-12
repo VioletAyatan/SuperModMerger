@@ -16,8 +16,8 @@
 - 👤 **User Interaction**: Clear command-line interface for user to choose conflict resolution options
 - 📊 **Detailed Statistics**: Provides detailed processing statistics after merging
 - 🌍 **Internationalization**: Currently supports Chinese and English. English is not my native language, so please bear with any grammatical errors, or feel free to submit a PR on my GitHub repository.
-- Supports SCR structured script merging and XML file merging, with line-by-line merging and conflict detection
-- Merging is based on original game files, which may fix some issues with outdated mods (only when multiple mods have files with the same name, as non-duplicate files are copied directly without parsing). However, try to avoid merging outdated mods to prevent unexpected issues.
+- Supports SCR structured script merging, .xml and .gui file merging, with line-by-line merging and conflict detection
+- Default merging logic is based on original game files, which may fix some issues with outdated mods (only when multiple mods have files with the same name, as non-duplicate files are copied directly without parsing). Alternatively, you can try using the **-f** command line parameter to enable global repair mode, which will take more time but may fix some outdated mod compatibility issues.
 
 ### About This Project
 
@@ -27,11 +27,11 @@ At first, I discovered **[Unleash The Mods](https://www.nexusmods.com/dyinglight
 
 Therefore, the basic usage of this tool is fully compatible with **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)**, and no runtime libraries need to be installed - it works out of the box.
 
-**The tool supports smart merging of .scr, .loot, .def, .phx, .ppfx and more SCR syntax structure files, as well as .xml files. It's not limited to common player_variables.scr file merging. The syntax parser has been tested against the entire original data0.pak file to ensure no conflicts. In theory, any file with correct SCR syntax can be recognized and merged by this tool.**
+**The tool supports smart merging of .scr, .loot, .def, .phx, .ppfx and more SCR syntax structure files, as well as .xml and .gui files. It's not limited to common player_variables.scr file merging. The syntax parser has been tested against the entire original data0.pak file to ensure no conflicts. In theory, any file with correct SCR syntax can be recognized and merged by this tool.**
 
-It should theoretically support Dying Light 2 mod merging as well, since Dying Light 2's directory structure is identical to The Beast. Dying Light 1 should also be supported as long as the SCR syntax is compatible, but for Dying Light 1, you'll need to manually specify the base mod location via command line.
+Dying Light 1 should also be supported in theory, but it hasn't been tested. You can manually specify the base mod location via command line parameters. Use the **-h** command line parameter to display the tool's supported command line options.
 
-### Bug Reports
+### Bug Reports & Feedback
 
 If you find any issues, please report them to me promptly and provide information about the mods you're trying to merge.
 
