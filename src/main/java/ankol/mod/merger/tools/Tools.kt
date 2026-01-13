@@ -57,7 +57,7 @@ object Tools {
         if (!mergedDirPath.exists()) {
             throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST"))
         }
-        mergedDirPath.walk().forEach { file: Path ->
+        mergedDirPath.walk(PathWalkOption.FOLLOW_LINKS).forEach { file: Path ->
             if (file.isRegularFile()) {
                 val filename = file.fileName.toString()
                 for (ext in extensions) {
