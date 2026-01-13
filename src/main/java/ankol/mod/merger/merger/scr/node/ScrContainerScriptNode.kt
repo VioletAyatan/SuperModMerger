@@ -27,4 +27,11 @@ class ScrContainerScriptNode(
     fun addChild(node: BaseTreeNode) {
         childrens[node.signature] = node
     }
+
+    override fun printTree(indent: String) {
+        super.printTree(indent)
+        for ((_, child) in childrens) {
+            child.printTree("$indent  ")
+        }
+    }
 }

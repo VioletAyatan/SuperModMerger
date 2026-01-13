@@ -28,5 +28,11 @@ class JsonArrayNode(
      */
     @Suppress("unused")
     fun getElements(): List<BaseTreeNode> = children
-}
 
+    override fun printTree(indent: String) {
+        super.printTree(indent)
+        for (child in children) {
+            child.printTree("$indent  ")
+        }
+    }
+}

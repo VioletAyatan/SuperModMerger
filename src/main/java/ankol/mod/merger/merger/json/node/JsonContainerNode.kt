@@ -20,4 +20,11 @@ class JsonContainerNode(
     fun addChildern(node: BaseTreeNode) {
         childerns[node.signature] = node
     }
+
+    override fun printTree(indent: String) {
+        super.printTree(indent)
+        for (child in childerns.values) {
+            child.printTree("$indent  ")
+        }
+    }
 }

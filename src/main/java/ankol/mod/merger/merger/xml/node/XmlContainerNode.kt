@@ -25,5 +25,11 @@ class XmlContainerNode(
     fun addChild(node: XmlNode) {
         childrens[node.signature] = node
     }
-}
 
+    override fun printTree(indent: String) {
+        super.printTree(indent)
+        for ((_, child) in childrens) {
+            child.printTree("$indent  ")
+        }
+    }
+}
