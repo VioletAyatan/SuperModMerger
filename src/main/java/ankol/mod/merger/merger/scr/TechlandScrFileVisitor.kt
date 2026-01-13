@@ -28,6 +28,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         private const val DIRECTIVE = "directive"
         private const val MACRO = "macro"
         private const val EXTERN = "extern"
+        private const val IF = "if"
+        private const val ELSE_IF = "elseif"
+        private const val ELSE = "else"
     }
 
     /**
@@ -270,14 +273,75 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     }
 
     /**
-     * 访问函数块内容
+     * 逻辑控制语句
+     */
+    override fun visitLogicControlDecl(ctx: LogicControlDeclContext): BaseTreeNode {
+        // 使用if条件表达式作为签名的一部分，确保唯一性
+        val conditionText = getFullText(ctx.expression()).replace("\\s+".toRegex(), "")
+        val signature = "$IF:$conditionText"
+
+        val ifNode = ScrContainerScriptNode(
+            signature,
+            getStartTokenIndex(ctx),
+            getStopTokenIndex(ctx),
+            ctx.start.line,
+            tokenStream
+        )
+
+        // 保存当前容器节点，处理完后恢复
+        val previousContainer = this.containerNode
+        this.containerNode = ifNode
+
+        // 处理if块内的语句
+        visitFunctionBlockContent(ifNode, ctx.functionBlock())
+
+        // 处理else if子句
+        for ((index, elseIfCtx) in ctx.elseIfClause().withIndex()) {
+            val elseIfCondition = getFullText(elseIfCtx.expression()).replace("\\s+".toRegex(), "")
+            val elseIfSignature = "$ELSE_IF:$elseIfCondition:$index" //else if 可能有多个，添加索引以区分
+
+            val elseIfNode = ScrContainerScriptNode(
+                elseIfSignature,
+                getStartTokenIndex(elseIfCtx),
+                getStopTokenIndex(elseIfCtx),
+                elseIfCtx.start.line,
+                tokenStream
+            )
+            this.containerNode = elseIfNode
+            visitFunctionBlockContent(elseIfNode, elseIfCtx.functionBlock())
+            ifNode.addChild(elseIfNode)
+        }
+
+        // 处理else子句
+        val elseCtx = ctx.elseClause()
+        if (elseCtx != null) {
+            val elseSignature = ELSE
+            val elseNode = ScrContainerScriptNode(
+                elseSignature,
+                getStartTokenIndex(elseCtx),
+                getStopTokenIndex(elseCtx),
+                elseCtx.start.line,
+                tokenStream
+            )
+            this.containerNode = elseNode
+            visitFunctionBlockContent(elseNode, elseCtx.functionBlock())
+            ifNode.addChild(elseNode)
+        }
+
+        // 恢复容器节点
+        this.containerNode = previousContainer
+
+        return ifNode
+    }
+
+    /**
+     * 处理函数块内容
      */
     private fun visitFunctionBlockContent(parent: ScrContainerScriptNode, ctx: FunctionBlockContext?) {
         if (ctx == null || ctx.statements() == null) {
             return
         }
         for (statement in ctx.statements()) {
-            // visit(stmt) 会调用 visitStatements，然后再分发到 visitFuntionCallDecl 等
             val child = visit(statement)
             if (child != null) {
                 parent.addChild(child)
@@ -318,4 +382,3 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         return valueList
     }
 }
-
