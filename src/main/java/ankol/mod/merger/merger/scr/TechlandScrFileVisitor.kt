@@ -276,29 +276,83 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 逻辑控制语句
      */
     override fun visitLogicControlDecl(ctx: LogicControlDeclContext): BaseTreeNode {
-        // 使用if条件表达式作为签名的一部分，确保唯一性
-        val conditionText = getFullText(ctx.expression()).replace("\\s+".toRegex(), "")
-        val signature = "$IF:$conditionText"
+        val previousContainer = this.containerNode
+
+        // 处理 if 语句 - 使用延迟唯一化策略（基于索引）
+        var ifSignature = IF
+        val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
+
+        // 检查是否已标记为可重复，如果是则需要计算索引
+        if (signatures.contains(IF)) {
+            // 已标记为可重复，计算当前是第几个 if
+            val children = containerNode!!.childrens
+            var ifIndex = 0
+            for (key in children.keys) {
+                if (key.startsWith("$IF:")) {
+                    ifIndex++
+                }
+            }
+            ifSignature = "$IF:$ifIndex"
+        } else {
+            val children: MutableMap<String, BaseTreeNode> = containerNode!!.childrens
+            // 发现重复的if语句，重新生成signature（使用索引）
+            if (children.containsKey(IF)) {
+                val existingIfNode = children[IF]!!
+                val existingIfSignature = "$IF:0" // 第一个 if 使用索引 0
+
+                // 更新已存在的节点签名
+                existingIfNode.signature = existingIfSignature
+                children.remove(IF)
+                children[existingIfSignature] = existingIfNode
+
+                signatures.add(IF) // 标记if为可重复语句
+                ifSignature = "$IF:1" // 当前这个是第二个，使用索引 1
+            }
+        }
+        repeatableFunctions[currentFunBlockSignature] = signatures
 
         val ifNode = ScrContainerScriptNode(
-            signature,
+            ifSignature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
             ctx.start.line,
             tokenStream
         )
 
-        // 保存当前容器节点，处理完后恢复
-        val previousContainer = this.containerNode
+        // 切换容器到 ifNode，处理 if 块内的语句
         this.containerNode = ifNode
-
-        // 处理if块内的语句
         visitFunctionBlockContent(ifNode, ctx.functionBlock())
 
-        // 处理else if子句
+        // 处理 else if 子句 - 作为 if 节点的子节点（也使用索引）
         for ((index, elseIfCtx) in ctx.elseIfClause().withIndex()) {
-            val elseIfCondition = getFullText(elseIfCtx.expression()).replace("\\s+".toRegex(), "")
-            val elseIfSignature = "$ELSE_IF:$elseIfCondition:$index" //else if 可能有多个，添加索引以区分
+            var elseIfSignature = ELSE_IF
+
+            // 对于 else if，也使用延迟唯一化（基于索引）
+            if (signatures.contains(ELSE_IF)) {
+                // 已标记为可重复，计算当前是第几个 else if
+                val children = ifNode.childrens
+                var elseIfIndex = 0
+                for (key in children.keys) {
+                    if (key.startsWith("$ELSE_IF:")) {
+                        elseIfIndex++
+                    }
+                }
+                elseIfSignature = "$ELSE_IF:$elseIfIndex"
+            } else if (index > 0) {
+                // 第二个及以后的 else if，触发延迟唯一化
+                val children = ifNode.childrens
+                if (children.containsKey(ELSE_IF)) {
+                    val existingElseIfNode = children[ELSE_IF]!!
+                    val existingElseIfSignature = "$ELSE_IF:0"
+
+                    existingElseIfNode.signature = existingElseIfSignature
+                    children.remove(ELSE_IF)
+                    children[existingElseIfSignature] = existingElseIfNode
+
+                    signatures.add(ELSE_IF)
+                    elseIfSignature = "$ELSE_IF:$index"
+                }
+            }
 
             val elseIfNode = ScrContainerScriptNode(
                 elseIfSignature,
@@ -307,30 +361,37 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
                 elseIfCtx.start.line,
                 tokenStream
             )
+
+            // 处理 else if 块内的语句
             this.containerNode = elseIfNode
             visitFunctionBlockContent(elseIfNode, elseIfCtx.functionBlock())
+
+            // 将 else if 节点添加为 if 节点的子节点
             ifNode.addChild(elseIfNode)
         }
+        repeatableFunctions[currentFunBlockSignature] = signatures
 
-        // 处理else子句
+        // 处理 else 子句 - 作为 if 节点的子节点，签名固定为 "else"
         val elseCtx = ctx.elseClause()
         if (elseCtx != null) {
-            val elseSignature = ELSE
             val elseNode = ScrContainerScriptNode(
-                elseSignature,
+                ELSE,
                 getStartTokenIndex(elseCtx),
                 getStopTokenIndex(elseCtx),
                 elseCtx.start.line,
                 tokenStream
             )
+
+            // 处理 else 块内的语句
             this.containerNode = elseNode
             visitFunctionBlockContent(elseNode, elseCtx.functionBlock())
+
+            // 将 else 节点添加为 if 节点的子节点
             ifNode.addChild(elseNode)
         }
-
         // 恢复容器节点
         this.containerNode = previousContainer
-
+        // 返回 if 节点
         return ifNode
     }
 
