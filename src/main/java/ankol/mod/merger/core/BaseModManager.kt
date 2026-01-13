@@ -54,6 +54,7 @@ class BaseModManager(
     //初始化逻辑
     init {
         try {
+            load()
             cacheDir.createDirectories()
         } catch (e: IOException) {
             ColorPrinter.warning("Failed to create base mod cache directory: " + e.message)
