@@ -103,6 +103,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         )
         this.containerNode = subNode
         // 注意：subDecl 包含 paramList 和 functionBlock
+        this.currentFunBlockSignature = signature
         visitFunctionBlockContent(subNode, ctx.functionBlock())
         return subNode
     }
@@ -278,7 +279,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     override fun visitLogicControlDecl(ctx: LogicControlDeclContext): BaseTreeNode {
         val previousContainer = this.containerNode
 
-        // 处理 if 语句 - 使用延迟唯一化策略（基于索引）
+        // 处理 if 语句
         var ifSignature = IF
         val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
 
