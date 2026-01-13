@@ -229,11 +229,11 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
 
         // 对比节点内容
-        if (modNode is ScrFunCallScriptNode && originalNode is ScrFunCallScriptNode) {
+        return if (modNode is ScrFunCallScriptNode && originalNode is ScrFunCallScriptNode) {
             // 函数调用节点，对比参数
-            return modNode.arguments == originalNode.arguments
+            modNode.arguments == originalNode.arguments
         } else {
-            return equalsTrimmed(modNode.sourceText, originalNode.sourceText)
+            equalsTrimmed(modNode.sourceText, originalNode.sourceText)
         }
     }
 
@@ -245,23 +245,29 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             else -> NodeType.OTHER
         }
 
+        var newContent: String
+
         // 选择合适的插入位置
         val insertPos = when (nodeType) {
             NodeType.IMPORT -> {
-                // import 语句应该插入到最前面（在第一个非import节点之前）
+                // import语句需要插入在文件最顶上
+                newContent = "\n${modNode.sourceText}"
                 findInsertPositionForImport(baseContainer)
             }
+
             NodeType.SUB -> {
-                // sub 函数应该插入到所有import之后，但在第一个非import、非sub节点之前
+                // sub 插入到import语句后，但在其他节点前
+                newContent = "${modNode.sourceText}\n"
                 findInsertPositionForSub(baseContainer)
             }
+
             NodeType.OTHER -> {
                 // 其他节点直接插在容器的 '}' 之前
+                newContent = "\n   ${modNode.sourceText}"
                 baseContainer.stopTokenIndex
             }
         }
 
-        val newContent = "\n    " + modNode.sourceText
         insertOperations.add(InsertOperation(insertPos, newContent, nodeType))
     }
 
@@ -295,7 +301,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             val isImport = node.signature.startsWith("import:")
 
             if (isSub || isImport) {
-                lastSubOrImportStopIndex = node.stopTokenIndex
+                lastSubOrImportStopIndex = node.startTokenIndex
             } else {
                 // 遇到第一个既不是import也不是sub的节点
                 return lastSubOrImportStopIndex?.let { it + 1 } ?: node.startTokenIndex
@@ -303,7 +309,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
 
         // 所有节点都是import或sub，返回容器结束位置
-        return lastSubOrImportStopIndex?.let { it + 1 } ?: container.stopTokenIndex
+        return lastSubOrImportStopIndex ?: container.stopTokenIndex
     }
 
     private fun parseFile(fileTree: AbstractFileTree): ParsedResult<ScrContainerScriptNode> {
