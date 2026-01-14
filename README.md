@@ -1,4 +1,4 @@
-# ModMergerTool
+# Super Mod Merger
 
 **[中文](README_CN.md) | English**
 
@@ -6,7 +6,7 @@
 
 ### 📋 Introduction
 
-**ModMergerTool** is an intelligent mod merging tool designed specifically for the Dying Light series, primarily for Dying Light: The Beast and Dying Light 2. It can merge multiple game mod files (.pak format) into a single file, using AST (Abstract Syntax Tree) analysis to achieve intelligent comparison and conflict resolution for script files.
+**Super Mod Merger** is an intelligent mod merging tool designed specifically for the Dying Light series, primarily for Dying Light: The Beast and Dying Light 2. It can merge multiple game mod files (.pak format) into a single file, using AST (Abstract Syntax Tree) analysis to achieve intelligent comparison and conflict resolution for script files.
 
 ### ✨ Key Features
 

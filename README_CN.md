@@ -1,4 +1,4 @@
-# ModMergerTool
+# Super Mod Merger
 
 **中文 | [English](README.md)**
 
@@ -6,7 +6,7 @@
 
 ### 📋 项目简介
 
-**ModMergerTool** 是一个专为消光系列（Dying Light）游戏设计的模组智能合并工具，目前主要是消光困兽和消光2。它能够将多个游戏模组文件（.pak
+**Super Mod Merger** 是一个专为消光系列（Dying Light）游戏设计的模组智能合并工具，目前主要是消光困兽和消光2。它能够将多个游戏模组文件（.pak
 格式）合并为单一文件，并通过 AST 语法树分析实现脚本文件的智能对比和冲突解决。
 
 ### ✨ 主要特性
