@@ -1,5 +1,6 @@
 package ankol.mod.merger.merger.xml.node
 
+import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.CommonTokenStream
 
 /**
@@ -16,13 +17,16 @@ class XmlContainerNode(
     tokenStream: CommonTokenStream,
     attributes: MutableMap<String, String>
 ) : XmlNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream, attributes) {
-
+    private val log = logger()
     val childrens: MutableMap<String, XmlNode> = LinkedHashMap()
 
     /**
      * 添加子节点
      */
     fun addChild(node: XmlNode) {
+        if (childrens.contains(node.signature)) {
+            log.warn("Repeatable siginature [${node.signature}] deteclted! Currently Node is ${node}.")
+        }
         childrens[node.signature] = node
     }
 

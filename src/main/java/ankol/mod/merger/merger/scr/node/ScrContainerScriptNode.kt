@@ -1,6 +1,7 @@
 package ankol.mod.merger.merger.scr.node
 
 import ankol.mod.merger.core.BaseTreeNode
+import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.TokenStream
 
 /**
@@ -16,6 +17,8 @@ class ScrContainerScriptNode(
     line: Int,
     tokenStream: TokenStream
 ) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
+    private val log = logger()
+
     /**
      * 子节点映射，key 是节点签名，value 是节点对象
      */
@@ -25,6 +28,9 @@ class ScrContainerScriptNode(
      * 添加子节点
      */
     fun addChild(node: BaseTreeNode) {
+        if (childrens.contains(node.signature)) {
+            log.warn("Repeatable siginature [${node.signature}] deteclted! Currently Node is ${node}.")
+        }
         childrens[node.signature] = node
     }
 
