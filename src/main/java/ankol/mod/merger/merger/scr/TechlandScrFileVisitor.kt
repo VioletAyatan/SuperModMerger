@@ -76,7 +76,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     override fun visitExportDecl(ctx: ExportDeclContext): BaseTreeNode {
         // Export 签名示例: "export:EJumpMaintainedSpeedSource_MoveController"
         // 这样 Mod 修改同一个变量时，能通过签名找到并覆盖它
-        val name = ctx.Id().getText()
+        val name = ctx.Id().text
         val signature = "$EXPORT:$name"
         return ScrLeafScriptNode(
             signature,
