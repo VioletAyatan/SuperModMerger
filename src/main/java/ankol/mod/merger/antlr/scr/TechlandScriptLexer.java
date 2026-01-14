@@ -79,6 +79,17 @@ public class TechlandScriptLexer extends Lexer {
 		};
 	}
 
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf",
+			"KwElse", "LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma",
+			"Equals", "LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus",
+			"Mul", "Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
+			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "Bool", "Id", "MacroId",
+			"Number", "String", "LineComment", "BlockComment", "WhiteSpaces"
+		};
+	}
+
 	@Override
 	@Deprecated
 	public String[] getTokenNames() {
@@ -89,17 +100,6 @@ public class TechlandScriptLexer extends Lexer {
 
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
-	}
-
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, "Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf",
-			"KwElse", "LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma",
-			"Equals", "LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus",
-			"Mul", "Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
-			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "Bool", "Id", "MacroId",
-			"Number", "String", "LineComment", "BlockComment", "WhiteSpaces"
-		};
 	}
 
 	@Override

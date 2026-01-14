@@ -10,13 +10,13 @@ definition
     : importDecl
     | exportDecl
     | externDecl
-    | subDecl
     | directiveCall
     | macroDecl
+    | subDecl
     | variableDecl
-    | funtionCallDecl
+    | funtionBlockDecl       // 函数块声明必须在函数调用之前，否则会被错误匹配
     | methodReferenceFunCallDecl
-    | funtionBlockDecl
+    | funtionCallDecl
     ;
 //导入导出声明
 importDecl
@@ -65,14 +65,14 @@ functionBlock
     ;
 
 statements
-    : funtionCallDecl
-    | methodReferenceFunCallDecl
-    | funtionBlockDecl
+    : logicControlDecl
     | useDecl
+    | funtionBlockDecl       // 函数块声明必须在函数调用之前
+    | methodReferenceFunCallDecl
     | variableDecl
     | externDecl
-    | logicControlDecl
     | macroDecl
+    | funtionCallDecl
     ;
 
 // 变量声明 (带类型, 例如: float health_critical = ...;)
