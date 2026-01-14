@@ -226,7 +226,7 @@ class FileMergerEngine(
                         targetPath.writeText(mergedContent)
 
                         this.mergedCount++
-                        ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS"))
+                        ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS", context.fileName))
                         return
                     }
                 }
@@ -321,7 +321,7 @@ class FileMergerEngine(
             targetPath.writeText(baseMergedContent)
 
             this.mergedCount++
-            ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS"))
+            ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS", context.fileName))
         } catch (e: Exception) {
             ColorPrinter.error(Localizations.t("ENGINE_MERGE_FAILED", e.message))
             log.error("Failed to merge file '{}': {}", relPath, e.message)

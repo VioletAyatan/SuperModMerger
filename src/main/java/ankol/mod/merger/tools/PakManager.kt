@@ -20,6 +20,7 @@ import java.security.MessageDigest
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
+import kotlin.io.path.isRegularFile
 
 /**
  * .pak文件管理工具
@@ -245,7 +246,7 @@ object PakManager {
         ZipArchiveOutputStream(pakPath.toFile()).use { zipOut ->
             Files.walk(sourceDir).use { pathStream ->
                 pathStream
-                    .filter { Files.isRegularFile(it) }
+                    .filter { it.isRegularFile() }
                     .forEach { file: Path ->
                         try {
                             // 计算相对路径，使用正斜杠作为路径分隔符（ZIP 标准）
