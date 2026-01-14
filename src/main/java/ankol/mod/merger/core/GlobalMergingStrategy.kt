@@ -22,7 +22,7 @@ object GlobalMergingStrategy {
     /**
      * 询问用户是否智能合并代码项
      */
-    fun askAutoMergingCode() {
+    fun askCodeMergingStrategy() {
         ColorPrinter.print("=".repeat(75))
         ColorPrinter.bold(Localizations.t("GLOBAL_STRATEGY_TITLE"))
         ColorPrinter.success(Localizations.t("GLOBAL_STRATEGY_OPTION_1"))
