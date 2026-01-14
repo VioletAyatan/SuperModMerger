@@ -32,10 +32,16 @@ class FileMergerEngine(
     private val argParser: SimpleArgParser
 ) {
     private val log = logger()
-    private val tempDir = Path(Tools.tempDir, "ModMerger_" + System.currentTimeMillis())
 
-    // 基准MOD相关
-    private val baseModManager: BaseModManager = BaseModManager(baseModPath)
+    /**
+     * 运行时临时文件存储目录
+     */
+    private val tempDir = Path(Tools.tempDir, "SuperModMergerTemp")
+
+    /**
+     * 基准MOD管理器
+     */
+    private val baseModManager: BaseModManager = BaseModManager(tempDir, baseModPath)
 
     // 统计信息
     private var mergedCount = 0 // 成功合并（无冲突）的文件数
@@ -58,6 +64,7 @@ class FileMergerEngine(
         }
         //开始合并
         try {
+            Tools.deleteRecursively(tempDir) //先清理掉旧的目录
             // 在提取过程中对每个mod分别进行路径修正
             val filesByPath = extractAllMods()
             // 输出目录（临时）

@@ -14,17 +14,16 @@ import java.security.DigestInputStream
 import java.security.MessageDigest
 import java.util.*
 import java.util.function.Function
-import kotlin.io.path.Path
 import kotlin.io.path.createDirectories
 
 /**
  * 基准MOD管理器
  * 负责基准MOD相关操作
  *
- * @param baseModPath 基准MOD文件路径
  * @author Ankol
  */
 class BaseModManager(
+    tempDir: Path,
     private val baseModPath: Path
 ) {
     /**
@@ -42,7 +41,7 @@ class BaseModManager(
     /**
      * 临时文件缓存目录
      */
-    private val cacheDir: Path = Path(Tools.tempDir, "BaseModCache_" + System.currentTimeMillis())
+    private val cacheDir: Path = tempDir.resolve("BaseModCache_" + System.currentTimeMillis())
 
     private val baseTreeCache = HashMap<String, ParsedResult<*>?>()
 

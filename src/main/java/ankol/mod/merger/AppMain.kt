@@ -45,7 +45,7 @@ class AppMain {
                 // 定位基准MOD的位置
                 val baseModPath = locateBaseModPath(argParser)
                 //询问自动合并代码策略
-                GlobalMergingStrategy.askAutoMergingCode()
+                GlobalMergingStrategy.askCodeMergingStrategy()
                 // 执行合并
                 val start = System.currentTimeMillis()
                 FileMergerEngine(modsToMerge, outputPath, baseModPath, argParser).merge()
