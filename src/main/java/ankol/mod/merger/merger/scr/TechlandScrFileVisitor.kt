@@ -140,11 +140,12 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 函数调用
      */
     override fun visitFuntionCallDecl(ctx: FuntionCallDeclContext): BaseTreeNode {
+        //生成签名
         val funcName = ctx.Id().text
         val valueList = getValueList(ctx.valueList())
         val argsList = valueList.map { it.text }
-        //提取函数签名，对于特殊的重复函数需要特殊处理
         var signature = "$FUN_CALL:$funcName"
+        //检测重复签名的处理逻辑
         val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
         if (signatures.contains(signature) && argsList.isNotEmpty()) {
             signature = signature + ":" + argsList.first()
@@ -152,17 +153,17 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             val children: MutableMap<String, BaseTreeNode> = containerNode!!.childrens
             //发现重复的函数调用，重新生成signature
             if (children.containsKey(signature)) {
-                val funCallNode = children[signature] as ScrFunCallScriptNode
-                val newSignature = if (funCallNode.arguments.isNotEmpty()) {
-                    funCallNode.signature + ":" + funCallNode.arguments.first()
+                val lastNode = children[signature] as ScrFunCallScriptNode
+                val lastNewSignature = if (lastNode.arguments.isNotEmpty()) {
+                    lastNode.signature + ":" + lastNode.arguments.first()
                 } else {
-                    funCallNode.signature
+                    lastNode.signature
                 }
-                funCallNode.signature = newSignature
+                lastNode.signature = lastNewSignature
                 children.remove(signature)
-                children[newSignature] = funCallNode
+                children[lastNewSignature] = lastNode
                 signatures.add("$FUN_CALL:$funcName") //标记这个函数为可重复函数，后续生成签名时需要特殊处理
-                signature = newSignature
+                signature = "${signature}:${argsList.first()}" //当前处理的签名也要重新生成
             }
         }
         repeatableFunctions[currentFunBlockSignature] = signatures
