@@ -191,7 +191,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
 
         // 检测被MOD删除的节点（base有，但mod没有）
-        detectRemovedNodes(originalContainer, baseContainer, modContainer)
+//        detectRemovedNodes(originalContainer, baseContainer, modContainer)
     }
 
     /**
