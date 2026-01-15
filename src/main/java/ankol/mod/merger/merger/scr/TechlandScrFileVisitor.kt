@@ -300,14 +300,14 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * use语句
      */
     override fun visitUseDecl(ctx: UseDeclContext): BaseTreeNode {
-        // use 语句，例如: use Input();
-        // use 语句通常是可以重复的（追加模式），所以把参数也放进签名里
         val name = ctx.Id().text
-        val params = if (ctx.valueList() != null) getFullText(ctx.valueList()) else ""
-        val cleanParams = params.replace("\\s+".toRegex(), "")
+        val signature = "$USE:$name"
+        if (ctx.valueList() != null) {
+            signature + ":${getFullText(ctx.valueList()).replace("\\s+", "")}"
+        }
 
         return ScrLeafScriptNode(
-            "$USE:$name:$cleanParams",
+            signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
             ctx.start.line,
