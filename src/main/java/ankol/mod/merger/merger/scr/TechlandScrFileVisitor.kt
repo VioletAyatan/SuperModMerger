@@ -112,6 +112,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 函数块声明
      */
     override fun visitFuntionBlockDecl(ctx: FuntionBlockDeclContext): BaseTreeNode {
+        val previousContainer = this.containerNode //这是标记上一层的容器，以便恢复
+
         val funcName = ctx.Id().text
         val rawParams = if (ctx.valueList() != null) getFullText(ctx.valueList()) else ""
         var signature = "$FUN_BLOCK:$funcName"
@@ -119,17 +121,19 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         if (!cleanParams.isEmpty()) {
             signature += ":$cleanParams"
         }
-        val blockNode = ScrContainerScriptNode(
+        val funBlockContainer = ScrContainerScriptNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
             ctx.start.line,
             tokenStream
         )
-        this.containerNode = blockNode
+        this.containerNode = funBlockContainer
         this.currentFunBlockSignature = signature
-        visitFunctionBlockContent(blockNode, ctx.functionBlock())
-        return blockNode
+        visitFunctionBlockContent(funBlockContainer, ctx.functionBlock())
+
+        this.containerNode = previousContainer //恢复容器节点
+        return funBlockContainer
     }
 
     /**
