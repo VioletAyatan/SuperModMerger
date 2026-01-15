@@ -147,24 +147,24 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         var signature = "$FUN_CALL:$funcName"
         //检测重复签名的处理逻辑
         val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
-        if (signatures.contains(signature) && argsList.isNotEmpty()) {
-            signature = signature + ":" + argsList.first()
-        } else {
-            val children: MutableMap<String, BaseTreeNode> = containerNode!!.childrens
-            //发现重复的函数调用，重新生成signature
-            if (children.containsKey(signature)) {
-                val lastNode = children[signature] as ScrFunCallScriptNode
-                val lastNewSignature = if (lastNode.arguments.isNotEmpty()) {
-                    lastNode.signature + ":" + lastNode.arguments.first()
-                } else {
-                    lastNode.signature
-                }
-                lastNode.signature = lastNewSignature
-                children.remove(signature)
-                children[lastNewSignature] = lastNode
-                signatures.add("$FUN_CALL:$funcName") //标记这个函数为可重复函数，后续生成签名时需要特殊处理
-                signature = "${signature}:${argsList.first()}" //当前处理的签名也要重新生成
-            }
+        val children: MutableMap<String, BaseTreeNode> = containerNode!!.childrens
+
+        if (signatures.contains(signature)) {
+            // 已标记为可重复函数，根据参数数量采用不同策略
+            signature = generateSignatureForRepeatableFunction(signature, argsList)
+        } else if (children.containsKey(signature)) {
+            // 发现重复的函数调用，需要开始特殊处理
+            val lastNode = children[signature] as ScrFunCallScriptNode
+            signatures.add("$FUN_CALL:$funcName") //标记这个函数为可重复函数
+
+            // 重新生成已存在节点的签名
+            val lastNewSignature = generateSignatureForRepeatableFunction(signature, lastNode.arguments)
+            lastNode.signature = lastNewSignature
+            children.remove(signature)
+            children[lastNewSignature] = lastNode
+
+            // 当前处理的签名也要重新生成
+            signature = generateSignatureForRepeatableFunction(signature, argsList)
         }
         repeatableFunctions[currentFunBlockSignature] = signatures
         return ScrFunCallScriptNode(
@@ -175,6 +175,43 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             tokenStream,
             argsList
         )
+    }
+
+    /**
+     * 为可重复函数生成签名
+     * 规则：
+     * 1. 参数数量 <= 1：使用索引标记 (funCall:funcName:0, funCall:funcName:1, ...)
+     * 2. 参数数量 > 1：先用第一个参数加入签名 (funCall:funcName:param1)
+     *    如果仍有重复，则追加索引标记 (funCall:funcName:param1:0, funCall:funcName:param1:1, ...)
+     */
+    private fun generateSignatureForRepeatableFunction(baseSignature: String, argsList: List<String>): String {
+        if (argsList.size <= 1) {
+            // 参数数量 <= 1，直接使用索引
+            val children = containerNode!!.childrens
+            var index = 0
+            for (key in children.keys) {
+                if (key.startsWith("$baseSignature:") && key.removePrefix("$baseSignature:").all { it.isDigit() }) {
+                    index++
+                }
+            }
+            return "$baseSignature:$index"
+        } else {
+            // 参数数量 > 1，先用第一个参数加入签名
+            val signatureWithParam = "$baseSignature:${argsList.first()}"
+            val children = containerNode!!.childrens
+
+            if (children.containsKey(signatureWithParam)) {
+                // 仍然有重复，需要追加索引
+                var index = 0
+                for (key in children.keys) {
+                    if (key.startsWith("$signatureWithParam:") && key.removePrefix("$signatureWithParam:").all { it.isDigit() }) {
+                        index++
+                    }
+                }
+                return "$signatureWithParam:$index"
+            }
+            return signatureWithParam
+        }
     }
 
     /**
