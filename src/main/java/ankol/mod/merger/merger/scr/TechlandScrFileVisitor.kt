@@ -122,6 +122,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             signature += ":${getFullText(ctx.valueList())}"
         }
 
+        this.currentFunBlockSignature = signature
         signature = generateFunctionBlockSignature(signature)
         val funBlockContainer = ScrContainerScriptNode(
             signature,
@@ -131,7 +132,6 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             tokenStream
         )
         this.containerNode = funBlockContainer
-        this.currentFunBlockSignature = signature
         visitFunctionBlockContent(funBlockContainer, ctx.functionBlock())
 
         this.containerNode = previousContainer //恢复容器节点
