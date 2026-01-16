@@ -236,8 +236,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 变量声明
      */
     override fun visitVariableDecl(ctx: VariableDeclContext): BaseTreeNode {
-        // 签名示例: "variable:flot:val"
-        val signature = "${VARIABLE}:${ctx.type().text}:${ctx.Id().text}"
+        val signature = generateFunctionBlockSignature("${VARIABLE}:${ctx.type().text}:${ctx.Id().text}")
         return ScrLeafScriptNode(
             signature,
             getStartTokenIndex(ctx),
@@ -251,7 +250,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * extern声明
      */
     override fun visitExternDecl(ctx: ExternDeclContext): BaseTreeNode {
-        val signature = "${EXTERN}:${ctx.type().text}:${ctx.Id().text}"
+        val signature = generateFunctionBlockSignature("${EXTERN}:${ctx.type().text}:${ctx.Id().text}")
         return ScrLeafScriptNode(
             signature,
             getStartTokenIndex(ctx),
