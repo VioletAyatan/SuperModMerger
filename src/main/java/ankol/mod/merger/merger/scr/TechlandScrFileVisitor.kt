@@ -93,39 +93,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     override fun visitSubDecl(ctx: SubDeclContext): BaseTreeNode {
         val previousContainer = this.containerNode //这是标记上一层的容器，以便恢复
 
-        var signature = "$SUB_FUN:${ctx.Id().text}"
-        val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
-        val children = containerNode!!.childrens
-        //这个签名已被标记为重复的
-        if (signatures.contains(signature)) {
-            var index = 0
-            for (key in children.keys) {
-                //先提取出sub:xxx:1中的索引1，然后+1生成当前自己的索引
-                //1 确保 key 属于这个基础签名族（如都是 sub:imports: 开头）
-                //2 移除前缀，提取冒号后面的部分（如 "0"、"1"、"123"）
-                //3 验证提取的部分全是数字，排除掉 sub:imports:abc 这样的非标准索引化签名
-                if (key.startsWith("$signature:") && key.removePrefix("$signature:").all { it.isDigit() }) {
-                    index++
-                }
-            }
-            signature = "$signature:$index"
-        }
-        // 发现重复的sub函数，需要开始特殊处理
-        else if (children.containsKey(signature)) {
-            val lastNode = children[signature]!!
-            signatures.add(signature) //标记这个sub为可重复函数
-
-            // 重新生成已存在节点的签名
-            val lastNewSignature = "$signature:0"
-            lastNode.signature = lastNewSignature
-            children.remove(signature)
-            children[lastNewSignature] = lastNode
-
-            // 当前处理的签名也要重新生成
-            signature = "$signature:1"
-        }
-        repeatableFunctions[currentFunBlockSignature] = signatures
-
+        val signature = generateFunctionBlockSignature("$SUB_FUN:${ctx.Id().text}")
         val subNode = ScrContainerScriptNode(
             signature,
             getStartTokenIndex(ctx),
@@ -155,6 +123,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         if (!cleanParams.isEmpty()) {
             signature += ":$cleanParams"
         }
+
+        signature = generateFunctionBlockSignature(signature)
         val funBlockContainer = ScrContainerScriptNode(
             signature,
             getStartTokenIndex(ctx),
@@ -433,6 +403,41 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         this.containerNode = previousContainer
         // 返回 if 节点
         return ifNode
+    }
+
+    /**
+     * 为函数块生成为唯一签名（使用subDecl、funBloackDecl）
+     * 使用ID+参数+索引作为唯一签名
+     * @return 签名
+     */
+    private fun generateFunctionBlockSignature(baseSignature: String): String {
+        var _signature = baseSignature
+        val repeatebleSignatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
+        val childrens = containerNode!!.childrens
+        if (repeatebleSignatures.contains(_signature)) {
+            var index = 0
+            for (key in childrens.keys) {
+                //先提取出sub:xxx:1中的索引1，然后+1生成当前自己的索引
+                //1 确保 key 属于这个基础签名族（如都是 sub:imports: 开头）
+                //2 移除前缀，提取冒号后面的部分（如 "0"、"1"、"123"）
+                //3 验证提取的部分全是数字，排除掉 sub:imports:abc 这样的非标准索引化签名
+                if (key.startsWith("$_signature:") && key.removePrefix("$_signature:").all { it.isDigit() }) {
+                    index++
+                }
+            }
+            _signature = "$_signature:$index"
+        } else if (childrens.containsKey(_signature)) {
+            val lastNode = childrens[_signature]!!
+            repeatebleSignatures.add(_signature) //标记这个sub为可重复函数
+            // 重新生成已存在节点的签名
+            val lastNewSignature = "$_signature:0"
+            lastNode.signature = lastNewSignature
+            childrens.remove(_signature)
+            childrens[lastNewSignature] = lastNode
+            // 当前处理的签名也要重新生成
+            _signature = "$_signature:1"
+        }
+        return _signature
     }
 
     /**
