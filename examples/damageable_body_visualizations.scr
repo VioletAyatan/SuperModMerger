@@ -1,0 +1,3592 @@
+import "damageable_body_visualizations.def"
+
+sub DefaultGibPhysicsImpulse()
+{
+    PhysicsImpulse("AllPhysicsBodies")
+    {
+        ImpactDirectionMaxDeviation(10.0);
+        ImpactVelocityMultiplierMinMax(2.0, 3.0);
+        AdditionalVerticalVelocityMinMax(0.5, 1.0);
+        WorldTorqueMinMax([2.0, 3.0, 2.0], [10.0, 10.0, 10.0]);
+    }
+}
+
+bool g_CutGibCollisionsWithMainBodyEnabled = false;
+bool g_FullBodyCutGibCollisionsWithMainBodyEnabled = true;
+
+// Supported model properties: Class, ClassVariant, DamageEllipsoidSize, DamageSize, Race, Sex
+
+sub main()
+{
+	//
+	/////////////////////////////////////////////////////////////////////////// M A S K S  B O D Y
+    BodyBloodMask("blood_mask_default")
+    {
+        MinValue(0);
+        MaxValue(255);
+        ThresholdValue(128);
+
+        BodyHitsCountThreshold(12);
+        HealthLossThreshold(0.75);
+    }
+    BodyBurningMask("burning_mask_default")
+    {
+        MinValue(0);
+        MaxValue(198);
+    }
+    //
+	/////////////////////////////////////////////////////////////////////////// CUTS - HEAD
+    BoneCut("head_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_neck_a");
+
+        HideEllipsoid("man", 0.72798210, -0.07095881, -0.02882780, -0.00000001, -0.20738877, 0.51048124, -0.17798012, -1.56726336, -0.63671839, 0.06100000, -0.03700005, 2.09400010);
+		HideEllipsoid("man_skinny_biter", 0.72798210, -0.07095881, -0.02882780, -0.00000001, -0.20738877, 0.51048124, -0.17798012, -1.56726336, -0.63671839, 0.06100000, -0.03700005, 2.09400010);
+		HideEllipsoid("man_XL_biter", 0.72798210, -0.07095881, -0.02882780, -0.00000001, -0.20738877, 0.51048124, -0.17798012, -1.56726336, -0.63671839, 0.06100000, -0.03700005, 2.09400010);
+        HideEllipsoid("woman", 0.24599996, 0.00000000, 0.00000000, 0.00000000, -0.10476122, 0.38189137, 0.00000000, -0.28931168, -0.07936457, -0.00070000, -0.09369999, 1.86299992);
+		HideEllipsoid("suicider", 0.34012273, -0.00976500, 0.03442623, -0.00000001, 0.38578078, 0.10942679, -0.05388581, -0.13976425, 0.49273452, -0.04400001, -0.17199995, 1.98399985);
+        HideEllipsoid("spitter", 0.21580887, -0.02158099, -0.00705625, -0.00000001, -0.17123765, 0.52371645, -0.17798014, -1.60789752, -0.52572834, 0.00600000, -0.03700002, 2.07399964);
+        HideEllipsoid("screamer", 0.62000000, 0.00000000, 0.00000000, 0.00000000, 0.09717534, -0.16210476, 0.00000000, 0.32077876, 0.19229406, 0.01100000, -0.15200001, 1.65399992);
+        HideEllipsoid("volatile", 0.77700001, 0.00000000, 0.00000000, 0.00000000, 0.14718203, -0.15809323, 0.00000000, 1.27426052, 1.18631458, 0.01100000, 0.75299996, 2.45400023);
+        HideEllipsoid("banshee", 0.58099997, 0.00000000, 0.00000000, 0.00000000, -0.11269771, 0.41082266, 0.00000000, -0.39057085, -0.10714220, -0.00070000, -0.09369978, 1.71300006);
+        HideEllipsoid("bolter", 1.22623217, -0.09567855, -0.08654323, -0.00000001, -0.36291105, 0.40121895, -0.18164225, -1.28039324, -1.15814292, 0.24100000, 0.01799995, 2.25400019);
+        HideEllipsoid("corruptor", 0.28045210, -0.02733660, -0.01110579, -0.00000001, -0.20738876, 0.51048136, -0.17798014, -1.56726348, -0.63671827, 0.01600000, -0.03699999, 2.30900025);
+        HideEllipsoid("demolisher", 0.25169247, 0.01218051, 0.00255785, -0.01732746, 0.27086791, 0.41514614, 0.00977566, -0.23416996, 0.15319550, 0.02100001, -0.27700007, 1.76400018);
+        HideEllipsoid("goon", 0.22617501, 0.01286300, -0.03347258, 0.00000000, 0.25669849, 0.09864528, 0.11180500, -0.25295952, 0.65826076, 0.08400005, -0.22700006, 2.22499990);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            Mesh("chr_dmg_cut_patch_head_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            ShowEllipsoid("man", 0.72798204, -0.07095882, -0.02882780, -0.00000001, -0.20738876, 0.51048130, -0.17798014, -1.56726325, -0.63671821, 0.06100000, -0.03700003, 2.13899970);
+			ShowEllipsoid("man_skinny_biter", 0.72798204, -0.07095882, -0.02882780, -0.00000001, -0.20738876, 0.51048130, -0.17798014, -1.56726325, -0.63671821, 0.06100000, -0.03700003, 2.13899970);
+			ShowEllipsoid("man_XL_biter", 0.72798204, -0.07095882, -0.02882780, -0.00000001, -0.20738876, 0.51048130, -0.17798014, -1.56726325, -0.63671821, 0.06100000, -0.03700003, 2.13899970);
+            ShowEllipsoid("woman", 0.72798204, -0.07095882, -0.02882780, -0.00000001, -0.20738876, 0.51048130, -0.17798014, -1.56726325, -0.63671821, 0.06100000, -0.03700003, 2.13899970);
+			ShowEllipsoid("suicider", 0.72798204, -0.07095883, -0.02882780, -0.00000001, -0.20738876, 0.51048130, -0.17798018, -1.56726325, -0.63671821, 0.06100000, -0.03699997, 2.15899992);
+            ShowEllipsoid("spitter", 0.72798204, -0.07095882, -0.02882780, -0.00000001, -0.20738876, 0.51048130, -0.17798014, -1.56726325, -0.63671821, 0.06100000, -0.03700003, 2.13899970);
+            ShowEllipsoid("screamer", 0.17399998, 0.00000000, 0.00000000, 0.00000000, 0.46341833, 0.25718370, 0.00000000, -0.12859184, 0.23170914, -0.00400000, -0.03700000, 1.81400001);
+            ShowEllipsoid("volatile", 0.72798204, -0.07095882, -0.02882780, -0.00000001, -0.20738876, 0.51048130, -0.17798014, -1.56726325, -0.63671821, 0.06100000, -0.03700003, 2.13899970);
+            ShowEllipsoid("banshee", 0.72798204, -0.07095883, -0.02882780, -0.00000001, -0.20738876, 0.51048130, -0.17798018, -1.56726325, -0.63671821, 0.06100000, -0.03699996, 1.91899979);
+            ShowEllipsoid("bolter", 0.72798204, -0.07095883, -0.02882780, -0.00000001, -0.20738876, 0.51048130, -0.17798018, -1.56726325, -0.63671821, 0.06100000, -0.03699997, 2.17899990);
+            ShowEllipsoid("corruptor", 0.25038734, -0.01545817, -0.00825944, -0.00000001, -0.25495073, 0.47715950, -0.11912338, -1.50101149, -0.80200422, 0.01600001, -0.03699998, 2.34400010);
+            ShowEllipsoid("demolisher", 0.27050692, -0.02636721, -0.01071197, -0.00000001, -0.19986093, 0.49195194, -0.04289939, -0.37776476, -0.15347114, -0.00399998, -0.40199995, 1.98399997);
+            ShowEllipsoid("goon", 0.21499999, 0.00000000, 0.00000000, 0.00000000, 0.06021571, -0.49636093, 0.00000000, 1.62508500, 0.19714618, 0.02700000, -0.03699991, 2.13000011);
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                Mesh("chr_dmg_cut_patch_head_a_gib.msh", "Default");
+            }
+
+            BloodEffectName("flying_head_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            PhysicsImpulse("AllPhysicsBodies")
+            {
+                ImpactDirectionMaxDeviation(5.0);
+                ImpactVelocityMultiplierMinMax(2.0, 3.0);
+                AdditionalVerticalVelocityMinMax(2.0, 2.0);
+                WorldTorqueMinMax([10.0, 10.0, 10.0], [13.0, 13.0, 13.0]);
+            }
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("spine3");
+            PhysicsSfxSkeletonNameSuffix("_head");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    //
+	/////////////////////////////////////////////////////////////////////////// D E S T R U C T I O N   -   H E A D
+	BoneDestruction("head_destruction")
+    {
+        MeshHelperElementName("patch_elem_head_destruction");
+
+        HideEllipsoid("man", 0.32595029, 0.00549845, 0.00148391, 0.00000000, -0.14747427, 0.54644966, 0.01048191, -0.57918698, -0.15630937, 0.00100000, -0.11199996, 2.05400014);
+		HideEllipsoid("man_skinny_biter", 0.57591200, 0.00971505, 0.00262187, 0.00000000, -0.14747426, 0.54644960, 0.01126805, -0.62262595, -0.16803254, 0.00100000, -0.11199997, 2.02899981);
+		HideEllipsoid("man_XL_biter", 0.26096019, -0.00455963, 0.00000000, 0.00988794, 0.56591356, 0.00000000, 0.00000000, 0.00000000, 0.64500022, 0.01600000, -0.27200001, 2.10800004);
+        HideEllipsoid("woman", 0.30700001, 0.00000000, 0.00000000, 0.00000000, -0.10211576, 0.37224770, 0.00000000, -0.27484611, -0.07539635, 0.02900000, -0.06399998, 1.88299990);
+        HideEllipsoid("screamer", 0.62000000, 0.00000000, 0.00000000, 0.00000000, 0.09717534, -0.16210476, 0.00000000, 0.32077876, 0.19229406, 0.01100000, -0.15200001, 1.65399992);
+        HideEllipsoid("corruptor", 0.28045210, -0.02733660, -0.01110579, -0.00000002, -0.20738879, 0.51048148, -0.17798015, -1.56726372, -0.63671827, 0.01600002, -0.03699996, 2.27900028);
+		HideEllipsoid("goon", 0.19157755, 0.01279182, -0.02775645, 0.01065661, 0.52262223, 0.31440815, 0.12196469, -0.39844808, 0.65818286, 0.10400005, -0.43700019, 2.17499995);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+			
+            //class corruptor
+			VariantsGroup()
+            {   
+                RequiredProperty("class", "corruptor");
+
+                Mesh("chr_dmg_head_destroyed_d.msh", "Infected");
+            }
+            //class screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+
+                Mesh("chr_dmg_head_destroyed_d.msh", "Infected");
+            }
+			//class goon
+			VariantsGroup()
+            {
+                RequiredProperty("class", "goon");
+
+                Mesh("chr_dmg_head_destroyed_d.msh", "Infected");
+            }
+			//race african
+			VariantsGroup()
+            {
+                RequiredProperty("race", "african");
+
+                Mesh("chr_dmg_head_destroyed_a.msh", "African");
+                Mesh("chr_dmg_head_destroyed_b.msh", "African");
+                Mesh("chr_dmg_head_destroyed_c.msh", "African");
+                Mesh("chr_dmg_head_destroyed_d.msh", "African");
+				Mesh("chr_dmg_head_destroyed_f.msh", "African");
+				Mesh("chr_dmg_head_destroyed_e.msh", "African");
+            }
+            //class biter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "biter");
+
+                Mesh("chr_dmg_head_destroyed_b.msh", "Infected");
+                Mesh("chr_dmg_head_destroyed_c.msh", "Infected");
+                Mesh("chr_dmg_head_destroyed_d.msh", "Infected");
+				Mesh("chr_dmg_head_destroyed_f.msh", "Infected");
+				Mesh("chr_dmg_head_destroyed_e.msh", "Infected");
+            }
+            //class viral
+			VariantsGroup()
+            {
+                RequiredProperty("class", "viral");
+
+                Mesh("chr_dmg_head_destroyed_c.msh", "Default");
+                Mesh("chr_dmg_head_destroyed_b.msh", "Default");
+                Mesh("chr_dmg_head_destroyed_d.msh", "Default");
+				Mesh("chr_dmg_head_destroyed_e.msh", "Default");
+				Mesh("chr_dmg_head_destroyed_f.msh", "Default");
+            }
+            
+
+            Mesh("chr_dmg_head_destroyed_a.msh", "Default");
+            Mesh("chr_dmg_head_destroyed_b.msh", "Default");
+            Mesh("chr_dmg_head_destroyed_c.msh", "Default");
+            Mesh("chr_dmg_head_destroyed_d.msh", "Default");
+			Mesh("chr_dmg_head_destroyed_f.msh", "Default");
+			Mesh("chr_dmg_head_destroyed_e.msh", "Default");
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+	BoneDestruction("head_destruction_skinned")
+    {
+        MeshHelperElementName("patch_elem_head_destruction");
+
+		HideEllipsoid("suicider", 0.21096779, 0.00355881, 0.00096044, 0.00000000, -0.07191327, 0.26646665, 0.00663854, -0.36681843, -0.09899593, 0.13600001, -0.11700000, 1.81899989);
+		HideEllipsoid("freak_toxin", 0.16111077, -0.01016771, -0.01356233, -0.00000001, -0.28084016, 0.21054657, -0.03766775, -0.21475984, -0.28646010, 0.00100003, -0.16699994, 2.03399992);
+		HideEllipsoid("banshee", 0.05081723, -0.00743101, 0.13560005, 0.12833522, 0.03982650, -0.04591215, -0.09976093, 0.38914868, 0.05871193, 0.14299986, -0.22999999, 1.51299977);
+		HideEllipsoid("bolter", 0.32595038, 0.00549845, 0.00148391, -0.00000001, -0.14747432, 0.54644978, 0.01048191, -0.57918715, -0.15630938, 0.00100000, -0.11199985, 2.19899964);
+		HideEllipsoid("volatile", 0.17725331, 0.08962963, 0.25850323, -0.47499409, 0.09475563, 0.29284486, 0.00570012, -0.56806517, 0.19305408, -0.33399981, -0.15200001, 2.11899996);
+
+
+		BodyPatch("Skinned")
+        {
+			//volatile
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_hologram");
+
+                Mesh("chr_dmg_head_destroyed_volatile_freak.msh");
+            }
+			//volatile
+			VariantsGroup()
+            {
+                RequiredProperty("class", "volatile");
+
+                Mesh("chr_dmg_head_destroyed_volatile.msh");
+            }
+			//bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_head_destruction_bolter.msh");
+            }
+            // banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_head_destruction_banshee.msh");
+            }
+			// chimera toxin
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_toxin");
+
+                Mesh("dlc_ft_freak_toxin_head_damaged.msh");
+            }
+			// suicider
+			VariantsGroup()
+            {
+                RequiredProperty("class", "suicider");
+
+                Mesh("chr_dmg_hole_head_top_suicider.msh");
+            }
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+    //
+	/////////////////////////////////////////////////////////////////////////// D E F O R M A T I O N
+	BodyDeformation("head_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -35.0,  35.0, -45.0,  45.0, BIT_0, "nose");
+        Zone( -90.0,  -5.0, -35.0,  55.0, BIT_1 | BIT_2, "right_side");
+        Zone(   5.0,  90.0, -35.0,  55.0, BIT_3 | BIT_4, "left_side");
+        Zone(   0.0, 120.0,  30.0,  90.0, BIT_5, "left_upper_head");
+        Zone(-120.0,   0.0,  30.0,  90.0, BIT_6, "right_upper_head");
+        Zone(  90.0, -90.0, -40.0,  90.0, BIT_7, "back_head");
+    }
+    BodyDeformation("torso_upper_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -83.8, 5.3, -22.3, 67.4, BIT_16, "right_chest");
+        Zone( -14.0, 80.6, -29.5, 54.4, BIT_17, "left_chest");
+        Zone(   90.8, -174.7, -14.0, 63.3, BIT_21, "left_upper_back");
+        Zone(-180.0, -99.2, -12.8, 71.6, BIT_22, "right_upper_back");
+        
+    }
+    BodyDeformation("torso_lower_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -98.3, 11.3, -65.1, 38.4, BIT_18, "right_belly");
+        Zone(   -20.8, 115.8, -71.6, 28.3, BIT_19, "left_belly");
+        Zone(   80.2, 180.0, -58.5, 14.0, BIT_20, "left_lower_back");
+        Zone(  170.5, -94.8, -56.1, 31.1, BIT_23, "right_lower_back");
+        
+    }
+    BodyDeformation("right_upperarm_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -12.5, -151.5, 25.2, 77.5, BIT_24, "right_upper_arm");
+    }
+    BodyDeformation("right_forearm_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -37.4, -180.0, 9.2, 82.9, BIT_25, "right_fore_arm");
+    }
+    BodyDeformation("left_upperarm_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -180.0, 41.0, 11.6, 90.0, BIT_26, "left_upper_arm");
+    }
+    BodyDeformation("left_forearm_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -180.0, 30.3, -11.6, 78.7, BIT_27, "left_fore_arm");
+    }
+    BodyDeformation("left_thigh_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -147.9, 24.4, -28.8, 65.8, BIT_28, "left_leg_thigh");
+    }
+    BodyDeformation("left_calf_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -169.3, 27.9, -33.1, 82.3, BIT_29, "left_calf");
+    }
+    BodyDeformation("right_thigh_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -17.2, 151.5, -28.2, 84.2, BIT_30, "right_thigh");
+    }
+    BodyDeformation("right_calf_deformation")
+    {
+        ReferenceOrientation([0.0, 0.0, -1.0], [1.0, 0.0, 0.0]);
+
+        Zone( -57.6, 159.8, -24.7, 68.6, BIT_31, "right_calf");
+    }
+    //
+	//
+	//
+	BodyElementDetachment("head_mask_detachment")
+    {
+        MeshHelperElementName("patch_elem_neck_a");
+
+        BodyModelSlot("HEADCOVER");
+
+        BodyDetachmentEffectName("armor_damage.gpufx");
+
+        PartPrefab("armor_part");
+
+        PartModelMeshSuffix("_static");
+        PartMeshSkinName("Default");
+
+        PartPhysicsImpulse("MainPhysicsBody")
+        {
+            ImpactDirectionMaxDeviation(30.0);
+            ImpactVelocityMultiplierMinMax(2.0, 4.0);
+            AdditionalVerticalVelocityMinMax(2.5, 3.5);
+            WorldTorqueMinMax([7.0, 7.0, 7.0], [15.0, 15.0, 15.0]);
+        }
+
+        PartForceBodyWorldXform(true);
+    }
+    //
+	/////////////////////////////////////////////////////////////////////////// C U T S   -   L I M B S
+	BoneCut("left_foot_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_leg_left_c");
+
+        HideEllipsoid("man", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20499998, 0.09250000, -0.18199998);
+		HideEllipsoid("man_skinny_biter", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20500001, 0.09250000, -0.23199999);
+		HideEllipsoid("man_XL_biter", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20500001, 0.09250000, -0.23199999);
+        HideEllipsoid("woman", 0.21364629, 0.00576036, 0.02339001, -0.04800002, 0.00022771, 0.43838000, 0.01469710, -0.55280155, 0.00189639, 0.19500001, 0.05760000, -0.26300007);
+        HideEllipsoid("spitter", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20500000, 0.09249999, -0.21699998);
+        HideEllipsoid("screamer", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20500001, 0.09250000, -0.23699999);
+        HideEllipsoid("volatile", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20499998, 0.09250000, -0.18199998);
+        HideEllipsoid("banshee", 0.20867774, 0.00562640, 0.02284606, -0.04201037, 0.00019929, 0.38367695, 0.01150786, -0.43284452, 0.00148487, 0.17000005, 0.05759998, -0.25299999);
+        HideEllipsoid("bolter", 0.20536563, 0.00545726, 0.01520460, -0.02791432, 0.00018224, 0.37696785, 0.01477482, -0.55980349, 0.00136469, 0.20499998, 0.09249999, -0.18699998);
+        HideEllipsoid("corruptor", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20500000, 0.09249999, -0.21699998);
+        //HideEllipsoid("demolisher", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20500000, 0.09250000, -0.20699999);
+        //HideEllipsoid("goon", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20499998, 0.09250000, -0.18199998);
+        HideEllipsoid("charger", 0.20536563, 0.00545725, 0.01520460, -0.03204977, 0.00020923, 0.43281493, 0.01142410, -0.43284795, 0.00105520, 0.20500001, 0.09250000, -0.23699999);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("l_calf");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BoneCut("left_calf_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_leg_left_b");
+
+        HideEllipsoid("man", 0.20479892, 0.01569867, 0.01571536, -0.03278826, -0.01525224, 0.44252503, 0.03402277, -0.43148449, -0.01235085, 0.18499999, 0.09250000, 0.09799999);
+		HideEllipsoid("man_skinny_biter", 0.20479892, 0.01569867, 0.01571536, -0.03278826, -0.01525224, 0.44252503, 0.03402277, -0.43148449, -0.01235085, 0.18499999, 0.09250000, 0.09799999);
+		HideEllipsoid("man_XL_biter", 0.20479892, 0.01569867, 0.01571536, -0.03278826, -0.01525224, 0.44252503, 0.03402277, -0.43148449, -0.01235085, 0.18499999, 0.09250000, 0.09799999);
+        HideEllipsoid("woman", 0.18197864, -0.14573564, 0.02002280, -0.05220896, 0.00022553, 0.47614622, -0.19007342, -0.24019054, -0.02072759, 0.21900003, 0.09250001, -0.00600000);
+        HideEllipsoid("spitter", 0.20479895, 0.01569866, 0.01571536, -0.03278826, -0.01525225, 0.44252515, 0.03402276, -0.43148455, -0.01235085, 0.18500000, 0.09249999, 0.05300000);
+        HideEllipsoid("screamer", 0.21474059, 0.01646072, 0.01647823, -0.03278826, -0.01525225, 0.44252512, 0.03402276, -0.43148452, -0.01235085, 0.18500000, 0.09249999, 0.06299999);
+        HideEllipsoid("volatile", 0.20479892, 0.01569867, 0.01571536, -0.03278826, -0.01525224, 0.44252503, 0.03402277, -0.43148449, -0.01235085, 0.18499999, 0.09250000, 0.09799999);
+        HideEllipsoid("banshee", 0.13562785, -0.10861613, 0.01492290, -0.04839409, 0.00020905, 0.44135475, -0.18697774, -0.23627859, -0.02039000, 0.18860000, 0.09249996, 0.03400000);
+        HideEllipsoid("bolter", 0.20479892, 0.01569867, 0.01571536, -0.03278826, -0.01525224, 0.44252503, 0.03402277, -0.43148449, -0.01235085, 0.18499999, 0.09250000, 0.09799999);
+        HideEllipsoid("corruptor", 0.20479895, 0.01569866, 0.01571536, -0.03278826, -0.01525225, 0.44252515, 0.03402276, -0.43148455, -0.01235085, 0.18500000, 0.09250001, 0.14300001);
+        //HideEllipsoid("demolisher", 0.20531222, 0.01606895, 0.00497186, -0.00954636, -0.01529047, 0.44363421, 0.03410802, -0.43142307, -0.01413564, 0.18500000, 0.09250000, 0.05800000);
+        //HideEllipsoid("goon", 0.20479895, 0.01569866, 0.01571536, -0.03278826, -0.01525225, 0.44252515, 0.03402276, -0.43148455, -0.01235085, 0.21500003, 0.09250000, 0.05800000);
+        HideEllipsoid("charger", 0.20479895, 0.01569866, 0.01571536, -0.03278826, -0.01525225, 0.44252515, 0.03402276, -0.43148455, -0.01235085, 0.18500000, 0.09250000, 0.07300000);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("l_thigh");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BoneCut("left_tight_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_leg_left_a");
+
+        HideEllipsoid("man", 0.16916224, 0.02056799, 0.02334759, -0.08891318, -0.06076197, 0.69773829, 0.03012860, -0.22946830, -0.01614376, 0.18099998, 0.05759998, 0.09200000);
+		HideEllipsoid("man_skinny_biter", 0.16916224, 0.02056799, 0.02334759, -0.08891318, -0.06076197, 0.69773829, 0.03012860, -0.22946830, -0.01614376, 0.18099996, 0.05759997, 0.15200000);
+		HideEllipsoid("man_XL_biter", 0.16916224, 0.02056799, 0.02334759, -0.08891318, -0.06076197, 0.69773829, 0.03012860, -0.22946830, -0.01614376, 0.18099996, 0.05759997, 0.15200000);
+        HideEllipsoid("woman", 0.19663931, -0.02947475, 0.02154615, -0.06541499, 0.00031032, 0.59742928, -0.04074195, -0.27496451, -0.00431818, 0.18500003, 0.05760001, 0.15199998);
+        HideEllipsoid("spitter", 0.16876124, 0.01984955, 0.02663924, -0.10686511, -0.07689196, 0.73429114, 0.03005718, -0.22920592, -0.01962713, 0.19599998, 0.05759995, 0.16699997);
+        HideEllipsoid("screamer", 0.16916221, 0.02056799, 0.02334758, -0.08891312, -0.06076196, 0.69773817, 0.03012859, -0.22946821, -0.01614375, 0.18099998, 0.05759997, 0.11700000);
+        HideEllipsoid("volatile", 0.16916224, 0.02056799, 0.02334759, -0.08891318, -0.06076197, 0.69773829, 0.03012860, -0.22946830, -0.01614376, 0.18099999, 0.05759998, 0.17199999);
+        HideEllipsoid("banshee", 0.15239544, -0.02284292, 0.01669826, -0.06541494, 0.00031032, 0.59742934, -0.04074194, -0.27496448, -0.00431818, 0.16000000, 0.05760001, 0.21300000);
+        HideEllipsoid("bolter", 0.18883219, 0.02295961, 0.02606241, -0.09646950, -0.06592585, 0.75703579, 0.04311503, -0.32837686, -0.02310226, 0.21099997, 0.05759997, 0.02200000);
+        HideEllipsoid("corruptor", 0.16916227, 0.02056800, 0.02334760, -0.08891319, -0.06076212, 0.69773817, 0.04895896, -0.37288579, -0.02623367, 0.18099999, 0.10300000, 0.34200001);
+        //HideEllipsoid("demolisher", 0.20358475, 0.02475334, 0.02809854, -0.08954285, -0.06119229, 0.70267963, 0.04116708, -0.31354067, -0.02205849, 0.20599999, 0.05759998, 0.11700000);
+        //HideEllipsoid("goon", 0.16916224, 0.02056799, 0.02334759, -0.08891318, -0.06076197, 0.69773829, 0.03012860, -0.22946830, -0.01614376, 0.18099996, 0.05759997, 0.27000001);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("pelvis");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BoneCut("right_foot_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_leg_right_c");
+
+        HideEllipsoid("man", 0.25967649, 0.00818975, -0.04687303, 0.06910649, -0.00021443, 0.38281247, 0.01025506, -0.33683777, -0.00203995, -0.23470002, 0.07160001, -0.14500000);
+		HideEllipsoid("man_skinny_biter", 0.25967649, 0.00818975, -0.04687304, 0.06910653, -0.00021443, 0.38281256, 0.01025506, -0.33683780, -0.00203995, -0.23469999, 0.07160001, -0.18400000);
+		HideEllipsoid("man_XL_biter", 0.25967649, 0.00818975, -0.04687304, 0.06910653, -0.00021443, 0.38281256, 0.01025506, -0.33683780, -0.00203995, -0.23469999, 0.07160001, -0.18400000);
+        HideEllipsoid("woman", 0.23653798, 0.00001917, -0.03421707, 0.05554907, -0.00021509, 0.38400295, -0.00000000, -0.35699996, -0.00019997, -0.20590004, 0.07150003, -0.19000000);
+        HideEllipsoid("spitter", 0.25967649, 0.00818975, -0.04687304, 0.06910653, -0.00021443, 0.38281256, 0.01025506, -0.33683780, -0.00203995, -0.23470002, 0.07160001, -0.18500002);
+        HideEllipsoid("screamer", 0.25967649, 0.00818975, -0.04687303, 0.06910649, -0.00021443, 0.38281247, 0.01025506, -0.33683777, -0.00203995, -0.23470002, 0.07160001, -0.14500000);
+        HideEllipsoid("volatile", 0.25967649, 0.00818975, -0.04687303, 0.06910649, -0.00021443, 0.38281247, 0.01025506, -0.33683777, -0.00203995, -0.23470002, 0.07160001, -0.14500000);
+        HideEllipsoid("banshee", 0.23653795, 0.00001917, -0.03421706, 0.05554904, -0.00021509, 0.38400295, -0.00000000, -0.35699996, -0.00019997, -0.20590001, 0.07150000, -0.23499998);
+        HideEllipsoid("bolter", 0.30000505, 0.00946164, -0.05415256, 0.08545046, -0.00026514, 0.47334898, 0.01442404, -0.47377193, -0.00286925, -0.25999999, -0.01000000, -0.31799999);
+        HideEllipsoid("corruptor", 0.25967649, 0.00818975, -0.04687304, 0.06910653, -0.00021443, 0.38281256, 0.01025506, -0.33683780, -0.00203995, -0.23470002, 0.07160001, -0.17000000);
+        //HideEllipsoid("demolisher", 0.25967649, 0.00818975, -0.04687304, 0.06910653, -0.00021443, 0.38281256, 0.01025506, -0.33683780, -0.00203995, -0.23470002, 0.07160001, -0.17000000);
+        //HideEllipsoid("goon", 0.25967649, 0.00818975, -0.04687303, 0.06910649, -0.00021443, 0.38281247, 0.01025506, -0.33683777, -0.00203995, -0.23470002, 0.07160001, -0.14500000);
+        HideEllipsoid("charger", 0.25967649, 0.00818975, -0.04687304, 0.06910653, -0.00021443, 0.38281256, 0.01025506, -0.33683780, -0.00203995, -0.23470002, 0.07160001, -0.17500000);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("r_calf");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BoneCut("right_calf_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_leg_right_b");
+
+        HideEllipsoid("man", 0.25967652, 0.00818975, -0.04687302, 0.07532427, -0.00023372, 0.41725561, 0.01025506, -0.33683777, -0.00203995, -0.23470004, 0.07160001, 0.13000000);
+		HideEllipsoid("man_skinny_biter", 0.25967652, 0.00818975, -0.04687302, 0.07532427, -0.00023372, 0.41725561, 0.01025506, -0.33683777, -0.00203995, -0.23470004, 0.07160001, 0.13000000);
+		HideEllipsoid("man_XL_biter", 0.25967652, 0.00818975, -0.04687302, 0.07532427, -0.00023372, 0.41725561, 0.01025506, -0.33683777, -0.00203995, -0.23470004, 0.07160001, 0.13000000);
+        HideEllipsoid("woman", 0.24119927, 0.00170203, -0.07959913, 0.17309713, 0.01805476, 0.52490056, 0.01131572, -0.68162119, 0.01971380, -0.28599995, 0.07150000, -0.08399998);
+        HideEllipsoid("spitter", 0.25967652, 0.00818975, -0.04687303, 0.07532431, -0.00023372, 0.41725573, 0.01025506, -0.33683783, -0.00203995, -0.21499999, 0.10699999, 0.09000000);
+        HideEllipsoid("screamer", 0.25967652, 0.00818975, -0.04687302, 0.07532427, -0.00023372, 0.41725561, 0.01025506, -0.33683777, -0.00203995, -0.23470004, 0.07160001, 0.13000000);
+        HideEllipsoid("volatile", 0.25967652, 0.00818975, -0.04687302, 0.07532427, -0.00023372, 0.41725561, 0.01025506, -0.33683777, -0.00203995, -0.23470004, 0.07160001, 0.13000000);
+        HideEllipsoid("banshee", 0.24119927, 0.00170203, -0.07959913, 0.17309713, 0.01805476, 0.52490056, 0.01131572, -0.68162119, 0.01971380, -0.28599989, 0.07150000, -0.07399997);
+        HideEllipsoid("bolter", 0.25967652, 0.00818975, -0.04687302, 0.07532427, -0.00023372, 0.41725561, 0.01025506, -0.33683777, -0.00203995, -0.23470004, 0.07160001, 0.13000000);
+        HideEllipsoid("corruptor", 0.25967652, 0.00818975, -0.04687303, 0.07532431, -0.00023372, 0.41725573, 0.01025506, -0.33683783, -0.00203995, -0.23470002, 0.07160002, 0.16500001);
+        //HideEllipsoid("demolisher", 0.30801210, 0.00956775, -0.02275957, 0.03198934, -0.00024244, 0.43281934, 0.01039247, -0.33683839, -0.00095677, -0.20500000, 0.07160002, 0.07000000);
+        //HideEllipsoid("goon", 0.25967652, 0.00818975, -0.04687302, 0.07532427, -0.00023372, 0.41725561, 0.01025506, -0.33683777, -0.00203995, -0.23470004, 0.07160001, 0.13000000);
+        HideEllipsoid("charger", 0.25967652, 0.00818975, -0.04687303, 0.07532431, -0.00023372, 0.41725573, 0.01025506, -0.33683783, -0.00203995, -0.23470002, 0.07160001, 0.11000000);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("r_thigh");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BoneCut("right_tight_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_leg_right_a");
+
+        HideEllipsoid("man", 0.21175569, -0.00665906, -0.05546344, 0.13083658, -0.08103154, 0.50925398, -0.04785086, -0.69842035, -0.09883758, -0.25399998, 0.06120001, 0.21699995);
+		HideEllipsoid("man_skinny_biter", 0.21175568, -0.00665905, -0.05546344, 0.13083658, -0.08103154, 0.50925398, -0.04785085, -0.69842017, -0.09883755, -0.20900002, 0.06120000, 0.30700001);
+		HideEllipsoid("man_XL_biter", 0.21175568, -0.00665905, -0.05546344, 0.13083658, -0.08103154, 0.50925398, -0.04785085, -0.69842017, -0.09883755, -0.20900002, 0.06120000, 0.30700001);
+        HideEllipsoid("woman", 0.18201107, 0.00104536, -0.02956522, 0.10299768, -0.02239165, 0.63328832, 0.00000000, -0.25114307, -0.00887985, -0.19999999, 0.06119998, 0.09400001);
+        HideEllipsoid("spitter", 0.21175568, -0.00665906, -0.05546344, 0.13083658, -0.08103155, 0.50925404, -0.04785085, -0.69842011, -0.09883755, -0.20900002, 0.06119999, 0.30199999);
+        HideEllipsoid("screamer", 0.21175568, -0.00665906, -0.05546344, 0.13083661, -0.08103156, 0.50925410, -0.04785086, -0.69841999, -0.09883754, -0.20900002, 0.06119999, 0.27699998);
+        HideEllipsoid("volatile", 0.21175568, -0.00665906, -0.05546344, 0.13083661, -0.08103156, 0.50925410, -0.04785086, -0.69841999, -0.09883754, -0.20900002, 0.06119999, 0.27699998);
+        HideEllipsoid("banshee", 0.18201108, -0.00050494, -0.02957940, 0.10299766, 0.01081583, 0.63359153, -0.00000000, -0.25126332, 0.00428923, -0.19999999, 0.06119999, 0.17200002);
+        HideEllipsoid("bolter", 0.21175568, -0.00665906, -0.05546344, 0.13083661, -0.08103156, 0.50925410, -0.04785086, -0.69841999, -0.09883754, -0.20900002, 0.06119999, 0.27699998);
+        HideEllipsoid("corruptor", 0.21175566, -0.00665905, -0.05546344, 0.14682224, -0.09093202, 0.57147491, -0.04785084, -0.69842017, -0.09883755, -0.22400002, 0.06120002, 0.41200000);
+        //HideEllipsoid("demolisher", 0.21616320, 0.00308480, -0.03499903, 0.08535011, -0.04610414, 0.52308095, 0.00000000, -0.70426971, -0.06207405, -0.20899999, 0.06120000, 0.20700000);
+        //HideEllipsoid("goon", 0.21175568, -0.00665906, -0.05546344, 0.13083661, -0.08103156, 0.50925410, -0.04785086, -0.69841999, -0.09883754, -0.20900002, 0.06119999, 0.27699998);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("pelvis");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BodyElementBreak("left_arm_break")
+    {
+        PartialRagdollBoneName("l_upperarm");
+    }
+    BoneCut("left_hand_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_arm_left_c");
+
+        HideEllipsoid("man", -0.14282660, 0.01538381, -0.12282060, 0.18313505, -0.05717893, -0.22012748, -0.04432396, -0.22965524, 0.02277849, 0.68500006, -0.05140003, 0.83300000);
+		HideEllipsoid("man_skinny_biter", -0.14282660, 0.01538381, -0.12282060, 0.18313505, -0.05717893, -0.22012748, -0.04432396, -0.22965524, 0.02277849, 0.68500006, -0.05140003, 0.83300000);
+		HideEllipsoid("man_XL_biter", -0.14282660, 0.01538381, -0.12282060, 0.18313505, -0.05717893, -0.22012748, -0.04432396, -0.22965524, 0.02277849, 0.68500006, -0.05140003, 0.83300000);
+        HideEllipsoid("woman", -0.15246382, 0.00821974, -0.11805177, 0.23062463, -0.09638377, -0.30456263, -0.04837657, -0.25670046, 0.04460472, 0.69299996, -0.09239997, 0.74899995);
+        HideEllipsoid("spitter", -0.16927600, 0.01823267, -0.14556514, 0.19567859, -0.06109533, -0.23520473, -0.06318522, -0.32738087, 0.03247147, 0.68500000, -0.05140003, 0.80299991);
+        HideEllipsoid("volatile", -0.14282660, 0.01538381, -0.12282060, 0.18313505, -0.05717893, -0.22012748, -0.04432396, -0.22965524, 0.02277849, 0.68500006, -0.05140003, 0.83300000);
+        HideEllipsoid("banshee", -0.21961115, 0.01183988, -0.17004348, 0.23062463, -0.09638372, -0.30456269, -0.04837659, -0.25670058, 0.04460468, 0.69300002, -0.09239998, 0.60900003);
+        HideEllipsoid("bolter", -0.17806849, 0.02944337, -0.05608660, 0.06973592, -0.09027692, -0.26879549, -0.05526071, -0.22046794, 0.05970899, 0.51999998, -0.05140004, 0.70800000);
+        HideEllipsoid("corruptor", -0.14282662, 0.01538380, -0.12282062, 0.18313511, -0.05717895, -0.22012755, -0.04432396, -0.22965524, 0.02277849, 0.68499994, -0.05140002, 0.96799994);
+        HideEllipsoid("demolisher", -0.21461786, 0.02311645, -0.18455578, 0.22390145, -0.06990714, -0.26912859, -0.07921731, -0.41044766, 0.04071047, 0.72000021, -0.05140002, 0.66799998);
+		HideEllipsoid("goon", -0.21461797, 0.02311653, -0.18455578, 0.22390133, -0.06990710, -0.26912868, -0.07921734, -0.41044775, 0.04071038, 0.72000027, -0.05140005, 0.72799999);
+        HideEllipsoid("charger", -0.14282662, 0.01538380, -0.12282062, 0.18313511, -0.05717895, -0.22012755, -0.04432396, -0.22965524, 0.02277849, 0.65499991, -0.05140001, 0.91299999);
+		HideEllipsoid("freak_slasher", -0.14282662, 0.01538380, -0.12282062, 0.18313511, -0.05717895, -0.22012755, -0.04432396, -0.22965524, 0.02277849, 0.65499991, -0.05140001, 0.91299999);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("l_forearm");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BoneCut("left_forearm_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_arm_left_b");
+
+        HideEllipsoid("man", -0.11768712, 0.00951672, -0.09088551, 0.17389646, -0.06459337, -0.23194116, -0.04928567, -0.26297230, 0.03628360, 0.56020021, -0.05140003, 0.95299995);
+		HideEllipsoid("man_skinny_biter", -0.11768712, 0.00951672, -0.09088551, 0.17389646, -0.06459337, -0.23194116, -0.04928567, -0.26297230, 0.03628360, 0.56020021, -0.05140003, 0.95299995);
+		HideEllipsoid("man_XL_biter", -0.11768712, 0.00951672, -0.09088551, 0.17389646, -0.06459337, -0.23194116, -0.04928567, -0.26297230, 0.03628360, 0.56020021, -0.05140003, 0.95299995);
+        HideEllipsoid("woman", -0.24229077, 0.02492786, -0.18851469, 0.18088129, -0.06720458, -0.24136652, -0.08343837, -0.41339922, 0.05257516, 0.52800000, -0.10200001, 0.99500000);
+        HideEllipsoid("spitter", -0.11768712, 0.00951672, -0.09088551, 0.17389643, -0.06459337, -0.23194118, -0.04928566, -0.26297227, 0.03628362, 0.56020027, -0.05140004, 0.94299996);
+        HideEllipsoid("volatile", -0.11768712, 0.00951672, -0.09088551, 0.17389646, -0.06459337, -0.23194116, -0.04928567, -0.26297230, 0.03628360, 0.56020021, -0.05140003, 0.95299995);
+        HideEllipsoid("banshee", -0.30915672, 0.03180736, -0.24053985, 0.23355132, -0.08677355, -0.31164908, -0.09521794, -0.47176155, 0.05999745, 0.62300003, -0.10200004, 0.80000007);
+        HideEllipsoid("bolter", -0.13264266, 0.02553844, -0.06288660, 0.16564779, -0.08557767, -0.38414359, -0.06447152, -0.26044241, 0.03021915, 0.49500000, -0.05140004, 0.78799999);
+        HideEllipsoid("corruptor", -0.11768712, 0.00951672, -0.09088551, 0.17389643, -0.06459337, -0.23194118, -0.04928566, -0.26297227, 0.03628362, 0.56020021, -0.05140004, 1.16799998);
+        HideEllipsoid("demolisher", -0.29453957, 0.02049146, -0.19530110, 0.27762502, -0.06399536, -0.42540929, -0.09130131, -0.77256471, 0.05663496, 0.76999974, -0.11099999, 0.81800014);
+        HideEllipsoid("goon", -0.11768712, 0.00951672, -0.09088551, 0.17389646, -0.06459337, -0.23194116, -0.04928567, -0.26297230, 0.03628360, 0.56020021, -0.05140003, 0.95299995);
+        HideEllipsoid("charger", -0.11768712, 0.00951672, -0.09088551, 0.17389643, -0.06459337, -0.23194118, -0.04928566, -0.26297227, 0.03628362, 0.51999998, -0.05140005, 1.00299990);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("l_upperarm");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BoneCut("left_upperarm_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_arm_left_a");
+
+        HideEllipsoid("man", -0.22349149, 0.00808381, -0.12663026, 0.19452168, -0.12339427, -0.35119119, -0.04687091, -0.26176605, 0.06601253, 0.51400006, -0.02599995, 1.07700014);
+		HideEllipsoid("man_skinny_biter", -0.22349149, 0.00808381, -0.12663026, 0.19452168, -0.12339427, -0.35119119, -0.04687091, -0.26176605, 0.06601253, 0.51400006, -0.02599995, 1.07700014);
+		HideEllipsoid("man_XL_biter", -0.22349149, 0.00808381, -0.12663026, 0.19452168, -0.12339427, -0.35119119, -0.04687091, -0.26176605, 0.06601253, 0.51400006, -0.02599995, 1.07700014);
+        HideEllipsoid("woman", -0.12934202, 0.04422728, -0.09766570, 0.20412315, -0.02097641, -0.27982628, -0.05295167, -0.20604561, -0.02318069, 0.42879990, -0.01250000, 1.12100005);
+        HideEllipsoid("spitter", -0.22349150, 0.00808381, -0.12663028, 0.19452170, -0.12339424, -0.35119116, -0.04687092, -0.26176605, 0.06601250, 0.49400002, -0.02599995, 1.07700014);
+        HideEllipsoid("volatile", -0.22349149, 0.00808381, -0.12663026, 0.19452168, -0.12339427, -0.35119119, -0.04687091, -0.26176605, 0.06601253, 0.51400006, -0.02599995, 1.07700014);
+        HideEllipsoid("banshee", -0.17782012, 0.04890708, -0.11624161, 0.27419019, -0.04039483, -0.43643680, -0.08525644, -0.35843650, -0.02038667, 0.48400009, -0.01250006, 0.77100003);
+        HideEllipsoid("bolter", -0.16522537, 0.01618775, -0.07458247, 0.17929763, -0.18933275, -0.43829852, -0.09577131, -0.38726804, 0.12811120, 0.44899994, -0.02599998, 0.91699994);
+        HideEllipsoid("corruptor", -0.22349150, 0.00808381, -0.12663028, 0.19452170, -0.12339424, -0.35119116, -0.04687092, -0.26176605, 0.06601250, 0.47899997, -0.02599995, 1.30200005);
+        HideEllipsoid("demolisher",  -0.24958001, 0.00902748, -0.14141199, 0.30799255, -0.19537412, -0.55605251, -0.08792575, -0.49105021, 0.12383364, 0.66900003, -0.02599990, 0.91200006)
+		{
+			Variant(-0.24957995, 0.00902748, -0.14141196, 0.30799234, -0.19537406, -0.55605245, -0.08792573, -0.49105000, 0.12383361, 0.66899979, -0.02599985, 0.83700001)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+		}
+        HideEllipsoid("goon", -0.18609795, 0.00673127, -0.10544309, 0.18062724, -0.11458033, -0.32610601, -0.04533136, -0.25316790, 0.06384421, 0.51400012, -0.02599998, 1.07700014);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+			//DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+			
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+			
+			ShowEllipsoid("demolisher", -0.20175105, 0.00729746, -0.11431214, 0.35199153, -0.22328472, -0.63548869, -0.13924429, -0.77765548, 0.19611010, 0.68899989, 0.19900003, 0.86199999);
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("spine3");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BodyElementBreak("right_arm_break")
+    {
+        PartialRagdollBoneName("r_upperarm");
+    }
+    BoneCut("right_hand_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_arm_right_c");
+
+        HideEllipsoid("man", -0.23842914, -0.06925531, 0.16115589, -0.22542843, -0.14126204, -0.39422613, 0.13265963, -0.34530905, 0.04787559, -0.69599998, -0.13900001, 0.64300013);
+		HideEllipsoid("man_skinny_biter", -0.23842914, -0.06925531, 0.16115589, -0.22542843, -0.14126204, -0.39422613, 0.13265963, -0.34530905, 0.04787559, -0.69599998, -0.13900001, 0.64300013);
+		HideEllipsoid("man_XL_biter", -0.23842914, -0.06925531, 0.16115589, -0.22542843, -0.14126204, -0.39422613, 0.13265963, -0.34530905, 0.04787559, -0.69599998, -0.13900001, 0.64300013);
+        HideEllipsoid("woman", -0.18941315, 0.00290856, 0.12866703, -0.20964855, -0.10615044, -0.30622792, 0.02282107, -0.15189488, 0.03702896, -0.64199990, -0.08760000, 0.75999987);
+        HideEllipsoid("spitter", -0.23842914, -0.06925531, 0.16115589, -0.22542843, -0.14126204, -0.39422613, 0.13265963, -0.34530905, 0.04787559, -0.69599998, -0.13900001, 0.64300013);
+        HideEllipsoid("volatile", -0.23842914, -0.06925531, 0.16115589, -0.22542843, -0.14126204, -0.39422613, 0.13265963, -0.34530905, 0.04787559, -0.69599998, -0.13900001, 0.64300013);
+        HideEllipsoid("banshee", -0.27626193, 0.00424212, 0.18766281, -0.22051112, -0.11165038, -0.32209471, 0.03654262, -0.24322414, 0.05929317, -0.65200007, -0.08760005, 0.56300002);
+        HideEllipsoid("bolter", -0.23842920, -0.06925534, 0.16115594, -0.22542852, -0.14126202, -0.39422610, 0.13265961, -0.34530905, 0.04787559, -0.58900011, -0.13900004, 0.55199993);
+        HideEllipsoid("corruptor", -0.23842917, -0.06925533, 0.16115592, -0.22542852, -0.14126204, -0.39422613, 0.13265963, -0.34530905, 0.04787559, -0.73100007, -0.09400000, 0.80800009);
+        HideEllipsoid("charger", -0.23842917, -0.06925533, 0.16115592, -0.22542852, -0.14126204, -0.39422613, 0.13265963, -0.34530905, 0.04787559, -0.69599998, -0.13900000, 0.71300006);
+		HideEllipsoid("demolisher", -0.23842920, -0.06925534, 0.16115594, -0.22542852, -0.14126202, -0.39422610, 0.13265961, -0.34530905, 0.04787559, -0.78600001, -0.13900001, 0.55299997);
+		HideEllipsoid("freak_slasher", -0.23842917, -0.06925533, 0.16115592, -0.22542852, -0.14126204, -0.39422613, 0.13265963, -0.34530905, 0.04787559, -0.69599998, -0.13900000, 0.71300006);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("r_forearm");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    BoneCut("right_forearm_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_arm_right_b");
+
+        HideEllipsoid("man", -0.26458070, -0.05210563, 0.18318862, -0.22542854, -0.18173720, -0.37728080, 0.11372705, -0.30309051, 0.07804665, -0.61599994, -0.12379995, 0.80799991);
+		HideEllipsoid("man_skinny_biter", -0.26458070, -0.05210563, 0.18318862, -0.22542854, -0.18173720, -0.37728080, 0.11372705, -0.30309051, 0.07804665, -0.61599994, -0.12379995, 0.80799991);
+		HideEllipsoid("man_XL_biter", -0.26458070, -0.05210563, 0.18318862, -0.22542854, -0.18173720, -0.37728080, 0.11372705, -0.30309051, 0.07804665, -0.61599994, -0.12379995, 0.80799991);
+        HideEllipsoid("woman", -0.16459917, 0.00252752, 0.11181108, -0.20964859, -0.10615045, -0.30622798, 0.08362913, -0.55662739, 0.13569473, -0.56700009, -0.05299996, 0.87800002);
+        HideEllipsoid("spitter", -0.26458070, -0.05210555, 0.18318860, -0.22542851, -0.18173723, -0.37728080, 0.11372697, -0.30309054, 0.07804672, -0.61599988, -0.12379997, 0.78299993);
+        HideEllipsoid("volatile", -0.26458070, -0.05210563, 0.18318862, -0.22542854, -0.18173720, -0.37728080, 0.11372705, -0.30309051, 0.07804665, -0.61599994, -0.12379995, 0.80799991);
+        HideEllipsoid("banshee", -0.16459918, 0.00252752, 0.11181107, -0.20964858, -0.10615046, -0.30622798, 0.08362915, -0.55662727, 0.13569473, -0.53200006, -0.05299994, 0.70800006);
+        HideEllipsoid("bolter", -0.26458070, -0.05210555, 0.18318860, -0.22542851, -0.18173723, -0.37728080, 0.11372697, -0.30309054, 0.07804672, -0.61599994, -0.12379997, 0.76799989);
+        HideEllipsoid("corruptor", -0.26458070, -0.05210555, 0.18318860, -0.22542851, -0.18173723, -0.37728080, 0.11372697, -0.30309054, 0.07804672, -0.61600000, -0.12379996, 1.00799990);
+        //HideEllipsoid("demolisher", -0.23617482, -0.04651138, 0.16352111, -0.22542852, -0.18173723, -0.37728080, 0.11372696, -0.30309054, 0.07804671, -0.70600003, -0.12379998, 0.77299994);
+        HideEllipsoid("charger", -0.26458070, -0.05210555, 0.18318860, -0.22542851, -0.18173723, -0.37728080, 0.11372697, -0.30309054, 0.07804672, -0.61599994, -0.12379997, 0.87299997);
+		HideEllipsoid("freak_slasher", -0.26458070, -0.05210555, 0.18318860, -0.22542851, -0.18173723, -0.37728080, 0.11372697, -0.30309054, 0.07804672, -0.61599994, -0.12379997, 0.87299997);
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("r_upperarm");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+	BoneCut("right_upperarm_cut")
+    {
+        AllowedWhenLimitedDrasticElementsPolicy(true);
+
+        MeshHelperElementName("patch_elem_arm_right_a");
+
+        HideEllipsoid("man", -0.19415776, -0.03763721, 0.07908993, -0.16476411, -0.08335528, -0.44414610, 0.06233745, -0.26547554, 0.02669801, -0.47799996, -0.00410011, 0.93299973);
+		HideEllipsoid("man_skinny_biter", -0.19415779, -0.03763721, 0.07908994, -0.16476415, -0.08335528, -0.44414616, 0.06233747, -0.26547554, 0.02669800, -0.44299999, -0.00410014, 0.95800000);
+		HideEllipsoid("man_XL_biter", -0.18235463, -0.03517711, 0.10429960, -0.21866119, -0.10097344, -0.41635659, 0.06733515, -0.26404527, 0.02867248, -0.53300005, -0.00410013, 0.95799994);
+        HideEllipsoid("woman", -0.12385006, 0.01053919, 0.08921371, -0.22614008, -0.06330453, -0.30645835, 0.00699908, -0.16827399, 0.02959532, -0.44700006, -0.00409999, 1.07299995);
+        HideEllipsoid("spitter", -0.21238849, -0.04117120, 0.08651621, -0.18874221, -0.09548600, -0.50878257, 0.04982448, -0.21218672, 0.02133895, -0.47299999, -0.00410011, 0.93800008);
+        HideEllipsoid("volatile", -0.23973468, -0.04647221, 0.09765564, -0.17675313, -0.08942066, -0.47646427, 0.07257535, -0.30907553, 0.03108274, -0.53799999, -0.00410007, 0.92299998);
+        HideEllipsoid("banshee", -0.14408705, 0.01226127, 0.10379110, -0.31101868, -0.08706500, -0.42148346, 0.02214330, -0.53237569, 0.09363195, -0.49700007, -0.00409998, 0.75800002);
+        HideEllipsoid("bolter", -0.14936408, -0.00304203, 0.05143071, -0.15684436, 0.02684841, -0.45391634, -0.00000002, -0.21861798, -0.01293089, -0.41299990, 0.04600000, 0.94300002);
+        HideEllipsoid("corruptor", -0.13823226, 0.00121153, 0.11213561, -0.30303580, -0.00403547, -0.37351590, -0.00000001, -0.21898732, 0.00236595, -0.56299996, 0.06100000, 1.22800004);
+		HideEllipsoid("demolisher", -0.21238849, -0.04117120, 0.08651621, -0.21957126, -0.11108264, -0.59188688, 0.07940062, -0.33814222, 0.03400589, -0.58299994, -0.00410005, 0.92799997)
+		{
+			Variant(-0.26177433, -0.07146937, 0.11052303, -0.22813490, -0.11541504, -0.61497134, 0.12466856, -0.40934563, 0.03057604, -0.60299999, 0.11099999, 0.91799986)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+		}
+
+        BodyPatch("Simple")
+        {
+            Prefab("human_patch");
+
+			//ClassVariant Freak Gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+            //damage size slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+            }
+
+            Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            Patch("Simple")
+            {
+                Prefab("human_patch");
+
+                VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_patch_default_a_slim.msh", "Default");
+                }
+
+                Mesh("chr_dmg_cut_patch_default_a.msh", "Default");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_cut_limbs");
+
+            use DefaultGibPhysicsImpulse();
+
+            PhysicsCollisionsWithMainBodyEnabled(g_CutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBone("spine3");
+            PhysicsSfxSkeletonNameSuffix("_limb");
+
+            BloodPuddlePreset("gib_blood_puddle");
+        }
+    }
+    //
+	/////////////////////////////////////////////////////////////////////////// C U T S - FULL BODY
+	//
+	BoneCut("right_vertical_cut")
+    {
+        MeshHelperElementName("helper_chest_vertical_right");
+
+        HideEllipsoid("man", 3.47134471, -2.12720728, 5.30654669, -0.44758898, -0.09399598, 0.25511631, -0.05493652, -4.08131361, -1.60011744, -0.47020024, -0.03910002, 1.49399996);
+		HideEllipsoid("man_skinny_biter", 0.66740841, 0.00000000, -0.15424289, 0.00000000, 0.62999988, 0.00000000, 0.24093421, 0.00000000, 1.04252148, -0.51100004, -0.03910011, 1.74399996);
+		HideEllipsoid("man_XL_biter", 0.66740841, 0.00000000, -0.15424289, 0.00000000, 0.62999988, 0.00000000, 0.24093421, 0.00000000, 1.04252148, -0.51100004, -0.03910011, 1.74399996);
+        HideEllipsoid("woman", 3.76600099, -0.18130554, 5.52440262, -0.43272880, -0.00106086, 0.29495758, -0.05959961, -4.38249969, -0.10320017, -0.43500000, -0.03910000, 1.54920018);
+        HideEllipsoid("spitter", -3.27053738, 0.63130814, -5.79997540, -0.45681381, -0.02770970, 0.25457576, 0.00000019, 4.35837841, 0.47439486, -0.42500001, -0.03910012, 1.57399988);
+        HideEllipsoid("screamer", 0.45452580, 0.00000000, -0.26273796, 0.00000000, 0.77499998, 0.00000000, 0.45541251, 0.00000000, 0.78784472, -0.43500000, -0.02900000, 1.50899982);
+        HideEllipsoid("banshee", 3.36904454, -0.60084158, 5.74658108, -0.45227015, -0.01477947, 0.26360685, -0.09193937, -4.36464119, -0.40244982, -0.35499996, -0.03909998, 1.54919982);
+        HideEllipsoid("bolter", 3.47134447, -1.07450986, 5.61514711, -0.44758898, -0.04353899, 0.26837277, -0.05493655, -4.31179667, -0.79113960, -0.53499997, -0.03910016, 1.40399992);
+
+        BodyPatch("Skinned")
+        {
+			//bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_cut_chest_vertical_right_bolter.msh");
+            }
+			//spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_cut_chest_vertical_right_spitter.msh");
+            }
+			//screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+
+                Mesh("chr_dmg_cut_chest_vertical_right_screamer.msh");
+            }
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_cut_chest_vertical_right_banshee.msh");
+            }
+			//biter AVERAGE mostly bare torso
+			VariantsGroup()
+            {
+                RequiredProperty("Damagesize", "man_biter_avg_body");
+
+                Mesh("chr_dmg_cut_chest_vertical_right_biter_avg.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("Damagesize", "man_biter_skinny");
+
+                Mesh("chr_dmg_cut_chest_vertical_right_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("Damagesize", "man_biter_xl");
+
+                Mesh("chr_dmg_cut_chest_vertical_right_biter_xl.msh");
+            }
+                
+            Mesh("chr_dmg_cut_chest_vertical_right.msh");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            ShowEllipsoid("man", 3.76600099, -0.18130554, 5.52440262, -0.43272880, -0.00106086, 0.29495758, -0.05959961, -4.38249969, -0.10320017, -0.47020006, -0.03910000, 1.62899995);
+			ShowEllipsoid("man_skinny_biter", 3.76600170, -0.18130557, 5.52440357, -0.43272889, -0.00106086, 0.29495764, -0.05959962, -4.38250017, -0.10320018, -0.40999991, -0.03910000, 1.62900019);
+			ShowEllipsoid("man_XL_biter", 4.14256716, 1.27464294, 5.09403038, -0.41107917, 0.08839656, 0.31217885, -0.06555899, -4.23967218, 1.11417699, -0.42999995, -0.03909996, 1.64400005);
+            ShowEllipsoid("spitter", 3.37097931, -0.18220291, 5.77390480, -0.45227024, -0.00094958, 0.26401901, -0.05334812, -4.38248491, -0.10714871, -0.46499991, -0.03910000, 1.55900013);
+            ShowEllipsoid("screamer", 3.76600170, -0.18130557, 5.52440357, -0.43272889, -0.00106086, 0.29495764, -0.05959962, -4.38250017, -0.10320018, -0.47020018, -0.03910000, 1.52900028);
+            ShowEllipsoid("banshee", 3.76600170, -0.18130557, 5.52440357, -0.43272889, -0.00106086, 0.29495764, -0.05959962, -4.38250017, -0.10320018, -0.29499990, -0.03910000, 1.62899995);
+            ShowEllipsoid("bolter", 3.76600099, -0.18130554, 5.52440262, -0.43272880, -0.00106086, 0.29495758, -0.05959961, -4.38249969, -0.10320017, -0.47020006, -0.03910000, 1.62899995);
+
+            Patch("Skinned")
+            {
+				//bolter
+				VariantsGroup()
+				{
+					RequiredProperty("class", "bolter");
+
+					Mesh("chr_dmg_cut_chest_vertical_right_bolter_gib.msh");
+				}
+                //spitter
+				VariantsGroup()
+				{
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_cut_chest_vertical_right_gib_spitter.msh"); 
+				}
+				//screamer
+				VariantsGroup()
+				{
+                RequiredProperty("class", "screamer");
+
+                Mesh("chr_dmg_cut_chest_vertical_right_gib_screamer.msh"); 
+				}
+				//banshee
+				VariantsGroup()
+                {
+                    RequiredProperty("class", "banshee");
+
+                    Mesh("chr_dmg_cut_chest_vertical_right_banshee_gib.msh"); 
+                }
+				//biter AVERAGE
+				VariantsGroup()
+				{
+					RequiredProperty("Damagesize", "man_biter_avg_body");
+
+					Mesh("chr_dmg_cut_chest_vertical_right_biter_avg_gib.msh");
+				}
+				//biter SKINNY
+				VariantsGroup()
+				{
+					RequiredProperty("Damagesize", "man_biter_skinny");
+
+					Mesh("chr_dmg_cut_chest_vertical_right_biter_skinny_gib.msh");
+				}
+				//biter XL
+				VariantsGroup()
+				{
+					RequiredProperty("Damagesize", "man_biter_xl");
+
+					Mesh("chr_dmg_cut_chest_vertical_right_gib_biter_xl.msh");
+				}
+                
+                Mesh("chr_dmg_cut_chest_vertical_right_gib.msh");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_ragdoll.lite");
+
+            PhysicsImpulse("AllPhysicsBodies")
+            {
+                AdditionalVerticalVelocityMinMax(0.3, 0.3);
+                AdditionalLocalVelocityMinMax([2.0, 0.0, 0.0], [2.0, 0.0, 0.0]);
+                LocalTorqueMinMax([0.0, 0.0, -90.0], [0.0, 0.0, -70.0]);
+                PhysicsBodyRequiredMinMass(2.0);
+            }
+
+            PhysicsCollisionsWithMainBodyEnabled(g_FullBodyCutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBonesCollisionsEnabled(true);
+            PhysicsAdditionalBone("spine");
+            PhysicsAdditionalBone("spine1");
+            PhysicsAdditionalBone("spine2");
+            PhysicsAdditionalBone("spine3");
+            PhysicsAdditionalBone("pelvis");
+
+            BloodPuddlePreset("body_blood_puddle");
+        }
+    }
+    BoneCut("left_vertical_cut")
+    {
+        MeshHelperElementName("helper_chest_vertical_left");
+
+        HideEllipsoid("man", -3.67148972, -2.83055806, 4.72993040, -0.43580151, 0.14170510, -0.25347865, 0.06031131, -3.82057691, -2.23955345, 0.45800006, -0.03910002, 1.53900003);
+		HideEllipsoid("man_skinny_biter", 0.67835271, 0.00000000, -0.78170484, 0.00000000, 0.77000004, 0.00000000, 0.52113658, 0.00000000, 0.45223519, 0.65300000, -0.03909999, 1.45899999);
+		HideEllipsoid("man_XL_biter", 0.74396431, 0.00000000, -0.71954274, 0.00000000, 0.77000004, 0.00000000, 0.47969526, 0.00000000, 0.49597630, 0.65299988, -0.03909999, 1.49399996);
+        HideEllipsoid("woman", -3.70770097, -0.18152077, 5.56359959, -0.43580154, 0.00090170, -0.29039794, 0.05970018, -4.38250017, -0.10320021, 0.44799989, -0.03909999, 1.54939985);
+        HideEllipsoid("spitter", 3.57221913, -1.23817313, -5.43785954, -0.43580031, 0.01611449, -0.28995362, 0.57033831, 4.34877872, -0.61553043, 0.41299999, -0.03909998, 1.59400010);
+        HideEllipsoid("screamer", 0.49593487, 0.00000000, 0.31027988, 0.00000000, 0.80500001, 0.00000000, -0.53304493, 0.00000000, 0.85199076, 0.45299983, -0.03909998, 1.60399997);
+        HideEllipsoid("bolter", -3.41381288, -2.67070365, 5.00772953, -0.44567946, 0.07206946, -0.26538771, 0.44420931, -4.00684595, -1.83409452, 0.44299996, -0.03910014, 1.53900003);
+		HideEllipsoid("banshee", -3.67148995, -2.83055735, 4.72992849, -0.43580136, 0.14170516, -0.25347865, 0.06031134, -3.82057595, -2.23955345, 0.36299992, -0.03909996, 1.53899980);
+
+        BodyPatch("Skinned")
+        {
+			//bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_cut_chest_vertical_left_bolter.msh");
+            }
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_cut_chest_vertical_left_banshee.msh");
+            }
+			//spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_cut_chest_vertical_left_spitter.msh");
+            }
+			//screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+
+                Mesh("chr_dmg_cut_chest_vertical_left_screamer.msh");
+            }
+			//biter AVERAGE mostly bare torso
+			VariantsGroup()
+            {
+                RequiredProperty("Damagesize", "man_biter_avg_body");
+
+                Mesh("chr_dmg_cut_chest_vertical_left_biter_avg.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("Damagesize", "man_biter_skinny");
+
+                Mesh("chr_dmg_cut_chest_vertical_left_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("Damagesize", "man_biter_xl");
+
+                Mesh("chr_dmg_cut_chest_vertical_left_biter_xl.msh");
+            }
+			
+            Mesh("chr_dmg_cut_chest_vertical_left.msh");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            ShowEllipsoid("man", -3.67148995, -2.83055735, 4.72992849, -0.43580136, 0.14170516, -0.25347865, 0.06031134, -3.82057595, -2.23955345, 0.45800000, -0.03909999, 1.65399981);
+			ShowEllipsoid("man_skinny_biter", -2.14897728, -5.32241106, 3.30423260, -0.45501420, 0.02342098, -0.25820187, 1.65603614, -2.62840152, -3.15675306, 0.40799990, -0.03910005, 1.65399969);
+			ShowEllipsoid("man_XL_biter", -2.46982670, -4.75280714, 3.89549732, -0.43066072, -0.01988253, -0.29730603, 1.90328169, -3.07991648, -2.55101466, 0.41300002, -0.03909987, 1.65399992);
+            ShowEllipsoid("spitter", -3.86291575, -0.20464127, 5.37588358, -0.42538929, 0.01161897, -0.30522707, -0.00000022, -4.42579460, -0.16847482, 0.43300009, -0.03910002, 1.58899999);
+            ShowEllipsoid("screamer", -3.67148995, -2.83055735, 4.72992849, -0.43580136, 0.14170516, -0.25347865, 0.06031134, -3.82057595, -2.23955345, 0.45800000, -0.03909999, 1.65399981);
+            ShowEllipsoid("bolter", -3.67148995, 0.78059906, 5.45664215, -0.43580136, -0.04958853, -0.28613418, 0.06031128, -4.37808895, 0.66688722, 0.47300011, -0.03910005, 1.62399983);
+			ShowEllipsoid("banshee", -3.37763333, 0.15075086, 5.69499636, -0.42538932, -0.17892493, -0.24755694, 1.25352776, -4.16125870, 0.85360360, 0.36800015, -0.03909999, 1.65399981);
+
+            Patch("Skinned")
+            {
+				//bolter
+				VariantsGroup()
+				{
+					RequiredProperty("class", "bolter");
+
+					Mesh("chr_dmg_cut_chest_vertical_left_bolter_gib.msh");
+				}
+				//banshee
+				VariantsGroup()
+				{
+					RequiredProperty("class", "banshee");
+
+					Mesh("chr_dmg_cut_chest_vertical_left_banshee_gib.msh");
+				}
+				//spitter
+				VariantsGroup()
+				{
+					RequiredProperty("class", "spitter");
+
+					Mesh("chr_dmg_cut_chest_vertical_left_gib_spitter.msh"); 
+				}
+				//screamer
+				VariantsGroup()
+				{
+					RequiredProperty("class", "screamer");
+
+					Mesh("chr_dmg_cut_chest_vertical_left_gib_screamer.msh"); 
+				}
+				//biter AVERAGE
+				VariantsGroup()
+				{
+					RequiredProperty("Damagesize", "man_biter_avg_body");
+
+					Mesh("chr_dmg_cut_chest_vertical_left_biter_avg_gib.msh");
+				}
+				//biter SKINNY
+				VariantsGroup()
+				{
+					RequiredProperty("Damagesize", "man_biter_skinny");
+
+					Mesh("chr_dmg_cut_chest_vertical_left_biter_skinny_gib.msh");
+				}
+				//biter XL
+				VariantsGroup()
+				{
+					RequiredProperty("Damagesize", "man_biter_xl");
+
+					Mesh("chr_dmg_cut_chest_vertical_left_gib_biter_xl.msh");
+				}
+				
+                Mesh("chr_dmg_cut_chest_vertical_left_gib.msh");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_ragdoll.lite");
+
+            PhysicsImpulse("AllPhysicsBodies")
+            {
+                AdditionalVerticalVelocityMinMax(0.3, 0.3);
+                AdditionalLocalVelocityMinMax([2.0, 0.0, 0.0], [2.0, 0.0, 0.0]);
+                LocalTorqueMinMax([0.0, 0.0, -90.0], [0.0, 0.0, -70.0]);
+                PhysicsBodyRequiredMinMass(2.0);
+            }
+
+            PhysicsCollisionsWithMainBodyEnabled(g_FullBodyCutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBonesCollisionsEnabled(true);
+            PhysicsAdditionalBone("spine");
+            PhysicsAdditionalBone("spine1");
+            PhysicsAdditionalBone("spine2");
+            PhysicsAdditionalBone("spine3");
+            PhysicsAdditionalBone("pelvis");
+
+            BloodPuddlePreset("body_blood_puddle");
+        }
+    }
+    BoneCut("horizontal_cut")
+    {
+        MeshHelperElementName("helper_waist_0");
+
+        HideEllipsoid("man", 0.22028956, 1.35335183, 0.41641411, -0.14687669, -0.32952923, 1.14867485, 0.60107988, -0.11163425, 0.04483239, 0.06000001, 0.08199999, -0.04300000);
+		HideEllipsoid("man_skinny_biter", 0.62500000, 0.00000000, 0.00000000, 0.00000000, 1.00000000, 0.00000000, 0.00000000, 0.00000000, 1.00000000, 0.03500000, 0.08199999, 0.07400000);
+		HideEllipsoid("man_XL_biter", 0.62500000, 0.00000000, 0.00000000, 0.00000000, 1.00000000, 0.00000000, 0.00000000, 0.00000000, 1.00000000, 0.03500000, 0.08199999, 0.07400000);
+        HideEllipsoid("woman", 0.62300009, 0.00009763, 0.00000000, -0.00000003, 0.00018301, 1.16900015, 0.00010390, -0.66300005, 0.00010380, 0.01000000, 0.04200000, -0.02800000);
+        HideEllipsoid("spitter", 0.21414018, 1.31557512, 0.40479043, -0.14931649, -0.33500317, 1.16775584, 0.92956561, -0.17264134, 0.06933303, 0.06000002, 0.08199999, -0.15300000);
+        HideEllipsoid("screamer", 1.43300021, 0.00000000, 0.00000000, 0.00000000, 1.20400071, 0.00000000, 0.00000000, 0.00000000, 0.61300027, 0.04000000, 0.09200000, 0.37700003);
+        HideEllipsoid("banshee", 0.62300009, 0.00009763, 0.00000000, -0.00000003, 0.00018301, 1.16900015, 0.00010390, -0.66300005, 0.00010380, 0.01000000, 0.04200001, -0.17300001);
+        HideEllipsoid("bolter", 0.22797550, 1.40057278, 0.43094340, -0.14199705, -0.31858146, 1.11051321, 0.56185770, -0.10434968, 0.04190699, 0.08000000, 0.08199999, -0.08300000);
+        HideEllipsoid("corruptor", 0.22028923, 1.35335195, 0.41641408, -0.14687671, -0.32952932, 1.14867520, 0.60108000, -0.11163414, 0.04483244, 0.06000002, 0.08199999, 0.17200002);
+        HideEllipsoid("demolisher", 0.22028956, 1.35335183, 0.41641411, -0.14687669, -0.32952923, 1.14867485, 0.60107988, -0.11163425, 0.04483239, 0.06000001, 0.08199999, -0.04300000);
+
+        BodyPatch("Skinned")
+        {
+			
+            //corruptor revenant
+			VariantsGroup()
+            {
+                RequiredProperty("class", "corruptor");
+
+                Mesh("chr_dmg_cut_waist_bottom_a_slim.msh"); 
+            }
+			//bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_cut_waist_bottom_bolter.msh");
+            }
+            //banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_cut_waist_bottom_banshee.msh");
+            }
+            //screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+
+				Mesh("chr_dmg_cut_waist_bottom_screamer.msh"); 
+            }
+            //spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_cut_waist_bottom_spitter.msh"); 
+            }
+            //sex female
+			VariantsGroup()
+            {
+                RequiredProperty("sex", "female");
+
+                Mesh("chr_dmg_cut_waist_bottom_a_slim.msh");
+            }
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_cut_waist_bottom_a_slim.msh");
+            }
+			//biter AVERAGE mostly bare torso
+			VariantsGroup()
+            {
+                RequiredProperty("Damagesize", "man_biter_avg_body");
+
+                Mesh("chr_dmg_cut_waist_bottom_biter_avg.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("Damagesize", "man_biter_skinny");
+
+                Mesh("chr_dmg_cut_waist_bottom_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("Damagesize", "man_biter_xl");
+
+                Mesh("chr_dmg_cut_waist_bottom_biter_xl.msh");
+            }
+
+            Mesh("chr_dmg_cut_waist_bottom_a.msh");
+        }
+
+        BodyBloodEffectName("wound_splashing.gpufx");
+
+        Gib()
+        {
+            Prefab("human_gib");
+
+            ShowEllipsoid("man", -0.21971092, 1.11924493, 0.07393983, 0.08860937, -0.06611995, 1.26417470, 0.72729594, 0.14563473, -0.04336099, 0.01000000, 0.13699999, -0.29300001);
+			ShowEllipsoid("man_skinny_biter", -0.24566098, 1.25143921, 0.08267318, 0.08826022, -0.06585973, 1.25919378, 0.78113335, 0.15641524, -0.04657071, -0.02000000, 0.13699999, -0.29400000);
+			ShowEllipsoid("man_XL_biter", -0.47443944, 1.16814554, -0.07424703, -0.08826024, 0.04424740, 1.26013851, 0.58035338, 0.23776208, 0.03229945, -0.02000001, 0.13700001, -0.23899999);
+            ShowEllipsoid("woman", 0.52899277, 0.66207397, -0.03047823, 0.13650747, -0.05801048, 1.10912657, 0.78975129, -0.63701427, -0.13051751, -0.00499999, 0.13700002, -0.11300001);
+            ShowEllipsoid("spitter", -0.21971092, 1.11924505, 0.07394011, 0.08860936, -0.06612024, 1.26417470, 0.72729599, 0.14563477, -0.04336096, 0.01000001, 0.13699999, -0.26300001);
+            ShowEllipsoid("screamer", 0.41200000, 0.00000000, 0.00000000, 0.00000000, 1.26899970, 0.00000000, 0.00000000, 0.00000000, 0.74299997, 0.04000000, 0.13699996, 0.32299998);
+            ShowEllipsoid("volatile", -0.21971092, 1.11924493, 0.07393983, 0.08860937, -0.06611995, 1.26417470, 0.72729594, 0.14563473, -0.04336099, 0.01000000, 0.13699999, -0.29300001);
+            ShowEllipsoid("banshee", 0.38930720, -0.00862648, -0.16521052, 0.24678458, 0.03051503, 0.57993752, 0.00060530, -4.18122911, 0.21974944, -0.00499998, 0.13700001, 0.31800002);
+            ShowEllipsoid("bolter", -0.01928799, 1.32045305, 0.39359465, 0.00462944, -0.35072023, 1.17684281, 0.43895406, 0.00636145, 0.00016908, 0.01500000, 0.12800002, -0.25800005);
+            ShowEllipsoid("corruptor", -0.21971095, 1.11924493, 0.07394010, 0.08860936, -0.06612024, 1.26417470, 0.72729611, 0.14563480, -0.04336096, 0.01000001, 0.13699998, -0.02300001);
+            ShowEllipsoid("demolisher", -0.10610709, 0.54052764, 0.03570860, 0.09105328, -0.06794389, 1.29904163, 0.62451524, 0.12505381, -0.03723324, -0.05000000, 0.13699999, -0.22800002);
+
+            Patch("Skinned")
+            {
+                //bolter
+				VariantsGroup()
+                {
+                    RequiredProperty("class", "bolter");
+
+                    Mesh("chr_dmg_cut_waist_top_bolter.msh");
+                }
+                //banshee
+				VariantsGroup()
+                {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_cut_waist_top_banshee.msh"); 
+                }
+                //spitter
+				VariantsGroup()
+                {
+                    RequiredProperty("class", "spitter");
+
+                    Mesh("chr_dmg_cut_waist_top_spitter.msh");
+                }
+				//screamer
+				VariantsGroup()
+                {
+                    RequiredProperty("class", "screamer");
+
+                    Mesh("chr_dmg_cut_waist_top_screamer.msh");
+                }
+                //sex female
+				VariantsGroup()
+                {
+                    RequiredProperty("sex", "female");
+
+                    Mesh("chr_dmg_cut_waist_top_slim.msh");
+                }
+                //DamageSize slim
+				VariantsGroup()
+                {
+                    RequiredProperty("DamageSize", "slim");
+
+                    Mesh("chr_dmg_cut_waist_top_slim.msh");
+                }
+				//biter AVERAGE bare torso
+				VariantsGroup()
+				{
+					RequiredProperty("Damagesize", "man_biter_avg_body");
+
+					Mesh("chr_dmg_cut_waist_top_biter_avg.msh");
+				}
+				//biter SKINNY
+				VariantsGroup()
+				{
+					RequiredProperty("Damagesize", "man_biter_skinny");
+
+					Mesh("chr_dmg_cut_waist_top_biter_skinny.msh");
+				}
+				//biter XL
+				VariantsGroup()
+				{
+					RequiredProperty("Damagesize", "man_biter_xl");
+
+					Mesh("chr_dmg_cut_waist_top_biter_xl.msh");
+				}
+
+                Mesh("chr_dmg_cut_waist_top.msh");
+            }
+
+            BloodEffectName("wound_bleeding.gpufx");
+
+            PhysicsSimsetName("sim_ragdoll.lite");
+
+            PhysicsImpulse("AllPhysicsBodies")
+            {
+                AdditionalLocalVelocityMinMax([1.5, 0.0, 0.0], [2.0, 0.0, 0.0]);
+                WorldTorqueMinMax([10.0, 30.0, 10.0], [20.0, 45.0, 20.0]);
+            }
+
+            PhysicsCollisionsWithMainBodyEnabled(g_FullBodyCutGibCollisionsWithMainBodyEnabled);
+
+            PhysicsAdditionalBonesCollisionsEnabled(true);
+            PhysicsAdditionalBone("pelvis");
+            PhysicsAdditionalBone("spine1");
+
+            BloodPuddlePreset("body_blood_puddle");
+        }
+    }
+    //
+	/////////////////////////////////////////////////////////////////////////// HOLES
+	//
+	////////////////////////////////////////////////////////////////////////////////// HEAD
+	//
+    BoneHole("hole_head_bottom")
+    {
+        MeshHelperElementName("helper_head_bottom");
+
+        HideEllipsoid("man", 0.03435974, -0.02400014, 0.04968302, 0.07685019, 0.00608145, -0.05021025, 0.08092957, 0.49686304, 0.18404806, -0.02700007, -0.34999999, 1.48399997);
+		HideEllipsoid("man_skinny_biter", 0.03435975, -0.02400015, 0.04968302, 0.07685020, 0.00608145, -0.05021027, 0.08092958, 0.49686310, 0.18404812, -0.02700007, -0.34999996, 1.46899986);
+		HideEllipsoid("man_XL_biter", 0.03435975, -0.02400015, 0.04968302, 0.07685020, 0.00608145, -0.05021027, 0.08092958, 0.49686310, 0.18404812, -0.02700007, -0.34999996, 1.46899986);
+        HideEllipsoid("woman", 0.04746459, -0.00249001, 0.04285920, 0.00576271, 0.10984893, -0.00000000, -0.05951925, 0.00312240, 0.06609620, 0.02500015, -0.03000000, 1.57699990);
+
+        BodyPatch("Skinned")
+        {
+        
+            // solidhead skinned
+            Mesh("chr_dmg_hole_head_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+    BoneHole("hole_head_top")
+    {
+        MeshHelperElementName("helper_head_top");
+
+        HideEllipsoid("man", -0.01511626, -0.01411282, 0.21902585, 0.21593125, -0.01646610, 0.01384170, 0.20392627, 2.83987665, 0.19706053, -0.17199999, -0.36970019, 1.79799998);
+		HideEllipsoid("man_skinny_biter", -0.01511626, -0.01411282, 0.21902585, 0.21593125, -0.01646610, 0.01384170, 0.20392627, 2.83987665, 0.19706053, -0.17199999, -0.36970019, 1.79799998);
+		HideEllipsoid("man_XL_biter", -0.01511626, -0.01411282, 0.21902585, 0.21593125, -0.01646610, 0.01384170, 0.20392627, 2.83987665, 0.19706053, -0.17199999, -0.36970019, 1.79799998);
+        HideEllipsoid("woman", -0.04151750, -0.02060408, 0.13739271, 0.13099469, -0.04374741, 0.03302355, 0.55864418, 2.03000593, 0.47324121, -0.17200002, -0.36970025, 1.70799994);
+        HideEllipsoid("volatile", -0.05231457, -0.07037573, 0.13382994, 0.13099466, -0.04837888, 0.02576577, 0.44171160, 1.78901136, 1.11343527, -0.17200017, -0.36970019, 1.66300035);
+        //HideEllipsoid("corruptor", -0.05231457, -0.07037573, 0.13382994, 0.13099466, -0.04837888, 0.02576577, 0.44171160, 1.78901136, 1.11343527, -0.17200017, -0.36970019, 1.66300035);
+		HideEllipsoid("screamer", 0.12422337, 0.00000000, -0.05024499, 0.00000000, 0.14400001, 0.00000000, 0.08024200, 0.00000000, 0.19838656, 0.13299999, -0.03400001, 1.76300001);
+		HideEllipsoid("spitter", 0.26327935, 0.00000000, -0.10648939, 0.00000000, 0.14400001, 0.00000000, 0.08024202, 0.00000000, 0.19838655, 0.13300005, -0.03400001, 1.76300013);
+        HideEllipsoid("demolisher", 0.06500001, 0.00000000, 0.00000000, 0.00000000, 0.09400000, 0.00000000, 0.00000000, 0.00000000, 0.10000001, -0.04700001, -0.14900000, 1.71300006)
+		{
+			Variant(0.07689478, -0.02205899, 0.00077109, 0.03421232, 0.11911415, -0.00416372, 0.00000000, 0.00401745, 0.11492980, -0.05200000, -0.13900000, 1.71299994)
+				{
+					RequiredProperty("ClassVariant", "freak_behemoth");
+				}
+		}
+        HideEllipsoid("goon", -0.00479475, -0.03947969, 0.13943951, 0.14184406, -0.00581787, 0.00323021, 0.07165865, 2.07458735, 0.58984458, 0.08299999, -1.40100002, 1.37800002);
+		HideEllipsoid("banshee", 0.05081724, -0.00743097, 0.13560005, 0.12833521, 0.03982651, -0.04591217, -0.09976093, 0.38914859, 0.05871188, 0.14299992, -0.22999996, 1.51299989);
+		HideEllipsoid("bolter", -0.01511638, -0.01411293, 0.21902589, 0.21593128, -0.01646622, 0.01384180, 0.04408666, 0.61394668, 0.04260234, 0.13800001, -0.36999997, 1.84300005);
+
+        BodyPatch("Skinned")
+        {
+            // bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_hole_head_top_bolter.msh");
+            }
+			// banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_hole_head_top_banshee.msh");
+            }
+			// spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_hole_head_top_spitter.msh");
+            }
+			// screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+
+                Mesh("chr_dmg_hole_head_top_screamer.msh");
+            }
+			// freak behemoth
+			VariantsGroup()
+            {
+				RequiredProperty("ClassVariant", "freak_behemoth");
+
+                Mesh("chr_dmg_hole_head_top_freak_behemoth.msh");
+            }
+			// freak gorilla
+			VariantsGroup()
+            {
+				RequiredProperty("ClassVariant", "freak_gorilla");
+
+                Mesh("chr_dmg_hole_head_top_freak_gorilla.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+
+                Mesh("chr_dmg_hole_head_top_demolisher_a.msh");
+            }
+            // goon
+			VariantsGroup()
+            {
+                
+                RequiredProperty("class", "goon");
+
+                Mesh("chr_dmg_hole_head_top_goon.msh");
+            }
+            //volatile
+			VariantsGroup()
+            {
+                // volatile
+                RequiredProperty("class", "volatile");
+
+                Mesh("chr_dmg_hole_head_top_volatile_a.msh");
+            }
+            
+            // solidhead skinned
+            Mesh("chr_dmg_hole_head_top_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+    //
+	////////////////////////////////////////////////////////////////////////////////// TORSO
+	//
+	BoneHole("hole_chest_front")
+    {
+        MeshHelperElementName("helper_chest");
+
+        HideEllipsoid("man", 0.14616424, -0.01415214, -0.10581467, 0.04647519, 0.00281105, 0.06382129, -0.00987072, -0.23213872, 0.01741265, 0.00300008, -0.27000004, 1.31900012)
+		{
+			Variant(0.07983964, -0.00248939, 0.06968096, -0.05843731, 0.00295381, 0.06706235, -0.01066859, -0.26977679, 0.00258602, -0.00700003, -0.30000001, 1.31299996)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_body");
+				}
+			Variant(0.08360566, -0.00260682, 0.07296781, -0.05187134, 0.00262192, 0.05952724, -0.01047102, -0.26478091, 0.00253813, -0.01200014, -0.30000007, 1.31299996)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+				}
+			Variant(0.11386272, -0.01102460, -0.08243021, 0.06412399, 0.00387854, 0.08805720, -0.00965891, -0.22715719, 0.01703899, 0.00300008, -0.27000007, 1.29400015)
+				{
+					RequiredProperty("DamageSize", "man_baron_soldier");
+				}
+		}
+		HideEllipsoid("man_skinny_biter", 0.07752357, -0.00750611, -0.05612268, 0.06412397, 0.00387854, 0.08805721, -0.01008254, -0.23712023, 0.01778631, -0.01200008, -0.26999983, 1.31900012);
+		HideEllipsoid("man_XL_biter", 0.08963663, -0.00867893, -0.06489184, 0.05235811, 0.00316688, 0.07189992, -0.00987072, -0.23213868, 0.01741265, -0.00700009, -0.26999983, 1.32900000);
+        HideEllipsoid("woman", 0.04879359, 0.01294559, 0.05681194, -0.09086703, 0.01521453, 0.07457529, 0.00361829, -0.31512910, 0.06870002, -0.00720006, -0.26980001, 1.28900003);
+        HideEllipsoid("screamer", 0.13773023, -0.00308578, -0.06182119, 0.03419802, -0.00599962, 0.07648855, -0.00947432, -0.19745281, -0.01125187, -0.01199988, -0.27000007, 1.35399985);
+        HideEllipsoid("bolter", 0.08462459, -0.00304213, 0.04522642, -0.04652041, 0.00384536, 0.08730447, -0.00938755, -0.20274481, 0.00392781, -0.00700003, -0.27000004, 1.39400005);
+        HideEllipsoid("corruptor", 0.12597583, -0.01219743, -0.09119937, 0.08765575, 0.00530186, 0.12037183, -0.01325982, -0.31184304, 0.02339125, -0.02200001, -0.26999998, 1.53400016);
+		HideEllipsoid("banshee", -0.00163723, 0.01571394, 0.08453634, -0.10898023, -0.00034358, -0.00204677, -0.00009414, -0.27823433, 0.05171743, 0.00300000, -0.26980007, 1.21400011);
+		
+        BodyPatch("Skinned")
+        {
+            //bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_hole_chest_bolter.msh"); 
+            }
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_hole_chest_banshee.msh"); 
+            }
+			//corruptor
+			VariantsGroup()
+            {
+                RequiredProperty("class", "corruptor");
+
+                Mesh("chr_dmg_hole_chest_biter_skinny.msh"); 
+            }
+			//howler screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+
+                Mesh("chr_dmg_hole_chest_screamer.msh"); 
+            }
+			//baron soldier man
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_baron_soldier");
+
+                Mesh("chr_dmg_hole_chest_a_big.msh");
+            }
+			//biter AVERAGE mostly naked torso
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_avg_body");
+
+                Mesh("chr_dmg_hole_chest_biter_avg.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_chest_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_chest_biter_xl.msh");
+            }
+            
+            Mesh("chr_dmg_hole_chest_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+    BoneHole("hole_belly_front")
+    {
+        MeshHelperElementName("helper_belly_center");
+
+        HideEllipsoid("man", 0.12551986, 0.00488411, -0.00984437, 0.01075322, 0.02807486, 0.15103695, 0.01661881, -0.31242800, 0.05689114, 0.00800000, -0.33999994, 1.08899999)
+		{
+			Variant(0.13548176, 0.00527174, -0.01062567, 0.00900757, 0.02351725, 0.12651798, 0.01505100, -0.28295359, 0.05152404, 0.00799999, -0.26979992, 1.04399991)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_body");
+				}
+			Variant(0.10061512, 0.00391504, -0.00789112, 0.00900757, 0.02351725, 0.12651797, 0.01505100, -0.28295356, 0.05152404, -0.00699998, -0.26979989, 1.07299995)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+				}
+			Variant(0.22475947, 0.01959638, 0.01323485, -0.02971566, 0.23406050, 0.15807797, 0.00000000, -0.06044595, 0.08950020, -0.00200000, -0.30499995, 0.91899991)
+				{
+					RequiredProperty("DamageEllipsoidSize", "man_baron_soldier_big_belly");
+				}
+			Variant(0.16599999, 0.00000000, 0.00000000, 0.00000000, 0.29899999, 0.00000000, 0.00000000, 0.00000000, 0.15800001, -0.00700000, -0.33999977, 1.02400005)
+				{
+					RequiredProperty("DamageEllipsoidSize", "man_baron_soldier");
+				}
+		}
+		HideEllipsoid("man_skinny_biter", 0.14544366, 0.00565937, -0.01140697, 0.00691279, 0.01804812, 0.09709521, 0.01505100, -0.28295359, 0.05152404, 0.00799999, -0.26979995, 1.07400012);
+		HideEllipsoid("man_XL_biter", 0.16038647, 0.00624081, -0.01257891, 0.00970583, 0.02534030, 0.13632560, 0.00799584, -0.15031910, 0.02737215, -0.02700000, -0.26979992, 1.02400005);
+        HideEllipsoid("woman", 0.15540554, 0.0060469923, -0.012188263, 0.008276609, 0.021608837, 0.1162511, 0.015834894, -0.29769075, 0.05420757, -0.007199995, -0.26979998, 1.089);
+        HideEllipsoid("spitter", 0.11057701, 0.00430267, -0.00867242, 0.00865844, 0.02260573, 0.12161418, 0.01400579, -0.26330402, 0.04794598, -0.00200000, -0.26979989, 1.05399978);
+        HideEllipsoid("screamer", 0.22600000, 0.00000000, 0.00000000, 0.00000000, 0.10399999, 0.00000000, 0.00000000, 0.00000000, 0.09300000, -0.02700000, -0.21999998, 0.99399996);
+        HideEllipsoid("bolter", 0.16536741, 0.00643462, -0.01296957, 0.00761105, 0.01987117, 0.10690279, 0.01348318, -0.25347921, 0.04615695, -0.00720000, -0.26979983, 1.04400015);
+        HideEllipsoid("corruptor", 0.16536745, 0.00643462, -0.01296956, 0.01040409, 0.02716334, 0.14613317, 0.01740271, -0.32716504, 0.05957467, -0.00700001, -0.26980004, 1.34399998);
+        HideEllipsoid("goon", 0.15042458, 0.00585318, -0.01179762, 0.00830931, 0.02169421, 0.11671039, 0.01426709, -0.26821631, 0.04884049, -0.00700001, -0.26979974, 1.06900001);
+		HideEllipsoid("banshee", 0.10559607, 0.00410885, -0.00828177, 0.00827661, 0.02160883, 0.11625110, 0.01452839, -0.27312881, 0.04973501, -0.00200000, -0.26979995, 0.94400001);
+
+        BodyPatch("Skinned")
+        {
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_hole_belly_guts_banshee.msh"); 
+            }
+			// goon
+			VariantsGroup()
+            {
+                RequiredProperty("class", "goon");
+
+                Mesh("chr_dmg_hole_belly_guts_goon.msh"); 
+            }
+			// screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+
+                Mesh("chr_dmg_hole_belly_guts_screamer.msh"); 
+            }
+			//bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_hole_belly_guts_bolter.msh"); 
+            }
+            //corruptor revenant
+			VariantsGroup()
+            {
+                RequiredProperty("class", "corruptor");
+
+                Mesh("chr_dmg_hole_belly_guts_a_slim.msh"); 
+            }
+            // spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_hole_belly_guts_spitter.msh");
+            }
+            //sex female
+			VariantsGroup()
+            {
+                RequiredProperty("sex", "female");
+
+                Mesh("chr_dmg_hole_belly_guts_a.msh");
+            }
+            //damage size big
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "big");
+
+                Mesh("chr_dmg_hole_belly_guts_a_big.msh");
+            }
+			//damge size slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_hole_belly_guts_a_slim.msh");
+            }
+			//biter AVERAGE body mostly naked torso
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_avg_body");
+
+                Mesh("chr_dmg_hole_belly_guts_biter_avg.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_belly_guts_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_belly_guts_biter_xl.msh");
+            }
+
+            Mesh("chr_dmg_hole_belly_guts_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+        
+    }
+    BoneHole("hole_chest_back")
+    {
+        MeshHelperElementName("helper_back");
+
+        HideEllipsoid("man", 0.05678678, 0.01287684, 0.08252546, -0.10984010, -0.00600200, 0.07651882, 0.02931957, -0.26554176, 0.02125859, -0.00999993, 0.31599998, 1.27400005)
+		{
+			Variant(-0.06240221, 0.01073967, 0.06535763, -0.06387649, 0.00484626, -0.06178438, -0.05180414, -0.42436936, 0.02027151, 0.02500004, 0.31599993, 1.32399988)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_body");
+				}
+		}
+		HideEllipsoid("man_skinny_biter", 0.06128472, 0.01389679, 0.08906212, -0.10164310, -0.00555409, 0.07080846, 0.03260163, -0.29526663, 0.02363831, -0.02300000, 0.31599993, 1.32099986);
+		HideEllipsoid("man_XL_biter", 0.07534086, 0.01708414, 0.10948922, -0.08524904, -0.00465827, 0.05938774, 0.02767856, -0.25067931, 0.02006878, -0.01799995, 0.31599984, 1.34100008);
+        HideEllipsoid("woman", 0.11098309, -0.00042077, -0.00189295, 0.00199156, 0.02473250, 0.11126697, -0.00000000, -0.15911655, 0.03536853, 0.01300000, 0.25100005, 1.23399997);
+        HideEllipsoid("spitter", 0.05678676, 0.01287685, 0.08252546, -0.12623416, -0.00689782, 0.08793955, 0.02330250, -0.21104625, 0.01689583, 0.00000006, 0.31600013, 1.34400010);
+        HideEllipsoid("screamer", 0.07177540, 0.00511119, 0.10343196, -0.11803713, -0.00644991, 0.08222916, 0.01905854, -0.31741887, 0.00246010, -0.00500000, 0.31600007, 1.27400005);
+        HideEllipsoid("charger", 0.04835309, 0.01096443, 0.07026921, -0.04426393, -0.00241872, 0.03083594, 0.00382905, -0.03467897, 0.00277631, 0.00500023, 0.27600002, 1.36400008);
+		HideEllipsoid("freak_slasher", 0.08100000, 0.00000000, 0.00000000, 0.00000000, 0.11899999, 0.00000000, 0.00000000, 0.00000000, 0.07300000, -0.00500000, 0.32100007, 1.37900007);
+
+        BodyPatch("Skinned")
+        {
+			//class charger
+			//ClassVariant freak_slasher
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_slasher");
+
+                Mesh("chr_dmg_hole_back_a_freak_slasher_a.msh");
+            }
+            //spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_hole_back_spitter.msh");
+            }
+			//charger
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "charger");
+
+                Mesh("chr_dmg_hole_back_a_charger_a.msh");
+            }
+            //sex female
+			VariantsGroup()
+            {
+                RequiredProperty("sex", "female");
+
+                Mesh("chr_dmg_hole_back_a_slim.msh");
+            }
+            //DamageSize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_hole_back_a_slim.msh");
+            }
+			//biter AVERAGE mostly naked torso
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_avg_body");
+
+                Mesh("chr_dmg_hole_back_a_biter_avg.msh");
+            }
+			//biter skinny
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+
+                Mesh("chr_dmg_hole_back_a_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+
+                Mesh("chr_dmg_hole_back_biter_xl.msh");
+            }
+
+            Mesh("chr_dmg_hole_back_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+    BoneHole("hole_chest_left")
+    {
+        MeshHelperElementName("helper_chest_left");
+
+        //HideEllipsoid("man", -0.0135, 0.0012, -0.0583, -0.0747, 0.0035, 0.0175, -0.0337, -0.7059, -0.0063, 0.1432, -0.3697, 1.2741);
+        //HideEllipsoid("woman", -0.0135, 0.0012, -0.0583, -0.0747, 0.0035, 0.0175, -0.0337, -0.7059, -0.0063, 0.1432, -0.3697, 1.2741);
+		
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+    BoneHole("hole_clavicle_left")
+    {
+        MeshHelperElementName("helper_clavicle_left");
+
+        HideEllipsoid("man", 0.09963351, -0.00353431, -0.05103607, 0.08724055, 0.01322125, 0.16939691, 0.00104532, -0.29314816, 0.02234155, 0.21300000, -0.03400003, 1.57900012)
+		{
+			Variant(0.15471399, -0.00072736, 0.07282893, -0.04879241, -0.01927225, 0.10345957, 0.02236643, -0.32935509, -0.05080342, 0.25799996, 0.01100003, 1.53400004)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_body");
+				}
+			Variant(0.17107581, 0.01203268, 0.04378697, -0.02975697, 0.02802103, 0.10856040, 0.00103916, -0.26039246, 0.06749596, 0.26299992, -0.03400003, 1.52400029)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+				}
+		}
+		HideEllipsoid("man_skinny_biter", 0.09963351, -0.00353431, -0.05103607, 0.08724058, 0.01322125, 0.16939695, 0.00104532, -0.29314819, 0.02234156, 0.21799999, -0.02899998, 1.58400011);
+		HideEllipsoid("man_XL_biter", 0.11297725, -0.00400765, -0.05787124, 0.08724056, 0.01322125, 0.16939695, 0.00104532, -0.29314822, 0.02234156, 0.22799999, -0.03400002, 1.57900035);
+        HideEllipsoid("woman", 0.10733399, 0.00001371, -0.03533297, 0.02716094, 0.00910197, 0.08251264, 0.00918835, -0.27947009, 0.02780379, 0.18100002, -0.00310001, 1.50800025);
+        HideEllipsoid("spitter", 0.11376416, -0.00294245, -0.04396659, 0.06898325, 0.01385896, 0.17756756, 0.00109574, -0.29313931, 0.02245353, 0.22299993, -0.03400002, 1.58399999);
+		HideEllipsoid("banshee", 0.08235945, 0.00676354, -0.00775738, 0.00596058, 0.00383219, 0.06662422, 0.01338847, -0.15422992, 0.00767342, 0.13600002, -0.00310000, 1.30200005);
+        HideEllipsoid("screamer", 0.11283705, -0.03238961, -0.07062374, 0.04028225, 0.14033295, 0.00000000, 0.14319733, -0.04110445, 0.24764079, 0.26299995, -0.02399999, 1.63900006);
+        HideEllipsoid("volatile", 0.08921178, -0.00938598, -0.05832806, 0.02992494, 0.28443018, 0.00000000, 0.08348802, -0.00878378, 0.12910694, 0.26300001, -0.00400000, 1.55900013);
+        HideEllipsoid("bolter", 0.00089025, -0.04156596, 0.12528162, -0.12008050, 0.01385529, 0.00545020, -0.01892078, -0.14509794, -0.04800617, 0.19899999, 0.00600001, 1.54399979);
+        HideEllipsoid("corruptor", 0.09518558, -0.00337653, -0.04875767, 0.09409191, 0.01425957, 0.18270035, 0.00072532, -0.20340888, 0.01550230, 0.20300001, -0.03400003, 1.83400011);
+        HideEllipsoid("demolisher", 0.12632102, -0.00448100, -0.06470642, 0.08724055, 0.01322125, 0.16939694, 0.00104532, -0.29314828, 0.02234156, 0.31799993, 0.03599998, 1.69900000)
+		{
+			Variant(0.14411274, -0.00511212, -0.07382002, 0.08724058, 0.01322125, 0.16939698, 0.00099199, -0.27819151, 0.02120168, 0.31800005, 0.03600001, 1.74400020)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+			Variant(0.11194666, -0.00416054, -0.05983012, 0.10672349, 0.01550128, 0.19860972, 0.00161709, -0.45767212, 0.03485188, 0.32300007, -0.04899999, 1.74400055)
+				{
+					RequiredProperty("ClassVariant", "freak_behemoth");
+				}
+		}
+        HideEllipsoid("goon", 0.10159223, -0.01042780, -0.08363185, 0.13964859, -0.01059109, 0.17095941, -0.01545913, -0.16827711, 0.00220290, 0.27800000, 0.01600000, 1.63900018);
+		HideEllipsoid("freak_toxin", 0.05179680, -0.02558092, -0.07792117, 0.10055733, 0.04096560, 0.05339514, 0.03563073, -0.20684032, 0.09158902, 0.19800001, -0.07900009, 1.76900017);
+		
+        BodyPatch("Skinned")
+        {
+			//bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_hole_clavicle_left_bolter.msh"); 
+            }
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_hole_clavicle_left_banshee.msh"); 
+            }
+            // freak toxin
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_toxin");
+				
+                Mesh("chr_dmg_hole_clavicle_left_freak_toxin.msh");
+            }
+			// goon
+			VariantsGroup()
+            {
+                RequiredProperty("class", "goon");
+                
+                Mesh("chr_dmg_hole_clavicle_left_goon.msh");
+            }
+            // freak_behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+                
+                Mesh("chr_dmg_hole_clavicle_left_freak_behemoth.msh");
+            }
+			// freak_gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+                
+                Mesh("chr_dmg_hole_clavicle_left_freak_gorilla.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+                
+                Mesh("chr_dmg_hole_clavicle_left_demolisher_a.msh");
+            }
+            // corruptor revenant
+			VariantsGroup()
+            {
+                RequiredProperty("class", "corruptor");
+                
+                Mesh("chr_dmg_hole_clavicle_left_a_small.msh");
+            }
+            // volatile
+			VariantsGroup()
+            {
+                RequiredProperty("class", "volatile");
+                
+                Mesh("chr_dmg_hole_clavicle_left_volatile.msh");
+            }
+            // screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+                
+                Mesh("chr_dmg_hole_clavicle_left_screamer.msh");
+            }
+            // spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_hole_clavicle_left_spitter.msh");
+            }
+            // sex female
+			VariantsGroup()
+            {
+                RequiredProperty("sex", "female");
+
+                Mesh("chr_dmg_hole_clavicle_left_a_woman.msh");
+            }
+            //damage size slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_hole_clavicle_left_a_small.msh");
+            }
+            // damage size big
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "big");
+
+                Mesh("chr_dmg_hole_clavicle_left_a_big.msh");
+            }
+			//biter AVERAGE mostly naked torso
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_avg_body");
+				
+                Mesh("chr_dmg_hole_clavicle_left_biter_avg.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_clavicle_left_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_clavicle_left_biter_xl.msh");
+            }
+
+            Mesh("chr_dmg_hole_clavicle_left_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_small.gpufx");
+    }   
+	BoneHole("hole_clavicle_right")
+    {
+        MeshHelperElementName("helper_clavicle_right");
+
+        HideEllipsoid("man", 0.10237705, 0.00988524, 0.06561416, -0.06267555, 0.00754385, 0.09665541, 0.01288171, -0.39185965, 0.03893728, -0.21200001, -0.01350000, 1.52400017)
+		{
+			Variant(0.10237705, 0.00988524, 0.06561416, -0.06267555, 0.00754385, 0.09665541, 0.01288171, -0.39185965, 0.03893728, -0.21200001, -0.01350000, 1.52400017)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_body");
+				}
+			Variant(0.13113911, 0.00402263, -0.01450368, 0.01287039, 0.00928361, 0.11894609, 0.00905750, -0.23318970, 0.01722016, -0.22200012, 0.02199997, 1.51899993)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+				}
+		}
+		HideEllipsoid("man_skinny_biter", 0.06216397, -0.01558390, 0.07281335, -0.08414011, -0.00561594, 0.07063217, -0.01808948, -0.27500719, -0.04341469, -0.18700010, 0.05700003, 1.51899993);
+		HideEllipsoid("man_XL_biter", 0.12167817, 0.00000000, 0.07320127, 0.00000000, 0.18000001, 0.00000000, -0.21084028, 0.00000000, 0.35046744, -0.31200010, 0.04200000, 1.70899999);
+        HideEllipsoid("woman", 0.10659754, 0.00192272, 0.03431136, -0.03541930, 0.00471802, 0.10977528, 0.00153683, -0.40360287, 0.01784226, -0.18199998, -0.00800000, 1.53399992);
+        HideEllipsoid("spitter", 0.13998707, 0.01662340, -0.09854592, 0.06050442, -0.00081178, 0.08581117, 0.01259991, -0.16820380, -0.01047527, -0.22700000, 0.02700000, 1.54400015);
+		HideEllipsoid("banshee", 0.08140492, -0.01486351, -0.00642800, 0.00596058, 0.00383219, 0.06662422, -0.02691488, -0.15223648, 0.01116452, -0.14399998, -0.00310000, 1.30700016);
+        HideEllipsoid("screamer", 0.09433569, -0.05367716, 0.05570943, 0.02926554, 0.08864523, 0.03585459, -0.08381798, -0.02139738, 0.12131654, -0.22699988, -0.04800002, 1.54399991);
+        HideEllipsoid("volatile", 0.11386441, 0.02021679, 0.07345187, -0.10586758, 0.00131186, 0.16375388, 0.02514586, -0.20670708, 0.01791288, -0.28699994, 0.03200000, 1.59399986);
+		HideEllipsoid("demolisher", 0.11963578, 0.02376010, -0.00259617, 0.00361887, 0.00144168, 0.17995787, 0.06508981, -0.32759362, 0.00131549, -0.27200004, 0.03200002, 1.71400011)
+		{
+			Variant(-0.05420132, 0.34973598, 0.11459046, 0.15434206, 0.00057089, 0.07126147, 0.08018475, 0.06951160, -0.17422554, -0.31200010, 0.17199993, 1.79399991)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+			Variant(-0.05565838, 0.35913745, 0.11767093, 0.14072366, 0.00052052, 0.06497368, 0.09787256, 0.08484510, -0.21265760, -0.34699994, 0.05199999, 1.79399955)
+				{
+					RequiredProperty("ClassVariant", "freak_behemoth");
+				}
+		}
+        HideEllipsoid("goon", 0.13924821, 0.02765519, -0.00302177, 0.00361887, 0.00144168, 0.17995788, 0.06508981, -0.32759365, 0.00131549, -0.31200001, 0.03200004, 1.73899996);
+		HideEllipsoid("bolter", -0.00165876, 0.04882087, -0.12262866, 0.11777695, 0.02628475, 0.00887134, 0.03525424, -0.13911401, -0.05586087, -0.21100008, 0.00600004, 1.54399991);
+        HideEllipsoid("corruptor", 0.09398549, 0.00907498, 0.06023595, -0.05429070, 0.00653462, 0.08372467, 0.00487151, -0.14819057, 0.01472501, -0.16700000, -0.02800000, 1.76400018);
+		HideEllipsoid("freak_toxin", 0.09706840, -0.04121908, 0.03771894, -0.00298537, 0.03647713, 0.04754479, -0.09877834, -0.14000188, 0.10120931, -0.19700000, 0.00700001, 1.73399997);
+		HideEllipsoid("charger", -0.00172160, 0.05067013, -0.12727360, 0.11777695, 0.02628478, 0.00887135, 0.02495270, -0.09846378, -0.03953790, -0.21600001, 0.25099999, 1.46300006);
+
+        BodyPatch("Skinned")
+        {
+			//charger
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "charger");
+
+                Mesh("chr_dmg_hole_clavicle_right_charger.msh"); 
+            }
+			//bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_hole_clavicle_right_bolter.msh"); 
+            }
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_hole_clavicle_right_banshee.msh"); 
+            }
+			// freak toxin
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_toxin");
+				
+                Mesh("chr_dmg_hole_clavicle_right_freak_toxin.msh");
+            }
+			// goon
+			VariantsGroup()
+            {
+                RequiredProperty("class", "goon");
+                
+                Mesh("chr_dmg_hole_clavicle_right_goon.msh");
+            }
+			// freak_behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+                
+                Mesh("chr_dmg_hole_clavicle_right_freak_behemoth.msh");
+            }
+			// freak_gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+                
+                Mesh("chr_dmg_hole_clavicle_right_freak_gorilla.msh");
+            }
+            // demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+                
+                Mesh("chr_dmg_hole_clavicle_right_demolisher_a.msh");
+            }
+            // corruptor revenant
+			VariantsGroup()
+            {
+                RequiredProperty("class", "corruptor");
+                
+                Mesh("chr_dmg_hole_clavicle_right_a_small.msh");
+            }
+            // volatile
+			VariantsGroup()
+            {
+                RequiredProperty("class", "volatile");
+                
+                Mesh("chr_dmg_hole_clavicle_right_volatile.msh");
+            }
+            //screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+                
+                Mesh("chr_dmg_hole_clavicle_right_screamer.msh");
+            }
+            //spitter
+			VariantsGroup()
+            { 
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_hole_clavicle_right_spitter.msh");
+            }
+            //sex female
+			VariantsGroup()
+            {
+                RequiredProperty("sex", "female");
+
+                Mesh("chr_dmg_hole_clavicle_right_a_woman.msh");
+            }
+            //biter AVERAGE mostly naked torso
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_avg_body");
+
+                Mesh("chr_dmg_hole_clavicle_right_biter_avg.msh");
+            }
+			// damage size slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_hole_clavicle_right_a_small.msh");
+            }
+            //damage size big
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "big");
+
+                Mesh("chr_dmg_hole_clavicle_right_a_big.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_clavicle_right_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_clavicle_right_biter_xl.msh");
+            }
+
+            Mesh("chr_dmg_hole_clavicle_right_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_small.gpufx");
+    }
+    BoneHole("hole_chest_right")
+    {
+        MeshHelperElementName("helper_chest_right");
+
+        //HideEllipsoid("man", 0.0145, 0.0012, -0.0487, -0.0583, -0.0025, -0.0173, 0.0334, -0.7059, -0.0071, -0.1373, -0.3697, 1.2867);
+        //HideEllipsoid("woman", 0.0145, 0.0012, -0.0487, -0.0583, -0.0025, -0.0173, 0.0334, -0.7059, -0.0071, -0.1373, -0.3697, 1.2867);
+
+        BodyBloodEffectName("hole_burst_small.gpufx");
+    }
+    BoneHole("hole_belly_left")
+    {
+        MeshHelperElementName("helper_belly_left");
+
+        HideEllipsoid("man", 0.00462646, -0.00547063, -0.08469752, 0.08360521, -0.00643026, 0.00498212, -0.04245065, -0.52734274, 0.03174236, 0.16790001, -0.03079998, 1.12100005)
+		{
+			Variant(0.01413542, 0.00271446, -0.09895869, 0.07646083, -0.01689271, 0.01045842, -0.03952219, -0.18553373, -0.01073465, 0.15799999, 0.02900000, 1.14100015)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_body");
+				}
+			Variant(0.00137094, 0.00652531, -0.08975267, 0.11895631, -0.00279218, 0.00161402, -0.00336238, -0.14956380, -0.01092514, 0.19300002, -0.06099999, 1.11599994)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+				}
+		}
+		HideEllipsoid("man_skinny_biter", 0.00669813, 0.01317457, -0.11908639, 0.08360524, -0.00713084, 0.00391357, -0.04391694, -0.54962951, -0.06327587, 0.13800000, -0.06100002, 1.13099992);
+		HideEllipsoid("man_XL_biter", 0.07000001, 0.00000000, 0.00000000, 0.00000000, 0.23900002, 0.00000000, 0.00000000, 0.00000000, 0.08000000, 0.21300006, -0.06100003, 1.13100016);
+        HideEllipsoid("woman", 0.00569709, -0.00673661, -0.10429779, 0.09829789, -0.00756031, 0.00585768, -0.01919178, -0.23840970, 0.01435061, 0.17299999, -0.03079998, 1.10099995);
+        HideEllipsoid("spitter", 0.00058309, -0.03172258, -0.10009165, 0.08399610, -0.00048947, 0.00064446, -0.00110216, -0.13345531, 0.04229026, 0.14300001, -0.01100001, 1.11600006);
+		HideEllipsoid("banshee", -0.01403602, -0.00086151, -0.10372136, 0.09518672, 0.02286018, -0.01307096, 0.03802557, -0.16051334, -0.00381257, 0.13300000, -0.03079999, 0.98600000);
+        HideEllipsoid("screamer", 0.01249030, -0.01731871, -0.11300024, 0.07346603, -0.02637797, 0.01216321, -0.07728136, -0.20471025, 0.02283226, 0.23800001, 0.10500000, 1.09599996);
+        HideEllipsoid("bolter", 0.07462544, -0.01389882, 0.07254561, -0.06842068, 0.07022212, 0.08383591, -0.06007667, -0.10768468, 0.04116802, 0.11800009, -0.01100001, 1.15600002);
+        HideEllipsoid("corruptor", 0.00559444, -0.00649027, -0.10063589, 0.12348952, -0.00845179, 0.00740997, -0.01291570, -0.17920853, 0.01083962, 0.15200000, -0.06599999, 1.38000000);
+        HideEllipsoid("goon", -0.04209472, -0.01666976, -0.11113124, 0.10236176, 0.06205816, -0.04808175, 0.08951291, -0.15580906, -0.01053459, 0.17299999, -0.03080001, 1.15599990);
+		HideEllipsoid("volatile", 0.10931028, -0.01879853, -0.00434448, 0.03198289, 0.17654568, 0.04080097, -0.00000000, -0.02251721, 0.09743189, 0.19699998, 0.01899998, 1.09999979);
+		HideEllipsoid("freak_toxin", 0.00642530, -0.00745417, -0.11558182, 0.07369537, -0.00504381, 0.00442208, -0.00861047, -0.11947236, 0.00722641, 0.12700000, 0.00900000, 1.38499999);
+		HideEllipsoid("charger", 0.08961473, -0.01541141, -0.00356169, 0.03198288, 0.17654563, 0.04080097, -0.00000000, -0.02251720, 0.09743187, 0.14199999, 0.11900000, 1.12999976);
+
+        BodyPatch("Skinned")
+        {
+			//charger
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "charger");
+
+                Mesh("chr_dmg_hole_belly_left_charger.msh"); 
+            }
+			//bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_hole_belly_left_bolter.msh"); 
+            }
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_hole_belly_left_banshee.msh"); 
+            }
+            // freak toxin
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_toxin");
+				
+                Mesh("chr_dmg_hole_belly_left_freak_toxin.msh");
+            }
+			// volatile
+			VariantsGroup()
+            {
+                RequiredProperty("class", "volatile");
+                
+                Mesh("chr_dmg_hole_belly_left_volatile.msh");
+            }
+			// goon
+			VariantsGroup()
+            {
+                RequiredProperty("class", "goon");
+                
+                Mesh("chr_dmg_hole_belly_left_goon.msh");
+            }
+            // screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+                
+                Mesh("chr_dmg_hole_belly_left_screamer.msh");
+            }
+			// bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+                
+                Mesh("chr_dmg_hole_belly_left_a_small.msh");
+            }
+            // corruptor revenant
+			VariantsGroup()
+            {
+                RequiredProperty("class", "corruptor");
+                
+                Mesh("chr_dmg_hole_belly_left_a_small.msh");
+            }
+            //spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_hole_belly_left_spitter.msh");
+            }
+            //sex female
+			VariantsGroup()
+            {
+                RequiredProperty("sex", "female");
+
+                Mesh("chr_dmg_hole_belly_left_a_woman.msh");
+            }
+            //damage size slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_hole_belly_left_a_small.msh");
+            }
+            // damage size big
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "big");
+
+                Mesh("chr_dmg_hole_belly_left_a_big.msh");
+            }
+			//biter AVERAGE big jacket
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+
+                Mesh("chr_dmg_hole_belly_left_a_big.msh");
+            }
+			//biter AVERAGE mostly naked torso
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_avg_body");
+
+                Mesh("chr_dmg_hole_belly_left_biter_avg.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_belly_left_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_belly_left_biter_xl.msh");
+            }
+
+            Mesh("chr_dmg_hole_belly_left_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+    BoneHole("hole_belly_right")
+    {
+        MeshHelperElementName("helper_belly_right");
+
+        HideEllipsoid("man", 0.09785351, 0.00535647, -0.00000010, 0.00000193, -0.00003708, -0.08899999, -0.01776378, 0.32451415, -0.00013559, -0.17770000, -0.00400000, 1.12000000)
+		{
+			Variant(-0.00604908, -0.00122574, -0.08978812, 0.07337432, 0.00816454, -0.00505473, 0.01942537, -0.17391528, 0.00106549, -0.13700001, -0.00100000, 1.13599992)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_body");
+				}
+			Variant(0.09785351, 0.00535646, -0.00000010, 0.00000194, -0.00003708, -0.08899996, -0.00901853, 0.16475332, -0.00006884, -0.16299999, -0.12899998, 1.11999989)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+				}
+		}
+		HideEllipsoid("man_skinny_biter", 0.12780869, 0.00699620, -0.00000013, 0.00000292, -0.00005583, -0.13400003, -0.01694392, 0.30953661, -0.00012933, -0.17770000, -0.00400000, 1.14000010);
+		HideEllipsoid("man_XL_biter", 0.08000000, 0.00000000, 0.00000000, 0.00000000, 0.23399998, 0.00000000, 0.00000000, 0.00000000, 0.08500000, -0.21199998, -0.05100000, 1.12600005);
+        HideEllipsoid("woman", 0.08779427, 0.00480583, -0.00000009, 0.00000238, -0.00004558, -0.10940000, -0.00628565, 0.11482807, -0.00004798, -0.14799999, -0.00400000, 1.11499989);
+        HideEllipsoid("spitter", 0.07692239, 0.00612540, 0.01137644, 0.01707013, -0.01690216, -0.10631994, -0.00755766, 0.13786891, -0.02313106, -0.11800000, -0.00400000, 1.09500039);
+		HideEllipsoid("banshee", 0.02794628, 0.00985975, -0.10038757, 0.08908398, -0.03701453, 0.02116410, -0.05597855, -0.15218188, -0.03053035, -0.14200000, -0.03079999, 0.97600001);
+        HideEllipsoid("screamer", 0.10634334, -0.00294073, 0.01861303, 0.01720989, 0.00676681, -0.09725755, 0.00142213, 0.09474251, 0.00684347, -0.18800004, 0.06099998, 1.12000000);
+        HideEllipsoid("bolter", -0.00383930, -0.03087763, -0.12622136, -0.09191095, 0.01960555, -0.00200045, 0.02594526, 0.11859090, -0.02980016, -0.13200000, -0.02600008, 1.14099991);
+        HideEllipsoid("corruptor", 0.09785353, 0.00535646, -0.00000010, 0.00000194, -0.00003708, -0.08899997, -0.01776378, 0.32451418, -0.00013559, -0.11800001, -0.00400000, 1.37999976);
+        HideEllipsoid("goon", 0.08754814, 0.01267737, 0.02869856, 0.03526389, 0.00184852, -0.10839300, -0.04711521, 0.34668648, -0.00941583, -0.22300002, 0.07100000, 1.13500011);
+		HideEllipsoid("volatile", 0.11499999, 0.00000000, 0.00000000, 0.00000000, 0.12199999, 0.00000000, 0.00000000, 0.00000000, 0.09700003, -0.16699995, 0.01200000, 1.09599996);
+		HideEllipsoid("freak_toxin", 0.07767509, 0.00700440, 0.00123343, 0.00190612, -0.00194957, -0.10896590, -0.01789781, 0.19915986, -0.00387636, -0.20299999, -0.02399999, 1.34000003);
+		HideEllipsoid("charger", 0.07767508, 0.00700441, 0.00123343, 0.00199355, -0.00203900, -0.11396434, -0.01431826, 0.15932788, -0.00310108, -0.12799999, 0.11099997, 1.16499960);
+
+        BodyPatch("Skinned")
+        {
+			//charger
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "charger");
+
+                Mesh("chr_dmg_hole_belly_right_charger.msh"); 
+            }
+			//bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+
+                Mesh("chr_dmg_hole_belly_right_bolter.msh"); 
+            }
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_hole_belly_right_banshee.msh"); 
+            }
+            // freak toxin
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_toxin");
+				
+                Mesh("chr_dmg_hole_belly_right_freak_toxin.msh");
+            }
+			//volatile
+			VariantsGroup()
+            {
+                RequiredProperty("class", "volatile");
+                
+                Mesh("chr_dmg_hole_belly_right_volatile.msh");
+            }
+			//goon
+			VariantsGroup()
+            {
+                RequiredProperty("class", "goon");
+                
+                Mesh("chr_dmg_hole_belly_right_goon.msh");
+            }
+            // screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+                
+                Mesh("chr_dmg_hole_belly_right_screamer.msh");
+            }
+			// bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+                
+                Mesh("chr_dmg_hole_belly_right_a_small.msh");
+            }
+            // corruptor revenant
+			VariantsGroup()
+            {
+                RequiredProperty("class", "corruptor");
+                
+                Mesh("chr_dmg_hole_belly_right_a_small.msh");
+            }
+            //spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+
+                Mesh("chr_dmg_hole_belly_right_spitter.msh");
+            }
+            //sex female
+			VariantsGroup()
+            {
+                RequiredProperty("sex", "female");
+
+                Mesh("chr_dmg_hole_belly_right_a_woman.msh");
+            }
+            //damagesize slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_hole_belly_right_a_small.msh");
+            }
+            //damage size big
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "big");
+
+                Mesh("chr_dmg_hole_belly_right_a_big.msh");
+            }
+			//biter AVERAGE big jacket
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+
+                Mesh("chr_dmg_hole_belly_right_a_big.msh");
+            }
+			//biter AVERAGE mostly naked torso
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_avg_body");
+
+                Mesh("chr_dmg_hole_belly_right_biter_avg.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_belly_right_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_belly_right_biter_xl.msh");
+            }
+
+            Mesh("chr_dmg_hole_belly_right_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+    BoneHole("hole_pelvis_left")
+    {
+        MeshHelperElementName("helper_pelvis_left");
+
+        HideEllipsoid("man", 0.01006692, -0.00600322, -0.12043100, 0.11778217, -0.01333759, 0.01051035, -0.01715845, -0.14688404, 0.00588756, 0.20699999, -0.04600000, 0.88999993)
+		{
+			Variant(0.00881895, -0.00525901, -0.10550151, 0.11778217, -0.01333759, 0.01051035, -0.01101387, -0.09428367, 0.00377917, 0.20699999, -0.05599999, 0.87500006)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+				}
+			Variant(0.01089897, -0.00649937, -0.13038394, 0.11778215, -0.01333768, 0.01051042, -0.02005698, -0.17169553, 0.00688207, 0.20700002, -0.03600001, 0.90499997)
+				{
+					RequiredProperty("DamageSize", "man_baron_soldier");
+				}
+		}
+		HideEllipsoid("man_skinny_biter", 0.00579964, 0.00999046, -0.09026380, 0.11851007, -0.00847277, 0.00667675, -0.02320703, -0.35690469, -0.04099360, 0.20699997, -0.03079999, 0.92499995);
+		HideEllipsoid("man_XL_biter", 0.09099998, 0.00000000, 0.00000000, 0.00000000, 0.15400000, 0.00000000, 0.00000000, 0.00000000, 0.14000000, 0.19700000, -0.00600000, 0.85500002);
+        HideEllipsoid("woman", 0.00692381, -0.01670942, -0.12368450, 0.11319127, -0.00725380, 0.00731637, -0.02403754, -0.33130431, 0.04341265, 0.21199998, -0.03079998, 0.85000002);
+        HideEllipsoid("screamer", 0.13600001, 0.00000000, 0.00000000, 0.00000000, 0.09400000, 0.00000000, 0.00000000, 0.00000000, 0.13000000, 0.19199996, -0.01600000, 0.88999993);
+        HideEllipsoid("bolter", 0.01496412, -0.00896238, -0.12478684, 0.12654014, -0.01885222, 0.01652836, -0.01923097, -0.12333790, 0.00655218, 0.14699990, 0.00900000, 0.91499996);
+        HideEllipsoid("corruptor", 0.03756286, -0.00390221, -0.12020732, 0.10581870, -0.04216173, 0.03443532, -0.11276643, -0.30375105, -0.02537723, 0.17199999, -0.03079997, 1.16500008);
+        HideEllipsoid("demolisher", 0.00206248, 0.01773635, -0.11967526, 0.08898057, -0.00128572, 0.00134294, -0.00404556, -0.33134621, -0.04917657, 0.20699999, -0.03080003, 1.06999993);
+		HideEllipsoid("charger", 0.11667601, 0.03646365, -0.04709683, -0.04271457, 0.05376750, -0.06419128, 0.00210088, 0.10416406, 0.08585127, 0.16200000, 0.09899999, 0.81999999);
+
+        BodyPatch("Skinned")
+        {
+			// charger
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "charger");
+                
+                Mesh("chr_dmg_hole_pelvis_left_charger.msh");
+            }
+            // bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+                
+                Mesh("chr_dmg_hole_pelvis_left_bolter.msh");
+            }
+			// freak_behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+                
+                Mesh("chr_dmg_hole_pelvis_left_freak_behemoth.msh");
+            }
+			// freak_gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+                
+                Mesh("chr_dmg_hole_pelvis_left_freak_gorilla.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+                
+                Mesh("chr_dmg_hole_pelvis_left_demolisher_a.msh");
+            }
+            //howler screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+
+                Mesh("chr_dmg_hole_pelvis_left_screamer.msh");  
+            }
+            //baron soldier man
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_baron_soldier");
+
+                Mesh("chr_dmg_hole_pelvis_left_a_big.msh");
+            }
+			//sex female
+			VariantsGroup()
+            {
+                RequiredProperty("sex", "female");
+
+                Mesh("chr_dmg_hole_pelvis_left_a_big.msh");
+            }
+            // damage size slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_hole_pelvis_left_a_small.msh");
+            }
+            // damage size big
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "big");
+
+                Mesh("chr_dmg_hole_pelvis_left_a_big.msh");
+            }
+            // class viral sex male
+			VariantsGroup()
+            {
+                RequiredProperty("class", "viral");
+                RequiredProperty("sex", "male");
+
+                Mesh("chr_dmg_hole_pelvis_left_a_big.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_pelvis_left_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_pelvis_left_biter_xl.msh");
+            }
+
+            Mesh("chr_dmg_hole_pelvis_left_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+	BoneHole("hole_pelvis_right")
+    {
+        MeshHelperElementName("helper_pelvis_right");
+
+        HideEllipsoid("man", 0.12961903, 0.00917406, 0.00384125, 0.00439404, -0.00907474, -0.12659916, -0.01617184, 0.23580179, -0.01746377, -0.23200002, -0.09769998, 0.89600009)
+		{
+			Variant(0.12961902, 0.00917406, 0.00384125, 0.00439404, -0.00907474, -0.12659915, -0.00525414, 0.07661070, -0.00567388, -0.23199999, -0.05799999, 0.88599998)
+				{
+					RequiredProperty("DamageSize", "man_biter_avg_big_jacket");
+				}
+			Variant(0.13460433, 0.00952691, 0.00398899, 0.00474003, -0.00978928, -0.13656758, -0.01276007, 0.18605460, -0.01377944, -0.22199999, -0.06300000, 0.90100020)
+				{
+					RequiredProperty("DamageSize", "man_baron_soldier");
+				}
+		}
+		HideEllipsoid("man_skinny_biter", 0.10806364, -0.03785669, -0.01068281, -0.01228060, -0.00222760, -0.11633238, 0.09831355, 0.28510979, -0.01583788, -0.23699996, -0.09769999, 0.93999988);
+		HideEllipsoid("man_XL_biter", 0.13500001, 0.00000000, 0.00000000, 0.00000000, 0.20199998, 0.00000000, 0.00000000, 0.00000000, 0.11699998, -0.24699999, -0.02800000, 0.87999994);
+        HideEllipsoid("woman", 0.15456453, -0.00791281, 0.00849730, 0.00687153, -0.00712641, -0.13162826, 0.02515555, 0.46570924, -0.02390048, -0.25200003, -0.09769998, 0.85100001);
+        HideEllipsoid("screamer", 0.12000000, 0.00000000, 0.00000000, 0.00000000, 0.10700000, 0.00000000, 0.00000000, 0.00000000, 0.12700002, -0.21700004, -0.00300000, 0.89100009);
+        HideEllipsoid("bolter", 0.01496412, -0.00896240, -0.12478684, 0.11182618, -0.01666010, 0.01460646, -0.02461565, -0.15787253, 0.00838681, -0.18299997, -0.02100001, 0.87499988);
+        HideEllipsoid("corruptor", 0.13036706, 0.03500520, 0.00201547, 0.00508602, -0.01050446, -0.14653595, -0.11377624, 0.42571229, -0.03446625, -0.19199999, -0.09770001, 1.17600000);
+        HideEllipsoid("demolisher", 0.13000005, 0.00000000, 0.00000000, 0.00000000, 0.26700002, 0.00000000, 0.00000000, 0.00000000, 0.13200001, -0.22700001, -0.09770007, 1.05100000);
+		HideEllipsoid("charger", 0.08664218, -0.02339469, -0.09405223, 0.02539022, 0.11916483, -0.00625142, 0.10165595, -0.01653118, 0.09775881, -0.20199999, 0.12299998, 0.82099992);
+
+        BodyPatch("Skinned")
+        {
+			// charger
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "charger");
+                
+                Mesh("chr_dmg_hole_pelvis_right_charger.msh");
+            }
+			// bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+                
+                Mesh("chr_dmg_hole_pelvis_right_bolter.msh");
+            }
+            // freak behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+                
+                Mesh("chr_dmg_hole_pelvis_right_freak_behemoth.msh");
+            }
+			// freak gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+                
+                Mesh("chr_dmg_hole_pelvis_right_freak_gorilla.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+                
+                Mesh("chr_dmg_hole_pelvis_right_demolisher_a.msh");
+            }
+            // howler screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+
+                Mesh("chr_dmg_hole_pelvis_right_screamer.msh");  
+            }
+			//baron soldier man
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_baron_soldier");
+
+                Mesh("chr_dmg_hole_pelvis_right_a_big.msh");
+            }
+			// sex female
+			VariantsGroup()
+            {
+                RequiredProperty("sex", "female");
+
+                Mesh("chr_dmg_hole_pelvis_right_a_big.msh");
+            }
+            // damage size slim
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "slim");
+
+                Mesh("chr_dmg_hole_pelvis_right_a_small.msh");
+            }
+            // damage size big
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "big");
+
+                Mesh("chr_dmg_hole_pelvis_right_a_big.msh");
+            }
+            // viral male
+			VariantsGroup()
+            {
+                RequiredProperty("class", "viral");
+                RequiredProperty("sex", "male");
+
+                Mesh("chr_dmg_hole_pelvis_right_a_big.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_pelvis_right_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_pelvis_right_biter_xl.msh");
+            }
+
+            Mesh("chr_dmg_hole_pelvis_right_a.msh");
+        }
+
+        BodyBloodEffectName("hole_burst_small.gpufx");
+    }
+    //
+	////////////////////////////////////////////////////////////////////////////////// ARMS
+	//
+	BoneHole("hole_forearm_left")
+    {
+        MeshHelperElementName("helper_forearm_left");
+
+        HideEllipsoid("demolisher", 0.12850845, 0.00859671, 0.00725823, -0.00859168, 0.15956892, -0.03687753, -0.01248172, 0.03956946, 0.17412490, 0.62200010, 0.02400002, 1.16000009)
+		{
+			Variant(0.07472382, 0.01241429, 0.03630754, -0.00990138, 0.18389343, -0.04249909, -0.05853844, 0.02288295, 0.11265267, 0.62200010, 0.02400002, 1.12000012)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+			Variant(0.06861078, 0.00708399, -0.00183781, -0.01140495, 0.09901138, -0.04413242, -0.00363116, 0.08472601, 0.19102177, 0.62200004, 0.04400006, 1.19999993)
+				{
+					RequiredProperty("ClassVariant", "freak_behemoth");
+				}
+		}
+		HideEllipsoid("goon", 0.10858463, 0.00726388, 0.00613292, -0.00466255, 0.08659533, -0.02001280, -0.00836763, 0.02652701, 0.11673174, 0.52200001, -0.01100010, 1.17700005);
+
+        BodyPatch("Skinned")
+        {
+            // goon
+			VariantsGroup()
+            {
+                RequiredProperty("class", "goon");
+                
+                Mesh("chr_dmg_hole_forearm_left_goon.msh");
+            }
+			// freak behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+                
+                Mesh("chr_dmg_hole_forearm_left_freak_behemoth.msh");
+            }
+			// freak gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+                
+                Mesh("chr_dmg_hole_forearm_left_freak_gorilla.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+                
+                Mesh("chr_dmg_hole_forearm_left_demolisher_a.msh");
+            }
+
+        }
+
+        BodyBloodEffectName("hole_burst_small.gpufx");
+    }
+    BoneHole("hole_forearm_right")
+    {
+        MeshHelperElementName("helper_forearm_right");
+
+        HideEllipsoid("demolisher", -0.00482087, 0.05721145, -0.17165260, 0.14892602, 0.00363691, -0.00297042, 0.00412747, -0.23236206, -0.07756174, -0.66900003, 0.00899997, 1.17999983)
+		{
+			Variant(-0.06315632, 0.05416746, -0.18297042, 0.10118658, 0.03138674, -0.02563492, 0.05167324, -0.23892561, -0.08856890, -0.66899991, 0.00899996, 1.17999983)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+		}
+
+        BodyPatch("Skinned")
+        {
+            // freak behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+                
+                Mesh("chr_dmg_hole_forearm_right_freak_behemoth.msh");
+            }
+			// freak gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+                
+                Mesh("chr_dmg_hole_forearm_right_freak_gorilla.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+                
+                Mesh("chr_dmg_hole_forearm_right_demolisher_a.msh");
+            }
+
+        }
+
+        BodyBloodEffectName("hole_burst_small.gpufx");
+    }
+	BoneHole("hole_upperarm_left")
+    {
+        MeshHelperElementName("helper_upperarm_left");
+
+        HideEllipsoid("man_skinny_biter", 0.06411039, 0.00000000, -0.05581091, 0.00000000, 0.05999999, 0.00000000, 0.04202233, 0.00000000, 0.04827136, 0.32199994, 0.03400000, 1.31999993);
+		HideEllipsoid("man_XL_biter", 0.07542400, 0.00000000, -0.06565990, 0.00000000, 0.07500000, 0.00000000, 0.05515431, 0.00000000, 0.06335616, 0.32199988, 0.03400000, 1.30500007);
+		HideEllipsoid("freak_slasher", 0.10100000, 0.00000000, 0.00000000, 0.00000000, 0.17900001, 0.00000000, 0.00000000, 0.00000000, 0.10500000, 0.38199997, 0.02900000, 1.39499998);
+		HideEllipsoid("freak_toxin", 0.05709884, 0.01387453, 0.03985251, -0.01035863, 0.09664406, -0.01880496, -0.06728240, 0.01081324, 0.09263453, 0.35199994, 0.05899999, 1.55999994);
+		HideEllipsoid("volatile", 0.10100000, 0.00000000, 0.00000000, 0.00000000, 0.30399996, 0.00000000, 0.00000000, 0.00000000, 0.07500000, 0.40200001, 0.06400000, 1.33500004);
+		HideEllipsoid("spitter", 0.06083421, 0.00000000, -0.06767718, 0.00000000, 0.09999999, 0.00000000, 0.03718526, 0.00000000, 0.03342539, 0.31700003, 0.03400000, 1.30999994);
+		HideEllipsoid("bolter", 0.05192967, 0.00000000, -0.08662742, 0.00000000, 0.11000001, 0.00000000, 0.06003881, 0.00000000, 0.03599086, 0.30700007, 0.01900000, 1.30999994);
+		HideEllipsoid("screamer", 0.06600000, 0.00000000, 0.00000000, 0.00000000, 0.12767640, 0.07680979, 0.00000000, -0.19589074, 0.32561767, 0.27700001, -0.17100003, 1.25500011);
+		HideEllipsoid("demolisher", 0.13400002, 0.00000000, 0.00000000, 0.00000000, 0.14900002, 0.00000000, 0.00000000, 0.00000000, 0.11400002, 0.50700003, 0.06400000, 1.40000010)
+		{
+			Variant(0.12400001, 0.00000000, 0.00000000, 0.00000000, 0.13900000, 0.00000000, 0.00000000, 0.00000000, 0.10499999, 0.50700003, 0.06400001, 1.38499999)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+			Variant(0.13400000, 0.00000000, 0.00000000, 0.00000000, 0.18400000, 0.00000000, 0.00000000, 0.00000000, 0.09699999, 0.52200007, 0.05400001, 1.38000000)
+				{
+					RequiredProperty("ClassVariant", "freak_behemoth");
+				}
+		}
+
+        BodyPatch("Skinned")
+        {
+			// bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+                
+                Mesh("chr_dmg_hole_upperarm_left_bolter.msh");
+            }
+			// spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+                
+                Mesh("chr_dmg_hole_upperarm_left_spitter.msh");
+            }
+			// screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+                
+                Mesh("chr_dmg_hole_upperarm_left_screamer.msh");
+            }
+			// freak toxin
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_toxin");
+				
+                Mesh("chr_dmg_hole_upperarm_left_freak_toxin.msh");
+            }
+			// freak behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+                
+                Mesh("chr_dmg_hole_upperarm_left_freak_behemoth.msh");
+            }
+			// freak gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+                
+                Mesh("chr_dmg_hole_upperarm_left_freak_gorilla.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+                
+                Mesh("chr_dmg_hole_upperarm_left_demolisher_a.msh");
+            }
+			// volatile
+			VariantsGroup()
+            {
+                RequiredProperty("class", "volatile");
+				
+                Mesh("chr_dmg_hole_upperarm_left_volatile.msh");
+            }
+            VariantsGroup()
+            {
+                // freak slasher
+                RequiredProperty("ClassVariant", "freak_slasher");
+				
+                Mesh("chr_dmg_hole_upperarm_left_freak_slasher_a.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_upperarm_left_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_upperarm_left_biter_xl.msh");
+            }
+        }
+
+        BodyBloodEffectName("hole_burst_small.gpufx");
+    }
+	BoneHole("hole_upperarm_right")
+    {
+        MeshHelperElementName("helper_upperarm_right");
+
+        HideEllipsoid("man_skinny_biter", 0.10722704, -0.03378107, -0.05231826, 0.03765831, 0.10278579, 0.01081410, 0.04005399, -0.02501071, 0.09824025, -0.37200001, 0.03200001, 1.36400008);
+		HideEllipsoid("man_XL_biter", -0.05679616, 0.00000000, -0.06981546, 0.00000000, 0.08000001, 0.00000000, 0.05740381, 0.00000000, -0.04669907, -0.34400010, 0.03900000, 1.31500006);
+		HideEllipsoid("freak_slasher", 0.10284443, 0.01271848, 0.00878989, -0.02159327, 0.14892019, 0.03716862, -0.00695157, -0.03335360, 0.12959632, -0.32699996, 0.05199999, 1.47899973);
+		HideEllipsoid("volatile", 0.13749273, -0.04331604, -0.06708550, 0.03081133, 0.08409742, 0.00884790, 0.02902996, -0.01812703, 0.07120167, -0.40199998, 0.05700003, 1.34899986);
+		HideEllipsoid("spitter", -0.05741045, 0.02326302, -0.05219075, 0.00000000, 0.08220376, 0.03664074, 0.04585352, 0.01875603, -0.04207928, -0.31899998, 0.03399996, 1.31500018);
+		HideEllipsoid("bolter", -0.04147862, 0.00000000, -0.08099707, 0.00000000, 0.11000000, 0.00000000, 0.06230545, 0.00000000, -0.03190663, -0.30399993, 0.01900000, 1.31500006);
+		HideEllipsoid("screamer", 0.06152594, -0.00694792, 0.01978092, 0.02207247, 0.06056250, -0.04738132, -0.01821098, 0.07025876, 0.08132076, -0.23200002, -0.07800008, 1.28400016);
+		HideEllipsoid("demolisher", 0.15899998, 0.00000000, 0.00000000, 0.00000000, 0.11000003, 0.00000000, 0.00000000, 0.00000000, 0.11899999, -0.46699998, 0.05200000, 1.40899992)
+		{
+			Variant(0.15899999, 0.00000000, 0.00000000, 0.00000000, 0.10500000, 0.00000000, 0.00000000, 0.00000000, 0.10900000, -0.46699998, 0.05700000, 1.39900005)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+		}
+		HideEllipsoid("freak_toxin", 0.06263591, -0.01345855, -0.04088531, -0.01035863, 0.08770441, -0.04473970, 0.06401044, 0.04930491, 0.08183330, -0.33400005, 0.08400002, 1.56500018);
+
+        BodyPatch("Skinned")
+        {
+			// bolter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "bolter");
+                
+                Mesh("chr_dmg_hole_upperarm_right_bolter.msh");
+            }
+			// spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+                
+                Mesh("chr_dmg_hole_upperarm_right_spitter.msh");
+            }
+			// screamer
+			VariantsGroup()
+            {
+                RequiredProperty("class", "screamer");
+                
+                Mesh("chr_dmg_hole_upperarm_right_screamer.msh");
+            }
+			// freak toxin
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_toxin");
+				
+                Mesh("chr_dmg_hole_upperarm_right_freak_toxin.msh");
+            }
+			// freak behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+                
+                Mesh("chr_dmg_hole_upperarm_right_freak_behemoth.msh");
+            }
+			// freak gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+                
+                Mesh("chr_dmg_hole_upperarm_right_freak_gorilla.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+                
+                Mesh("chr_dmg_hole_upperarm_right_demolisher_a.msh");
+            }
+			// volatile
+			VariantsGroup()
+            {
+                RequiredProperty("class", "volatile");
+				
+                Mesh("chr_dmg_hole_upperarm_right_volatile.msh");
+            }
+            // freak slasher
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_slasher");
+				
+                Mesh("chr_dmg_hole_upperarm_right_freak_slasher_a.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_upperarm_right_biter_skinny.msh");
+            }
+			//biter XL
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_xl");
+				
+                Mesh("chr_dmg_hole_upperarm_right_biter_xl.msh");
+            }
+        }
+
+        BodyBloodEffectName("hole_burst_small.gpufx");
+    }
+	//
+	////////////////////////////////////////////////////////////////////////////////// LEGS
+	//
+	BoneHole("hole_thigh_left")
+    {
+        MeshHelperElementName("helper_thigh_left");
+
+        HideEllipsoid("freak_slasher", 0.03935655, 0.04324581, 0.02601657, -0.09857115, 0.06586751, 0.03962572, 0.00000000, -0.07680977, 0.12767638, 0.18700002, -0.11599998, 0.67499995);
+
+        BodyPatch("Skinned")
+        {
+            VariantsGroup()
+            {
+                // freak slasher
+                RequiredProperty("ClassVariant", "freak_slasher");
+				
+                Mesh("chr_dmg_hole_tigh_left_freak_slasher_a.msh");
+            }
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+	BoneHole("hole_thigh_right_side")
+    {
+        MeshHelperElementName("helper_thigh_right_side");
+
+        HideEllipsoid("man_skinny_biter", 0.23500000, 0.00000000, 0.00000000, 0.00000000, 0.12900001, 0.00000000, 0.00000000, 0.00000000, 0.19900000, -0.34200001, 0.00800000, 0.70599997);
+		HideEllipsoid("freak_slasher", 0.12418459, -0.03452189, -0.06641861, 0.08330271, 0.33330312, -0.01748518, 0.07704999, -0.01138906, 0.14998196, -0.33699995, 0.04299998, 0.76600003);
+		HideEllipsoid("spitter", -0.00671078, 0.00760773, -0.13060659, 0.11359870, 0.00790111, -0.00537665, 0.00763150, -0.11452888, -0.00706333, -0.17299999, 0.01400001, 0.72000009);
+		HideEllipsoid("banshee", -0.02374899, -0.03140740, -0.10378131, 0.08519199, 0.01158669, -0.02300156, 0.02825293, -0.13778743, 0.03523338, -0.16800003, 0.04400003, 0.61500001);
+		HideEllipsoid("volatile", 0.24889481, 0.00870030, -0.02181068, -0.00398252, 0.11393042, 0.00000000, 0.00993960, 0.00034744, 0.11356536, -0.28700003, -0.01200000, 0.78100014);
+		HideEllipsoid("demolisher", 0.09000001, 0.00000000, 0.00000000, 0.00000000, 0.18400002, 0.00000000, 0.00000000, 0.00000000, 0.13900000, -0.24200000, -0.03700000, 0.74599999)
+		{
+			Variant(0.06223090, 0.05026979, 0.00051386, -0.09489234, 0.11714965, 0.03142303, 0.01837622, -0.02423966, 0.14586212, -0.24200006, -0.00200000, 0.76099998)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+			Variant(0.08282373, 0.04643872, -0.00294561, -0.06061750, 0.10998287, 0.02950069, 0.01921321, -0.02568808, 0.13524784, -0.24200004, -0.00200005, 0.76099998)
+				{
+					RequiredProperty("ClassVariant", "freak_behemoth");
+				}
+		}
+		HideEllipsoid("goon", 0.09000000, 0.00000000, 0.00000000, 0.00000000, 0.19399998, 0.00000000, 0.00000000, 0.00000000, 0.13899998, -0.24200000, -0.02200000, 0.77600002);
+		HideEllipsoid("freak_toxin", 0.09000001, 0.00000000, 0.00000000, 0.00000000, 0.18400000, 0.00000000, 0.00000000, 0.00000000, 0.15399998, -0.20700000, 0.02800000, 0.90099996);
+
+        BodyPatch("Skinned")
+        {
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_hole_thigh_right_side_banshee.msh"); 
+            }
+			// freak toxin
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_toxin");
+				
+                Mesh("chr_dmg_hole_thigh_right_side_freak_toxin.msh");
+            }
+			// freak behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("class", "goon");
+				
+                Mesh("chr_dmg_hole_thigh_right_side_goon.msh");
+            }
+			// freak behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+				
+                Mesh("chr_dmg_hole_thigh_right_side_freak_behemoth.msh");
+            }
+			// freak gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+				
+                Mesh("chr_dmg_hole_thigh_right_side_freak_gorilla.msh");
+            }
+			// spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+				
+                Mesh("chr_dmg_hole_thigh_right_side_spitter.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+				
+                Mesh("chr_dmg_hole_thigh_right_side_demolisher_a.msh");
+            }
+            // volatile
+			VariantsGroup()
+            {
+                RequiredProperty("class", "volatile");
+				
+                Mesh("chr_dmg_hole_thigh_right_side_volatile.msh");
+            }
+			// freak slasher
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_slasher");
+				
+                Mesh("chr_dmg_hole_thigh_right_side_a_freak_slasher_a.msh");
+            }
+			//biter SKINNY
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_thigh_right_side_biter_skinny.msh");
+            }
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+	BoneHole("hole_thigh_left_side")
+    {
+        MeshHelperElementName("helper_thigh_left_side");
+
+        HideEllipsoid("man_skinny_biter", 0.17399998, 0.00000000, 0.00000000, 0.00000000, 0.08399999, 0.00000000, 0.00000000, 0.00000000, 0.13399999, 0.24399999, 0.01800002, 0.71100003);
+		HideEllipsoid("spitter", -0.00568630, 0.00644623, -0.11066668, 0.08370429, 0.00582194, -0.00396179, 0.00929064, -0.13942647, -0.00859883, 0.17199999, 0.01400001, 0.73499995);
+		HideEllipsoid("banshee", -0.00645469, 0.00731736, -0.12562162, 0.08868670, 0.00616847, -0.00419759, 0.01393590, -0.20913970, -0.01289829, 0.17199998, 0.01400001, 0.62000006);
+		HideEllipsoid("volatile", 0.14481756, 0.13058665, 0.00000000, -0.08303974, 0.09208909, 0.00000000, 0.00000000, 0.00000000, 0.12900002, 0.29400003, 0.01800001, 0.77600002);
+		HideEllipsoid("demolisher", 0.17999999, 0.00000000, 0.00000000, 0.00000000, 0.17399998, 0.00000000, 0.00000000, 0.00000000, 0.13399999, 0.27399999, -0.02200000, 0.76099998)
+		{
+			Variant(0.07500000, 0.00000000, 0.00000000, 0.00000000, 0.12400001, 0.00000000, 0.00000000, 0.00000000, 0.18900001, 0.27399999, -0.00200000, 0.76100004)
+				{
+					RequiredProperty("ClassVariant", "freak_gorilla");
+				}
+			Variant(0.20218386, 0.09872527, 0.00000000, -0.04124523, 0.08446793, 0.00000000, 0.00000000, 0.00000000, 0.13899998, 0.27399999, 0.00299999, 0.76100010)
+				{
+					RequiredProperty("ClassVariant", "freak_behemoth");
+				}
+		}
+		HideEllipsoid("goon", 0.17999999, 0.00000000, 0.00000000, 0.00000000, 0.17399998, 0.00000000, 0.00000000, 0.00000000, 0.14900002, 0.28400001, -0.02200000, 0.76100004);
+		HideEllipsoid("freak_toxin", 0.09954761, -0.05128931, -0.02616639, 0.06956301, 0.10522318, 0.05839580, -0.00248046, -0.07831553, 0.14407127, 0.21899994, 0.06299993, 0.90599996);
+
+        BodyPatch("Skinned")
+        {
+			//banshee
+			VariantsGroup()
+            {
+                RequiredProperty("class", "banshee");
+
+                Mesh("chr_dmg_hole_thigh_left_side_banshee.msh"); 
+            }
+			// spitter
+			VariantsGroup()
+            {
+                RequiredProperty("class", "spitter");
+				
+                Mesh("chr_dmg_hole_thigh_left_side_spitter.msh");
+            }
+			// goon
+			VariantsGroup()
+            {
+                RequiredProperty("class", "goon");
+				
+                Mesh("chr_dmg_hole_thigh_left_side_goon.msh");
+            }
+			// freak toxin
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_toxin");
+				
+                Mesh("chr_dmg_hole_thigh_left_side_freak_toxin.msh");
+            }
+			// freak behemoth
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_behemoth");
+				
+                Mesh("chr_dmg_hole_thigh_left_side_freak_behemoth.msh");
+            }
+			// freak gorilla
+			VariantsGroup()
+            {
+                RequiredProperty("ClassVariant", "freak_gorilla");
+				
+                Mesh("chr_dmg_hole_thigh_left_side_freak_gorilla.msh");
+            }
+			// demolisher
+			VariantsGroup()
+            {
+                RequiredProperty("class", "demolisher");
+				
+                Mesh("chr_dmg_hole_thigh_left_side_demolisher_a.msh");
+            }
+            // volatile
+			VariantsGroup()
+            {
+                RequiredProperty("class", "volatile");
+				
+                Mesh("chr_dmg_hole_thigh_left_side_volatile.msh");
+            }
+			// biter_skinny
+			VariantsGroup()
+            {
+                RequiredProperty("DamageSize", "man_biter_skinny");
+				
+                Mesh("chr_dmg_hole_thigh_left_side_biter_skinny.msh");
+            }
+        }
+
+        BodyBloodEffectName("hole_burst_big.gpufx");
+    }
+}
