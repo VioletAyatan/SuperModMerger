@@ -117,11 +117,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         val previousContainer = this.containerNode //这是标记上一层的容器，以便恢复
 
         val funcName = ctx.Id().text
-        val rawParams = if (ctx.valueList() != null) getFullText(ctx.valueList()) else ""
         var signature = "$FUN_BLOCK:$funcName"
-        val cleanParams = rawParams.replace("\\s+".toRegex(), "")
-        if (!cleanParams.isEmpty()) {
-            signature += ":$cleanParams"
+        if (ctx.valueList() != null) {
+            signature += ":${getFullText(ctx.valueList())}"
         }
 
         signature = generateFunctionBlockSignature(signature)
@@ -155,20 +153,20 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
 
         if (signatures.contains(signature)) {
             // 已标记为可重复函数，根据参数数量采用不同策略
-            signature = generateSignatureForRepeatableFunction(signature, argsList)
+            signature = generateFunctionCallSignature(signature, argsList)
         } else if (children.containsKey(signature)) {
             // 发现重复的函数调用，需要开始特殊处理
             val lastNode = children[signature] as ScrFunCallScriptNode
             signatures.add("$FUN_CALL:$funcName") //标记这个函数为可重复函数
 
             // 重新生成已存在节点的签名
-            val lastNewSignature = generateSignatureForRepeatableFunction(signature, lastNode.arguments)
+            val lastNewSignature = generateFunctionCallSignature(signature, lastNode.arguments)
             lastNode.signature = lastNewSignature
             children.remove(signature)
             children[lastNewSignature] = lastNode
 
             // 当前处理的签名也要重新生成
-            signature = generateSignatureForRepeatableFunction(signature, argsList)
+            signature = generateFunctionCallSignature(signature, argsList)
         }
         repeatableFunctions[currentFunBlockSignature] = signatures
         return ScrFunCallScriptNode(
@@ -268,9 +266,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      */
     override fun visitUseDecl(ctx: UseDeclContext): BaseTreeNode {
         val name = ctx.Id().text
-        val signature = "$USE:$name"
+        var signature = "$USE:$name"
         if (ctx.valueList() != null) {
-            signature + ":${getFullText(ctx.valueList()).replace("\\s+", "")}"
+            signature += ":${getFullText(ctx.valueList())}"
         }
 
         return ScrLeafScriptNode(
@@ -447,7 +445,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 2. 参数数量 > 1：先用第一个参数加入签名 (funCall:funcName:param1)
      *    如果仍有重复，则追加索引标记 (funCall:funcName:param1:0, funCall:funcName:param1:1, ...)
      */
-    private fun generateSignatureForRepeatableFunction(baseSignature: String, argsList: List<String>): String {
+    private fun generateFunctionCallSignature(baseSignature: String, argsList: List<String>): String {
         if (argsList.size <= 1) {
             // 参数数量 <= 1，直接使用索引
             val children = containerNode!!.childrens
@@ -514,7 +512,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         val a = ctx.start.startIndex
         val b = ctx.stop.stopIndex
         // 这里的 input 是 CharStream，能拿到最原始的字符流
-        return ctx.start.inputStream.getText(Interval(a, b))
+        return ctx.start.inputStream.getText(Interval(a, b)).replace("\\s".toRegex(), "")
     }
 
     private fun getValueList(context: ValueListContext?): MutableList<ExpressionContext> {
