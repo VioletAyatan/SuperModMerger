@@ -29,17 +29,17 @@ class AppMain {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            // 如果没有命令行参数，启动 GUI 版本
-            if (args.isEmpty()) {
-                launchGUI()
-                return
-            }
-
-            // 如果指定了 --gui 参数，启动 GUI 版本
-            if (args.contains("--gui")) {
-                launchGUI()
-                return
-            }
+//            // 如果没有命令行参数，启动 GUI 版本
+//            if (args.isEmpty()) {
+//                launchGUI()
+//                return
+//            }
+//
+//            // 如果指定了 --gui 参数，启动 GUI 版本
+//            if (args.contains("--gui")) {
+//                launchGUI()
+//                return
+//            }
 
             // 否则运行原来的命令行版本
             launchCLI(args)
