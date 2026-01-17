@@ -22,7 +22,7 @@ class JsonContainerNode(
      */
     fun addChildern(node: BaseTreeNode) {
         if (childrens.contains(node.signature)) {
-            log.warn("Repeatable siginature detected: [${node.signature}] Line: ${node.lineNumber} SourceText: ${node.sourceText}.")
+            log.debug("Repeatable siginature detected: [${node.signature}] Line: ${node.lineNumber} SourceText: ${node.sourceText}.")
         }
         childrens[node.signature] = node
     }
