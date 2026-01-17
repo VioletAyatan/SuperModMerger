@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
  * <p>
  * 支持ANSI彩色输出，仅在Windows10+和Unix-like系统中有效，使用示例：
  * <ui>
- * <li>ColorPrinter.info("This is info message");</li>
+ * <li>ColorPrinter.cyan("This is cyan message");</li>
  * <li>ColorPrinter.success("Operation successful");</li>
  * <li>ColorPrinter.warning("Warning message");</li>
  * <li>ColorPrinter.error("Error occurred");</li>
@@ -95,18 +95,38 @@ public class ColorPrinter {
     }
 
     /**
-     * 打印 INFO 级别日志（蓝色）
+     * 打印蓝色日志
+     *
+     * @param message 文本
      */
-    public static void info(String message) {
+    public static void blue(String message) {
+        System.out.println(applyColor(message, BRIGHT_BLUE));
+        log.debug(message);
+    }
+
+    /**
+     * 打印蓝色日志，带格式化参数
+     *
+     * @param format 文本模板
+     * @param args   格式化参数
+     */
+    public static void blue(String format, Object... args) {
+        blue(Tools.format(format, args));
+    }
+
+    /**
+     * 打印青色日志
+     */
+    public static void cyan(String message) {
         System.out.println(applyColor(message, BRIGHT_CYAN));
         log.debug(message);
     }
 
     /**
-     * 打印 INFO 级别日志（蓝色），带格式化参数
+     * 打印青色日志，带格式化参数
      */
-    public static void info(String format, Object... args) {
-        info(Tools.format(format, args));
+    public static void cyan(String format, Object... args) {
+        cyan(Tools.format(format, args));
     }
 
     /**

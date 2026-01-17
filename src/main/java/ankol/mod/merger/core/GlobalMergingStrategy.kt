@@ -26,9 +26,9 @@ object GlobalMergingStrategy {
         ColorPrinter.print("=".repeat(75))
         ColorPrinter.bold(Localizations.t("GLOBAL_STRATEGY_TITLE"))
         ColorPrinter.success(Localizations.t("GLOBAL_STRATEGY_OPTION_1"))
-        ColorPrinter.info(Localizations.t("GLOBAL_STRATEGY_OPTION_2"))
+        ColorPrinter.cyan(Localizations.t("GLOBAL_STRATEGY_OPTION_2"))
         ColorPrinter.print("=".repeat(75))
-        ColorPrinter.info(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
+        ColorPrinter.cyan(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
         while (true) {
             val input = readln()
             if (input == "1") {
@@ -50,9 +50,9 @@ object GlobalMergingStrategy {
         ColorPrinter.print("=".repeat(75))
         ColorPrinter.bold(Localizations.t("GLOBAL_STRATEGY_FIX_PATH_TITLE"))
         ColorPrinter.success(Localizations.t("PATH_CORRECTION_STRATEGY_SMART"))
-        ColorPrinter.info(Localizations.t("PATH_CORRECTION_STRATEGY_KEEP"))
+        ColorPrinter.cyan(Localizations.t("PATH_CORRECTION_STRATEGY_KEEP"))
         ColorPrinter.print("=".repeat(75))
-        ColorPrinter.info(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
+        ColorPrinter.cyan(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
         while (true) {
             val input = readln()
             if (input == "1") {

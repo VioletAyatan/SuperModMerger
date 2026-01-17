@@ -53,14 +53,14 @@ class FileMergerEngine(
      */
     fun merge() {
         //打印初始信息
-        ColorPrinter.info(Localizations.t("ENGINE_TITLE"))
+        ColorPrinter.cyan(Localizations.t("ENGINE_TITLE"))
         if (modsToMerge.isEmpty()) {
             ColorPrinter.error(Localizations.t("ENGINE_NO_MODS_FOUND"))
             return
         }
-        ColorPrinter.info(Localizations.t("ENGINE_FOUND_MODS_TO_MERGE", modsToMerge.size))
+        ColorPrinter.cyan(Localizations.t("ENGINE_FOUND_MODS_TO_MERGE", modsToMerge.size))
         for ((i, modPath) in modsToMerge.withIndex()) {
-            ColorPrinter.info(Localizations.t("ENGINE_MOD_LIST_ITEM", (i + 1), modPath.fileName))
+            ColorPrinter.cyan(Localizations.t("ENGINE_MOD_LIST_ITEM", (i + 1), modPath.fileName))
         }
         //开始合并
         try {
@@ -73,7 +73,7 @@ class FileMergerEngine(
             // 开始合并文件
             processFiles(filesByPath, mergedDir)
             // 合并完成，打包
-            ColorPrinter.info(Localizations.t("ENGINE_CREATING_MERGED_PAK"))
+            ColorPrinter.cyan(Localizations.t("ENGINE_CREATING_MERGED_PAK"))
             PakManager.createPak(mergedDir, outputPath)
             ColorPrinter.success(Localizations.t("ENGINE_MERGED_PAK_CREATED", outputPath))
             // 打印统计信息
@@ -125,7 +125,7 @@ class FileMergerEngine(
 
         // 如果有路径被修正，输出日志
         if (!corrections.isEmpty()) {
-            ColorPrinter.info(Localizations.t("ENGINE_PATH_CORRECTIONS_FOR_MOD", modFileName))
+            ColorPrinter.cyan(Localizations.t("ENGINE_PATH_CORRECTIONS_FOR_MOD", modFileName))
             for (entry in corrections.entries) {
                 ColorPrinter.success(Localizations.t("ENGINE_PATH_CORRECTION_ITEM", entry.key, entry.value))
                 pathCorrectionCount++
@@ -166,17 +166,20 @@ class FileMergerEngine(
      * 处理所有文件（合并或复制）
      */
     private fun processFiles(filesByName: Map<String, MutableList<PathFileTree>>, mergedDir: Path) {
-        ColorPrinter.info(Localizations.t("ENGINE_PROCESSING_FILES"))
+        ColorPrinter.cyan(Localizations.t("ENGINE_PROCESSING_FILES"))
+        val globalFixActived = argParser.hasOption("f")
+        if (globalFixActived) {
+            ColorPrinter.debug(Localizations.t("ENGINE_GLOBAL_FIX_ENABLED"))
+        }
         for ((relPath, fileSources) in filesByName) {
             totalProcessed++
             try {
                 //单个文件处理
                 if (fileSources.size == 1) {
-                    val hasFix = argParser.hasOption("f")
-                    if (!hasFix) {
-                        Tools.zeroCopy(fileSources.first().safeGetFullPathName(), mergedDir.resolve(relPath))
-                    } else {
+                    if (globalFixActived) {
                         processSingleFile(relPath, fileSources.first(), mergedDir) //做压力测试的时候把这个打开
+                    } else {
+                        Tools.zeroCopy(fileSources.first().safeGetFullPathName(), mergedDir.resolve(relPath))
                     }
                 } else {
                     // 在多个 mod 中存在，需要合并
@@ -266,7 +269,7 @@ class FileMergerEngine(
 
         try {
             // 支持合并，开始处理合并逻辑
-            ColorPrinter.info(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size))
+            ColorPrinter.cyan(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size))
             val merger = mergerOptional.get()
             var baseMergedContent = "" //基准文本内容
 
@@ -343,7 +346,7 @@ class FileMergerEngine(
         ColorPrinter.warning("\n${Localizations.t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath)}")
         ColorPrinter.warning(Localizations.t("ASSET_CHOSE_WHICH_VERSION_TO_USE"))
         for ((i, fileTree) in fileSources.withIndex()) {
-            ColorPrinter.info("{}. {}", i + 1, fileTree.getFirstArchiveFileName())
+            ColorPrinter.cyan("{}. {}", i + 1, fileTree.getFirstArchiveFileName())
         }
         while (true) {
             val input = readln()
@@ -351,7 +354,7 @@ class FileMergerEngine(
                 val choice = input.toInt()
                 if (choice >= 1 && choice <= fileSources.size) {
                     val chosenSource = fileSources[choice - 1]
-                    ColorPrinter.info(
+                    ColorPrinter.cyan(
                         Localizations.t(
                             "ASSET_USER_CHOSE_COMPLETE",
                             chosenSource.getFirstArchiveFileName(),
@@ -385,14 +388,14 @@ class FileMergerEngine(
      * 打印合并统计信息
      */
     private fun printStatistics() {
-        ColorPrinter.info("\n{}", "=".repeat(75))
-        ColorPrinter.info(Localizations.t("ENGINE_STATISTICS_TITLE"))
-        ColorPrinter.info(Localizations.t("ENGINE_TOTAL_FILES_PROCESSED", totalProcessed))
+        ColorPrinter.cyan("\n{}", "=".repeat(75))
+        ColorPrinter.cyan(Localizations.t("ENGINE_STATISTICS_TITLE"))
+        ColorPrinter.cyan(Localizations.t("ENGINE_TOTAL_FILES_PROCESSED", totalProcessed))
         ColorPrinter.success(Localizations.t("ENGINE_MERGED_NO_CONFLICTS", mergedCount))
         if (pathCorrectionCount > 0) {
             ColorPrinter.success(Localizations.t("ENGINE_PATH_CORRECTIONS_APPLIED", pathCorrectionCount))
         }
-        ColorPrinter.info("{}", "=".repeat(75))
+        ColorPrinter.cyan("{}", "=".repeat(75))
     }
 
     /**
