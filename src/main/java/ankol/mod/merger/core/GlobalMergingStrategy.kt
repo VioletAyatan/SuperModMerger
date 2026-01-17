@@ -23,12 +23,12 @@ object GlobalMergingStrategy {
      * 询问用户是否智能合并代码项
      */
     fun askCodeMergingStrategy() {
-        ColorPrinter.print("=".repeat(75))
+        ColorPrinter.blue("=".repeat(75))
         ColorPrinter.bold(Localizations.t("GLOBAL_STRATEGY_TITLE"))
         ColorPrinter.success(Localizations.t("GLOBAL_STRATEGY_OPTION_1"))
         ColorPrinter.cyan(Localizations.t("GLOBAL_STRATEGY_OPTION_2"))
-        ColorPrinter.print("=".repeat(75))
-        ColorPrinter.cyan(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
+        ColorPrinter.blue("=".repeat(75))
+        ColorPrinter.bold(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
         while (true) {
             val input = readln()
             if (input == "1") {

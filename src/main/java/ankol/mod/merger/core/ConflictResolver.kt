@@ -40,7 +40,7 @@ object ConflictResolver {
                     // 根据冲突类型显示不同的提示
                     if (record.conflictType == ConflictType.REMOVAL) {
                         // 删除类型冲突的特殊显示
-                        ColorPrinter.cyan("=".repeat(75))
+                        ColorPrinter.blue("=".repeat(75))
                         ColorPrinter.cyan(Localizations.t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
                         ColorPrinter.warning(Localizations.t("CRESOLVER_REMOVAL_DETECTED"))
                         ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_1", record.baseModName))
@@ -48,9 +48,9 @@ object ConflictResolver {
                             Localizations.t("CRESOLVER_LINE_INFO", record.baseNode.lineNumber, baseNodeSource)
                         )
                         ColorPrinter.warning(Localizations.t("CRESOLVER_REMOVAL_MOD_VERSION_2", record.mergeModName))
-                        ColorPrinter.cyan("=".repeat(75))
+                        ColorPrinter.blue("=".repeat(75))
                         // 删除类型的选择对话框
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
+                        ColorPrinter.bold(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
                         ColorPrinter.cyan(Localizations.t("CRESOLVER_REMOVAL_OPTION_1", baseNodeSource))
                         ColorPrinter.cyan(Localizations.t("CRESOLVER_REMOVAL_OPTION_2"))
                         ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_1", record.baseModName))
@@ -58,7 +58,7 @@ object ConflictResolver {
                     } else {
                         // 普通修改冲突的显示
                         val modNodeSource = record.modNode?.sourceText?.trim() ?: ""
-                        ColorPrinter.cyan("=".repeat(75))
+                        ColorPrinter.blue("=".repeat(75))
                         ColorPrinter.cyan(Localizations.t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
                         ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_1", record.baseModName))
                         ColorPrinter.bold(
@@ -68,9 +68,9 @@ object ConflictResolver {
                         ColorPrinter.bold(
                             Localizations.t("CRESOLVER_LINE_INFO", record.modNode?.lineNumber ?: 0, modNodeSource)
                         )
-                        ColorPrinter.cyan("=".repeat(75))
+                        ColorPrinter.blue("=".repeat(75))
                         //选择对话框
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
+                        ColorPrinter.bold(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
                         ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_OPTION_1", baseNodeSource))
                         ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_OPTION_2", modNodeSource))
                         ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_1", record.baseModName))
