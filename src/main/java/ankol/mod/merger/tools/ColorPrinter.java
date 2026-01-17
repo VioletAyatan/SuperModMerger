@@ -98,7 +98,7 @@ public class ColorPrinter {
      * 打印 INFO 级别日志（蓝色）
      */
     public static void info(String message) {
-        System.out.println(applyColor(message, BRIGHT_BLUE));
+        System.out.println(applyColor(message, BRIGHT_CYAN));
         log.debug(message);
     }
 
