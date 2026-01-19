@@ -1,5 +1,6 @@
 package ankol.mod.merger.gui
 
+import ankol.mod.merger.gui.component.TimeLabel
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.geometry.Insets
@@ -32,6 +33,7 @@ class ModMergerToolMaterialGUI : Application() {
     private lateinit var statusLabel: Label
     private lateinit var mergeButton: Button
     private lateinit var outputPathLabel: Label
+    private lateinit var timeLabel: TimeLabel
 
     override fun start(primaryStage: Stage) {
         val root = BorderPane()
@@ -65,6 +67,7 @@ class ModMergerToolMaterialGUI : Application() {
         primaryStage.minWidth = 800.0
         primaryStage.minHeight = 600.0
         primaryStage.setOnCloseRequest {
+            timeLabel.stop()
             println("应用正常关闭")
         }
         primaryStage.show()
@@ -349,7 +352,7 @@ class ModMergerToolMaterialGUI : Application() {
                     style = "-fx-text-fill: #757575;"
                 },
                 Region().apply { HBox.setHgrow(this, Priority.ALWAYS) },
-                Label(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))).apply {
+                TimeLabel("HH:mm:ss").apply {
                     style = "-fx-text-fill: #757575;"
                 }
             )
