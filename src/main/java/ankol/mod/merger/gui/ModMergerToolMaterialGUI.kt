@@ -48,6 +48,16 @@ class ModMergerToolMaterialGUI : Application() {
             scene.stylesheets.add(cssResource.toExternalForm())
         }
 
+        // 设置窗口图标
+//        try {
+//            val iconResource = this::class.java.getResourceAsStream("/images/icon.ico")
+//            if (iconResource != null) {
+//                primaryStage.icons.add(Image(iconResource))
+//            }
+//        } catch (e: Exception) {
+//            println("无法加载应用图标: ${e.message}")
+//        }
+
         primaryStage.title = "Super Mod Merger"
         primaryStage.scene = scene
         primaryStage.width = 1000.0
