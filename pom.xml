@@ -6,7 +6,7 @@
 
     <groupId>ankol.mod.merger</groupId>
     <artifactId>SuperModMerger</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
