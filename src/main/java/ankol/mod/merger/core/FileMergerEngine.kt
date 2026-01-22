@@ -8,14 +8,15 @@ import ankol.mod.merger.tools.Tools.getEntryFileName
 import org.apache.commons.lang3.Strings
 import java.io.IOException
 import java.nio.file.Files
-import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 import java.util.*
 import java.util.concurrent.CompletionException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.io.path.Path
+import kotlin.io.path.createDirectories
 import kotlin.io.path.readText
+import kotlin.io.path.writeText
 
 /**
  * 模组合并引擎 - 负责执行模组合并的核心逻辑
@@ -31,10 +32,16 @@ class FileMergerEngine(
     private val argParser: SimpleArgParser
 ) {
     private val log = logger()
-    private val tempDir = Path(Tools.tempDir, "ModMerger_" + System.currentTimeMillis())
 
-    // 基准MOD相关
-    private val baseModManager: BaseModManager = BaseModManager(baseModPath)
+    /**
+     * 运行时临时文件存储目录
+     */
+    private val tempDir = Path(Tools.tempDir, "SuperModMergerTemp")
+
+    /**
+     * 基准MOD管理器
+     */
+    private val baseModManager: BaseModManager = BaseModManager(tempDir, baseModPath)
 
     // 统计信息
     private var mergedCount = 0 // 成功合并（无冲突）的文件数
@@ -46,18 +53,18 @@ class FileMergerEngine(
      */
     fun merge() {
         //打印初始信息
-        ColorPrinter.info(Localizations.t("ENGINE_TITLE"))
+        ColorPrinter.cyan(Localizations.t("ENGINE_TITLE"))
         if (modsToMerge.isEmpty()) {
             ColorPrinter.error(Localizations.t("ENGINE_NO_MODS_FOUND"))
             return
         }
-        ColorPrinter.info(Localizations.t("ENGINE_FOUND_MODS_TO_MERGE", modsToMerge.size))
+        ColorPrinter.cyan(Localizations.t("ENGINE_FOUND_MODS_TO_MERGE", modsToMerge.size))
         for ((i, modPath) in modsToMerge.withIndex()) {
-            ColorPrinter.info(Localizations.t("ENGINE_MOD_LIST_ITEM", (i + 1), modPath.fileName))
+            ColorPrinter.cyan(Localizations.t("ENGINE_MOD_LIST_ITEM", (i + 1), modPath.fileName))
         }
         //开始合并
         try {
-            baseModManager.load()
+            Tools.deleteRecursively(tempDir) //先清理掉旧的目录
             // 在提取过程中对每个mod分别进行路径修正
             val filesByPath = extractAllMods()
             // 输出目录（临时）
@@ -66,7 +73,7 @@ class FileMergerEngine(
             // 开始合并文件
             processFiles(filesByPath, mergedDir)
             // 合并完成，打包
-            ColorPrinter.info(Localizations.t("ENGINE_CREATING_MERGED_PAK"))
+            ColorPrinter.cyan(Localizations.t("ENGINE_CREATING_MERGED_PAK"))
             PakManager.createPak(mergedDir, outputPath)
             ColorPrinter.success(Localizations.t("ENGINE_MERGED_PAK_CREATED", outputPath))
             // 打印统计信息
@@ -118,7 +125,7 @@ class FileMergerEngine(
 
         // 如果有路径被修正，输出日志
         if (!corrections.isEmpty()) {
-            ColorPrinter.info(Localizations.t("ENGINE_PATH_CORRECTIONS_FOR_MOD", modFileName))
+            ColorPrinter.cyan(Localizations.t("ENGINE_PATH_CORRECTIONS_FOR_MOD", modFileName))
             for (entry in corrections.entries) {
                 ColorPrinter.success(Localizations.t("ENGINE_PATH_CORRECTION_ITEM", entry.key, entry.value))
                 pathCorrectionCount++
@@ -159,17 +166,20 @@ class FileMergerEngine(
      * 处理所有文件（合并或复制）
      */
     private fun processFiles(filesByName: Map<String, MutableList<PathFileTree>>, mergedDir: Path) {
-        ColorPrinter.info(Localizations.t("ENGINE_PROCESSING_FILES"))
+        ColorPrinter.cyan(Localizations.t("ENGINE_PROCESSING_FILES"))
+        val globalFixActived = argParser.hasOption("f")
+        if (globalFixActived) {
+            ColorPrinter.debug(Localizations.t("ENGINE_GLOBAL_FIX_ENABLED"))
+        }
         for ((relPath, fileSources) in filesByName) {
             totalProcessed++
             try {
                 //单个文件处理
                 if (fileSources.size == 1) {
-                    val hasFix = argParser.hasOption("f")
-                    if (!hasFix) {
-                        Tools.zeroCopy(fileSources.first().safeGetFullPathName(), mergedDir.resolve(relPath))
-                    } else {
+                    if (globalFixActived) {
                         processSingleFile(relPath, fileSources.first(), mergedDir) //做压力测试的时候把这个打开
+                    } else {
+                        Tools.zeroCopy(fileSources.first().safeGetFullPathName(), mergedDir.resolve(relPath))
                     }
                 } else {
                     // 在多个 mod 中存在，需要合并
@@ -203,42 +213,28 @@ class FileMergerEngine(
                         val merger = mergerOptional.get()
                         val fileName = getEntryFileName(relPath)
 
-                        val tempBaseFile = Files.createTempFile("merge_base_data0_", ".tmp")
-                        try {
-                            Files.writeString(tempBaseFile, originalBaseModContent)
+                        val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
 
-                            val fileBase = PathFileTree(fileName, relPath, mutableListOf("data0.pak"), tempBaseFile)
+                        context.fileName = relPath
+                        context.mod1Name = "data0.pak"
+                        context.mod2Name = fileCurrent.getFirstArchiveFileName()
+                        context.isFirstModMergeWithBaseMod = true // 标记为与data0.pak的合并
 
-                            context.fileName = relPath
-                            context.mod1Name = "data0.pak"
-                            context.mod2Name = fileCurrent.getFirstArchiveFileName()
-                            context.isFirstModMergeWithBaseMod = true // 标记为与data0.pak的合并
+                        val result = merger.merge(fileBase, fileCurrent)
+                        val mergedContent = result.mergedContent
 
-                            val result = merger.merge(fileBase, fileCurrent)
-                            val mergedContent = result.mergedContent
+                        // 写入合并结果
+                        val targetPath = mergedOutputDir.resolve(relPath)
+                        targetPath.parent.createDirectories()
+                        targetPath.writeText(mergedContent)
 
-                            // 写入合并结果
-                            val targetPath = mergedOutputDir.resolve(relPath)
-                            Files.createDirectories(targetPath.parent)
-                            Files.writeString(targetPath, mergedContent)
-
-                            this.mergedCount++
-                            ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS"))
-                            return
-                        } finally {
-                            Files.deleteIfExists(tempBaseFile)
-                        }
+                        this.mergedCount++
+                        ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS", context.fileName))
+                        return
                     }
                 }
-            } catch (e: NoSuchFileException) {
-                // 基准mod中不存在该文件，直接复制
-                log.debug("File '{}' not found in base mod, copying directly", relPath)
             } catch (e: Exception) {
-                ColorPrinter.warning(
-                    "Failed to merge '{}' with base mod: {}, copying original file",
-                    relPath,
-                    e.message
-                )
+                ColorPrinter.error("Processing file '${relPath}' error, Reason: ${e.message}", e)
             }
         }
         // 没有基准mod，或者基准mod中不存在该文件，或者不支持合并，直接复制
@@ -273,7 +269,7 @@ class FileMergerEngine(
 
         try {
             // 支持合并，开始处理合并逻辑
-            ColorPrinter.info(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size))
+            ColorPrinter.cyan(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size))
             val merger = mergerOptional.get()
             var baseMergedContent = "" //基准文本内容
 
@@ -291,8 +287,7 @@ class FileMergerEngine(
                 // 第一个 mod：如果有data0.pak基准文件，使用它作为base与第一个mod合并
                 if (i == 0) {
                     if (originalBaseModContent != null) {
-                        val fileBase =
-                            MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
+                        val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
 
                         context.fileName = relPath
                         context.mod1Name = "data0.pak"
@@ -311,7 +306,7 @@ class FileMergerEngine(
                     val previousModName = previousSource.getFirstArchiveFileName()
 
                     // 执行合并 - 使用真实的MOD压缩包名字
-                    val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), baseMergedContent)
+                    val fileBase = MemoryFileTree(fileName, relPath, mutableListOf(previousModName), baseMergedContent)
 
                     context.fileName = relPath
                     context.mod1Name = previousModName
@@ -325,15 +320,15 @@ class FileMergerEngine(
 
             // 写入最终合并结果
             val targetPath = mergedDir.resolve(relPath)
-            Files.createDirectories(targetPath.parent)
-            Files.writeString(targetPath, baseMergedContent)
+            targetPath.parent.createDirectories()
+            targetPath.writeText(baseMergedContent)
 
             this.mergedCount++
-            ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS"))
+            ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS", context.fileName))
         } catch (e: Exception) {
             ColorPrinter.error(Localizations.t("ENGINE_MERGE_FAILED", e.message))
             log.error("Failed to merge file '{}': {}", relPath, e.message)
-            // 失败时使用最后一个 mod 的版本
+            // todo 这里合并失败的策略还得再调整下，现在是失败时使用最后一个 mod 的版本
             val lastSource: PathFileTree = fileSources.last()
             Tools.zeroCopy(lastSource.safeGetFullPathName(), mergedDir.resolve(relPath))
         }
@@ -351,7 +346,7 @@ class FileMergerEngine(
         ColorPrinter.warning("\n${Localizations.t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath)}")
         ColorPrinter.warning(Localizations.t("ASSET_CHOSE_WHICH_VERSION_TO_USE"))
         for ((i, fileTree) in fileSources.withIndex()) {
-            ColorPrinter.info("{}. {}", i + 1, fileTree.getFirstArchiveFileName())
+            ColorPrinter.cyan("{}. {}", i + 1, fileTree.getFirstArchiveFileName())
         }
         while (true) {
             val input = readln()
@@ -359,7 +354,7 @@ class FileMergerEngine(
                 val choice = input.toInt()
                 if (choice >= 1 && choice <= fileSources.size) {
                     val chosenSource = fileSources[choice - 1]
-                    ColorPrinter.info(
+                    ColorPrinter.cyan(
                         Localizations.t(
                             "ASSET_USER_CHOSE_COMPLETE",
                             chosenSource.getFirstArchiveFileName(),
@@ -380,9 +375,9 @@ class FileMergerEngine(
         if (fileSources.size <= 1) {
             return true
         }
-        val first = fileSources.first().safeGetFullPathName()
+        val first = fileSources.first()
         for (i in 1 until fileSources.size) {
-            if (!PakManager.areFilesIdentical(first, fileSources[i].safeGetFullPathName())) {
+            if (!PakManager.areFilesIdentical(first, fileSources[i])) {
                 return false
             }
         }
@@ -393,14 +388,14 @@ class FileMergerEngine(
      * 打印合并统计信息
      */
     private fun printStatistics() {
-        ColorPrinter.info("\n{}", "=".repeat(75))
-        ColorPrinter.info(Localizations.t("ENGINE_STATISTICS_TITLE"))
-        ColorPrinter.info(Localizations.t("ENGINE_TOTAL_FILES_PROCESSED", totalProcessed))
+        ColorPrinter.cyan("\n{}", "=".repeat(75))
+        ColorPrinter.cyan(Localizations.t("ENGINE_STATISTICS_TITLE"))
+        ColorPrinter.cyan(Localizations.t("ENGINE_TOTAL_FILES_PROCESSED", totalProcessed))
         ColorPrinter.success(Localizations.t("ENGINE_MERGED_NO_CONFLICTS", mergedCount))
         if (pathCorrectionCount > 0) {
             ColorPrinter.success(Localizations.t("ENGINE_PATH_CORRECTIONS_APPLIED", pathCorrectionCount))
         }
-        ColorPrinter.info("{}", "=".repeat(75))
+        ColorPrinter.cyan("{}", "=".repeat(75))
     }
 
     /**

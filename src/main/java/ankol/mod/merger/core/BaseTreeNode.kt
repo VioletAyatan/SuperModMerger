@@ -32,15 +32,10 @@ abstract class BaseTreeNode(
             return _sourceText
         }
 
-    /*companion object {
-        var calcCount = 0
-        var getCount = 0
-
-        init {
-            Runtime.getRuntime().addShutdownHook(Thread {
-                println("BaseTreeNode calcCount: $calcCount, getCount: $getCount")
-                println("Cache use rate = ${(((getCount - calcCount).toDouble() / getCount) * 100)}")
-            })
-        }
-    }*/
+    /**
+     * 打印树节点
+     */
+    open fun printTree(indent: String = "") {
+        println("${indent}Node: $signature")
+    }
 }

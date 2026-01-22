@@ -7,6 +7,7 @@ import ankol.mod.merger.core.*
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.ConflictRecord
+import ankol.mod.merger.merger.ConflictType
 import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode
@@ -29,9 +30,18 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 插入操作记录
      */
-    private data class InsertOperation(val tokenIndex: Int, val content: String)
+    private data class InsertOperation(val tokenIndex: Int, val content: String, val nodeType: NodeType = NodeType.OTHER)
 
     private val insertOperations = ArrayList<InsertOperation>()
+
+    /**
+     * 节点类型，用于确定插入位置的优先级
+     */
+    private enum class NodeType {
+        IMPORT,  // import 语句 - 最高优先级，放在文件最前
+        SUB,     // sub 函数声明 - 次高优先级，放在 import 之后
+        OTHER    // 其他声明 - 最低优先级
+    }
 
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
@@ -54,10 +64,17 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             //开始递归对比
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
 
-            //第一个mod与原版文件的对比，直接使用MOD修改的版本，不提示冲突
+            //第一个mod与原版文件的对比
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
                 for (record in conflicts) {
-                    record.userChoice = UserChoice.MERGE_MOD
+                    if (record.conflictType == ConflictType.REMOVAL) {
+                        // 删除类型冲突：MOD缺少原版节点，应该保留原版（补回缺失的代码）
+                        // 因为这很可能是MOD过期导致的缺失，而非故意删除
+                        record.userChoice = UserChoice.BASE_MOD
+                    } else {
+                        // 普通修改冲突：使用MOD修改的版本
+                        record.userChoice = UserChoice.MERGE_MOD
+                    }
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
@@ -172,23 +189,91 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 log.error("Error in processing scr node with signature: '${signature}'", e)
             }
         }
+
+        // 检测被MOD删除的节点（base有，但mod没有）
+//        detectRemovedNodes(originalContainer, baseContainer, modContainer)
+    }
+
+    /**
+     * 检测被MOD删除/注释的节点
+     *
+     * 判断逻辑：
+     * - 如果节点在base中存在，但在mod中不存在
+     * - 且该节点在原版(original)中也存在，说明MOD故意删除了这个节点
+     * - 需要提示用户选择是保留(使用base)还是删除(使用mod的删除操作)
+     */
+    private fun detectRemovedNodes(
+        originalContainer: ScrContainerScriptNode?,
+        baseContainer: ScrContainerScriptNode,
+        modContainer: ScrContainerScriptNode
+    ) {
+        for ((signature, baseNode) in baseContainer.childrens) {
+            val modNode = modContainer.childrens[signature]
+
+            // base有，但mod没有 -> 可能是删除
+            if (modNode == null) {
+                // 检查原版是否有这个节点
+                val originalNode = originalContainer?.childrens?.get(signature)
+
+                if (originalNode != null) {
+                    // 原版有这个节点，MOD也应该有但却没有
+                    // 这说明MOD故意删除了这个节点，需要提示用户
+                    conflicts.add(
+                        ConflictRecord(
+                            context.fileName,
+                            context.mod1Name,
+                            context.mod2Name,
+                            signature,
+                            baseNode,
+                            null, // modNode为null表示删除
+                            conflictType = ConflictType.REMOVAL
+                        )
+                    )
+                }
+                // 如果原版也没有这个节点，说明是base MOD新增的，mod没有是正常的（过期MOD）
+                // 这种情况不需要特殊处理，base的内容会保留
+            }
+        }
     }
 
     private fun getMergedContent(baseResult: ParsedResult<ScrContainerScriptNode>): String {
         val rewriter = TokenStreamRewriter(baseResult.tokenStream)
         // 处理冲突节点的替换
         for (record in conflicts) {
-            if (record.userChoice == UserChoice.MERGE_MOD) { // 用户选择了 Mod
+            if (record.conflictType == ConflictType.REMOVAL) {
+                // 删除类型的冲突
+                if (record.userChoice == UserChoice.MERGE_MOD) {
+                    // 用户选择使用MOD的版本（即删除该节点）
+                    val baseNode = record.baseNode
+                    rewriter.delete(baseNode.startTokenIndex, baseNode.stopTokenIndex)
+                }
+                // 如果选择 BASE_MOD，则保留原内容，不做任何操作
+            } else if (record.userChoice == UserChoice.MERGE_MOD) {
+                // 普通修改冲突：用户选择了 Mod
                 val baseNode = record.baseNode
                 val modNode = record.modNode
-                rewriter.replace(
-                    baseNode.startTokenIndex,
-                    baseNode.stopTokenIndex,
-                    modNode.sourceText
-                )
+                if (modNode != null) {
+                    rewriter.replace(
+                        baseNode.startTokenIndex,
+                        baseNode.stopTokenIndex,
+                        modNode.sourceText
+                    )
+                }
             }
         }
-        for (op in insertOperations) {
+
+        // 对插入操作按照优先级和位置排序
+        // 优先级：IMPORT > SUB > OTHER
+        // 同一优先级内按照 tokenIndex 升序排序（从前往后插入）
+        val sortedOperations = insertOperations.sortedWith(compareBy<InsertOperation> { op ->
+            when (op.nodeType) {
+                NodeType.IMPORT -> 0
+                NodeType.SUB -> 1
+                NodeType.OTHER -> 2
+            }
+        }.thenBy { it.tokenIndex })
+
+        for (op in sortedOperations) {
             rewriter.insertBefore(op.tokenIndex, op.content)
         }
 
@@ -208,19 +293,87 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
 
         // 对比节点内容
-        if (modNode is ScrFunCallScriptNode && originalNode is ScrFunCallScriptNode) {
+        return if (modNode is ScrFunCallScriptNode && originalNode is ScrFunCallScriptNode) {
             // 函数调用节点，对比参数
-            return modNode.arguments == originalNode.arguments
+            modNode.arguments == originalNode.arguments
         } else {
-            return equalsTrimmed(modNode.sourceText, originalNode.sourceText)
+            equalsTrimmed(modNode.sourceText, originalNode.sourceText)
         }
     }
 
     private fun handleInsertion(baseContainer: ScrContainerScriptNode, modNode: BaseTreeNode) {
-        // 插入位置：Base 容器的 '}' 之前
-        val insertPos = baseContainer.stopTokenIndex
-        val newContent = "\n    " + modNode.sourceText
-        insertOperations.add(InsertOperation(insertPos, newContent))
+        // 根据节点签名确定节点类型
+        val nodeType = when {
+            modNode.signature.startsWith("import:") -> NodeType.IMPORT
+            modNode.signature.startsWith("sub:") -> NodeType.SUB
+            else -> NodeType.OTHER
+        }
+
+        var newContent: String
+
+        // 选择合适的插入位置
+        val insertPos = when (nodeType) {
+            NodeType.IMPORT -> {
+                // import语句需要插入在文件最顶上
+                newContent = "\n${modNode.sourceText}"
+                findInsertPositionForImport(baseContainer)
+            }
+
+            NodeType.SUB -> {
+                // sub 插入到import语句后，但在其他节点前
+                newContent = "${modNode.sourceText}\n"
+                findInsertPositionForSub(baseContainer)
+            }
+
+            NodeType.OTHER -> {
+                // 其他节点直接插在容器的 '}' 之前
+                newContent = "\n   ${modNode.sourceText}"
+                baseContainer.stopTokenIndex
+            }
+        }
+
+        insertOperations.add(InsertOperation(insertPos, newContent, nodeType))
+    }
+
+    /**
+     * 找到import语句的插入位置：在所有现有import之后，或者在第一个非import节点之前
+     */
+    private fun findInsertPositionForImport(container: ScrContainerScriptNode): Int {
+        var lastImportStopIndex: Int? = null
+
+        for ((_, node) in container.childrens) {
+            if (node.signature.startsWith("import:")) {
+                lastImportStopIndex = node.stopTokenIndex
+            } else {
+                // 遇到第一个非import节点，如果有import就插在最后import之后，否则插在该节点之前
+                return lastImportStopIndex?.let { it + 1 } ?: node.startTokenIndex
+            }
+        }
+
+        // 所有节点都是import，或者没有节点，返回容器结束位置
+        return lastImportStopIndex?.let { it + 1 } ?: container.stopTokenIndex
+    }
+
+    /**
+     * 找到sub函数的插入位置：在所有import和sub之后，但在其他节点之前
+     */
+    private fun findInsertPositionForSub(container: ScrContainerScriptNode): Int {
+        var lastSubOrImportStopIndex: Int? = null
+
+        for ((_, node) in container.childrens) {
+            val isSub = node.signature.startsWith("sub:")
+            val isImport = node.signature.startsWith("import:")
+
+            if (isSub || isImport) {
+                lastSubOrImportStopIndex = node.startTokenIndex
+            } else {
+                // 遇到第一个既不是import也不是sub的节点
+                return lastSubOrImportStopIndex?.let { it + 1 } ?: node.startTokenIndex
+            }
+        }
+
+        // 所有节点都是import或sub，返回容器结束位置
+        return lastSubOrImportStopIndex ?: container.stopTokenIndex
     }
 
     private fun parseFile(fileTree: AbstractFileTree): ParsedResult<ScrContainerScriptNode> {

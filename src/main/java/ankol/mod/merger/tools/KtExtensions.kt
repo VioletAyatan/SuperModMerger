@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory
  *
  * val user = User("Alice", 30)
  * val log = user.logger()  // 返回与 User 类关联的 Logger
- * log.info("Logging some information")
+ * log.cyan("Logging some information")
  *
  * ```
  */

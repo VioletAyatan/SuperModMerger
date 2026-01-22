@@ -144,12 +144,12 @@ public class SimpleArgParser {
      * 打印帮助信息
      */
     public void printHelp() {
-        ColorPrinter.info(Localizations.t("ARG_PARSER_USAGE"));
+        ColorPrinter.cyan(Localizations.t("ARG_PARSER_USAGE"));
         for (Option opt : options.values()) {
             String sName = (opt.shortName != null) ? "-" + opt.shortName : "  ";
             String lName = "--" + opt.longName;
             String valParams = opt.hasValue ? " <value>" : "";
-            ColorPrinter.info("  {}, {} {}", sName, lName + valParams, opt.description);
+            ColorPrinter.cyan("  {}, {} {}", sName, lName + valParams, opt.description);
         }
     }
 

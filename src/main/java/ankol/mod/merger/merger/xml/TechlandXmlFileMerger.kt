@@ -10,6 +10,7 @@ import ankol.mod.merger.core.ParsedResult
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.ConflictRecord
+import ankol.mod.merger.merger.ConflictType
 import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.xml.node.XmlContainerNode
 import ankol.mod.merger.merger.xml.node.XmlNode
@@ -67,10 +68,16 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 递归对比
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
 
-            // 第一个mod与原版文件的对比，直接通过，不提示冲突
+            // 第一个mod与原版文件的对比
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
                 for (record in conflicts) {
-                    record.userChoice = UserChoice.MERGE_MOD
+                    if (record.conflictType == ConflictType.REMOVAL) {
+                        // 删除类型冲突：MOD缺少原版节点，应该保留原版（补回缺失的代码）
+                        record.userChoice = UserChoice.BASE_MOD
+                    } else {
+                        // 普通修改冲突：使用MOD修改的版本
+                        record.userChoice = UserChoice.MERGE_MOD
+                    }
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
@@ -160,6 +167,46 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                 System.err.println("Error in processing XML node with signature: '${signature}'")
             }
         }
+
+        // 检测被MOD删除的节点（base有，但mod没有）
+        detectRemovedNodes(originalContainer, baseContainer, modContainer)
+    }
+
+    /**
+     * 检测被MOD删除/注释的节点
+     */
+    private fun detectRemovedNodes(
+        originalContainer: XmlContainerNode?,
+        baseContainer: XmlContainerNode,
+        modContainer: XmlContainerNode
+    ) {
+        for ((signature, baseNode) in baseContainer.childrens) {
+            val modNode = modContainer.childrens[signature]
+
+            // base有，但mod没有 -> 可能是删除
+            if (modNode == null) {
+                // 检查原版是否有这个节点
+                val originalNode = originalContainer?.childrens?.get(signature)
+
+                if (originalNode != null) {
+                    // 原版有这个节点，MOD也应该有但却没有
+                    // 这说明MOD故意删除了这个节点，需要提示用户
+                    conflicts.add(
+                        ConflictRecord(
+                            context.fileName,
+                            context.mod1Name,
+                            context.mod2Name,
+                            signature,
+                            baseNode,
+                            null, // modNode为null表示删除
+                            conflictType = ConflictType.REMOVAL
+                        )
+                    )
+                }
+                // 如果原版也没有这个节点，说明是base MOD新增的，mod没有是正常的
+                // 这种情况不需要特殊处理，base的内容会保留
+            }
+        }
     }
 
     /**
@@ -169,14 +216,25 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
         val rewriter = TokenStreamRewriter(baseResult.tokenStream)
         // 处理冲突节点的替换
         for (record in conflicts) {
-            if (record.userChoice == UserChoice.MERGE_MOD) { // 用户选择了 Mod
+            if (record.conflictType == ConflictType.REMOVAL) {
+                // 删除类型的冲突
+                if (record.userChoice == UserChoice.MERGE_MOD) {
+                    // 用户选择使用MOD的版本（即删除该节点）
+                    val baseNode = record.baseNode
+                    rewriter.delete(baseNode.startTokenIndex, baseNode.stopTokenIndex)
+                }
+                // 如果选择 BASE_MOD，则保留原内容，不做任何操作
+            } else if (record.userChoice == UserChoice.MERGE_MOD) {
+                // 普通修改冲突：用户选择了 Mod
                 val baseNode = record.baseNode
                 val modNode = record.modNode
-                rewriter.replace(
-                    baseNode.startTokenIndex,
-                    baseNode.stopTokenIndex,
-                    modNode.sourceText
-                )
+                if (modNode != null) {
+                    rewriter.replace(
+                        baseNode.startTokenIndex,
+                        baseNode.stopTokenIndex,
+                        modNode.sourceText
+                    )
+                }
             }
         }
 

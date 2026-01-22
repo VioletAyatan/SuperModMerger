@@ -1,18 +1,18 @@
 package ankol.mod.merger.core.filetrees
 
-import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 
 /**
  * 路径文件树，当文件是在某文件路径时的表示
- * 
+ * @param fileHash 文件hash值
  * @author Ankol
  */
 class PathFileTree(
     fileName: String,
     fileEntryName: String,
     archiveFileName: MutableList<String>,
+    var fileHash: String? = null,
     /**
      * 解压出来后的文件路径
      */
@@ -20,12 +20,7 @@ class PathFileTree(
 ) : AbstractFileTree(fileName, fileEntryName, archiveFileName) {
 
     override fun getContent(): String {
-        try {
-            return fullPathName?.let { Files.readString(it) }
-                ?: throw IllegalArgumentException("Error, fullPathName is null")
-        } catch (e: IOException) {
-            throw RuntimeException(e)
-        }
+        return fullPathName?.let { Files.readString(it) } ?: throw IllegalArgumentException("Error, fullPathName is null")
     }
 
     /**

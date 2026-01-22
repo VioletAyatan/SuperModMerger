@@ -1,0 +1,3188 @@
+import "inventorystuff.scr"
+import "Inventory_Infected.scr"
+import "faction_exports.scr"
+import "inventory_weapondefintions.scr"
+import "inventory_fury.scr"
+
+
+sub main()
+{
+	
+	////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////SETUP Items - Do not touch////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	
+	use Inventory_Infected();
+	use inventory_fury();
+	
+	// TEMPORARY - fake entry to allow animators to test a cigarette mesh in attractors (life places).
+    Item("ANIM_Cigarette", CategoryType_Melee)
+    {
+        Name("&ANIM_Cigarette&");
+        Description("&ANIM_Cigarette&");
+        Visibility(true);
+        Condition(-1); 
+        Mesh("cigarette_a.msh");
+        Skin("default");
+        GameVersion(1);
+    }
+
+    // DO NOT REMOVE!!! placeholder item in case definition is not found
+    Item("FakeItem", CategoryType_Melee)
+    {
+        Name("&FakeItem&");
+        Description("&FakeItem&");
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("None");
+        GameVersion(1);
+    }
+	
+	
+	////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////    Player Skill Items   /////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	
+	Item("Melee_Fists", CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        WeaponBuildType(WeaponBuildType_Metal);
+        Condition(-1);
+		DamageTiers("Player_Fists_Tier");
+		IsAutomaticTierScaling(true);
+		ArmourDamageName("Player_Armour_Damage");
+        DamageRange(115.0 *0.01);
+        Force(10.0);
+        PhysicsDamage(10.0);
+        DamageToPhysicsObjects(90.0);
+        StaminaUsage(0.3);
+        DamageType(DamageType_Punch1);
+        Flags(291);
+        Price(-1);
+        Mesh("weapon_fists.msh");
+        AnimPrefix("fist");
+        HudIcon("weapon_fist");
+        MinDamageMult(1.0);        
+        HorizontalAttackDamageMul(1.0);
+        RagdollBehavior(RagdollBehavior_Fists);
+        TwoHanded(true);
+        AiHitSound("fists");
+        SoundInjuryDamageType("unarmed");
+		Material("fists");
+        use HitEffects_Fists();
+        use PickupSounds_Default();
+        DamageSize(5.0);
+        StatsType(StatsType_Fists);
+        LootType(LootType_None);
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        Color(Color_White);
+        PlayerTool();
+		HitReactionType(EReactionType_Blunt);		
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+		GameVersion(1);
+		XrayTriggerProbability(0.000);
+		StaminaDamage(100000000);
+        IgnoreStaminaDamageItemCheck(true);
+        ScaleStaminaDamageByCurve(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+
+        DestroyableDamage(40.0);
+        PhysicsDamageMul(1.0); //1.0 original
+        IsAutomaticLegendLevelDamageScaling(true);
+    
+   use fury_weapon_fists();}
+
+    // Same as Melee_Fists but without the field PlayerTool
+    Item("Melee_Fists_Challenge", CategoryType_Melee)
+    {
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        WeaponBuildType(WeaponBuildType_Metal);
+        Condition(-1);
+		DamageTiers("Player_Fists_Tier");
+		IsAutomaticTierScaling(true);
+		ArmourDamageName("Player_Armour_Damage");
+        DamageRange(115.0 *0.01);
+        Force(10.0);
+        PhysicsDamage(10.0);
+        DamageToPhysicsObjects(5.0);
+        StaminaUsage(0.3);
+        DamageType(DamageType_Punch1);
+        DestroyableDamage(20);
+        Flags(35);
+        Price(-1);
+        Mesh("weapon_fists.msh");
+        AnimPrefix("fist");
+        HudIcon("weapon_fist");
+        MinDamageMult(1.0);        
+        HorizontalAttackDamageMul(1.0);
+        RagdollBehavior(RagdollBehavior_Fists);
+        TwoHanded(true);
+        AiHitSound("fists");
+        SoundInjuryDamageType("unarmed");
+		Material("fists");
+        use HitEffects_Fists();
+        use PickupSounds_Default();
+        DamageSize(5.0);
+        StatsType(StatsType_Fists);
+        LootType(LootType_None);
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        Color(Color_White);
+		HitReactionType(EReactionType_Blunt);		
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+		GameVersion(1);
+		ChallengeItem(true);
+        StaminaDamage(100.0);
+        IgnoreStaminaDamageItemCheck(true);
+        ScaleStaminaDamageByCurve(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	
+	// used head stomp skill
+    Item("StompItem", CategoryType_Melee)
+    {
+        Name("&Melee_Stomp_N&");
+		Mesh("weapon_fists.msh");
+        Visibility(false);        
+        DamageRange(1.0);
+		DamageTiers("Player_Stomp_Tier");
+		IsAutomaticTierScaling(true);
+		IsDifficultyScaling(true);
+        DamageToPhysicsObjects(200.0);
+        PhysicsDamageMul(0.2);
+        DamageType(DamageType_Kick);                
+		ItemType(ItemType_Fists);
+        HitReactionType(EReactionType_Push);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Ragdoll);		
+		LimbsDestroyProb(1.0);
+		FF_EffectName("KickHeavy");
+        GameVersion(1);
+		XrayTriggerProbability(0.0);
+        StaminaUsage(0.25);
+        StaminaDamage(500.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	// used for kicks (low / mid / hight)
+    Item("Melee_Leg", CategoryType_Melee)
+    {
+        Name("&Melee_Leg_N&");        
+        ItemType(ItemType_Fists);        
+        Condition(0);        
+        DamageTiers("Player_Fists_Tier");
+		IsAutomaticTierScaling(true);
+		DamageToPhysicsObjects(90.0);
+        DamageRange(1.7);        
+        StaminaUsage(0.0);       
+        AiHitSound("kick");
+        DamageType(DamageType_Kick);                                
+		RagdollBehaviorPrefix("Kick");
+        use HitEffects_Kick();     
+		HitReactionType(EReactionType_Push);		
+        HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);			
+		ConfusionProb(0.0);
+	    FF_EffectName("KickLight");
+        GameVersion(1);
+		XrayTriggerProbability(0.0);
+		StaminaDamage(100000000);
+        ScaleStaminaDamageByCurve(true);        
+        IgnoreStaminaDamageItemCheck(true);
+
+        DestroyableDamage(40.0);
+        PhysicsDamageMul(1.25); //1.25 original
+        DamageTag("ignore_counterattack");
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	// used for charged kicks
+    Item("Melee_Leg_Charged", CategoryType_Melee)
+    {
+        Name("&Melee_Leg_Charged_N&");        
+        ItemType(ItemType_Fists);        
+        Condition(0);        
+        DamageTiers("Player_Fists_Tier");
+		IsAutomaticTierScaling(true);
+		DamageToPhysicsObjects(34.0);
+        DamageRange(1.7);        
+        PhysicsDamageMul(1.9);
+        StaminaUsage(0.0);        
+        AiHitSound("kick_charged");
+        DamageType(DamageType_Kick);                                
+		RagdollBehaviorPrefix("Kick");
+        DestroyableDamage(40.0);
+        use HitEffects_Default();     
+		HitReactionType(EReactionType_Push);		
+        HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+        //HitReactionFlags(EReactionFlag_Ragdoll);
+        HitReactionFlags(EReactionFlag_Interrupt);		
+		ConfusionProb(0.0);
+	    FF_EffectName("KickLight");
+        GameVersion(1);
+		XrayTriggerProbability(0.0);
+		//AutoStaminaDamage(100);
+        StaminaDamage(200.0);
+        DamageTag("ignore_counterattack");
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	// wrtestle  dropk kick
+    Item("Melee_WrestleKickLeg", CategoryType_Melee)
+    {
+        Name("&Melee_WrestleKickLeg_N&");        
+        ItemType(ItemType_Fists);        
+		DamageTiers("WrestleKick_Tier");
+		IsAutomaticTierScaling(true);
+        DamageToPhysicsObjects(100.0);        
+        DamageRange(2.0);        
+        PhysicsDamageMul(2.5);
+        AiHitSound("dropkick_dlc_ft"); 
+        DamageType(DamageType_Ram);
+        DestroyableDamage(120.0);                
+        Reparable(false);         
+		FF_Left(0.9);
+        FF_Right(0.9);
+        FF_Duration(0.4);
+        FF_FadeOut(0.0);
+        use HitEffects_Default();        		
+		HitReactionType(EReactionType_Push);		
+        HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);		
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		FF_EffectName("KickHeavy");
+        GameVersion(1);
+		XrayTriggerProbability(0.0);
+		StaminaDamage(500.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DamageTag("wrestle_kick");
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	// when tackling enemies
+	Item("Melee_Tackle", CategoryType_Melee)
+    {
+        Name("&Melee_Tackle_N&");        
+        DamageToPhysicsObjects(100.0);
+		DamageName("TackleDamage");
+        DamageRange(2.0);        
+        PhysicsDamageMul(2.2);
+        StaminaUsage(0.0);       
+        AiHitSound("player_tackle");
+        DamageType(DamageType_Kick);                
+        Reparable(false);		
+		ItemType(ItemType_Fists);        
+		HitReactionType(EReactionType_Push);		
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		StaminaDamage(65.0);      
+		FF_EffectName("CollisionHeavy");
+        GameVersion(1);
+        StaminaDamage(400);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DestroyableDamage(60.0);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	// Ram
+    Item("Melee_Ram", CategoryType_Melee)
+    {
+        Name("&Melee_Ram_N&");        
+        ItemType(ItemType_Fists);        
+		DamageTiers("Melee_Ram_Tier");
+		IsAutomaticTierScaling(true);
+        DamageToPhysicsObjects(100.0);        
+        DamageRange(2.5);        
+        PhysicsDamageMul(2.0);
+        AiHitSound("wrestler_kick");
+        DamageType(DamageType_Ram);
+        DestroyableDamage(120.0);       
+        Reparable(false);         
+		FF_Left(0.9);
+        FF_Right(0.9);
+        FF_Duration(0.4);
+        FF_FadeOut(0.0);
+        use HitEffects_Default();        		
+		HitReactionType(EReactionType_Push);		
+        HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);		
+		//HitReactionFlags(EReactionFlag_Ragdoll);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		FF_EffectName("CollisionHeavy");
+        GameVersion(1);
+        StaminaDamage(100000000); 
+        ScaleStaminaDamageByCurve(true);        
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	//  special damage that is done in exhausted attacks
+    Item("Melee_WeaponPush", CategoryType_Melee)
+    {
+        Name("&Melee_Tackle_N&");
+        Description("&Melee_Tackle_D&");        
+        ItemType(ItemType_Fists);        
+        Condition(0);
+        Damage(0.0);
+		DamageName("Player_Melee_WeaponPush");
+        DamageToPhysicsObjects(50.0);
+        DamageRange(1.0);
+        Force(0.35);
+        PhysicsDamageMul(0.1);
+        DestroyableDamage(20.0);
+        StaminaUsage(0.0);       
+        AiHitSound("push");
+        DamageType(DamageType_Kick);                
+        Reparable(false);  		
+		HitReactionType(EReactionType_Push);		
+		HitReactionHitSeverity(EHitSeverity_Light);
+		//HitReactionMoveSeverity(EMoveSeverity_Light);
+        GameVersion(1);
+        StaminaDamage(100.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+    // backup item so when doesn't exista a shockwave item it will be used in - ground pound / coliding after wallrun / heavy landing and hitting close ai 
+    Item("Melee_Shockwave", CategoryType_Melee)
+    {
+        Name("&Melee_Shockwave_N&");                
+        Condition(0);
+        DamageName("Melee_Shockwave");
+        DamageRange(200.0);
+        AiHitSound("kick");
+        DamageType(DamageType_Forcewave);                
+        Reparable(false); 
+        MaxDamageAngle(60.0);        
+        ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Push);		
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+        GameVersion(1);
+        StaminaDamage(150);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+
+        DestroyableDamage(0.0);
+        PhysicsDamageMul(0.3); //0.3 original
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }	
+
+    // same as above, no damage (used for instance in JumpAttack to scatter enemies on landing)
+    Item("Melee_Shockwave_NoDamage", CategoryType_Melee)
+    {
+        Name("&Melee_ShockwaveNoDamage_N&");                
+        Condition(0);
+        Damage(0.0);
+        DamageRange(200.0);
+        PhysicsDamageMul(0.3);
+        AiHitSound("kick");
+        DamageType(DamageType_Forcewave);                
+        Reparable(false); 
+        MaxDamageAngle(360.0);        
+        ItemType(ItemType_Collision);
+        HitReactionType(EReactionType_Push);        
+        HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EHitSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        GameVersion(1);
+        StaminaDamage(100);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }   
+
+    Item("Melee_Shockwave_DeathFromAbove", CategoryType_Melee)
+    {
+        Name("&Melee_Shockwave_N&");                
+        Condition(0);
+		DamageTiers("Player_Shockwave_Tier");
+		IsAutomaticTierScaling(true);
+		DamageRange(200.0);
+        PhysicsDamageMul(0.3);
+        AiHitSound("kick");
+        DamageType(DamageType_Forcewave);
+        Reparable(false); 
+        MaxDamageAngle(-1.0);        
+        ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Push);		
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+        HitReactionFlags(EReactionFlag_Ragdoll);
+        GameVersion(1);
+        StaminaDamage(150);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }	
+
+    Item("Melee_ZombieAmortizerShockwave", CategoryType_Melee)
+    {
+        Name("&Melee_ZombieAmortizerShockwave_N&");                
+        DamageRange(4.0);
+        PhysicsDamageMul(0.7);
+        DamageType(DamageType_Forcewave);                        
+        MaxDamageAngle(-1.0);
+		ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Push);		
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        GameVersion(1);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+
+    // damage given to close enemy after landing above 5.0
+    Item("Melee_HeavyLandingShockwave", CategoryType_Melee)
+    {
+        Name("&Melee_HeavyLandingShockwave_N&");                
+        Damage(1.0);
+        DamageRange(2.5);
+        PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(2.0);
+        DamageType(DamageType_Forcewave);
+        DamageToPhysicsObjects(400.0);                      
+        MaxDamageAngle(60.0);
+		ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Push);		
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+        GameVersion(1);
+        StaminaDamage(100);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+
+        DestroyableDamage(120.0);
+        PhysicsDamageMul(1.1);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    // damage given to close enemy after landing below 5.0
+    Item("Melee_LightLandingShockwave", CategoryType_Melee)
+    {
+        Name("&Melee_LightLandingShockwave_N&");        
+        DamageRange(1.25);        
+        PhysicsDamageMul(0.3);
+        Damage(1.0);
+        DamageType(DamageType_Forcewave);                        
+        MaxDamageAngle(60.0);
+		ItemType(ItemType_Collision);
+		HitReactionType(EReactionType_Push);		
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+        GameVersion(1);
+        StaminaDamage(50);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	// Displayed when healing others in coop
+    Item("CoopHealBandage", CategoryType_Other)
+    {
+        Visibility(true);
+        ItemType(ItemType_Special);
+        PhysicsScript("simple.phx");
+        InventoryMeshHq("player_bandage_roll_a_anm.msh");
+        InventoryMesh("player_bandage_roll_a_anm.msh");
+        Mesh("player_bandage_roll_a_anm.msh");
+        HudIcon("weapon_pickaxe");
+        HolderElement("r_thigh");
+        HolderOffset([0.0,0.0,0.0]);
+        HolderAngle([0.0,0.0,0.0]);
+        AiHitSound("weapon_rope_hit_body");
+        use PickupSounds_Default();
+        Reparable(false);
+        Color(Color_White);
+        CraftingSlots(0);
+		EquipmentSlot(2);
+		SilentItem(true);
+        GameVersion(1);
+    }
+	
+    // used in shockwave ground damage on first skill lvl (via skills)
+    Item("Melee_GroundPoundLvl1", CategoryType_Melee)
+    {
+        Name("&Melee_GroundPound_N&");        
+        Visibility(false);        
+        DamageRange(0.5);
+		DamageTiers("Player_GroundPoundLvl1_Tier");
+		IsAutomaticTierScaling(true);
+        DamageToPhysicsObjects(400.0);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(2.0);
+        DamageType(DamageType_Blunt);
+        StaminaUsage(0.3);
+        MaxDamageAngle(60.0);     
+		ItemType(ItemType_Stick);
+        HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);		
+		HitReactionFlags(EReactionFlag_Interrupt);
+		ConfusionProb(0.0);
+		StunnedEffectDuration(0.0);
+        GameVersion(1);
+        StaminaDamage(300.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DamageTag("ground_pound;ignore_counterattack;ignore_dodge");
+        DestroyableDamage(0.0);
+        PhysicsDamageMul(1.1);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    Item("Melee_GroundPoundLvl1_1h", CategoryType_Melee)
+    {
+        Name("&Melee_GroundPound_N&");        
+        Visibility(false);        
+        DamageRange(0.6);
+		DamageTiers("Player_GroundPoundLvl1_Tier");
+		IsAutomaticTierScaling(true);
+        DamageToPhysicsObjects(400.0);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(2.0);
+        DamageType(DamageType_Blunt);
+        StaminaUsage(0.3);
+        MaxDamageAngle(60.0);     
+		ItemType(ItemType_Stick);
+        HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		ConfusionProb(0.0);
+		StunnedEffectDuration(0.0);
+        GameVersion(1);
+        StaminaDamage(300.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DamageTag("ground_pound;ignore_counterattack;ignore_dodge");
+        DestroyableDamage(0.0);
+        PhysicsDamageMul(1.1);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    Item("Melee_GroundPoundLvl1_15h", CategoryType_Melee)
+    {
+        Name("&Melee_GroundPound_N&");        
+        Visibility(false);        
+        DamageRange(0.7);
+		DamageTiers("Player_GroundPoundLvl1_Tier");
+		IsAutomaticTierScaling(true);
+        DamageToPhysicsObjects(400.0);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(2.0);
+        DamageType(DamageType_Blunt);
+        StaminaUsage(0.3);
+        MaxDamageAngle(60.0);     
+		ItemType(ItemType_Stick);
+        HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);		
+		HitReactionFlags(EReactionFlag_Interrupt);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		ConfusionProb(0.0);
+		StunnedEffectDuration(0.0);
+        GameVersion(1);
+        StaminaDamage(300.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DamageTag("ground_pound;ignore_counterattack;ignore_dodge");
+        DestroyableDamage(0.0);
+        PhysicsDamageMul(1.1);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    Item("Melee_GroundPoundLvl1_2h", CategoryType_Melee)
+    {
+        Name("&Melee_GroundPound_N&");        
+        Visibility(false);        
+        DamageRange(1.0);
+		DamageTiers("Player_GroundPoundLvl1_Tier");
+		IsAutomaticTierScaling(true);
+        DamageToPhysicsObjects(400.0);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(2.0);
+        DamageType(DamageType_Blunt);
+        StaminaUsage(0.3);
+        MaxDamageAngle(60.0);     
+		ItemType(ItemType_Stick);
+        HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);		
+		HitReactionFlags(EReactionFlag_Interrupt);
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		ConfusionProb(0.0);
+		StunnedEffectDuration(0.0);
+        GameVersion(1);
+        StaminaDamage(300.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DamageTag("ground_pound;ignore_counterattack;ignore_dodge");
+        DestroyableDamage(0.0);
+        PhysicsDamageMul(1.1);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    // used in shockwave ground damage on second skill lvl (via skills)
+    Item("Melee_GroundPoundLvl2", CategoryType_Melee)
+    {
+        Name("&Melee_GroundPound_N&");        
+        Visibility(false);    
+        DamageRange(0.5);
+		DamageTiers("Player_GroundPoundLvl2_Tier");
+		IsAutomaticTierScaling(true);       
+        DamageToPhysicsObjects(250.0);
+        PhysicsDamageMul(1.1);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(3.0);
+        DamageType(DamageType_Blunt);
+        StaminaUsage(0.3);
+        MaxDamageAngle(60.0);        
+		ItemType(ItemType_Stick);
+        HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        HitReactionFlags(EReactionFlag_Ragdoll);
+		ConfusionProb(0.0);
+		StunnedEffectDuration(0.0);
+        GameVersion(1);
+        StaminaDamage(300.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DamageTag("ground_pound;ignore_counterattack;ignore_dodge");
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    Item("Melee_GroundPoundLvl2_1h", CategoryType_Melee)
+    {
+        Name("&Melee_GroundPound_N&");        
+        Visibility(false);    
+        DamageRange(0.6);
+		DamageTiers("Player_GroundPoundLvl2_Tier");
+		IsAutomaticTierScaling(true);       
+        DamageToPhysicsObjects(250.0);
+        PhysicsDamageMul(1.1);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(3.0);
+        DamageType(DamageType_Blunt);
+        StaminaUsage(0.3);
+        MaxDamageAngle(60.0);        
+		ItemType(ItemType_Stick);
+        HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        HitReactionFlags(EReactionFlag_Ragdoll);
+		ConfusionProb(0.0);
+		StunnedEffectDuration(0.0);
+        GameVersion(1);
+        StaminaDamage(300.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DamageTag("ground_pound;ignore_counterattack;ignore_dodge");
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    Item("Melee_GroundPoundLvl2_15h", CategoryType_Melee)
+    {
+        Name("&Melee_GroundPound_N&");        
+        Visibility(false);    
+        DamageRange(0.7);
+		DamageTiers("Player_GroundPoundLvl2_Tier");
+		IsAutomaticTierScaling(true);       
+        DamageToPhysicsObjects(250.0);
+        PhysicsDamageMul(1.1);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(3.0);
+        DamageType(DamageType_Blunt);
+        StaminaUsage(0.3);
+        MaxDamageAngle(60.0);        
+		ItemType(ItemType_Stick);
+        HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        HitReactionFlags(EReactionFlag_Ragdoll);
+		ConfusionProb(0.0);
+		StunnedEffectDuration(0.0);
+        GameVersion(1);
+        StaminaDamage(300.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DamageTag("ground_pound;ignore_counterattack;ignore_dodge");
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    Item("Melee_GroundPoundLvl2_2h", CategoryType_Melee)
+    {
+        Name("&Melee_GroundPound_N&");        
+        Visibility(false);    
+        DamageRange(1.0);
+		DamageTiers("Player_GroundPoundLvl2_Tier");
+		IsAutomaticTierScaling(true);       
+        DamageToPhysicsObjects(250.0);
+        PhysicsDamageMul(1.1);
+		PhysicsDamageMulAtMaxRange(0.5);
+		PhysicsDamageMulStartScalingRange(3.0);
+        DamageType(DamageType_Blunt);
+        StaminaUsage(0.3);
+        MaxDamageAngle(60.0);        
+		ItemType(ItemType_Stick);
+        HitReactionType(EReactionType_Blast);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        HitReactionFlags(EReactionFlag_Ragdoll);
+		ConfusionProb(0.0);
+		StunnedEffectDuration(0.0);
+        GameVersion(1);
+        StaminaDamage(300.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        DamageTag("ground_pound;ignore_counterattack;ignore_dodge");
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	// furtheres distance to which provide a gentle hit reaction
+	Item("Melee_GroundPoundSmallPush", CategoryType_Melee)
+    {
+        Name("&Melee_GroundPound_N&");
+        Description("&Melee_GroundPound_D&");
+        Visibility(false);    
+        DamageRange(3.5);
+		DamageTiers("Damage_GroundPoundSmallPush_Tier");
+        IsAutomaticTierScaling(true);
+        DamageToPhysicsObjects(100.0);
+        DamageType(DamageType_Kick);		
+        MaxDamageAngle(-1.0);       
+        PhysicsDamageMulAtMaxRange(0.5);
+        PhysicsDamageMulStartScalingRange(5.0);
+		ItemType(ItemType_Stick);
+        HitReactionType(EReactionType_Blunt);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        GameVersion(1);
+        StaminaDamage(300.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);	
+        DamageTag("ground_pound;ignore_counterattack;ignore_dodge");
+        DestroyableDamage(0.0);
+        PhysicsDamageMul(1.0);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }   
+	// damage to destoyable object when falling from large height
+    Item("Special_CollisionDamage", CategoryType_Melee)
+    {
+        Name("&Special_CollisionDamage&");        
+        Visibility(false);
+        AiHitSound("special_collision");        
+        PhysicsDamageMul(1.0);
+		ItemType(ItemType_Collision);		
+        HitReactionType(EReactionType_Push);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+        GameVersion(1);
+
+        DestroyableDamage(120.0);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    // falling from large hight on ai
+    Item("Special_JumpOnHeadDamage", CategoryType_Melee)
+    {
+        Name("&Special_JumpOnHeadDamage&");      
+        Visibility(false);        
+		DamageName("JumpOnHeadDamage");
+        PhysicsDamageMul(100.0);        
+		ItemType(ItemType_Collision);		
+        HitReactionType(EReactionType_Push);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionStrongHitSeverity(EHitSeverity_Heavy);
+		HitReactionStrongMoveSeverity(EMoveSeverity_Heavy);
+		HitReactionFlags(EReactionFlag_Interrupt);
+        GameVersion(1);
+		XrayTriggerProbability(0.0);
+        StaminaDamage(500.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    // damages the enemy that we are using to bound off
+	Item("Melee_JumpOverItem", CategoryType_Melee)
+    {
+        Name("&Melee_JumpOverItem&");        
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fury_fists");          
+		ItemType(ItemType_Collision);		
+		DamageName("Player_VaultOverDamage");
+		HitReactionType(EReactionType_Push);
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+        GameVersion(1);
+        StaminaDamage(200.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }	
+	//  running into enemy
+    Item("Melee_CrowdBump", CategoryType_Melee)
+    {
+		Name("&Melee_JumpOverItem&");        
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fury_fists");
+		ItemType(ItemType_Collision);		
+        HitReactionType(EReactionType_Push);
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+		FF_EffectName("CollisionLight");
+        GameVersion(1);
+        StaminaDamage(200.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+		
+	//  perfect block
+    Item("Melee_PerfectBlock", CategoryType_Melee)
+    {
+		Name("&Melee_PerfectBlock&");        
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fury_fists");
+        DamageName("Player_BlockDisableDamage");      
+		ItemType(ItemType_Collision);    
+		HitReactionType(EReactionType_Blunt);		
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		ConfusionProb(1.0);
+		StunnedEffectDuration(2.0);
+		FF_EffectName("BlockHitPerfect");
+        GameVersion(1);
+		StaminaDamage(300);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	//  running into enemy
+    Item("Melee_PerfectDodgeDamage", CategoryType_Melee)
+    {
+		Name("&Melee_PerfectDodgeDamage&");        
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fury_fists");
+        DamageName("Player_PerfectDodgeDamage");      
+		ItemType(ItemType_Collision);        
+		HitReactionType(EReactionType_Blunt);		
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+		ConfusionProb(1.0);
+		StunnedEffectDuration(3.0);
+        GameVersion(1);
+		StaminaDamage(200);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	// colliding with enemy durign wallrun
+    Item("Melee_HardCollision", CategoryType_Melee)
+    {
+		Name("&Melee_JumpOverItem&");        
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fury_fists");
+        DamageName("CrowdBumpDamage");      
+		ItemType(ItemType_Collision);        
+		HitReactionType(EReactionType_Push);		
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+		FF_EffectName("CollisionMedium");
+        GameVersion(1);
+        StaminaDamage(300);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	// damages from Grapling Hook ParaGlider Collisions
+    Item("Melee_GHPG_Collision", CategoryType_Melee)
+    {
+        Name("&Volumetric_Default&");
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fists");          
+        ItemType(ItemType_Collision);
+        DamageType(DamageType_Kick);
+        PhysicsDamageMul(1.0);
+        DamageName("TEST_EMPTY");
+        HitReactionHitSeverity(EHitSeverity_Light);
+        HitReactionMoveSeverity(EMoveSeverity_Medium);
+        GameVersion(1);
+        StaminaDamage(300);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        Silenced(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	// used the colliding with ai on zip-line
+    Item("Melee_ZipLine", CategoryType_Melee)
+    {
+        Name("&Melee_ZipLine_N&");
+        Description("&Melee_ZipLine_D&");        
+        ItemType(ItemType_Fists);        
+        DamageToPhysicsObjects(100.0);
+        DamageRange(2.0);
+        PhysicsDamageMul(3.0);
+        AiHitSound("kick");
+        DamageType(DamageType_Ram);
+        DestroyableDamage(20.0);                
+        Reparable(false); 
+		HitReactionType(EReactionType_Push);		
+        HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);		
+		HitReactionFlags(EReactionFlag_Ragdoll);
+		FF_EffectName("KickHeavy");
+        GameVersion(1);
+        StaminaDamage(300);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	// damages the enemy from anim event when no specific damage defined
+	Item("Volumetric_Detect", CategoryType_Melee)
+    {
+        Name("&Volumetric_Default&");
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fists");          
+		ItemType(ItemType_Collision);
+		DamageType(DamageType_Kick);
+		PhysicsDamageMul(1.0);
+		DamageName("TEST_EMPTY");
+		HitReactionHitSeverity(EHitSeverity_Light);
+		HitReactionMoveSeverity(EMoveSeverity_Light);
+        GameVersion(1);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }	
+	
+	// damages the enemy from anim event when no specific damage defined
+	Item("Volumetric_Default", CategoryType_Melee)
+    {
+        Name("&Volumetric_Default&");
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fists");          
+		ItemType(ItemType_Collision);
+		DamageType(DamageType_Kick);
+		PhysicsDamageMul(1.0);
+		DamageName("Player_Volumetric_Default");
+		HitReactionType(EReactionType_Push);
+        HitReactionContext(EReactionContext_Collision);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		FF_EffectName("CollisionMedium");
+		//HitReactionFlags(EReactionFlag_Ragdoll);	
+        GameVersion(1);
+        StaminaDamage(400.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }	
+
+    // damages the enemy from anim event when no specific damage defined but ragdoll is preferred
+	Item("Volumetric_Ragdoll", CategoryType_Melee)
+    {
+        Name("&Volumetric_Default&");
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("slide_kick");
+        DeadAiHitSoundName("slide_kick_dead_bodies");
+		ItemType(ItemType_Collision);
+		DamageType(DamageType_Kick);
+		PhysicsDamageMul(1.0);
+		DamageName("Player_Volumetric_Default");
+		HitReactionType(EReactionType_Push);
+        HitReactionContext(EReactionContext_Collision);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		HitReactionFlags(EReactionFlag_Interrupt);
+		FF_EffectName("CollisionMedium");
+		HitReactionFlags(EReactionFlag_Ragdoll);	
+        GameVersion(1);
+        StaminaDamage(400.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }	
+	
+	// damages the enemy from anim event when vaulting over enemy
+	Item("Volumetric_VaultKick", CategoryType_Melee)
+    {
+        Name("&Volumetric_Default&");
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fists");          
+		ItemType(ItemType_Fists);
+		DamageType(DamageType_Kick);
+		PhysicsDamageMul(1.5);
+        DestroyableDamage(20.0);
+		DamageTiers("Player_Volumetric_VaultKick_Tier");
+		IsAutomaticTierScaling(true);
+		HitReactionType(EReactionType_Push);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+		ConfusionProb(1.0);
+		StunnedEffectDuration(3.0);
+		StaminaDamage(15);
+		FF_EffectName("KickMedium");
+        GameVersion(1);
+		XrayTriggerProbability(0.0);
+        StaminaDamage(400.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+
+    Item("Volumetric_VaultKickHold", CategoryType_Melee)
+    {
+        Name("&Volumetric_Default&");
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fists");          
+		ItemType(ItemType_Fists);
+		DamageType(DamageType_Kick);
+		PhysicsDamageMul(1.75);
+        DestroyableDamage(20.0);
+		DamageTiers("Player_Volumetric_VaultKick_Tier");
+		IsAutomaticTierScaling(true);
+		HitReactionType(EReactionType_Push);
+        HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+        HitReactionFlags(EReactionFlag_Ragdoll);
+		ConfusionProb(1.0);
+		StunnedEffectDuration(3.0);
+		StaminaDamage(15);
+		FF_EffectName("KickMedium");
+        GameVersion(1);
+		XrayTriggerProbability(0.0);
+        StaminaDamage(400.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	// damages the enemy from anim event when kicking from monkeybar
+	Item("Volumetric_MonkeyBartKick", CategoryType_Melee)
+    {
+        Name("&Volumetric_Default&");
+        Visibility(false);
+        Condition(-1);
+        //AiHitSound("monkeybar_kick"); //Moved to player anim         
+		ItemType(ItemType_Fists);
+		DamageType(DamageType_Kick);
+		PhysicsDamageMul(2.25);
+        DestroyableDamage(20.0);
+		DamageTiers("Player_Volumetric_VaultKick_Tier");
+		IsAutomaticTierScaling(true);
+		HitReactionType(EReactionType_Push);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);
+        HitReactionFlags(EReactionFlag_Ragdoll);
+		FF_EffectName("KickHeavy");
+        GameVersion(1);
+		XrayTriggerProbability(0.0);
+		//StaminaDamage(15);
+        StaminaDamage(400.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }	
+	
+	// damages the enemy from anim event when kicking from wallrun and rope/grappling hook
+	Item("Volumetric_LeapTackle", CategoryType_Melee)
+    {
+        Name("&Volumetric_Default&");
+        Visibility(false);
+        Condition(-1);
+        AiHitSound("fists");          
+		ItemType(ItemType_Fists);
+		DamageType(DamageType_Kick);
+		PhysicsDamageMul(1.5);
+		DamageTiers("Player_Volumetric_LeapTackle_Tier");
+		IsAutomaticTierScaling(true);
+        HitReactionType(EReactionType_Push);		
+        HitReactionContext(EReactionContext_Melee);
+        HitReactionHitSeverity(EHitSeverity_Heavy);
+        HitReactionMoveSeverity(EMoveSeverity_Heavy);		
+        HitReactionFlags(EReactionFlag_Ragdoll);        
+		StaminaDamage(15); 
+		FF_EffectName("KickHeavy");
+        GameVersion(1);
+        StaminaDamage(400.0);
+        ScaleStaminaDamageByCurve(true);
+        IgnoreStaminaDamageItemCheck(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+	////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////    Player Tool Items    /////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	
+	Item("PlayerBackpack", CategoryType_Other)
+    {
+        Visibility(true);
+        ItemType(ItemType_Special);
+        AnimPrefix("Unarmed");
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        InventoryMeshHq("player_backpack.msh");
+        InventoryMesh("player_backpack.msh");
+        Mesh("player_backpack.msh");
+        Skin("Default");
+        use PickupSounds_Default();
+		GameVersion(1);
+    }
+
+	Item("PlayerBinoculars", CategoryType_Other)
+    {
+        Description("&Binoculars_D&");
+        Visibility(true);
+        ItemType(ItemType_Special);
+        AnimPrefix("Unarmed");
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        InventoryMeshHq("eqp_binoculars_a.msh");
+        InventoryMesh("eqp_binoculars_a.msh");
+        HudIcon("weapon_binoculars");
+        Mesh("binoculars.msh");
+        Skin("Default");
+        use PickupSounds_Default();
+        Color(Color_White);
+        EquipmentSlot(0);
+        Price(0);
+        PlayerTool();
+		GameVersion(1);
+    }
+	
+    Item("Binoculars", CategoryType_Other)
+    {
+        Description("&Binoculars_D&");
+		Visibility(true);
+        ItemType(ItemType_Binoculars);
+        PhysicsScript("simple.phx");
+        HudIcon("weapon_binoculars");
+		Mesh("eqp_binoculars_a.msh");
+        InventoryMesh("eqp_binoculars_a.msh");
+        InventoryMeshTPP("binoculars.msh");
+		TwoHanded(false);
+        HolderElement("r_thigh");
+        HolderOffset([0.0,10.0,10.0]);
+        HolderAngle([0.0,0.0,-90.0]);
+        AiHitSound("weapon_rope_hit_body");
+        use PickupSounds_Default();
+        Color(Color_White);
+        EquipmentSlot(0);
+        Price(0);
+        PlayerTool();
+		GameVersion(1);
+    }
+	
+	// used in glide controller 
+	Item("Parachute", CategoryType_Throwable)
+    {
+        Visibility(true);
+        ItemType(ItemType_Special);
+        PhysicsScript("simple.phx");
+        Condition(25.0);
+		AnimPrefix("Unarmed");
+        InventoryMeshHq("parachute_a.msh");
+        InventoryMesh("parachute_a.msh");
+        Mesh("parachute_a_tpp.msh");
+		Skin("player_default");
+        HudIcon("weapon_scanner");
+        HolderElement("r_thigh");
+        HolderOffset([0.0,10.0,10.0]);
+        HolderAngle([0.0,0.0,-90.0]);
+        AiHitSound("weapon_rope_hit_body");
+        use PickupSounds_Default();
+        Reparable(false);
+        Color(Color_White);
+        CraftingSlots(0);
+        EquipmentSlot(2);
+        TwoHanded(true);
+        PlayerTool();
+        GameVersion(1);
+    }
+
+	// used in freeclimb controlelr / attach tool
+	Item("ClimbPickaxe", CategoryType_Other)
+    {
+		Name("Climb Pickaxe");
+        Visibility(true);
+        ItemType(ItemType_FreeClimb);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+
+        InventoryMeshHq("wpn_throwing_knife_a_fpp.msh");
+        InventoryMesh("wpn_throwing_knife_a_fpp.msh");
+        Mesh("wpn_throwing_knife_a_tpp.msh");
+        AnimPrefix("Unarmed");
+        HudIcon("weapon_pickaxe");
+        HolderElement("r_thigh");
+        HolderOffset([0.0,10.0,10.0] *[0.01, 0.01, 0.01]);
+        HolderAngle([0.0,0.0,-90.0]);
+        AiHitSound("knife");
+        use PickupSounds_Default();
+
+        Reparable(false);
+        Color(Color_White);
+        CraftingSlots(0);
+        EquipmentSlot(2);
+        PlayerTool();
+        GameVersion(1);
+    }
+	// used in rope hook  / grapling hook damage is for pulling enemies 
+	Item("RopeHook", CategoryType_Other)
+    {
+        Visibility(true);
+        ItemType(ItemType_Hook);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+        DamageName("RopeHookEnemyPull");
+        DamageToPhysicsObjects(50.0);
+        PhysicsDamageMul(0.7);
+        StaminaUsage(0.8);
+        DamageType(DamageType_Blast);
+        InventoryMeshHq("wpn_rope_hook_harpoon_a_fpp.msh");
+        InventoryMesh("wpn_rope_hook_harpoon_a_fpp.msh");
+        Mesh("wpn_rope_hook_harpoon_a_tpp.msh");
+        AnimPrefix("Unarmed");
+        HudIcon("equipment_grappling_a");
+        TwoHanded(false);
+        AiHitSound("weapon_rope_hit_body");
+        use HitEffects_Sharp_Heavy();
+        use PickupSounds_Default();
+        StatsType(StatsType_Cut);
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        Color(Color_White);
+        CraftingSlots(0);
+        RagdollBehaviorPrefix("");
+        HandInertiaFactor(1.8);
+        HandInertiaRotFactor([0.5,1.0,4.0]);
+        EquipmentSlot(2);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(0, 15);
+        PlayerTool();	
+		UIStats()
+        {
+         UIStat("&StatsUI_Hook&", "&Hook4&");
+		 UIStat("&StatsUI_Hook&", "&Hook1&");
+        }        
+		HitReactionType(EReactionType_Stab);		
+        HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);		
+		HitReactionFlags(EReactionFlag_Ragdoll);
+        HitReactionFlags(EReactionFlag_Interrupt);
+        GameVersion(1);	
+        ItemLevel(1, 3);
+        StaminaDamage(300.0);  
+        IgnoreStaminaDamageItemCheck(true);
+        ScaleStaminaDamageByCurve(true);
+        Silenced(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+
+	Item("Player_Flashlight", CategoryType_Flashlight)
+    {
+        CategoryType(CategoryType_Flashlight);
+        ItemType(ItemType_Flashlight);
+		
+        FlashlightPreset("Player Flashlight");
+		
+        EnergyDrainPerSecond(0.0); 				/// Amount of energy used up every second when flashlight is turned on
+        BatteryReloadTime(-1.0);  				/// Time it takes to reload a battery
+		GameVersion(1);
+    }
+    
+    Item("RopeHook_2", CategoryType_Other)
+    {
+        Visibility(true);
+        Description("&Tool_GrappleHook_Desc_Lvl2&");
+        ItemType(ItemType_Hook);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+        DamageName("RopeHookEnemyPull");
+        DamageToPhysicsObjects(50.0);
+        PhysicsDamageMul(0.7);
+        StaminaUsage(0.8);
+        DamageType(DamageType_Blast);
+        InventoryMeshHq("wpn_rope_hook_harpoon_a_fpp.msh");
+        InventoryMesh("wpn_rope_hook_harpoon_a_fpp.msh");
+        Mesh("wpn_rope_hook_harpoon_a_tpp.msh");
+        AnimPrefix("Unarmed");
+        HudIcon("equipment_grappling_a");
+        TwoHanded(false);
+        AiHitSound("weapon_rope_hit_body");
+        Name("&Ropehook_N&");
+        use HitEffects_Sharp_Heavy();
+        use PickupSounds_Default();
+        StatsType(StatsType_Cut);
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        Color(Color_Blue);
+        CraftingSlots(0);
+        RagdollBehaviorPrefix("");
+        HandInertiaFactor(1.8);
+        HandInertiaRotFactor([0.5,1.0,4.0]);
+        EquipmentSlot(2);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(0, 15);
+        PlayerTool();
+		UIStats()
+        {
+         UIStat("&StatsUI_Hook&", "&Hook4&");
+         UIStat("&StatsUI_Hook&", "&Hook1&");
+		 UIStat("&StatsUI_Hook&", "&Hook2&");
+        }		
+		HitReactionType(EReactionType_Stab);		
+        HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);		
+		HitReactionFlags(EReactionFlag_Ragdoll);
+        HitReactionFlags(EReactionFlag_Interrupt);
+        GameVersion(1);	
+        ItemLevel(2, 3);
+        StaminaDamage(300.0);  
+        IgnoreStaminaDamageItemCheck(true);
+        ScaleStaminaDamageByCurve(true);
+        Silenced(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+    
+    Item("RopeHook_3", CategoryType_Other)
+    {
+        Visibility(true);
+        Description("&Tool_GrappleHook_Desc_Lvl3&");
+        ItemType(ItemType_Hook);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+        DamageName("RopeHookEnemyPull");
+        DamageToPhysicsObjects(50.0);
+        PhysicsDamageMul(0.7);
+        StaminaUsage(0.8);
+        DamageType(DamageType_Blast);
+        InventoryMeshHq("wpn_rope_hook_harpoon_a_fpp.msh");
+        InventoryMesh("wpn_rope_hook_harpoon_a_fpp.msh");
+        Mesh("wpn_rope_hook_harpoon_a_tpp.msh");
+        AnimPrefix("Unarmed");
+        HudIcon("equipment_grappling_a");
+        TwoHanded(false);
+        AiHitSound("weapon_rope_hit_body");
+        Name("&Ropehook_N&");
+        use HitEffects_Sharp_Heavy();
+        use PickupSounds_Default();
+        StatsType(StatsType_Cut);
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        Color(Color_Violet);
+        CraftingSlots(0);
+        RagdollBehaviorPrefix("");
+        HandInertiaFactor(1.8);
+        HandInertiaRotFactor([0.5,1.0,4.0]);
+        EquipmentSlot(2);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(0, 15);
+        PlayerTool();
+		UIStats()
+        {
+         UIStat("&StatsUI_Hook&", "&Hook4&");
+         UIStat("&StatsUI_Hook&", "&Hook1&");
+		 UIStat("&StatsUI_Hook&", "&Hook3&");
+        }		
+		HitReactionType(EReactionType_Stab);		
+        HitReactionContext(EReactionContext_Melee);
+		HitReactionHitSeverity(EHitSeverity_Heavy);
+		HitReactionMoveSeverity(EMoveSeverity_Heavy);		
+		HitReactionFlags(EReactionFlag_Ragdoll);
+        HitReactionFlags(EReactionFlag_Interrupt);
+        GameVersion(1);	
+        ItemLevel(3, 3);
+        StaminaDamage(300.0);  
+        IgnoreStaminaDamageItemCheck(true);
+        ScaleStaminaDamageByCurve(true);
+        Silenced(true);
+        IsAutomaticLegendLevelDamageScaling(true);
+        CanApplyBerserkAffixDamage(true);
+        UseLLFistsDamageBonus(true);
+    }
+	
+    Item("UV_Flashlight_1", CategoryType_Flashlight)
+    {
+		Name("&Flashlight_Superlight_N&");
+		Description("&UV_Flashlight_1_D&");
+		AnimPrefix("Flashlight");
+        Visibility(true);
+        ItemType(ItemType_Flashlight);
+        HudIcon("uv_flashlight");
+        PhysicsScript("simple.phx");
+        Mesh("flashlight_a.msh");
+        HudIcon("equipment_uv_flashlight");
+        Skin("UVLight");
+        EquipmentSlot(0);
+        Price(0);
+        UVLight(true);
+        PlayerTool();
+        Color(Color_White);
+		UIStats(){
+		 UIStat("&StatsUI_MaxEnergy&", 5, "Seconds");
+         UIStat("&StatsUI_Rechargetime&", 9, "Seconds");
+		 UIStat("&StatsUI_ConeSize&", "&Small&");
+         UIStatNightmareModeOverride("&StatsUI_MaxEnergy&");
+		 UIStatOnlyNightmareMode("&StatsUI_BatteryConsumption&", "&High&"); 
+		 UIStatOnlyNightmareMode("&StatsUI_Usage&", "&Requires&"); 
+        }
+
+        FlashlightPreset("Player Flashlight UV LVL 1");
+
+        FullDepletionActive(true);
+        EnergyDrainPerSecond(0.75);             /// Amount of energy used up every second when flashlight is turned on
+        MaxEnergy(5.0);                         /// Amount of energy the flashlight has
+        //BatteryRechargeEnabled();     		/// Uncomment to enable reloading flashlight with batteries
+        GeneratorRechargeEnabled();           	/// Uncomment to enable recharging battery using a generator
+        GeneratorRechargePerSecond(0.6);     	/// Amount of energy generated every second when using generator
+        EnergyConsumeOnStart(1.0);              /// Initial cost of turning on the light
+        RequiredEnergyLevel(0.0);               /// Recharged ratio (0.0-1.0) needed to switch flashlight on
+        RegenerationDelay(3.0);                 /// Turn off - recharge span
+        CanWorkWhenFullyDrained(false);         /// not parsed, may be usefull
+        LowBatteryLevel(0.25);                  /// not parsed, may be usefull
+		ItemLevel(1, 3);
+		GameVersion(1);
+    }
+    
+    Item("UV_Flashlight_2", CategoryType_Flashlight)
+    {
+		Name("&Flashlight_Superlight_N&");
+		Description("&UV_Flashlight_2_D&");
+		AnimPrefix("Flashlight");
+        Visibility(true);
+        ItemType(ItemType_Flashlight);
+        HudIcon("uv_flashlight");
+        PhysicsScript("simple.phx");
+        Mesh("flashlight_a.msh");
+        HudIcon("equipment_uv_flashlight");
+        Skin("UVLight");
+        EquipmentSlot(0);
+        Price(0);
+        UVLight(true);
+        PlayerTool();
+		Color(Color_Blue);
+		UIStats(){
+		 UIStat("&StatsUI_MaxEnergy&", 5, "Seconds");
+         UIStat("&StatsUI_Rechargetime&", 9, "Seconds");
+		 UIStat("&StatsUI_ConeSize&", "&Medium&");
+         UIStatNightmareModeOverride("&StatsUI_MaxEnergy&");
+		 UIStatOnlyNightmareMode("&StatsUI_BatteryConsumption&", "&High&"); 
+		 UIStatOnlyNightmareMode("&StatsUI_Usage&", "&Requires&"); 
+        }
+
+        FlashlightPreset("Player Flashlight UV LVL 2");
+
+        FullDepletionActive(true);
+        EnergyDrainPerSecond(0.75);            	/// Amount of energy used up every second when flashlight is turned on
+        MaxEnergy(5.0);                         /// Amount of energy the flashlight has
+		//BatteryRechargeEnabled();     		/// Uncomment to enable reloading flashlight with batteries
+        GeneratorRechargeEnabled();           	/// Uncomment to enable recharging battery using a generator
+        GeneratorRechargePerSecond(0.6);      	/// Amount of energy generated every second when using generator
+        EnergyConsumeOnStart(1.0);              /// Initial cost of turning on the light
+        RequiredEnergyLevel(0.0);               /// Recharged ratio (0.0-1.0) needed to switch flashlight on
+        RegenerationDelay(2.5);                 /// Turn off - recharge span
+        CanWorkWhenFullyDrained(false);         /// not parsed, may be usefull
+        LowBatteryLevel(0.25);                  /// not parsed, may be usefull
+		ItemLevel(2, 3);
+		GameVersion(1);
+    }
+    
+    Item("UV_Flashlight_3", CategoryType_Flashlight)
+    {
+		Name("&Flashlight_Superlight_N&");
+		Description("&UV_Flashlight_3_D&");
+		AnimPrefix("Flashlight");
+        Visibility(true);
+        ItemType(ItemType_Flashlight);
+        HudIcon("uv_flashlight");
+        PhysicsScript("simple.phx");
+        Mesh("flashlight_a.msh");
+        HudIcon("equipment_uv_flashlight");
+        Skin("UVLight");
+        EquipmentSlot(0);
+        Price(0);
+        UVLight(true);
+        PlayerTool();
+	    Color(Color_Violet);
+		UIStats(){
+		 UIStat("&StatsUI_MaxEnergy&", 6, "Seconds");
+         UIStat("&StatsUI_Rechargetime&", 9, "Seconds");
+		 UIStat("&StatsUI_ConeSize&", "&Large&");
+         UIStatNightmareModeOverride("&StatsUI_MaxEnergy&");
+		 UIStatOnlyNightmareMode("&StatsUI_BatteryConsumption&", "&High&"); 
+		 UIStatOnlyNightmareMode("&StatsUI_Usage&", "&Requires&"); 
+        }
+
+        FlashlightPreset("Player Flashlight UV LVL 3");
+
+        FullDepletionActive(true);
+        EnergyDrainPerSecond(0.8);              /// Amount of energy used up every second when flashlight is turned on
+        MaxEnergy(6.0);                         /// Amount of energy the flashlight has
+		//BatteryRechargeEnabled();     		/// Uncomment to enable reloading flashlight with batteries
+        GeneratorRechargeEnabled();           	/// Uncomment to enable recharging battery using a generator
+        GeneratorRechargePerSecond(0.65);      	/// Amount of energy generated every second when using generator
+        EnergyConsumeOnStart(1.0);              /// Initial cost of turning on the light
+        RequiredEnergyLevel(0.0);               /// Recharged ratio (0.0-1.0) needed to switch flashlight on
+        RegenerationDelay(2.0);                 /// Turn off - recharge span
+        CanWorkWhenFullyDrained(false);         /// not parsed, may be usefull
+        LowBatteryLevel(0.25);                  /// not parsed, may be usefull
+		ItemLevel(3, 3);
+		GameVersion(1);
+    }
+    
+    Item("UV_Flashlight_4", CategoryType_Flashlight)
+    {
+		Name("&Flashlight_Superlight_N&");
+        Description("&UV_Flashlight_4_D&");
+		AnimPrefix("Flashlight");
+        Visibility(true);
+        ItemType(ItemType_Flashlight);
+        HudIcon("uv_flashlight");
+        PhysicsScript("simple.phx");
+        Mesh("flashlight_a.msh");
+        HudIcon("equipment_uv_flashlight");
+        Skin("UVLight");
+        EquipmentSlot(0);
+        Price(0);
+        UVLight(true);
+        PlayerTool();
+
+        FlashlightPreset("Player Flashlight UV LVL 4");
+
+        FullDepletionActive(true);
+        EnergyDrainPerSecond(1.0);              /// Amount of energy used up every second when flashlight is turned on
+        MaxEnergy(15.0);                        /// Amount of energy the flashlight has
+		//BatteryRechargeEnabled();     		/// Uncomment to enable reloading flashlight with batteries
+        GeneratorRechargeEnabled();           	/// Uncomment to enable recharging battery using a generator
+        GeneratorRechargePerSecond(1.0);      	/// Amount of energy generated every second when using generator
+        EnergyConsumeOnStart(0.2);              /// Initial cost of turning on the light
+        RequiredEnergyLevel(0.2);               /// Recharged ratio (0.0-1.0) needed to switch flashlight on
+        RegenerationDelay(1.0);                 /// Turn off - recharge span
+        CanWorkWhenFullyDrained(false);         /// not parsed, may be usefull
+        LowBatteryLevel(0.25);                  /// not parsed, may be usefull
+		ItemLevel(4, 5);
+		GameVersion(1);
+    }
+    
+    Item("UV_Flashlight_5", CategoryType_Flashlight)
+    {
+		Name("&Flashlight_Superlight_N&");
+        Description("&UV_Flashlight_5_D&");
+		AnimPrefix("Flashlight");
+        Visibility(true);
+        ItemType(ItemType_Flashlight);
+        HudIcon("uv_flashlight");
+        PhysicsScript("simple.phx");
+        Mesh("flashlight_a.msh");
+        HudIcon("equipment_uv_flashlight");
+        Skin("UVLight");
+        EquipmentSlot(0);
+        Price(0);
+        UVLight(true);
+        PlayerTool();
+
+        FlashlightPreset("Player Flashlight UV LVL 5");
+
+        FullDepletionActive(true);
+        EnergyDrainPerSecond(1.0);              /// Amount of energy used up every second when flashlight is turned on
+        MaxEnergy(18.0);                        /// Amount of energy the flashlight has
+		//BatteryRechargeEnabled();     		/// Uncomment to enable reloading flashlight with batteries
+        GeneratorRechargeEnabled();           	/// Uncomment to enable recharging battery using a generator
+        GeneratorRechargePerSecond(1.0);      	/// Amount of energy generated every second when using generator
+        EnergyConsumeOnStart(0.2);              /// Initial cost of turning on the light
+        RequiredEnergyLevel(0.2);               /// Recharged ratio (0.0-1.0) needed to switch flashlight on
+        RegenerationDelay(1.0);                 /// Turn off - recharge span
+        CanWorkWhenFullyDrained(false);         /// not parsed, may be usefull
+        LowBatteryLevel(0.25);                  /// not parsed, may be usefull
+		ItemLevel(5, 5);
+		GameVersion(1);
+    }
+	
+	Item("FreecamFlashlight", CategoryType_Flashlight)
+    {
+        CategoryType(CategoryType_Flashlight);
+        ItemType(ItemType_Flashlight);
+		
+        FlashlightPreset("Freecam Flashlight");
+		
+        EnergyDrainPerSecond(0.0); 				/// Amount of energy used up every second when flashlight is turned on
+		GameVersion(1);
+    }
+	
+    Item("Player_Flashlight_Nightmare", CategoryType_Flashlight)
+    {
+        CategoryType(CategoryType_Flashlight);
+        ItemType(ItemType_Flashlight);
+		
+        FlashlightPreset("Player Flashlight Nightmare");
+		
+        FullDepletionActive(false);
+        BlockWholeDeviceWhenEmpty(true);        /// Setting this to true will prevent UV flashlight from working when this one has zero charge
+        BatteryRechargeEnabled();
+        EnergyDrainPerSecond(1.0);             /// Amount of energy used up every second when flashlight is turned on
+        MaxEnergy(1200.0);                         /// Amount of energy the flashlight has
+        RequiredEnergyLevel(0.0);               /// Recharged ratio (0.0-1.0) needed to switch flashlight on
+        EnergyConsumeOnStart(0.5);             /// Amount of energy drained when turning on the flashlight
+        ParallelEnergyDrainMultiplier(2.0);     /// Multiplier for energy drain speed when UV flashlight is used; -1 means no parallel drain
+
+        Reparable(true);
+        RepairPart("Craft_Battery", 1);
+        
+        EnergyFactorDeltaForFlickerProbabilityReevaluation(0.0001); /// How much energy factor should change before flicker probability is re-evaluated
+
+        /// FlickeringProfile(energy factor threshold, flicker probability, [min flicker duration, max flicker duration], cooldown duration seconds)
+        FlickeringProfile(0.75, 0.15,  [0.001, 0.025], 10.0);
+        FlickeringProfile(0.5, 0.35,  [0.005, 0.055], 7.0);
+        FlickeringProfile(0.3, 0.5,  [0.030, 0.070], 5.0);
+        FlickeringProfile(0.01, 1.0, [0.005, 0.020], 0.2); // effectively flickering 5 times per second during last 1% of energy
+
+        FlashlightMinIntensity(0.25); /// Minimal intensity of the flashlight
+
+        IsActiveInMenus(true); /// Making this flashlight stay turned on and keep draining energy while the player is in menus
+
+        IsNightmareItem(true);
+        DepletedFlashlightExternalEnergy(0.5 + 1.0); // EnergyConsumeOnStart + some extra to let the flashlight flicker for a second
+        FlashlightDepletedEnergyFactorTreshold(0.0025);
+        
+		GameVersion(10);
+    
+   FlickeringProfile(0.10, 0.5,  [0.030, 0.070], 5.0);
+   FlickeringProfile(0.20, 0.35,  [0.005, 0.055], 7.0);
+   FlickeringProfile(0.30, 0.15,  [0.001, 0.025], 10.0);}
+	
+    Item("PursuitBreakerSwitch", CategoryType_Medkit)
+    {
+        Name("&PursuitBreakerSwitch_N&");
+        Description("&PursuitBreakerSwitch_D&");
+        Visibility(true);
+        ItemType(ItemType_StaminaBooster);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("wpn_poweritem_detonator_a_fpp.msh");        
+        Skin("Default");        
+        AnimPrefix("Unarmed");
+        UseTime(0.73);
+        UseSound("pursuit_remote_activate.wav");
+        UseOnPickUp(true);
+        Color(Color_White);
+        GameVersion(1);
+    }
+	
+	// item used to hold it when zip - sliding
+	Item("ZipLine_Pulley", CategoryType_Other)
+    {
+		Name("ZipLine Pulley");
+        Visibility(true);
+        ItemType(ItemType_Special);
+
+        InventoryMeshTpp("eqp_zipline_pulley_rope.msh");
+        InventoryMeshHq("eqp_zipline_pulley_rope.msh");
+        InventoryMesh("eqp_zipline_pulley_rope.msh");
+        Mesh("eqp_zipline_pulley_rope.msh");
+        Skin("Default");
+        AnimPrefix("Unarmed");
+        HudIcon("weapon_pickaxe");
+        HolderElement("r_thigh");
+        use PickupSounds_Default();
+        PlayerTool();
+		GameVersion(1);
+    }
+	
+	Item("Attachable_Flashlight", CategoryType_Flashlight)
+    {        
+        ItemType(ItemType_Flashlight);
+        Visibility(true);
+        LightFullColor([255.0,255.0,255.0]);        
+        FullLightRange(15.0);
+        FullLightAngle(15.0);
+        LightFullIntensity(1.5);
+        Mesh("flashlight_torso_b.msh");
+        Skin("default"); 
+        InventoryMesh("flashlight_torso_b.msh");
+        InventorySkin("flashlight_torso_b_ON");
+        Condition(-1);
+        GameVersion(1);
+    }
+    
+    Item("Attachable_Flashlight_Exterior", CategoryType_Flashlight)
+    {        
+        ItemType(ItemType_Flashlight);
+        Visibility(true);
+        LightFullColor([255.0,255.0,255.0]);        
+        FullLightRange(12.0);
+        FullLightAngle(20.0);
+        LightFullIntensity(2);
+        Mesh("flashlight_torso_b.msh");
+        Skin("default"); 
+        InventoryMesh("flashlight_torso_b.msh");
+        InventorySkin("flashlight_torso_b_ON");
+        Condition(-1);
+        GameVersion(1);
+    }
+	
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////// Player CustomAnim Items /////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	
+	Item("TapeRoll", CategoryType_Other)
+    {
+        Name("&TapeRoll&");
+        Description("&Cube&");
+        Visibility(true);
+        ItemType(ItemType_Key);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("dlc_ft_tape_roll_a_anm.msh");        
+        PlayerTool();
+        Color(Color_White);
+        GameVersion(1);
+    }
+	
+	Item("PaperSheet", CategoryType_Medkit)
+    {
+        Name("&PaperSheet_N&");
+        Description("&PaperSheet_D&");
+        Visibility(true);
+        ItemType(ItemType_StaminaBooster);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("small_sheet_anim.msh");        
+        Skin("Default");        
+        AnimPrefix("PaperSheet");        
+        UseTime(0.73);
+        UseOnPickUp(true);
+        Color(Color_White);
+        TwoHanded(true);
+        GameVersion(1);
+    }
+	
+	// custom move item
+	Item("TreeBranch", CategoryType_Other)
+    {
+        Visibility(true);
+        ItemType(ItemType_Special);
+        PhysicsScript("simple.phx");
+        InventoryMeshHq("branch_amortizer.msh");
+        InventoryMesh("branch_amortizer.msh");
+        Mesh("branch_amortizer.msh");
+        SkinTag("Weapon_Craft0");
+        AnimPrefix("Knife");
+        HudIcon("weapon_pickaxe");
+        HolderElement("r_thigh");
+        HolderOffset([0.0,0.0,0.0]);
+        HolderAngle([0.0,0.0,0.0]);
+        AiHitSound("weapon_rope_hit_body");
+        use PickupSounds_Default();
+        Reparable(false);
+        Color(Color_White);
+        CraftingSlots(0);
+		EquipmentSlot(2);
+		SilentItem(true);
+        GameVersion(1);
+    }
+	// custom move item
+	Item("ElectricWrench", CategoryType_Other)
+    {
+        Visibility(true);
+        ItemType(ItemType_Special);
+        PhysicsScript("simple.phx");
+        InventoryMeshHq("electric_wench_rope_hook_fpp.msh");
+        InventoryMesh("electric_wench_rope_hook_fpp.msh");
+        InventoryMeshTPP("invisible.msh");
+        Mesh("invisible.msh");
+        SkinTag("Weapon_Craft0");
+        AnimPrefix("Knife");
+        HudIcon("weapon_pickaxe");
+        HolderElement("r_thigh");
+        HolderOffset([0.0,0.0,0.0]);
+        HolderAngle([0.0,0.0,0.0]);
+        AiHitSound("weapon_rope_hit_body");
+        use PickupSounds_Default();
+        Reparable(false);
+        Color(Color_White);
+        CraftingSlots(0);
+		EquipmentSlot(2);
+		SilentItem(true);
+		GameVersion(1);
+	}
+	
+	//Fury Cin Injector
+	Item("Serum_Sample", CategoryType_Other)
+    {
+        Name("&Serum_Sample&");
+        Description("&Serum_Sample&");
+        Visibility(true);
+        ItemType(ItemType_Key);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("wpn_syringe_pistol_a_fpp_anm.msh");
+        Color(Color_White);
+        GameVersion(1);
+    
+   Price(1);}
+	
+	Item("KeyDoor", CategoryType_Other)
+    {
+        Name("&KeyDoor&");
+        Description("&KeyDoor&");
+        Visibility(true);
+        ItemType(ItemType_Key);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("dlc_ft_key_secure_anm.msh");        
+        PlayerTool();
+        Color(Color_White);
+        GameVersion(1);
+    
+   Price(1);}
+	
+	Item("Convoy_Truck_Card", CategoryType_Other)
+    {
+        Name("&Convoy_Truck_Card&");
+        Description("&Convoy_Truck_Card&");
+        Visibility(true);
+        ItemType(ItemType_Key);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("dlc_ft_veh_military_truck_a_doors_keycard_anm.msh");        
+        PlayerTool();
+        Color(Color_White);
+        GameVersion(1);
+    
+   Price(1);}
+	
+	Item("Detonator_Cable", CategoryType_Other)
+    {
+        Name("&Detonator_Cable&");
+        Description("&Detonator_Cable&");
+        Visibility(true);
+        ItemType(ItemType_Key);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("dlc_ft_detonator_explosive_cable_anm.msh");        
+        PlayerTool();
+        Color(Color_White);
+        GameVersion(1);
+    
+   Price(1);}
+	
+    Item("Walkie_Talkie", CategoryType_Other)
+    {
+        Name("&Walkie_Talkie&");
+        Description("&Walkie_Talkie&");
+        Visibility(true);
+        ItemType(ItemType_Key);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("wpn_walkie_talkie_b_fpp.msh");        
+        Skin("Default");
+        PlayerTool();
+        Color(Color_White);
+        GameVersion(1);
+    
+   Price(1);}
+	
+	Item("DLC_FT_AccessCard", CategoryType_Other)
+    {
+        Name("&DLC_FT_AccessCard_N&");
+        Description("&DLC_FT_AccessCard_D&");
+        Visibility(true);
+        ItemType(ItemType_Key);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("hotel_card.msh");        
+        Skin("Default");
+        PlayerTool();
+        Color(Color_Green);
+        HudIcon("AccessCard");
+        GameVersion(1);
+    
+   Price(1);}
+	
+	////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////   Opportunity/AI Items  /////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	
+	Item("Molotov_Lantern_Small", CategoryType_ThrowableLiquid)
+    {
+        Visibility(false);
+		DamagePresetName("molotov_lantern");
+		DamageRange(3.0);
+		ExplosionFx("lamp_explosion.gpufx");
+		
+        SplashRadiusMin(0.7);
+        SplashRadiusMax(1.5);
+        SplashNumPositions(3);
+        SplashSpacingType("EvenAngles");
+        SplashEmitterLifeTimeMin(5.0);
+        SplashEmitterLifeTimeMax(10.0);
+        SplashEmitterFadeInTime(0.0);
+		SplashEmitterDamagePreset("molotov_lantern_splash");
+        SplashEmitterScale([3.0,1.0,3.0]);
+		SplashEmitterCenterGroundFx("lantern_burn_surf_center_ground.gpufx");
+        SplashEmitterGroundFx("lantern_burning_surface_ground.gpufx");
+        SplashEmitterCenterWallFx("lantern_burn_surf_center_wall.gpufx");
+		SplashEmitterWallFx("lantern_burning_surface_wall.gpufx");
+		GameVersion(1);
+    }
+	
+	Item("dlc_ft_Thrown_Spear_wt1", CategoryType_Throwable)
+    {
+        Visibility(true);
+		HandToUse("RIGHT");
+        ItemType(ItemType_ThrowableSpear);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+        ThrowDamage("SpearThrow_RGD4");
+        DamageName("SpearThrow_RGD4");
+        Force(25.0);
+		ThrowImpulseLook(45.0);
+        ThrowImpulseUp(2.0);
+		InitialRotation(90,0,0);
+		RotationVel(0,0,0);
+        CriticalProb(1.0);
+        ThrowSpeed(45.0);
+		MotionTrailFx("spear_trail.gpufx");
+		TrailOffset(0,0,1);
+		TrailEulerAngleOffset(90,0,0);
+        GravityFactor(1.0);
+        ExplodeDelay(-1);
+        ExplodeOnCollision(false);
+        ScheduleExplodeAfterContact(false);
+        ExplosionFx("spear_hit.gpufx");
+		PenetrationEnable(false);
+		RicochetEnable(false);
+        CriticalDamage(2.0);
+        DamageRange(1.35);
+        DamageToPhysicsObjects(70.0);
+        PhysicsDamageMul(1.0);
+        StaminaUsage(0.2);
+        ConfusionProb(0.0);
+        WeaponBuildType(WeaponBuildType_Universal);
+        DamageType(DamageType_Pierce);
+        Flags(1);
+        InventoryMeshHQ("wpn_2hp_spear_a_fpp.msh");
+        InventoryMesh("wpn_2hp_spear_a_tpp.msh");
+        Mesh("wpn_2hp_spear_a_tpp.msh");
+        SkinTag("Weapon_Craft0");
+        AnimPrefix("Spear");
+        HudIcon("weapon_spear");
+		HitReactionType(EReactionType_Stab);
+		HitReactionContext(EReactionContext_RangedWeapon);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);	
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        HorizontalAttackDamageMul(3.0);
+        TwoHanded(true);
+        DestroySound("damaged_heavy_weapon_XX.wav");
+        AiHitSound("spear");
+        use HitEffects_ThrownSpear();
+        use PickupSounds_Stick_Metal();
+        DamageSize(5.0);
+        StatsType(StatsType_Blunt);
+        FF_EffectName("Hit_Stick2HeavyBlunt");
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        SoundDamagedHit("damaged_sharp_weapon_XX.wav");
+        ThrowBeginSound("weapon_heavy_throw.wav");
+        Color(Color_White);
+        AchType(AchType_BigHammer);
+        CraftingSlots(1,0);
+        UniqueFxNameBase("machete");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        Price(8118);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(1, 3);
+        InWorldScale(1.0);
+		SynchroMovementOnAttack(true);
+		EnabledAutoAim(true);
+		EnabledAutoAimTarget(true);
+		TwoHanded(true);
+		HandInertiaRotFactor([0.25,1.0,1.0]);
+		HandInertiaFactor(0.8);
+        DuckInertiaFactor(0.0);
+		OpportunityWeapon(true);
+		HideFlightParaboll(true);
+		Name("&Thrown_Spear_N&");
+		Description("&Thrown_Spear_D&");	
+		MaxStackCount(1);
+		GameVersion(1);
+        DestroyableDamage(120.0);
+        DestroyOnHit(false);
+        LootRecoverProbability(0.0);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	
+
+    Item("dlc_ft_Thrown_Spear_wt2", CategoryType_Throwable)
+    {
+        Visibility(true);
+		HandToUse("RIGHT");
+        ItemType(ItemType_ThrowableSpear);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+        ThrowDamage("SpearThrow_RGD7");
+        DamageName("SpearThrow_RGD7");
+        Force(25.0);
+		ThrowImpulseLook(45.0);
+        ThrowImpulseUp(2.0);
+		InitialRotation(90,0,0);
+		RotationVel(0,0,0);
+        CriticalProb(1.0);
+        ThrowSpeed(45.0);
+		MotionTrailFx("spear_trail.gpufx");
+		TrailOffset(0,0,1);
+		TrailEulerAngleOffset(90,0,0);
+        GravityFactor(1.0);
+        ExplodeDelay(-1);
+        ExplodeOnCollision(false);
+        ScheduleExplodeAfterContact(false);
+        ExplosionFx("spear_hit.gpufx");
+		PenetrationEnable(false);
+		RicochetEnable(false);
+        CriticalDamage(2.0);
+        DamageRange(1.35);
+        DamageToPhysicsObjects(70.0);
+        PhysicsDamageMul(1.0);
+        StaminaUsage(0.2);
+        ConfusionProb(0.0);
+        WeaponBuildType(WeaponBuildType_Universal);
+        DamageType(DamageType_Pierce);
+        Flags(1);
+        InventoryMeshHQ("wpn_2hp_spear_a_fpp.msh");
+        InventoryMesh("wpn_2hp_spear_a_tpp.msh");
+        Mesh("wpn_2hp_spear_a_tpp.msh");
+        SkinTag("Weapon_Craft0");
+        AnimPrefix("Spear");
+        HudIcon("weapon_spear");
+		HitReactionType(EReactionType_Stab);
+		HitReactionContext(EReactionContext_RangedWeapon);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);	
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        HorizontalAttackDamageMul(3.0);
+        TwoHanded(true);
+        DestroySound("damaged_heavy_weapon_XX.wav");
+        AiHitSound("spear");
+        use HitEffects_ThrownSpear();
+        use PickupSounds_Stick_Metal();
+        DamageSize(5.0);
+        StatsType(StatsType_Blunt);
+        FF_EffectName("Hit_Stick2HeavyBlunt");
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        SoundDamagedHit("damaged_sharp_weapon_XX.wav");
+        ThrowBeginSound("weapon_heavy_throw.wav");
+        Color(Color_White);
+        AchType(AchType_BigHammer);
+        CraftingSlots(1,0);
+        UniqueFxNameBase("machete");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        Price(8118);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(1, 3);
+        InWorldScale(1.0);
+		SynchroMovementOnAttack(true);
+		EnabledAutoAim(true);
+		EnabledAutoAimTarget(true);
+		TwoHanded(true);
+		HandInertiaRotFactor([0.25,1.0,1.0]);
+		HandInertiaFactor(0.8);
+        DuckInertiaFactor(0.0);
+		OpportunityWeapon(true);
+		HideFlightParaboll(true);
+		Name("&Thrown_Spear_N&");
+		Description("&Thrown_Spear_D&");	
+		MaxStackCount(1);
+		GameVersion(1);
+        DestroyableDamage(120.0);
+        DestroyOnHit(false);
+        LootRecoverProbability(0.0);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	
+
+    Item("dlc_ft_Thrown_Spear_wt3", CategoryType_Throwable)
+    {
+        Visibility(true);
+		HandToUse("RIGHT");
+        ItemType(ItemType_ThrowableSpear);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+        ThrowDamage("SpearThrow_RGD9");
+        DamageName("SpearThrow_RGD9");
+        Force(25.0);
+		ThrowImpulseLook(45.0);
+        ThrowImpulseUp(2.0);
+		InitialRotation(90,0,0);
+		RotationVel(0,0,0);
+        CriticalProb(1.0);
+        ThrowSpeed(45.0);
+		MotionTrailFx("spear_trail.gpufx");
+		TrailOffset(0,0,1);
+		TrailEulerAngleOffset(90,0,0);
+        GravityFactor(1.0);
+        ExplodeDelay(-1);
+        ExplodeOnCollision(false);
+        ScheduleExplodeAfterContact(false);
+        ExplosionFx("spear_hit.gpufx");
+		PenetrationEnable(false);
+		RicochetEnable(false);
+        CriticalDamage(2.0);
+        DamageRange(1.35);
+        DamageToPhysicsObjects(70.0);
+        PhysicsDamageMul(1.0);
+        StaminaUsage(0.2);
+        ConfusionProb(0.0);
+        WeaponBuildType(WeaponBuildType_Universal);
+        DamageType(DamageType_Pierce);
+        Flags(1);
+        InventoryMeshHQ("wpn_2hp_spear_a_fpp.msh");
+        InventoryMesh("wpn_2hp_spear_a_tpp.msh");
+        Mesh("wpn_2hp_spear_a_tpp.msh");
+        SkinTag("Weapon_Craft0");
+        AnimPrefix("Spear");
+        HudIcon("weapon_spear");
+		HitReactionType(EReactionType_Stab);
+		HitReactionContext(EReactionContext_RangedWeapon);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);	
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        HorizontalAttackDamageMul(3.0);
+        TwoHanded(true);
+        DestroySound("damaged_heavy_weapon_XX.wav");
+        AiHitSound("spear");
+        use HitEffects_ThrownSpear();
+        use PickupSounds_Stick_Metal();
+        DamageSize(5.0);
+        StatsType(StatsType_Blunt);
+        FF_EffectName("Hit_Stick2HeavyBlunt");
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        SoundDamagedHit("damaged_sharp_weapon_XX.wav");
+        ThrowBeginSound("weapon_heavy_throw.wav");
+        Color(Color_White);
+        AchType(AchType_BigHammer);
+        CraftingSlots(1,0);
+        UniqueFxNameBase("machete");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        Price(8118);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(1, 3);
+        InWorldScale(1.0);
+		SynchroMovementOnAttack(true);
+		EnabledAutoAim(true);
+		EnabledAutoAimTarget(true);
+		TwoHanded(true);
+		HandInertiaRotFactor([0.25,1.0,1.0]);
+		HandInertiaFactor(0.8);
+        DuckInertiaFactor(0.0);
+		OpportunityWeapon(true);
+		HideFlightParaboll(true);
+		Name("&Thrown_Spear_N&");
+		Description("&Thrown_Spear_D&");	
+		MaxStackCount(1);
+		GameVersion(1);
+        DestroyableDamage(120.0);
+        DestroyOnHit(false);
+        LootRecoverProbability(0.0);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	
+	Item("dlc_ft_Thrown_Pitchfork_wt1", CategoryType_Throwable)
+    {
+        Visibility(true);
+		HandToUse("RIGHT");
+        ItemType(ItemType_ThrowableSpear);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+        ThrowDamage("SpearThrow_RGD4");
+        DamageName("SpearThrow_RGD4");
+        Force(25.0);
+		ThrowImpulseLook(45.0);
+        ThrowImpulseUp(2.0);
+		InitialRotation(90,0,0);
+		RotationVel(0,0,0);
+        CriticalProb(1.0);
+        ThrowSpeed(45.0);
+		MotionTrailFx("spear_trail.gpufx");
+		TrailOffset(0,0,1);
+		TrailEulerAngleOffset(90,0,0);
+        GravityFactor(1.0);
+        ExplodeDelay(-1);
+        ExplodeOnCollision(false);
+        ScheduleExplodeAfterContact(false);
+        ExplosionFx("spear_hit.gpufx");
+		PenetrationEnable(false);
+		RicochetEnable(false);
+        CriticalDamage(2.0);
+        DamageRange(1.35);
+        DamageToPhysicsObjects(70.0);
+        PhysicsDamageMul(1.0);
+        StaminaUsage(0.2);
+        ConfusionProb(0.0);
+        WeaponBuildType(WeaponBuildType_Universal);
+        DamageType(DamageType_Pierce);
+        Flags(1);
+        InventoryMeshHQ("wpn_2hp_spear_d_fpp.msh");
+        InventoryMesh("wpn_2hp_spear_d_fpp.msh");
+        Mesh("wpn_2hp_spear_d_tpp.msh");
+        SkinTag("Weapon_Craft0");
+        AnimPrefix("Spear");
+        HudIcon("wpn_2hp_spear_d_icon_ft");
+		HitReactionType(EReactionType_Stab);
+		HitReactionContext(EReactionContext_RangedWeapon);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);	
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        HorizontalAttackDamageMul(3.0);
+        TwoHanded(true);
+        DestroySound("damaged_heavy_weapon_XX.wav");
+        AiHitSound("spear");
+        use HitEffects_ThrownSpear();
+        use PickupSounds_Stick_Metal();
+        DamageSize(5.0);
+        StatsType(StatsType_Blunt);
+        FF_EffectName("Hit_Stick2HeavyBlunt");
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        SoundDamagedHit("damaged_sharp_weapon_XX.wav");
+        ThrowBeginSound("weapon_heavy_throw.wav");
+        Color(Color_White);
+        AchType(AchType_BigHammer);
+        CraftingSlots(1,0);
+        UniqueFxNameBase("machete");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        Price(8118);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(1, 3);
+        InWorldScale(1.0);
+		SynchroMovementOnAttack(true);
+		EnabledAutoAim(true);
+		EnabledAutoAimTarget(true);
+		TwoHanded(true);
+		HandInertiaRotFactor([0.25,1.0,1.0]);
+		HandInertiaFactor(0.8);
+        DuckInertiaFactor(0.0);
+		OpportunityWeapon(true);
+		HideFlightParaboll(true);
+		Name("&pitchfork_n&");
+		Description("&pitchfork_d&");	
+		MaxStackCount(1);
+		GameVersion(1);
+        DestroyableDamage(120.0);
+        DestroyOnHit(false);
+        LootRecoverProbability(0.0);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	
+
+    Item("dlc_ft_Thrown_Pitchfork_wt2", CategoryType_Throwable)
+    {
+        Visibility(true);
+		HandToUse("RIGHT");
+        ItemType(ItemType_ThrowableSpear);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+        ThrowDamage("SpearThrow_RGD7");
+        DamageName("SpearThrow_RGD7");
+        Force(25.0);
+		ThrowImpulseLook(45.0);
+        ThrowImpulseUp(2.0);
+		InitialRotation(90,0,0);
+		RotationVel(0,0,0);
+        CriticalProb(1.0);
+        ThrowSpeed(45.0);
+		MotionTrailFx("spear_trail.gpufx");
+		TrailOffset(0,0,1);
+		TrailEulerAngleOffset(90,0,0);
+        GravityFactor(1.0);
+        ExplodeDelay(-1);
+        ExplodeOnCollision(false);
+        ScheduleExplodeAfterContact(false);
+        ExplosionFx("spear_hit.gpufx");
+		PenetrationEnable(false);
+		RicochetEnable(false);
+        CriticalDamage(2.0);
+        DamageRange(1.35);
+        DamageToPhysicsObjects(70.0);
+        PhysicsDamageMul(1.0);
+        StaminaUsage(0.2);
+        ConfusionProb(0.0);
+        WeaponBuildType(WeaponBuildType_Universal);
+        DamageType(DamageType_Pierce);
+        Flags(1);
+        InventoryMeshHQ("wpn_2hp_spear_d_fpp.msh");
+        InventoryMesh("wpn_2hp_spear_d_tpp.msh");
+        Mesh("wpn_2hp_spear_d_tpp.msh");
+        SkinTag("Weapon_Craft0");
+        AnimPrefix("Spear");
+        HudIcon("wpn_2hp_spear_d_icon_ft");
+		HitReactionType(EReactionType_Stab);
+		HitReactionContext(EReactionContext_RangedWeapon);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);	
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        HorizontalAttackDamageMul(3.0);
+        TwoHanded(true);
+        DestroySound("damaged_heavy_weapon_XX.wav");
+        AiHitSound("spear");
+        use HitEffects_ThrownSpear();
+        use PickupSounds_Stick_Metal();
+        DamageSize(5.0);
+        StatsType(StatsType_Blunt);
+        FF_EffectName("Hit_Stick2HeavyBlunt");
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        SoundDamagedHit("damaged_sharp_weapon_XX.wav");
+        ThrowBeginSound("weapon_heavy_throw.wav");
+        Color(Color_White);
+        AchType(AchType_BigHammer);
+        CraftingSlots(1,0);
+        UniqueFxNameBase("machete");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        Price(8118);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(1, 3);
+        InWorldScale(1.0);
+		SynchroMovementOnAttack(true);
+		EnabledAutoAim(true);
+		EnabledAutoAimTarget(true);
+		TwoHanded(true);
+		HandInertiaRotFactor([0.25,1.0,1.0]);
+		HandInertiaFactor(0.8);
+        DuckInertiaFactor(0.0);
+		OpportunityWeapon(true);
+		HideFlightParaboll(true);
+		Name("&pitchfork_n&");
+		Description("&pitchfork_d&");	
+		MaxStackCount(1);
+		GameVersion(1);
+        DestroyableDamage(120.0);
+        DestroyOnHit(false);
+        LootRecoverProbability(0.0);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	
+
+    Item("dlc_ft_Thrown_Pitchfork_wt3", CategoryType_Throwable)
+    {
+        Visibility(true);
+		HandToUse("RIGHT");
+        ItemType(ItemType_ThrowableSpear);
+        PhysicsScript("simple.phx");
+        Condition(-1);
+        ThrowDamage("SpearThrow_RGD9");
+        DamageName("SpearThrow_RGD9");
+        Force(25.0);
+		ThrowImpulseLook(45.0);
+        ThrowImpulseUp(2.0);
+		InitialRotation(90,0,0);
+		RotationVel(0,0,0);
+        CriticalProb(1.0);
+        ThrowSpeed(45.0);
+		MotionTrailFx("spear_trail.gpufx");
+		TrailOffset(0,0,1);
+		TrailEulerAngleOffset(90,0,0);
+        GravityFactor(1.0);
+        ExplodeDelay(-1);
+        ExplodeOnCollision(false);
+        ScheduleExplodeAfterContact(false);
+        ExplosionFx("spear_hit.gpufx");
+		PenetrationEnable(false);
+		RicochetEnable(false);
+        CriticalDamage(2.0);
+        DamageRange(1.35);
+        DamageToPhysicsObjects(70.0);
+        PhysicsDamageMul(1.0);
+        StaminaUsage(0.2);
+        ConfusionProb(0.0);
+        WeaponBuildType(WeaponBuildType_Universal);
+        DamageType(DamageType_Pierce);
+        Flags(1);
+        InventoryMeshHQ("wpn_2hp_spear_d_fpp.msh");
+        InventoryMesh("wpn_2hp_spear_d_tpp.msh");
+        Mesh("wpn_2hp_spear_d_tpp.msh");
+        SkinTag("Weapon_Craft0");
+        AnimPrefix("Spear");
+        HudIcon("wpn_2hp_spear_d_icon_ft");
+		HitReactionType(EReactionType_Stab);
+		HitReactionContext(EReactionContext_RangedWeapon);
+		HitReactionHitSeverity(EHitSeverity_Medium);
+		HitReactionMoveSeverity(EMoveSeverity_Medium);	
+		HitReactionFlags(EReactionFlag_Interrupt);	
+        HorizontalAttackDamageMul(3.0);
+        TwoHanded(true);
+        DestroySound("damaged_heavy_weapon_XX.wav");
+        AiHitSound("spear");
+        use HitEffects_ThrownSpear();
+        use PickupSounds_Stick_Metal();
+        DamageSize(5.0);
+        StatsType(StatsType_Blunt);
+        FF_EffectName("Hit_Stick2HeavyBlunt");
+        FF_Left(0.6);
+        FF_Right(0.6);
+        FF_Duration(0.2);
+        FF_FadeOut(0.0);
+        SoundDamagedHit("damaged_sharp_weapon_XX.wav");
+        ThrowBeginSound("weapon_heavy_throw.wav");
+        Color(Color_White);
+        AchType(AchType_BigHammer);
+        CraftingSlots(1,0);
+        UniqueFxNameBase("machete");
+        RagdollBehaviorPrefix("Stick2HeavyBlunt");
+        Price(8118);
+        GenType(GenType_MeleeWeapon);
+        TierSpread(1, 3);
+        InWorldScale(1.0);
+		SynchroMovementOnAttack(true);
+		EnabledAutoAim(true);
+		EnabledAutoAimTarget(true);
+		TwoHanded(true);
+		HandInertiaRotFactor([0.25,1.0,1.0]);
+		HandInertiaFactor(0.8);
+        DuckInertiaFactor(0.0);
+		OpportunityWeapon(true);
+		HideFlightParaboll(true);
+		Name("&pitchfork_n&");
+		Description("&pitchfork_d&");
+		MaxStackCount(1);
+		GameVersion(1);
+        DestroyableDamage(120.0);
+        DestroyOnHit(false);
+        LootRecoverProbability(0.0);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	
+	Item("Spikes_Pikes", CategoryType_Melee)
+    {
+        Name("&Spikes_Pikes&");
+        Description("&Spikes_Pikes&");
+        Visibility(true);
+        ItemType(ItemType_Stick);        
+        AiHitSound("spikes");
+        GameVersion(1);
+        IsAutomaticLegendLevelDamageScaling(true);
+    }
+	
+	Item("AI_Throwable_Stone", CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Stone_N&");
+        Description("&AI_Throwable_Stone_D&");
+        ItemType(ItemType_ThrowableStone);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        Mesh("wpn_rock_a_tpp.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("brick");
+		SoundInjuryDamageType("brick");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(10.0);
+        DamageType(DamageType_Blunt);
+        DamageName("AI_Throwable_Stone_Damage");
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(false);
+        PhysicsDamageMul(5.0);
+        ThrowSpeed(30.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+        MotionTrailFx("throwing_knife_trail.gpufx");
+		HitReactionMoveSeverity(EMoveSeverity_Medium);
+        SweepSize(0.81, 0.41, 0);
+        GameVersion(1);
+    }
+    
+    Item("AI_Throwable_Knife", CategoryType_Throwable)
+    {
+        Name("&AI_Throwable_Knife_N&");
+        Description("&AI_Throwable_Knife_D&");
+        ItemType(ItemType_ThrowableKnife);
+        OwnerType(OwnerType_AI);
+        Visibility(true);
+        MaxStackCount(1);
+        Price(5);
+        Mesh("wpn_throwing_knife_a_tpp.msh");
+        Skin("default");
+        AnimPrefix("Decoy");
+        AiHitSound("knife");
+        PhysicsScript("simple.phx");
+        HudIcon("jar");
+        Damage(10.0);
+        DamageType(DamageType_Cut);
+		DamageName("AI_Throwable_Knife_Damage");
+        ExplodeDelay(10.0);
+        ExplodeOnCollision(true);
+        PhysicsDamageMul(5.0);
+        ThrowSpeed(30.0);
+        ThrowImpulseLook(13.0);
+        ThrowImpulseUp(2.0);
+        ThrowBeginSound("");
+        InitialRotation(90.0, 90.0, 0.0);
+        StatsType(StatsType_None);
+        NoiseType("NONE");
+        Color(Color_White);
+        FF_EffectName("Throw_Knife");
+        ThrowFlySound("ai_knife_throw_fly.wav");
+        AIHandElement("L_HandHolder");
+        MotionTrailFx("throwing_knife_trail.gpufx");
+        SweepSize(0.81, 0.41, 0);
+        GameVersion(1);
+    }
+	
+	Item("Summoner_Horn", CategoryType_Melee)
+    {
+        OwnerType(OwnerType_AI);
+        Name("alarm_siren_anm");
+        Description("alarm_siren_anm");
+        Visibility(true);
+        ItemType(ItemType_SummoningTool);
+        PhysicsScript("simple.phx");
+        Mesh("alarm_siren_anm.msh");
+		GameVersion(1);
+    }
+	
+	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////// Special Resources and Tokens ///////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	
+	Item("Collectable_FurySkill_Freak_01", CategoryType_Collectable)
+    {
+		Name("&FurySkill_SingleItem_N&");
+		Description("&FurySkill_SingleItem_D&");
+		ItemType(ItemType_Collectible_FuryPoint);
+		Price(0);
+		Mesh("inhibitor_box_a.msh");
+		Skin("bundle");
+		use PickupSounds_Inhibitor();
+		Color(Color_Orange);
+		HudIcon("equipment_medkit_b");
+		GameVersion(1);
+		SkillPointsGranted(1);
+    }
+
+    Item("Collectable_FurySkill_Freak_02", CategoryType_Collectable)
+    {
+		Name("&FurySkill_SingleItem_N&");
+		Description("&FurySkill_SingleItem_D&");
+		ItemType(ItemType_Collectible_FuryPoint);
+		Price(0);
+		Mesh("inhibitor_box_a.msh");
+		Skin("bundle");
+		use PickupSounds_Inhibitor();
+		Color(Color_Orange);
+		HudIcon("equipment_medkit_b");
+		GameVersion(1);
+		SkillPointsGranted(1);
+    }
+
+    Item("Collectable_FurySkill_Freak_03", CategoryType_Collectable)
+    {
+		Name("&FurySkill_SingleItem_N&");
+		Description("&FurySkill_SingleItem_D&");
+		ItemType(ItemType_Collectible_FuryPoint);
+		Price(0);
+		Mesh("inhibitor_box_a.msh");
+		Skin("bundle");
+		use PickupSounds_Inhibitor();
+		Color(Color_Orange);
+		HudIcon("equipment_medkit_b");
+		GameVersion(1);
+		SkillPointsGranted(1);
+    }
+
+    Item("Collectable_FurySkill_Freak_04", CategoryType_Collectable)
+    {
+		Name("&FurySkill_SingleItem_N&");
+		Description("&FurySkill_SingleItem_D&");
+		ItemType(ItemType_Collectible_FuryPoint);
+		Price(0);
+		Mesh("inhibitor_box_a.msh");
+		Skin("bundle");
+		use PickupSounds_Inhibitor();
+		Color(Color_Orange);
+		HudIcon("equipment_medkit_b");
+		GameVersion(1);
+		SkillPointsGranted(3);
+    }
+
+    Item("Collectable_FurySkill_Freak_05", CategoryType_Collectable)
+    {
+		Name("&FurySkill_SingleItem_N&");
+		Description("&FurySkill_SingleItem_D&");
+		ItemType(ItemType_Collectible_FuryPoint);
+		Price(0);
+		Mesh("inhibitor_box_a.msh");
+		Skin("bundle");
+		use PickupSounds_Inhibitor();
+		Color(Color_Orange);
+		HudIcon("equipment_medkit_b");
+		GameVersion(1);
+		SkillPointsGranted(3);
+    }
+
+    Item("Collectable_FurySkill_Freak_06", CategoryType_Collectable)
+    {
+		Name("&FurySkill_SingleItem_N&");
+		Description("&FurySkill_SingleItem_D&");
+		ItemType(ItemType_Collectible_FuryPoint);
+		Price(0);
+		Mesh("inhibitor_box_a.msh");
+		Skin("bundle");
+		use PickupSounds_Inhibitor();
+		Color(Color_Orange);
+		HudIcon("equipment_medkit_b");
+		GameVersion(1);
+		SkillPointsGranted(4);
+    }
+
+    Item("Collectable_FurySkill_Freak_07", CategoryType_Collectable)
+    {
+		Name("&FurySkill_SingleItem_N&");
+		Description("&FurySkill_SingleItem_D&");
+		ItemType(ItemType_Collectible_FuryPoint);
+		Price(0);
+		Mesh("inhibitor_box_a.msh");
+		Skin("bundle");
+		use PickupSounds_Inhibitor();
+		Color(Color_Orange);
+		HudIcon("equipment_medkit_b");
+		GameVersion(1);
+		SkillPointsGranted(4);
+    }
+
+    Item("Collectable_FurySkill_Freak_08", CategoryType_Collectable)
+    {
+		Name("&FurySkill_SingleItem_N&");
+		Description("&FurySkill_SingleItem_D&");
+		ItemType(ItemType_Collectible_FuryPoint);
+		Price(0);
+		Mesh("inhibitor_box_a.msh");
+		Skin("bundle");
+		use PickupSounds_Inhibitor();
+		Color(Color_Orange);
+		HudIcon("equipment_medkit_b");
+		GameVersion(1);
+		SkillPointsGranted(5);
+    }
+	
+    Item("DLC_FT_UpgradeComponent_T1", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        MaxStackCount(100000);
+        HudIcon("manual_bigginer");
+        Mesh("loot_manual_a.msh");
+        Skin("default");
+		Color(Color_Blue);
+		CanDrop(true);
+        TokenType(-1);
+        Visibility(true);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Book();
+        GenType(GenType_None);
+        GameVersion(1);
+		ShowLootBackground(true);
+    
+   Price(10000);}
+
+    Item("DLC_FT_UpgradeComponent_T2", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        MaxStackCount(100000);
+        HudIcon("manual_professional");
+        Mesh("loot_manual_a.msh");
+        Skin("default");
+		Color(Color_Violet);
+        TokenType(-1);
+        Visibility(true);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Book();
+        GenType(GenType_None);
+        LinkedItems("Craftplan_Upgrade_Component_T2");
+        GameVersion(1);
+		ShowLootBackground(true);
+    
+   Price(10000);}
+
+    Item("DLC_FT_UpgradeComponent_T3", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        MaxStackCount(100000);
+        HudIcon("manual_engineer");
+        Mesh("loot_manual_a.msh");
+        Skin("default");
+		Color(Color_Orange);
+        TokenType(-1);
+        Visibility(true);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Book();
+        GenType(GenType_None);
+        LinkedItems("Craftplan_Upgrade_Component_T3");
+        GameVersion(1);
+		ShowLootBackground(true);
+    
+   Price(1);}
+	
+	Item("Craftplan_Upgrade_Component_T2", CategoryType_Collectable)
+    {
+		Name("&DLC_FT_UpgradeComponent_T2_N&");
+		Description("&DLC_FT_UpgradeComponent_T2_D&");
+        ItemType(ItemType_CraftPlan);
+        CraftplanType("Token");
+        Price(1);
+        Mesh("blueprint.msh");
+        Skin("default");
+        RequiredItem("DLC_FT_UpgradeComponent_T1", 3);
+        Color(Color_Violet);
+        CraftedItem("DLC_FT_UpgradeComponent_T2", 1, 1);
+        HudIcon("blueprint_b");
+        GameVersion(1);
+    }
+	
+	Item("Craftplan_Upgrade_Component_T3", CategoryType_Collectable)
+    {
+		Name("&DLC_FT_UpgradeComponent_T3_N&");
+		Description("&DLC_FT_UpgradeComponent_T3_D&");
+        ItemType(ItemType_CraftPlan);
+        CraftplanType("Token");
+        Price(1);
+        Mesh("blueprint.msh");
+        Skin("default");
+        RequiredItem("DLC_FT_UpgradeComponent_T2", 3);
+        Color(Color_Orange);
+        CraftedItem("DLC_FT_UpgradeComponent_T3", 1, 1);
+        HudIcon("blueprint_b");
+        GameVersion(1);
+    }
+	
+	Item("Cash_Cash", CategoryType_Cash)
+    {
+        ItemType(ItemType_Cash);
+        Visibility(false);
+        Price(1);
+        Mesh("collectable_wallet.msh");
+        Skin("default");
+        PhysicsScript("dropped_inventory.phx");
+        Color(Color_Green);
+        HudIcon("money_icon");
+        MaxStackCount(9999999);
+		use PickupSounds_Cash();
+		GameVersion(1);
+    }
+	
+	Item("DLC_FT_Military_Card", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        MaxStackCount(100000);
+		HudIcon("icon_militarycard");
+        Mesh("dlc_ft_military_truck_card.msh");
+        Skin("Default");
+		Color(Color_Violet);
+        TokenType(-1);
+        Visibility(true);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Default_Simple();
+        GenType(GenType_None);
+        GameVersion(1);
+    
+   Price(1);}
+	
+	Item("DLC_FT_Car_Repair_Kit", CategoryType_Token)
+    {
+        ItemType(ItemType_Token);
+        MaxStackCount(100000);
+		HudIcon("icon_repairkit");
+        Mesh("loot_tools_a.msh");
+        Skin("Repair Kit");
+		Color(Color_Violet);
+		CanDrop(false);
+        TokenType(-1);
+        Visibility(true);
+        PhysicsScript("simple.phx");
+        use PickupSounds_Toolbox();
+        GenType(GenType_None);
+        GameVersion(1);
+    
+   Price(1);}
+	
+	Item("ZZ1Patch_Menu_Docket", CategoryType_Voucher)
+    {
+		Name("&Docket_Reward_TechlandGG_n&");
+		Description("&Docket_Reward_d&");
+        ItemType(ItemType_Docket);
+        Visibility(false);
+        Price(0);
+        Mesh("collectable_wallet.msh");
+        Skin("DOCKET");
+        PhysicsScript("simple.phx");
+        Color(Color_White);
+        HudIcon("docket_multi_icon");
+        DocketType("_All");
+        GameVersion(1);
+    }
+	//////////COOP_temp/////////////
+    Item("Coop_FT_T2_lootpack", CategoryType_LootPack)
+    {
+        ItemType(ItemType_LootPack);
+		LootTypeObjectName("Coop_lootpack_T2");
+        Visibility(true);
+        MaxStackCount(10);
+		Price(300);
+        HudIcon("coop_lootpack_T2");
+		Mesh("drugs.msh");
+		Skin("default");
+        use PickupSounds_Default();
+        AllowedInShop(false);
+        Name("&coop_FT_lootpack_N&");
+        Description("&coop_FT_lootpack_D&");
+        CanDrop(false);
+        GameVersion(1);
+    }
+
+    Item("Coop_FT_T3_lootpack", CategoryType_LootPack)
+    {
+        ItemType(ItemType_LootPack);
+		LootTypeObjectName("Coop_lootpack_T3");
+        Visibility(true);
+        MaxStackCount(10);
+		Price(300);
+        HudIcon("coop_lootpack_T3");
+		Mesh("drugs.msh");
+		Skin("default");
+        use PickupSounds_Default();
+        AllowedInShop(false);
+        Name("&coop_FT_lootpack_N&");
+        Description("&coop_FT_lootpack_D&");
+        CanDrop(false);
+        GameVersion(1);
+    }   
+
+    Item("AI_Push", CategoryType_Melee)
+    {
+        Name("&AI_Push&");
+        Description("&AI_Push&");
+        DamageRange(1.0);
+        Visibility(false);
+        ItemType(ItemType_Fists);
+        OwnerType(OwnerType_AI);
+        DamageType(DamageType_Kick);
+		AiHitSound("kick");
+		Material("fists");
+		GameVersion(8);
+    }
+	
+	// TODO: Set correct properties!
+	Item("Air_Drop_Token_1", CategoryType_Throwable)
+    {
+        Name("&AIr_Drop_Token_1&");
+        Description("&AIr_Drop_Token_1&");
+        Visibility(true);
+        Mesh("flashlight_a.msh");
+        Skin("default");
+		ItemType(ItemType_Special);
+		ChallengeItem(true);
+        GameVersion(8);
+    }
+	
+	// TODO: Set correct properties!
+	Item("Air_Drop_Token_2", CategoryType_Throwable)
+    {
+        Name("&AIr_Drop_Token_2&");
+        Description("&AIr_Drop_Token_2&");
+        Visibility(true);
+        Mesh("flashlight_a.msh");
+        Skin("default");
+		ItemType(ItemType_Special);
+		ChallengeItem(true);
+        GameVersion(8);
+    }
+	
+	// TODO: Set correct properties!
+	Item("Air_Drop_Token_3", CategoryType_Throwable)
+    {
+        Name("&Air_Drop_Token_3&");
+        Description("&Air_Drop_Token_3&");
+        Visibility(true);
+        Mesh("flashlight_a.msh");
+        Skin("default");
+		ItemType(ItemType_Special);
+		ChallengeItem(true);
+        GameVersion(8);
+    }
+
+    //PUBG Flare Gun
+	Item("Flare_Gun", CategoryType_Other)
+    {
+        Name("&Flare_Gun&");
+        Description("&Flare_Gun&");
+        Visibility(true);
+        ItemType(ItemType_Key);
+        PhysicsScript("simple.phx");
+        MaxStackCount(1);
+        Mesh("wpn_flare_gun_a_fpp.msh");
+        Color(Color_White);
+        GameVersion(8);
+    }
+    
+    //New Game Plus
+    Item("NGPlus_Lootpack_Activity", CategoryType_LootPack)
+    {
+        ItemType(ItemType_LootPack);
+        Name("&NGPlus_Lootpack_Activity_n&");
+        Description("&NGPlus_Lootpack_Activity_d&");
+        LootTypeObjectName("NGPlus_Lootpack_Activity");
+        //ContentIconForMenu("reward_explosives");
+        //ContentIconForMenu("reward_potions");
+        Visibility(true);
+        MaxStackCount(999);
+        Price(300);
+        HudIcon("reward_ngplus_activity_chest");
+        Mesh("upgrade_mode_box_a.msh");
+        //Skin("LegendLevel");
+        Skin("default");
+        use PickupSounds_Default();
+        Color(Color_Blue);
+        CanDrop(false);
+        AllowedInShop(false);
+        GameVersion(9);
+        IsNGPlusLoot(true);
+    }
+    
+    Item("NGPlus_Lootpack_Side", CategoryType_LootPack)
+    {
+        ItemType(ItemType_LootPack);
+        Name("&NGPlus_Lootpack_Side_n&");
+        Description("&NGPlus_Lootpack_Side_d&");
+        LootTypeObjectName("NGPlus_Lootpack_Side");
+        //ContentIconForMenu("reward_legendbox_weapons_exotic");
+        //ContentIconForMenu("reward_explosives");
+        //ContentIconForMenu("reward_potions");
+        Visibility(true);
+        MaxStackCount(999);
+        Price(300);
+        HudIcon("reward_ngplus_side_chest");
+        Mesh("upgrade_mode_box_a.msh");
+        //Skin("LegendLevel");
+        Skin("default");
+        use PickupSounds_Default();
+        Color(Color_Violet);
+        CanDrop(false);
+        AllowedInShop(false);
+        GameVersion(9);
+        IsNGPlusLoot(true);
+    }
+    
+    Item("NGPlus_Lootpack_Main", CategoryType_LootPack)
+    {
+        ItemType(ItemType_LootPack);
+        Name("&NGPlus_Lootpack_Main_n&");
+        Description("&NGPlus_Lootpack_Main_d&");
+        LootTypeObjectName("NGPlus_Lootpack_Main");
+        //ContentIconForMenu("reward_legendbox_weapons_exotic");
+        //ContentIconForMenu("reward_explosives");
+        //ContentIconForMenu("reward_potions");
+        Visibility(true);
+        MaxStackCount(999);
+        Price(300);
+        HudIcon("reward_ngplus_main_chest");
+        Mesh("upgrade_mode_box_a.msh");
+        //Skin("LegendLevel");
+        Skin("default");
+        use PickupSounds_Default();
+        Color(Color_Orange);
+        CanDrop(false);
+        AllowedInShop(false);
+        GameVersion(9);
+        IsNGPlusLoot(true);
+    }
+    	
+	////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////     Weapon Params      //////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	
+
+    MaxRepairCountByRarity(Color_White,  2);
+    MaxRepairCountByRarity(Color_Green,  2);
+    MaxRepairCountByRarity(Color_Blue,   4);
+    MaxRepairCountByRarity(Color_Violet, 5);
+    MaxRepairCountByRarity(Color_Orange, 7);
+    MaxRepairCountByRarity(Color_Platinum, -1);
+	MaxRepairCountByRarity(Color_Exotic, 8);
+	MaxRepairCountByRarity(Color_Limited, 0);
+
+    CraftSlotsBonus(Color_Green,  0, 0);
+    CraftSlotsBonus(Color_Blue,   2, 0);
+    CraftSlotsBonus(Color_Violet, 2, 0);
+    CraftSlotsBonus(Color_Orange, 3, 0);
+    CraftSlotsBonus(Color_Platinum, 3, 0);
+	CraftSlotsBonus(Color_Exotic, 3, 0);
+    CraftSlotsBonus(Color_Limited, 0, 0);
+
+    RepairSlotsBonus(Color_Green,  0);
+    RepairSlotsBonus(Color_Blue,   0);
+    RepairSlotsBonus(Color_Violet, 1);
+    RepairSlotsBonus(Color_Orange, 2);
+    RepairSlotsBonus(Color_Platinum, 3);
+	RepairSlotsBonus(Color_Exotic, 3);
+	RepairSlotsBonus(Color_Limited, 0);
+
+    DurabilityBonus(Color_White,  0);
+	DurabilityBonus(Color_Green,  0);
+    DurabilityBonus(Color_Blue,   45);
+    DurabilityBonus(Color_Violet, 50);
+    DurabilityBonus(Color_Orange, 60);
+    DurabilityBonus(Color_Platinum, 60);
+	DurabilityBonus(Color_Exotic, 60);
+    DurabilityBonus(Color_Limited, 100);
+
+    AffixBonus(Color_Green, 0);
+	AffixBonus(Color_Blue, 1);
+    AffixBonus(Color_Violet, 2);
+    AffixBonus(Color_Orange, 3);
+    AffixBonus(Color_Platinum, 4);
+	AffixBonus(Color_Exotic, 3);
+    AffixBonus(Color_Limited, 2);
+
+    CraftingSlotsValueCurve("crafting_slots_value_mul");
+    ConditionValueCurve("condition_value_mul");
+    RepairsLeftValueCurve("repairs_left_value_mul");
+    
+    DamageScaledByDistanceCurve("Thrown_Weapons_Damage_Distance_Mul");
+}

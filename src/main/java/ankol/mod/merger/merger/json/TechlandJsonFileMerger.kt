@@ -11,6 +11,7 @@ import ankol.mod.merger.core.ParsedResult
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.ConflictRecord
+import ankol.mod.merger.merger.ConflictType
 import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.json.node.JsonArrayNode
 import ankol.mod.merger.merger.json.node.JsonContainerNode
@@ -68,7 +69,13 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             //冲突解决
             if (context.isFirstModMergeWithBaseMod && conflicts.isNotEmpty()) {
                 for (record in conflicts) {
-                    record.userChoice = UserChoice.MERGE_MOD
+                    if (record.conflictType == ConflictType.REMOVAL) {
+                        // 删除类型冲突：MOD缺少原版节点，应该保留原版（补回缺失的代码）
+                        record.userChoice = UserChoice.BASE_MOD
+                    } else {
+                        // 普通修改冲突：使用MOD修改的版本
+                        record.userChoice = UserChoice.MERGE_MOD
+                    }
                 }
             } else if (conflicts.isNotEmpty()) {
                 resolveConflict(conflicts)
@@ -116,9 +123,9 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
     ) {
         var previousSiblingInBase: BaseTreeNode? = null
 
-        for ((signature, modChild) in modContainer.childerns) {
-            val originalChild = originalContainer?.childerns?.get(signature)
-            val baseChild = baseContainer.childerns[signature]
+        for ((signature, modChild) in modContainer.childrens) {
+            val originalChild = originalContainer?.childrens?.get(signature)
+            val baseChild = baseContainer.childrens[signature]
 
             //不存在，新增
             if (baseChild == null) {
@@ -165,6 +172,46 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                 } else {
                     reduceCompare(originalChild, baseChild, modChild)
                 }
+            }
+        }
+
+        // 检测被MOD删除的节点（base有，但mod没有）
+        detectRemovedNodes(originalContainer, baseContainer, modContainer)
+    }
+
+    /**
+     * 检测被MOD删除/注释的节点
+     */
+    private fun detectRemovedNodes(
+        originalContainer: JsonContainerNode?,
+        baseContainer: JsonContainerNode,
+        modContainer: JsonContainerNode
+    ) {
+        for ((signature, baseChild) in baseContainer.childrens) {
+            val modChild = modContainer.childrens[signature]
+
+            // base有，但mod没有 -> 可能是删除
+            if (modChild == null) {
+                // 检查原版是否有这个节点
+                val originalChild = originalContainer?.childrens?.get(signature)
+
+                if (originalChild != null) {
+                    // 原版有这个节点，MOD也应该有但却没有
+                    // 这说明MOD故意删除了这个节点，需要提示用户
+                    conflicts.add(
+                        ConflictRecord(
+                            context.fileName,
+                            context.mod1Name,
+                            context.mod2Name,
+                            signature,
+                            baseChild,
+                            null, // modNode为null表示删除
+                            conflictType = ConflictType.REMOVAL
+                        )
+                    )
+                }
+                // 如果原版也没有这个节点，说明是base MOD新增的，mod没有是正常的
+                // 这种情况不需要特殊处理，base的内容会保留
             }
         }
     }
@@ -249,15 +296,26 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
 
         // 处理冲突节点
         for (conflictRecord in conflicts) {
-            if (conflictRecord.userChoice == UserChoice.MERGE_MOD) {
+            if (conflictRecord.conflictType == ConflictType.REMOVAL) {
+                // 删除类型的冲突
+                if (conflictRecord.userChoice == UserChoice.MERGE_MOD) {
+                    // 用户选择使用MOD的版本（即删除该节点）
+                    val baseNode = conflictRecord.baseNode
+                    rewriter.delete(baseNode.startTokenIndex, baseNode.stopTokenIndex)
+                }
+                // 如果选择 BASE_MOD，则保留原内容，不做任何操作
+            } else if (conflictRecord.userChoice == UserChoice.MERGE_MOD) {
+                // 普通修改冲突：用户选择了 Mod
                 val baseNode = conflictRecord.baseNode
                 val modNode = conflictRecord.modNode
-                // 替换为mod节点的内容
-                rewriter.replace(
-                    baseNode.startTokenIndex,
-                    baseNode.stopTokenIndex,
-                    modNode.sourceText
-                )
+                if (modNode != null) {
+                    // 替换为mod节点的内容
+                    rewriter.replace(
+                        baseNode.startTokenIndex,
+                        baseNode.stopTokenIndex,
+                        modNode.sourceText
+                    )
+                }
             }
         }
 
