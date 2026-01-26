@@ -84,7 +84,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                 resolveConflict(conflicts)
             }
 
-            return MergeResult(getMergedContent(baseResult), !conflicts.isEmpty())
+            return MergeResult(getMergedContent(baseResult))
         } catch (e: Exception) {
             log.error("Error during XML file merge: ${file1.fileName} Reason: ${e.message}", e)
             throw BusinessException("文件${file1.fileName}合并失败")

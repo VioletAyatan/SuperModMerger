@@ -33,7 +33,6 @@ class ModMergerToolMaterialGUI : Application() {
     private lateinit var statusLabel: Label
     private lateinit var mergeButton: Button
     private lateinit var outputPathLabel: Label
-    private lateinit var timeLabel: TimeLabel
 
     override fun start(primaryStage: Stage) {
         val root = BorderPane()
@@ -42,7 +41,7 @@ class ModMergerToolMaterialGUI : Application() {
         root.center = createMainContent()
         root.bottom = createStatusBar()
 
-        val scene = Scene(root, 1000.0, 700.0)
+        val scene = Scene(root, 1280.0, 1060.0)
 
         // 加载Material Design CSS样式
         val cssResource = this::class.java.getResource("/styles/material-design.css")
@@ -50,26 +49,12 @@ class ModMergerToolMaterialGUI : Application() {
             scene.stylesheets.add(cssResource.toExternalForm())
         }
 
-        // 设置窗口图标
-//        try {
-//            val iconResource = this::class.java.getResourceAsStream("/images/icon.ico")
-//            if (iconResource != null) {
-//                primaryStage.icons.add(Image(iconResource))
-//            }
-//        } catch (e: Exception) {
-//            println("无法加载应用图标: ${e.message}")
-//        }
-
         primaryStage.title = "Super Mod Merger"
         primaryStage.scene = scene
         primaryStage.width = 1000.0
         primaryStage.height = 700.0
         primaryStage.minWidth = 800.0
         primaryStage.minHeight = 600.0
-        primaryStage.setOnCloseRequest {
-            timeLabel.stop()
-            println("应用正常关闭")
-        }
         primaryStage.show()
     }
 
@@ -83,7 +68,8 @@ class ModMergerToolMaterialGUI : Application() {
             padding = Insets(16.0)
 
             children.addAll(
-                VBox(5.0).apply {
+                HBox(5.0).apply {
+                    alignment = Pos.BOTTOM_CENTER
                     children.addAll(
                         Label("ModMergerTool").apply {
                             styleClass.add("material-title")
@@ -352,7 +338,7 @@ class ModMergerToolMaterialGUI : Application() {
                     style = "-fx-text-fill: #757575;"
                 },
                 Region().apply { HBox.setHgrow(this, Priority.ALWAYS) },
-                TimeLabel("HH:mm:ss").apply {
+                TimeLabel("YYYY-MM-dd HH:mm:ss").apply {
                     style = "-fx-text-fill: #757575;"
                 }
             )

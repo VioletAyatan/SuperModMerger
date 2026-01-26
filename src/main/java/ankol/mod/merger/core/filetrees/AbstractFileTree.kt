@@ -25,11 +25,11 @@ abstract class AbstractFileTree(
      *
      * @return 最外层压缩包文件名
      */
-    fun getFirstArchiveFileName(): String? {
+    fun getFirstArchiveFileName(): String {
         return if (archiveFileNames.isNotEmpty()) {
             archiveFileNames[0]
         } else {
-            null
+            ""
         }
     }
 }
