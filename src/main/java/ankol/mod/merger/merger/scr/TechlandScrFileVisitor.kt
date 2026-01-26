@@ -204,7 +204,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         // 处理预处理指令调用，例如: !define MAX_SPEED 10
         val directiveName = ctx.Id().text
         val valueList = ctx.valueList()
-        var signature: String = "$DIRECTIVE:$directiveName:"
+        var signature = "$DIRECTIVE:$directiveName:"
         if (valueList != null) {
             signature += ":" + valueList.getText()
         }

@@ -306,7 +306,7 @@ class FileMergerEngine(
                     val previousModName = previousSource.getFirstArchiveFileName()
 
                     // 执行合并 - 使用真实的MOD压缩包名字
-                    val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), baseMergedContent)
+                    val fileBase = MemoryFileTree(fileName, relPath, mutableListOf(previousModName), baseMergedContent)
 
                     context.fileName = relPath
                     context.mod1Name = previousModName

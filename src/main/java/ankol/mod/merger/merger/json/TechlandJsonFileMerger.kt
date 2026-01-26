@@ -80,7 +80,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             } else if (conflicts.isNotEmpty()) {
                 resolveConflict(conflicts)
             }
-            return MergeResult(getMergedContent(baseResult), conflicts.isNotEmpty())
+            return MergeResult(getMergedContent(baseResult))
         } catch (e: Exception) {
             log.error("Error during JSON file merge: ${file1.fileName} Reason: ${e.message}", e)
             throw BusinessException("文件${file1.fileName}合并失败")
