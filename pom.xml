@@ -13,6 +13,7 @@
         <maven.compiler.target>25</maven.compiler.target>
         <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <native.executable.name>SuperModMerger</native.executable.name>
         <mainClass>ankol.mod.merger.AppMain</mainClass>
         <antlr4.version>4.13.2</antlr4.version>
         <lombok.version>1.18.42</lombok.version>
@@ -174,16 +175,12 @@
                 <artifactId>native-maven-plugin</artifactId>
                 <version>0.10.6</version>
                 <configuration>
-                    <imageName>${project.build.finalName}</imageName>
+                    <imageName>${native.executable.name}</imageName>
                     <verbose>true</verbose>
                     <mainClass>${mainClass}</mainClass>
                     <metadataRepository>
                         <enabled>true</enabled>
                     </metadataRepository>
-                    <!-- https://www.graalvm.org/latest/reference-manual/native-image/overview/Options/ -->
-                    <buildArgs>
-
-                    </buildArgs>
                 </configuration>
             </plugin>
             <!-- Antlr4生成器-->
@@ -381,7 +378,7 @@
                                 <configuration>
                                     <executable>${project.basedir}/builds/rcedit-x64.exe</executable>
                                     <arguments>
-                                        <argument>${project.build.directory}/${project.build.finalName}.exe</argument>
+                                        <argument>${project.build.directory}/${native.executable.name}.exe</argument>
                                         <argument>--set-icon</argument>
                                         <argument>${project.basedir}/builds/icon.ico</argument>
                                         <argument>--set-file-version</argument>
