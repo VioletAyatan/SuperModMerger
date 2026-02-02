@@ -56,8 +56,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 originalBaseModRoot = parsedResult.astNode
             }
             // 解析base和mod文件，保留TokenStream
-            val baseResult = parseFile(file1)
-            val modResult = parseFile(file2)
+            val baseResult = parseContent(file1.getContent())
+            val modResult = parseContent(file2.getContent())
             val baseRoot: ScrContainerScriptNode = baseResult.astNode!!
             val modRoot: ScrContainerScriptNode = modResult.astNode!!
 
@@ -91,6 +91,20 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             insertOperations.clear()
             originalBaseModRoot = null
         }
+    }
+
+    override fun merge(fileTrees: List<AbstractFileTree>): MergeResult {
+        val parsedResults = fileTrees.map { parseContent(it.getContent()) }
+        //开始进行深度对比
+        reduceCompare(parsedResults)
+        //解决冲突
+        ConflictResolver.resolveConflict(conflicts)
+        //返回处理后的文本
+        return MergeResult(getMergedContent(parsedResults.first()))
+    }
+
+    private fun reduceCompare(parsedResults: List<ParsedResult<ScrContainerScriptNode>>) {
+        TODO("Not yet implemented")
     }
 
     private fun reduceCompare(
@@ -374,10 +388,6 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
 
         // 所有节点都是import或sub，返回容器结束位置
         return lastSubOrImportStopIndex ?: container.stopTokenIndex
-    }
-
-    private fun parseFile(fileTree: AbstractFileTree): ParsedResult<ScrContainerScriptNode> {
-        return parseContent(fileTree.getContent())
     }
 
     private fun parseContent(content: String): ParsedResult<ScrContainerScriptNode> {

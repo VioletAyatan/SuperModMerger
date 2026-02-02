@@ -19,4 +19,8 @@ abstract class AbstractFileMerger(var context: MergerContext) {
      * @return 一个包含合并后内容和冲突信息的 [MergeResult] 对象。
      */
     abstract fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult
+
+    open fun merge(fileTrees: List<AbstractFileTree>): MergeResult {
+        return MergeResult("")
+    }
 }
