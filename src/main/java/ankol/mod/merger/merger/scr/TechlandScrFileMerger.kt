@@ -94,6 +94,12 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     }
 
     override fun merge(fileTrees: List<AbstractFileTree>): MergeResult {
+        if (fileTrees.isEmpty()) {
+            throw BusinessException("没有提供需要合并的文件")
+        }
+        if (fileTrees.size == 1) {
+            return MergeResult(fileTrees.first().getContent())
+        }
         val parsedResults = fileTrees.map { parseContent(it.getContent()) }
         //开始进行深度对比
         reduceCompare(parsedResults)
@@ -104,7 +110,11 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     }
 
     private fun reduceCompare(parsedResults: List<ParsedResult<ScrContainerScriptNode>>) {
-        TODO("Not yet implemented")
+        val originalContainerNode = parsedResults.first().astNode
+
+        for ((signature, treeNode) in originalContainerNode.childrens) {
+
+        }
     }
 
     private fun reduceCompare(
