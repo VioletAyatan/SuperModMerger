@@ -58,8 +58,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 解析base和mod文件，保留TokenStream
             val baseResult = parseContent(file1.getContent())
             val modResult = parseContent(file2.getContent())
-            val baseRoot: ScrContainerScriptNode = baseResult.astNode!!
-            val modRoot: ScrContainerScriptNode = modResult.astNode!!
+            val baseRoot: ScrContainerScriptNode = baseResult.astNode
+            val modRoot: ScrContainerScriptNode = modResult.astNode
 
             //开始递归对比
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
@@ -90,30 +90,6 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             conflicts.clear()
             insertOperations.clear()
             originalBaseModRoot = null
-        }
-    }
-
-    override fun merge(fileTrees: List<AbstractFileTree>): MergeResult {
-        if (fileTrees.isEmpty()) {
-            throw BusinessException("没有提供需要合并的文件")
-        }
-        if (fileTrees.size == 1) {
-            return MergeResult(fileTrees.first().getContent())
-        }
-        val parsedResults = fileTrees.map { parseContent(it.getContent()) }
-        //开始进行深度对比
-        reduceCompare(parsedResults)
-        //解决冲突
-        ConflictResolver.resolveConflict(conflicts)
-        //返回处理后的文本
-        return MergeResult(getMergedContent(parsedResults.first()))
-    }
-
-    private fun reduceCompare(parsedResults: List<ParsedResult<ScrContainerScriptNode>>) {
-        val originalContainerNode = parsedResults.first().astNode
-
-        for ((signature, treeNode) in originalContainerNode.childrens) {
-
         }
     }
 
@@ -211,51 +187,6 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 }
             } catch (e: Exception) {
                 log.error("Error in processing scr node with signature: '${signature}'", e)
-            }
-        }
-
-        // 检测被MOD删除的节点（base有，但mod没有）
-//        detectRemovedNodes(originalContainer, baseContainer, modContainer)
-    }
-
-    /**
-     * 检测被MOD删除/注释的节点
-     *
-     * 判断逻辑：
-     * - 如果节点在base中存在，但在mod中不存在
-     * - 且该节点在原版(original)中也存在，说明MOD故意删除了这个节点
-     * - 需要提示用户选择是保留(使用base)还是删除(使用mod的删除操作)
-     */
-    private fun detectRemovedNodes(
-        originalContainer: ScrContainerScriptNode?,
-        baseContainer: ScrContainerScriptNode,
-        modContainer: ScrContainerScriptNode
-    ) {
-        for ((signature, baseNode) in baseContainer.childrens) {
-            val modNode = modContainer.childrens[signature]
-
-            // base有，但mod没有 -> 可能是删除
-            if (modNode == null) {
-                // 检查原版是否有这个节点
-                val originalNode = originalContainer?.childrens?.get(signature)
-
-                if (originalNode != null) {
-                    // 原版有这个节点，MOD也应该有但却没有
-                    // 这说明MOD故意删除了这个节点，需要提示用户
-                    conflicts.add(
-                        ConflictRecord(
-                            context.fileName,
-                            context.mod1Name,
-                            context.mod2Name,
-                            signature,
-                            baseNode,
-                            null, // modNode为null表示删除
-                            conflictType = ConflictType.REMOVAL
-                        )
-                    )
-                }
-                // 如果原版也没有这个节点，说明是base MOD新增的，mod没有是正常的（过期MOD）
-                // 这种情况不需要特殊处理，base的内容会保留
             }
         }
     }
