@@ -3,9 +3,7 @@ package ankol.mod.merger
 import ankol.mod.merger.core.FileMergerEngine
 import ankol.mod.merger.core.GlobalMergingStrategy
 import ankol.mod.merger.exception.BusinessException
-import ankol.mod.merger.gui.ModMergerToolMaterialGUI
 import ankol.mod.merger.tools.*
-import javafx.application.Application
 import java.io.FileDescriptor
 import java.io.FileOutputStream
 import java.io.PrintStream
@@ -29,40 +27,6 @@ class AppMain {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            /*// 如果没有命令行参数，启动 GUI 版本
-            if (args.isEmpty()) {
-                launchGUI()
-                return
-            }
-
-            // 如果指定了 --gui 参数，启动 GUI 版本
-            if (args.contains("--gui")) {
-                launchGUI()
-                return
-            }*/
-
-            // 否则运行原来的命令行版本
-            launchCLI(args)
-        }
-
-        /**
-         * 启动 GUI 版本
-         */
-        private fun launchGUI() {
-            try {
-                log.info("启动 GUI 版本...")
-                Application.launch(ModMergerToolMaterialGUI::class.java)
-            } catch (e: Exception) {
-                log.error("启动 GUI 失败", e)
-                e.printStackTrace()
-                exitProcess(1)
-            }
-        }
-
-        /**
-         * 启动命令行版本
-         */
-        private fun launchCLI(args: Array<String>) {
             var exitCode = 0
             try {
                 initCharset() //初始化控制台字符集为UTF-8
