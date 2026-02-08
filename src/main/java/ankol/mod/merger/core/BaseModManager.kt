@@ -79,7 +79,7 @@ class BaseModManager(
 
             loaded = true
             val timetake = System.currentTimeMillis() - startTime
-            ColorPrinter.success(Localizations.t("BASE_MOD_INDEXED_FILES", indexedBaseModFileMap.size, baseModPath.fileName, timetake))
+            ColorPrinter.success(Localizations.t("BASE_MOD_INDEXED_FILES", baseModPath.fileName, indexedBaseModFileMap.size, timetake))
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
@@ -87,7 +87,7 @@ class BaseModManager(
 
     /**
      * 从基准MOD中提取指定文件的内容（带缓存优化）
-     * 
+     *
      * @param relPath 文件在基准MOD中的相对路径
      * @return 文件内容，如果文件不存在返回null
      */
@@ -119,7 +119,7 @@ class BaseModManager(
 
     /**
      * 判断MOD里的文件路径是否正确
-     * 
+     *
      * @param filePath mod文件路径
      */
     fun hasPathConflict(filePath: String): Boolean {
@@ -135,7 +135,7 @@ class BaseModManager(
 
     /**
      * 获取建议的修正路径
-     * 
+     *
      * @param filePath 待检查的文件相对路径
      * @return 如果存在同名文件，返回基准MOD中的正确路径；否则返回null
      */

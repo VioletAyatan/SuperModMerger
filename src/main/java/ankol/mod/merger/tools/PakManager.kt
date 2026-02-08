@@ -24,7 +24,7 @@ import kotlin.io.path.isRegularFile
 
 /**
  * .pak文件管理工具
- * 
+ *
  * @author Ankol
  */
 object PakManager {
@@ -33,12 +33,12 @@ object PakManager {
 
     /**
      * 从 .pak 文件中提取所有文件到临时目录（支持递归解压嵌套压缩包）
-     * 
+     *
      * 如果压缩包中包含 .pak、.zip、.7z 或 .rar 文件，会递归解压它们
      * 这样可以处理诸如 "zip里套pak" 这样的嵌套情况
-     * 
+     *
      * 返回的映射包含文件来源信息，可以追踪嵌套链
-     * 
+     *
      * @param pakPath pak文件路径
      * @param tempDir 临时解压目录
      * @return 文件映射表 (相对路径 -> FileSourceInfo)，包含来源链信息
@@ -66,20 +66,21 @@ object PakManager {
 
     /**
      * 递归解压ZIP格式压缩包
-     * 
-     * @param archivePath 压缩包路径
+     *
+     * @param pakPath 压缩包路径
      * @param outputDir   输出目录
      * @param fileTreeMap 文件树映射表
      * @param archiveNames 当前压缩包名称（用于构建来源链）
      */
     private fun extractZipRecursive(
-        archivePath: Path,
+        pakPath: Path,
         outputDir: Path,
         fileTreeMap: MutableMap<String, PathFileTree>,
         archiveNames: MutableList<String>
     ) {
+        val archiveNames = findVortexModName(pakPath, archiveNames)
         ZipFile.builder()
-            .setPath(archivePath)
+            .setPath(pakPath)
             .setCharset(StandardCharsets.UTF_8)
             .get()
             .use { zipFile ->
@@ -110,22 +111,38 @@ object PakManager {
     }
 
     /**
+     * 用于兼容Vortex的mod安装结构，父级目录名才是mod真正名字
+     */
+    private fun findVortexModName(
+        pakPath: Path,
+        archiveNames: MutableList<String>
+    ): MutableList<String> {
+        var archiveNames = archiveNames
+        if (pakPath.fileName.toString().startsWith("data", true) && pakPath.fileName.toString().endsWith(".pak")) {
+            val parentDirName = pakPath.parent.fileName.toString().substringBefore("-") //寻找父级目录名字
+            archiveNames = mutableListOf(parentDirName)
+        }
+        return archiveNames
+    }
+
+    /**
      * 递归解压 7Z 格式压缩包（支持嵌套）
      *
      * 当遇到 .pak、.zip、.7z 或 .rar 文件时，会递归解压，并记录来源链
-     * @param archivePath 压缩包路径
+     * @param pakPath 压缩包路径
      * @param outputDir   输出目录
      * @param fileTreeMap 文件映射表，包含来源信息
      * @param archiveNames 当前压缩包名称（用于构建来源链）
      */
     private fun extract7zRecursive(
-        archivePath: Path,
+        pakPath: Path,
         outputDir: Path,
         fileTreeMap: MutableMap<String, PathFileTree>,
         archiveNames: MutableList<String>
     ) {
+        val archiveNames = findVortexModName(pakPath, archiveNames)
         SevenZFile.builder()
-            .setPath(archivePath)
+            .setPath(pakPath)
             .setCharset(StandardCharsets.UTF_8)
             .get()
             .use { sevenZFile ->
@@ -224,7 +241,7 @@ object PakManager {
 
     /**
      * 判断文件是否是支持的压缩包格式
-     * 
+     *
      * @param fileName 文件名
      * @return 是否是压缩包文件
      */
@@ -236,7 +253,7 @@ object PakManager {
 
     /**
      * 将合并后的文件打包成 .pak 文件
-     * 
+     *
      * @param sourceDir 源目录（包含所有要打包的文件）
      * @param pakPath   输出 pak 文件路径
      */
@@ -269,7 +286,7 @@ object PakManager {
 
     /**
      * 判断两个文件在内容上是否相同
-     * 
+     *
      * @param file1 第一个文件
      * @param file2 第二个文件
      * @return 两个文件内容是否相同

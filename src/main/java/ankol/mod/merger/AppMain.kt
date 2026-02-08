@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
+import kotlin.io.path.Path
 import kotlin.io.path.notExists
 import kotlin.system.exitProcess
 
@@ -42,9 +43,9 @@ class AppMain {
                 // 扫描需要合并的MOD目录
                 val modsToMerge = Tools.scanFiles(Tools.getMergingModDir(), ".pak", ".zip", ".7z")
                 // 确定输出路径
-                var outputPath = Paths.get(Tools.userDir, "source", "data7.pak")
+                var outputPath = Path(Tools.userDir, "source", "data7.pak")
                 if (argParser.hasOption("o")) {
-                    outputPath = Paths.get(argParser.getOptionValue("o"))
+                    outputPath = Path(argParser.getOptionValue("o"))
                 }
                 // 定位基准MOD的位置
                 val baseModPath = locateBaseModPath(argParser)
