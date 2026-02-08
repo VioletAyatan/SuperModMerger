@@ -62,8 +62,8 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             }
             val baseResult = parseFile(file1)
             val modResult = parseFile(file2)
-            val baseRoot = baseResult.astNode!!
-            val modRoot = modResult.astNode!!
+            val baseRoot = baseResult.astNode
+            val modRoot = modResult.astNode
             //深度对比
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
             //冲突解决

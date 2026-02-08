@@ -56,10 +56,10 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 originalBaseModRoot = parsedResult.astNode
             }
             // 解析base和mod文件，保留TokenStream
-            val baseResult = parseFile(file1)
-            val modResult = parseFile(file2)
-            val baseRoot: ScrContainerScriptNode = baseResult.astNode!!
-            val modRoot: ScrContainerScriptNode = modResult.astNode!!
+            val baseResult = parseContent(file1.getContent())
+            val modResult = parseContent(file2.getContent())
+            val baseRoot: ScrContainerScriptNode = baseResult.astNode
+            val modRoot: ScrContainerScriptNode = modResult.astNode
 
             //开始递归对比
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
@@ -187,51 +187,6 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 }
             } catch (e: Exception) {
                 log.error("Error in processing scr node with signature: '${signature}'", e)
-            }
-        }
-
-        // 检测被MOD删除的节点（base有，但mod没有）
-//        detectRemovedNodes(originalContainer, baseContainer, modContainer)
-    }
-
-    /**
-     * 检测被MOD删除/注释的节点
-     *
-     * 判断逻辑：
-     * - 如果节点在base中存在，但在mod中不存在
-     * - 且该节点在原版(original)中也存在，说明MOD故意删除了这个节点
-     * - 需要提示用户选择是保留(使用base)还是删除(使用mod的删除操作)
-     */
-    private fun detectRemovedNodes(
-        originalContainer: ScrContainerScriptNode?,
-        baseContainer: ScrContainerScriptNode,
-        modContainer: ScrContainerScriptNode
-    ) {
-        for ((signature, baseNode) in baseContainer.childrens) {
-            val modNode = modContainer.childrens[signature]
-
-            // base有，但mod没有 -> 可能是删除
-            if (modNode == null) {
-                // 检查原版是否有这个节点
-                val originalNode = originalContainer?.childrens?.get(signature)
-
-                if (originalNode != null) {
-                    // 原版有这个节点，MOD也应该有但却没有
-                    // 这说明MOD故意删除了这个节点，需要提示用户
-                    conflicts.add(
-                        ConflictRecord(
-                            context.fileName,
-                            context.mod1Name,
-                            context.mod2Name,
-                            signature,
-                            baseNode,
-                            null, // modNode为null表示删除
-                            conflictType = ConflictType.REMOVAL
-                        )
-                    )
-                }
-                // 如果原版也没有这个节点，说明是base MOD新增的，mod没有是正常的（过期MOD）
-                // 这种情况不需要特殊处理，base的内容会保留
             }
         }
     }
@@ -374,10 +329,6 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
 
         // 所有节点都是import或sub，返回容器结束位置
         return lastSubOrImportStopIndex ?: container.stopTokenIndex
-    }
-
-    private fun parseFile(fileTree: AbstractFileTree): ParsedResult<ScrContainerScriptNode> {
-        return parseContent(fileTree.getContent())
     }
 
     private fun parseContent(content: String): ParsedResult<ScrContainerScriptNode> {
