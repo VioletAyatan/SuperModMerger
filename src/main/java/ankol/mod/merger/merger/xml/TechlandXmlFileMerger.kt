@@ -62,8 +62,8 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 解析base和mod文件
             val baseResult = parseFile(file1)
             val modResult = parseFile(file2)
-            val baseRoot = baseResult.astNode!!
-            val modRoot = modResult.astNode!!
+            val baseRoot = baseResult.astNode
+            val modRoot = modResult.astNode
 
             // 递归对比
             reduceCompare(originalBaseModRoot, baseRoot, modRoot)
