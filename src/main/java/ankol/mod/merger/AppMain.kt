@@ -88,7 +88,6 @@ class AppMain {
             argParser.addOption("o", "output", true, Localizations.t("APP_MAIN_OPTION_OUTPUT_DESC"))
             argParser.addOption("b", "base", true, Localizations.t("APP_MAIN_OPTION_BASE_DESC"))
             argParser.addOption("h", "help", false, Localizations.t("APP_MAIN_OPTION_HELP_DESC"))
-            argParser.addOption("f", "fix", false, Localizations.t("STRATEGYS_GLOBAL_FIX_ENABLE"))
             return argParser
         }
 

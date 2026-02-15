@@ -166,8 +166,8 @@ class FileMergerEngine(
      */
     private fun processFiles(filesByName: Map<String, MutableList<PathFileTree>>, mergedDir: Path) {
         ColorPrinter.cyan(Localizations.t("ENGINE_PROCESSING_FILES"))
-        val globalFixActived = argParser.hasOption("f")
-        if (globalFixActived) {
+        val globalFixActive = GlobalMergingStrategy.globalFixActive
+        if (globalFixActive) {
             ColorPrinter.debug(Localizations.t("ENGINE_GLOBAL_FIX_ENABLED"))
         }
         for ((relPath, fileSources) in filesByName) {
@@ -175,7 +175,7 @@ class FileMergerEngine(
             try {
                 //单个文件处理
                 if (fileSources.size == 1) {
-                    if (globalFixActived) {
+                    if (globalFixActive) {
                         processSingleFile(relPath, fileSources.first(), mergedDir) //做压力测试的时候把这个打开
                     } else {
                         Tools.zeroCopy(fileSources.first().safeGetFullPathName(), mergedDir.resolve(relPath))
