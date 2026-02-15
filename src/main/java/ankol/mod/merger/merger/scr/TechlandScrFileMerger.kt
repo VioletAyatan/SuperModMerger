@@ -120,9 +120,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                             //两者内容不同，检查mod节点内容与原版是否相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
                                 //检查base节点是否与原版相同
-                                if (isNodeSameAsOriginalNode(originalNode, baseNode)
-                                    && GlobalMergingStrategy.autoMergingCodeLine
-                                ) {
+                                if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
                                     //base节点与原版一致，说明base节点未变动，使用mod的内容（开启了智能合并的情况下）
                                     val record = ConflictRecord(
                                         context.fileName,
