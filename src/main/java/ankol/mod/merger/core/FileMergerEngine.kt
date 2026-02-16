@@ -98,7 +98,7 @@ class FileMergerEngine(
         extractedFiles: MutableMap<String, PathFileTree>
     ): MutableMap<String, PathFileTree> {
         //如果没有基准MOD或者合并策略指定了不修正路径
-        if (!baseModManager.loaded || !GlobalMergingStrategy.autoFixPath) {
+        if (!baseModManager.loaded) {
             return extractedFiles
         }
 
@@ -166,7 +166,7 @@ class FileMergerEngine(
      */
     private fun processFiles(filesByName: Map<String, MutableList<PathFileTree>>, mergedDir: Path) {
         ColorPrinter.cyan(Localizations.t("ENGINE_PROCESSING_FILES"))
-        val globalFixActive = GlobalMergingStrategy.globalFixActive
+        val globalFixActive = GlobalMergingStrategy.activeMode == GlobalMergingStrategy.GLOBAL_FIX_MODE
         if (globalFixActive) {
             ColorPrinter.debug(Localizations.t("ENGINE_GLOBAL_FIX_ENABLED"))
         }

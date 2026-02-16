@@ -15,13 +15,6 @@ import kotlin.io.path.Path
 import kotlin.io.path.notExists
 import kotlin.system.exitProcess
 
-/**
- * Techland模组合并工具 - 主应用入口类
- *
- * 支持两种启动模式：
- * 1. GUI 模式（推荐）：不传递任何参数，直接启动 GUI 应用
- * 2. 命令行模式：传递命令行参数运行
- */
 class AppMain {
     companion object {
         private val log = logger<AppMain>()
