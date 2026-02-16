@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
 import kotlin.io.path.isRegularFile
+import kotlin.io.path.name
 
 /**
  * .pak文件管理工具
@@ -28,7 +29,6 @@ import kotlin.io.path.isRegularFile
  * @author Ankol
  */
 object PakManager {
-    // 嵌套解压计数器，确保目录名唯一性
     private val NESTED_COUNTER = AtomicInteger(0)
 
     /**
@@ -43,17 +43,16 @@ object PakManager {
      * @param tempDir 临时解压目录
      * @return 文件映射表 (相对路径 -> FileSourceInfo)，包含来源链信息
      */
-    fun extractPak(pakPath: Path, tempDir: Path): MutableMap<String, PathFileTree> {
+    fun extractPak(archiveName: String, pakPath: Path, tempDir: Path): MutableMap<String, PathFileTree> {
         tempDir.createDirectories()
-        val archiveName = pakPath.fileName.toString()
         val fileTreeMap = hashMapOf<String, PathFileTree>()
         val archiveNames = mutableListOf(archiveName)
         when {
-            archiveName.endsWith(".7z") -> {
+            pakPath.name.endsWith(".7z") -> {
                 extract7zRecursive(pakPath, tempDir, fileTreeMap, archiveNames)
             }
 
-            Strings.CI.endsWithAny(archiveName, ".zip", ".pak") -> {
+            Strings.CI.endsWithAny(pakPath.name, ".zip", ".pak") -> {
                 extractZipRecursive(pakPath, tempDir, fileTreeMap, archiveNames)
             }
 
@@ -78,7 +77,6 @@ object PakManager {
         fileTreeMap: MutableMap<String, PathFileTree>,
         archiveNames: MutableList<String>
     ) {
-        val archiveNames = findVortexModName(pakPath, archiveNames)
         ZipFile.builder()
             .setPath(pakPath)
             .setCharset(StandardCharsets.UTF_8)
@@ -111,21 +109,6 @@ object PakManager {
     }
 
     /**
-     * 用于兼容Vortex的mod安装结构，父级目录名才是mod真正名字
-     */
-    private fun findVortexModName(
-        pakPath: Path,
-        archiveNames: MutableList<String>
-    ): MutableList<String> {
-        var archiveNames = archiveNames
-        if (pakPath.fileName.toString().startsWith("data", true) && pakPath.fileName.toString().endsWith(".pak")) {
-            val parentDirName = pakPath.parent.fileName.toString().substringBefore("-") //寻找父级目录名字
-            archiveNames = mutableListOf(parentDirName)
-        }
-        return archiveNames
-    }
-
-    /**
      * 递归解压 7Z 格式压缩包（支持嵌套）
      *
      * 当遇到 .pak、.zip、.7z 或 .rar 文件时，会递归解压，并记录来源链
@@ -140,7 +123,6 @@ object PakManager {
         fileTreeMap: MutableMap<String, PathFileTree>,
         archiveNames: MutableList<String>
     ) {
-        val archiveNames = findVortexModName(pakPath, archiveNames)
         SevenZFile.builder()
             .setPath(pakPath)
             .setCharset(StandardCharsets.UTF_8)

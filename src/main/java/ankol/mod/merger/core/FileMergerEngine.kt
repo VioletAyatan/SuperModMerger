@@ -59,9 +59,6 @@ class FileMergerEngine(
             return
         }
         ColorPrinter.cyan(Localizations.t("ENGINE_FOUND_MODS_TO_MERGE", modsToMerge.size))
-//        for ((i, modPath) in modsToMerge.withIndex()) {
-//            ColorPrinter.cyan(Localizations.t("ENGINE_MOD_LIST_ITEM", (i + 1), modPath.fileName))
-//        }
         //开始合并
         try {
             Tools.deleteRecursively(tempDir) //先清理掉旧的目录
@@ -147,7 +144,7 @@ class FileMergerEngine(
                 val archiveName = modPath.modName // 解压的压缩包真实名称
                 val modTempDir: Path = tempDir.resolve("${archiveName}${index.getAndIncrement()}") // 生成临时目录名字
 
-                val extractedFiles = PakManager.extractPak(modPath.modPath, modTempDir)
+                val extractedFiles = PakManager.extractPak(archiveName, modPath.modPath, modTempDir)
                 val correctedFiles = correctPathsForMod(archiveName, extractedFiles)
                 // 按文件路径分组，并记录来源MOD名字
                 for ((fileRelPath, fileSource) in correctedFiles) {
