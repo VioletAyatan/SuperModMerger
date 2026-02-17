@@ -2,7 +2,7 @@ package ankol.mod.merger
 
 import ankol.mod.merger.core.FileMergerEngine
 import ankol.mod.merger.core.GlobalMergingStrategy
-import ankol.mod.merger.domain.ModPath
+import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.tools.*
 import org.apache.commons.lang3.Strings
@@ -61,7 +61,7 @@ fun main(args: Array<String>) {
     }
 }
 
-private fun locateMergingMod(): List<ModPath> {
+private fun locateMergingMod(): List<MergingModInfo> {
     var vortexDeploy = false
     val mergingModDir = Tools.getMergingModDir()
     //先找下当前目录有没有Vortex的部署文件，如果有说明是用vortex进行的部署
@@ -70,15 +70,15 @@ private fun locateMergingMod(): List<ModPath> {
             vortexDeploy = true
         }
     }
-    val mergingMods = mutableListOf<ModPath>()
+    val mergingMods = mutableListOf<MergingModInfo>()
     mergingModDir.walk(PathWalkOption.FOLLOW_LINKS)
         .forEach { path: Path ->
             if (path.isRegularFile() && Strings.CI.equalsAny(path.extension, "pak", "zip", "7z")) {
                 if (vortexDeploy) {
                     val modName = path.parent.name
-                    mergingMods.add(ModPath(modName, path))
+                    mergingMods.add(MergingModInfo(modName, path))
                 } else {
-                    mergingMods.add(ModPath(path.name, path))
+                    mergingMods.add(MergingModInfo(path.name, path))
                 }
             }
         }
