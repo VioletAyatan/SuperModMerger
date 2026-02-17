@@ -2,7 +2,7 @@ package ankol.mod.merger.core
 
 import ankol.mod.merger.core.filetrees.MemoryFileTree
 import ankol.mod.merger.core.filetrees.PathFileTree
-import ankol.mod.merger.domain.ModPath
+import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.merger.MergerFactory
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Tools.getEntryFileName
@@ -27,7 +27,7 @@ import kotlin.io.path.writeText
  * @author Ankol
  */
 class FileMergerEngine(
-    private val modsToMerge: List<ModPath>,
+    private val modsToMerge: List<MergingModInfo>,
     private val outputPath: Path,
     private val baseModPath: Path
 ) {
@@ -139,12 +139,12 @@ class FileMergerEngine(
     private fun extractAllMods(): MutableMap<String, MutableList<PathFileTree>> {
         val filesByPath = ConcurrentHashMap<String, MutableList<PathFileTree>>()
         val index = AtomicInteger(0)
-        modsToMerge.parallelStream().forEach { modPath: ModPath ->
+        modsToMerge.parallelStream().forEach { mod: MergingModInfo ->
             try {
-                val archiveName = modPath.modName // 解压的压缩包真实名称
+                val archiveName = mod.modName // 解压的压缩包真实名称
                 val modTempDir: Path = tempDir.resolve("${archiveName}${index.getAndIncrement()}") // 生成临时目录名字
 
-                val extractedFiles = PakManager.extractPak(archiveName, modPath.modPath, modTempDir)
+                val extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir)
                 val correctedFiles = correctPathsForMod(archiveName, extractedFiles)
                 // 按文件路径分组，并记录来源MOD名字
                 for ((fileRelPath, fileSource) in correctedFiles) {
@@ -152,7 +152,7 @@ class FileMergerEngine(
                         .add(fileSource)
                 }
             } catch (e: IOException) {
-                throw CompletionException(Localizations.t("ENGINE_EXTRACT_FAILED", modPath.modName), e)
+                throw CompletionException(Localizations.t("ENGINE_EXTRACT_FAILED", mod.modName), e)
             }
         }
         return filesByPath
