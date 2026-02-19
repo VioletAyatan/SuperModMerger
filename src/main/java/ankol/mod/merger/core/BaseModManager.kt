@@ -100,7 +100,7 @@ class BaseModManager(
         val fileName = getEntryFileName(relPath).lowercase(Locale.getDefault())
         val pathFileTree = indexedBaseModFileMap[fileName] ?: return null
 
-        val fullPathName = pathFileTree.fullPathName
+        val fullPathName = pathFileTree.filePath
         if (fullPathName != null) {
             return Files.readString(fullPathName, Charsets.UTF_8)
         }
@@ -108,7 +108,7 @@ class BaseModManager(
         //没有初始化内容，从压缩包里提取出来
         val fileEntryName = pathFileTree.fileEntryName
         val (filePath, fileHash) = extractFileFromPak(fileEntryName) //todo 这里可以考虑改为读取的内容就保存到内存里，不要每次都去硬盘读了
-        pathFileTree.fullPathName = filePath
+        pathFileTree.filePath = filePath
         pathFileTree.fileHash = fileHash
         //返回的hash值为空，说明文件大小为0
         if (fileHash.isEmpty()) {
