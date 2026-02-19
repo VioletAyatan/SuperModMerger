@@ -81,7 +81,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 ConflictResolver.resolveConflict(conflicts)
             }
 
-            return MergeResult(getMergedContent(baseResult))
+            return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
             log.error("Error during SCR file merge: ${file1.fileName} Reason: ${e.message}", e)
             throw BusinessException("文件${file1.fileName}合并失败")
@@ -123,7 +123,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                 if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
                                     //base节点与原版一致，说明base节点未变动，使用mod的内容（开启了智能合并的情况下）
                                     val record = ConflictRecord(
-                                        context.fileName,
+                                        context.mergingFileName,
                                         context.mod1Name,
                                         context.mod2Name,
                                         signature,
@@ -136,7 +136,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     //真正的冲突，记录
                                     conflicts.add(
                                         ConflictRecord(
-                                            context.fileName,
+                                            context.mergingFileName,
                                             context.mod1Name,
                                             context.mod2Name,
                                             signature,
@@ -158,7 +158,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                 if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
                                     conflicts.add(
                                         ConflictRecord(
-                                            context.fileName,
+                                            context.mergingFileName,
                                             context.mod1Name,
                                             context.mod2Name,
                                             signature,
@@ -170,7 +170,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                 } else {
                                     conflicts.add(
                                         ConflictRecord(
-                                            context.fileName,
+                                            context.mergingFileName,
                                             context.mod1Name,
                                             context.mod2Name,
                                             signature,

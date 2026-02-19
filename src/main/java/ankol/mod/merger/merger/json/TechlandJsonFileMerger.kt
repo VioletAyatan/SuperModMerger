@@ -80,7 +80,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             } else if (conflicts.isNotEmpty()) {
                 resolveConflict(conflicts)
             }
-            return MergeResult(getMergedContent(baseResult))
+            return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
             log.error("Error during JSON file merge: ${file1.fileName} Reason: ${e.message}", e)
             throw BusinessException("文件${file1.fileName}合并失败")
@@ -156,7 +156,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                                         // 发生冲突，记录完整的PairNode（包含key和value）
                                         conflicts.add(
                                             ConflictRecord(
-                                                context.fileName,
+                                                context.mergingFileName,
                                                 context.mod1Name,
                                                 context.mod2Name,
                                                 baseChild.signature,
@@ -200,7 +200,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                     // 这说明MOD故意删除了这个节点，需要提示用户
                     conflicts.add(
                         ConflictRecord(
-                            context.fileName,
+                            context.mergingFileName,
                             context.mod1Name,
                             context.mod2Name,
                             signature,
@@ -232,7 +232,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             if (!isNodeSameAsOriginalBaseMod(originalArray, modArray)) {
                 conflicts.add(
                     ConflictRecord(
-                        context.fileName,
+                        context.mergingFileName,
                         context.mod1Name,
                         context.mod2Name,
                         baseArray.signature,
@@ -266,7 +266,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
                 conflicts.add(
                     ConflictRecord(
-                        context.fileName,
+                        context.mergingFileName,
                         context.mod1Name,
                         context.mod2Name,
                         baseNode.signature,
@@ -337,6 +337,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                         // 在对象的左花括号后插入
                         rewriter.insertAfter(parentContainer.startTokenIndex, insertText)
                     }
+
                     is JsonArrayNode -> {
                         // 在数组的左方括号后插入
                         rewriter.insertAfter(parentContainer.startTokenIndex, insertText)
@@ -362,6 +363,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                 // 第一个子节点，添加换行和缩进
                 "\n    $nodeText"
             }
+
             else -> {
                 // 后续子节点，添加逗号、换行和缩进
                 ",\n    $nodeText"

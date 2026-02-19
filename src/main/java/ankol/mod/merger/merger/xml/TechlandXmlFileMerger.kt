@@ -77,7 +77,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                 ConflictResolver.resolveConflict(conflicts)
             }
 
-            return MergeResult(getMergedContent(baseResult))
+            return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
             log.error("Error during XML file merge: ${file1.fileName} Reason: ${e.message}", e)
             throw BusinessException("文件${file1.fileName}合并失败")
@@ -130,7 +130,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                             if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
                                 conflicts.add(
                                     ConflictRecord(
-                                        context.fileName,
+                                        context.mergingFileName,
                                         context.mod1Name,
                                         context.mod2Name,
                                         signature,
@@ -145,7 +145,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                         if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
                             conflicts.add(
                                 ConflictRecord(
-                                    context.fileName,
+                                    context.mergingFileName,
                                     context.mod1Name,
                                     context.mod2Name,
                                     signature,
@@ -186,7 +186,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                     // 这说明MOD故意删除了这个节点，需要提示用户
                     conflicts.add(
                         ConflictRecord(
-                            context.fileName,
+                            context.mergingFileName,
                             context.mod1Name,
                             context.mod2Name,
                             signature,
