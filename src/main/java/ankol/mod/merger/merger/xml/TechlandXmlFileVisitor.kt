@@ -24,7 +24,7 @@ class TechlandXmlFileVisitor(val tokenStream: CommonTokenStream) : TechlandXMLPa
         /**
          * 优先级属性名称列表 - 用于识别元素的主要标识符
          */
-        private val PRIORITY_ATTRIBUTE_NAMES = arrayOf<String?>(
+        private val PRIORITY_ATTRIBUTE_NAMES = arrayOf<String>(
             "id", "uid", "name", "key", "Name", "type", "property_id", "class"
         )
     }

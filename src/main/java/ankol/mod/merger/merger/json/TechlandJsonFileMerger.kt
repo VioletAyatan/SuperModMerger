@@ -11,7 +11,6 @@ import ankol.mod.merger.core.ParsedResult
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.ConflictType
 import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.json.node.JsonArrayNode
 import ankol.mod.merger.merger.json.node.JsonContainerNode
@@ -62,25 +61,20 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             }
             val baseResult = parseFile(file1)
             val modResult = parseFile(file2)
-            val baseRoot = baseResult.astNode!!
-            val modRoot = modResult.astNode!!
-            //深度对比
-            reduceCompare(originalBaseModRoot, baseRoot, modRoot)
+            val baseRoot = baseResult.astNode
+            val modRoot = modResult.astNode
+
+            deepCompare(originalBaseModRoot, baseRoot, modRoot)
             //冲突解决
             if (context.isFirstModMergeWithBaseMod && conflicts.isNotEmpty()) {
                 for (record in conflicts) {
-                    if (record.conflictType == ConflictType.REMOVAL) {
-                        // 删除类型冲突：MOD缺少原版节点，应该保留原版（补回缺失的代码）
-                        record.userChoice = UserChoice.BASE_MOD
-                    } else {
-                        // 普通修改冲突：使用MOD修改的版本
-                        record.userChoice = UserChoice.MERGE_MOD
-                    }
+                    // 普通修改冲突：使用MOD修改的版本
+                    record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (conflicts.isNotEmpty()) {
-                resolveConflict(conflicts)
+                resolveConflict(conflicts, context)
             }
-            return MergeResult(getMergedContent(baseResult), conflicts.isNotEmpty())
+            return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
             log.error("Error during JSON file merge: ${file1.fileName} Reason: ${e.message}", e)
             throw BusinessException("文件${file1.fileName}合并失败")
@@ -92,7 +86,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
         }
     }
 
-    private fun reduceCompare(
+    private fun deepCompare(
         originalNode: BaseTreeNode?,
         baseNode: BaseTreeNode,
         modNode: BaseTreeNode
@@ -141,11 +135,11 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                         when (baseValue) {
                             // 对象节点对比
                             is JsonContainerNode if modValue is JsonContainerNode -> {
-                                reduceCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
+                                deepCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
                             }
                             // 数组节点对比
                             is JsonArrayNode if modValue is JsonArrayNode -> {
-                                reduceCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
+                                deepCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
                             }
                             // 叶子节点，直接比较文本
                             else -> {
@@ -156,9 +150,9 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                                         // 发生冲突，记录完整的PairNode（包含key和value）
                                         conflicts.add(
                                             ConflictRecord(
-                                                context.fileName,
-                                                context.mod1Name,
-                                                context.mod2Name,
+                                                context.mergingFileName,
+                                                context.baseModName,
+                                                context.mergeModName,
                                                 baseChild.signature,
                                                 baseChild,  // 完整的PairNode
                                                 modChild    // 完整的PairNode
@@ -170,48 +164,8 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                         }
                     }
                 } else {
-                    reduceCompare(originalChild, baseChild, modChild)
+                    deepCompare(originalChild, baseChild, modChild)
                 }
-            }
-        }
-
-        // 检测被MOD删除的节点（base有，但mod没有）
-        detectRemovedNodes(originalContainer, baseContainer, modContainer)
-    }
-
-    /**
-     * 检测被MOD删除/注释的节点
-     */
-    private fun detectRemovedNodes(
-        originalContainer: JsonContainerNode?,
-        baseContainer: JsonContainerNode,
-        modContainer: JsonContainerNode
-    ) {
-        for ((signature, baseChild) in baseContainer.childrens) {
-            val modChild = modContainer.childrens[signature]
-
-            // base有，但mod没有 -> 可能是删除
-            if (modChild == null) {
-                // 检查原版是否有这个节点
-                val originalChild = originalContainer?.childrens?.get(signature)
-
-                if (originalChild != null) {
-                    // 原版有这个节点，MOD也应该有但却没有
-                    // 这说明MOD故意删除了这个节点，需要提示用户
-                    conflicts.add(
-                        ConflictRecord(
-                            context.fileName,
-                            context.mod1Name,
-                            context.mod2Name,
-                            signature,
-                            baseChild,
-                            null, // modNode为null表示删除
-                            conflictType = ConflictType.REMOVAL
-                        )
-                    )
-                }
-                // 如果原版也没有这个节点，说明是base MOD新增的，mod没有是正常的
-                // 这种情况不需要特殊处理，base的内容会保留
             }
         }
     }
@@ -232,9 +186,9 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             if (!isNodeSameAsOriginalBaseMod(originalArray, modArray)) {
                 conflicts.add(
                     ConflictRecord(
-                        context.fileName,
-                        context.mod1Name,
-                        context.mod2Name,
+                        context.mergingFileName,
+                        context.baseModName,
+                        context.mergeModName,
                         baseArray.signature,
                         baseArray,
                         modArray
@@ -245,7 +199,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             // 逐个比较数组元素
             for (i in baseElements.indices) {
                 val originalElement = originalArray?.getElements()?.getOrNull(i)
-                reduceCompare(originalElement, baseElements[i], modElements[i])
+                deepCompare(originalElement, baseElements[i], modElements[i])
             }
         }
     }
@@ -266,9 +220,9 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
                 conflicts.add(
                     ConflictRecord(
-                        context.fileName,
-                        context.mod1Name,
-                        context.mod2Name,
+                        context.mergingFileName,
+                        context.baseModName,
+                        context.mergeModName,
                         baseNode.signature,
                         baseNode,
                         modNode
@@ -296,26 +250,11 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
 
         // 处理冲突节点
         for (conflictRecord in conflicts) {
-            if (conflictRecord.conflictType == ConflictType.REMOVAL) {
-                // 删除类型的冲突
-                if (conflictRecord.userChoice == UserChoice.MERGE_MOD) {
-                    // 用户选择使用MOD的版本（即删除该节点）
-                    val baseNode = conflictRecord.baseNode
-                    rewriter.delete(baseNode.startTokenIndex, baseNode.stopTokenIndex)
-                }
-                // 如果选择 BASE_MOD，则保留原内容，不做任何操作
-            } else if (conflictRecord.userChoice == UserChoice.MERGE_MOD) {
+            if (conflictRecord.userChoice == UserChoice.MERGE_MOD) {
                 // 普通修改冲突：用户选择了 Mod
                 val baseNode = conflictRecord.baseNode
                 val modNode = conflictRecord.modNode
-                if (modNode != null) {
-                    // 替换为mod节点的内容
-                    rewriter.replace(
-                        baseNode.startTokenIndex,
-                        baseNode.stopTokenIndex,
-                        modNode.sourceText
-                    )
-                }
+                rewriter.replace(baseNode.startTokenIndex, baseNode.stopTokenIndex, modNode.sourceText)
             }
         }
 
@@ -337,6 +276,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                         // 在对象的左花括号后插入
                         rewriter.insertAfter(parentContainer.startTokenIndex, insertText)
                     }
+
                     is JsonArrayNode -> {
                         // 在数组的左方括号后插入
                         rewriter.insertAfter(parentContainer.startTokenIndex, insertText)
@@ -362,6 +302,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                 // 第一个子节点，添加换行和缩进
                 "\n    $nodeText"
             }
+
             else -> {
                 // 后续子节点，添加逗号、换行和缩进
                 ",\n    $nodeText"

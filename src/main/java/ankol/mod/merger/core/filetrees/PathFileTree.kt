@@ -16,17 +16,17 @@ class PathFileTree(
     /**
      * 解压出来后的文件路径
      */
-    var fullPathName: Path? = null
+    var filePath: Path? = null
 ) : AbstractFileTree(fileName, fileEntryName, archiveFileName) {
 
     override fun getContent(): String {
-        return fullPathName?.let { Files.readString(it) } ?: throw IllegalArgumentException("Error, fullPathName is null")
+        return filePath?.let { Files.readString(it) } ?: throw IllegalArgumentException("Error, fullPathName is null")
     }
 
     /**
      * 安全获取FullPathName，为空的情况下会抛出异常
      */
-    fun safeGetFullPathName(): Path {
-        return fullPathName ?: throw IllegalArgumentException("Error, fullPathName is null")
+    fun safegetFilePath(): Path {
+        return filePath ?: throw IllegalArgumentException("Error, fullPathName is null")
     }
 }
