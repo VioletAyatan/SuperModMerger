@@ -76,7 +76,11 @@ private fun locateMergingMod(): List<MergingModInfo> {
             if (path.isRegularFile() && Strings.CI.equalsAny(path.extension, "pak", "zip", "7z")) {
                 if (vortexDeploy) {
                     val modName = path.parent.name
-                    mergingMods.add(MergingModInfo(modName, path))
+                    if (modName == "mods") {
+                        mergingMods.add(MergingModInfo(path.name, path))
+                    } else {
+                        mergingMods.add(MergingModInfo(modName, path))
+                    }
                 } else {
                     mergingMods.add(MergingModInfo(path.name, path))
                 }
