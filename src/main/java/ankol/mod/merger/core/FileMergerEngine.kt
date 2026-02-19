@@ -218,7 +218,6 @@ class FileMergerEngine(
                             this.baseModName = "data0.pak"
                             this.mergeModName = fileCurrent.getFirstArchiveFileName()
                             this.isFirstModMergeWithBaseMod = true // 标记为与data0.pak的合并
-                            this.mergedHistory = mutableMapOf()
                         }
 
 
@@ -271,7 +270,6 @@ class FileMergerEngine(
 
         try {
             var baseMergedContent = "" //基准文本内容
-            var mergedHistory = mutableMapOf<String, String>() //用于存储合并过程中的节点合并记录，方便处理冲突时正确显示冲突来源mod
             // 支持合并，开始处理合并逻辑
             ColorPrinter.cyan(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size))
             val merger = mergerOptional.get()
@@ -297,7 +295,6 @@ class FileMergerEngine(
                             this.baseModName = "data0.pak"
                             this.mergeModName = currentModName
                             this.isFirstModMergeWithBaseMod = true // 标记为第一个mod与data0.pak的合并
-                            this.mergedHistory = mergedHistory
                         }
                         val result = merger.merge(fileBase, fileCurrent)
                         baseMergedContent = result.mergedContent
@@ -318,12 +315,10 @@ class FileMergerEngine(
                         this.baseModName = previousModName
                         this.mergeModName = currentModName
                         this.isFirstModMergeWithBaseMod = false // 后续合并正常处理冲突
-                        this.mergedHistory = mergedHistory
                     }
 
                     val result = merger.merge(fileBase, fileCurrent)
                     baseMergedContent = result.mergedContent
-                    mergedHistory = result.mergedHistory
                 }
             }
 

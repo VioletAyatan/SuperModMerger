@@ -7,7 +7,6 @@ import ankol.mod.merger.core.*
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.ConflictType
 import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode
@@ -66,18 +65,11 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             //第一个mod与原版文件的对比
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
                 for (record in conflicts) {
-                    if (record.conflictType == ConflictType.REMOVAL) {
-                        // 删除类型冲突：MOD缺少原版节点，应该保留原版（补回缺失的代码）
-                        // 因为这很可能是MOD过期导致的缺失，而非故意删除
-                        record.userChoice = UserChoice.BASE_MOD
-                    } else {
-                        // 普通修改冲突：使用MOD修改的版本
-                        record.userChoice = UserChoice.MERGE_MOD
-                    }
+                    record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
-                ConflictResolver.resolveConflict(conflicts)
+                ConflictResolver.resolveConflict(conflicts, context)
             }
 
             return MergeResult(getMergedContent(baseResult), context.mergedHistory)
@@ -115,12 +107,12 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                         // 容器节点，递归进入内部对比
                         deepCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
                     }
-                    //对比Funcall节点
+                    //function call节点的对比逻辑
                     else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
                         if (baseNode.arguments != modNode.arguments) {
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
                                 if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
-                                    context.mergedHistory[modNode.signature] = context.mergeModName
+                                    context.mergedHistory.markSignture(modNode.signature, context.mergeModName)
                                     //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
                                         context.mergingFileName,
@@ -154,6 +146,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                         if (!equalsTrimmed(baseText, modText)) {
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
                                 if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
+                                    context.mergedHistory.markSignture(modNode.signature, context.mergeModName)
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
@@ -191,25 +184,11 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         val rewriter = TokenStreamRewriter(baseResult.tokenStream)
         // 处理冲突节点的替换
         for (record in conflicts) {
-            if (record.conflictType == ConflictType.REMOVAL) {
-                // 删除类型的冲突
-                if (record.userChoice == UserChoice.MERGE_MOD) {
-                    // 用户选择使用MOD的版本（即删除该节点）
-                    val baseNode = record.baseNode
-                    rewriter.delete(baseNode.startTokenIndex, baseNode.stopTokenIndex)
-                }
-                // 如果选择 BASE_MOD，则保留原内容，不做任何操作
-            } else if (record.userChoice == UserChoice.MERGE_MOD) {
+            if (record.userChoice == UserChoice.MERGE_MOD) {
                 // 普通修改冲突：用户选择了 Mod
                 val baseNode = record.baseNode
                 val modNode = record.modNode
-                if (modNode != null) {
-                    rewriter.replace(
-                        baseNode.startTokenIndex,
-                        baseNode.stopTokenIndex,
-                        modNode.sourceText
-                    )
-                }
+                rewriter.replace(baseNode.startTokenIndex, baseNode.stopTokenIndex, modNode.sourceText)
             }
         }
 
