@@ -3,7 +3,6 @@ package ankol.mod.merger.core
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.constants.UserChoice.Companion.findByOrder
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.ConflictType
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations
 
@@ -18,7 +17,7 @@ object ConflictResolver {
      *
      * @param conflicts 冲突项目
      */
-    fun resolveConflict(conflicts: MutableList<ConflictRecord>) {
+    fun resolveConflict(conflicts: MutableList<ConflictRecord>, context: MergerContext) {
         //筛选出智能合并的节点
         val automaticMerge = handleAutoMergingCode(conflicts)
         //对于真正的冲突项，提示用户选择使用哪一个版本解决
@@ -35,46 +34,23 @@ object ConflictResolver {
                 } else if (userChose == UserChoice.USE_ALL_MERGE) {
                     record.userChoice = UserChoice.MERGE_MOD //4表示用户全部选择mergeMod的配置来处理
                 } else {
+                    //获取冲突节点的文本
                     val baseNodeSource = record.baseNode.sourceText.trim()
-                    // 根据冲突类型显示不同的提示
-                    if (record.conflictType == ConflictType.REMOVAL) {
-                        // 删除类型冲突的特殊显示
-                        ColorPrinter.blue("=".repeat(75))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
-                        ColorPrinter.warning(Localizations.t("CRESOLVER_REMOVAL_DETECTED"))
-                        ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_1", record.baseModName))
-                        ColorPrinter.bold(
-                            Localizations.t("CRESOLVER_LINE_INFO", record.baseNode.lineNumber, baseNodeSource)
-                        )
-                        ColorPrinter.warning(Localizations.t("CRESOLVER_REMOVAL_MOD_VERSION_2", record.mergeModName))
-                        ColorPrinter.blue("=".repeat(75))
-                        // 删除类型的选择对话框
-                        ColorPrinter.bold(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_REMOVAL_OPTION_1", baseNodeSource))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_REMOVAL_OPTION_2"))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_1", record.baseModName))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_2", record.mergeModName))
-                    } else {
-                        // 普通修改冲突的显示
-                        val modNodeSource = record.modNode?.sourceText?.trim() ?: ""
-                        ColorPrinter.blue("=".repeat(75))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
-                        ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_1", record.baseModName))
-                        ColorPrinter.bold(
-                            Localizations.t("CRESOLVER_LINE_INFO", record.baseNode.lineNumber, baseNodeSource)
-                        )
-                        ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_2", record.mergeModName))
-                        ColorPrinter.bold(
-                            Localizations.t("CRESOLVER_LINE_INFO", record.modNode?.lineNumber ?: 0, modNodeSource)
-                        )
-                        ColorPrinter.blue("=".repeat(75))
-                        //选择对话框
-                        ColorPrinter.bold(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_OPTION_1", baseNodeSource))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_OPTION_2", modNodeSource))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_1", record.baseModName))
-                        ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_2", record.mergeModName))
-                    }
+                    val modNodeSource = record.modNode.sourceText.trim()
+
+                    ColorPrinter.blue("=".repeat(75))
+                    ColorPrinter.cyan(Localizations.t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
+                    ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_1", record.baseModName))
+                    ColorPrinter.bold(Localizations.t("CRESOLVER_LINE_INFO", record.baseNode.lineNumber, baseNodeSource))
+                    ColorPrinter.warning(Localizations.t("CRESOLVER_MOD_VERSION_2", record.mergeModName))
+                    ColorPrinter.bold(Localizations.t("CRESOLVER_LINE_INFO", record.modNode.lineNumber, modNodeSource))
+                    ColorPrinter.blue("=".repeat(75))
+                    //选择对话框
+                    ColorPrinter.bold(Localizations.t("CRESOLVER_CHOOSE_PROMPT"))
+                    ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_OPTION_1", baseNodeSource))
+                    ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_OPTION_2", modNodeSource))
+                    ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_1", record.baseModName))
+                    ColorPrinter.cyan(Localizations.t("CRESOLVER_USE_ALL_FROM_MOD_2", record.mergeModName))
 
                     while (true) {
                         val input = readln()
@@ -103,7 +79,7 @@ object ConflictResolver {
         val automaticMerge = conflicts.filter { it.userChoice != null }
         if (!automaticMerge.isEmpty()) {
             for (item in automaticMerge) {
-                val modNodeText = item.modNode?.sourceText
+                val modNodeText = item.modNode.sourceText
                 ColorPrinter.print(
                     Localizations.t(
                         "CRESOLVER_AUTO_MERGE_CODELINE",
