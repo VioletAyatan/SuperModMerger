@@ -4,7 +4,7 @@ import ankol.mod.merger.antlr.xml.TechlandXMLLexer
 import ankol.mod.merger.antlr.xml.TechlandXMLParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.AbstractFileMerger
-import ankol.mod.merger.core.ConflictResolver.resolveConflict
+import ankol.mod.merger.core.ConflictResolver
 import ankol.mod.merger.core.MergerContext
 import ankol.mod.merger.core.ParsedResult
 import ankol.mod.merger.core.filetrees.AbstractFileTree
@@ -22,7 +22,7 @@ import org.antlr.v4.runtime.TokenStreamRewriter
 
 /**
  * XML文件合并器
- * 
+ *
  * @author Ankol
  */
 class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context) {
@@ -71,17 +71,10 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 第一个mod与原版文件的对比
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
                 for (record in conflicts) {
-                    if (record.conflictType == ConflictType.REMOVAL) {
-                        // 删除类型冲突：MOD缺少原版节点，应该保留原版（补回缺失的代码）
-                        record.userChoice = UserChoice.BASE_MOD
-                    } else {
-                        // 普通修改冲突：使用MOD修改的版本
-                        record.userChoice = UserChoice.MERGE_MOD
-                    }
+                    record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (!conflicts.isEmpty()) {
-                // 正常情况下，提示用户解决冲突
-                resolveConflict(conflicts)
+                ConflictResolver.resolveConflict(conflicts)
             }
 
             return MergeResult(getMergedContent(baseResult))

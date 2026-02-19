@@ -23,7 +23,7 @@ object Tools {
     /**
      * 获取待合并的MOD所在目录
      * 这个工具默认配置的是在mods目录下
-     * 
+     *
      * @param meringModDir mod合并目录地址，可用于修改默认合并目录
      * @return 待合并的MOD目录路径
      */
@@ -46,7 +46,7 @@ object Tools {
 
     /**
      * 扫描指定目录中的所有文件，按扩展名过滤
-     * 
+     *
      * @param mergedDirPath        目录路径
      * @param extensions 要查找的扩展名（如 ".pak", ".zip"）
      * @return 匹配的文件列表
@@ -100,7 +100,7 @@ object Tools {
                                 "TOOLS_SAME_FILE_NAME_WARNING",
                                 fileName,
                                 entryName,
-                                pakIndexMap[fileName]?.fullPathName
+                                pakIndexMap[fileName]?.filePath
                             )
                         )
                     }

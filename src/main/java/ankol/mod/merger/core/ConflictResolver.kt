@@ -9,13 +9,13 @@ import ankol.mod.merger.tools.Localizations
 
 /**
  * 冲突解决器
- * 
+ *
  * @author Ankol
  */
 object ConflictResolver {
     /**
      * 交互式解决冲突
-     * 
+     *
      * @param conflicts 冲突项目
      */
     fun resolveConflict(conflicts: MutableList<ConflictRecord>) {
@@ -36,7 +36,6 @@ object ConflictResolver {
                     record.userChoice = UserChoice.MERGE_MOD //4表示用户全部选择mergeMod的配置来处理
                 } else {
                     val baseNodeSource = record.baseNode.sourceText.trim()
-
                     // 根据冲突类型显示不同的提示
                     if (record.conflictType == ConflictType.REMOVAL) {
                         // 删除类型冲突的特殊显示
@@ -104,7 +103,7 @@ object ConflictResolver {
         val automaticMerge = conflicts.filter { it.userChoice != null }
         if (!automaticMerge.isEmpty()) {
             for (item in automaticMerge) {
-                val modNodeText = item.modNode?.sourceText ?: "[REMOVED]"
+                val modNodeText = item.modNode?.sourceText
                 ColorPrinter.print(
                     Localizations.t(
                         "CRESOLVER_AUTO_MERGE_CODELINE",

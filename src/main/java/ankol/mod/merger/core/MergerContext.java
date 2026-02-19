@@ -2,12 +2,14 @@ package ankol.mod.merger.core;
 
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 public class MergerContext {
     /**
      * 当前正在合并的文件名
      */
-    private String fileName;
+    private String mergingFileName;
     /**
      * 基准MOD名称
      */
@@ -20,6 +22,10 @@ public class MergerContext {
      * 基准MOD管理器
      */
     private BaseModManager baseModManager;
+    /**
+     * 合并历史
+     */
+    private Map<String, String> mergedHistory;
     /**
      * 是否是第一个MOD与data0.pak的合并
      * 当为true时，第一个MOD相对于data0.pak的修改应该被自动接受，不提示冲突

@@ -275,7 +275,7 @@ object PakManager {
      * @throws IOException 如果文件不可读
      */
     fun areFilesIdentical(file1: PathFileTree, file2: PathFileTree): Boolean {
-        return Files.size(file1.safeGetFullPathName()) == Files.size(file2.safeGetFullPathName())
+        return Files.size(file1.safegetFilePath()) == Files.size(file2.safegetFilePath())
                 && file1.fileHash == file2.fileHash
     }
 }

@@ -5,7 +5,6 @@ import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.merger.MergerFactory
 import ankol.mod.merger.tools.*
-import ankol.mod.merger.tools.Tools.getEntryFileName
 import org.apache.commons.lang3.Strings
 import java.io.IOException
 import java.nio.file.Files
@@ -59,6 +58,9 @@ class FileMergerEngine(
             return
         }
         ColorPrinter.cyan(Localizations.t("ENGINE_FOUND_MODS_TO_MERGE", modsToMerge.size))
+        for ((index, modInfo) in modsToMerge.withIndex()) {
+            ColorPrinter.cyan("${index + 1}. ${modInfo.modName}")
+        }
         //开始合并
         try {
             Tools.deleteRecursively(tempDir) //先清理掉旧的目录
@@ -175,7 +177,7 @@ class FileMergerEngine(
                     if (globalFixActive) {
                         processSingleFile(relPath, fileSources.first(), mergedDir) //做压力测试的时候把这个打开
                     } else {
-                        Tools.zeroCopy(fileSources.first().safeGetFullPathName(), mergedDir.resolve(relPath))
+                        Tools.zeroCopy(fileSources.first().safegetFilePath(), mergedDir.resolve(relPath))
                     }
                 } else {
                     // 在多个 mod 中存在，需要合并
@@ -207,11 +209,11 @@ class FileMergerEngine(
                     // 如果支持合并，进行对比合并
                     if (mergerOptional.isPresent) {
                         val merger = mergerOptional.get()
-                        val fileName = getEntryFileName(relPath)
+                        val fileName = Tools.getEntryFileName(relPath)
 
                         val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
 
-                        context.fileName = relPath
+                        context.mergingFileName = relPath
                         context.mod1Name = "data0.pak"
                         context.mod2Name = fileCurrent.getFirstArchiveFileName()
                         context.isFirstModMergeWithBaseMod = true // 标记为与data0.pak的合并
@@ -225,7 +227,7 @@ class FileMergerEngine(
                         targetPath.writeText(mergedContent)
 
                         this.mergedCount++
-                        ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS", context.fileName))
+                        ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
                         return
                     }
                 }
@@ -234,7 +236,7 @@ class FileMergerEngine(
             }
         }
         // 没有基准mod，或者基准mod中不存在该文件，或者不支持合并，直接复制
-        Tools.zeroCopy(fileCurrent.safeGetFullPathName(), mergedOutputDir.resolve(relPath))
+        Tools.zeroCopy(fileCurrent.safegetFilePath(), mergedOutputDir.resolve(relPath))
     }
 
     /**
@@ -249,7 +251,7 @@ class FileMergerEngine(
         // 先简单的判断一下文件内容（计算hash值）、大小是否相同，不同肯定不一样
         if (areAllFilesIdentical(fileSources)) {
             // 文件都一样，直接使用第一个
-            Tools.zeroCopy(fileSources.first().safeGetFullPathName(), mergedDir.resolve(relPath))
+            Tools.zeroCopy(fileSources.first().safegetFilePath(), mergedDir.resolve(relPath))
             return
         }
 
@@ -264,20 +266,21 @@ class FileMergerEngine(
         }
 
         try {
+            var baseMergedContent = "" //基准文本内容
+            var mergedHistory = mapOf<String, String>() //用于存储合并过程中的节点合并记录，方便处理冲突时正确显示冲突来源mod
             // 支持合并，开始处理合并逻辑
             ColorPrinter.cyan(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size))
             val merger = mergerOptional.get()
-            var baseMergedContent = "" //基准文本内容
 
             var originalBaseModContent: String? = null
             if (baseModManager.loaded) {
                 originalBaseModContent = baseModManager.extractFileContent(relPath)
             }
-            val fileName = getEntryFileName(relPath)
+            val fileName = Tools.getEntryFileName(relPath)
 
             // 顺序合并：使用data0.pak作为基准（如果存在），然后依次合并各个mod
             for ((i, fileCurrent) in fileSources.withIndex()) {
-                val currentModPath = fileCurrent.safeGetFullPathName()
+                val currentModPath = fileCurrent.safegetFilePath()
                 val currentModName = fileCurrent.getFirstArchiveFileName()
 
                 // 第一个 mod：如果有data0.pak基准文件，使用它作为base与第一个mod合并
@@ -285,11 +288,13 @@ class FileMergerEngine(
                     if (originalBaseModContent != null) {
                         val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
 
-                        context.fileName = relPath
-                        context.mod1Name = "data0.pak"
-                        context.mod2Name = currentModName
-                        context.isFirstModMergeWithBaseMod = true // 标记为第一个mod与data0.pak的合并
-
+                        context.apply {
+                            this.mergingFileName = relPath
+                            this.mod1Name = "data0.pak"
+                            this.mod2Name = currentModName
+                            this.isFirstModMergeWithBaseMod = true // 标记为第一个mod与data0.pak的合并
+                            this.mergedHistory = mergedHistory
+                        }
                         val result = merger.merge(fileBase, fileCurrent)
                         baseMergedContent = result.mergedContent
                     } else {
@@ -304,13 +309,17 @@ class FileMergerEngine(
                     // 执行合并 - 使用真实的MOD压缩包名字
                     val fileBase = MemoryFileTree(fileName, relPath, mutableListOf(previousModName), baseMergedContent)
 
-                    context.fileName = relPath
-                    context.mod1Name = previousModName
-                    context.mod2Name = currentModName
-                    context.isFirstModMergeWithBaseMod = false // 后续合并正常处理冲突
+                    context.apply {
+                        this.mergingFileName = relPath
+                        this.mod1Name = previousModName
+                        this.mod2Name = currentModName
+                        this.isFirstModMergeWithBaseMod = false // 后续合并正常处理冲突
+                        this.mergedHistory = mergedHistory
+                    }
 
                     val result = merger.merge(fileBase, fileCurrent)
                     baseMergedContent = result.mergedContent
+                    mergedHistory = result.mergedHistory
                 }
             }
 
@@ -320,13 +329,13 @@ class FileMergerEngine(
             targetPath.writeText(baseMergedContent)
 
             this.mergedCount++
-            ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS", context.fileName))
+            ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
         } catch (e: Exception) {
             ColorPrinter.error(Localizations.t("ENGINE_MERGE_FAILED", e.message))
             log.error("Failed to merge file '{}': {}", relPath, e.message)
             // todo 这里合并失败的策略还得再调整下，现在是失败时使用最后一个 mod 的版本
             val lastSource: PathFileTree = fileSources.last()
-            Tools.zeroCopy(lastSource.safeGetFullPathName(), mergedDir.resolve(relPath))
+            Tools.zeroCopy(lastSource.safegetFilePath(), mergedDir.resolve(relPath))
         }
     }
 
@@ -356,7 +365,7 @@ class FileMergerEngine(
                             chosenSource.getFirstArchiveFileName(),
                         )
                     )
-                    Tools.zeroCopy(chosenSource.safeGetFullPathName(), mergedDir.resolve(relPath))
+                    Tools.zeroCopy(chosenSource.safegetFilePath(), mergedDir.resolve(relPath))
                     return
                 }
             }
