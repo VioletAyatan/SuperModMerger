@@ -1,34 +1,34 @@
-package ankol.mod.merger.core;
+package ankol.mod.merger.core
 
-import lombok.Data;
-
-import java.util.Map;
-
-@Data
-public class MergerContext {
+class MergerContext {
     /**
      * 当前正在合并的文件名
      */
-    private String mergingFileName;
+    lateinit var mergingFileName: String
+
     /**
      * 基准MOD名称
      */
-    private String mod1Name;
+    lateinit var baseModName: String
+
     /**
      * 待合并MOD名称
      */
-    private String mod2Name;
+    lateinit var mergeModName: String
+
     /**
      * 基准MOD管理器
      */
-    private BaseModManager baseModManager;
+    lateinit var baseModManager: BaseModManager
+
     /**
      * 合并历史
      */
-    private Map<String, String> mergedHistory;
+    var mergedHistory: MutableMap<String, String> = mutableMapOf()
+
     /**
      * 是否是第一个MOD与data0.pak的合并
      * 当为true时，第一个MOD相对于data0.pak的修改应该被自动接受，不提示冲突
      */
-    private boolean isFirstModMergeWithBaseMod = false;
+    var isFirstModMergeWithBaseMod = false
 }

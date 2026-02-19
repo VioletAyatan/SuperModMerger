@@ -64,8 +64,8 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             val modResult = parseFile(file2)
             val baseRoot = baseResult.astNode
             val modRoot = modResult.astNode
-            //深度对比
-            reduceCompare(originalBaseModRoot, baseRoot, modRoot)
+
+            deepCompare(originalBaseModRoot, baseRoot, modRoot)
             //冲突解决
             if (context.isFirstModMergeWithBaseMod && conflicts.isNotEmpty()) {
                 for (record in conflicts) {
@@ -92,7 +92,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
         }
     }
 
-    private fun reduceCompare(
+    private fun deepCompare(
         originalNode: BaseTreeNode?,
         baseNode: BaseTreeNode,
         modNode: BaseTreeNode
@@ -141,11 +141,11 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                         when (baseValue) {
                             // 对象节点对比
                             is JsonContainerNode if modValue is JsonContainerNode -> {
-                                reduceCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
+                                deepCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
                             }
                             // 数组节点对比
                             is JsonArrayNode if modValue is JsonArrayNode -> {
-                                reduceCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
+                                deepCompare((originalChild as? JsonPairNode)?.value, baseValue, modValue)
                             }
                             // 叶子节点，直接比较文本
                             else -> {
@@ -157,8 +157,8 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                                         conflicts.add(
                                             ConflictRecord(
                                                 context.mergingFileName,
-                                                context.mod1Name,
-                                                context.mod2Name,
+                                                context.baseModName,
+                                                context.mergeModName,
                                                 baseChild.signature,
                                                 baseChild,  // 完整的PairNode
                                                 modChild    // 完整的PairNode
@@ -170,7 +170,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                         }
                     }
                 } else {
-                    reduceCompare(originalChild, baseChild, modChild)
+                    deepCompare(originalChild, baseChild, modChild)
                 }
             }
         }
@@ -201,8 +201,8 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                     conflicts.add(
                         ConflictRecord(
                             context.mergingFileName,
-                            context.mod1Name,
-                            context.mod2Name,
+                            context.baseModName,
+                            context.mergeModName,
                             signature,
                             baseChild,
                             null, // modNode为null表示删除
@@ -233,8 +233,8 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                 conflicts.add(
                     ConflictRecord(
                         context.mergingFileName,
-                        context.mod1Name,
-                        context.mod2Name,
+                        context.baseModName,
+                        context.mergeModName,
                         baseArray.signature,
                         baseArray,
                         modArray
@@ -245,7 +245,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             // 逐个比较数组元素
             for (i in baseElements.indices) {
                 val originalElement = originalArray?.getElements()?.getOrNull(i)
-                reduceCompare(originalElement, baseElements[i], modElements[i])
+                deepCompare(originalElement, baseElements[i], modElements[i])
             }
         }
     }
@@ -267,8 +267,8 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                 conflicts.add(
                     ConflictRecord(
                         context.mergingFileName,
-                        context.mod1Name,
-                        context.mod2Name,
+                        context.baseModName,
+                        context.mergeModName,
                         baseNode.signature,
                         baseNode,
                         modNode

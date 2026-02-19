@@ -61,8 +61,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             val baseRoot: ScrContainerScriptNode = baseResult.astNode
             val modRoot: ScrContainerScriptNode = modResult.astNode
 
-            //开始递归对比
-            reduceCompare(originalBaseModRoot, baseRoot, modRoot)
+            deepCompare(originalBaseModRoot, baseRoot, modRoot)
 
             //第一个mod与原版文件的对比
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
@@ -93,7 +92,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
     }
 
-    private fun reduceCompare(
+    private fun deepCompare(
         originalContainer: ScrContainerScriptNode?,
         baseContainer: ScrContainerScriptNode,
         modContainer: ScrContainerScriptNode
@@ -114,18 +113,19 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                     // [存在] 检查是否冲突
                     if (baseNode is ScrContainerScriptNode && modNode is ScrContainerScriptNode) {
                         // 容器节点，递归进入内部对比
-                        reduceCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
-                    } else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
+                        deepCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
+                    }
+                    //对比Funcall节点
+                    else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
                         if (baseNode.arguments != modNode.arguments) {
-                            //两者内容不同，检查mod节点内容与原版是否相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                //检查base节点是否与原版相同
                                 if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
-                                    //base节点与原版一致，说明base节点未变动，使用mod的内容（开启了智能合并的情况下）
+                                    context.mergedHistory[modNode.signature] = context.mergeModName
+                                    //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
                                         context.mergingFileName,
-                                        context.mod1Name,
-                                        context.mod2Name,
+                                        context.baseModName,
+                                        context.mergeModName,
                                         signature,
                                         baseNode,
                                         modNode
@@ -133,12 +133,12 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     record.userChoice = UserChoice.MERGE_MOD
                                     conflicts.add(record)
                                 } else {
-                                    //真正的冲突，记录
+                                    //base节点与原版不一致，说明已经被修改过，记录冲突
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
-                                            context.mod1Name,
-                                            context.mod2Name,
+                                            context.baseModName,
+                                            context.mergeModName,
                                             signature,
                                             baseNode,
                                             modNode
@@ -152,15 +152,13 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                         val modText = modNode.sourceText
                         //内容不一致
                         if (!equalsTrimmed(baseText, modText)) {
-                            // 检查modNode是否与原始基准MOD相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                //对比基准节点与base节点，相同直接用mod的
                                 if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
-                                            context.mod1Name,
-                                            context.mod2Name,
+                                            context.baseModName,
+                                            context.mergeModName,
                                             signature,
                                             baseNode,
                                             modNode,
@@ -171,8 +169,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
-                                            context.mod1Name,
-                                            context.mod2Name,
+                                            context.baseModName,
+                                            context.mergeModName,
                                             signature,
                                             baseNode,
                                             modNode

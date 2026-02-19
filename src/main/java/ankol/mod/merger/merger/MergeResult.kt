@@ -5,5 +5,5 @@ package ankol.mod.merger.merger
  *
  * @param mergedContent 合并后的脚本文本内容
  */
-data class MergeResult(val mergedContent: String, val mergedHistory: Map<String, String>) {
+data class MergeResult(val mergedContent: String, val mergedHistory: MutableMap<String, String>) {
 }
