@@ -213,10 +213,14 @@ class FileMergerEngine(
 
                         val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
 
-                        context.mergingFileName = relPath
-                        context.mod1Name = "data0.pak"
-                        context.mod2Name = fileCurrent.getFirstArchiveFileName()
-                        context.isFirstModMergeWithBaseMod = true // 标记为与data0.pak的合并
+                        context.apply {
+                            this.mergingFileName = relPath
+                            this.baseModName = "data0.pak"
+                            this.mergeModName = fileCurrent.getFirstArchiveFileName()
+                            this.isFirstModMergeWithBaseMod = true // 标记为与data0.pak的合并
+                            this.mergedHistory = mutableMapOf()
+                        }
+
 
                         val result = merger.merge(fileBase, fileCurrent)
                         val mergedContent = result.mergedContent
@@ -267,7 +271,7 @@ class FileMergerEngine(
 
         try {
             var baseMergedContent = "" //基准文本内容
-            var mergedHistory = mapOf<String, String>() //用于存储合并过程中的节点合并记录，方便处理冲突时正确显示冲突来源mod
+            var mergedHistory = mutableMapOf<String, String>() //用于存储合并过程中的节点合并记录，方便处理冲突时正确显示冲突来源mod
             // 支持合并，开始处理合并逻辑
             ColorPrinter.cyan(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size))
             val merger = mergerOptional.get()
@@ -290,8 +294,8 @@ class FileMergerEngine(
 
                         context.apply {
                             this.mergingFileName = relPath
-                            this.mod1Name = "data0.pak"
-                            this.mod2Name = currentModName
+                            this.baseModName = "data0.pak"
+                            this.mergeModName = currentModName
                             this.isFirstModMergeWithBaseMod = true // 标记为第一个mod与data0.pak的合并
                             this.mergedHistory = mergedHistory
                         }
@@ -311,8 +315,8 @@ class FileMergerEngine(
 
                     context.apply {
                         this.mergingFileName = relPath
-                        this.mod1Name = previousModName
-                        this.mod2Name = currentModName
+                        this.baseModName = previousModName
+                        this.mergeModName = currentModName
                         this.isFirstModMergeWithBaseMod = false // 后续合并正常处理冲突
                         this.mergedHistory = mergedHistory
                     }
@@ -355,21 +359,17 @@ class FileMergerEngine(
         }
         while (true) {
             val input = readln()
-            if (input.matches("\\d+".toRegex())) {
+            try {
                 val choice = input.toInt()
                 if (choice >= 1 && choice <= fileSources.size) {
                     val chosenSource = fileSources[choice - 1]
-                    ColorPrinter.cyan(
-                        Localizations.t(
-                            "ASSET_USER_CHOSE_COMPLETE",
-                            chosenSource.getFirstArchiveFileName(),
-                        )
-                    )
+                    ColorPrinter.cyan(Localizations.t("ASSET_USER_CHOSE_COMPLETE", chosenSource.getFirstArchiveFileName()))
                     Tools.zeroCopy(chosenSource.safegetFilePath(), mergedDir.resolve(relPath))
                     return
                 }
+            } catch (_: Exception) {
+                ColorPrinter.warning(Localizations.t("ASSET_INVALID_INPUT_PLEASE_ENTER_NUMBER", 1, fileSources.size))
             }
-            ColorPrinter.warning(Localizations.t("ASSET_INVALID_INPUT_PLEASE_ENTER_NUMBER", 1, fileSources.size))
         }
     }
 

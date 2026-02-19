@@ -65,8 +65,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             val baseRoot = baseResult.astNode
             val modRoot = modResult.astNode
 
-            // 递归对比
-            reduceCompare(originalBaseModRoot, baseRoot, modRoot)
+            deepCompare(originalBaseModRoot, baseRoot, modRoot)
 
             // 第一个mod与原版文件的对比
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
@@ -92,7 +91,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 递归对比树节点
      */
-    private fun reduceCompare(
+    private fun deepCompare(
         originalContainer: XmlContainerNode?,
         baseContainer: XmlContainerNode,
         modContainer: XmlContainerNode
@@ -118,7 +117,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                     previousSiblingInBase = baseNode
                     //容器节点，继续递归对比
                     if (baseNode is XmlContainerNode && modNode is XmlContainerNode) {
-                        reduceCompare(originalNode as XmlContainerNode?, baseNode, modNode)
+                        deepCompare(originalNode as XmlContainerNode?, baseNode, modNode)
                     }
                     //叶子节点，对比属性
                     else if (baseNode !is XmlContainerNode && modNode !is XmlContainerNode) {
@@ -131,8 +130,8 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                                 conflicts.add(
                                     ConflictRecord(
                                         context.mergingFileName,
-                                        context.mod1Name,
-                                        context.mod2Name,
+                                        context.baseModName,
+                                        context.mergeModName,
                                         signature,
                                         baseNode,
                                         modNode
@@ -146,8 +145,8 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                             conflicts.add(
                                 ConflictRecord(
                                     context.mergingFileName,
-                                    context.mod1Name,
-                                    context.mod2Name,
+                                    context.baseModName,
+                                    context.mergeModName,
                                     signature,
                                     baseNode,
                                     modNode
@@ -187,8 +186,8 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                     conflicts.add(
                         ConflictRecord(
                             context.mergingFileName,
-                            context.mod1Name,
-                            context.mod2Name,
+                            context.baseModName,
+                            context.mergeModName,
                             signature,
                             baseNode,
                             null, // modNode为null表示删除
