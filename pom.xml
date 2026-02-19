@@ -6,13 +6,14 @@
 
     <groupId>ankol.mod.merger</groupId>
     <artifactId>SuperModMerger</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <native.executable.name>SuperModMerger</native.executable.name>
         <mainClass>ankol.mod.merger.AppMain</mainClass>
         <antlr4.version>4.13.2</antlr4.version>
         <lombok.version>1.18.42</lombok.version>
@@ -58,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
         <dependency>
@@ -66,22 +67,6 @@
             <artifactId>kotlin-test-junit</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
-        </dependency>
-        <!-- JavaFX 依赖 -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-            <version>${javafx.version}</version>
         </dependency>
     </dependencies>
 
@@ -174,16 +159,12 @@
                 <artifactId>native-maven-plugin</artifactId>
                 <version>0.10.6</version>
                 <configuration>
-                    <imageName>${project.build.finalName}</imageName>
+                    <imageName>${native.executable.name}</imageName>
                     <verbose>true</verbose>
                     <mainClass>${mainClass}</mainClass>
                     <metadataRepository>
                         <enabled>true</enabled>
                     </metadataRepository>
-                    <!-- https://www.graalvm.org/latest/reference-manual/native-image/overview/Options/ -->
-                    <buildArgs>
-
-                    </buildArgs>
                 </configuration>
             </plugin>
             <!-- Antlr4生成器-->
@@ -381,7 +362,7 @@
                                 <configuration>
                                     <executable>${project.basedir}/builds/rcedit-x64.exe</executable>
                                     <arguments>
-                                        <argument>${project.build.directory}/${project.build.finalName}.exe</argument>
+                                        <argument>${project.build.directory}/${native.executable.name}.exe</argument>
                                         <argument>--set-icon</argument>
                                         <argument>${project.basedir}/builds/icon.ico</argument>
                                         <argument>--set-file-version</argument>

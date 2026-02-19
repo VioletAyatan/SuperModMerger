@@ -7,7 +7,6 @@ import ankol.mod.merger.core.*
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.ConflictType
 import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode
@@ -56,32 +55,24 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 originalBaseModRoot = parsedResult.astNode
             }
             // 解析base和mod文件，保留TokenStream
-            val baseResult = parseFile(file1)
-            val modResult = parseFile(file2)
-            val baseRoot: ScrContainerScriptNode = baseResult.astNode!!
-            val modRoot: ScrContainerScriptNode = modResult.astNode!!
+            val baseResult = parseContent(file1.getContent())
+            val modResult = parseContent(file2.getContent())
+            val baseRoot: ScrContainerScriptNode = baseResult.astNode
+            val modRoot: ScrContainerScriptNode = modResult.astNode
 
-            //开始递归对比
-            reduceCompare(originalBaseModRoot, baseRoot, modRoot)
+            deepCompare(originalBaseModRoot, baseRoot, modRoot)
 
             //第一个mod与原版文件的对比
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
                 for (record in conflicts) {
-                    if (record.conflictType == ConflictType.REMOVAL) {
-                        // 删除类型冲突：MOD缺少原版节点，应该保留原版（补回缺失的代码）
-                        // 因为这很可能是MOD过期导致的缺失，而非故意删除
-                        record.userChoice = UserChoice.BASE_MOD
-                    } else {
-                        // 普通修改冲突：使用MOD修改的版本
-                        record.userChoice = UserChoice.MERGE_MOD
-                    }
+                    record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
-                ConflictResolver.resolveConflict(conflicts)
+                ConflictResolver.resolveConflict(conflicts, context)
             }
 
-            return MergeResult(getMergedContent(baseResult), !conflicts.isEmpty())
+            return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
             log.error("Error during SCR file merge: ${file1.fileName} Reason: ${e.message}", e)
             throw BusinessException("文件${file1.fileName}合并失败")
@@ -93,7 +84,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
     }
 
-    private fun reduceCompare(
+    private fun deepCompare(
         originalContainer: ScrContainerScriptNode?,
         baseContainer: ScrContainerScriptNode,
         modContainer: ScrContainerScriptNode
@@ -114,20 +105,19 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                     // [存在] 检查是否冲突
                     if (baseNode is ScrContainerScriptNode && modNode is ScrContainerScriptNode) {
                         // 容器节点，递归进入内部对比
-                        reduceCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
-                    } else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
+                        deepCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
+                    }
+                    //function call节点的对比逻辑
+                    else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
                         if (baseNode.arguments != modNode.arguments) {
-                            //两者内容不同，检查mod节点内容与原版是否相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                //检查base节点是否与原版相同
-                                if (isNodeSameAsOriginalNode(originalNode, baseNode)
-                                    && GlobalMergingStrategy.autoMergingCodeLine
-                                ) {
-                                    //base节点与原版一致，说明base节点未变动，使用mod的内容（开启了智能合并的情况下）
+                                if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
+                                    context.mergedHistory.markSignture(modNode.signature, context.mergeModName)
+                                    //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
-                                        context.fileName,
-                                        context.mod1Name,
-                                        context.mod2Name,
+                                        context.mergingFileName,
+                                        context.baseModName,
+                                        context.mergeModName,
                                         signature,
                                         baseNode,
                                         modNode
@@ -135,12 +125,12 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     record.userChoice = UserChoice.MERGE_MOD
                                     conflicts.add(record)
                                 } else {
-                                    //真正的冲突，记录
+                                    //base节点与原版不一致，说明已经被修改过，记录冲突
                                     conflicts.add(
                                         ConflictRecord(
-                                            context.fileName,
-                                            context.mod1Name,
-                                            context.mod2Name,
+                                            context.mergingFileName,
+                                            context.baseModName,
+                                            context.mergeModName,
                                             signature,
                                             baseNode,
                                             modNode
@@ -154,15 +144,14 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                         val modText = modNode.sourceText
                         //内容不一致
                         if (!equalsTrimmed(baseText, modText)) {
-                            // 检查modNode是否与原始基准MOD相同
                             if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                //对比基准节点与base节点，相同直接用mod的
                                 if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
+                                    context.mergedHistory.markSignture(modNode.signature, context.mergeModName)
                                     conflicts.add(
                                         ConflictRecord(
-                                            context.fileName,
-                                            context.mod1Name,
-                                            context.mod2Name,
+                                            context.mergingFileName,
+                                            context.baseModName,
+                                            context.mergeModName,
                                             signature,
                                             baseNode,
                                             modNode,
@@ -172,9 +161,9 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                 } else {
                                     conflicts.add(
                                         ConflictRecord(
-                                            context.fileName,
-                                            context.mod1Name,
-                                            context.mod2Name,
+                                            context.mergingFileName,
+                                            context.baseModName,
+                                            context.mergeModName,
                                             signature,
                                             baseNode,
                                             modNode
@@ -189,76 +178,17 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 log.error("Error in processing scr node with signature: '${signature}'", e)
             }
         }
-
-        // 检测被MOD删除的节点（base有，但mod没有）
-//        detectRemovedNodes(originalContainer, baseContainer, modContainer)
-    }
-
-    /**
-     * 检测被MOD删除/注释的节点
-     *
-     * 判断逻辑：
-     * - 如果节点在base中存在，但在mod中不存在
-     * - 且该节点在原版(original)中也存在，说明MOD故意删除了这个节点
-     * - 需要提示用户选择是保留(使用base)还是删除(使用mod的删除操作)
-     */
-    private fun detectRemovedNodes(
-        originalContainer: ScrContainerScriptNode?,
-        baseContainer: ScrContainerScriptNode,
-        modContainer: ScrContainerScriptNode
-    ) {
-        for ((signature, baseNode) in baseContainer.childrens) {
-            val modNode = modContainer.childrens[signature]
-
-            // base有，但mod没有 -> 可能是删除
-            if (modNode == null) {
-                // 检查原版是否有这个节点
-                val originalNode = originalContainer?.childrens?.get(signature)
-
-                if (originalNode != null) {
-                    // 原版有这个节点，MOD也应该有但却没有
-                    // 这说明MOD故意删除了这个节点，需要提示用户
-                    conflicts.add(
-                        ConflictRecord(
-                            context.fileName,
-                            context.mod1Name,
-                            context.mod2Name,
-                            signature,
-                            baseNode,
-                            null, // modNode为null表示删除
-                            conflictType = ConflictType.REMOVAL
-                        )
-                    )
-                }
-                // 如果原版也没有这个节点，说明是base MOD新增的，mod没有是正常的（过期MOD）
-                // 这种情况不需要特殊处理，base的内容会保留
-            }
-        }
     }
 
     private fun getMergedContent(baseResult: ParsedResult<ScrContainerScriptNode>): String {
         val rewriter = TokenStreamRewriter(baseResult.tokenStream)
         // 处理冲突节点的替换
         for (record in conflicts) {
-            if (record.conflictType == ConflictType.REMOVAL) {
-                // 删除类型的冲突
-                if (record.userChoice == UserChoice.MERGE_MOD) {
-                    // 用户选择使用MOD的版本（即删除该节点）
-                    val baseNode = record.baseNode
-                    rewriter.delete(baseNode.startTokenIndex, baseNode.stopTokenIndex)
-                }
-                // 如果选择 BASE_MOD，则保留原内容，不做任何操作
-            } else if (record.userChoice == UserChoice.MERGE_MOD) {
+            if (record.userChoice == UserChoice.MERGE_MOD) {
                 // 普通修改冲突：用户选择了 Mod
                 val baseNode = record.baseNode
                 val modNode = record.modNode
-                if (modNode != null) {
-                    rewriter.replace(
-                        baseNode.startTokenIndex,
-                        baseNode.stopTokenIndex,
-                        modNode.sourceText
-                    )
-                }
+                rewriter.replace(baseNode.startTokenIndex, baseNode.stopTokenIndex, modNode.sourceText)
             }
         }
 
@@ -374,10 +304,6 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
 
         // 所有节点都是import或sub，返回容器结束位置
         return lastSubOrImportStopIndex ?: container.stopTokenIndex
-    }
-
-    private fun parseFile(fileTree: AbstractFileTree): ParsedResult<ScrContainerScriptNode> {
-        return parseContent(fileTree.getContent())
     }
 
     private fun parseContent(content: String): ParsedResult<ScrContainerScriptNode> {
