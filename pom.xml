@@ -159,7 +159,7 @@
                 <artifactId>native-maven-plugin</artifactId>
                 <version>0.10.6</version>
                 <configuration>
-                    <imageName>${native.executable.name}</imageName>
+                    <imageName>${native.executable.name}-${project.version}</imageName>
                     <verbose>true</verbose>
                     <mainClass>${mainClass}</mainClass>
                     <metadataRepository>
@@ -362,7 +362,7 @@
                                 <configuration>
                                     <executable>${project.basedir}/builds/rcedit-x64.exe</executable>
                                     <arguments>
-                                        <argument>${project.build.directory}/${native.executable.name}.exe</argument>
+                                        <argument>${project.build.directory}/${native.executable.name}-${project.version}.exe</argument>
                                         <argument>--set-icon</argument>
                                         <argument>${project.basedir}/builds/icon.ico</argument>
                                         <argument>--set-file-version</argument>
