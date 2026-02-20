@@ -23,7 +23,6 @@ abstract class BaseTreeNode(
     private val _sourceText: String by lazy {
         val startIndex = tokenStream.get(startTokenIndex).startIndex
         val stopIndex = tokenStream.get(stopTokenIndex).stopIndex
-//        calcCount++
         return@lazy tokenStream.tokenSource.inputStream.getText(Interval(startIndex, stopIndex))
     }
 
