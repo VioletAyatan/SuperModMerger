@@ -17,12 +17,10 @@ class ErrorReporter {
          */
         @JvmStatic
         fun printErrors() {
-            if (errors.isEmpty()) {
-                println("No errors reported.")
-            } else {
-                println("Errors reported:")
+            if (errors.isNotEmpty()) {
+                ColorPrinter.error(Localizations.t("ERROR_REPORTER_TITLE"))
                 errors.forEach { error ->
-                    println("- [${error.errorSource}] ${error.message}")
+                    ColorPrinter.error(Localizations.t("ERROR_REPORTER_MSG", error.errorSource, error.message))
                 }
             }
         }

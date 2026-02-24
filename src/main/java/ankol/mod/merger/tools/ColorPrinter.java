@@ -163,15 +163,15 @@ public class ColorPrinter {
      * 打印错误消息（红色）
      */
     public static void error(String message) {
-        System.err.println(applyColor(message, BRIGHT_RED));
-        log.error(message);
+        System.out.println(applyColor(message, BRIGHT_RED));
+        log.debug(message);
     }
 
     /**
      * 打印错误消息（红色），带异常堆栈跟踪
      */
     public static void error(String message, Throwable e) {
-        System.err.println(applyColor(message, BRIGHT_RED));
+        System.out.println(applyColor(message, BRIGHT_RED));
         log.debug(message, e);
     }
 
