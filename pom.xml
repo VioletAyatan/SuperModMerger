@@ -6,7 +6,7 @@
 
     <groupId>ankol.mod.merger</groupId>
     <artifactId>SuperModMerger</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
+    <version>1.5.0</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -159,7 +159,7 @@
                 <artifactId>native-maven-plugin</artifactId>
                 <version>0.10.6</version>
                 <configuration>
-                    <imageName>${native.executable.name}</imageName>
+                    <imageName>${native.executable.name}-${project.version}</imageName>
                     <verbose>true</verbose>
                     <mainClass>${mainClass}</mainClass>
                     <metadataRepository>
@@ -334,7 +334,7 @@
                                 <!-- 启用优化 os编译选项减少体积，但会降低性能-->
                                 <!--<buildArg>-Os</buildArg>-->
                                 <!-- 启用全部优化-->
-                                <!-- <buildArg>-O3</buildArg>-->
+                                 <buildArg>-O3</buildArg>
                                 <!-- 添加完整字符集支持 -->
                                 <buildArg>-H:+AddAllCharsets</buildArg>
                             </buildArgs>
@@ -362,7 +362,7 @@
                                 <configuration>
                                     <executable>${project.basedir}/builds/rcedit-x64.exe</executable>
                                     <arguments>
-                                        <argument>${project.build.directory}/${native.executable.name}.exe</argument>
+                                        <argument>${project.build.directory}/${native.executable.name}-${project.version}.exe</argument>
                                         <argument>--set-icon</argument>
                                         <argument>${project.basedir}/builds/icon.ico</argument>
                                         <argument>--set-file-version</argument>

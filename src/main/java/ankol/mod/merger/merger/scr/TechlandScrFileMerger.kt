@@ -99,12 +99,10 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 val baseNode = baseContainer.childrens[signature]
 
                 if (baseNode == null) {
-                    // 新增 Base 没有这个节点 -> 插入
                     handleInsertion(baseContainer, modNode)
                 } else {
-                    // [存在] 检查是否冲突
+                    //容器节点，递归对比
                     if (baseNode is ScrContainerScriptNode && modNode is ScrContainerScriptNode) {
-                        // 容器节点，递归进入内部对比
                         deepCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
                     }
                     //function call节点的对比逻辑
@@ -125,11 +123,12 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     record.userChoice = UserChoice.MERGE_MOD
                                     conflicts.add(record)
                                 } else {
-                                    //base节点与原版不一致，说明已经被修改过，记录冲突
+                                    //标记真正的冲突
+                                    val modName = context.mergedHistory.getModNameFromSignature(signature)
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
-                                            context.baseModName,
+                                            modName ?: context.baseModName,
                                             context.mergeModName,
                                             signature,
                                             baseNode,
@@ -139,7 +138,9 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                 }
                             }
                         }
-                    } else {
+                    }
+                    //其他类型节点直接比较文本内容
+                    else {
                         val baseText = baseNode.sourceText
                         val modText = modNode.sourceText
                         //内容不一致
@@ -155,7 +156,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                             signature,
                                             baseNode,
                                             modNode,
-                                            userChoice = UserChoice.MERGE_MOD
+                                            UserChoice.MERGE_MOD
                                         )
                                     )
                                 } else {

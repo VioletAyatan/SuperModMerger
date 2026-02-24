@@ -95,7 +95,7 @@ class FileMergerEngine(
     private fun correctPathsForMod(
         modFileName: String,
         extractedFiles: MutableMap<String, PathFileTree>
-    ): MutableMap<String, PathFileTree> {
+    ): Map<String, PathFileTree> {
         //如果没有基准MOD或者合并策略指定了不修正路径
         if (!baseModManager.loaded) {
             return extractedFiles
@@ -111,11 +111,6 @@ class FileMergerEngine(
                 val suggestedPath: String = baseModManager.getSuggestedPath(fileEntryName)!!
                 corrections[fileEntryName] = suggestedPath
                 correctedFiles[suggestedPath] = sourceInfo
-            }
-            //文本类型的文件，直接标记为删除，这些往往是mod作者自己添加的描述文件
-            else if (Strings.CI.endsWithAny(fileEntryName, ".txt", ".md")) {
-                markToRemoved.add(fileEntryName)
-                log.warn("Unsupported text file: {}, Marking to removal.", fileEntryName)
             } else {
                 correctedFiles[fileEntryName] = sourceInfo
             }
@@ -146,7 +141,8 @@ class FileMergerEngine(
                 val archiveName = mod.modName // 解压的压缩包真实名称
                 val modTempDir: Path = tempDir.resolve("${archiveName}${index.getAndIncrement()}") // 生成临时目录名字
 
-                val extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir)
+                var extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir)
+                extractedFiles = filterFiles(extractedFiles)
                 val correctedFiles = correctPathsForMod(archiveName, extractedFiles)
                 // 按文件路径分组，并记录来源MOD名字
                 for ((fileRelPath, fileSource) in correctedFiles) {
@@ -158,6 +154,40 @@ class FileMergerEngine(
             }
         }
         return filesByPath
+    }
+
+    /**
+     * 过滤掉一些不支持合并的文件（比如文本文件、rpak资源文件等）
+     */
+    private fun filterFiles(extractedFiles: MutableMap<String, PathFileTree>): MutableMap<String, PathFileTree> {
+        return extractedFiles.filter { predicate: Map.Entry<String, PathFileTree> ->
+            val fileEntryName = predicate.key
+            val sourceInfo = predicate.value
+            //文本类型的文件，直接标记为删除，这些往往是mod作者自己添加的描述文件
+            if (Strings.CI.endsWithAny(fileEntryName, ".txt", ".md")) {
+                log.warn("Unsupported text file: {}, Marking to removal.", fileEntryName)
+                return@filter false
+            }
+            // 不支持dll文件.asi文件的合并
+            else if (Strings.CI.endsWithAny(fileEntryName, ".dll", ".asi")) {
+                log.warn("Unsupported dll/asi file: {}, Please handle it yourself after merging.", fileEntryName)
+                ErrorReporter.addErrorReport(
+                    sourceInfo.getFirstArchiveFileName(),
+                    Localizations.t("ERROR_REPORTER_NSUPPORT_DLL", fileEntryName)
+                )
+                return@filter false
+            }
+            // 不支持rpak文件的合并，rpack是资源文件，不能合并
+            else if (Strings.CI.endsWithAny(fileEntryName, ".rpack")) {
+                log.warn("Unsupported rpak file: {}, Marking to removal.", fileEntryName)
+                ErrorReporter.addErrorReport(
+                    sourceInfo.getFirstArchiveFileName(),
+                    Localizations.t("ERROR_REPORTER_NSUPPORT_RPACK", fileEntryName)
+                )
+                return@filter false
+            }
+            return@filter true
+        }.toMutableMap()
     }
 
     /**
@@ -395,6 +425,7 @@ class FileMergerEngine(
         if (pathCorrectionCount > 0) {
             ColorPrinter.success(Localizations.t("ENGINE_PATH_CORRECTIONS_APPLIED", pathCorrectionCount))
         }
+        ErrorReporter.printErrors()
         ColorPrinter.cyan("{}", "=".repeat(75))
     }
 

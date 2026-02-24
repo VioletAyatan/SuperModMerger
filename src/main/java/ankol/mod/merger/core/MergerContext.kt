@@ -39,7 +39,18 @@ class MergerContext {
          * 标记这个签名
          */
         fun markSignture(signature: String, modName: String) {
-            map[signature] = modName
+            if (!map.containsKey(signature)) {
+                map[signature] = modName
+            } /*else {
+                System.err.println("错误，检测到重复的签名插入：${signature}，跳过处理.")
+            }*/
+        }
+
+        /**
+         * 从记录的签名中获取这个冲突来源的真正MOD名字
+         */
+        fun getModNameFromSignature(signature: String): String? {
+            return map[signature]
         }
     }
 }
