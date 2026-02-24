@@ -80,6 +80,7 @@ class FileMergerEngine(
         } catch (e: Exception) {
             throw RuntimeException(e)
         } finally {
+            ErrorReporter.printErrors()
             baseModManager.close()
             cleanupTempDir()
         }
@@ -121,11 +122,19 @@ class FileMergerEngine(
             else if (Strings.CI.endsWithAny(fileEntryName, ".dll", ".asi")) {
                 markToRemoved.add(fileEntryName)
                 log.warn("Unsupported dll/asi file: {}, Please handle it yourself after merging.", fileEntryName)
+                ErrorReporter.addErrorReport(
+                    sourceInfo.getFirstArchiveFileName(),
+                    "此mod中识别到不支持合并的 .dll/.asi 文件，已标记为移除，请参考mod页面的说明进行手动安装"
+                )
             }
             // 不支持rpak文件的合并，rpack是资源文件，不能合并
             else if (Strings.CI.endsWithAny(fileEntryName, ".rpack")) {
                 markToRemoved.add(fileEntryName)
                 log.warn("Unsupported rpak file: {}, Marking to removal.", fileEntryName)
+                ErrorReporter.addErrorReport(
+                    sourceInfo.getFirstArchiveFileName(),
+                    "此mod中识别到不支持合并的 .rpack 资源文件，已标记为移除，请参考mod页面的说明进行手动安装"
+                )
             } else {
                 correctedFiles[fileEntryName] = sourceInfo
             }
