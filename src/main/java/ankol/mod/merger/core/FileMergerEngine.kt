@@ -116,6 +116,16 @@ class FileMergerEngine(
             else if (Strings.CI.endsWithAny(fileEntryName, ".txt", ".md")) {
                 markToRemoved.add(fileEntryName)
                 log.warn("Unsupported text file: {}, Marking to removal.", fileEntryName)
+            }
+            // 不支持dll文件.asi文件的合并
+            else if (Strings.CI.endsWithAny(fileEntryName, ".dll", ".asi")) {
+                markToRemoved.add(fileEntryName)
+                log.warn("Unsupported dll/asi file: {}, Please handle it yourself after merging.", fileEntryName)
+            }
+            // 不支持rpak文件的合并，rpack是资源文件，不能合并
+            else if (Strings.CI.endsWithAny(fileEntryName, ".rpack")) {
+                markToRemoved.add(fileEntryName)
+                log.warn("Unsupported rpak file: {}, Marking to removal.", fileEntryName)
             } else {
                 correctedFiles[fileEntryName] = sourceInfo
             }
