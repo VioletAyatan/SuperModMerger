@@ -48,7 +48,7 @@ class BaseModManager(
     /**
      * 复用的 ZipFile 连接，避免频繁打开关闭
      */
-    private lateinit var zipFileConnection: ZipFile
+    private var zipFileConnection: ZipFile? = null
 
     //初始化逻辑
     init {
@@ -172,7 +172,7 @@ class BaseModManager(
     fun close() {
         // 关闭 ZipFile 连接
         try {
-            zipFileConnection.close()
+            zipFileConnection?.close()
         } catch (e: IOException) {
             ColorPrinter.warning("Failed to close ZipFile connection: " + e.message)
         }
@@ -189,7 +189,7 @@ class BaseModManager(
     private fun extractFileFromPak(fileEntryName: String): Pair<Path, String> {
         val zipFile = zipFileConnection
         val digest = MessageDigest.getInstance("SHA-256")
-        val entry = zipFile.getEntry(fileEntryName)
+        val entry = zipFile!!.getEntry(fileEntryName)
         val outputPath = cacheDir.resolve(fileEntryName)
         outputPath.parent.createDirectories()
         //大小为0
