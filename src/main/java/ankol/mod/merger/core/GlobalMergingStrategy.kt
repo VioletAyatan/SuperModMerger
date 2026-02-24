@@ -39,10 +39,10 @@ enum class GlobalMergingStrategy {
             while (true) {
                 val input = readln()
                 if (input == "1") {
-                    activeMode = GlobalMergingStrategy.NORMAL_MODE
+                    activeMode = NORMAL_MODE
                     break
                 } else if (input == "2") {
-                    activeMode = GlobalMergingStrategy.GLOBAL_FIX_MODE
+                    activeMode = GLOBAL_FIX_MODE
                     break
                 } else {
                     ColorPrinter.error(Localizations.t("ASSET_INVALID_INPUT_PLEASE_ENTER_NUMBER", "1", "2"))
