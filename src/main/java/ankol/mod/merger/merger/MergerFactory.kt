@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 /**
  * 合并器获取工厂，通过判断文件扩展名来获取对应支持的合并器
- * 
+ *
  * @author Ankol
  */
 object MergerFactory {
@@ -35,7 +35,7 @@ object MergerFactory {
 
     /**
      * 注册一个合并器，并关联一个或多个文件扩展名。
-     * 
+     *
      * @param merger     合并器实例。
      * @param extensions 要关联的文件扩展名（例如 ".txt", ".xml"）。
      */
@@ -47,15 +47,15 @@ object MergerFactory {
 
     /**
      * 根据文件名获取对应的合并器。
-     * 
+     *
      * @param fileName 文件名（包含扩展名）
      * @return 一个包含合并器实例的 [Optional]；如果找不到合适的合并器，则为空。
      */
-    fun getMerger(fileName: String, context: MergerContext): Optional<AbstractFileMerger> {
+    fun getMerger(fileName: String, context: MergerContext): AbstractFileMerger? {
         val extension = "." + fileName.substringAfterLast(".")
         val aClass = mergerMap[extension.lowercase(Locale.getDefault())]
         if (aClass == null) {
-            return Optional.empty()
+          return null
         } else {
             var fileMerger = mergerCache[aClass]
             if (fileMerger == null) {
@@ -66,7 +66,7 @@ object MergerFactory {
             } else {
                 fileMerger.context = context
             }
-            return Optional.of(fileMerger!!)
+            return fileMerger
         }
     }
 }
