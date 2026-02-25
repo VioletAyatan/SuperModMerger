@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
+>
     <!-- 定义变量 -->
     <timestamp key="bySecond" datePattern="yyyyMMdd-HHmmss"/>
     <property name="LOG_DIR" value="logs"/>
     <property name="DEBUG_LOG_FILE" value="${LOG_DIR}/app-${bySecond}.log"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%msg%n"/>
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
 
     <property name="MAX_HISTORY" value="30"/>
@@ -14,7 +15,7 @@
     <!-- 控制台输出-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -29,7 +30,6 @@
             <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-
         <!-- 滚动策略：基于时间和大小 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 归档日志文件的命名模式 -->
