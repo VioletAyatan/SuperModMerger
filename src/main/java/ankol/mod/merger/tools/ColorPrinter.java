@@ -100,8 +100,7 @@ public class ColorPrinter {
      * @param message 文本
      */
     public static void blue(String message) {
-        System.out.println(applyColor(message, BRIGHT_BLUE));
-        log.debug(message);
+        log.info(applyColor(message, BRIGHT_BLUE));
     }
 
     /**
@@ -118,8 +117,7 @@ public class ColorPrinter {
      * 打印青色日志
      */
     public static void cyan(String message) {
-        System.out.println(applyColor(message, BRIGHT_CYAN));
-        log.debug(message);
+        log.info(applyColor(message, BRIGHT_CYAN));
     }
 
     /**
@@ -133,8 +131,7 @@ public class ColorPrinter {
      * 打印成功消息（绿色）
      */
     public static void success(String message) {
-        System.out.println(applyColor(message, BRIGHT_GREEN));
-        log.debug(message);
+        log.info(applyColor(message, BRIGHT_GREEN));
     }
 
     /**
@@ -148,8 +145,7 @@ public class ColorPrinter {
      * 打印警告消息（黄色）
      */
     public static void warning(String message) {
-        System.out.println(applyColor(message, BRIGHT_YELLOW));
-        log.debug(message);
+        log.info(applyColor(message, BRIGHT_YELLOW));
     }
 
     /**
@@ -163,16 +159,7 @@ public class ColorPrinter {
      * 打印错误消息（红色）
      */
     public static void error(String message) {
-        System.out.println(applyColor(message, BRIGHT_RED));
-        log.debug(message);
-    }
-
-    /**
-     * 打印错误消息（红色），带异常堆栈跟踪
-     */
-    public static void error(String message, Throwable e) {
-        System.out.println(applyColor(message, BRIGHT_RED));
-        log.debug(message, e);
+        log.info(applyColor(message, BRIGHT_RED));
     }
 
     /**
@@ -186,8 +173,7 @@ public class ColorPrinter {
      * 打印调试消息（青色）
      */
     public static void debug(String message) {
-        System.out.println(applyColor(message, BRIGHT_CYAN));
-        log.debug(message);
+        log.info(applyColor(message, BRIGHT_CYAN));
     }
 
     /**
@@ -201,8 +187,7 @@ public class ColorPrinter {
      * 打印普通消息（白色）
      */
     public static void print(String message) {
-        System.out.println(applyColor(message, WHITE));
-        log.debug(message);
+        log.info(applyColor(message, WHITE));
     }
 
     /**
@@ -216,8 +201,7 @@ public class ColorPrinter {
      * 打印加粗消息（白色加粗）
      */
     public static void bold(String message) {
-        System.out.println(applyColor(BOLD + message, RESET));
-        log.debug(message);
+        log.info(applyColor(BOLD + message, RESET));
     }
 
     /**
@@ -231,14 +215,14 @@ public class ColorPrinter {
      * 打印强调消息（洋红色）
      */
     public static void highlight(String message) {
-        System.out.println(applyColor(message, BRIGHT_MAGENTA));
+        log.info(applyColor(message, BRIGHT_MAGENTA));
     }
 
     /**
      * 打印强调消息（洋红色），带格式化参数
      */
     public static void highlight(String format, Object... args) {
-        System.out.println(applyColor(Tools.format(format, args), BRIGHT_MAGENTA));
+        log.info(applyColor(Tools.format(format, args), BRIGHT_MAGENTA));
     }
 
     /**
@@ -248,7 +232,7 @@ public class ColorPrinter {
      * @param colorCode ANSI 颜色代码（如 ColorPrinter.RED）
      */
     public static void printWithColor(String message, String colorCode) {
-        System.out.println(applyColor(message, colorCode));
+        log.info(applyColor(message, colorCode));
     }
 
     /**
