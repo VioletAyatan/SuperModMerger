@@ -20,7 +20,6 @@
         <slf4j.version>2.0.9</slf4j.version>
         <logback.version>1.5.20</logback.version>
         <kotlin.version>2.3.0</kotlin.version>
-        <juniversalchardet.version>2.5.0</juniversalchardet.version>
         <javafx.version>25</javafx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
     </properties>
@@ -72,11 +71,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.github.albfernandez</groupId>
-                <artifactId>juniversalchardet</artifactId>
-                <version>${juniversalchardet.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
