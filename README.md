@@ -1,6 +1,6 @@
 # Super Mod Merger
 
-**[中文](README_CN.md) | English | [Code Architecture & Principles](ARCHITECTURE.md)**
+**[中文](README_CN.md) | English**
 
 ## Game Mod Merge Tool
 
