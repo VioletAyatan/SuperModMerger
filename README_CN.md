@@ -1,6 +1,6 @@
 # Super Mod Merger
 
-**中文 | [English](README.md) | [代码架构与原理](ARCHITECTURE.md)**
+**中文 | [English](README.md)**
 
 ## 游戏模组合并工具
 
