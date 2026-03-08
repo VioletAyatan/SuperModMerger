@@ -83,7 +83,7 @@ object ConflictResolver {
                 ColorPrinter.print(
                     Localizations.t(
                         "CRESOLVER_AUTO_MERGE_CODELINE",
-                        item.baseModName,
+                        "Vanilla",
                         item.baseNode.sourceText,
                         item.mergeModName,
                         modNodeText
