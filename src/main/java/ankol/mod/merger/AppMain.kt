@@ -115,18 +115,41 @@ class AppMain {
 
         private fun initCharset() {
             try {
-                val p = ProcessBuilder("cmd", "/c", "chcp", "65001")
-                    .inheritIO() // 让子进程输出到相同控制台（可见 chcp 的反馈）
-                    .start()
-                if (!p.waitFor(2, TimeUnit.SECONDS)) {
-                    p.destroyForcibly()
+                // 1. 无论什么系统，优先设置属性，辅助第三方库识别
+                System.setProperty("file.encoding", "UTF-8")
+                System.setProperty("sun.stdout.encoding", "UTF-8")
+                System.setProperty("sun.stderr.encoding", "UTF-8")
+
+                val isWindows = System.getProperty("os.name")?.startsWith("Windows", ignoreCase = true) == true
+
+                // 2. 针对 Windows 环境的特殊处理
+                if (isWindows) {
+                    // 尝试切换控制台代码页到 UTF-8 (chcp 65001)
+                    // 放到 try-catch 中，即使是在没有 cmd 的环境（如 IDE、服务、CI）失败也不影响后续逻辑
+                    try {
+                        // 只有看起来像是在交互式终端时才尝试 chcp，避免不必要的进程创建开销
+                        // 但为了兼容性，如果判断不准也无所谓，ProcessBuilder 吃掉异常即可
+                        ProcessBuilder("cmd", "/c", "chcp", "65001")
+                            .redirectOutput(ProcessBuilder.Redirect.DISCARD)
+                            .redirectError(ProcessBuilder.Redirect.DISCARD)
+                            .start()
+                            .waitFor(1, TimeUnit.SECONDS)
+                    } catch (_: Exception) {
+                        // 忽略所有 chcp 失败，这只是为了让 cmd 显示正常，不影响程序内部编码
+                    }
                 }
-                val psOut = PrintStream(FileOutputStream(FileDescriptor.out), true, StandardCharsets.UTF_8)
-                val psErr = PrintStream(FileOutputStream(FileDescriptor.err), true, StandardCharsets.UTF_8)
-                System.setOut(psOut)
-                System.setErr(psErr)
+
+                // 3. 【核心】强制重置标准输出流为 UTF-8
+                // 这一步是关键：无论是在控制台、还是重定向到文件(> log.txt)、还是被服务通过管道捕获
+                // 都强制写入 UTF-8 字节。Native Image 默认可能跟随系统 ANSI (GBK)，必须强转。
+                val out = PrintStream(FileOutputStream(FileDescriptor.out), true, StandardCharsets.UTF_8)
+                val err = PrintStream(FileOutputStream(FileDescriptor.err), true, StandardCharsets.UTF_8)
+                System.setOut(out)
+                System.setErr(err)
+
             } catch (e: Exception) {
-                System.err.println("Error executing command [chcp] Skip!" + e.message)
+                // 兜底：如果连设置流都失败，打印原始错误（尽量不崩溃）
+                System.err.println("Encodeing set error: " + e.message)
             }
         }
 
