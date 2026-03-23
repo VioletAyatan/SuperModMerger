@@ -11,7 +11,9 @@ import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.misc.Interval
 
 class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScriptBaseVisitor<BaseTreeNode>() {
-    //检测重复函数的东西
+    /**
+     * 这个MAP用于识别当前处理到哪个块中，并且用于标记重复的函数以实现重复签名的检测
+     */
     private val repeatableFunctions: MutableMap<String, MutableSet<String>> = HashMap()
     private var currentFunBlockSignature = "ROOT" //标记当前处理到哪个函数块了，重复函数签名生成仅限自己对应的函数块内
     private var containerNode: ScrContainerScriptNode? = null
@@ -148,27 +150,27 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         val argsList = valueList.map { it.text }
         var signature = "$FUN_CALL:$funcName"
         //检测重复签名的处理逻辑
-        val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
-        val children: MutableMap<String, BaseTreeNode> = containerNode!!.childrens
+        val repeatedSignatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
+        val childrens = containerNode?.childrens ?: hashMapOf()
 
-        if (signatures.contains(signature)) {
+        if (repeatedSignatures.contains(signature)) {
             // 已标记为可重复函数，根据参数数量采用不同策略
             signature = generateFunctionCallSignature(signature, argsList)
-        } else if (children.containsKey(signature)) {
+        } else if (childrens.containsKey(signature)) {
             // 发现重复的函数调用，需要开始特殊处理
-            val lastNode = children[signature] as ScrFunCallScriptNode
-            signatures.add("$FUN_CALL:$funcName") //标记这个函数为可重复函数
+            val previousNode = childrens[signature] as ScrFunCallScriptNode
+            repeatedSignatures.add("$FUN_CALL:$funcName") //标记这个函数为可重复函数
 
             // 重新生成已存在节点的签名
-            val lastNewSignature = generateFunctionCallSignature(signature, lastNode.arguments)
-            lastNode.signature = lastNewSignature
-            children.remove(signature)
-            children[lastNewSignature] = lastNode
+            val lastNewSignature = generateFunctionCallSignature(signature, previousNode.arguments)
+            previousNode.signature = lastNewSignature
+            childrens.remove(signature)
+            childrens[lastNewSignature] = previousNode
 
             // 当前处理的签名也要重新生成
             signature = generateFunctionCallSignature(signature, argsList)
         }
-        repeatableFunctions[currentFunBlockSignature] = signatures
+        repeatableFunctions[currentFunBlockSignature] = repeatedSignatures
         return ScrFunCallScriptNode(
             signature,
             getStartTokenIndex(ctx),
