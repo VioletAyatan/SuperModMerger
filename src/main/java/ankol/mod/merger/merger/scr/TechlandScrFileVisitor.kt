@@ -21,14 +21,14 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     private var currentContainerNode: ScrContainerScriptNode? = null
 
     companion object {
-        private const val FUN_CALL: String = "funCall"
-        private const val METHOD_REFERENCE: String = "methodReference"
-        private const val FUN_BLOCK: String = "funBlock"
-        private const val SUB_FUN: String = "sub"
-        private const val VARIABLE: String = "variable"
-        private const val USE: String = "use"
-        private const val IMPORT: String = "import"
-        private const val EXPORT: String = "export"
+        private const val FUN_CALL = "funCall"
+        private const val METHOD_REFERENCE = "methodReference"
+        private const val FUN_BLOCK = "funBlock"
+        private const val SUB_FUN = "sub"
+        private const val VARIABLE = "variable"
+        private const val USE = "use"
+        private const val IMPORT = "import"
+        private const val EXPORT = "export"
         private const val DIRECTIVE = "directive"
         private const val MACRO = "macro"
         private const val EXTERN = "extern"
