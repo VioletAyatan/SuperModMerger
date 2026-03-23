@@ -117,27 +117,87 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      */
     override fun visitFuntionBlockDecl(ctx: FuntionBlockDeclContext): BaseTreeNode {
         val previousContainer = this.containerNode //这是标记上一层的容器，以便恢复
+        val previousFunBlockSignature = this.currentFunBlockSignature // Save previous signature
 
         val funcName = ctx.Id().text
+        val valueList = getValueList(ctx.valueList())
+        val argsList = valueList.map { it.text }
         var signature = "$FUN_BLOCK:$funcName"
-        if (ctx.valueList() != null) {
-            signature += ":${getFullText(ctx.valueList())}"
+
+        //检测重复签名的处理逻辑
+        val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
+        val children: MutableMap<String, BaseTreeNode> = containerNode!!.childrens
+
+        if (signatures.contains(signature)) {
+            // 已标记为可重复函数，根据策略生成签名
+            signature = generateFunctionBlockArgsSignature(signature, argsList)
+        } else if (children.containsKey(signature)) {
+            // 发现重复，需要开始特殊处理
+            val lastNode = children[signature] as ScrContainerScriptNode
+            signatures.add(signature) //标记这个函数为可重复函数
+
+            // 重新生成已存在节点的签名
+            val lastNewSignature = generateFunctionBlockArgsSignature(signature, lastNode.arguments)
+            lastNode.signature = lastNewSignature
+            children.remove(signature)
+            children[lastNewSignature] = lastNode
+
+            // 当前处理的签名也要重新生成
+            signature = generateFunctionBlockArgsSignature(signature, argsList)
         }
+        repeatableFunctions[currentFunBlockSignature] = signatures
 
         this.currentFunBlockSignature = signature
-        signature = generateFunctionBlockSignature(signature)
         val funBlockContainer = ScrContainerScriptNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
             ctx.start.line,
-            tokenStream
+            tokenStream,
+            argsList
         )
         this.containerNode = funBlockContainer
         visitFunctionBlockContent(funBlockContainer, ctx.functionBlock())
 
         this.containerNode = previousContainer //恢复容器节点
+        this.currentFunBlockSignature = previousFunBlockSignature // Restore signature
         return funBlockContainer
+    }
+
+    /**
+     * 生成函数块的重复签名 (基于参数)
+     * 1. 如果参数为空，直接使用索引加入签名
+     * 2. 如果有参数，尝试使用参数第一个值加入签名；如果加入后也碰到重复，添加索引
+     */
+    private fun generateFunctionBlockArgsSignature(baseSignature: String, argsList: List<String>): String {
+        if (argsList.isEmpty()) {
+            return generateIndexedSignature(baseSignature)
+        }
+
+        val signatureWithParam = "$baseSignature:${argsList[0]}"
+        val children = containerNode!!.childrens
+
+        // 如果带参数的签名已经被占用，或者已经存在基于此的索引序列
+        if (children.containsKey(signatureWithParam) || hasIndexedChildren(signatureWithParam)) {
+            return generateIndexedSignature(signatureWithParam)
+        }
+
+        return signatureWithParam
+    }
+
+    private fun generateIndexedSignature(baseSignature: String): String {
+        val children = containerNode!!.childrens
+        var index = 0
+        while (children.containsKey("$baseSignature:$index")) {
+            index++
+        }
+        return "$baseSignature:$index"
+    }
+
+    private fun hasIndexedChildren(baseSignature: String): Boolean {
+        val children = containerNode!!.childrens
+        // Check if :0 exists, which implies a sequence started
+        return children.containsKey("$baseSignature:0")
     }
 
     /**
