@@ -60,6 +60,9 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             val baseRoot: ScrContainerScriptNode = baseResult.astNode
             val modRoot: ScrContainerScriptNode = modResult.astNode
 
+//            baseRoot.printTree()
+//            modRoot.printTree()
+
             deepCompare(originalBaseModRoot, baseRoot, modRoot)
 
             //第一个mod与原版文件的对比
