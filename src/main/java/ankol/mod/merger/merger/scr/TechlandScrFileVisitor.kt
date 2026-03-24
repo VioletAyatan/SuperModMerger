@@ -10,6 +10,10 @@ import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.misc.Interval
 
+/**
+ * 用于实现将Techland scr脚本转换为AST节点树的Visitor
+ * @author Ankol
+ */
 class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScriptBaseVisitor<BaseTreeNode>() {
     /** 这个MAP用于识别当前处理到哪个块中，并且用于标记重复的函数以实现重复签名的检测 */
     private val repeatableFunctions: MutableMap<String, MutableSet<String>> = HashMap()
@@ -49,8 +53,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             tokenStream
         )
         this.currentContainerNode = rootNode
-        for (defCtx in ctx.definition()) {
-            val childNode = visit(defCtx)
+        ctx.definition().forEach { def ->
+            val childNode = visit(def)
             if (childNode != null) {
                 rootNode.addChild(childNode)
             }
@@ -62,7 +66,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 导入声明
      */
     override fun visitImportDecl(ctx: ImportDeclContext): BaseTreeNode {
-        // Import 签名示例: "import:data/scripts/inputs.scr"
+        //eg: "import:data/scripts/inputs.scr"
         val path = ctx.String().text
         val signature = "$IMPORT:$path"
         return ScrLeafScriptNode(
@@ -78,8 +82,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 导出声明
      */
     override fun visitExportDecl(ctx: ExportDeclContext): BaseTreeNode {
-        // Export 签名示例: "export:EJumpMaintainedSpeedSource_MoveController"
-        // 这样 Mod 修改同一个变量时，能通过签名找到并覆盖它
+        //eg: "export:EJumpMaintainedSpeedSource_MoveController"
         val name = ctx.Id().text
         val signature = "$EXPORT:$name"
         return ScrLeafScriptNode(
