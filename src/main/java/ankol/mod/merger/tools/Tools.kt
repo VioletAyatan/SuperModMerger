@@ -164,7 +164,7 @@ object Tools {
      * @return 格式化后的字符串
      */
     @JvmStatic
-    fun format(template: String, vararg args: Any): String {
+    fun format(template: String, vararg args: Any?): String {
         if (args.isEmpty()) return template
         var index = 0
         return template.replace(strFormatRegex) {
