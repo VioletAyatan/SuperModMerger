@@ -1,97 +1,99 @@
-package ankol.mod.merger.tools;
+package ankol.mod.merger.tools
 
-import lombok.extern.slf4j.Slf4j;
+import ankol.mod.merger.tools.Tools.format
+import java.util.*
 
 /**
  * 控制台彩色打印工具类
- * <p>
- * 支持ANSI彩色输出，仅在Windows10+和Unix-like系统中有效，使用示例：
- * <ui>
- * <li>ColorPrinter.cyan("This is cyan message");</li>
- * <li>ColorPrinter.success("Operation successful");</li>
- * <li>ColorPrinter.warning("Warning message");</li>
- * <li>ColorPrinter.error("Error occurred");</li>
- * </ui>
  *
+ * 支持ANSI彩色输出，仅在Windows10+和Unix-like系统中有效，使用示例：
+ * - ColorPrinter.cyan("This is cyan message");
+ * - ColorPrinter.success("Operation successful");
+ * - ColorPrinter.warning("Warning message");
+ * - ColorPrinter.error("Error occurred");
  * @author Ankol
  */
-@Slf4j
-public class ColorPrinter {
+object ColorPrinter {
+    private val log = logger()
 
     // ANSI 颜色代码
-    private static final String RESET = "\033[0m";
-    private static final String BLACK = "\033[30m";
-    private static final String RED = "\033[31m";
-    private static final String GREEN = "\033[32m";
-    private static final String YELLOW = "\033[33m";
-    private static final String BLUE = "\033[34m";
-    private static final String MAGENTA = "\033[35m";
-    private static final String CYAN = "\033[36m";
-    private static final String WHITE = "\033[37m";
+    private const val RESET = "\u001b[0m"
+    private const val BLACK = "\u001b[30m"
+    private const val RED = "\u001b[31m"
+    private const val GREEN = "\u001b[32m"
+    private const val YELLOW = "\u001b[33m"
+    private const val BLUE = "\u001b[34m"
+    private const val MAGENTA = "\u001b[35m"
+    private const val CYAN = "\u001b[36m"
+    private const val WHITE = "\u001b[37m"
 
     // 高亮颜色
-    private static final String BRIGHT_RED = "\033[91m";
-    private static final String BRIGHT_GREEN = "\033[92m";
-    private static final String BRIGHT_YELLOW = "\033[93m";
-    private static final String BRIGHT_BLUE = "\033[94m";
-    private static final String BRIGHT_MAGENTA = "\033[95m";
-    private static final String BRIGHT_CYAN = "\033[96m";
-    private static final String BRIGHT_WHITE = "\033[97m";
+    private const val BRIGHT_RED = "\u001b[91m"
+    private const val BRIGHT_GREEN = "\u001b[92m"
+    private const val BRIGHT_YELLOW = "\u001b[93m"
+    private const val BRIGHT_BLUE = "\u001b[94m"
+    private const val BRIGHT_MAGENTA = "\u001b[95m"
+    private const val BRIGHT_CYAN = "\u001b[96m"
+    private const val BRIGHT_WHITE = "\u001b[97m"
 
     // 背景颜色
-    private static final String BG_RED = "\033[41m";
-    private static final String BG_GREEN = "\033[42m";
-    private static final String BG_YELLOW = "\033[43m";
-    private static final String BG_BLUE = "\033[44m";
+    private const val BG_RED = "\u001b[41m"
+    private const val BG_GREEN = "\u001b[42m"
+    private const val BG_YELLOW = "\u001b[43m"
+    private const val BG_BLUE = "\u001b[44m"
 
     // 样式
-    private static final String BOLD = "\033[1m";
-    private static final String DIM = "\033[2m";
-    private static final String ITALIC = "\033[3m";
-    private static final String UNDERLINE = "\033[4m";
+    private const val BOLD = "\u001b[1m"
+    private const val DIM = "\u001b[2m"
+    private const val ITALIC = "\u001b[3m"
+    private const val UNDERLINE = "\u001b[4m"
 
+    /**
+     * 检查是否支持彩色输出
+     */
     // 检查是否支持彩色输出（Windows 10+ 或 Unix-like 系统）
-    private static final boolean SUPPORTS_COLOR = supportsColor();
+    val isColorSupported: Boolean = supportsColor()
 
     /**
      * 检查系统是否支持 ANSI 彩色输出
      */
-    private static boolean supportsColor() {
+    private fun supportsColor(): Boolean {
         // Windows 10+ 支持 ANSI，通过检查 OS 和版本
-        String os = System.getProperty("os.name", "").toLowerCase();
-        String osVersion = System.getProperty("os.version", "");
+        val os = System.getProperty("os.name", "").lowercase(Locale.getDefault())
+        val osVersion = System.getProperty("os.version", "")
 
         // Unix-like 系统（Linux, macOS 等）
         if (os.contains("linux") || os.contains("mac") || os.contains("unix")) {
-            return true;
+            return true
         }
 
         // Windows 10+ 支持 ANSI
         if (os.contains("windows")) {
             try {
                 // Windows 10 及更高版本
-                String[] versionParts = osVersion.split("\\.");
-                if (versionParts.length > 0) {
-                    int major = Integer.parseInt(versionParts[0]);
+                val versionParts: Array<String?> =
+                    osVersion.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                if (versionParts.isNotEmpty()) {
+                    val major = versionParts[0]!!.toInt()
                     // Windows 10 = 10.0，Windows 11 = 10.0 但 build > 21000
-                    return major >= 10;
+                    return major >= 10
                 }
-            } catch (Exception e) {
-                return false;
+            } catch (e: Exception) {
+                return false
             }
         }
 
-        return false;
+        return false
     }
 
     /**
      * 应用颜色（如果不支持，返回原文本）
      */
-    private static String applyColor(String text, String color) {
-        if (!SUPPORTS_COLOR) {
-            return text;
+    private fun applyColor(text: String, color: String): String {
+        if (!isColorSupported) {
+            return text
         }
-        return color + text + RESET;
+        return color + text + RESET
     }
 
     /**
@@ -99,8 +101,8 @@ public class ColorPrinter {
      *
      * @param message 文本
      */
-    public static void blue(String message) {
-        log.info(applyColor(message, BRIGHT_BLUE));
+    fun blue(message: String) {
+        log.info(applyColor(message, BRIGHT_BLUE))
     }
 
     /**
@@ -109,120 +111,122 @@ public class ColorPrinter {
      * @param format 文本模板
      * @param args   格式化参数
      */
-    public static void blue(String format, Object... args) {
-        blue(Tools.format(format, args));
+    fun blue(format: String, vararg args: Any) {
+        ColorPrinter.blue(format(format, *args))
     }
 
     /**
      * 打印青色日志
      */
-    public static void cyan(String message) {
-        log.info(applyColor(message, BRIGHT_CYAN));
+    @JvmStatic
+    fun cyan(message: String) {
+        log.info(applyColor(message, BRIGHT_CYAN))
     }
 
     /**
      * 打印青色日志，带格式化参数
      */
-    public static void cyan(String format, Object... args) {
-        cyan(Tools.format(format, args));
+    @JvmStatic
+    fun cyan(format: String, vararg args: Any) {
+        ColorPrinter.cyan(format(format, *args))
     }
 
     /**
      * 打印成功消息（绿色）
      */
-    public static void success(String message) {
-        log.info(applyColor(message, BRIGHT_GREEN));
+    fun success(message: String) {
+        log.info(applyColor(message, BRIGHT_GREEN))
     }
 
     /**
      * 打印成功消息（绿色），带格式化参数
      */
-    public static void success(String format, Object... args) {
-        success(Tools.format(format, args));
+    fun success(format: String, vararg args: Any) {
+        ColorPrinter.success(format(format, *args))
     }
 
     /**
      * 打印警告消息（黄色）
      */
-    public static void warning(String message) {
-        log.info(applyColor(message, BRIGHT_YELLOW));
+    fun warning(message: String) {
+        log.info(applyColor(message, BRIGHT_YELLOW))
     }
 
     /**
      * 打印警告消息（黄色），带格式化参数
      */
-    public static void warning(String format, Object... args) {
-        warning(Tools.format(format, args));
+    fun warning(format: String, vararg args: Any) {
+        ColorPrinter.warning(format(format, *args))
     }
 
     /**
      * 打印错误消息（红色）
      */
-    public static void error(String message) {
-        log.info(applyColor(message, BRIGHT_RED));
+    fun error(message: String) {
+        log.info(applyColor(message, BRIGHT_RED))
     }
 
     /**
      * 打印错误消息（红色），带格式化参数
      */
-    public static void error(String format, Object... args) {
-        error(Tools.format(format, args));
+    fun error(format: String, vararg args: Any) {
+        ColorPrinter.error(format(format, *args))
     }
 
     /**
      * 打印调试消息（青色）
      */
-    public static void debug(String message) {
-        log.info(applyColor(message, BRIGHT_CYAN));
+    fun debug(message: String) {
+        log.info(applyColor(message, BRIGHT_CYAN))
     }
 
     /**
      * 打印调试消息（青色），带格式化参数
      */
-    public static void debug(String format, Object... args) {
-        debug(Tools.format(format, args));
+    fun debug(format: String, vararg args: Any) {
+        ColorPrinter.debug(format(format, *args))
     }
 
     /**
      * 打印普通消息（白色）
      */
-    public static void print(String message) {
-        log.info(applyColor(message, WHITE));
+    fun print(message: String) {
+        log.info(applyColor(message, WHITE))
     }
 
     /**
      * 打印普通消息（白色），带格式化参数
      */
-    public static void print(String format, Object... args) {
-        print(Tools.format(format, args));
+    fun print(format: String, vararg args: Any) {
+        ColorPrinter.print(format(format, *args))
     }
 
     /**
      * 打印加粗消息（白色加粗）
      */
-    public static void bold(String message) {
-        log.info(applyColor(BOLD + message, RESET));
+    fun bold(message: String) {
+        log.info(applyColor(BOLD + message, RESET))
     }
 
     /**
      * 打印加粗消息（白色加粗），带格式化参数
      */
-    public static void bold(String format, Object... args) {
-        bold(Tools.format(format, args));
+    fun bold(format: String, vararg args: Any) {
+        ColorPrinter.bold(format(format, *args))
     }
 
     /**
      * 打印强调消息（洋红色）
      */
-    public static void highlight(String message) {
-        log.info(applyColor(message, BRIGHT_MAGENTA));
+    fun highlight(message: String) {
+        log.info(applyColor(message, BRIGHT_MAGENTA))
     }
 
     /**
      * 打印强调消息（洋红色），带格式化参数
      */
-    public static void highlight(String format, Object... args) {
-        log.info(applyColor(Tools.format(format, args), BRIGHT_MAGENTA));
+    fun highlight(format: String, vararg args: Any) {
+        log.info(applyColor(format(format, *args), BRIGHT_MAGENTA))
     }
 
     /**
@@ -231,36 +235,15 @@ public class ColorPrinter {
      * @param message   消息内容
      * @param colorCode ANSI 颜色代码（如 ColorPrinter.RED）
      */
-    public static void printWithColor(String message, String colorCode) {
-        log.info(applyColor(message, colorCode));
+    fun printWithColor(message: String, colorCode: String) {
+        log.info(applyColor(message, colorCode))
     }
 
     /**
      * 获取彩色文本（不直接打印）
      */
-    public static String getColoredText(String text, String colorCode) {
-        return applyColor(text, colorCode);
+    fun getColoredText(text: String, colorCode: String): String {
+        return applyColor(text, colorCode)
     }
-
-    /**
-     * 检查是否支持彩色输出
-     */
-    public static boolean isColorSupported() {
-        return SUPPORTS_COLOR;
-    }
-
-    // 公开常用颜色常量
-    public static final String RED_CODE = RED;
-    public static final String GREEN_CODE = GREEN;
-    public static final String YELLOW_CODE = YELLOW;
-    public static final String BLUE_CODE = BLUE;
-    public static final String CYAN_CODE = CYAN;
-    public static final String MAGENTA_CODE = MAGENTA;
-    public static final String BRIGHT_RED_CODE = BRIGHT_RED;
-    public static final String BRIGHT_GREEN_CODE = BRIGHT_GREEN;
-    public static final String BRIGHT_YELLOW_CODE = BRIGHT_YELLOW;
-    public static final String BRIGHT_BLUE_CODE = BRIGHT_BLUE;
-    public static final String BRIGHT_CYAN_CODE = BRIGHT_CYAN;
-    public static final String BRIGHT_MAGENTA_CODE = BRIGHT_MAGENTA;
 }
 
