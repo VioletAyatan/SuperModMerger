@@ -38,6 +38,18 @@
       "allDeclaredMethods": true
     },
     {
+      "type": "ch.qos.logback.core.rolling.FixedWindowRollingPolicy",
+      "allDeclaredConstructors": true,
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy",
+      "allDeclaredConstructors": true,
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
       "type": "ch.qos.logback.classic.filter.ThresholdFilter",
       "allDeclaredConstructors": true,
       "allDeclaredFields": true,
