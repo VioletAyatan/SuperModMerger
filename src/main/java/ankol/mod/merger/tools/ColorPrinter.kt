@@ -169,7 +169,7 @@ object ColorPrinter {
     /**
      * 打印错误消息（红色），带格式化参数
      */
-    fun error(format: String, vararg args: Any) {
+    fun error(format: String, vararg args: Any?) {
         ColorPrinter.error(format(format, *args))
     }
 
