@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="false" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
+<configuration debug="false"
+>
     <!-- 定义变量 -->
-    <timestamp key="bySecond" datePattern="yyyyMMdd-HHmmss"/>
     <property name="LOG_DIR" value="logs"/>
-    <property name="DEBUG_LOG_FILE" value="${LOG_DIR}/app-${bySecond}.log"/>
+    <property name="DEBUG_LOG_FILE" value="${LOG_DIR}/app.log"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%msg%n"/>
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
 
-    <property name="MAX_HISTORY" value="30"/>
-    <property name="TOTAL_SIZE_CAP" value="1GB"/>
+    <!-- 日志文件最大保留数量 -->
+    <property name="MAX_FILES" value="20"/>
     <property name="MAX_FILE_SIZE" value="10MB"/>
 
     <!-- 控制台输出-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -29,20 +29,15 @@
             <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-
-        <!-- 滚动策略：基于时间和大小 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- 归档日志文件的命名模式 -->
-            <fileNamePattern>${LOG_DIR}/archive/app-%d{yyyyMMdd}.%i.log.gz</fileNamePattern>
-            <!-- 单个日志文件的最大大小 -->
-            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
-            <!-- 保留的日志文件天数 -->
-            <maxHistory>${MAX_HISTORY}</maxHistory>
-            <!-- 所有日志文件的总大小上限 -->
-            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
-            <!-- 启动时清理过期的日志文件 -->
-            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        <!-- 滚动策略：基于固定数量的滚动，最多保留100个日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/archive/app.%i.log.gz</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>${MAX_FILES}</maxIndex>
         </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+        </triggeringPolicy>
     </appender>
 
     <!-- 日志异步追加器 -->
