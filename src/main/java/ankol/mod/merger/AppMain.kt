@@ -115,11 +115,10 @@ class AppMain {
 
         private fun initCharset() {
             try {
-                val p = ProcessBuilder("cmd", "/c", "chcp", "65001")
-                    .inheritIO() // 让子进程输出到相同控制台（可见 chcp 的反馈）
-                    .start()
-                if (!p.waitFor(2, TimeUnit.SECONDS)) {
-                    p.destroyForcibly()
+                val osName = System.getProperty("os.name")
+                if (osName.contains("Windows")) {
+                    // 执行 chcp 命令
+                    ProcessBuilder("cmd", "/c", "chcp 65001").inheritIO().start().waitFor(2, TimeUnit.SECONDS)
                 }
                 val psOut = PrintStream(FileOutputStream(FileDescriptor.out), true, StandardCharsets.UTF_8)
                 val psErr = PrintStream(FileOutputStream(FileDescriptor.err), true, StandardCharsets.UTF_8)

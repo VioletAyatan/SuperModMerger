@@ -3,9 +3,13 @@ package ankol.mod.merger.merger.scr
 import ankol.mod.merger.antlr.scr.TechlandScriptLexer
 import ankol.mod.merger.antlr.scr.TechlandScriptParser
 import ankol.mod.merger.constants.UserChoice
-import ankol.mod.merger.core.*
+import ankol.mod.merger.core.BaseTreeNode
+import ankol.mod.merger.core.ConflictResolver
+import ankol.mod.merger.core.MergerContext
+import ankol.mod.merger.core.ParsedResult
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
+import ankol.mod.merger.merger.AbstractFileMerger
 import ankol.mod.merger.merger.ConflictRecord
 import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
@@ -59,6 +63,9 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             val modResult = parseContent(file2.getContent())
             val baseRoot: ScrContainerScriptNode = baseResult.astNode
             val modRoot: ScrContainerScriptNode = modResult.astNode
+
+//            baseRoot.printTree()
+//            modRoot.printTree()
 
             deepCompare(originalBaseModRoot, baseRoot, modRoot)
 

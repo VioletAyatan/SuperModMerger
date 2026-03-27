@@ -168,7 +168,7 @@ object Tools {
         if (args.isEmpty()) return template
         var index = 0
         return template.replace(strFormatRegex) {
-            if (index < args.size) args[index++]?.toString() ?: "null" else "{}"
+            if (index < args.size) args[index++].toString() else "{}"
         }
     }
 

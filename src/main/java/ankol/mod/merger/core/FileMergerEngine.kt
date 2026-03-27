@@ -234,11 +234,10 @@ class FileMergerEngine(
                 // 基准mod中存在该文件，需要进行对比合并
                 if (originalBaseModContent != null) {
                     val context = MergerContext().also { it.baseModManager = baseModManager }
-                    val mergerOptional = MergerFactory.getMerger(relPath, context)
+                    val merger = MergerFactory.getMerger(relPath, context)
 
                     // 如果支持合并，进行对比合并
-                    if (mergerOptional.isPresent) {
-                        val merger = mergerOptional.get()
+                    if (merger != null) {
                         val fileName = Tools.getEntryFileName(relPath)
 
                         val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
@@ -263,13 +262,13 @@ class FileMergerEngine(
                         ColorPrinter.success(Localizations.t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
                         return
                     }
+                } else {
+                    Tools.zeroCopy(fileCurrent.safegetFilePath(), mergedOutputDir.resolve(relPath))
                 }
             } catch (e: Exception) {
                 ColorPrinter.error("Processing file '${relPath}' error, Reason: ${e.message}", e)
             }
         }
-        // 没有基准mod，或者基准mod中不存在该文件，或者不支持合并，直接复制
-        Tools.zeroCopy(fileCurrent.safegetFilePath(), mergedOutputDir.resolve(relPath))
     }
 
     /**
@@ -290,10 +289,10 @@ class FileMergerEngine(
 
         val context = MergerContext()
         context.baseModManager = baseModManager
-        val mergerOptional = MergerFactory.getMerger(relPath, context) //获取合并器
+        val merger = MergerFactory.getMerger(relPath, context) //获取合并器
 
         //不支持合并的文件类型，直接让用户选择用哪个文件
-        if (mergerOptional.isEmpty) {
+        if (merger == null) {
             choiseWhichAssetToUse(relPath, fileSources, mergedDir)
             return
         }
@@ -302,7 +301,6 @@ class FileMergerEngine(
             var baseMergedContent = "" //基准文本内容
             // 支持合并，开始处理合并逻辑
             ColorPrinter.cyan(Localizations.t("ENGINE_MERGING_FILE", relPath, fileSources.size))
-            val merger = mergerOptional.get()
 
             var originalBaseModContent: String? = null
             if (baseModManager.loaded) {
