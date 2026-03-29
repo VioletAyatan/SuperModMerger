@@ -16,11 +16,11 @@ public class TechlandScriptLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		Import=1, Extern=2, Export=3, Sub=4, Use=5, Exclamation=6, KwIf=7, KwElse=8, 
-		LParen=9, RParen=10, LBrace=11, RBrace=12, Semicolon=13, Comma=14, Equals=15, 
-		LBracket=16, RBracket=17, Dot=18, DoubleColon=19, Plus=20, Minus=21, Mul=22, 
-		Div=23, LogicAnd=24, LogicOr=25, BitOr=26, BitAnd=27, BitNot=28, Question=29, 
-		Colon=30, Gt=31, Lt=32, Eq=33, NotEq=34, Gte=35, Lte=36, Bool=37, Id=38, 
+		Import=1, Extern=2, Export=3, Sub=4, Use=5, Exclamation=6, KwIf=7, KwElse=8,
+		LParen=9, RParen=10, LBrace=11, RBrace=12, Semicolon=13, Comma=14, Equals=15,
+		LBracket=16, RBracket=17, Dot=18, DoubleColon=19, Plus=20, Minus=21, Mul=22,
+		Div=23, LogicAnd=24, LogicOr=25, BitOr=26, BitAnd=27, BitNot=28, Question=29,
+		Colon=30, Gt=31, Lt=32, Eq=33, NotEq=34, Gte=35, Lte=36, Bool=37, Id=38,
 		MacroId=39, Number=40, String=41, LineComment=42, BlockComment=43, WhiteSpaces=44;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -30,12 +30,42 @@ public class TechlandScriptLexer extends Lexer {
 		"DEFAULT_MODE"
 	};
 
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf", "KwElse",
+			"LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma", "Equals",
+			"LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus", "Mul",
+			"Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
+			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "TRUE_LITERAL", "FALSE_LITERAL",
+			"Bool", "Id", "MacroId", "Number", "EXPONENT", "String", "LineComment",
+			"BlockComment", "WhiteSpaces"
+		};
+	}
 	public static final String[] ruleNames = makeRuleNames();
+
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "'import'", "'extern'", "'export'", "'sub'", "'use'", "'!'", null,
+			null, "'('", "')'", "'{'", "'}'", "';'", "','", "'='", "'['", "']'",
+			"'.'", "'::'", "'+'", "'-'", "'*'", "'/'", "'&&'", "'||'", "'|'", "'&'",
+			"'~'", "'?'", "':'", "'>'", "'<'", "'=='", "'!='", "'>='", "'<='"
+		};
+	}
 	/**
 	 * @deprecated Use {@link #VOCABULARY} instead.
 	 */
 	@Deprecated
 	public static final String[] tokenNames;
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf",
+			"KwElse", "LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma",
+			"Equals", "LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus",
+			"Mul", "Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
+			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "Bool", "Id", "MacroId",
+			"Number", "String", "LineComment", "BlockComment", "WhiteSpaces"
+		};
+	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
@@ -53,42 +83,6 @@ public class TechlandScriptLexer extends Lexer {
 			}
 		}
 	}
-	public TechlandScriptLexer(CharStream input) {
-		super(input);
-		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
-	}
-
-	private static String[] makeRuleNames() {
-		return new String[] {
-			"Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf", "KwElse",
-			"LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma", "Equals",
-			"LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus", "Mul",
-			"Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
-			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "TRUE_LITERAL", "FALSE_LITERAL",
-			"Bool", "Id", "MacroId", "Number", "EXPONENT", "String", "LineComment",
-			"BlockComment", "WhiteSpaces"
-		};
-	}
-
-	private static String[] makeLiteralNames() {
-		return new String[] {
-			null, "'import'", "'extern'", "'export'", "'sub'", "'use'", "'!'", null,
-			null, "'('", "')'", "'{'", "'}'", "';'", "','", "'='", "'['", "']'",
-			"'.'", "'::'", "'+'", "'-'", "'*'", "'/'", "'&&'", "'||'", "'|'", "'&'",
-			"'~'", "'?'", "':'", "'>'", "'<'", "'=='", "'!='", "'>='", "'<='"
-		};
-	}
-
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, "Import", "Extern", "Export", "Sub", "Use", "Exclamation", "KwIf",
-			"KwElse", "LParen", "RParen", "LBrace", "RBrace", "Semicolon", "Comma",
-			"Equals", "LBracket", "RBracket", "Dot", "DoubleColon", "Plus", "Minus",
-			"Mul", "Div", "LogicAnd", "LogicOr", "BitOr", "BitAnd", "BitNot", "Question",
-			"Colon", "Gt", "Lt", "Eq", "NotEq", "Gte", "Lte", "Bool", "Id", "MacroId",
-			"Number", "String", "LineComment", "BlockComment", "WhiteSpaces"
-		};
-	}
 
 	@Override
 	@Deprecated
@@ -100,6 +94,12 @@ public class TechlandScriptLexer extends Lexer {
 
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
+	}
+
+
+	public TechlandScriptLexer(CharStream input) {
+		super(input);
+		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override

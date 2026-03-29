@@ -14,9 +14,9 @@ definition
     | macroDecl
     | subDecl
     | variableDecl
-    | funtionBlockDecl       // 函数块声明必须在函数调用之前，否则会被错误匹配
+    | functionBlockDecl       // 函数块声明必须在函数调用之前，否则会被错误匹配
     | methodReferenceFunCallDecl
-    | funtionCallDecl
+    | functionCallDecl
     ;
 //导入导出声明
 importDecl
@@ -67,12 +67,12 @@ functionBlock
 statements
     : logicControlDecl
     | useDecl
-    | funtionBlockDecl       // 函数块声明必须在函数调用之前
+    | functionBlockDecl       // 函数块声明必须在函数调用之前
     | methodReferenceFunCallDecl
     | variableDecl
     | externDecl
     | macroDecl
-    | funtionCallDecl
+    | functionCallDecl
     ;
 
 // 变量声明 (带类型, 例如: float health_critical = ...;)
@@ -81,7 +81,7 @@ variableDecl
     ;
 
 // 函数调用 (例如: Set("f_pp_light_leak", light_leak);)
-funtionCallDecl
+functionCallDecl
     : Id LParen valueList? RParen Semicolon? //传统函数调用
     ;
 
@@ -90,7 +90,7 @@ methodReferenceFunCallDecl
     ;
 
 //函数块 (例如: Item(...) {...})
-funtionBlockDecl
+functionBlockDecl
     : Id LParen valueList? RParen functionBlock
     ;
 

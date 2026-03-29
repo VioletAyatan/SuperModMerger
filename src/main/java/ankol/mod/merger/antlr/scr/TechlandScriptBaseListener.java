@@ -209,13 +209,13 @@ public class TechlandScriptBaseListener implements TechlandScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx) { }
+	@Override public void enterFunctionCallDecl(TechlandScriptParser.FunctionCallDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx) { }
+	@Override public void exitFunctionCallDecl(TechlandScriptParser.FunctionCallDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -233,13 +233,13 @@ public class TechlandScriptBaseListener implements TechlandScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuntionBlockDecl(TechlandScriptParser.FuntionBlockDeclContext ctx) { }
+	@Override public void enterFunctionBlockDecl(TechlandScriptParser.FunctionBlockDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuntionBlockDecl(TechlandScriptParser.FuntionBlockDeclContext ctx) { }
+	@Override public void exitFunctionBlockDecl(TechlandScriptParser.FunctionBlockDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -117,10 +117,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         return subNode
     }
 
-    /**
-     * 函数块声明
-     */
-    override fun visitFuntionBlockDecl(ctx: FuntionBlockDeclContext): BaseTreeNode {
+    override fun visitFunctionBlockDecl(ctx: FunctionBlockDeclContext): BaseTreeNode {
         val previousContainer = this.currentContainerNode //这是标记上一层的容器，以便恢复
         val previousFunBlockSignature = this.currentFunBlockSignature // Save previous signature
 
@@ -208,7 +205,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     /**
      * 函数调用
      */
-    override fun visitFuntionCallDecl(ctx: FuntionCallDeclContext): BaseTreeNode {
+    override fun visitFunctionCallDecl(ctx: FunctionCallDeclContext): BaseTreeNode {
         //生成签名
         val funcName = ctx.Id().text
         val valueList = getValueList(ctx.valueList())

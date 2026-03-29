@@ -168,15 +168,15 @@ public interface TechlandScriptListener extends ParseTreeListener {
 	 */
 	void exitVariableDecl(TechlandScriptParser.VariableDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TechlandScriptParser#funtionCallDecl}.
+	 * Enter a parse tree produced by {@link TechlandScriptParser#functionCallDecl}.
 	 * @param ctx the parse tree
 	 */
-	void enterFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx);
+	void enterFunctionCallDecl(TechlandScriptParser.FunctionCallDeclContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link TechlandScriptParser#funtionCallDecl}.
+	 * Exit a parse tree produced by {@link TechlandScriptParser#functionCallDecl}.
 	 * @param ctx the parse tree
 	 */
-	void exitFuntionCallDecl(TechlandScriptParser.FuntionCallDeclContext ctx);
+	void exitFunctionCallDecl(TechlandScriptParser.FunctionCallDeclContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TechlandScriptParser#methodReferenceFunCallDecl}.
 	 * @param ctx the parse tree
@@ -188,15 +188,15 @@ public interface TechlandScriptListener extends ParseTreeListener {
 	 */
 	void exitMethodReferenceFunCallDecl(TechlandScriptParser.MethodReferenceFunCallDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TechlandScriptParser#funtionBlockDecl}.
+	 * Enter a parse tree produced by {@link TechlandScriptParser#functionBlockDecl}.
 	 * @param ctx the parse tree
 	 */
-	void enterFuntionBlockDecl(TechlandScriptParser.FuntionBlockDeclContext ctx);
+	void enterFunctionBlockDecl(TechlandScriptParser.FunctionBlockDeclContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link TechlandScriptParser#funtionBlockDecl}.
+	 * Exit a parse tree produced by {@link TechlandScriptParser#functionBlockDecl}.
 	 * @param ctx the parse tree
 	 */
-	void exitFuntionBlockDecl(TechlandScriptParser.FuntionBlockDeclContext ctx);
+	void exitFunctionBlockDecl(TechlandScriptParser.FunctionBlockDeclContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TechlandScriptParser#useDecl}.
 	 * @param ctx the parse tree
