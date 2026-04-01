@@ -25,7 +25,7 @@ import kotlin.io.path.writeText
  * @author Ankol
  */
 class FileMergerEngine(
-    private val modsToMerge: List<MergingModInfo>,
+    private val mergeableMods: List<MergingModInfo>,
     private val outputPath: Path,
     private val baseModPath: Path
 ) {
@@ -52,12 +52,12 @@ class FileMergerEngine(
     fun merge() {
         //打印初始信息
         ColorPrinter.cyan(t("ENGINE_TITLE"))
-        if (modsToMerge.isEmpty()) {
+        if (mergeableMods.isEmpty()) {
             ColorPrinter.error(t("ENGINE_NO_MODS_FOUND"))
             return
         }
-        ColorPrinter.cyan(t("ENGINE_FOUND_MODS_TO_MERGE", modsToMerge.size))
-        for ((index, modInfo) in modsToMerge.withIndex()) {
+        ColorPrinter.cyan(t("ENGINE_FOUND_MODS_TO_MERGE", mergeableMods.size))
+        for ((index, modInfo) in mergeableMods.withIndex()) {
             ColorPrinter.cyan("${index + 1}. ${modInfo.modName}")
         }
         //开始合并
@@ -135,7 +135,7 @@ class FileMergerEngine(
     private fun extractAllMods(): MutableMap<String, MutableList<PathFileTree>> {
         val filesByPath = ConcurrentHashMap<String, MutableList<PathFileTree>>()
         val index = AtomicInteger(0)
-        modsToMerge.parallelStream().forEach { mod: MergingModInfo ->
+        mergeableMods.parallelStream().forEach { mod: MergingModInfo ->
             try {
                 val archiveName = mod.modName // 解压的压缩包真实名称
                 val modTempDir: Path = tempDir.resolve("${archiveName}${index.getAndIncrement()}") // 生成临时目录名字
@@ -247,8 +247,8 @@ class FileMergerEngine(
                         }
 
 
-                        val result = merger.merge(fileBase, fileCurrent)
-                        val mergedContent = result.mergedContent
+                        val mergeResult = merger.merge(fileBase, fileCurrent)
+                        val mergedContent = mergeResult.mergedContent
 
                         // 写入合并结果
                         val targetPath = mergedOutputDir.resolve(relPath)
