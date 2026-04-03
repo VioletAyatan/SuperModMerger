@@ -92,16 +92,16 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     }
 
     private fun deepCompare(
-        originalContainer: ScrContainerScriptNode?,
+        vanillaContainer: ScrContainerScriptNode?,
         baseContainer: ScrContainerScriptNode,
         modContainer: ScrContainerScriptNode
     ) {
         // 遍历 Mod 的所有子节点
         for ((signature, modNode) in modContainer.childrens) {
             try {
-                var originalNode: BaseTreeNode? = null
-                if (originalContainer != null) {
-                    originalNode = originalContainer.childrens[signature]
+                var vanillaNode: BaseTreeNode? = null
+                if (vanillaContainer != null) {
+                    vanillaNode = vanillaContainer.childrens[signature]
                 }
                 val baseNode = baseContainer.childrens[signature]
 
@@ -110,13 +110,13 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 } else {
                     //容器节点，递归对比
                     if (baseNode is ScrContainerScriptNode && modNode is ScrContainerScriptNode) {
-                        deepCompare(originalNode as ScrContainerScriptNode?, baseNode, modNode)
+                        deepCompare(vanillaNode as ScrContainerScriptNode?, baseNode, modNode)
                     }
                     //function call节点的对比逻辑
                     else if (baseNode is ScrFunCallScriptNode && modNode is ScrFunCallScriptNode) {
                         if (baseNode.arguments != modNode.arguments) {
-                            if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
+                            if (!isNodeSameAsOriginalNode(vanillaNode, modNode)) {
+                                if (isNodeSameAsOriginalNode(vanillaNode, baseNode)) {
                                     context.mergedHistory.markSignture(modNode.signature, context.mergeModName)
                                     //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
@@ -152,8 +152,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                         val modText = modNode.sourceText
                         //内容不一致
                         if (!equalsTrimmed(baseText, modText)) {
-                            if (!isNodeSameAsOriginalNode(originalNode, modNode)) {
-                                if (isNodeSameAsOriginalNode(originalNode, baseNode)) {
+                            if (!isNodeSameAsOriginalNode(vanillaNode, modNode)) {
+                                if (isNodeSameAsOriginalNode(vanillaNode, baseNode)) {
                                     context.mergedHistory.markSignture(modNode.signature, context.mergeModName)
                                     conflicts.add(
                                         ConflictRecord(
