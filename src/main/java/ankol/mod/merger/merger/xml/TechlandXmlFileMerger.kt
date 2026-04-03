@@ -91,7 +91,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
      * 递归对比树节点
      */
     private fun deepCompare(
-        originalContainer: XmlContainerNode?,
+        vanillaContainer: XmlContainerNode?,
         baseContainer: XmlContainerNode,
         modContainer: XmlContainerNode
     ) {
@@ -99,10 +99,10 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
         var previousSiblingInBase: XmlNode? = null // 追踪前一个兄弟节点
         for ((signature, modNode) in modContainer.childrens) {
             try {
-                var originalNode: XmlNode? = null
+                var vanillaNode: XmlNode? = null
 
-                if (originalContainer != null) {
-                    originalNode = originalContainer.childrens[signature]
+                if (vanillaContainer != null) {
+                    vanillaNode = vanillaContainer.childrens[signature]
                 }
 
                 val baseNode = baseContainer.childrens[signature]
@@ -116,7 +116,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                     previousSiblingInBase = baseNode
                     //容器节点，继续递归对比
                     if (baseNode is XmlContainerNode && modNode is XmlContainerNode) {
-                        deepCompare(originalNode as XmlContainerNode?, baseNode, modNode)
+                        deepCompare(vanillaNode as XmlContainerNode?, baseNode, modNode)
                     }
                     //叶子节点，对比属性
                     else if (baseNode !is XmlContainerNode && modNode !is XmlContainerNode) {
@@ -125,7 +125,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                         val modAttr = modNode.attributes
                         if (baseAttr != modAttr) {
                             // 不相同，检查是否跟基准mod的一样，不一样视为冲突
-                            if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
+                            if (!isNodeSameAsOriginalBaseMod(vanillaNode, modNode)) {
                                 conflicts.add(
                                     ConflictRecord(
                                         context.mergingFileName,
@@ -140,7 +140,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                         }
                     } else {
                         // 一个是容器，一个不是容器，这种情况下认为是冲突
-                        if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
+                        if (!isNodeSameAsOriginalBaseMod(vanillaNode, modNode)) {
                             conflicts.add(
                                 ConflictRecord(
                                     context.mergingFileName,
@@ -155,7 +155,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                     }
                 }
             } catch (e: Exception) {
-                System.err.println("Error in processing XML node with signature: '${signature}'")
+                log.error("Error in processing XML node with signature: '${signature}'", e)
             }
         }
     }
@@ -181,8 +181,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             val newNode = record.newNode
 
             val insertPosition = if (previousSibling != null) {
-                // 如果有前一个兄弟节点，在其后面插入
-                // 使用stopTokenIndex + 1
+                //如果有上一个兄弟节点，在其后面插入（stopToken+1）
                 previousSibling.stopTokenIndex + 1
             } else {
                 // 如果没有前一个兄弟节点（即这是第一个子节点），在父容器的结束标签前面插入
