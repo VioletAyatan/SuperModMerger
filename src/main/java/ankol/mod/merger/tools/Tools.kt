@@ -33,7 +33,7 @@ object Tools {
             if (defaultPath.exists()) {
                 defaultPath
             } else {
-                throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", defaultPath))
+                throw BusinessException(Localizations.t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
             }
         } else {
             if (meringModDir.exists()) {
@@ -55,7 +55,7 @@ object Tools {
     fun scanFiles(mergedDirPath: Path, vararg extensions: String): MutableList<Path> {
         val results = ArrayList<Path>()
         if (!mergedDirPath.exists()) {
-            throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST"))
+            throw BusinessException(Localizations.t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
         }
         mergedDirPath.walk(PathWalkOption.FOLLOW_LINKS)
             .filter { it.isRegularFile() }

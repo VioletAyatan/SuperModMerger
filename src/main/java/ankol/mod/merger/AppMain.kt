@@ -35,7 +35,7 @@ class AppMain {
                     exitProcess(0)
                 }
                 // 扫描需要合并的MOD目录
-                val modsToMerge = locateMergingMod()
+                val modsToMerge = locateMergingMod(argParser)
                 // 确定输出路径
                 var outputPath = Path(Tools.userDir, "source", "data7.pak")
                 if (argParser.hasOption("o")) {
@@ -62,9 +62,9 @@ class AppMain {
             }
         }
 
-        private fun locateMergingMod(): List<MergingModInfo> {
+        private fun locateMergingMod(argParser: SimpleArgParser): List<MergingModInfo> {
             var vortexDeploy = false
-            val mergingModDir = Tools.getMergingModDir()
+            val mergingModDir = Tools.getMergingModDir(argParser.getOptionValue("m")?.let { Path(it) })
             //先找下当前目录有没有Vortex的部署文件，如果有说明是用vortex进行的部署
             mergingModDir.listDirectoryEntries().forEach {
                 if (it.isRegularFile() && it.name.contains("""vortex\.deployment\.[^.]+\.json""".toRegex())) {
@@ -107,6 +107,7 @@ class AppMain {
 
         private fun registerArgsParser(): SimpleArgParser {
             val argParser = SimpleArgParser()
+            argParser.addOption("m", "merge", true, Localizations.t("APP_MAIN_OPTION_MERGE_DESC"))
             argParser.addOption("o", "output", true, Localizations.t("APP_MAIN_OPTION_OUTPUT_DESC"))
             argParser.addOption("b", "base", true, Localizations.t("APP_MAIN_OPTION_BASE_DESC"))
             argParser.addOption("h", "help", false, Localizations.t("APP_MAIN_OPTION_HELP_DESC"))
