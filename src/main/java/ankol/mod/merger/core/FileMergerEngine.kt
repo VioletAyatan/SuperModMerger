@@ -171,7 +171,7 @@ class FileMergerEngine(
             // 不支持dll文件.asi文件的合并
             else if (Strings.CI.endsWithAny(fileEntryName, ".dll", ".asi")) {
                 log.warn("Unsupported dll/asi file: {}, Please handle it yourself after merging.", fileEntryName)
-                ErrorReporter.addErrorReport(sourceInfo.getFirstArchiveFileName(), t("ERROR_REPORTER_NSUPPORT_DLL", fileEntryName))
+                ErrorReporter.addErrorReport(sourceInfo.getFirstArchiveFileName(), t("ERROR_NOT_SUPPORT_DLL", fileEntryName))
                 return@filter false
             }
             // 不支持rpak文件的合并，rpack是资源文件，不能合并
@@ -179,7 +179,7 @@ class FileMergerEngine(
                 log.warn("Unsupported rpak file: {}, Marking to removal.", fileEntryName)
                 ErrorReporter.addErrorReport(
                     sourceInfo.getFirstArchiveFileName(),
-                    t("ERROR_REPORTER_NSUPPORT_RPACK", fileEntryName)
+                    t("ERROR_NOT_SUPPORT_RPACK", fileEntryName)
                 )
                 return@filter false
             }
