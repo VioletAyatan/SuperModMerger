@@ -130,7 +130,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     record.userChoice = UserChoice.MERGE_MOD
                                     conflicts.add(record)
                                 } else {
-                                    //标记真正的冲突
+                                    //标记真正的冲突 todo MergedHistory存在作用域混乱的问题，还需改良
                                     val modName = context.mergedHistory.getModNameFromSignature(signature)
                                     conflicts.add(
                                         ConflictRecord(

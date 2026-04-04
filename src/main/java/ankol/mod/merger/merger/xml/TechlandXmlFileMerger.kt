@@ -30,7 +30,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 冲突项列表
      */
-    private val conflicts = ArrayList<ConflictRecord>()
+    private val conflicts = arrayListOf<ConflictRecord>()
 
     /**
      * 新增节点记录
@@ -49,14 +49,14 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 原始基准MOD对应文件的语法树
      */
-    private var originalBaseModRoot: XmlContainerNode? = null
+    private var vanillaContainerNode: XmlContainerNode? = null
 
     override fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult {
         try {
             val parsedResult = context.baseModManager.parseForm(file1.fileEntryName) { parseContent(it) }
             // 解析原始基准MOD文件（如果存在）
             if (parsedResult != null) {
-                originalBaseModRoot = parsedResult.astNode
+                vanillaContainerNode = parsedResult.astNode
             }
             // 解析base和mod文件
             val baseResult = parseFile(file1)
@@ -64,7 +64,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             val baseRoot = baseResult.astNode
             val modRoot = modResult.astNode
 
-            deepCompare(originalBaseModRoot, baseRoot, modRoot)
+            deepCompare(vanillaContainerNode, baseRoot, modRoot)
 
             // 第一个mod与原版文件的对比
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
@@ -83,7 +83,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 清理状态，准备下一个文件合并
             conflicts.clear()
             newNodes.clear()
-            originalBaseModRoot = null
+            vanillaContainerNode = null
         }
     }
 
@@ -180,12 +180,14 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             val previousSibling = record.previousSibling
             val newNode = record.newNode
 
-            val insertPosition = if (previousSibling != null) {
+            val insertPosition: Int = if (previousSibling != null) {
                 //如果有上一个兄弟节点，在其后面插入（stopToken+1）
                 previousSibling.stopTokenIndex + 1
             } else {
                 // 如果没有前一个兄弟节点（即这是第一个子节点），在父容器的结束标签前面插入
-                record.parentContainer.stopTokenIndex
+                val stopTokenIndex = record.parentContainer.stopTokenIndex + 1
+                println(record.parentContainer.tokenStream.get(stopTokenIndex).text)
+                stopTokenIndex
             }
             rewriter.insertBefore(insertPosition, "\n" + newNode.sourceText)
         }
@@ -197,7 +199,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
      */
     private fun isNodeSameAsOriginalBaseMod(originalNode: XmlNode?, modNode: XmlNode): Boolean {
         // 如果没有原始基准MOD，则认为不相同
-        if (originalBaseModRoot == null) {
+        if (vanillaContainerNode == null) {
             return false
         }
         if (originalNode == null) {
