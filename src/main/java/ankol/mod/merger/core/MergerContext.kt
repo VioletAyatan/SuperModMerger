@@ -1,6 +1,12 @@
 package ankol.mod.merger.core
 
+import ankol.mod.merger.tools.logger
+
 class MergerContext {
+    companion object {
+        private val log = logger()
+    }
+
     /**
      * 当前正在合并的文件名
      */
@@ -41,9 +47,9 @@ class MergerContext {
         fun markSignture(signature: String, modName: String) {
             if (!map.containsKey(signature)) {
                 map[signature] = modName
-            } /*else {
-                System.err.println("错误，检测到重复的签名插入：${signature}，跳过处理.")
-            }*/
+            } else {
+                log.debug("警告，合并历史中检测到重复的签名插入：${signature}，跳过处理.")
+            }
         }
 
         /**
