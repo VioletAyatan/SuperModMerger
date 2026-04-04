@@ -259,9 +259,8 @@ class FileMergerEngine(
                         ColorPrinter.success(t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
                         return
                     }
-                } else {
-                    Tools.zeroCopy(fileCurrent.safegetFilePath(), mergedOutputDir.resolve(relPath))
                 }
+                Tools.zeroCopy(fileCurrent.safegetFilePath(), mergedOutputDir.resolve(relPath))
             } catch (e: Exception) {
                 ColorPrinter.error("Processing file '${relPath}' error, Reason: ${e.message}", e)
             }
