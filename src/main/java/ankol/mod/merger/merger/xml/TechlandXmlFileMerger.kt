@@ -12,6 +12,7 @@ import ankol.mod.merger.merger.AbstractFileMerger
 import ankol.mod.merger.merger.ConflictRecord
 import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.xml.node.XmlContainerNode
+import ankol.mod.merger.merger.xml.node.XmlLeafNode
 import ankol.mod.merger.merger.xml.node.XmlNode
 import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.CharStream
@@ -35,7 +36,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 新增节点记录
      */
-    private data class NewNodeRecord(
+    private data class XmlNewNode(
         val parentContainer: XmlContainerNode,
         val previousSibling: XmlNode?,
         val newNode: XmlNode
@@ -44,7 +45,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 新增节点列表
      */
-    private val newNodes = ArrayList<NewNodeRecord>()
+    private val newNodes = ArrayList<XmlNewNode>()
 
     /**
      * 原始基准MOD对应文件的语法树
@@ -108,9 +109,8 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                 val baseNode = baseContainer.childrens[signature]
 
                 if (baseNode == null) {
-                    // Base中不存在这个节点 - 新增节点，需要添加到合并结果中
-                    // 记录前一个兄弟节点，用于确定插入位置
-                    newNodes.add(NewNodeRecord(baseContainer, previousSiblingInBase, modNode))
+                    //新增节点，记录插入操作
+                    newNodes.add(XmlNewNode(baseContainer, previousSiblingInBase, modNode))
                 } else {
                     // 更新前一个兄弟节点
                     previousSiblingInBase = baseNode
@@ -119,15 +119,15 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                         deepCompare(vanillaNode as XmlContainerNode?, baseNode, modNode)
                     }
                     //叶子节点，对比属性
-                    else if (baseNode !is XmlContainerNode && modNode !is XmlContainerNode) {
-                        // 使用规范化文本进行对比，避免空格、换行等格式差异
+                    else if (baseNode is XmlLeafNode && modNode is XmlLeafNode) {
                         val baseAttr = baseNode.attributes
                         val modAttr = modNode.attributes
                         if (baseAttr != modAttr) {
-                            // 不相同，检查是否跟基准mod的一样，不一样视为冲突
+                            // 属性不同，检查modNode与原版是否相同
                             if (!isNodeSameAsOriginalBaseMod(vanillaNode, modNode)) {
-                                conflicts.add(
-                                    ConflictRecord(
+                                if (isNodeSameAsOriginalBaseMod(vanillaNode, baseNode)) {
+                                    //base节点与原版一致，自动合并
+                                    val record = ConflictRecord(
                                         context.mergingFileName,
                                         context.baseModName,
                                         context.mergeModName,
@@ -135,7 +135,21 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                                         baseNode,
                                         modNode
                                     )
-                                )
+                                    record.userChoice = UserChoice.MERGE_MOD
+                                    conflicts.add(record)
+                                } else {
+                                    //真正的冲突，记录变更
+                                    conflicts.add(
+                                        ConflictRecord(
+                                            context.mergingFileName,
+                                            context.baseModName,
+                                            context.mergeModName,
+                                            signature,
+                                            baseNode,
+                                            modNode
+                                        )
+                                    )
+                                }
                             }
                         }
                     } else {
@@ -179,17 +193,18 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
         for (record in newNodes) {
             val previousSibling = record.previousSibling
             val newNode = record.newNode
-
-            val insertPosition: Int = if (previousSibling != null) {
-                //如果有上一个兄弟节点，在其后面插入（stopToken+1）
-                previousSibling.stopTokenIndex + 1
+            //有兄弟节点，插在兄弟节点后面
+            if (previousSibling != null) {
+                rewriter.insertBefore(previousSibling.stopTokenIndex + 1, "\n${newNode.sourceText}")
             } else {
-                // 如果没有前一个兄弟节点（即这是第一个子节点），在父容器的结束标签前面插入
-                val stopTokenIndex = record.parentContainer.stopTokenIndex + 1
-                println(record.parentContainer.tokenStream.get(stopTokenIndex).text)
-                stopTokenIndex
+                // todo xml容器的结束标签是>，然而实际需要插入在<之前，这里需要继续搜索前面的token索引
+                //todo 这里的逻辑后面看看还有没有更好的解决方法
+                var stopTokenIndex = record.parentContainer.stopTokenIndex
+                while (record.parentContainer.tokenStream.get(stopTokenIndex).type != TechlandXMLLexer.OPEN) {
+                    stopTokenIndex--
+                }
+                rewriter.insertBefore(stopTokenIndex, "${newNode.sourceText}\n")
             }
-            rewriter.insertBefore(insertPosition, "\n" + newNode.sourceText)
         }
         return rewriter.text
     }
