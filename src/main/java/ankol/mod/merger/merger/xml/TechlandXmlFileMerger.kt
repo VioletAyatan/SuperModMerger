@@ -126,6 +126,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                             // 属性不同，检查modNode与原版是否相同
                             if (!isNodeSameAsOriginalBaseMod(vanillaNode, modNode)) {
                                 if (isNodeSameAsOriginalBaseMod(vanillaNode, baseNode)) {
+                                    context.mergedHistory.markSignture("${modContainer.signature}-${signature}", context.mergeModName)
                                     //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
                                         context.mergingFileName,
@@ -138,11 +139,12 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     record.userChoice = UserChoice.MERGE_MOD
                                     conflicts.add(record)
                                 } else {
+                                    val modName = context.mergedHistory.getModNameFromSignature("${modContainer.signature}-${signature}")
                                     //真正的冲突，记录变更
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
-                                            context.baseModName,
+                                            modName ?: context.baseModName,
                                             context.mergeModName,
                                             signature,
                                             baseNode,
