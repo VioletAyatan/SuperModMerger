@@ -117,7 +117,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                         if (baseNode.arguments != modNode.arguments) {
                             if (!isNodeSameAsOriginalNode(vanillaNode, modNode)) {
                                 if (isNodeSameAsOriginalNode(vanillaNode, baseNode)) {
-                                    context.mergedHistory.markSignture(modNode.signature, context.mergeModName)
+                                    context.mergedHistory.markSignture("${modContainer.signature}-${signature}", context.mergeModName)
                                     //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
                                         context.mergingFileName,
@@ -131,7 +131,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     conflicts.add(record)
                                 } else {
                                     //标记真正的冲突 todo MergedHistory存在作用域混乱的问题，还需改良
-                                    val modName = context.mergedHistory.getModNameFromSignature(signature)
+                                    val modName = context.mergedHistory.getModNameFromSignature("${modContainer.signature}-${signature}")
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
