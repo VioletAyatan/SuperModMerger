@@ -50,22 +50,22 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 原始基准MOD对应文件的语法树
      */
-    private var vanillaContainerNode: XmlContainerNode? = null
+    private var vanillaRootNode: XmlContainerNode? = null
 
-    override fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult {
+    override fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult {
         try {
-            val parsedResult = context.baseModManager.parseForm(file1.fileEntryName) { parseContent(it) }
+            val parsedResult = context.baseModManager.parseForm(accumulatedFile.fileEntryName) { parseContent(it) }
             // 解析原始基准MOD文件（如果存在）
             if (parsedResult != null) {
-                vanillaContainerNode = parsedResult.astNode
+                vanillaRootNode = parsedResult.astNode
             }
             // 解析base和mod文件
-            val baseResult = parseFile(file1)
-            val modResult = parseFile(file2)
+            val baseResult = parseFile(accumulatedFile)
+            val modResult = parseFile(incomingModFile)
             val baseRoot = baseResult.astNode
             val modRoot = modResult.astNode
 
-            deepCompare(vanillaContainerNode, baseRoot, modRoot)
+            deepCompare(vanillaRootNode, baseRoot, modRoot)
 
             // 第一个mod与原版文件的对比
             if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
@@ -78,13 +78,13 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
 
             return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
-            log.error("Error during XML file merge: ${file1.fileName} Reason: ${e.message}", e)
-            throw BusinessException("文件${file1.fileName}合并失败")
+            log.error("Error during XML file merge: ${accumulatedFile.fileName} Reason: ${e.message}", e)
+            throw BusinessException("文件${accumulatedFile.fileName}合并失败")
         } finally {
             // 清理状态，准备下一个文件合并
             conflicts.clear()
             newNodes.clear()
-            vanillaContainerNode = null
+            vanillaRootNode = null
         }
     }
 
@@ -216,7 +216,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
      */
     private fun isNodeSameAsOriginalBaseMod(originalNode: XmlNode?, modNode: XmlNode): Boolean {
         // 如果没有原始基准MOD，则认为不相同
-        if (vanillaContainerNode == null) {
+        if (vanillaRootNode == null) {
             return false
         }
         if (originalNode == null) {

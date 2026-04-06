@@ -19,7 +19,7 @@ import kotlin.io.path.writeText
 
 /**
  * 模组合并引擎 - 负责执行模组合并的核心逻辑
- * @param modsToMerge 要合并的 mod 列表（.pak 文件路径）
+ * @param mergeableMods 要合并的 mod 列表（.pak 文件路径）
  * @param outputPath 最终输出的 .pak 文件路径
  * @param baseModPath 基准MOD文件路径（可为null）
  * @author Ankol

@@ -50,21 +50,21 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
     /**
      * 原始基准MOD对应文件的语法树
      */
-    private var originalBaseModRoot: BaseTreeNode? = null
+    private var vanillaRootNode: BaseTreeNode? = null
 
-    override fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult {
+    override fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult {
         try {
             //解析基准文件
-            val parsedResult = context.baseModManager.parseForm(file1.fileEntryName) { parseContent(it) }
+            val parsedResult = context.baseModManager.parseForm(accumulatedFile.fileEntryName) { parseContent(it) }
             if (parsedResult != null) {
-                originalBaseModRoot = parsedResult.astNode
+                vanillaRootNode = parsedResult.astNode
             }
-            val baseResult = parseFile(file1)
-            val modResult = parseFile(file2)
+            val baseResult = parseFile(accumulatedFile)
+            val modResult = parseFile(incomingModFile)
             val baseRoot = baseResult.astNode
             val modRoot = modResult.astNode
 
-            deepCompare(originalBaseModRoot, baseRoot, modRoot)
+            deepCompare(vanillaRootNode, baseRoot, modRoot)
             //冲突解决
             if (context.isFirstModMergeWithBaseMod && conflicts.isNotEmpty()) {
                 for (record in conflicts) {
@@ -76,13 +76,13 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             }
             return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
-            log.error("Error during JSON file merge: ${file1.fileName} Reason: ${e.message}", e)
-            throw BusinessException("文件${file1.fileName}合并失败")
+            log.error("Error during JSON file merge: ${accumulatedFile.fileName} Reason: ${e.message}", e)
+            throw BusinessException("文件${accumulatedFile.fileName}合并失败")
         } finally {
             // 清理状态，准备下一个文件合并
             conflicts.clear()
             newNodes.clear()
-            originalBaseModRoot = null
+            vanillaRootNode = null
         }
     }
 

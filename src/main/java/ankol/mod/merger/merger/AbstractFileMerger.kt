@@ -14,9 +14,9 @@ abstract class AbstractFileMerger(var context: MergerContext) {
     /**
      * 合并两个文件。
      *
-     * @param file1 第一个文件（来自Mod1）的路径。
-     * @param file2 第二个文件（来自Mod2）的路径。
+     * @param accumulatedFile 第一个文件（来自Mod1）的路径。
+     * @param incomingModFile 第二个文件（来自Mod2）的路径。
      * @return 一个包含合并后内容和冲突信息的 [MergeResult] 对象。
      */
-    abstract fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult
+    abstract fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult
 }
