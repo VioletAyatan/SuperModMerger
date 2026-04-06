@@ -14,13 +14,13 @@ class ScrContainerScriptNode(
     signature: String,
     startTokenIndex: Int,
     stopTokenIndex: Int,
-    line: Int,
+    lineNumber: Int,
     tokenStream: TokenStream,
     /**
      * 参数列表
      */
     val arguments: List<String> = emptyList(),
-) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
+) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, lineNumber, tokenStream) {
     private val log = logger()
 
     /**
