@@ -171,12 +171,12 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 1. 如果参数为空，直接使用索引加入签名
      * 2. 如果有参数，尝试使用参数第一个值加入签名；如果加入后也碰到重复，添加索引
      */
-    private fun generateFunctionBlockArgsSignature(baseSignature: String, argsList: List<String>): String {
+    private fun generateFunctionBlockArgsSignature(signaturePrefix: String, argsList: List<String>): String {
         if (argsList.isEmpty()) {
-            return generateIndexedSignature(baseSignature)
+            return generateIndexedSignature(signaturePrefix)
         }
 
-        val signatureWithParam = "$baseSignature:${argsList[0]}"
+        val signatureWithParam = "$signaturePrefix:${argsList[0]}"
         val children = currentContainerNode!!.childrens
 
         // 如果带参数的签名已经被占用，或者已经存在基于此的索引序列
@@ -187,19 +187,19 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         return signatureWithParam
     }
 
-    private fun generateIndexedSignature(baseSignature: String): String {
+    private fun generateIndexedSignature(signaturePrefix: String): String {
         val children = currentContainerNode!!.childrens
         var index = 0
-        while (children.containsKey("$baseSignature:$index")) {
+        while (children.containsKey("$signaturePrefix:$index")) {
             index++
         }
-        return "$baseSignature:$index"
+        return "$signaturePrefix:$index"
     }
 
-    private fun hasIndexedChildren(baseSignature: String): Boolean {
+    private fun hasIndexedChildren(signaturePrefix: String): Boolean {
         val children = currentContainerNode!!.childrens
         // Check if :0 exists, which implies a sequence started
-        return children.containsKey("$baseSignature:0")
+        return children.containsKey("$signaturePrefix:0")
     }
 
     /**
@@ -508,20 +508,20 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 2. 参数数量 > 1：先用第一个参数加入签名 (funCall:funcName:param1)
      *    如果仍有重复，则追加索引标记 (funCall:funcName:param1:0, funCall:funcName:param1:1, ...)
      */
-    private fun generateFunctionCallSignature(baseSignature: String, argsList: List<String>): String {
+    private fun generateFunctionCallSignature(signaturePrefix: String, argsList: List<String>): String {
         if (argsList.size <= 1) {
             // 参数数量 <= 1，直接使用索引
             val children = currentContainerNode!!.childrens
             var index = 0
             for (key in children.keys) {
-                if (key.startsWith("$baseSignature:") && key.removePrefix("$baseSignature:").all { it.isDigit() }) {
+                if (key.startsWith("$signaturePrefix:") && key.removePrefix("$signaturePrefix:").all { it.isDigit() }) {
                     index++
                 }
             }
-            return "$baseSignature:$index"
+            return "$signaturePrefix:$index"
         } else {
             // 参数数量 > 1，先用第一个参数加入签名
-            val signatureWithParam = "$baseSignature:${argsList.first()}"
+            val signatureWithParam = "$signaturePrefix:${argsList.first()}"
             val children = currentContainerNode!!.childrens
 
             if (children.containsKey(signatureWithParam)) {
