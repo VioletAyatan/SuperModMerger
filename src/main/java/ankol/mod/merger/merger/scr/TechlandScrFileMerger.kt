@@ -70,7 +70,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             deepCompare(vanillaRootNode, accumulatedRoot, incomingModRoot)
 
             //第一个mod与原版文件的对比
-            if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
+            if (context.isFirstMerge && !conflicts.isEmpty()) {
                 for (record in conflicts) {
                     record.userChoice = UserChoice.MERGE_MOD
                 }
@@ -121,7 +121,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
                                         context.mergingFileName,
-                                        context.baseModName,
+                                        context.accumulatedModName,
                                         context.mergeModName,
                                         signature,
                                         accumulatedNode,
@@ -135,7 +135,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
-                                            modName ?: context.baseModName,
+                                            modName ?: context.accumulatedModName,
                                             context.mergeModName,
                                             signature,
                                             accumulatedNode,
@@ -158,7 +158,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
-                                            context.baseModName,
+                                            context.accumulatedModName,
                                             context.mergeModName,
                                             signature,
                                             accumulatedNode,
@@ -170,7 +170,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
-                                            context.baseModName,
+                                            context.accumulatedModName,
                                             context.mergeModName,
                                             signature,
                                             accumulatedNode,

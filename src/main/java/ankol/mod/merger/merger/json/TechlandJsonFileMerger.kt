@@ -66,7 +66,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
 
             deepCompare(vanillaRootNode, baseRoot, modRoot)
             //冲突解决
-            if (context.isFirstModMergeWithBaseMod && conflicts.isNotEmpty()) {
+            if (context.isFirstMerge && conflicts.isNotEmpty()) {
                 for (record in conflicts) {
                     // 普通修改冲突：使用MOD修改的版本
                     record.userChoice = UserChoice.MERGE_MOD
@@ -151,7 +151,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                                         conflicts.add(
                                             ConflictRecord(
                                                 context.mergingFileName,
-                                                context.baseModName,
+                                                context.accumulatedModName,
                                                 context.mergeModName,
                                                 baseChild.signature,
                                                 baseChild,  // 完整的PairNode
@@ -187,7 +187,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                 conflicts.add(
                     ConflictRecord(
                         context.mergingFileName,
-                        context.baseModName,
+                        context.accumulatedModName,
                         context.mergeModName,
                         baseArray.signature,
                         baseArray,
@@ -221,7 +221,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                 conflicts.add(
                     ConflictRecord(
                         context.mergingFileName,
-                        context.baseModName,
+                        context.accumulatedModName,
                         context.mergeModName,
                         baseNode.signature,
                         baseNode,

@@ -5,7 +5,6 @@ import ankol.mod.merger.merger.json.TechlandJsonFileMerger
 import ankol.mod.merger.merger.scr.TechlandScrFileMerger
 import ankol.mod.merger.merger.xml.TechlandXmlFileMerger
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * 合并器获取工厂，通过判断文件扩展名来获取对应支持的合并器
@@ -13,34 +12,29 @@ import java.util.concurrent.ConcurrentHashMap
  * @author Ankol
  */
 object MergerFactory {
-    private val mergerMap: MutableMap<String, Class<out AbstractFileMerger>> = HashMap()
-
     /**
-     * 实例化后的实例存储在缓存里，不去反复构造实例
+     * 合并器实例缓存
      */
-    private val mergerCache: MutableMap<Class<*>, AbstractFileMerger> = ConcurrentHashMap()
+    private val mergerMap: MutableMap<String, (MergerContext) -> AbstractFileMerger> = HashMap()
 
     init {
         //.scr格式的合并器
-        registerMerger(TechlandScrFileMerger::class.java, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth")
+        registerMerger(::TechlandScrFileMerger, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth")
         //.xml文件的合并器
-        registerMerger(TechlandXmlFileMerger::class.java, ".xml")
+        registerMerger(::TechlandXmlFileMerger, ".xml")
         //json格式合并器
-        registerMerger(TechlandJsonFileMerger::class.java, ".gui")
-        /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            DebugTool.printCacheUseRate("mergerCache", (AbstractCache) mergerCache);
-        }));*/
+        registerMerger(::TechlandJsonFileMerger, ".gui")
     }
 
     /**
      * 注册一个合并器，并关联一个或多个文件扩展名。
      *
-     * @param merger     合并器实例。
-     * @param extensions 要关联的文件扩展名（例如 ".txt", ".xml"）。
+     * @param mergerFactory 合并器创建函数。
+     * @param extensions 要关联的文件扩展名（例如 .scr, .xml）。
      */
-    private fun registerMerger(merger: Class<out AbstractFileMerger>, vararg extensions: String) {
+    private fun registerMerger(mergerFactory: (MergerContext) -> AbstractFileMerger, vararg extensions: String) {
         for (ext in extensions) {
-            mergerMap[ext.lowercase(Locale.getDefault())] = merger
+            mergerMap[ext.lowercase(Locale.getDefault())] = mergerFactory
         }
     }
 
@@ -52,20 +46,7 @@ object MergerFactory {
      */
     fun getMerger(fileName: String, context: MergerContext): AbstractFileMerger? {
         val extension = "." + fileName.substringAfterLast(".")
-        val aClass = mergerMap[extension.lowercase(Locale.getDefault())]
-        if (aClass == null) {
-          return null
-        } else {
-            var fileMerger = mergerCache[aClass]
-            if (fileMerger == null) {
-                synchronized(MergerFactory::class.java) {
-                    fileMerger = aClass.getConstructor(context.javaClass).newInstance(context)
-                    mergerCache[aClass] = fileMerger
-                }
-            } else {
-                fileMerger.context = context
-            }
-            return fileMerger
-        }
+        val mergerFactory = mergerMap[extension.lowercase(Locale.getDefault())]
+        return mergerFactory?.invoke(context)
     }
 }
