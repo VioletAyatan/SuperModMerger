@@ -5,6 +5,7 @@ target/
 .kotlin
 merged_mod
 logs
+mods
 source
 
 ### IntelliJ IDEA ###
