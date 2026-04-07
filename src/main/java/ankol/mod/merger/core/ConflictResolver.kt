@@ -2,6 +2,7 @@ package ankol.mod.merger.core
 
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.constants.UserChoice.Companion.findByOrder
+import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.merger.ConflictRecord
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations

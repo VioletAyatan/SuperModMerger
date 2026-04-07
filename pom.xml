@@ -16,7 +16,6 @@
         <native.executable.name>SuperModMerger</native.executable.name>
         <mainClass>ankol.mod.merger.AppMain</mainClass>
         <antlr4.version>4.13.2</antlr4.version>
-        <lombok.version>1.18.42</lombok.version>
         <slf4j.version>2.0.9</slf4j.version>
         <kotlin.version>2.3.0</kotlin.version>
         <javafx.version>25</javafx.version>
@@ -209,25 +208,7 @@
                 </executions>
                 <configuration>
                     <jvmTarget>${maven.compiler.target}</jvmTarget>
-                    <compilerPlugins>
-                        <plugin>lombok</plugin>
-                    </compilerPlugins>
-                    <pluginOptions>
-                        <option>lombok:config=${project.basedir}/lombok.config</option>
-                    </pluginOptions>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.jetbrains.kotlin</groupId>
-                        <artifactId>kotlin-maven-lombok</artifactId>
-                        <version>${kotlin.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                        <version>${lombok.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -260,14 +241,6 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
-                    <annotationProcessorPaths>
-                        <!-- 添加lombok的注解处理器-->
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <!-- JavaFX Maven 插件 -->

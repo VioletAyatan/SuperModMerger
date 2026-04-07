@@ -1,6 +1,6 @@
 package ankol.mod.merger.merger
 
-import ankol.mod.merger.core.MergerContext
+import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.merger.json.TechlandJsonFileMerger
 import ankol.mod.merger.merger.scr.TechlandScrFileMerger
 import ankol.mod.merger.merger.xml.TechlandXmlFileMerger

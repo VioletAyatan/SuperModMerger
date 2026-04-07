@@ -1,5 +1,6 @@
-package ankol.mod.merger.core
+package ankol.mod.merger.domain
 
+import ankol.mod.merger.core.BaseModManager
 import ankol.mod.merger.tools.logger
 import java.util.concurrent.ConcurrentHashMap
 

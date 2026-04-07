@@ -1,6 +1,4 @@
-package ankol.mod.merger.merger
-
-import ankol.mod.merger.core.MergerContext
+package ankol.mod.merger.domain
 
 /**
  * 合并结果内部类 - 存储单个文件的合并结果

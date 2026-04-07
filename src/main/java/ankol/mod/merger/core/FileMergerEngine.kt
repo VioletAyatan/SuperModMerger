@@ -2,16 +2,13 @@ package ankol.mod.merger.core
 
 import ankol.mod.merger.core.filetrees.MemoryFileTree
 import ankol.mod.merger.core.filetrees.PathFileTree
+import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.merger.MergerFactory
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Localizations.t
-import org.apache.commons.lang3.Strings
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.*
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.io.path.Path
 import kotlin.io.path.createDirectories
 import kotlin.io.path.readText
@@ -39,7 +36,12 @@ class FileMergerEngine(
     /**
      * 基准MOD管理器
      */
-    private val baseModManager: BaseModManager = BaseModManager(tempDir, baseModPath)
+    private val baseModManager = BaseModManager(tempDir, baseModPath)
+
+    /**
+     * MOD提取器
+     */
+    private val modExtrator = ModExtrator(mergeableMods, tempDir, baseModManager)
 
     // 统计信息
     private var mergedCount = 0 // 成功合并（无冲突）的文件数
@@ -64,12 +66,13 @@ class FileMergerEngine(
         try {
             Tools.deleteRecursively(tempDir) //先清理掉旧的目录
             // 在提取过程中对每个mod分别进行路径修正
-            val filesByPath = extractAllMods()
+            val extractionResult = modExtrator.extractAllMods()
+            pathCorrectionCount += extractionResult.correctionCount
             // 输出目录（临时）
             val mergedDir = tempDir.resolve("merged")
             Files.createDirectories(mergedDir)
             // 开始合并文件
-            processFiles(filesByPath, mergedDir)
+            processFiles(extractionResult.filesByPath, mergedDir)
             // 合并完成，打包
             ColorPrinter.cyan(t("ENGINE_CREATING_MERGED_PAK"))
             PakManager.createPak(mergedDir, outputPath)
@@ -82,113 +85,6 @@ class FileMergerEngine(
             baseModManager.close()
             cleanupTempDir()
         }
-    }
-
-    /**
-     * 对单个MOD的文件路径进行修正
-     *
-     * @param modFileName    MOD文件名
-     * @param extractedFiles 提取的文件映射（相对路径 -> FileSourceInfo）
-     * @return 修正后的文件映射
-     */
-    private fun correctPathsForMod(
-        modFileName: String,
-        extractedFiles: MutableMap<String, PathFileTree>
-    ): Map<String, PathFileTree> {
-        //如果没有基准MOD或者合并策略指定了不修正路径
-        if (!baseModManager.isLoaded) {
-            return extractedFiles
-        }
-
-        val corrections = LinkedHashMap<String, String>() //记录修正的路径（原路径 -> 新路径）
-        val correctedFiles = LinkedHashMap<String, PathFileTree>() //修正后的文件路径
-
-        val markToRemoved = HashSet<String>()
-        // 查找需要修正的路径
-        for ((fileEntryName, sourceInfo) in extractedFiles) {
-            if (baseModManager.hasPathConflict(fileEntryName)) {
-                val suggestedPath = baseModManager.getSuggestedPath(fileEntryName)
-                if (suggestedPath != null) {
-                    corrections[fileEntryName] = suggestedPath
-                    correctedFiles[suggestedPath] = sourceInfo
-                } else {
-                    correctedFiles[fileEntryName] = sourceInfo
-                }
-            } else {
-                correctedFiles[fileEntryName] = sourceInfo
-            }
-        }
-        markToRemoved.forEach { removeFile: String -> extractedFiles.remove(removeFile) } //移除不存在于基准MOD中的文件
-
-        // 如果有路径被修正，输出日志
-        if (!corrections.isEmpty()) {
-            ColorPrinter.cyan(t("ENGINE_PATH_CORRECTIONS_FOR_MOD", modFileName))
-            for (entry in corrections.entries) {
-                ColorPrinter.success(t("ENGINE_PATH_CORRECTION_ITEM", entry.key, entry.value))
-                pathCorrectionCount++
-            }
-        }
-
-        return correctedFiles
-    }
-
-    /**
-     * 从所有 mod 中提取文件，按相对路径分组
-     * 在提取过程中对每个mod分别进行路径修正，避免不同mod的同名文件冲突
-     */
-    private fun extractAllMods(): MutableMap<String, MutableList<PathFileTree>> {
-        val filesByPath = ConcurrentHashMap<String, MutableList<PathFileTree>>()
-        val index = AtomicInteger(0)
-        mergeableMods.parallelStream().forEach { mod: MergingModInfo ->
-            try {
-                val archiveName = mod.modName // 解压的压缩包真实名称
-                val modTempDir: Path = tempDir.resolve("${archiveName}${index.getAndIncrement()}") // 生成临时目录名字
-
-                var extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir)
-                extractedFiles = filterFiles(extractedFiles)
-                val correctedFiles = correctPathsForMod(archiveName, extractedFiles)
-                // 按文件路径分组，并记录来源MOD名字
-                for ((fileRelPath, fileSource) in correctedFiles) {
-                    filesByPath.computeIfAbsent(fileRelPath) { Collections.synchronizedList(ArrayList()) }
-                        .add(fileSource)
-                }
-            } catch (e: Exception) {
-                log.error(t("ENGINE_EXTRACT_FAILED", mod.modName), e)
-                ErrorReporter.addErrorReport(mod.modName, t("ERROR_EXTRA_MOD_FAILED", e.message, mod.modPath))
-            }
-        }
-        return filesByPath
-    }
-
-    /**
-     * 过滤掉一些不支持合并的文件（比如文本文件、rpak资源文件等）
-     */
-    private fun filterFiles(extractedFiles: MutableMap<String, PathFileTree>): MutableMap<String, PathFileTree> {
-        return extractedFiles.filter { predicate: Map.Entry<String, PathFileTree> ->
-            val fileEntryName = predicate.key
-            val sourceInfo = predicate.value
-            //文本类型的文件，直接标记为删除，这些往往是mod作者自己添加的描述文件
-            if (Strings.CI.endsWithAny(fileEntryName, ".txt", ".md")) {
-                log.warn("Unsupported text file: {}, Marking to removal.", fileEntryName)
-                return@filter false
-            }
-            // 不支持dll文件.asi文件的合并
-            else if (Strings.CI.endsWithAny(fileEntryName, ".dll", ".asi")) {
-                log.warn("Unsupported dll/asi file: {}, Please handle it yourself after merging.", fileEntryName)
-                ErrorReporter.addErrorReport(sourceInfo.getFirstArchiveFileName(), t("ERROR_NOT_SUPPORT_DLL", fileEntryName))
-                return@filter false
-            }
-            // 不支持rpak文件的合并，rpack是资源文件，不能合并
-            else if (Strings.CI.endsWithAny(fileEntryName, ".rpack")) {
-                log.warn("Unsupported rpak file: {}, Marking to removal.", fileEntryName)
-                ErrorReporter.addErrorReport(
-                    sourceInfo.getFirstArchiveFileName(),
-                    t("ERROR_NOT_SUPPORT_RPACK", fileEntryName)
-                )
-                return@filter false
-            }
-            return@filter true
-        }.toMutableMap()
     }
 
     /**
