@@ -1,7 +1,6 @@
 package ankol.mod.merger.tools;
 
 import ankol.mod.merger.exception.BusinessException;
-import lombok.Data;
 
 import java.util.*;
 
@@ -55,7 +54,7 @@ public class SimpleArgParser {
                 }
                 if (options.containsKey(rawName)) {
                     Option opt = options.get(rawName);
-                    if (opt.isHasValue()) {
+                    if (opt.hasValue) {
                         if (value == null && i + 1 < args.length && !args[i + 1].startsWith("-")) {
                             value = args[++i];
                         }
@@ -74,7 +73,7 @@ public class SimpleArgParser {
                 if (shortToLongMap.containsKey(shortName)) {
                     String longName = shortToLongMap.get(shortName);
                     Option opt = options.get(longName);
-                    if (opt.isHasValue()) {
+                    if (opt.hasValue) {
                         if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
                             parsedValues.put(longName, args[++i]); // 映射为长名存入
                         } else {
@@ -160,12 +159,11 @@ public class SimpleArgParser {
         }
     }
 
-    @Data
     public static class Option {
-        private String shortName;
-        private String longName;
-        private boolean hasValue;
-        private String description;
+        private final String shortName;
+        private final String longName;
+        private final boolean hasValue;
+        private final String description;
 
         /**
          * 命令行指令构造函数
