@@ -7,10 +7,8 @@ import java.nio.file.StandardOpenOption
 import kotlin.io.path.*
 
 object Tools {
-    @JvmStatic
     val userDir: String = System.getProperty("user.dir")
 
-    @JvmStatic
     val tempDir: String = System.getProperty("java.io.tmpdir")
 
     private val strFormatRegex = Regex("\\{}")
@@ -47,7 +45,6 @@ object Tools {
      * @param mergedDirPath        目录路径
      * @param extensions 要查找的扩展名（如 ".pak", ".zip"）
      * @return 匹配的文件列表
-     * @throws IOException 如果目录不存在或无法访问
      */
     fun scanFiles(mergedDirPath: Path, vararg extensions: String): MutableList<Path> {
         val results = ArrayList<Path>()
