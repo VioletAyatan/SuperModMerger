@@ -64,9 +64,12 @@ object Tools {
         return results
     }
 
-    @JvmStatic
+    /**
+     * 获取zipEntry里的文件名，去掉'/'，返回小写的文件名
+     * @return entry文件名
+     */
     fun getEntryFileName(entryName: String): String {
-        return entryName.substring(entryName.lastIndexOf("/") + 1)
+        return entryName.substring(entryName.lastIndexOf("/") + 1).lowercase()
     }
 
     /**

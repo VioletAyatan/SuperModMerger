@@ -15,13 +15,11 @@ import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode
 import ankol.mod.merger.tools.logger
-import lombok.extern.slf4j.Slf4j
 import org.antlr.v4.runtime.CharStream
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.TokenStreamRewriter
 
-@Slf4j
 class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context) {
     private val log = logger()
 
