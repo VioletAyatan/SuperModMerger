@@ -15,6 +15,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Function
 import kotlin.io.path.createDirectories
+import kotlin.io.path.name
 
 /**
  * 基准MOD管理器
@@ -90,7 +91,7 @@ class BaseModManager(
         if (Files.isDirectory(baseModPath)) {
             throw IOException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", baseModPath))
         }
-        if (!baseModPath.fileName.toString().endsWith(".pak", ignoreCase = true)) {
+        if (!baseModPath.name.endsWith(".pak", ignoreCase = true)) {
             throw IOException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"))
         }
         if (!Files.isReadable(baseModPath)) {
