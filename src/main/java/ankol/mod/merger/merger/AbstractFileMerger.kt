@@ -1,7 +1,8 @@
 package ankol.mod.merger.merger
 
-import ankol.mod.merger.core.MergerContext
+import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.domain.MergeResult
 
 /**
  * 文件合并器通用接口
@@ -16,7 +17,7 @@ abstract class AbstractFileMerger(val context: MergerContext) {
      *
      * @param accumulatedFile 第一个文件（来自Mod1）的路径。
      * @param incomingModFile 第二个文件（来自Mod2）的路径。
-     * @return 一个包含合并后内容和冲突信息的 [MergeResult] 对象。
+     * @return 一个包含合并后内容和冲突信息的 [ankol.mod.merger.domain.MergeResult] 对象。
      */
     abstract fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult
 }

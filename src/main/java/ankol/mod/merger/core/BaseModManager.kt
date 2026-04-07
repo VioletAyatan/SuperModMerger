@@ -1,6 +1,7 @@
 package ankol.mod.merger.core
 
 import ankol.mod.merger.core.filetrees.PathFileTree
+import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations
 import ankol.mod.merger.tools.Tools
