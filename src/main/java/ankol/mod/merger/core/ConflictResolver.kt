@@ -58,7 +58,6 @@ object ConflictResolver {
                         val choice = findByOrder(input.toIntOrNull())
                         if (choice == null) {
                             ColorPrinter.warning(Localizations.t("CRESOLVER_INVALID_INPUT"))
-                            break
                         } else {
                             userChose = choice
                             record.userChoice = choice
