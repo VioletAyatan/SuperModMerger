@@ -1,53 +1,39 @@
 package ankol.mod.merger.core
 
 import ankol.mod.merger.tools.logger
+import java.util.concurrent.ConcurrentHashMap
 
-class MergerContext {
+class MergerContext(
+    /** 基准模组管理器 **/
+    val baseModManager: BaseModManager,
+    /** 当前合并文件名 **/
+    var mergingFileName: String = "",
+    var accumulatedModName: String = "",
+    var mergeModName: String = "",
+    /** 合并历史 **/
+    var mergedHistory: MergedHistory = MergedHistory(),
+    /** 是否是第一次合并 **/
+    var isFirstMerge: Boolean = false
+) {
     companion object {
         private val log = logger()
     }
 
-    /**
-     * 当前正在合并的文件名
-     */
-    lateinit var mergingFileName: String
-
-    /**
-     * 基准MOD名称
-     */
-    lateinit var baseModName: String
-
-    /**
-     * 待合并MOD名称
-     */
-    lateinit var mergeModName: String
-
-    /**
-     * 基准MOD管理器
-     */
-    lateinit var baseModManager: BaseModManager
-
-    /**
-     * 合并历史
-     */
-    var mergedHistory: MergedHistory = MergedHistory()
-
-    /**
-     * 是否是第一个MOD与data0.pak的合并
-     * 当为true时，第一个MOD相对于data0.pak的修改应该被自动接受，不提示冲突
-     */
-    var isFirstModMergeWithBaseMod = false
+    fun configure(mergingFileName: String, accumulatedModName: String, incomingModName: String, isFirstMerge: Boolean) {
+        this.mergingFileName = mergingFileName
+        this.accumulatedModName = accumulatedModName
+        this.mergeModName = incomingModName
+        this.isFirstMerge = isFirstMerge
+    }
 
     class MergedHistory {
-        private val map: MutableMap<String, String> = mutableMapOf()
+        private val map: MutableMap<String, String> = ConcurrentHashMap()
 
         /**
          * 标记这个签名
          */
         fun markSignture(signature: String, modName: String) {
-            if (!map.containsKey(signature)) {
-                map[signature] = modName
-            } else {
+            if (map.putIfAbsent(signature, modName) != null) {
                 log.debug("警告，合并历史中检测到重复的签名插入：${signature}，跳过处理.")
             }
         }

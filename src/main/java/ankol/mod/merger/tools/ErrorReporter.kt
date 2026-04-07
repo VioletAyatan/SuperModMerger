@@ -1,8 +1,10 @@
 package ankol.mod.merger.tools
 
+import java.util.concurrent.ConcurrentLinkedQueue
+
 class ErrorReporter {
     companion object {
-        private val errors = mutableListOf<ErrorMsg>()
+        private val errors = ConcurrentLinkedQueue<ErrorMsg>()
 
         /**
          * 添加错误报告记录

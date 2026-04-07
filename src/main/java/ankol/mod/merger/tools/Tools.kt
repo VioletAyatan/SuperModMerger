@@ -1,9 +1,6 @@
 package ankol.mod.merger.tools
 
-import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.exception.BusinessException
-import org.apache.commons.compress.archivers.zip.ZipFile
-import java.io.IOException
 import java.nio.channels.FileChannel
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -68,49 +65,6 @@ object Tools {
                 }
             }
         return results
-    }
-
-    /**
-     * 索引基准MOD，建立一个索引MAP，方便后续进行文件路径修正和对比使用
-     * @param filePath 基准MOD路径
-     */
-    @JvmStatic
-    fun indexPakFile(filePath: Path): MutableMap<String, PathFileTree> {
-        if (filePath.notExists()) {
-            throw BusinessException(Localizations.t("TOOLS_FILE_NOT_EXIST", filePath.absolutePathString()))
-        }
-        if (filePath.isDirectory()) {
-            throw BusinessException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", filePath.absolutePathString()))
-        }
-        if (!filePath.fileName.toString().endsWith(".pak")) {
-            throw BusinessException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"))
-        }
-        val pakIndexMap = HashMap<String, PathFileTree>()
-        try {
-            ZipFile.builder().setPath(filePath).get().use { zipFile ->
-                val entries = zipFile.entries
-                while (entries.hasMoreElements()) {
-                    val zipEntry = entries.nextElement()
-                    val entryName = zipEntry.name
-                    val fileName = getEntryFileName(entryName)
-                    //重复文件的识别
-                    if (fileName in pakIndexMap) {
-                        ColorPrinter.warning(
-                            Localizations.t(
-                                "TOOLS_SAME_FILE_NAME_WARNING",
-                                fileName,
-                                entryName,
-                                pakIndexMap[fileName]?.filePath
-                            )
-                        )
-                    }
-                    pakIndexMap[fileName] = PathFileTree(fileName, entryName, mutableListOf(filePath.fileName.toString()))
-                }
-            }
-        } catch (e: IOException) {
-            throw RuntimeException(e)
-        }
-        return pakIndexMap
     }
 
     @JvmStatic

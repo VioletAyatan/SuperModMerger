@@ -1,5 +1,6 @@
 package ankol.mod.merger.tools;
 
+import ankol.mod.merger.exception.BusinessException;
 import lombok.Data;
 
 import java.util.*;
@@ -58,10 +59,15 @@ public class SimpleArgParser {
                         if (value == null && i + 1 < args.length && !args[i + 1].startsWith("-")) {
                             value = args[++i];
                         }
+                        if (value == null || value.isEmpty()) {
+                            throw new BusinessException(Localizations.t("ARG_PARSER_MISSING_VALUE", arg));
+                        }
                         parsedValues.put(rawName, value); // 存入长名
                     } else {
                         parsedFlags.add(rawName); // 存入长名
                     }
+                } else {
+                    throw new BusinessException(Localizations.t("ARG_PARSER_UNKNOWN_OPTION", arg));
                 }
             } else if (arg.startsWith("-")) {
                 String shortName = arg.substring(1);
@@ -71,13 +77,14 @@ public class SimpleArgParser {
                     if (opt.isHasValue()) {
                         if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
                             parsedValues.put(longName, args[++i]); // 映射为长名存入
+                        } else {
+                            throw new BusinessException(Localizations.t("ARG_PARSER_MISSING_VALUE", arg));
                         }
                     } else {
                         parsedFlags.add(longName); // 映射为长名存入
                     }
                 } else {
-                    // 未知短参，视为位置参数或报错
-                    positionalArgs.add(arg);
+                    throw new BusinessException(Localizations.t("ARG_PARSER_UNKNOWN_OPTION", arg));
                 }
             } else {
                 // 位置参数

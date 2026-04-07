@@ -10,7 +10,7 @@ import ankol.mod.merger.core.filetrees.AbstractFileTree
  * 定义了所有文件类型合并器必须实现的方法。
  * 每个实现类负责处理一种特定的文件类型（如.scr, .xml等）。
  */
-abstract class AbstractFileMerger(var context: MergerContext) {
+abstract class AbstractFileMerger(val context: MergerContext) {
     /**
      * 合并两个文件。
      *

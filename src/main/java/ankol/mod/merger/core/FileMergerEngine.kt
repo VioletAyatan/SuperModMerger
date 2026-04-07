@@ -96,7 +96,7 @@ class FileMergerEngine(
         extractedFiles: MutableMap<String, PathFileTree>
     ): Map<String, PathFileTree> {
         //如果没有基准MOD或者合并策略指定了不修正路径
-        if (!baseModManager.loaded) {
+        if (!baseModManager.isLoaded) {
             return extractedFiles
         }
 
@@ -107,9 +107,13 @@ class FileMergerEngine(
         // 查找需要修正的路径
         for ((fileEntryName, sourceInfo) in extractedFiles) {
             if (baseModManager.hasPathConflict(fileEntryName)) {
-                val suggestedPath: String = baseModManager.getSuggestedPath(fileEntryName)!!
-                corrections[fileEntryName] = suggestedPath
-                correctedFiles[suggestedPath] = sourceInfo
+                val suggestedPath = baseModManager.getSuggestedPath(fileEntryName)
+                if (suggestedPath != null) {
+                    corrections[fileEntryName] = suggestedPath
+                    correctedFiles[suggestedPath] = sourceInfo
+                } else {
+                    correctedFiles[fileEntryName] = sourceInfo
+                }
             } else {
                 correctedFiles[fileEntryName] = sourceInfo
             }
@@ -225,27 +229,26 @@ class FileMergerEngine(
      */
     private fun processSingleFile(relPath: String, fileCurrent: PathFileTree, mergedOutputDir: Path) {
         // 如果基准mod存在，尝试与基准mod对比
-        if (baseModManager.loaded) {
+        if (baseModManager.isLoaded) {
             try {
-                val originalBaseModContent = baseModManager.extractFileContent(relPath)
+                val vanillaFileContent = baseModManager.extractFileContent(relPath)
                 // 基准mod中存在该文件，需要进行对比合并
-                if (originalBaseModContent != null) {
-                    val context = MergerContext().also { it.baseModManager = baseModManager }
+                if (vanillaFileContent != null) {
+                    val context = MergerContext(baseModManager)
                     val merger = MergerFactory.getMerger(relPath, context)
 
                     // 如果支持合并，进行对比合并
                     if (merger != null) {
                         val fileName = Tools.getEntryFileName(relPath)
 
-                        val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
+                        val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), vanillaFileContent)
 
-                        context.apply {
-                            this.mergingFileName = relPath
-                            this.baseModName = "data0.pak"
-                            this.mergeModName = fileCurrent.getFirstArchiveFileName()
-                            this.isFirstModMergeWithBaseMod = true // 标记为与data0.pak的合并
-                        }
-
+                        context.configure(
+                            relPath,
+                            "data0.pak",
+                            fileCurrent.getFirstArchiveFileName(),
+                            true
+                        )
 
                         val mergeResult = merger.merge(fileBase, fileCurrent)
                         val mergedContent = mergeResult.mergedContent
@@ -283,8 +286,7 @@ class FileMergerEngine(
             return
         }
 
-        val context = MergerContext()
-        context.baseModManager = baseModManager
+        val context = MergerContext(baseModManager)
         val merger = MergerFactory.getMerger(relPath, context) //获取合并器
 
         //不支持合并的文件类型，直接让用户选择用哪个文件
@@ -294,13 +296,13 @@ class FileMergerEngine(
         }
 
         try {
-            var baseMergedContent = "" //基准文本内容
+            var accumulatedContent = ""
             // 支持合并，开始处理合并逻辑
             ColorPrinter.cyan(t("ENGINE_MERGING_FILE", relPath, fileSources.size))
 
-            var originalBaseModContent: String? = null
-            if (baseModManager.loaded) {
-                originalBaseModContent = baseModManager.extractFileContent(relPath)
+            var vanillaFileContent: String? = null
+            if (baseModManager.isLoaded) {
+                vanillaFileContent = baseModManager.extractFileContent(relPath)
             }
             val fileName = Tools.getEntryFileName(relPath)
 
@@ -311,20 +313,21 @@ class FileMergerEngine(
 
                 // 第一个 mod：如果有data0.pak基准文件，使用它作为base与第一个mod合并
                 if (i == 0) {
-                    if (originalBaseModContent != null) {
-                        val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), originalBaseModContent)
+                    if (vanillaFileContent != null) {
+                        val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), vanillaFileContent)
 
-                        context.apply {
-                            this.mergingFileName = relPath
-                            this.baseModName = "data0.pak"
-                            this.mergeModName = currentModName
-                            this.isFirstModMergeWithBaseMod = true // 标记为第一个mod与data0.pak的合并
-                        }
+                        context.configure(
+                            relPath,
+                            "data0.pak",
+                            currentModName,
+                            true
+                        )
+
                         val result = merger.merge(fileBase, fileCurrent)
-                        baseMergedContent = result.mergedContent
+                        accumulatedContent = result.mergedContent
                     } else {
                         // 没有data0.pak基准文件，直接使用第一个mod的内容
-                        baseMergedContent = currentModPath.readText()
+                        accumulatedContent = currentModPath.readText()
                     }
                 } else {
                     // 后续的 mod，与当前合并结果合并
@@ -332,24 +335,24 @@ class FileMergerEngine(
                     val previousModName = previousSource.getFirstArchiveFileName()
 
                     // 执行合并 - 使用真实的MOD压缩包名字
-                    val fileBase = MemoryFileTree(fileName, relPath, mutableListOf(previousModName), baseMergedContent)
+                    val fileBase = MemoryFileTree(fileName, relPath, mutableListOf(previousModName), accumulatedContent)
 
-                    context.apply {
-                        this.mergingFileName = relPath
-                        this.baseModName = previousModName
-                        this.mergeModName = currentModName
-                        this.isFirstModMergeWithBaseMod = false // 后续合并正常处理冲突
-                    }
+                    context.configure(
+                        relPath,
+                        previousModName,
+                        currentModName,
+                        false
+                    )
 
                     val result = merger.merge(fileBase, fileCurrent)
-                    baseMergedContent = result.mergedContent
+                    accumulatedContent = result.mergedContent
                 }
             }
 
             // 写入最终合并结果
             val targetPath = mergedDir.resolve(relPath)
             targetPath.parent.createDirectories()
-            targetPath.writeText(baseMergedContent)
+            targetPath.writeText(accumulatedContent)
 
             this.mergedCount++
             ColorPrinter.success(t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
