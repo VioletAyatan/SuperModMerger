@@ -5,6 +5,7 @@ import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations
 import ankol.mod.merger.tools.Tools
 import ankol.mod.merger.tools.Tools.getEntryFileName
+import ankol.mod.merger.tools.logger
 import org.apache.commons.compress.archivers.zip.ZipFile
 import java.io.IOException
 import java.nio.file.Files
@@ -27,6 +28,8 @@ class BaseModManager(
     tempDir: Path,
     private val baseModPath: Path
 ) {
+    private val log = logger()
+
     /**
      * 文件名 → 标准路径的映射
      * 键：文件名（小写）
@@ -77,6 +80,7 @@ class BaseModManager(
             val timetake = System.currentTimeMillis() - startTime
             ColorPrinter.success(Localizations.t("BASE_MOD_INDEXED_FILES", baseModPath.fileName, indexedBaseModFileMap.size, timetake))
         } catch (e: Exception) {
+            log.error("Load base mod $baseModPath failed. Reason: ${e.message}", e)
             zipFileConnection.close()
         }
     }
