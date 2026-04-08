@@ -9,15 +9,15 @@ import ankol.mod.merger.tools.PakManager
 import ankol.mod.merger.tools.logger
 import org.apache.commons.lang3.Strings
 import java.nio.file.Path
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * 模组提取器
  * @author Ankol
  */
-class ModExtrator(
+class ModExtractor(
     private val mergeableMods: List<MergingModInfo>,
     private val tempDir: Path,
     private val baseModManager: BaseModManager
@@ -83,7 +83,7 @@ class ModExtrator(
                 }
             }
 
-            filesByPath.computeIfAbsent(targetPath) { Collections.synchronizedList(arrayListOf()) }.add(sourceInfo)
+            filesByPath.computeIfAbsent(targetPath) { CopyOnWriteArrayList() }.add(sourceInfo)
         }
 
         if (correctionsFileMap.isNotEmpty()) {

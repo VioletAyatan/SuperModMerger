@@ -26,7 +26,7 @@ class PathFileTree(
     /**
      * 安全获取FullPathName，为空的情况下会抛出异常
      */
-    fun safegetFilePath(): Path {
+    fun safeGetFilePath(): Path {
         return filePath ?: throw IllegalArgumentException("Error, fullPathName is null")
     }
 }
