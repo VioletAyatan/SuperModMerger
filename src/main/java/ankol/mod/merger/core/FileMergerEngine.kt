@@ -7,7 +7,6 @@ import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.merger.MergerFactory
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Localizations.t
-import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.createDirectories
@@ -64,13 +63,13 @@ class FileMergerEngine(
         }
         //开始合并
         try {
-            Tools.deleteRecursively(tempDir) //先清理掉旧的目录
-            // 在提取过程中对每个mod分别进行路径修正
+            //清理临时目录，防止残留
+            Tools.deleteRecursively(tempDir)
+            //提取所有MOD文件
             val groupedFiles = modExtractor.extractAllMods()
             pathCorrectionCount += groupedFiles.size
-            // 输出目录（临时）
             val mergedDir = tempDir.resolve("merged")
-            Files.createDirectories(mergedDir)
+            mergedDir.createDirectories()
             // 开始合并文件
             processFiles(groupedFiles, mergedDir)
             // 合并完成，打包
