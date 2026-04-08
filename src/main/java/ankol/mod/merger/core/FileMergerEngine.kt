@@ -66,13 +66,13 @@ class FileMergerEngine(
         try {
             Tools.deleteRecursively(tempDir) //先清理掉旧的目录
             // 在提取过程中对每个mod分别进行路径修正
-            val extractionResult = modExtractor.extractAllMods()
-            pathCorrectionCount += extractionResult.correctionCount
+            val groupedFiles = modExtractor.extractAllMods()
+            pathCorrectionCount += groupedFiles.size
             // 输出目录（临时）
             val mergedDir = tempDir.resolve("merged")
             Files.createDirectories(mergedDir)
             // 开始合并文件
-            processFiles(extractionResult.filesByPath, mergedDir)
+            processFiles(groupedFiles, mergedDir)
             // 合并完成，打包
             ColorPrinter.cyan(t("ENGINE_CREATING_MERGED_PAK"))
             PakManager.createPak(mergedDir, outputPath)
@@ -90,13 +90,13 @@ class FileMergerEngine(
     /**
      * 处理所有文件（合并或复制）
      */
-    private fun processFiles(filesByName: Map<String, MutableList<PathFileTree>>, mergedDir: Path) {
+    private fun processFiles(groupedFiles: Map<String, MutableList<PathFileTree>>, mergedDir: Path) {
         ColorPrinter.cyan(t("ENGINE_PROCESSING_FILES"))
         val globalFixActive = GlobalMergingStrategy.activeMode == GlobalMergingStrategy.GLOBAL_FIX_MODE
         if (globalFixActive) {
             ColorPrinter.debug(t("ENGINE_GLOBAL_FIX_ENABLED"))
         }
-        for ((relPath, fileSources) in filesByName) {
+        for ((relPath, fileSources) in groupedFiles) {
             totalProcessed++
             try {
                 //单个文件处理
