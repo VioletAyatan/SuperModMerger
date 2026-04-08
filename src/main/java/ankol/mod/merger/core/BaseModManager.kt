@@ -10,6 +10,7 @@ import ankol.mod.merger.tools.logger
 import org.apache.commons.compress.archivers.zip.ZipFile
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.lang.AutoCloseable
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.DigestInputStream
@@ -24,7 +25,7 @@ import kotlin.io.path.name
  *
  * @author Ankol
  */
-class BaseModManager(private val baseModPath: Path) {
+class BaseModManager(private val baseModPath: Path) : AutoCloseable {
     private val log = logger()
 
     /**
@@ -241,8 +242,7 @@ class BaseModManager(private val baseModPath: Path) {
      * 清理内存缓存并关闭 ZipFile 连接
      * 建议在合并完成后调用此方法释放资源
      */
-    @Synchronized
-    fun close() {
+    override fun close() {
         // 关闭 ZipFile 连接
         try {
             if (this::zipFileConnection.isInitialized) {

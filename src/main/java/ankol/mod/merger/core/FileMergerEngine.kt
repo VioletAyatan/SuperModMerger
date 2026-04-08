@@ -41,7 +41,7 @@ class FileMergerEngine(
     /**
      * MOD提取器
      */
-    private val modExtrator = ModExtrator(mergeableMods, tempDir, baseModManager)
+    private val modExtractor = ModExtractor(mergeableMods, tempDir, baseModManager)
 
     // 统计信息
     private var mergedCount = 0 // 成功合并（无冲突）的文件数
@@ -66,7 +66,7 @@ class FileMergerEngine(
         try {
             Tools.deleteRecursively(tempDir) //先清理掉旧的目录
             // 在提取过程中对每个mod分别进行路径修正
-            val extractionResult = modExtrator.extractAllMods()
+            val extractionResult = modExtractor.extractAllMods()
             pathCorrectionCount += extractionResult.correctionCount
             // 输出目录（临时）
             val mergedDir = tempDir.resolve("merged")
@@ -104,7 +104,7 @@ class FileMergerEngine(
                     if (globalFixActive) {
                         processSingleFile(relPath, fileSources.first(), mergedDir) //做压力测试的时候把这个打开
                     } else {
-                        Tools.zeroCopy(fileSources.first().safegetFilePath(), mergedDir.resolve(relPath))
+                        Tools.zeroCopy(fileSources.first().safeGetFilePath(), mergedDir.resolve(relPath))
                     }
                 } else {
                     // 在多个 mod 中存在，需要合并
@@ -112,6 +112,7 @@ class FileMergerEngine(
                 }
             } catch (e: Exception) {
                 ColorPrinter.error(t("ENGINE_PROCESSING_ERROR", relPath, e.message))
+                log.error(e.message, e)
             }
         }
     }
@@ -159,7 +160,7 @@ class FileMergerEngine(
                         return
                     }
                 }
-                Tools.zeroCopy(fileCurrent.safegetFilePath(), mergedOutputDir.resolve(relPath))
+                Tools.zeroCopy(fileCurrent.safeGetFilePath(), mergedOutputDir.resolve(relPath))
             } catch (e: Exception) {
                 ColorPrinter.error("Processing file '${relPath}' error, Reason: ${e.message}", e)
             }
@@ -178,7 +179,7 @@ class FileMergerEngine(
         // 先简单的判断一下文件内容（计算hash值）、大小是否相同，不同肯定不一样
         if (areAllFilesIdentical(fileSources)) {
             // 文件都一样，直接使用第一个
-            Tools.zeroCopy(fileSources.first().safegetFilePath(), mergedDir.resolve(relPath))
+            Tools.zeroCopy(fileSources.first().safeGetFilePath(), mergedDir.resolve(relPath))
             return
         }
 
@@ -187,7 +188,7 @@ class FileMergerEngine(
 
         //不支持合并的文件类型，直接让用户选择用哪个文件
         if (merger == null) {
-            choiseWhichAssetToUse(relPath, fileSources, mergedDir)
+            chooseWhichAssetToUse(relPath, fileSources, mergedDir)
             return
         }
 
@@ -204,7 +205,7 @@ class FileMergerEngine(
 
             // 顺序合并：使用data0.pak作为基准（如果存在），然后依次合并各个mod
             for ((i, fileCurrent) in fileSources.withIndex()) {
-                val currentModPath = fileCurrent.safegetFilePath()
+                val currentModPath = fileCurrent.safeGetFilePath()
                 val currentModName = fileCurrent.getFirstArchiveFileName()
 
                 // 第一个 mod：如果有data0.pak基准文件，使用它作为base与第一个mod合并
@@ -257,7 +258,7 @@ class FileMergerEngine(
             log.error("Failed to merge file '{}': {}", relPath, e.message)
             // todo 这里合并失败的策略还得再调整下，现在是失败时使用最后一个 mod 的版本
             val lastSource: PathFileTree = fileSources.last()
-            Tools.zeroCopy(lastSource.safegetFilePath(), mergedDir.resolve(relPath))
+            Tools.zeroCopy(lastSource.safeGetFilePath(), mergedDir.resolve(relPath))
         }
     }
 
@@ -265,7 +266,7 @@ class FileMergerEngine(
     /**
      * 不支持合并的文件类型，让用户选择使用哪个版本
      */
-    private fun choiseWhichAssetToUse(
+    private fun chooseWhichAssetToUse(
         relPath: String,
         fileSources: MutableList<PathFileTree>,
         mergedDir: Path
@@ -282,7 +283,7 @@ class FileMergerEngine(
                 if (choice >= 1 && choice <= fileSources.size) {
                     val chosenSource = fileSources[choice - 1]
                     ColorPrinter.cyan(t("ASSET_USER_CHOSE_COMPLETE", chosenSource.getFirstArchiveFileName()))
-                    Tools.zeroCopy(chosenSource.safegetFilePath(), mergedDir.resolve(relPath))
+                    Tools.zeroCopy(chosenSource.safeGetFilePath(), mergedDir.resolve(relPath))
                     return
                 }
             } catch (_: Exception) {

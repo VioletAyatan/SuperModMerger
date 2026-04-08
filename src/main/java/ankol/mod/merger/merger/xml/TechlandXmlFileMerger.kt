@@ -4,13 +4,13 @@ import ankol.mod.merger.antlr.xml.TechlandXMLLexer
 import ankol.mod.merger.antlr.xml.TechlandXMLParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.ConflictResolver
+import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.domain.ParsedResult
-import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.AbstractFileMerger
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.merger.xml.node.XmlContainerNode
 import ankol.mod.merger.merger.xml.node.XmlLeafNode
 import ankol.mod.merger.merger.xml.node.XmlNode
@@ -199,7 +199,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             if (previousSibling != null) {
                 rewriter.insertBefore(previousSibling.stopTokenIndex + 1, "\n${newNode.sourceText}")
             } else {
-                // todo xml容器的结束标签是>，然而实际需要插入在<之前，这里需要继续搜索前面的token索引
+                // xml容器的结束标签是>，然而实际需要插入在<之前，这里需要继续搜索前面的token索引
                 //todo 这里的逻辑后面看看还有没有更好的解决方法
                 var stopTokenIndex = record.parentContainer.stopTokenIndex
                 while (record.parentContainer.tokenStream.get(stopTokenIndex).type != TechlandXMLLexer.OPEN) {
