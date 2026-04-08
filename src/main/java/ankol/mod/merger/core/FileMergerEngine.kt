@@ -36,7 +36,7 @@ class FileMergerEngine(
     /**
      * 基准MOD管理器
      */
-    private val baseModManager = BaseModManager(tempDir, baseModPath)
+    private val baseModManager = BaseModManager(baseModPath)
 
     /**
      * MOD提取器

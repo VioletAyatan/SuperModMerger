@@ -3,7 +3,7 @@ package ankol.mod.merger.core
 import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.tools.ColorPrinter
-import ankol.mod.merger.tools.Localizations
+import ankol.mod.merger.tools.Localizations.t
 import ankol.mod.merger.tools.Tools
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.logger
@@ -24,10 +24,7 @@ import kotlin.io.path.name
  *
  * @author Ankol
  */
-class BaseModManager(
-    private val tempDir: Path,
-    private val baseModPath: Path
-) {
+class BaseModManager(private val baseModPath: Path) {
     private val log = logger()
 
     /**
@@ -70,7 +67,7 @@ class BaseModManager(
      */
     fun load() {
         if (isLoaded) {
-            ColorPrinter.warning(Localizations.t("BASE_MOD_ALREADY_LOADED"))
+            ColorPrinter.warning(t("BASE_MOD_ALREADY_LOADED"))
             return
         }
         try {
@@ -79,7 +76,7 @@ class BaseModManager(
             this.indexedBaseModFileMap = indexBasePack(zipFileConnection)
             isLoaded = true
             val timetake = System.currentTimeMillis() - startTime
-            ColorPrinter.success(Localizations.t("BASE_MOD_INDEXED_FILES", baseModPath.fileName, indexedBaseModFileMap.size, timetake))
+            ColorPrinter.success(t("BASE_MOD_INDEXED_FILES", baseModPath.fileName, indexedBaseModFileMap.size, timetake))
         } catch (e: Exception) {
             log.error("Load base mod $baseModPath failed. Reason: ${e.message}", e)
             if (this::zipFileConnection.isInitialized) {
@@ -93,13 +90,13 @@ class BaseModManager(
      */
     private fun openZipConnection(): ZipFile {
         if (!Files.exists(baseModPath)) {
-            throw IOException(Localizations.t("BASE_MOD_FILE_NOT_FOUND", baseModPath))
+            throw IOException(t("BASE_MOD_FILE_NOT_FOUND", baseModPath))
         }
         if (Files.isDirectory(baseModPath)) {
-            throw IOException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", baseModPath))
+            throw IOException(t("TOOLS_PATH_IS_DIRECTORY", baseModPath))
         }
         if (!baseModPath.name.endsWith(".pak", ignoreCase = true)) {
-            throw IOException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"))
+            throw IOException(t("TOOLS_FILE_MUST_BE_PAK"))
         }
         if (!Files.isReadable(baseModPath)) {
             throw IOException("Base MOD file is not readable: $baseModPath")
@@ -119,7 +116,7 @@ class BaseModManager(
             val fileName = getEntryFileName(entryName)
             if (fileName in pakIndexMap) {
                 ColorPrinter.warning(
-                    Localizations.t(
+                    t(
                         "TOOLS_SAME_FILE_NAME_WARNING",
                         fileName,
                         entryName,
@@ -166,7 +163,8 @@ class BaseModManager(
      */
     private fun extractFileFromPak(fileEntryName: String): CachedBaseFile {
         val digest = MessageDigest.getInstance("SHA-256")
-        val entry = zipFileConnection.getEntry(fileEntryName) ?: throw IOException(Localizations.t("BASE_MOD_FILE_NOT_FOUND", fileEntryName))
+        val entry = zipFileConnection.getEntry(fileEntryName)
+            ?: throw IOException(t("BASE_MOD_FILE_NOT_FOUND", fileEntryName))
         if (entry.size == 0L) {
             return CachedBaseFile("", "", true)
         }
@@ -231,8 +229,8 @@ class BaseModManager(
         fileEntryName: String,
         function: Function<String, ParsedResult<T>>
     ): ParsedResult<T>? {
-        val normalizedFileName = getEntryFileName(fileEntryName)
-        val canonicalEntryName = indexedBaseModFileMap[normalizedFileName]?.fileEntryName ?: fileEntryName
+        val entryFileName = getEntryFileName(fileEntryName)
+        val canonicalEntryName = indexedBaseModFileMap[entryFileName]?.fileEntryName ?: fileEntryName
         return baseTreeCache.computeIfAbsent(canonicalEntryName) {
             val content = extractFileContent(canonicalEntryName) ?: return@computeIfAbsent null
             function.apply(content)

@@ -47,18 +47,9 @@ class ModExtrator(
             try {
                 val archiveName = mod.modName
                 val modTempDir = tempDir.resolve("${archiveName}${index.getAndIncrement()}")
-
-                var extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir) //解压压缩包
-                extractedFiles = filterFiles(extractedFiles) //过滤掉不支持的文件
-                val correctionFileMap = correctPathsForMod(archiveName, extractedFiles) //路径修正
-
-                correctionCounter.addAndGet(correctionFileMap.size) //计数器增加
-
-                //按文件路径分组后返回filesByPath
-                for ((fileRelPath, fileSource) in correctionFileMap) {
-                    filesByPath.computeIfAbsent(fileRelPath) { Collections.synchronizedList(arrayListOf()) }
-                        .add(fileSource)
-                }
+                val extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir) //解压压缩包
+                val correctedCount = processExtractedFiles(archiveName, extractedFiles, filesByPath)
+                correctionCounter.addAndGet(correctedCount)
             } catch (e: Exception) {
                 log.error(t("ENGINE_EXTRACT_FAILED", mod.modName), e)
                 ErrorReporter.addErrorReport(mod.modName, t("ERROR_EXTRA_MOD_FAILED", e.message, mod.modPath))
@@ -66,6 +57,61 @@ class ModExtrator(
         }
 
         return ExtractionResult(filesByPath, correctionCounter.get())
+    }
+
+    /**
+     * 单次遍历完成：过滤、路径修正、按路径分组
+     */
+    private fun processExtractedFiles(
+        modFileName: String,
+        extractedFiles: Map<String, PathFileTree>,
+        filesByPath: MutableMap<String, MutableList<PathFileTree>>
+    ): Int {
+        val correctionsFileMap = LinkedHashMap<String, String>()
+
+        for ((fileEntryName, sourceInfo) in extractedFiles) {
+            if (shouldSkipFile(fileEntryName, sourceInfo)) {
+                continue
+            }
+
+            var targetPath = fileEntryName
+            if (baseModManager.isLoaded && baseModManager.hasPathConflict(fileEntryName)) {
+                val suggestedPath = baseModManager.getSuggestedPath(fileEntryName)
+                if (suggestedPath != null) {
+                    correctionsFileMap[fileEntryName] = suggestedPath
+                    targetPath = suggestedPath
+                }
+            }
+
+            filesByPath.computeIfAbsent(targetPath) { Collections.synchronizedList(arrayListOf()) }.add(sourceInfo)
+        }
+
+        if (correctionsFileMap.isNotEmpty()) {
+            ColorPrinter.cyan(t("ENGINE_PATH_CORRECTIONS_FOR_MOD", modFileName))
+            for ((wrongPath, correctPath) in correctionsFileMap) {
+                ColorPrinter.success(t("ENGINE_PATH_CORRECTION_ITEM", wrongPath, correctPath))
+            }
+        }
+
+        return correctionsFileMap.size
+    }
+
+    private fun shouldSkipFile(fileEntryName: String, sourceInfo: PathFileTree): Boolean {
+        if (Strings.CI.endsWithAny(fileEntryName, ".txt", ".md")) {
+            log.warn("Unsupported text file: ${fileEntryName}, Marking to removal.")
+            return true
+        }
+        if (Strings.CI.endsWithAny(fileEntryName, ".dll", ".asi")) {
+            log.warn("Unsupported dll/asi file: ${fileEntryName}, Please handle it yourself after merging.")
+            ErrorReporter.addErrorReport(sourceInfo.getFirstArchiveFileName(), t("ERROR_NOT_SUPPORT_DLL", fileEntryName))
+            return true
+        }
+        if (Strings.CI.endsWithAny(fileEntryName, ".rpack")) {
+            log.warn("Unsupported rpak file: ${fileEntryName}, Marking to removal.")
+            ErrorReporter.addErrorReport(sourceInfo.getFirstArchiveFileName(), t("ERROR_NOT_SUPPORT_RPACK", fileEntryName))
+            return true
+        }
+        return false
     }
 
     /**

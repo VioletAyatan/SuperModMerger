@@ -143,9 +143,13 @@ object PakManager {
                             else -> Files.newOutputStream(outputPath).use { output ->
                                 DigestOutputStream(output, digest).use { dos ->
                                     val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                                    while (sevenZFile.read(buffer) != -1) {
+                                    while (true) {
+                                        val read = sevenZFile.read(buffer)
+                                        if (read == -1) {
+                                            break
+                                        }
                                         //写入文件内容，顺便计算哈希
-                                        dos.write(buffer, 0, buffer.size)
+                                        dos.write(buffer, 0, read)
                                     }
                                 }
                             }
