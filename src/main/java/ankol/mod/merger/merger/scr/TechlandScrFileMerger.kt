@@ -12,8 +12,8 @@ import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.AbstractFileMerger
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
-import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode
+import ankol.mod.merger.merger.scr.node.ScrContainerNode
+import ankol.mod.merger.merger.scr.node.ScrFunCallNode
 import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.TokenStreamRewriter
 
@@ -44,7 +44,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 基准MOD（data0.pak）对应文件的语法树，用于三方对比
      */
-    private var vanillaRootNode: ScrContainerScriptNode? = null
+    private var vanillaRootNode: ScrContainerNode? = null
 
     override fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult {
         try {
@@ -56,8 +56,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 解析base和mod文件，保留TokenStream
             val accumulatedResult = parseContent(accumulatedFile.getContent())
             val incomingModResult = parseContent(incomingModFile.getContent())
-            val accumulatedRoot: ScrContainerScriptNode = accumulatedResult.astNode
-            val incomingModRoot: ScrContainerScriptNode = incomingModResult.astNode
+            val accumulatedRoot: ScrContainerNode = accumulatedResult.astNode
+            val incomingModRoot: ScrContainerNode = incomingModResult.astNode
 
             deepCompare(vanillaRootNode, accumulatedRoot, incomingModRoot)
 
@@ -84,9 +84,9 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     }
 
     private fun deepCompare(
-        vanillaContainer: ScrContainerScriptNode?,
-        accumulatedContainer: ScrContainerScriptNode,
-        incomingModContainer: ScrContainerScriptNode
+        vanillaContainer: ScrContainerNode?,
+        accumulatedContainer: ScrContainerNode,
+        incomingModContainer: ScrContainerNode
     ) {
         // 遍历 Mod 的所有子节点
         for ((signature, incomingModNode) in incomingModContainer.childrens) {
@@ -101,11 +101,11 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                     handleInsertion(accumulatedContainer, incomingModNode)
                 } else {
                     //容器节点，递归对比
-                    if (accumulatedNode is ScrContainerScriptNode && incomingModNode is ScrContainerScriptNode) {
-                        deepCompare(vanillaNode as ScrContainerScriptNode?, accumulatedNode, incomingModNode)
+                    if (accumulatedNode is ScrContainerNode && incomingModNode is ScrContainerNode) {
+                        deepCompare(vanillaNode as ScrContainerNode?, accumulatedNode, incomingModNode)
                     }
                     //function call节点的对比逻辑
-                    else if (accumulatedNode is ScrFunCallScriptNode && incomingModNode is ScrFunCallScriptNode) {
+                    else if (accumulatedNode is ScrFunCallNode && incomingModNode is ScrFunCallNode) {
                         if (accumulatedNode.arguments != incomingModNode.arguments) {
                             if (!isNodeSameAsOriginalNode(vanillaNode, incomingModNode)) {
                                 if (isNodeSameAsOriginalNode(vanillaNode, accumulatedNode)) {
@@ -180,7 +180,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
     }
 
-    private fun getMergedContent(accumulatedResult: ParsedResult<ScrContainerScriptNode>): String {
+    private fun getMergedContent(accumulatedResult: ParsedResult<ScrContainerNode>): String {
         val rewriter = TokenStreamRewriter(accumulatedResult.tokenStream)
         // 处理冲突节点的替换
         for (record in conflicts) {
@@ -223,7 +223,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
 
         // 对比节点内容
-        return if (incomingModNode is ScrFunCallScriptNode && originalNode is ScrFunCallScriptNode) {
+        return if (incomingModNode is ScrFunCallNode && originalNode is ScrFunCallNode) {
             // 函数调用节点，对比参数
             incomingModNode.arguments == originalNode.arguments
         } else {
@@ -231,7 +231,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
     }
 
-    private fun handleInsertion(accumulatedContainer: ScrContainerScriptNode, incomingModNode: BaseTreeNode) {
+    private fun handleInsertion(accumulatedContainer: ScrContainerNode, incomingModNode: BaseTreeNode) {
         // 根据节点签名确定节点类型
         val nodeType = when {
             incomingModNode.signature.startsWith("import:") -> NodeType.IMPORT
@@ -268,7 +268,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 找到import语句的插入位置：在所有现有import之后，或者在第一个非import节点之前
      */
-    private fun findInsertPositionForImport(container: ScrContainerScriptNode): Int {
+    private fun findInsertPositionForImport(container: ScrContainerNode): Int {
         var lastImportStopIndex: Int? = null
 
         for ((_, node) in container.childrens) {
@@ -287,7 +287,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 找到sub函数的插入位置：在所有import和sub之后，但在其他节点之前
      */
-    private fun findInsertPositionForSub(container: ScrContainerScriptNode): Int {
+    private fun findInsertPositionForSub(container: ScrContainerNode): Int {
         var lastSubOrImportStopIndex: Int? = null
 
         for ((_, node) in container.childrens) {
@@ -306,7 +306,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         return lastSubOrImportStopIndex ?: container.stopTokenIndex
     }
 
-    private fun parseContent(content: String): ParsedResult<ScrContainerScriptNode> {
+    private fun parseContent(content: String): ParsedResult<ScrContainerNode> {
         return parseContentWithTemplate(
             content = content,
             lexerFactory = ::TechlandScriptLexer,
@@ -314,7 +314,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             parseTreeFactory = { it.file() },
             astBuilder = { tokenStream, parseTree ->
                 val visitor = TechlandScrFileVisitor(tokenStream)
-                visitor.visitFile(parseTree) as ScrContainerScriptNode
+                visitor.visitFile(parseTree) as ScrContainerNode
             }
         )
     }

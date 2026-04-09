@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.TokenStream
  * 对应到SCR语法中即为包含其他语句的代码块，如函数体、条件语句体等
  * @author Ankol
  */
-class ScrContainerScriptNode(
+class ScrContainerNode(
     signature: String,
     startTokenIndex: Int,
     stopTokenIndex: Int,
