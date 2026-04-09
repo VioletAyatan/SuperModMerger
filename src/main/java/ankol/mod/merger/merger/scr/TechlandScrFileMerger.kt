@@ -5,19 +5,16 @@ import ankol.mod.merger.antlr.scr.TechlandScriptParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.core.ConflictResolver
+import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.domain.ParsedResult
-import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.AbstractFileMerger
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
 import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode
 import ankol.mod.merger.tools.logger
-import org.antlr.v4.runtime.CharStream
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.TokenStreamRewriter
 
 class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context) {
@@ -61,9 +58,6 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             val incomingModResult = parseContent(incomingModFile.getContent())
             val accumulatedRoot: ScrContainerScriptNode = accumulatedResult.astNode
             val incomingModRoot: ScrContainerScriptNode = incomingModResult.astNode
-
-//            accumulatedRoot.printTree()
-//            incomingModRoot.printTree()
 
             deepCompare(vanillaRootNode, accumulatedRoot, incomingModRoot)
 
@@ -313,14 +307,16 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     }
 
     private fun parseContent(content: String): ParsedResult<ScrContainerScriptNode> {
-        val input: CharStream = CharStreams.fromString(content)
-        val lexer = TechlandScriptLexer(input)
-        val tokens = CommonTokenStream(lexer)
-        val parser = TechlandScriptParser(tokens)
-        val visitor = TechlandScrFileVisitor(tokens)
-        // 注意：visitFile 返回的一定是我们定义的 ROOT Container
-        val ast = visitor.visitFile(parser.file()) as ScrContainerScriptNode
-        return ParsedResult(ast, tokens)
+        return parseContentWithTemplate(
+            content = content,
+            lexerFactory = ::TechlandScriptLexer,
+            parserFactory = ::TechlandScriptParser,
+            parseTreeFactory = { it.file() },
+            astBuilder = { tokenStream, parseTree ->
+                val visitor = TechlandScrFileVisitor(tokenStream)
+                visitor.visitFile(parseTree) as ScrContainerScriptNode
+            }
+        )
     }
 
     private fun equalsTrimmed(a: String?, b: String?): Boolean {

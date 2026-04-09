@@ -15,9 +15,6 @@ import ankol.mod.merger.merger.xml.node.XmlContainerNode
 import ankol.mod.merger.merger.xml.node.XmlLeafNode
 import ankol.mod.merger.merger.xml.node.XmlNode
 import ankol.mod.merger.tools.logger
-import org.antlr.v4.runtime.CharStream
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.TokenStreamRewriter
 
 /**
@@ -60,8 +57,8 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                 vanillaRootNode = parsedResult.astNode
             }
             // 解析base和mod文件
-            val baseResult = parseFile(accumulatedFile)
-            val modResult = parseFile(incomingModFile)
+            val baseResult = parseContent(accumulatedFile.getContent())
+            val modResult = parseContent(incomingModFile.getContent())
             val baseRoot = baseResult.astNode
             val modRoot = modResult.astNode
 
@@ -227,22 +224,18 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     }
 
     /**
-     * 将XML文件解析成语法树
-     */
-    private fun parseFile(filePath: AbstractFileTree): ParsedResult<XmlContainerNode> {
-        return parseContent(filePath.getContent())
-    }
-
-    /**
      * 解析字符串内容为ParseResult
      */
     private fun parseContent(content: String): ParsedResult<XmlContainerNode> {
-        val input: CharStream = CharStreams.fromString(content)
-        val lexer = TechlandXMLLexer(input)
-        val tokens = CommonTokenStream(lexer)
-        val parser = TechlandXMLParser(tokens)
-        val visitor = TechlandXmlFileVisitor(tokens)
-        val root = visitor.visitDocument(parser.document())
-        return ParsedResult(root as XmlContainerNode, tokens)
+        return parseContentWithTemplate(
+            content = content,
+            lexerFactory = ::TechlandXMLLexer,
+            parserFactory = ::TechlandXMLParser,
+            parseTreeFactory = { it.document() },
+            astBuilder = { tokenStream, parseTree ->
+                val visitor = TechlandXmlFileVisitor(tokenStream)
+                visitor.visitDocument(parseTree) as XmlContainerNode
+            }
+        )
     }
 }

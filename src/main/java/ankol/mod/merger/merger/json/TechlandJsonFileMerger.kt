@@ -5,19 +5,17 @@ import ankol.mod.merger.antlr.json.JSONParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.core.ConflictResolver.resolveConflict
+import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.domain.ParsedResult
-import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.AbstractFileMerger
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.merger.json.node.JsonArrayNode
 import ankol.mod.merger.merger.json.node.JsonContainerNode
 import ankol.mod.merger.merger.json.node.JsonPairNode
 import ankol.mod.merger.tools.logger
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.TokenStreamRewriter
 
 /**
@@ -59,8 +57,8 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             if (parsedResult != null) {
                 vanillaRootNode = parsedResult.astNode
             }
-            val baseResult = parseFile(accumulatedFile)
-            val modResult = parseFile(incomingModFile)
+            val baseResult = parseContent(accumulatedFile.getContent())
+            val modResult = parseContent(incomingModFile.getContent())
             val baseRoot = baseResult.astNode
             val modRoot = modResult.astNode
 
@@ -310,22 +308,18 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
         }
     }
 
-    private fun parseFile(fileTree: AbstractFileTree): ParsedResult<BaseTreeNode> {
-        return parseContent(fileTree.getContent())
-    }
-
     private fun parseContent(content: String): ParsedResult<BaseTreeNode> {
-        val charStream = CharStreams.fromString(content)
-        val lexer = JSONLexer(charStream)
-        val tokenStream = CommonTokenStream(lexer)
-        val parser = JSONParser(tokenStream)
-        val jsonContext = parser.json()
-
-        // 使用Visitor转换为节点树
-        val visitor = TechlandJsonFileVisitor(tokenStream)
-        val astNode = visitor.visit(jsonContext)
-
-        return ParsedResult(astNode, tokenStream)
+        return parseContentWithTemplate(
+            content = content,
+            lexerFactory = ::JSONLexer,
+            parserFactory = ::JSONParser,
+            parseTreeFactory = { it.json() },
+            astBuilder = { tokenStream, parseTree ->
+                // 使用Visitor转换为节点树
+                val visitor = TechlandJsonFileVisitor(tokenStream)
+                visitor.visit(parseTree)
+            }
+        )
     }
 }
 
