@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.TokenStream
 /**
  * 函数调用节点
  */
-class ScrFunCallScriptNode(
+class ScrFunCallNode(
     signature: String,
     startTokenIndex: Int,
     stopTokenIndex: Int,

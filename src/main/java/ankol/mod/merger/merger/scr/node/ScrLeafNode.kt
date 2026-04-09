@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.TokenStream
 /**
  * 叶子节点
  */
-class ScrLeafScriptNode(
+class ScrLeafNode(
     signature: String,
     startTokenIndex: Int,
     stopTokenIndex: Int,
