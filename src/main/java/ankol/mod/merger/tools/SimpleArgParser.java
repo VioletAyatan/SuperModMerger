@@ -4,6 +4,8 @@ import ankol.mod.merger.exception.BusinessException;
 
 import java.util.*;
 
+import static ankol.mod.merger.tools.Localizations.t;
+
 /**
  * 简单的命令行参数解析工具
  *
@@ -59,14 +61,14 @@ public class SimpleArgParser {
                             value = args[++i];
                         }
                         if (value == null || value.isEmpty()) {
-                            throw new BusinessException(Localizations.t("ARG_PARSER_MISSING_VALUE", arg));
+                            throw new BusinessException(t("ARG_PARSER_MISSING_VALUE", arg));
                         }
                         parsedValues.put(rawName, value); // 存入长名
                     } else {
                         parsedFlags.add(rawName); // 存入长名
                     }
                 } else {
-                    throw new BusinessException(Localizations.t("ARG_PARSER_UNKNOWN_OPTION", arg));
+                    throw new BusinessException(t("ARG_PARSER_UNKNOWN_OPTION", arg));
                 }
             } else if (arg.startsWith("-")) {
                 String shortName = arg.substring(1);
@@ -77,13 +79,13 @@ public class SimpleArgParser {
                         if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
                             parsedValues.put(longName, args[++i]); // 映射为长名存入
                         } else {
-                            throw new BusinessException(Localizations.t("ARG_PARSER_MISSING_VALUE", arg));
+                            throw new BusinessException(t("ARG_PARSER_MISSING_VALUE", arg));
                         }
                     } else {
                         parsedFlags.add(longName); // 映射为长名存入
                     }
                 } else {
-                    throw new BusinessException(Localizations.t("ARG_PARSER_UNKNOWN_OPTION", arg));
+                    throw new BusinessException(t("ARG_PARSER_UNKNOWN_OPTION", arg));
                 }
             } else {
                 // 位置参数
@@ -150,7 +152,7 @@ public class SimpleArgParser {
      * 打印帮助信息
      */
     public void printHelp() {
-        ColorPrinter.cyan(Localizations.t("ARG_PARSER_USAGE"));
+        ColorPrinter.cyan(t("ARG_PARSER_USAGE"));
         for (Option opt : options.values()) {
             String sName = (opt.shortName != null) ? "-" + opt.shortName : "  ";
             String lName = "--" + opt.longName;

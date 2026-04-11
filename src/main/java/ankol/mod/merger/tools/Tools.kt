@@ -1,6 +1,7 @@
 package ankol.mod.merger.tools
 
 import ankol.mod.merger.exception.BusinessException
+import ankol.mod.merger.tools.Localizations.t
 import java.nio.channels.FileChannel
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -28,13 +29,13 @@ object Tools {
             if (defaultPath.exists()) {
                 defaultPath
             } else {
-                throw BusinessException(Localizations.t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
+                throw BusinessException(t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
             }
         } else {
             if (meringModDir.exists()) {
                 meringModDir
             } else {
-                throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", meringModDir))
+                throw BusinessException(t("TOOLS_MODS_DIR_NOT_EXIST", meringModDir))
             }
         }
     }
@@ -49,7 +50,7 @@ object Tools {
     fun scanFiles(mergedDirPath: Path, vararg extensions: String): MutableList<Path> {
         val results = ArrayList<Path>()
         if (!mergedDirPath.exists()) {
-            throw BusinessException(Localizations.t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
+            throw BusinessException(t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
         }
         mergedDirPath.walk(PathWalkOption.FOLLOW_LINKS)
             .filter { it.isRegularFile() }

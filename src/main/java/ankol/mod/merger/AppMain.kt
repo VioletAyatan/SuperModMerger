@@ -5,6 +5,7 @@ import ankol.mod.merger.core.GlobalMergingStrategy
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.tools.*
+import ankol.mod.merger.tools.Localizations.t
 import org.apache.commons.lang3.Strings
 import java.io.FileDescriptor
 import java.io.FileOutputStream
@@ -49,11 +50,11 @@ class AppMain {
                 val start = System.currentTimeMillis()
                 FileMergerEngine(modsToMerge, outputPath, baseModPath).merge()
                 val end = System.currentTimeMillis()
-                ColorPrinter.success(Localizations.t("APP_MAIN_DONE", end - start))
+                ColorPrinter.success(t("APP_MAIN_DONE", end - start))
             } catch (e: Exception) {
                 exitCode = 1
                 if (e is BusinessException) {
-                    ColorPrinter.error(Localizations.t("APP_MAIN_ERROR", e.message))
+                    ColorPrinter.error(t("APP_MAIN_ERROR", e.message))
                 } else {
                     log.error(e.message, e)
                 }
@@ -100,17 +101,17 @@ class AppMain {
                 Paths.get(Tools.userDir, "source", "data0.pak")
             }
             if (baseModPath.notExists()) {
-                throw BusinessException(Localizations.t("APP_MAIN_BASE_MOD_NOT_FOUND"))
+                throw BusinessException(t("APP_MAIN_BASE_MOD_NOT_FOUND"))
             }
             return baseModPath
         }
 
         private fun registerArgsParser(): SimpleArgParser {
             val argParser = SimpleArgParser()
-            argParser.addOption("m", "merge", true, Localizations.t("APP_MAIN_OPTION_MERGE_DESC"))
-            argParser.addOption("o", "output", true, Localizations.t("APP_MAIN_OPTION_OUTPUT_DESC"))
-            argParser.addOption("b", "base", true, Localizations.t("APP_MAIN_OPTION_BASE_DESC"))
-            argParser.addOption("h", "help", false, Localizations.t("APP_MAIN_OPTION_HELP_DESC"))
+            argParser.addOption("m", "merge", true, t("APP_MAIN_OPTION_MERGE_DESC"))
+            argParser.addOption("o", "output", true, t("APP_MAIN_OPTION_OUTPUT_DESC"))
+            argParser.addOption("b", "base", true, t("APP_MAIN_OPTION_BASE_DESC"))
+            argParser.addOption("h", "help", false, t("APP_MAIN_OPTION_HELP_DESC"))
             return argParser
         }
 
@@ -131,7 +132,7 @@ class AppMain {
         }
 
         private fun parseAnyKeyToExit(exitCode: Int) {
-            ColorPrinter.success(Localizations.t("APP_MAIN_PRESS_ANY_KEY_EXIT"))
+            ColorPrinter.success(t("APP_MAIN_PRESS_ANY_KEY_EXIT"))
             readlnOrNull()
             exitProcess(exitCode)
         }
