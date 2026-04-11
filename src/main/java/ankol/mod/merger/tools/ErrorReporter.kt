@@ -1,5 +1,6 @@
 package ankol.mod.merger.tools
 
+import ankol.mod.merger.tools.Localizations.t
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class ErrorReporter {
@@ -20,9 +21,9 @@ class ErrorReporter {
         @JvmStatic
         fun printErrors() {
             if (errors.isNotEmpty()) {
-                ColorPrinter.error(Localizations.t("ERROR_REPORTER_TITLE"))
+                ColorPrinter.error(t("ERROR_REPORTER_TITLE"))
                 errors.forEach { error ->
-                    ColorPrinter.error(Localizations.t("ERROR_REPORTER_MSG", error.errorSource, error.message))
+                    ColorPrinter.error(t("ERROR_REPORTER_MSG", error.errorSource, error.message))
                 }
             }
         }
