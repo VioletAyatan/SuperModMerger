@@ -6,7 +6,6 @@ import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Localizations.t
-import org.apache.commons.lang3.Strings
 import java.io.FileDescriptor
 import java.io.FileOutputStream
 import java.io.PrintStream
@@ -73,9 +72,10 @@ class AppMain {
                 }
             }
             val mergingMods = mutableListOf<MergingModInfo>()
+            val exts = setOf("pak", "zip", "7z")
             mergingModDir.walk(PathWalkOption.FOLLOW_LINKS)
                 .forEach { path: Path ->
-                    if (path.isRegularFile() && Strings.CI.equalsAny(path.extension, "pak", "zip", "7z")) {
+                    if (path.isRegularFile() && path.extension in exts) {
                         if (vortexDeploy) {
                             val modName = path.parent.name
                             if (modName == "mods") {
