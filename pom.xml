@@ -161,8 +161,6 @@
                         <configuration>
                             <arguments>
                                 <argument>-visitor</argument> <!-- 生成 Visitor 接口/基类 -->
-                                <argument>-package</argument>
-                                <argument>ankol.mod.merger.script</argument>
                             </arguments>
                         </configuration>
                     </execution>
