@@ -1,25 +1,22 @@
-package ankol.mod.merger.tools;
+package ankol.mod.merger.tools
 
-import ankol.mod.merger.exception.BusinessException;
-
-import java.util.*;
-
-import static ankol.mod.merger.tools.Localizations.t;
+import ankol.mod.merger.exception.BusinessException
+import ankol.mod.merger.tools.Localizations.t
 
 /**
  * 简单的命令行参数解析工具
  *
  * @author Ankol
  */
-public class SimpleArgParser {
+class SimpleArgParser {
     // --- 定义存储结构 ---
-    private final Map<String, Option> options = new LinkedHashMap<>();
+    private val options = LinkedHashMap<String, Option>()
     // 关键映射：短名 -> 长名 (例如 "p" -> "port")
-    private final Map<String, String> shortToLongMap = new HashMap<>();
+    private val shortToLongMap = HashMap<String, String>()
     // 解析结果 (统一使用长名作为 Key)
-    private final Map<String, String> parsedValues = new HashMap<>();
-    private final Set<String> parsedFlags = new HashSet<>();
-    private final List<String> positionalArgs = new ArrayList<>();
+    private val parsedValues = HashMap<String, String>()
+    private val parsedFlags = HashSet<String>()
+    private val _positionalArgs = ArrayList<String>()
 
     /**
      * 添加命令行配置项
@@ -29,12 +26,12 @@ public class SimpleArgParser {
      * @param hasValue    是否需要值（支持不带值的命令行参数）
      * @param description 命令行描述
      */
-    public void addOption(String shortName, String longName, boolean hasValue, String description) {
-        Option option = new Option(shortName, longName, hasValue, description);
-        options.put(longName, option);
-        //添加到长短名映射中
-        if (shortName != null && !shortName.isEmpty()) {
-            shortToLongMap.put(shortName, longName);
+    fun addOption(shortName: String?, longName: String, hasValue: Boolean, description: String) {
+        val option = Option(shortName, longName, hasValue, description)
+        options[longName] = option
+        // 添加到长短名映射中
+        if (!shortName.isNullOrEmpty()) {
+            shortToLongMap[shortName] = longName
         }
     }
 
@@ -43,54 +40,50 @@ public class SimpleArgParser {
      *
      * @param args 命令行参数数组
      */
-    public void parse(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i];
+    fun parse(args: Array<String>) {
+        var i = 0
+        while (i < args.size) {
+            val arg = args[i]
             if (arg.startsWith("--")) {
-                String rawName = arg.substring(2);
-                String value = null;
+                var rawName = arg.substring(2)
+                var value: String? = null
                 if (rawName.contains("=")) {
-                    String[] parts = rawName.split("=", 2);
-                    rawName = parts[0];
-                    value = parts[1];
+                    val parts = rawName.split("=", limit = 2)
+                    rawName = parts[0]
+                    value = parts[1]
                 }
-                if (options.containsKey(rawName)) {
-                    Option opt = options.get(rawName);
-                    if (opt.hasValue) {
-                        if (value == null && i + 1 < args.length && !args[i + 1].startsWith("-")) {
-                            value = args[++i];
-                        }
-                        if (value == null || value.isEmpty()) {
-                            throw new BusinessException(t("ARG_PARSER_MISSING_VALUE", arg));
-                        }
-                        parsedValues.put(rawName, value); // 存入长名
-                    } else {
-                        parsedFlags.add(rawName); // 存入长名
+                val opt = options[rawName]
+                    ?: throw BusinessException(t("ARG_PARSER_UNKNOWN_OPTION", arg))
+                if (opt.hasValue) {
+                    if (value == null && i + 1 < args.size && !args[i + 1].startsWith("-")) {
+                        value = args[++i]
                     }
+                    if (value.isNullOrEmpty()) {
+                        throw BusinessException(t("ARG_PARSER_MISSING_VALUE", arg))
+                    }
+                    parsedValues[rawName] = value
                 } else {
-                    throw new BusinessException(t("ARG_PARSER_UNKNOWN_OPTION", arg));
+                    parsedFlags.add(rawName)
                 }
             } else if (arg.startsWith("-")) {
-                String shortName = arg.substring(1);
-                if (shortToLongMap.containsKey(shortName)) {
-                    String longName = shortToLongMap.get(shortName);
-                    Option opt = options.get(longName);
-                    if (opt.hasValue) {
-                        if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
-                            parsedValues.put(longName, args[++i]); // 映射为长名存入
-                        } else {
-                            throw new BusinessException(t("ARG_PARSER_MISSING_VALUE", arg));
-                        }
+                val shortName = arg.substring(1)
+                val longName = shortToLongMap[shortName]
+                    ?: throw BusinessException(t("ARG_PARSER_UNKNOWN_OPTION", arg))
+                val opt = options[longName]!!
+                if (opt.hasValue) {
+                    if (i + 1 < args.size && !args[i + 1].startsWith("-")) {
+                        parsedValues[longName] = args[++i]
                     } else {
-                        parsedFlags.add(longName); // 映射为长名存入
+                        throw BusinessException(t("ARG_PARSER_MISSING_VALUE", arg))
                     }
                 } else {
-                    throw new BusinessException(t("ARG_PARSER_UNKNOWN_OPTION", arg));
+                    parsedFlags.add(longName)
                 }
             } else {
                 // 位置参数
-                positionalArgs.add(arg);
+                _positionalArgs.add(arg)
             }
+            i++
         }
     }
 
@@ -100,13 +93,9 @@ public class SimpleArgParser {
      * @param key key
      * @return 返回转换后的长名
      */
-    public String resolveKey(String key) {
+    fun resolveKey(key: String): String {
         // 如果这个 key 是已知的短名，返回对应的长名
-        if (shortToLongMap.containsKey(key)) {
-            return shortToLongMap.get(key);
-        }
-        // 否则假设它是长名
-        return key;
+        return shortToLongMap[key] ?: key
     }
 
     /**
@@ -115,9 +104,9 @@ public class SimpleArgParser {
      * @param key key (支持 -v 或 --verbose)
      * @return 对应选项是否存在
      */
-    public boolean hasOption(String key) {
-        String longKey = resolveKey(key);
-        return parsedFlags.contains(longKey) || parsedValues.containsKey(longKey);
+    fun hasOption(key: String): Boolean {
+        val longKey = resolveKey(key)
+        return longKey in parsedFlags || longKey in parsedValues
     }
 
     /**
@@ -125,8 +114,8 @@ public class SimpleArgParser {
      *
      * @param key (支持 -p 或 --port)
      */
-    public String getOptionValue(String key) {
-        return parsedValues.get(resolveKey(key));
+    fun getOptionValue(key: String): String? {
+        return parsedValues[resolveKey(key)]
     }
 
     /**
@@ -135,8 +124,8 @@ public class SimpleArgParser {
      * @param key          支持 -p 或 --port
      * @param defaultValue 默认值
      */
-    public String getOptionValue(String key, String defaultValue) {
-        return parsedValues.getOrDefault(resolveKey(key), defaultValue);
+    fun getOptionValue(key: String, defaultValue: String): String {
+        return parsedValues.getOrDefault(resolveKey(key), defaultValue)
     }
 
     /**
@@ -144,42 +133,34 @@ public class SimpleArgParser {
      *
      * @return 位置参数列表
      */
-    public List<String> getPositionalArgs() {
-        return positionalArgs;
-    }
+    fun getPositionalArgs(): List<String> = _positionalArgs
 
     /**
      * 打印帮助信息
      */
-    public void printHelp() {
-        ColorPrinter.cyan(t("ARG_PARSER_USAGE"));
-        for (Option opt : options.values()) {
-            String sName = (opt.shortName != null) ? "-" + opt.shortName : "  ";
-            String lName = "--" + opt.longName;
-            String valParams = opt.hasValue ? " <value>" : "";
-            ColorPrinter.cyan("  {}, {} {}", sName, lName + valParams, opt.description);
+    fun printHelp() {
+        ColorPrinter.cyan(t("ARG_PARSER_USAGE"))
+        for (opt in options.values) {
+            val sName = if (opt.shortName != null) "-${opt.shortName}" else "  "
+            val lName = "--${opt.longName}"
+            val valParams = if (opt.hasValue) " <value>" else ""
+            ColorPrinter.cyan("  {}, {} {}", sName, lName + valParams, opt.description)
         }
     }
 
-    public static class Option {
-        private final String shortName;
-        private final String longName;
-        private final boolean hasValue;
-        private final String description;
-
-        /**
-         * 命令行指令构造函数
-         *
-         * @param shortName   短名称（-x）
-         * @param longName    长名称（--xxx）
-         * @param hasValue    是否需要值（支持不带值的命令行参数）
-         * @param description 命令行描述
-         */
-        public Option(String shortName, String longName, boolean hasValue, String description) {
-            this.shortName = shortName;
-            this.longName = longName;
-            this.hasValue = hasValue;
-            this.description = description;
-        }
-    }
+    /**
+     * 命令行指令
+     *
+     * @param shortName   短名称（-x）
+     * @param longName    长名称（--xxx）
+     * @param hasValue    是否需要值（支持不带值的命令行参数）
+     * @param description 命令行描述
+     */
+    data class Option(
+        val shortName: String?,
+        val longName: String,
+        val hasValue: Boolean,
+        val description: String
+    )
 }
+
