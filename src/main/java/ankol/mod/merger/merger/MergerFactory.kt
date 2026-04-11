@@ -19,11 +19,11 @@ object MergerFactory {
 
     init {
         //.scr格式的合并器
-        registerMerger(::TechlandScrFileMerger, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth")
+        registerMerger(::TechlandScrFileMerger, ".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth", ".gpufx")
         //.xml文件的合并器
         registerMerger(::TechlandXmlFileMerger, ".xml")
-        //json格式合并器
-        registerMerger(::TechlandJsonFileMerger, ".gui")
+        //json格式合并器(.model也是json格式，但由于是模型文件，不提供支持合并)
+        registerMerger(::TechlandJsonFileMerger, ".gui", ".json")
     }
 
     /**

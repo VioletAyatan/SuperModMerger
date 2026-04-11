@@ -168,6 +168,16 @@ public interface TechlandScriptListener extends ParseTreeListener {
 	 */
 	void exitVariableDecl(TechlandScriptParser.VariableDeclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TechlandScriptParser#variableAssignDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableAssignDecl(TechlandScriptParser.VariableAssignDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TechlandScriptParser#variableAssignDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableAssignDecl(TechlandScriptParser.VariableAssignDeclContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TechlandScriptParser#functionCallDecl}.
 	 * @param ctx the parse tree
 	 */

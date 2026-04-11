@@ -30,6 +30,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         private const val FUN_BLOCK = "funBlock"
         private const val SUB_FUN = "sub"
         private const val VARIABLE = "variable"
+        private const val VARIABLE_ASSIGN = "varaibleAssign"
         private const val USE = "use"
         private const val IMPORT = "import"
         private const val EXPORT = "export"
@@ -301,6 +302,20 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      */
     override fun visitVariableDecl(ctx: VariableDeclContext): BaseTreeNode {
         val signature = generateFunctionBlockSignature("${VARIABLE}:${ctx.type().text}:${ctx.Id().text}")
+        return ScrLeafNode(
+            signature,
+            getStartTokenIndex(ctx),
+            getStopTokenIndex(ctx),
+            ctx.start.line,
+            tokenStream
+        )
+    }
+
+    /**
+     * 变量赋值声明
+     */
+    override fun visitVariableAssignDecl(ctx: VariableAssignDeclContext): BaseTreeNode {
+        val signature = "${VARIABLE_ASSIGN}:${ctx.Id().text}:${ctx.expression().text}"
         return ScrLeafNode(
             signature,
             getStartTokenIndex(ctx),
