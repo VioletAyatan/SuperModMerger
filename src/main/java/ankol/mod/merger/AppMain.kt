@@ -40,7 +40,7 @@ class AppMain {
                 // 确定输出路径
                 var outputPath = Path(Tools.userDir, "source", "data7.pak")
                 if (argParser.hasOption("o")) {
-                    outputPath = Path(argParser.getOptionValue("o"))
+                    outputPath = Path(argParser.getOptionValue("o")!!)
                 }
                 // 定位基准MOD的位置
                 val baseModPath = locateBaseModPath(argParser)
@@ -96,7 +96,7 @@ class AppMain {
          */
         private fun locateBaseModPath(argParser: SimpleArgParser): Path {
             val baseModPath: Path = if (argParser.hasOption("b")) {
-                Paths.get(argParser.getOptionValue("b"))
+                Paths.get(argParser.getOptionValue("b")!!)
             } else {
                 Paths.get(Tools.userDir, "source", "data0.pak")
             }
