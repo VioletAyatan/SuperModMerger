@@ -70,14 +70,19 @@ statements
     | functionBlockDecl       // 函数块声明必须在函数调用之前
     | methodReferenceFunCallDecl
     | variableDecl
+    | variableAssignDecl
     | externDecl
     | macroDecl
     | functionCallDecl
     ;
 
-// 变量声明 (带类型, 例如: float health_critical = ...;)
+// 变量声明语句
 variableDecl
     : type Id (Equals expression)? Semicolon?
+    ;
+//变量赋值语句
+variableAssignDecl
+    : Id Equals expression Semicolon?
     ;
 
 // 函数调用 (例如: Set("f_pp_light_leak", light_leak);)

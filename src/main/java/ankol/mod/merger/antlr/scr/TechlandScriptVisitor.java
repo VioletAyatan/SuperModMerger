@@ -107,6 +107,12 @@ public interface TechlandScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVariableDecl(TechlandScriptParser.VariableDeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TechlandScriptParser#variableAssignDecl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariableAssignDecl(TechlandScriptParser.VariableAssignDeclContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TechlandScriptParser#functionCallDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

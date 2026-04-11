@@ -209,6 +209,18 @@ public class TechlandScriptBaseListener implements TechlandScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVariableAssignDecl(TechlandScriptParser.VariableAssignDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVariableAssignDecl(TechlandScriptParser.VariableAssignDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFunctionCallDecl(TechlandScriptParser.FunctionCallDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}

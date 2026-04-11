@@ -130,6 +130,13 @@ public class TechlandScriptBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitVariableAssignDecl(TechlandScriptParser.VariableAssignDeclContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitFunctionCallDecl(TechlandScriptParser.FunctionCallDeclContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
