@@ -83,12 +83,17 @@ object PakManager {
             .get()
             .use { zipFile ->
                 val digest = MessageDigest.getInstance("SHA-256")
+                val normalizedOutputDir = outputDir.normalize()
                 zipFile.entries.asSequence()
                     .filterNot { it.isDirectory }
                     .forEach { entry ->
                         val entryName = entry.name
                         val fileName = getEntryFileName(entryName)
-                        val outputPath = outputDir.resolve(entryName)
+                        val outputPath = outputDir.resolve(entryName).normalize()
+                        // 路径穿越防护：确保解压路径始终在输出目录内
+                        require(outputPath.startsWith(normalizedOutputDir)) {
+                            "Path traversal detected in archive entry: $entryName"
+                        }
                         outputPath.parent?.createDirectories()
                         // 解压文件
                         when (entry.size) {
@@ -129,12 +134,17 @@ object PakManager {
             .get()
             .use { sevenZFile ->
                 val digest = MessageDigest.getInstance("SHA-256")
+                val normalizedOutputDir = outputDir.normalize()
                 generateSequence { sevenZFile.nextEntry }
                     .filterNot { it.isDirectory }
                     .forEach { entry ->
                         val entryName = entry.name
                         val fileName = getEntryFileName(entryName)
-                        val outputPath = outputDir.resolve(entryName)
+                        val outputPath = outputDir.resolve(entryName).normalize()
+                        // 路径穿越防护：确保解压路径始终在输出目录内
+                        require(outputPath.startsWith(normalizedOutputDir)) {
+                            "Path traversal detected in archive entry: $entryName"
+                        }
                         outputPath.parent?.createDirectories()
 
                         // 写入文件内容
