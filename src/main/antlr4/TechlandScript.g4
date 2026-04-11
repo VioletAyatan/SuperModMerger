@@ -43,7 +43,7 @@ subDecl
     ;
 //逻辑控制语句
 logicControlDecl
-    : KwIf LParen expression RParen functionBlock elseIfClause* elseClause?
+    : KwIf LParen expression (Comma expression)* RParen functionBlock elseIfClause* elseClause?
     ;
 elseIfClause
     : KwElse KwIf LParen expression RParen functionBlock  // 支持 else if
