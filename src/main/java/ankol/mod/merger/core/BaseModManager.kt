@@ -4,6 +4,7 @@ import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations.t
+import ankol.mod.merger.tools.SoftLruCache
 import ankol.mod.merger.tools.Tools
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.logger
@@ -15,7 +16,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.security.DigestInputStream
 import java.security.MessageDigest
-import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Function
 import kotlin.io.path.name
 
@@ -40,12 +40,11 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
      */
     var isLoaded = false
 
-    private val baseTreeCache = ConcurrentHashMap<String, ParsedResult<*>?>()
+    /** AST树缓存 **/
+    private val astTreeCache = SoftLruCache<String, ParsedResult<*>>(1024)
 
-    /**
-     * 文件内容缓存（key 为 pak 内 entry 全路径）
-     */
-    private val baseFileContentCache = ConcurrentHashMap<String, CachedBaseFile>()
+    /** 文件内容缓存 **/
+    private val fileContentCache = SoftLruCache<String, CachedBaseFile>(1024)
 
     private data class CachedBaseFile(
         val content: String,
@@ -73,9 +72,9 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
         }
         try {
             val startTime = System.currentTimeMillis()
-            zipFileConnection = openZipConnection()
+            this.zipFileConnection = openZipConnection()
             this.indexedBaseModFileMap = indexBasePack(zipFileConnection)
-            isLoaded = true
+            this.isLoaded = true
             val timetake = System.currentTimeMillis() - startTime
             ColorPrinter.success(t("BASE_MOD_INDEXED_FILES", baseModPath.fileName, indexedBaseModFileMap.size, timetake))
         } catch (e: Exception) {
@@ -145,14 +144,14 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
         val pathFileTree = indexedBaseModFileMap[fileName] ?: return null
 
         val fileEntryName = pathFileTree.fileEntryName
-        val cached = baseFileContentCache[fileEntryName]
+        val cached = fileContentCache.get(fileEntryName)
         if (cached != null) {
             return if (cached.isEmpty) null else cached.content
         }
 
         val extracted = extractFileFromPak(fileEntryName)
         pathFileTree.fileHash = extracted.hash
-        baseFileContentCache[fileEntryName] = extracted
+        fileContentCache.put(fileEntryName, extracted)
         if (extracted.isEmpty) {
             return null
         }
@@ -222,20 +221,25 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
      * 从基准MOD获得解析后的语法树节点，带缓存机制
      *
      * @param fileEntryName 文件在压缩包中的全路径
-     * @param function      解析语法树使用的函数
+     * @param parseFunction      解析语法树使用的函数
      * @return 解析结果，如果文件不存在返回null
      */
     @Suppress("UNCHECKED_CAST")
     fun <T : BaseTreeNode> parseForm(
         fileEntryName: String,
-        function: Function<String, ParsedResult<T>>
+        parseFunction: Function<String, ParsedResult<T>>
     ): ParsedResult<T>? {
         val entryFileName = getEntryFileName(fileEntryName)
         val canonicalEntryName = indexedBaseModFileMap[entryFileName]?.fileEntryName ?: fileEntryName
-        return baseTreeCache.computeIfAbsent(canonicalEntryName) {
-            val content = extractFileContent(canonicalEntryName) ?: return@computeIfAbsent null
-            function.apply(content)
-        } as ParsedResult<T>?
+
+        val cached = astTreeCache.get(canonicalEntryName)
+        if (cached != null) {
+            return cached as ParsedResult<T>
+        }
+        val content = extractFileContent(canonicalEntryName) ?: return null
+        val result = parseFunction.apply(content)
+        astTreeCache.put(canonicalEntryName, result)
+        return result
     }
 
     /**
@@ -252,7 +256,7 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
             ColorPrinter.warning("Failed to close ZipFile connection: " + e.message)
         }
 
-        baseFileContentCache.clear()
-        baseTreeCache.clear()
+        fileContentCache.clear()
+        astTreeCache.clear()
     }
 }
