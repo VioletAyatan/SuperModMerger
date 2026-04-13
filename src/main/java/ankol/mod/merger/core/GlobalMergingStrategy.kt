@@ -4,8 +4,7 @@ import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 
 /**
- * 全局合并策略
- *
+ * GlobalMergingStrategy
  * @author Ankol
  */
 enum class GlobalMergingStrategy {

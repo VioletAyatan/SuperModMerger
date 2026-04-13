@@ -13,10 +13,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicInteger
 
-/**
- * 模组提取器
- * @author Ankol
- */
 class ModExtractor(
     private val mergeableMods: List<MergingModInfo>,
     private val tempDir: Path,
@@ -24,12 +20,23 @@ class ModExtractor(
 ) {
     private val log = logger()
 
+    data class GroupedModFile(
+        /**
+         * FileFullName in Zip-pak eg: /scripts/inventory/inventory.scr
+         */
+        val fileEntryName: String,
+        /**
+         * Grouped files list with the same name from different mod paks
+         */
+        val fileTreePaths: MutableList<PathFileTree>
+    )
+
     /**
-     * 从所有 mod 中提取文件，按相对路径分组
-     * @return [Map] key为文件相对路径名，value为分组后的文件
+     * Extract files from all mods and group them by relative file path
+     * @return [Map] key is the relative file path, value is the grouped files
      */
-    fun extractAllMods(): ConcurrentHashMap<String, MutableList<PathFileTree>> {
-        val filesByPath = ConcurrentHashMap<String, MutableList<PathFileTree>>()
+    fun extractAllMods(): MutableCollection<GroupedModFile> {
+        val filesByPath = ConcurrentHashMap<String, GroupedModFile>()
         val index = AtomicInteger(0)
         val correctionCounter = AtomicInteger(0)
 
@@ -37,8 +44,8 @@ class ModExtractor(
             try {
                 val archiveName = mod.modName
                 val modTempDir = tempDir.resolve("${archiveName}${index.getAndIncrement()}")
-                val extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir) //解压压缩包
-                val correctedCount = processExtractedFiles(archiveName, extractedFiles, filesByPath)
+                val extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir) // Extract compressed archive
+                val correctedCount = groupExtractedFilesByPath(archiveName, extractedFiles, filesByPath)
                 correctionCounter.addAndGet(correctedCount)
             } catch (e: Exception) {
                 log.error(t("ENGINE_EXTRACT_FAILED", mod.modName), e)
@@ -46,16 +53,16 @@ class ModExtractor(
             }
         }
 
-        return filesByPath
+        return filesByPath.values
     }
 
     /**
-     * 单次遍历完成：过滤、路径修正、按路径分组
+     * Single pass processing: filter, correct paths, and group by relative path
      */
-    private fun processExtractedFiles(
+    private fun groupExtractedFilesByPath(
         modFileName: String,
         extractedFiles: Map<String, PathFileTree>,
-        filesByPath: MutableMap<String, MutableList<PathFileTree>>
+        filesByPath: ConcurrentHashMap<String, GroupedModFile>
     ): Int {
         val correctionsFileMap = LinkedHashMap<String, String>()
 
@@ -73,7 +80,8 @@ class ModExtractor(
                 }
             }
 
-            filesByPath.computeIfAbsent(targetPath) { CopyOnWriteArrayList() }.add(sourceInfo)
+            filesByPath.computeIfAbsent(targetPath) { GroupedModFile(fileEntryName, CopyOnWriteArrayList()) }
+                .fileTreePaths.add(sourceInfo)
         }
 
         if (correctionsFileMap.isNotEmpty()) {
