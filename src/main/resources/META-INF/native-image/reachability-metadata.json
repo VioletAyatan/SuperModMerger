@@ -28,56 +28,56 @@
     {
       "type": "ch.qos.logback.core.ConsoleAppender",
       "allDeclaredConstructors": true,
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.classic.AsyncAppender",
       "allDeclaredConstructors": true,
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.core.rolling.FixedWindowRollingPolicy",
       "allDeclaredConstructors": true,
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy",
       "allDeclaredConstructors": true,
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.core.rolling.RollingFileAppender",
       "allDeclaredConstructors": true,
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.classic.filter.ThresholdFilter",
       "allDeclaredConstructors": true,
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.core.encoder.LayoutWrappingEncoder",
       "allDeclaredConstructors": true,
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.core.UnsynchronizedAppenderBase",
       "allDeclaredConstructors": true,
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     },
     {
       "type": "ch.qos.logback.core.AsyncAppenderBase",
       "allDeclaredConstructors": true,
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     }
   ],
   "resources": [
