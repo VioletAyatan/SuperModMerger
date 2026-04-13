@@ -244,8 +244,7 @@ object PakManager {
     private fun isArchiveFile(fileName: String): Boolean =
         fileName.endsWith(".pak", ignoreCase = true) ||
                 fileName.endsWith(".zip", ignoreCase = true) ||
-                fileName.endsWith(".7z", ignoreCase = true) ||
-                fileName.endsWith(".rar", ignoreCase = true)
+                fileName.endsWith(".7z", ignoreCase = true)
 
     /**
      * 将合并后的文件打包成 .pak 文件

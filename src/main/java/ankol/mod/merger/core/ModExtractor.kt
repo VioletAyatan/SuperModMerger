@@ -80,7 +80,7 @@ class ModExtractor(
                 }
             }
 
-            filesByPath.computeIfAbsent(targetPath) { GroupedModFile(fileEntryName, CopyOnWriteArrayList()) }
+            filesByPath.computeIfAbsent(targetPath) { GroupedModFile(targetPath, CopyOnWriteArrayList()) }
                 .fileTreePaths.add(sourceInfo)
         }
 
