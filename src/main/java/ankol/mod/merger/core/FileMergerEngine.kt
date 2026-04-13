@@ -89,28 +89,28 @@ class FileMergerEngine(
     /**
      * 处理所有文件（合并或复制）
      */
-    private fun processFiles(groupedFiles: Map<String, MutableList<PathFileTree>>, mergedDir: Path) {
+    private fun processFiles(groupedModFiles: Collection<ModExtractor.GroupedModFile>, mergedDir: Path) {
         ColorPrinter.cyan(t("ENGINE_PROCESSING_FILES"))
         val globalFixActive = GlobalMergingStrategy.activeMode == GlobalMergingStrategy.GLOBAL_FIX_MODE
         if (globalFixActive) {
             ColorPrinter.debug(t("ENGINE_GLOBAL_FIX_ENABLED"))
         }
-        for ((relPath, fileSources) in groupedFiles) {
+        for ((fileEntryName, fileSources) in groupedModFiles) {
             totalProcessed++
             try {
                 //单个文件处理
                 if (fileSources.size == 1) {
                     if (globalFixActive) {
-                        processSingleFile(relPath, fileSources.first(), mergedDir) //做压力测试的时候把这个打开
+                        processSingleFile(fileEntryName, fileSources.first(), mergedDir) //做压力测试的时候把这个打开
                     } else {
-                        Tools.zeroCopy(fileSources.first().safeGetFilePath(), mergedDir.resolve(relPath))
+                        Tools.zeroCopy(fileSources.first().safeGetFilePath(), mergedDir.resolve(fileEntryName))
                     }
                 } else {
                     // 在多个 mod 中存在，需要合并
-                    mergeFiles(relPath, fileSources, mergedDir)
+                    mergeFiles(fileEntryName, fileSources, mergedDir)
                 }
             } catch (e: Exception) {
-                ColorPrinter.error(t("ENGINE_PROCESSING_ERROR", relPath, e.message))
+                ColorPrinter.error(t("ENGINE_PROCESSING_ERROR", fileEntryName, e.message))
                 log.error(e.message, e)
             }
         }
