@@ -103,7 +103,6 @@ class FileMergerEngine(
                     mergeFiles(fileEntryName, fileSources, mergedDir)
                 }
             } catch (e: Exception) {
-                ColorPrinter.error(t("ENGINE_PROCESSING_ERROR", fileEntryName, e.message))
                 log.error(e.message, e)
             }
         }
@@ -151,9 +150,9 @@ class FileMergerEngine(
             }
             Tools.zeroCopy(fileCurrent.safeGetFilePath(), mergedOutputDir.resolve(relPath))
         } catch (e: Exception) {
-            ColorPrinter.error(t("ENGINE_MERGE_FAILED", e.message))
-            log.error("Processing file '${relPath}' error. Reason: ${e.message}. Fallback to original file: ${fileCurrent.fileName}", e)
             Tools.zeroCopy(fileCurrent.safeGetFilePath(), mergedOutputDir.resolve(relPath))
+            log.error("Processing file '${relPath}' error. Reason: ${e.message}. Fallback to original file: ${fileCurrent.fileName}", e)
+            ErrorReporter.addErrorReport(relPath, t("ERROR_FILE_MERGE_FAILED", relPath, e.message))
         }
     }
 
@@ -244,11 +243,11 @@ class FileMergerEngine(
             this.mergedCount++
             ColorPrinter.success(t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
         } catch (e: Exception) {
-            ColorPrinter.error(t("ENGINE_MERGE_FAILED", e.message))
-            log.error("Failed to merge file '{}': {}", relPath, e.message)
             // TODO: Adjust the strategy for merge failures here, currently using the last mod's version when failing
             val lastSource: PathFileTree = fileSources.last()
             Tools.zeroCopy(lastSource.safeGetFilePath(), mergedDir.resolve(relPath))
+            log.error("Failed to merge file '{}': {}", relPath, e.message)
+            ErrorReporter.addErrorReport(relPath, t("ERROR_FILE_MERGE_FAILED", relPath, e.message))
         }
     }
 
