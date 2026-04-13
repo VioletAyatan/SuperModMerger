@@ -145,17 +145,31 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                                     // 检查是否与原始基准MOD相同
                                     val originalValue = (originalChild as? JsonPairNode)?.value
                                     if (originalValue == null || originalValue.sourceText != modValue.sourceText) {
-                                        // 发生冲突，记录完整的PairNode（包含key和value）
-                                        conflicts.add(
-                                            ConflictRecord(
+                                        if (originalValue != null && originalValue.sourceText == baseValue.sourceText) {
+                                            // base与原版一致，mod做了修改，自动合并
+                                            val record = ConflictRecord(
                                                 context.mergingFileName,
                                                 context.accumulatedModName,
                                                 context.mergeModName,
                                                 baseChild.signature,
-                                                baseChild,  // 完整的PairNode
-                                                modChild    // 完整的PairNode
+                                                baseChild,
+                                                modChild
                                             )
-                                        )
+                                            record.userChoice = UserChoice.MERGE_MOD
+                                            conflicts.add(record)
+                                        } else {
+                                            // 发生冲突，记录完整的PairNode（包含key和value）
+                                            conflicts.add(
+                                                ConflictRecord(
+                                                    context.mergingFileName,
+                                                    context.accumulatedModName,
+                                                    context.mergeModName,
+                                                    baseChild.signature,
+                                                    baseChild,  // 完整的PairNode
+                                                    modChild    // 完整的PairNode
+                                                )
+                                            )
+                                        }
                                     }
                                 }
                             }

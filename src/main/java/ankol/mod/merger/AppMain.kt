@@ -117,7 +117,7 @@ class AppMain {
 
         private fun initCharset() {
             try {
-                val osName = System.getProperty("os.name")
+                val osName = System.getProperty("os.name", "")
                 if (osName.contains("Windows")) {
                     // 执行 chcp 命令
                     ProcessBuilder("cmd", "/c", "chcp 65001").inheritIO().start().waitFor(2, TimeUnit.SECONDS)

@@ -101,7 +101,7 @@ object Tools {
             targetPath.parent?.createDirectories()
         }
         FileChannel.open(sourcePath).use { sourceChannel ->
-            FileChannel.open(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE).use { targetChannel ->
+            FileChannel.open(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING).use { targetChannel ->
                 var position = 0L
                 val size = sourceChannel.size()
                 while (position < size) {
