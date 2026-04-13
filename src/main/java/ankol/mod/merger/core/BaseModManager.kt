@@ -41,10 +41,10 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
     var isLoaded = false
 
     /** AST树缓存 **/
-    private val astTreeCache = SoftLruCache<String, ParsedResult<*>>(1024)
+    private val astTreeCache = SoftLruCache<String, ParsedResult<*>>(2048)
 
     /** 文件内容缓存 **/
-    private val fileContentCache = SoftLruCache<String, CachedBaseFile>(1024)
+    private val fileContentCache = SoftLruCache<String, CachedBaseFile>(2048)
 
     private data class CachedBaseFile(
         val content: String,
