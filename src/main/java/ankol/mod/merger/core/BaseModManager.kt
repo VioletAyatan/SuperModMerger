@@ -53,7 +53,8 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
     )
 
     /**
-     * 复用的 ZipFile 连接，避免频繁打开关闭
+     * Reuse zip-connection to avoid repeatedly opening and closing the same file, which is costly.
+     * Keep it open until the merged is compleate, then close it in close() method.
      */
     private lateinit var zipFileConnection: ZipFile
 
