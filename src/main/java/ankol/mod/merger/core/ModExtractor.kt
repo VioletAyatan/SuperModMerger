@@ -35,7 +35,7 @@ class ModExtractor(
      * Extract files from all mods and group them by relative file path
      * @return [Map] key is the relative file path, value is the grouped files
      */
-    fun extractAllMods(): MutableCollection<GroupedModFile> {
+    fun extractAllMods(): Collection<GroupedModFile> {
         val filesByPath = ConcurrentHashMap<String, GroupedModFile>()
         val index = AtomicInteger(0)
         val correctionCounter = AtomicInteger(0)
