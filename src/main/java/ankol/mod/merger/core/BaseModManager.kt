@@ -1,23 +1,24 @@
 package ankol.mod.merger.core
 
-import ankol.mod.merger.core.filetrees.PathFileTree
+import ankol.mod.merger.core.filetrees.BaseFile
 import ankol.mod.merger.domain.ParsedResult
+import ankol.mod.merger.exception.ExitProcessException
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 import ankol.mod.merger.tools.SoftLruCache
 import ankol.mod.merger.tools.Tools
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.logger
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipFile
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.lang.AutoCloseable
-import java.nio.file.Files
 import java.nio.file.Path
 import java.security.DigestInputStream
 import java.security.MessageDigest
 import java.util.function.Function
-import kotlin.io.path.name
+import kotlin.io.path.exists
 
 /**
  * 基准MOD管理器
@@ -25,7 +26,7 @@ import kotlin.io.path.name
  *
  * @author Ankol
  */
-class BaseModManager(private val baseModPath: Path) : AutoCloseable {
+class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     private val log = logger()
 
     /**
@@ -33,12 +34,14 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
      * 键：文件名（小写）
      * 值：在基准MOD中的相对路径
      */
-    var indexedBaseModFileMap: MutableMap<String, PathFileTree> = mutableMapOf()
+    var indexedBaseModFileMap: MutableMap<String, BaseFile> = mutableMapOf()
 
     /**
      * 基准MOD是否已加载
      */
     var isLoaded = false
+
+    private val basePakSet = setOf("data0.pak", "data1.pak", "databt.mpak")
 
     /** AST树缓存 **/
     private val astTreeCache = SoftLruCache<String, ParsedResult<*>>(2048)
@@ -56,7 +59,7 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
      * Reuse zip-connection to avoid repeatedly opening and closing the same file, which is costly.
      * Keep it open until the merged is compleate, then close it in close() method.
      */
-    private lateinit var zipFileConnection: ZipFile
+    private lateinit var zipFileConnections: Map<String, ZipFile>
 
     //初始化逻辑
     init {
@@ -71,61 +74,62 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
             ColorPrinter.warning(t("BASE_MOD_ALREADY_LOADED"))
             return
         }
-        try {
-            val startTime = System.currentTimeMillis()
-            this.zipFileConnection = openZipConnection()
-            this.indexedBaseModFileMap = indexBasePack(zipFileConnection)
-            this.isLoaded = true
-            val timetake = System.currentTimeMillis() - startTime
-            ColorPrinter.success(t("BASE_MOD_INDEXED_FILES", baseModPath.fileName, indexedBaseModFileMap.size, timetake))
-        } catch (e: Exception) {
-            log.error("Load base mod $baseModPath failed. Reason: ${e.message}", e)
-            if (this::zipFileConnection.isInitialized) {
-                zipFileConnection.close()
-            }
-        }
+        val startTime = System.currentTimeMillis()
+        this.zipFileConnections = openZipConnection()
+        this.indexedBaseModFileMap = indexBasePack(zipFileConnections)
+        this.isLoaded = true
+        val timetake = System.currentTimeMillis() - startTime
+        ColorPrinter.success(t("BASE_MOD_INDEXED_FILES", basePakDirPath.fileName, indexedBaseModFileMap.size, timetake))
     }
 
     /**
      * 校验基准MOD路径并建立Zip连接
      */
-    private fun openZipConnection(): ZipFile {
-        if (!Files.exists(baseModPath)) {
-            throw IOException(t("BASE_MOD_FILE_NOT_FOUND", baseModPath))
+    private fun openZipConnection(): MutableMap<String, ZipFile> {
+        if (!basePakDirPath.exists()) {
+            throw IOException(t("BASE_MOD_FILE_NOT_FOUND", basePakDirPath))
         }
-        if (Files.isDirectory(baseModPath)) {
-            throw IOException(t("TOOLS_PATH_IS_DIRECTORY", baseModPath))
+        val connectionMap = mutableMapOf<String, ZipFile>()
+        for (pakName in basePakSet) {
+            try {
+                val resolvePath = basePakDirPath.resolve(pakName)
+                if (resolvePath.exists()) {
+                    val zipFile = ZipFile.builder().setPath(resolvePath).get()
+                    connectionMap[pakName] = zipFile
+                }
+            } catch (e: RuntimeException) {
+                log.error("Failed to create zip file $pakName. Reason: ${e.message}", e)
+            }
         }
-        if (!baseModPath.name.endsWith(".pak", ignoreCase = true)) {
-            throw IOException(t("TOOLS_FILE_MUST_BE_PAK"))
+        if (connectionMap.isEmpty()) {
+            throw ExitProcessException(1, t("BASE_MOD_NO_VALID_PAK_FOUND", basePakDirPath))
         }
-        if (!Files.isReadable(baseModPath)) {
-            throw IOException("Base MOD file is not readable: $baseModPath")
-        }
-        return ZipFile.builder().setPath(baseModPath).get()
+        return connectionMap
     }
 
     /**
-     * 索引基准data0.pak，为里面的文件建立一个映射表
+     * 索引游戏基准PAK，为里面的文件建立一个映射表，方便后续操作
      */
-    private fun indexBasePack(zipFile: ZipFile): MutableMap<String, PathFileTree> {
-        val pakIndexMap = HashMap<String, PathFileTree>()
-        val entries = zipFile.entries
-        while (entries.hasMoreElements()) {
-            val zipEntry = entries.nextElement()
-            val entryName = zipEntry.name //这里获取的文件在zip里的完整路径 eg: scripts/inventory/fury_config.scr
-            val fileName = getEntryFileName(entryName)
-            if (fileName in pakIndexMap) {
-                ColorPrinter.warning(
-                    t(
-                        "TOOLS_SAME_FILE_NAME_WARNING",
-                        fileName,
-                        entryName,
-                        pakIndexMap[fileName]?.fileEntryName
-                    )
-                )
+    private fun indexBasePack(zipConnections: Map<String, ZipFile>): MutableMap<String, BaseFile> {
+        val pakIndexMap = HashMap<String, BaseFile>()
+        zipConnections.forEach { (pakName, zipFile) ->
+            zipFile.entries.asSequence().forEach { archiveEntry: ZipArchiveEntry ->
+                if (!archiveEntry.isDirectory) {
+                    val archiveEntryName = archiveEntry.name
+                    val fileName = getEntryFileName(archiveEntryName)
+                    if (fileName in pakIndexMap) {
+                        ColorPrinter.warning(
+                            t(
+                                "TOOLS_SAME_FILE_NAME_WARNING",
+                                fileName,
+                                archiveEntryName,
+                                pakIndexMap[fileName]?.archiveEntryName
+                            )
+                        )
+                    }
+                    pakIndexMap[fileName] = BaseFile(fileName, archiveEntryName, pakName)
+                }
             }
-            pakIndexMap[fileName] = PathFileTree(fileName, entryName, mutableListOf(baseModPath.fileName.toString()))
         }
         return pakIndexMap
     }
@@ -142,16 +146,15 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
             return null
         }
         val fileName = getEntryFileName(entryFilePath)
-        val pathFileTree = indexedBaseModFileMap[fileName] ?: return null
+        val baseFile = indexedBaseModFileMap[fileName] ?: return null
 
-        val fileEntryName = pathFileTree.fileEntryName
+        val fileEntryName = baseFile.archiveEntryName
         val cached = fileContentCache.get(fileEntryName)
         if (cached != null) {
             return if (cached.isEmpty) null else cached.content
         }
 
-        val extracted = extractFileFromPak(fileEntryName)
-        pathFileTree.fileHash = extracted.hash
+        val extracted = extractFileFromPak(baseFile.basePakName, fileEntryName)
         fileContentCache.put(fileEntryName, extracted)
         if (extracted.isEmpty) {
             return null
@@ -162,15 +165,15 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
     /**
      * 从PAK文件中提取指定文件并在内存中缓存内容与哈希
      */
-    private fun extractFileFromPak(fileEntryName: String): CachedBaseFile {
+    private fun extractFileFromPak(basePakName: String, archiveEntryName: String): CachedBaseFile {
         val digest = MessageDigest.getInstance("SHA-256")
-        val entry = zipFileConnection.getEntry(fileEntryName)
-            ?: throw IOException(t("BASE_MOD_FILE_NOT_FOUND", fileEntryName))
+        val zipFile = zipFileConnections[basePakName] ?: throw IOException(t("BASE_MOD_FILE_NOT_FOUND", basePakName))
+        val entry = zipFile.getEntry(archiveEntryName)
         if (entry.size == 0L) {
             return CachedBaseFile("", "", true)
         }
 
-        val content = zipFileConnection.getInputStream(entry).use { zin ->
+        val content = zipFile.getInputStream(entry).use { zin ->
             DigestInputStream(zin, digest).use { din ->
                 val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
                 val output = ByteArrayOutputStream()
@@ -200,7 +203,7 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
         val fileName = getEntryFileName(filePath)
         val pathFileTree = indexedBaseModFileMap[fileName] ?: return false
         //有时会有一些不属于mod的文件被加入到pak中，这里查到空后说明不是原版mod支持修改的文件.
-        val correctPath = pathFileTree.fileEntryName
+        val correctPath = pathFileTree.archiveEntryName
         return !correctPath.equals(filePath, ignoreCase = true)
     }
 
@@ -215,7 +218,7 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
             return null
         }
         val fileName = getEntryFileName(filePath)
-        return indexedBaseModFileMap[fileName]?.fileEntryName
+        return indexedBaseModFileMap[fileName]?.archiveEntryName
     }
 
     /**
@@ -231,7 +234,7 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
         parseFunction: Function<String, ParsedResult<T>>
     ): ParsedResult<T>? {
         val entryFileName = getEntryFileName(fileEntryName)
-        val canonicalEntryName = indexedBaseModFileMap[entryFileName]?.fileEntryName ?: fileEntryName
+        val canonicalEntryName = indexedBaseModFileMap[entryFileName]?.archiveEntryName ?: fileEntryName
 
         val cached = astTreeCache.get(canonicalEntryName)
         if (cached != null) {
@@ -250,13 +253,10 @@ class BaseModManager(private val baseModPath: Path) : AutoCloseable {
     override fun close() {
         // 关闭 ZipFile 连接
         try {
-            if (this::zipFileConnection.isInitialized) {
-                zipFileConnection.close()
-            }
+            zipFileConnections.forEach { (_, zipFile) -> zipFile.close() }
         } catch (e: IOException) {
             ColorPrinter.warning("Failed to close ZipFile connection: " + e.message)
         }
-
         fileContentCache.clear()
         astTreeCache.clear()
     }
