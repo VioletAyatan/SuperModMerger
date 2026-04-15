@@ -17,13 +17,13 @@ import kotlin.io.path.writeText
  * File Merger Engine - Core logic for executing mod merging operations
  * @param mergeableMods List of mods to merge (.pak file paths)
  * @param outputPath Final output .pak file path
- * @param baseModPath Base mod file path (can be null)
+ * @param basePakDirPath Base mod file path (can be null)
  * @author Ankol
  */
 class FileMergerEngine(
     private val mergeableMods: List<MergingModInfo>,
     private val outputPath: Path,
-    private val baseModPath: Path
+    private val basePakDirPath: Path
 ) {
     private val log = logger()
 
@@ -32,7 +32,7 @@ class FileMergerEngine(
      */
     private val tempDir = Path(Tools.tempDir, "SuperModMergerTemp")
 
-    private val baseModManager = BaseModManager(baseModPath)
+    private val baseModManager = BaseModManager(basePakDirPath)
     private val modExtractor = ModExtractor(mergeableMods, tempDir, baseModManager)
 
     // Statistics
@@ -73,6 +73,7 @@ class FileMergerEngine(
             printStatistics()
         } catch (e: Exception) {
             log.error(e.message, e)
+            throw e
         } finally {
             baseModManager.close()
             cleanupTempDir()

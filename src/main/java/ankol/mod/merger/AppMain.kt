@@ -42,12 +42,12 @@ class AppMain {
                     outputPath = Path(argParser.getOptionValue("o")!!)
                 }
                 // 定位基准MOD的位置
-                val baseModPath = locateBaseModPath(argParser)
+                val basePakDirPath = locateBaseModPath(argParser)
                 //询问自动合并代码策略
                 GlobalMergingStrategy.askCodeMergingStrategy()
                 // 执行合并
                 val start = System.currentTimeMillis()
-                FileMergerEngine(modsToMerge, outputPath, baseModPath).merge()
+                FileMergerEngine(modsToMerge, outputPath, basePakDirPath).merge()
                 val end = System.currentTimeMillis()
                 ColorPrinter.success(t("APP_MAIN_DONE", end - start))
             } catch (e: Exception) {
@@ -98,9 +98,9 @@ class AppMain {
             val baseModPath: Path = if (argParser.hasOption("b")) {
                 Paths.get(argParser.getOptionValue("b")!!)
             } else {
-                Paths.get(Tools.userDir, "source", "data0.pak")
+                Paths.get(Tools.userDir, "source")
             }
-            if (baseModPath.notExists()) {
+            if (baseModPath.notExists() || baseModPath.isRegularFile()) {
                 throw BusinessException(t("APP_MAIN_BASE_MOD_NOT_FOUND"))
             }
             return baseModPath
