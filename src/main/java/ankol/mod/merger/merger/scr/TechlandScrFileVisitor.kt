@@ -32,6 +32,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         private const val VARIABLE = "variable"
         private const val VARIABLE_ASSIGN = "varaibleAssign"
         private const val USE = "use"
+        private const val USE_SEMANTIC = "useSemantic"
         private const val IMPORT = "import"
         private const val EXPORT = "export"
         private const val DIRECTIVE = "directive"
@@ -356,6 +357,17 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             ctx.start.line,
             tokenStream
         )
+    }
+
+    override fun visitUseSemanticDecl(ctx: UseSemanticDeclContext): BaseTreeNode {
+        val semantic = ctx.String().text
+        return ScrLeafNode(
+           "$USE_SEMANTIC:${semantic}",
+           getStartTokenIndex(ctx),
+           getStopTokenIndex(ctx),
+           ctx.start.line,
+           tokenStream
+       )
     }
 
     /**
