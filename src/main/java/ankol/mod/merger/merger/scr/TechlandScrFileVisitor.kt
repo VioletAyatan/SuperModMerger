@@ -3,9 +3,9 @@ package ankol.mod.merger.merger.scr
 import ankol.mod.merger.antlr.scr.TechlandScriptBaseVisitor
 import ankol.mod.merger.antlr.scr.TechlandScriptParser.*
 import ankol.mod.merger.core.BaseTreeNode
-import ankol.mod.merger.merger.scr.node.ScrContainerScriptNode
-import ankol.mod.merger.merger.scr.node.ScrFunCallScriptNode
-import ankol.mod.merger.merger.scr.node.ScrLeafScriptNode
+import ankol.mod.merger.merger.scr.node.ScrContainerNode
+import ankol.mod.merger.merger.scr.node.ScrFunCallNode
+import ankol.mod.merger.merger.scr.node.ScrLeafNode
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.misc.Interval
@@ -22,7 +22,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     private var currentFunBlockSignature = "ROOT"
 
     /** 当前正在进行处理的容器节点 */
-    private var currentContainerNode: ScrContainerScriptNode? = null
+    private var currentContainerNode: ScrContainerNode? = null
 
     companion object {
         private const val FUN_CALL = "funCall"
@@ -30,6 +30,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         private const val FUN_BLOCK = "funBlock"
         private const val SUB_FUN = "sub"
         private const val VARIABLE = "variable"
+        private const val VARIABLE_ASSIGN = "varaibleAssign"
         private const val USE = "use"
         private const val IMPORT = "import"
         private const val EXPORT = "export"
@@ -45,7 +46,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 文件根节点
      */
     override fun visitFile(ctx: FileContext): BaseTreeNode {
-        val rootNode = ScrContainerScriptNode(
+        val rootNode = ScrContainerNode(
             "ROOT",
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -69,7 +70,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         //eg: "import:data/scripts/inputs.scr"
         val path = ctx.String().text
         val signature = "$IMPORT:$path"
-        return ScrLeafScriptNode(
+        return ScrLeafNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -85,7 +86,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         //eg: "export:EJumpMaintainedSpeedSource_MoveController"
         val name = ctx.Id().text
         val signature = "$EXPORT:$name"
-        return ScrLeafScriptNode(
+        return ScrLeafNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -101,7 +102,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         val previousContainer = this.currentContainerNode //这是标记上一层的容器，以便恢复
 
         val signature = generateFunctionBlockSignature("$SUB_FUN:${ctx.Id().text}")
-        val subNode = ScrContainerScriptNode(
+        val subNode = ScrContainerNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -135,7 +136,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             signature = generateFunctionBlockArgsSignature(signature, argsList)
         } else if (children.containsKey(signature)) {
             // 发现重复，需要开始特殊处理
-            val lastNode = children[signature] as ScrContainerScriptNode
+            val lastNode = children[signature] as ScrContainerNode
             signatures.add(signature) //标记这个函数为可重复函数
 
             // 重新生成已存在节点的签名
@@ -150,7 +151,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         repeatableFunctions[currentFunBlockSignature] = signatures
 
         this.currentFunBlockSignature = signature
-        val funBlockContainer = ScrContainerScriptNode(
+        val funBlockContainer = ScrContainerNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -171,12 +172,12 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 1. 如果参数为空，直接使用索引加入签名
      * 2. 如果有参数，尝试使用参数第一个值加入签名；如果加入后也碰到重复，添加索引
      */
-    private fun generateFunctionBlockArgsSignature(baseSignature: String, argsList: List<String>): String {
+    private fun generateFunctionBlockArgsSignature(signaturePrefix: String, argsList: List<String>): String {
         if (argsList.isEmpty()) {
-            return generateIndexedSignature(baseSignature)
+            return generateIndexedSignature(signaturePrefix)
         }
 
-        val signatureWithParam = "$baseSignature:${argsList[0]}"
+        val signatureWithParam = "$signaturePrefix:${argsList[0]}"
         val children = currentContainerNode!!.childrens
 
         // 如果带参数的签名已经被占用，或者已经存在基于此的索引序列
@@ -187,19 +188,19 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         return signatureWithParam
     }
 
-    private fun generateIndexedSignature(baseSignature: String): String {
+    private fun generateIndexedSignature(signaturePrefix: String): String {
         val children = currentContainerNode!!.childrens
         var index = 0
-        while (children.containsKey("$baseSignature:$index")) {
+        while (children.containsKey("$signaturePrefix:$index")) {
             index++
         }
-        return "$baseSignature:$index"
+        return "$signaturePrefix:$index"
     }
 
-    private fun hasIndexedChildren(baseSignature: String): Boolean {
+    private fun hasIndexedChildren(signaturePrefix: String): Boolean {
         val children = currentContainerNode!!.childrens
         // Check if :0 exists, which implies a sequence started
-        return children.containsKey("$baseSignature:0")
+        return children.containsKey("$signaturePrefix:0")
     }
 
     /**
@@ -220,7 +221,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             signature = generateFunctionCallSignature(signature, argsList)
         } else if (childrens.containsKey(signature)) {
             // 发现重复的函数调用，需要开始特殊处理
-            val previousNode = childrens[signature] as ScrFunCallScriptNode
+            val previousNode = childrens[signature] as ScrFunCallNode
             repeatedSignatures.add("$FUN_CALL:$funcName") //标记这个函数为可重复函数
 
             // 重新生成已存在节点的签名
@@ -233,7 +234,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             signature = generateFunctionCallSignature(signature, argsList)
         }
         repeatableFunctions[currentFunBlockSignature] = repeatedSignatures
-        return ScrFunCallScriptNode(
+        return ScrFunCallNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -251,7 +252,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         val funName = ctx.Id(1).text
         val signature = "${METHOD_REFERENCE}:${referanceName}:${funName}"
 
-        return ScrFunCallScriptNode(
+        return ScrFunCallNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -272,7 +273,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         if (valueList != null) {
             signature += ":" + valueList.getText()
         }
-        return ScrLeafScriptNode(
+        return ScrLeafNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -287,7 +288,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     override fun visitMacroDecl(ctx: MacroDeclContext): BaseTreeNode {
         val macroId = ctx.MacroId() //Like: $Police_parking_dead_zone
         val signature: String = MACRO + ":" + macroId.text
-        return ScrLeafScriptNode(
+        return ScrLeafNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -301,7 +302,21 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      */
     override fun visitVariableDecl(ctx: VariableDeclContext): BaseTreeNode {
         val signature = generateFunctionBlockSignature("${VARIABLE}:${ctx.type().text}:${ctx.Id().text}")
-        return ScrLeafScriptNode(
+        return ScrLeafNode(
+            signature,
+            getStartTokenIndex(ctx),
+            getStopTokenIndex(ctx),
+            ctx.start.line,
+            tokenStream
+        )
+    }
+
+    /**
+     * 变量赋值声明
+     */
+    override fun visitVariableAssignDecl(ctx: VariableAssignDeclContext): BaseTreeNode {
+        val signature = "${VARIABLE_ASSIGN}:${ctx.Id().text}:${ctx.expression().text}"
+        return ScrLeafNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -315,7 +330,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      */
     override fun visitExternDecl(ctx: ExternDeclContext): BaseTreeNode {
         val signature = generateFunctionBlockSignature("${EXTERN}:${ctx.type().text}:${ctx.Id().text}")
-        return ScrLeafScriptNode(
+        return ScrLeafNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -334,7 +349,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             signature += ":${getFullText(ctx.valueList())}"
         }
 
-        return ScrLeafScriptNode(
+        return ScrLeafNode(
             signature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -382,7 +397,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         }
         repeatableFunctions[currentFunBlockSignature] = signatures
 
-        val ifNode = ScrContainerScriptNode(
+        val ifNode = ScrContainerNode(
             ifSignature,
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
@@ -425,7 +440,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
                 }
             }
 
-            val elseIfNode = ScrContainerScriptNode(
+            val elseIfNode = ScrContainerNode(
                 elseIfSignature,
                 getStartTokenIndex(elseIfCtx),
                 getStopTokenIndex(elseIfCtx),
@@ -445,7 +460,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         // 处理 else 子句 - 作为 if 节点的子节点，签名固定为 "else"
         val elseCtx = ctx.elseClause()
         if (elseCtx != null) {
-            val elseNode = ScrContainerScriptNode(
+            val elseNode = ScrContainerNode(
                 ELSE,
                 getStartTokenIndex(elseCtx),
                 getStopTokenIndex(elseCtx),
@@ -508,20 +523,20 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      * 2. 参数数量 > 1：先用第一个参数加入签名 (funCall:funcName:param1)
      *    如果仍有重复，则追加索引标记 (funCall:funcName:param1:0, funCall:funcName:param1:1, ...)
      */
-    private fun generateFunctionCallSignature(baseSignature: String, argsList: List<String>): String {
+    private fun generateFunctionCallSignature(signaturePrefix: String, argsList: List<String>): String {
         if (argsList.size <= 1) {
             // 参数数量 <= 1，直接使用索引
             val children = currentContainerNode!!.childrens
             var index = 0
             for (key in children.keys) {
-                if (key.startsWith("$baseSignature:") && key.removePrefix("$baseSignature:").all { it.isDigit() }) {
+                if (key.startsWith("$signaturePrefix:") && key.removePrefix("$signaturePrefix:").all { it.isDigit() }) {
                     index++
                 }
             }
-            return "$baseSignature:$index"
+            return "$signaturePrefix:$index"
         } else {
             // 参数数量 > 1，先用第一个参数加入签名
-            val signatureWithParam = "$baseSignature:${argsList.first()}"
+            val signatureWithParam = "$signaturePrefix:${argsList.first()}"
             val children = currentContainerNode!!.childrens
 
             if (children.containsKey(signatureWithParam)) {
@@ -541,7 +556,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     /**
      * 处理函数块内容
      */
-    private fun visitFunctionBlockContent(parent: ScrContainerScriptNode, ctx: FunctionBlockContext?) {
+    private fun visitFunctionBlockContent(parent: ScrContainerNode, ctx: FunctionBlockContext?) {
         if (ctx == null || ctx.statements() == null) {
             return
         }
