@@ -6,7 +6,6 @@ import ankol.mod.merger.exception.ExitProcessException
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 import ankol.mod.merger.tools.SoftLruCache
-import ankol.mod.merger.tools.Tools
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.logger
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
@@ -15,8 +14,6 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.lang.AutoCloseable
 import java.nio.file.Path
-import java.security.DigestInputStream
-import java.security.MessageDigest
 import java.util.function.Function
 import kotlin.io.path.exists
 
@@ -51,7 +48,6 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
 
     private data class CachedBaseFile(
         val content: String,
-        val hash: String,
         val isEmpty: Boolean
     )
 
@@ -166,29 +162,25 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
      * 从PAK文件中提取指定文件并在内存中缓存内容与哈希
      */
     private fun extractFileFromPak(basePakName: String, archiveEntryName: String): CachedBaseFile {
-        val digest = MessageDigest.getInstance("SHA-256")
         val zipFile = zipFileConnections[basePakName] ?: throw IOException(t("BASE_MOD_FILE_NOT_FOUND", basePakName))
         val entry = zipFile.getEntry(archiveEntryName)
         if (entry.size == 0L) {
-            return CachedBaseFile("", "", true)
+            return CachedBaseFile("", true)
         }
 
         val content = zipFile.getInputStream(entry).use { zin ->
-            DigestInputStream(zin, digest).use { din ->
-                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                val output = ByteArrayOutputStream()
-                while (true) {
-                    val read = din.read(buffer)
-                    if (read == -1) {
-                        break
-                    }
-                    output.write(buffer, 0, read)
+            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+            val output = ByteArrayOutputStream()
+            while (true) {
+                val read = zin.read(buffer)
+                if (read == -1) {
+                    break
                 }
-                output.toString(Charsets.UTF_8)
+                output.write(buffer, 0, read)
             }
+            output.toString(Charsets.UTF_8)
         }
-        val fileHash = Tools.bytesToHex(digest.digest())
-        return CachedBaseFile(content, fileHash, false)
+        return CachedBaseFile(content, false)
     }
 
     /**
