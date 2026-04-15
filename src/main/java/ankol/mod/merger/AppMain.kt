@@ -4,6 +4,7 @@ import ankol.mod.merger.core.FileMergerEngine
 import ankol.mod.merger.core.GlobalMergingStrategy
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.exception.BusinessException
+import ankol.mod.merger.exception.ExitProcessException
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Localizations.t
 import java.io.FileDescriptor
@@ -52,10 +53,18 @@ class AppMain {
                 ColorPrinter.success(t("APP_MAIN_DONE", end - start))
             } catch (e: Exception) {
                 exitCode = 1
-                if (e is BusinessException) {
-                    ColorPrinter.error(t("APP_MAIN_ERROR", e.message))
-                } else {
-                    log.error(e.message, e)
+                when (e) {
+                    is BusinessException -> {
+                        ColorPrinter.error(t("APP_MAIN_ERROR", e.message))
+                    }
+
+                    is ExitProcessException -> {
+                        ColorPrinter.error(e.errorMessage)
+                    }
+
+                    else -> {
+                        log.error(e.message, e)
+                    }
                 }
             } finally {
                 parseAnyKeyToExit(exitCode)
