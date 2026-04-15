@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.5.3-SNAPSHOT
+## 1.6.0
 
 - 新增 .gpufx, .chs, .scd 格式文件合并支持（这些文件都使用的类scr语法）
 - scr脚本解析器更新，支持更多的语法逻辑
