@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="false"
->
+<configuration debug="false">
     <!-- 定义变量 -->
     <property name="LOG_DIR" value="logs"/>
     <property name="DEBUG_LOG_FILE" value="${LOG_DIR}/app.log"/>
