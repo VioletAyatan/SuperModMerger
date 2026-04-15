@@ -1,19 +1,15 @@
 package ankol.mod.merger.tools
 
-import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.exception.BusinessException
-import org.apache.commons.compress.archivers.zip.ZipFile
-import java.io.IOException
+import ankol.mod.merger.tools.Localizations.t
 import java.nio.channels.FileChannel
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import kotlin.io.path.*
 
 object Tools {
-    @JvmStatic
     val userDir: String = System.getProperty("user.dir")
 
-    @JvmStatic
     val tempDir: String = System.getProperty("java.io.tmpdir")
 
     private val strFormatRegex = Regex("\\{}")
@@ -33,13 +29,13 @@ object Tools {
             if (defaultPath.exists()) {
                 defaultPath
             } else {
-                throw BusinessException(Localizations.t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
+                throw BusinessException(t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
             }
         } else {
             if (meringModDir.exists()) {
                 meringModDir
             } else {
-                throw BusinessException(Localizations.t("TOOLS_MODS_DIR_NOT_EXIST", meringModDir))
+                throw BusinessException(t("TOOLS_MODS_DIR_NOT_EXIST", meringModDir))
             }
         }
     }
@@ -50,12 +46,11 @@ object Tools {
      * @param mergedDirPath        目录路径
      * @param extensions 要查找的扩展名（如 ".pak", ".zip"）
      * @return 匹配的文件列表
-     * @throws IOException 如果目录不存在或无法访问
      */
     fun scanFiles(mergedDirPath: Path, vararg extensions: String): MutableList<Path> {
         val results = ArrayList<Path>()
         if (!mergedDirPath.exists()) {
-            throw BusinessException(Localizations.t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
+            throw BusinessException(t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
         }
         mergedDirPath.walk(PathWalkOption.FOLLOW_LINKS)
             .filter { it.isRegularFile() }
@@ -71,51 +66,11 @@ object Tools {
     }
 
     /**
-     * 索引基准MOD，建立一个索引MAP，方便后续进行文件路径修正和对比使用
-     * @param filePath 基准MOD路径
+     * 获取zipEntry里的文件名，去掉'/'，返回小写的文件名
+     * @return entry文件名
      */
-    @JvmStatic
-    fun indexPakFile(filePath: Path): MutableMap<String, PathFileTree> {
-        if (filePath.notExists()) {
-            throw BusinessException(Localizations.t("TOOLS_FILE_NOT_EXIST", filePath.absolutePathString()))
-        }
-        if (filePath.isDirectory()) {
-            throw BusinessException(Localizations.t("TOOLS_PATH_IS_DIRECTORY", filePath.absolutePathString()))
-        }
-        if (!filePath.fileName.toString().endsWith(".pak")) {
-            throw BusinessException(Localizations.t("TOOLS_FILE_MUST_BE_PAK"))
-        }
-        val pakIndexMap = HashMap<String, PathFileTree>()
-        try {
-            ZipFile.builder().setPath(filePath).get().use { zipFile ->
-                val entries = zipFile.entries
-                while (entries.hasMoreElements()) {
-                    val zipEntry = entries.nextElement()
-                    val entryName = zipEntry.name
-                    val fileName = getEntryFileName(entryName)
-                    //重复文件的识别
-                    if (fileName in pakIndexMap) {
-                        ColorPrinter.warning(
-                            Localizations.t(
-                                "TOOLS_SAME_FILE_NAME_WARNING",
-                                fileName,
-                                entryName,
-                                pakIndexMap[fileName]?.filePath
-                            )
-                        )
-                    }
-                    pakIndexMap[fileName] = PathFileTree(fileName, entryName, mutableListOf(filePath.fileName.toString()))
-                }
-            }
-        } catch (e: IOException) {
-            throw RuntimeException(e)
-        }
-        return pakIndexMap
-    }
-
-    @JvmStatic
     fun getEntryFileName(entryName: String): String {
-        return entryName.substring(entryName.lastIndexOf("/") + 1)
+        return entryName.substring(entryName.lastIndexOf("/") + 1).lowercase()
     }
 
     /**
@@ -146,7 +101,7 @@ object Tools {
             targetPath.parent?.createDirectories()
         }
         FileChannel.open(sourcePath).use { sourceChannel ->
-            FileChannel.open(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE).use { targetChannel ->
+            FileChannel.open(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING).use { targetChannel ->
                 var position = 0L
                 val size = sourceChannel.size()
                 while (position < size) {

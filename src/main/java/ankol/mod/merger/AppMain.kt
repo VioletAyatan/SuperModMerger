@@ -4,8 +4,9 @@ import ankol.mod.merger.core.FileMergerEngine
 import ankol.mod.merger.core.GlobalMergingStrategy
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.exception.BusinessException
+import ankol.mod.merger.exception.ExitProcessException
 import ankol.mod.merger.tools.*
-import org.apache.commons.lang3.Strings
+import ankol.mod.merger.tools.Localizations.t
 import java.io.FileDescriptor
 import java.io.FileOutputStream
 import java.io.PrintStream
@@ -39,23 +40,31 @@ class AppMain {
                 // 确定输出路径
                 var outputPath = Path(Tools.userDir, "source", "data7.pak")
                 if (argParser.hasOption("o")) {
-                    outputPath = Path(argParser.getOptionValue("o"))
+                    outputPath = Path(argParser.getOptionValue("o")!!)
                 }
                 // 定位基准MOD的位置
-                val baseModPath = locateBaseModPath(argParser)
+                val basePakDirPath = locateBaseModPath(argParser)
                 //询问自动合并代码策略
                 GlobalMergingStrategy.askCodeMergingStrategy()
                 // 执行合并
                 val start = System.currentTimeMillis()
-                FileMergerEngine(modsToMerge, outputPath, baseModPath).merge()
+                FileMergerEngine(modsToMerge, outputPath, basePakDirPath).merge()
                 val end = System.currentTimeMillis()
-                ColorPrinter.success(Localizations.t("APP_MAIN_DONE", end - start))
+                ColorPrinter.success(t("APP_MAIN_DONE", end - start))
             } catch (e: Exception) {
                 exitCode = 1
-                if (e is BusinessException) {
-                    ColorPrinter.error(Localizations.t("APP_MAIN_ERROR", e.message))
-                } else {
-                    log.error(e.message, e)
+                when (e) {
+                    is BusinessException -> {
+                        ColorPrinter.error(t("APP_MAIN_ERROR", e.message))
+                    }
+
+                    is ExitProcessException -> {
+                        ColorPrinter.error(e.errorMessage)
+                    }
+
+                    else -> {
+                        log.error(e.message, e)
+                    }
                 }
             } finally {
                 parseAnyKeyToExit(exitCode)
@@ -72,9 +81,10 @@ class AppMain {
                 }
             }
             val mergingMods = mutableListOf<MergingModInfo>()
+            val exts = setOf("pak", "zip", "7z")
             mergingModDir.walk(PathWalkOption.FOLLOW_LINKS)
                 .forEach { path: Path ->
-                    if (path.isRegularFile() && Strings.CI.equalsAny(path.extension, "pak", "zip", "7z")) {
+                    if (path.isRegularFile() && path.extension in exts) {
                         if (vortexDeploy) {
                             val modName = path.parent.name
                             if (modName == "mods") {
@@ -95,28 +105,28 @@ class AppMain {
          */
         private fun locateBaseModPath(argParser: SimpleArgParser): Path {
             val baseModPath: Path = if (argParser.hasOption("b")) {
-                Paths.get(argParser.getOptionValue("b"))
+                Paths.get(argParser.getOptionValue("b")!!)
             } else {
-                Paths.get(Tools.userDir, "source", "data0.pak")
+                Paths.get(Tools.userDir, "source")
             }
-            if (baseModPath.notExists()) {
-                throw BusinessException(Localizations.t("APP_MAIN_BASE_MOD_NOT_FOUND"))
+            if (baseModPath.notExists() || baseModPath.isRegularFile()) {
+                throw BusinessException(t("APP_MAIN_BASE_MOD_NOT_FOUND"))
             }
             return baseModPath
         }
 
         private fun registerArgsParser(): SimpleArgParser {
             val argParser = SimpleArgParser()
-            argParser.addOption("m", "merge", true, Localizations.t("APP_MAIN_OPTION_MERGE_DESC"))
-            argParser.addOption("o", "output", true, Localizations.t("APP_MAIN_OPTION_OUTPUT_DESC"))
-            argParser.addOption("b", "base", true, Localizations.t("APP_MAIN_OPTION_BASE_DESC"))
-            argParser.addOption("h", "help", false, Localizations.t("APP_MAIN_OPTION_HELP_DESC"))
+            argParser.addOption("m", "merge", true, t("APP_MAIN_OPTION_MERGE_DESC"))
+            argParser.addOption("o", "output", true, t("APP_MAIN_OPTION_OUTPUT_DESC"))
+            argParser.addOption("b", "base", true, t("APP_MAIN_OPTION_BASE_DESC"))
+            argParser.addOption("h", "help", false, t("APP_MAIN_OPTION_HELP_DESC"))
             return argParser
         }
 
         private fun initCharset() {
             try {
-                val osName = System.getProperty("os.name")
+                val osName = System.getProperty("os.name", "")
                 if (osName.contains("Windows")) {
                     // 执行 chcp 命令
                     ProcessBuilder("cmd", "/c", "chcp 65001").inheritIO().start().waitFor(2, TimeUnit.SECONDS)
@@ -131,7 +141,7 @@ class AppMain {
         }
 
         private fun parseAnyKeyToExit(exitCode: Int) {
-            ColorPrinter.success(Localizations.t("APP_MAIN_PRESS_ANY_KEY_EXIT"))
+            ColorPrinter.success(t("APP_MAIN_PRESS_ANY_KEY_EXIT"))
             readlnOrNull()
             exitProcess(exitCode)
         }

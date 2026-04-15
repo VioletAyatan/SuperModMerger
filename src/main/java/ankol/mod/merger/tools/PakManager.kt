@@ -83,12 +83,17 @@ object PakManager {
             .get()
             .use { zipFile ->
                 val digest = MessageDigest.getInstance("SHA-256")
+                val normalizedOutputDir = outputDir.normalize()
                 zipFile.entries.asSequence()
                     .filterNot { it.isDirectory }
                     .forEach { entry ->
                         val entryName = entry.name
                         val fileName = getEntryFileName(entryName)
-                        val outputPath = outputDir.resolve(entryName)
+                        val outputPath = outputDir.resolve(entryName).normalize()
+                        // 路径穿越防护：确保解压路径始终在输出目录内
+                        require(outputPath.startsWith(normalizedOutputDir)) {
+                            "Path traversal detected in archive entry: $entryName"
+                        }
                         outputPath.parent?.createDirectories()
                         // 解压文件
                         when (entry.size) {
@@ -129,12 +134,17 @@ object PakManager {
             .get()
             .use { sevenZFile ->
                 val digest = MessageDigest.getInstance("SHA-256")
+                val normalizedOutputDir = outputDir.normalize()
                 generateSequence { sevenZFile.nextEntry }
                     .filterNot { it.isDirectory }
                     .forEach { entry ->
                         val entryName = entry.name
                         val fileName = getEntryFileName(entryName)
-                        val outputPath = outputDir.resolve(entryName)
+                        val outputPath = outputDir.resolve(entryName).normalize()
+                        // 路径穿越防护：确保解压路径始终在输出目录内
+                        require(outputPath.startsWith(normalizedOutputDir)) {
+                            "Path traversal detected in archive entry: $entryName"
+                        }
                         outputPath.parent?.createDirectories()
 
                         // 写入文件内容
@@ -143,9 +153,13 @@ object PakManager {
                             else -> Files.newOutputStream(outputPath).use { output ->
                                 DigestOutputStream(output, digest).use { dos ->
                                     val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                                    while (sevenZFile.read(buffer) != -1) {
+                                    while (true) {
+                                        val read = sevenZFile.read(buffer)
+                                        if (read == -1) {
+                                            break
+                                        }
                                         //写入文件内容，顺便计算哈希
-                                        dos.write(buffer, 0, buffer.size)
+                                        dos.write(buffer, 0, read)
                                     }
                                 }
                             }
@@ -230,8 +244,7 @@ object PakManager {
     private fun isArchiveFile(fileName: String): Boolean =
         fileName.endsWith(".pak", ignoreCase = true) ||
                 fileName.endsWith(".zip", ignoreCase = true) ||
-                fileName.endsWith(".7z", ignoreCase = true) ||
-                fileName.endsWith(".rar", ignoreCase = true)
+                fileName.endsWith(".7z", ignoreCase = true)
 
     /**
      * 将合并后的文件打包成 .pak 文件
@@ -275,7 +288,7 @@ object PakManager {
      * @throws IOException 如果文件不可读
      */
     fun areFilesIdentical(file1: PathFileTree, file2: PathFileTree): Boolean {
-        return Files.size(file1.safegetFilePath()) == Files.size(file2.safegetFilePath())
+        return Files.size(file1.safeGetFilePath()) == Files.size(file2.safeGetFilePath())
                 && file1.fileHash == file2.fileHash
     }
 }

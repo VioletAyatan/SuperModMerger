@@ -4,20 +4,17 @@ import ankol.mod.merger.antlr.xml.TechlandXMLLexer
 import ankol.mod.merger.antlr.xml.TechlandXMLParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.ConflictResolver
-import ankol.mod.merger.core.MergerContext
-import ankol.mod.merger.core.ParsedResult
 import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.domain.MergeResult
+import ankol.mod.merger.domain.MergerContext
+import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.AbstractFileMerger
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.xml.node.XmlContainerNode
 import ankol.mod.merger.merger.xml.node.XmlLeafNode
 import ankol.mod.merger.merger.xml.node.XmlNode
 import ankol.mod.merger.tools.logger
-import org.antlr.v4.runtime.CharStream
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.TokenStreamRewriter
 
 /**
@@ -50,25 +47,25 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 原始基准MOD对应文件的语法树
      */
-    private var vanillaContainerNode: XmlContainerNode? = null
+    private var vanillaRootNode: XmlContainerNode? = null
 
-    override fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult {
+    override fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult {
         try {
-            val parsedResult = context.baseModManager.parseForm(file1.fileEntryName) { parseContent(it) }
+            val parsedResult = context.baseModManager.parseForm(accumulatedFile.fileEntryName) { parseContent(it) }
             // 解析原始基准MOD文件（如果存在）
             if (parsedResult != null) {
-                vanillaContainerNode = parsedResult.astNode
+                vanillaRootNode = parsedResult.astNode
             }
             // 解析base和mod文件
-            val baseResult = parseFile(file1)
-            val modResult = parseFile(file2)
+            val baseResult = parseContent(accumulatedFile.getContent())
+            val modResult = parseContent(incomingModFile.getContent())
             val baseRoot = baseResult.astNode
             val modRoot = modResult.astNode
 
-            deepCompare(vanillaContainerNode, baseRoot, modRoot)
+            deepCompare(vanillaRootNode, baseRoot, modRoot)
 
             // 第一个mod与原版文件的对比
-            if (context.isFirstModMergeWithBaseMod && !conflicts.isEmpty()) {
+            if (context.isFirstMerge && !conflicts.isEmpty()) {
                 for (record in conflicts) {
                     record.userChoice = UserChoice.MERGE_MOD
                 }
@@ -78,13 +75,13 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
 
             return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
-            log.error("Error during XML file merge: ${file1.fileName} Reason: ${e.message}", e)
-            throw BusinessException("文件${file1.fileName}合并失败")
+            log.error("Error during XML file merge: ${accumulatedFile.fileName} Reason: ${e.message}", e)
+            throw BusinessException("文件${accumulatedFile.fileName}合并失败")
         } finally {
             // 清理状态，准备下一个文件合并
             conflicts.clear()
             newNodes.clear()
-            vanillaContainerNode = null
+            vanillaRootNode = null
         }
     }
 
@@ -130,7 +127,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
                                         context.mergingFileName,
-                                        context.baseModName,
+                                        context.accumulatedModName,
                                         context.mergeModName,
                                         signature,
                                         baseNode,
@@ -144,7 +141,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     conflicts.add(
                                         ConflictRecord(
                                             context.mergingFileName,
-                                            modName ?: context.baseModName,
+                                            modName ?: context.accumulatedModName,
                                             context.mergeModName,
                                             signature,
                                             baseNode,
@@ -160,7 +157,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                             conflicts.add(
                                 ConflictRecord(
                                     context.mergingFileName,
-                                    context.baseModName,
+                                    context.accumulatedModName,
                                     context.mergeModName,
                                     signature,
                                     baseNode,
@@ -199,7 +196,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
             if (previousSibling != null) {
                 rewriter.insertBefore(previousSibling.stopTokenIndex + 1, "\n${newNode.sourceText}")
             } else {
-                // todo xml容器的结束标签是>，然而实际需要插入在<之前，这里需要继续搜索前面的token索引
+                // xml容器的结束标签是>，然而实际需要插入在<之前，这里需要继续搜索前面的token索引
                 //todo 这里的逻辑后面看看还有没有更好的解决方法
                 var stopTokenIndex = record.parentContainer.stopTokenIndex
                 while (record.parentContainer.tokenStream.get(stopTokenIndex).type != TechlandXMLLexer.OPEN) {
@@ -216,7 +213,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
      */
     private fun isNodeSameAsOriginalBaseMod(originalNode: XmlNode?, modNode: XmlNode): Boolean {
         // 如果没有原始基准MOD，则认为不相同
-        if (vanillaContainerNode == null) {
+        if (vanillaRootNode == null) {
             return false
         }
         if (originalNode == null) {
@@ -227,22 +224,18 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     }
 
     /**
-     * 将XML文件解析成语法树
-     */
-    private fun parseFile(filePath: AbstractFileTree): ParsedResult<XmlContainerNode> {
-        return parseContent(filePath.getContent())
-    }
-
-    /**
      * 解析字符串内容为ParseResult
      */
     private fun parseContent(content: String): ParsedResult<XmlContainerNode> {
-        val input: CharStream = CharStreams.fromString(content)
-        val lexer = TechlandXMLLexer(input)
-        val tokens = CommonTokenStream(lexer)
-        val parser = TechlandXMLParser(tokens)
-        val visitor = TechlandXmlFileVisitor(tokens)
-        val root = visitor.visitDocument(parser.document())
-        return ParsedResult(root as XmlContainerNode, tokens)
+        return parseContentWithTemplate(
+            content = content,
+            lexerFactory = ::TechlandXMLLexer,
+            parserFactory = ::TechlandXMLParser,
+            parseTreeFactory = { it.document() },
+            astBuilder = { tokenStream, parseTree ->
+                val visitor = TechlandXmlFileVisitor(tokenStream)
+                visitor.visitDocument(parseTree) as XmlContainerNode
+            }
+        )
     }
 }

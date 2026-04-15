@@ -5,19 +5,17 @@ import ankol.mod.merger.antlr.json.JSONParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.core.ConflictResolver.resolveConflict
-import ankol.mod.merger.core.MergerContext
-import ankol.mod.merger.core.ParsedResult
 import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.domain.MergeResult
+import ankol.mod.merger.domain.MergerContext
+import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.merger.AbstractFileMerger
 import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.MergeResult
 import ankol.mod.merger.merger.json.node.JsonArrayNode
 import ankol.mod.merger.merger.json.node.JsonContainerNode
 import ankol.mod.merger.merger.json.node.JsonPairNode
 import ankol.mod.merger.tools.logger
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.TokenStreamRewriter
 
 /**
@@ -50,23 +48,23 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
     /**
      * 原始基准MOD对应文件的语法树
      */
-    private var originalBaseModRoot: BaseTreeNode? = null
+    private var vanillaRootNode: BaseTreeNode? = null
 
-    override fun merge(file1: AbstractFileTree, file2: AbstractFileTree): MergeResult {
+    override fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult {
         try {
             //解析基准文件
-            val parsedResult = context.baseModManager.parseForm(file1.fileEntryName) { parseContent(it) }
+            val parsedResult = context.baseModManager.parseForm(accumulatedFile.fileEntryName) { parseContent(it) }
             if (parsedResult != null) {
-                originalBaseModRoot = parsedResult.astNode
+                vanillaRootNode = parsedResult.astNode
             }
-            val baseResult = parseFile(file1)
-            val modResult = parseFile(file2)
+            val baseResult = parseContent(accumulatedFile.getContent())
+            val modResult = parseContent(incomingModFile.getContent())
             val baseRoot = baseResult.astNode
             val modRoot = modResult.astNode
 
-            deepCompare(originalBaseModRoot, baseRoot, modRoot)
+            deepCompare(vanillaRootNode, baseRoot, modRoot)
             //冲突解决
-            if (context.isFirstModMergeWithBaseMod && conflicts.isNotEmpty()) {
+            if (context.isFirstMerge && conflicts.isNotEmpty()) {
                 for (record in conflicts) {
                     // 普通修改冲突：使用MOD修改的版本
                     record.userChoice = UserChoice.MERGE_MOD
@@ -76,13 +74,13 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
             }
             return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
-            log.error("Error during JSON file merge: ${file1.fileName} Reason: ${e.message}", e)
-            throw BusinessException("文件${file1.fileName}合并失败")
+            log.error("Error during JSON file merge: ${accumulatedFile.fileName} Reason: ${e.message}", e)
+            throw BusinessException("文件${accumulatedFile.fileName}合并失败")
         } finally {
             // 清理状态，准备下一个文件合并
             conflicts.clear()
             newNodes.clear()
-            originalBaseModRoot = null
+            vanillaRootNode = null
         }
     }
 
@@ -147,17 +145,31 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                                     // 检查是否与原始基准MOD相同
                                     val originalValue = (originalChild as? JsonPairNode)?.value
                                     if (originalValue == null || originalValue.sourceText != modValue.sourceText) {
-                                        // 发生冲突，记录完整的PairNode（包含key和value）
-                                        conflicts.add(
-                                            ConflictRecord(
+                                        if (originalValue != null && originalValue.sourceText == baseValue.sourceText) {
+                                            // base与原版一致，mod做了修改，自动合并
+                                            val record = ConflictRecord(
                                                 context.mergingFileName,
-                                                context.baseModName,
+                                                context.accumulatedModName,
                                                 context.mergeModName,
                                                 baseChild.signature,
-                                                baseChild,  // 完整的PairNode
-                                                modChild    // 完整的PairNode
+                                                baseChild,
+                                                modChild
                                             )
-                                        )
+                                            record.userChoice = UserChoice.MERGE_MOD
+                                            conflicts.add(record)
+                                        } else {
+                                            // 发生冲突，记录完整的PairNode（包含key和value）
+                                            conflicts.add(
+                                                ConflictRecord(
+                                                    context.mergingFileName,
+                                                    context.accumulatedModName,
+                                                    context.mergeModName,
+                                                    baseChild.signature,
+                                                    baseChild,  // 完整的PairNode
+                                                    modChild    // 完整的PairNode
+                                                )
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -187,7 +199,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                 conflicts.add(
                     ConflictRecord(
                         context.mergingFileName,
-                        context.baseModName,
+                        context.accumulatedModName,
                         context.mergeModName,
                         baseArray.signature,
                         baseArray,
@@ -221,7 +233,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                 conflicts.add(
                     ConflictRecord(
                         context.mergingFileName,
-                        context.baseModName,
+                        context.accumulatedModName,
                         context.mergeModName,
                         baseNode.signature,
                         baseNode,
@@ -310,22 +322,18 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
         }
     }
 
-    private fun parseFile(fileTree: AbstractFileTree): ParsedResult<BaseTreeNode> {
-        return parseContent(fileTree.getContent())
-    }
-
     private fun parseContent(content: String): ParsedResult<BaseTreeNode> {
-        val charStream = CharStreams.fromString(content)
-        val lexer = JSONLexer(charStream)
-        val tokenStream = CommonTokenStream(lexer)
-        val parser = JSONParser(tokenStream)
-        val jsonContext = parser.json()
-
-        // 使用Visitor转换为节点树
-        val visitor = TechlandJsonFileVisitor(tokenStream)
-        val astNode = visitor.visit(jsonContext)
-
-        return ParsedResult(astNode, tokenStream)
+        return parseContentWithTemplate(
+            content = content,
+            lexerFactory = ::JSONLexer,
+            parserFactory = ::JSONParser,
+            parseTreeFactory = { it.json() },
+            astBuilder = { tokenStream, parseTree ->
+                // 使用Visitor转换为节点树
+                val visitor = TechlandJsonFileVisitor(tokenStream)
+                visitor.visit(parseTree)
+            }
+        )
     }
 }
 

@@ -52,12 +52,11 @@ object Localizations {
 
     /**
      * 本地化语言
-     * 
+     *
      * @param key  语言key
      * @param args 参数集
      * @return 本地化后的翻译（没找到对应key值回退到默认值，都没有返回key值）
      */
-    @JvmStatic
     fun t(key: String, vararg args: Any?): String {
         var text: String? = translator.getProperty(key)
         if (text.isNullOrEmpty()) {

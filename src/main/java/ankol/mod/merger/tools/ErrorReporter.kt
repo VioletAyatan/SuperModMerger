@@ -1,8 +1,11 @@
 package ankol.mod.merger.tools
 
+import ankol.mod.merger.tools.Localizations.t
+import java.util.concurrent.ConcurrentLinkedQueue
+
 class ErrorReporter {
     companion object {
-        private val errors = mutableListOf<ErrorMsg>()
+        private val errors = ConcurrentLinkedQueue<ErrorMsg>()
 
         /**
          * 添加错误报告记录
@@ -18,9 +21,9 @@ class ErrorReporter {
         @JvmStatic
         fun printErrors() {
             if (errors.isNotEmpty()) {
-                ColorPrinter.error(Localizations.t("ERROR_REPORTER_TITLE"))
+                ColorPrinter.error(t("ERROR_REPORTER_TITLE"))
                 errors.forEach { error ->
-                    ColorPrinter.error(Localizations.t("ERROR_REPORTER_MSG", error.errorSource, error.message))
+                    ColorPrinter.error(t("ERROR_REPORTER_MSG", error.errorSource, error.message))
                 }
             }
         }
