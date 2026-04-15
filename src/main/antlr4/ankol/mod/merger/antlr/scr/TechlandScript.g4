@@ -12,6 +12,7 @@ definition
     | exportDecl
     | externDecl
     | directiveCall
+    | useSemanticDecl
     | macroDecl
     | subDecl
     | variableDecl
@@ -104,6 +105,10 @@ functionBlockDecl
 useDecl
     : Use Id LParen valueList? RParen Semicolon?
     ;
+// use_semantic
+useSemanticDecl
+    : UseSemantic String Semicolon?
+    ;
 
 //值列表的匹配
 valueList
@@ -164,6 +169,7 @@ Extern: 'extern';
 Export: 'export';
 Sub: 'sub';
 Use: 'use';
+UseSemantic: 'use_semantic';
 Exclamation: '!';
 //逻辑判读关键字
 KwIf: 'if' | 'If';
