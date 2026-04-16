@@ -8,7 +8,7 @@ class ErrorReporter {
         private val errors = ConcurrentLinkedQueue<ErrorMsg>()
 
         /**
-         * 添加错误报告记录
+         * Add an error report record
          */
         @JvmStatic
         fun addErrorReport(errorSource: String, message: String) {
@@ -16,7 +16,7 @@ class ErrorReporter {
         }
 
         /**
-         * 打印错误报告
+         * Print error reports
          */
         @JvmStatic
         fun printErrors() {
