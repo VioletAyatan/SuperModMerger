@@ -8,34 +8,34 @@ import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 
 /**
- * 冲突解决器
+ * Conflict resolver
  *
  * @author Ankol
  */
 object ConflictResolver {
     /**
-     * 交互式解决冲突
+     * Interactive conflict resolution
      *
-     * @param conflicts 冲突项目
+     * @param conflicts Conflict items
      */
     fun resolveConflict(conflicts: MutableList<ConflictRecord>, context: MergerContext) {
-        //筛选出智能合并的节点
+        // Filter out nodes that can be auto-merged
         val automaticMerge = handleAutoMergingCode(conflicts)
-        //对于真正的冲突项，提示用户选择使用哪一个版本解决
+        // For real conflicts, prompt user to choose which version to use
         if (!conflicts.isEmpty()) {
-            println() //换行
+            println() // New line
             ColorPrinter.warning(t("CRESOLVER_CONFLICT_DETECTED", conflicts.size))
 
-            var userChose: UserChoice? = null //用户选择项
+            var userChose: UserChoice? = null // User's choice
             for (i in conflicts.indices) {
                 val record = conflicts[i]
 
                 if (userChose == UserChoice.USE_ALL_BASE) {
-                    record.userChoice = UserChoice.BASE_MOD //3表示用户全部选择baseMod的配置来处理
+                    record.userChoice = UserChoice.BASE_MOD // 3 means user chooses all baseMod configs
                 } else if (userChose == UserChoice.USE_ALL_MERGE) {
-                    record.userChoice = UserChoice.MERGE_MOD //4表示用户全部选择mergeMod的配置来处理
+                    record.userChoice = UserChoice.MERGE_MOD // 4 means user chooses all mergeMod configs
                 } else {
-                    //获取冲突节点的文本
+                    // Get the text of the conflict nodes
                     val baseNodeSource = record.baseNode.sourceText.trim()
                     val modNodeSource = record.modNode.sourceText.trim()
 
@@ -46,7 +46,7 @@ object ConflictResolver {
                     ColorPrinter.warning(t("CRESOLVER_MOD_VERSION_2", record.mergeModName))
                     ColorPrinter.bold(t("CRESOLVER_LINE_INFO", record.modNode.lineNumber, modNodeSource))
                     ColorPrinter.blue("=".repeat(75))
-                    //选择对话框
+                    // Selection dialog
                     ColorPrinter.bold(t("CRESOLVER_CHOOSE_PROMPT"))
                     ColorPrinter.cyan(t("CRESOLVER_USE_OPTION_1", baseNodeSource))
                     ColorPrinter.cyan(t("CRESOLVER_USE_OPTION_2", modNodeSource))
@@ -68,12 +68,12 @@ object ConflictResolver {
             }
             ColorPrinter.success(t("CRESOLVER_CONFLICT_RESOLVED"))
         }
-        //最后把自动合并的节点加回去，让后续处理合并的逻辑使用同一个容器
+        // Finally, add the auto-merged nodes back for subsequent logic to use the same container
         conflicts.addAll(automaticMerge)
     }
 
     /**
-     * 处理自动合并的代码
+     * Handle auto-merging code
      */
     private fun handleAutoMergingCode(conflicts: MutableList<ConflictRecord>): List<ConflictRecord> {
         val automaticMerge = conflicts.filter { it.userChoice != null }
@@ -91,7 +91,7 @@ object ConflictResolver {
                 )
             }
             ColorPrinter.success(t("CRESOLVER_AUTO_MERGE_COUNT", automaticMerge.size))
-            conflicts.removeAll(automaticMerge) //暂时移除，主要是为了不出现冲突提示.
+            conflicts.removeAll(automaticMerge) // Temporarily remove, mainly to avoid conflict prompts.
         }
         return automaticMerge
     }

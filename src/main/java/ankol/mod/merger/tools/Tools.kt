@@ -17,11 +17,11 @@ object Tools {
     private val HEX_ARRAY = "0123456789abcdef".toCharArray()
 
     /**
-     * 获取待合并的MOD所在目录
-     * 这个工具默认配置的是在mods目录下
+     * Get the directory containing the mods to be merged
+     * This tool is configured by default to be under the mods directory
      *
-     * @param meringModDir mod合并目录地址，可用于修改默认合并目录
-     * @return 待合并的MOD目录路径
+     * @param meringModDir mod merging directory path, can be used to override the default merge directory
+     * @return Path to the directory containing mods to be merged
      */
     fun getMergingModDir(meringModDir: Path? = null): Path {
         return if (meringModDir == null) {
@@ -41,11 +41,11 @@ object Tools {
     }
 
     /**
-     * 扫描指定目录中的所有文件，按扩展名过滤
+     * Scan all files in the specified directory, filter by extension
      *
-     * @param mergedDirPath        目录路径
-     * @param extensions 要查找的扩展名（如 ".pak", ".zip"）
-     * @return 匹配的文件列表
+     * @param mergedDirPath        Directory path
+     * @param extensions Extensions to search for (e.g. ".pak", ".zip")
+     * @return List of matching files
      */
     fun scanFiles(mergedDirPath: Path, vararg extensions: String): MutableList<Path> {
         val results = ArrayList<Path>()
@@ -66,16 +66,16 @@ object Tools {
     }
 
     /**
-     * 获取zipEntry里的文件名，去掉'/'，返回小写的文件名
-     * @return entry文件名
+     * Get the file name in zipEntry, remove '/', return the lowercase file name
+     * @return entry file name
      */
     fun getEntryFileName(entryName: String): String {
         return entryName.substring(entryName.lastIndexOf("/") + 1).lowercase()
     }
 
     /**
-     * 递归删除指定路径及其下的所有文件和目录
-     * @param path 要删除的路径
+     * Recursively delete the specified path and all files and directories under it
+     * @param path Path to delete
      */
     @JvmStatic
     fun deleteRecursively(path: Path) {
@@ -91,10 +91,10 @@ object Tools {
     }
 
     /**
-     * 拷贝文件，使用零拷贝方式提高效率
-     * @param sourcePath 源文件路径
-     * @param targetPath 目标文件路径
-     * @param createParentDirs 是否自动创建父目录，默认为 true
+     * Copy file using zero-copy method for efficiency
+     * @param sourcePath Source file path
+     * @param targetPath Target file path
+     * @param createParentDirs Whether to automatically create parent directories, default is true
      */
     fun zeroCopy(sourcePath: Path, targetPath: Path, createParentDirs: Boolean = true) {
         if (createParentDirs) {
@@ -105,7 +105,7 @@ object Tools {
                 var position = 0L
                 val size = sourceChannel.size()
                 while (position < size) {
-                    // transferTo 可能无法一次传输所有数据，需要循环处理
+                    // transferTo may not transfer all data at once, need to loop
                     position += sourceChannel.transferTo(position, size - position, targetChannel)
                 }
             }
@@ -113,10 +113,10 @@ object Tools {
     }
 
     /**
-     * 格式化字符串，将 {} 占位符替换为参数值
-     * @param template 模板字符串，如 "Hello {} World {}"
-     * @param args 参数列表
-     * @return 格式化后的字符串
+     * Format string, replace {} placeholders with parameter values
+     * @param template Template string, e.g. "Hello {} World {}"
+     * @param args Parameter list
+     * @return Formatted string
      */
     @JvmStatic
     fun format(template: String, vararg args: Any?): String {
@@ -128,10 +128,10 @@ object Tools {
     }
 
     /**
-     * 将字节数组转换为十六进制字符串
+     * Convert byte array to hexadecimal string
      *
-     * @param bytes 字节数组
-     * @return 十六进制字符串
+     * @param bytes Byte array
+     * @return Hexadecimal string
      */
     fun bytesToHex(bytes: ByteArray): String {
         val hexChars = CharArray(bytes.size * 2)

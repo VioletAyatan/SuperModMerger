@@ -4,12 +4,12 @@ import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * 基础树节点
- * @param signature 当前节点签名（确保在同一树层级下保持唯一，方便进行多文件对比）
- * @param startTokenIndex 当前节点起始TOKEN索引
- * @param stopTokenIndex 当前节点结束TOKEN索引
- * @param lineNumber 当前行号
- * @param tokenStream Token流引用
+ * Base tree node
+ * @param signature Signature of the current node (should be unique at the same tree level, for multi-file comparison)
+ * @param startTokenIndex Start TOKEN index of the current node
+ * @param stopTokenIndex End TOKEN index of the current node
+ * @param lineNumber Current line number
+ * @param tokenStream Token stream reference
  * @author Ankol
  */
 abstract class BaseTreeNode(
@@ -32,7 +32,7 @@ abstract class BaseTreeNode(
         }
 
     /**
-     * 打印树节点
+     * Print tree node
      */
     open fun printTree(indent: String = "") {
         println("${indent}Node: $signature")
