@@ -20,16 +20,11 @@ abstract class BaseTreeNode(
     @field:Transient
     val tokenStream: TokenStream
 ) {
-    private val _sourceText: String by lazy {
+    val sourceText: String by lazy(LazyThreadSafetyMode.NONE) {
         val startIndex = tokenStream.get(startTokenIndex).startIndex
         val stopIndex = tokenStream.get(stopTokenIndex).stopIndex
         return@lazy tokenStream.tokenSource.inputStream.getText(Interval(startIndex, stopIndex))
     }
-
-    val sourceText: String
-        get() {
-            return _sourceText
-        }
 
     /**
      * Print tree node
