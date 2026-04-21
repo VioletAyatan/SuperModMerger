@@ -42,7 +42,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 新增节点列表
      */
-    private val newNodes = ArrayList<XmlNewNode>()
+    private val newNodes = arrayListOf<XmlNewNode>()
 
     /**
      * 原始基准MOD对应文件的语法树
@@ -90,12 +90,12 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
      */
     private fun deepCompare(
         vanillaContainer: XmlContainerNode?,
-        baseContainer: XmlContainerNode,
-        modContainer: XmlContainerNode
+        accumulatedContainer: XmlContainerNode,
+        incomingModContainer: XmlContainerNode
     ) {
         // 遍历Mod的所有子节点
         var previousSiblingInBase: XmlNode? = null // 追踪前一个兄弟节点
-        for ((signature, modNode) in modContainer.childrens) {
+        for ((signature, modNode) in incomingModContainer.childrens) {
             try {
                 var vanillaNode: XmlNode? = null
 
@@ -103,40 +103,40 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                     vanillaNode = vanillaContainer.childrens[signature]
                 }
 
-                val baseNode = baseContainer.childrens[signature]
+                val accumulatedNode = accumulatedContainer.childrens[signature]
 
-                if (baseNode == null) {
+                if (accumulatedNode == null) {
                     //新增节点，记录插入操作
-                    newNodes.add(XmlNewNode(baseContainer, previousSiblingInBase, modNode))
+                    newNodes.add(XmlNewNode(accumulatedContainer, previousSiblingInBase, modNode))
                 } else {
                     // 更新前一个兄弟节点
-                    previousSiblingInBase = baseNode
+                    previousSiblingInBase = accumulatedNode
                     //容器节点，继续递归对比
-                    if (baseNode is XmlContainerNode && modNode is XmlContainerNode) {
-                        deepCompare(vanillaNode as XmlContainerNode?, baseNode, modNode)
+                    if (accumulatedNode is XmlContainerNode && modNode is XmlContainerNode) {
+                        deepCompare(vanillaNode as XmlContainerNode?, accumulatedNode, modNode)
                     }
                     //叶子节点，对比属性
-                    else if (baseNode is XmlLeafNode && modNode is XmlLeafNode) {
-                        val baseAttr = baseNode.attributes
+                    else if (accumulatedNode is XmlLeafNode && modNode is XmlLeafNode) {
+                        val baseAttr = accumulatedNode.attributes
                         val modAttr = modNode.attributes
                         if (baseAttr != modAttr) {
                             // 属性不同，检查modNode与原版是否相同
                             if (!isNodeSameAsOriginalBaseMod(vanillaNode, modNode)) {
-                                if (isNodeSameAsOriginalBaseMod(vanillaNode, baseNode)) {
-                                    context.mergedHistory.markSignture("${modContainer.signature}-${signature}", context.mergeModName)
+                                if (isNodeSameAsOriginalBaseMod(vanillaNode, accumulatedNode)) {
+                                    context.mergedHistory.markSignture("${incomingModContainer.signature}-${signature}", context.mergeModName)
                                     //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
                                         context.mergingFileName,
                                         context.accumulatedModName,
                                         context.mergeModName,
                                         signature,
-                                        baseNode,
+                                        accumulatedNode,
                                         modNode
                                     )
                                     record.userChoice = UserChoice.MERGE_MOD
                                     conflicts.add(record)
                                 } else {
-                                    val modName = context.mergedHistory.getModNameFromSignature("${modContainer.signature}-${signature}")
+                                    val modName = context.mergedHistory.getModNameFromSignature("${incomingModContainer.signature}-${signature}")
                                     //真正的冲突，记录变更
                                     conflicts.add(
                                         ConflictRecord(
@@ -144,7 +144,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                                             modName ?: context.accumulatedModName,
                                             context.mergeModName,
                                             signature,
-                                            baseNode,
+                                            accumulatedNode,
                                             modNode
                                         )
                                     )
@@ -160,7 +160,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                                     context.accumulatedModName,
                                     context.mergeModName,
                                     signature,
-                                    baseNode,
+                                    accumulatedNode,
                                     modNode
                                 )
                             )

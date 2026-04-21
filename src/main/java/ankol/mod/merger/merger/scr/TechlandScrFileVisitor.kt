@@ -25,22 +25,22 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     private var currentContainerNode: ScrContainerNode? = null
 
     companion object {
-        private const val FUN_CALL = "funCall"
-        private const val METHOD_REFERENCE = "methodReference"
-        private const val FUN_BLOCK = "funBlock"
-        private const val SUB_FUN = "sub"
-        private const val VARIABLE = "variable"
-        private const val VARIABLE_ASSIGN = "varaibleAssign"
-        private const val USE = "use"
-        private const val USE_SEMANTIC = "useSemantic"
-        private const val IMPORT = "import"
-        private const val EXPORT = "export"
-        private const val DIRECTIVE = "directive"
-        private const val MACRO = "macro"
-        private const val EXTERN = "extern"
-        private const val IF = "if"
-        private const val ELSE_IF = "elseif"
-        private const val ELSE = "else"
+        const val FUN_CALL = "funCall"
+        const val METHOD_REFERENCE = "methodReference"
+        const val FUN_BLOCK = "funBlock"
+        const val SUB_FUN = "sub"
+        const val VARIABLE = "variable"
+        const val VARIABLE_ASSIGN = "varaibleAssign"
+        const val USE = "use"
+        const val USE_SEMANTIC = "useSemantic"
+        const val IMPORT = "import"
+        const val EXPORT = "export"
+        const val DIRECTIVE = "directive"
+        const val MACRO = "macro"
+        const val EXTERN = "extern"
+        const val IF = "if"
+        const val ELSE_IF = "elseif"
+        const val ELSE = "else"
     }
 
     /**
@@ -362,12 +362,12 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     override fun visitUseSemanticDecl(ctx: UseSemanticDeclContext): BaseTreeNode {
         val semantic = ctx.String().text
         return ScrLeafNode(
-           "$USE_SEMANTIC:${semantic}",
-           getStartTokenIndex(ctx),
-           getStopTokenIndex(ctx),
-           ctx.start.line,
-           tokenStream
-       )
+            "$USE_SEMANTIC:${semantic}",
+            getStartTokenIndex(ctx),
+            getStopTokenIndex(ctx),
+            ctx.start.line,
+            tokenStream
+        )
     }
 
     /**
@@ -555,7 +555,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
                 // 仍然有重复，需要追加索引
                 var index = 0
                 for (key in children.keys) {
-                    if (key.startsWith("$signatureWithParam:") && key.removePrefix("$signatureWithParam:").all { it.isDigit() }) {
+                    if (key.startsWith("$signatureWithParam:") && key.removePrefix("$signatureWithParam:")
+                            .all { it.isDigit() }
+                    ) {
                         index++
                     }
                 }
