@@ -1,11 +1,11 @@
 package ankol.mod.merger.exception
 
 /**
- * 用于退出进程的异常，一般抛出这个异常视为整个流程需要中止
+ * Exception for exiting the process. Throwing this exception is generally considered as a signal to terminate the whole process.
  */
 class ExitProcessException : RuntimeException {
     /**
-     * 异常退出码
+     * Exit code for the exception
      */
     val exitCode: Int
 

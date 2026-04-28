@@ -6,7 +6,7 @@ import java.util.*
 import kotlin.system.exitProcess
 
 /**
- * 国际化工具类
+ * Internationalization utility class
  * @author Ankol
  */
 object Localizations {
@@ -51,11 +51,11 @@ object Localizations {
     }
 
     /**
-     * 本地化语言
+     * Localization
      *
-     * @param key  语言key
-     * @param args 参数集
-     * @return 本地化后的翻译（没找到对应key值回退到默认值，都没有返回key值）
+     * @param key  Language key
+     * @param args Arguments
+     * @return Translated string (if not found, returns default value, if none, returns key)
      */
     fun t(key: String, vararg args: Any?): String {
         var text: String? = translator.getProperty(key)
