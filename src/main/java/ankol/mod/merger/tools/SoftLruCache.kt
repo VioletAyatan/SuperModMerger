@@ -3,12 +3,12 @@ package ankol.mod.merger.tools
 import java.lang.ref.SoftReference
 
 /**
- * 结合 LRU 淘汰策略与 SoftReference 的线程安全缓存。
+ * Thread-safe cache combining LRU eviction strategy and SoftReference.
  *
- * - 当条目数超过 [maxSize] 时，最久未访问的条目会被淘汰。
- * - 即使在容量内，JVM 在内存压力时也可通过 GC 回收 SoftReference 指向的值。
+ * - When the number of entries exceeds [maxSize], the least recently used entry will be evicted.
+ * - Even within the capacity, JVM may reclaim the value pointed by SoftReference under memory pressure via GC.
  *
- * @param maxSize 缓存最大条目数
+ * @param maxSize Maximum number of cache entries
  * @author Ankol
  */
 class SoftLruCache<K, V>(private val maxSize: Int) {
@@ -21,7 +21,7 @@ class SoftLruCache<K, V>(private val maxSize: Int) {
     }
 
     /**
-     * 获取缓存值。若 key 不存在或对应的 SoftReference 已被 GC 回收，返回 null 并清理该条目。
+     * Get the cached value. If the key does not exist or the corresponding SoftReference has been GC collected, return null and clean up the entry.
      */
     @Synchronized
     fun get(key: K): V? {
@@ -34,7 +34,7 @@ class SoftLruCache<K, V>(private val maxSize: Int) {
     }
 
     /**
-     * 存入缓存值，用 SoftReference 包装。
+     * Put a value into the cache, wrapped with SoftReference.
      */
     @Synchronized
     fun put(key: K, value: V) {
@@ -42,11 +42,10 @@ class SoftLruCache<K, V>(private val maxSize: Int) {
     }
 
     /**
-     * 清空全部缓存。
+     * Clear all cache entries.
      */
     @Synchronized
     fun clear() {
         map.clear()
     }
 }
-

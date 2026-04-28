@@ -1,26 +1,26 @@
 package ankol.mod.merger.constants
 
 /**
- * 用户选择的冲突解决方案
+ * User's conflict resolution choice
  */
 enum class UserChoice {
     /**
-     * 使用基础模组的修改
+     * Use the modification from the base mod
      */
     BASE_MOD,
 
     /**
-     * 使用合并模组的修改
+     * Use the modification from the merged mod
      */
     MERGE_MOD,
 
     /**
-     * 全部使用基础模组的修改
+     * Use all modifications from the base mod
      */
     USE_ALL_BASE,
 
     /**
-     * 全部使用合并模组的修改
+     * Use all modifications from the merged mod
      */
     USE_ALL_MERGE,
     ;
@@ -29,7 +29,7 @@ enum class UserChoice {
         fun findByOrder(order: Int?): UserChoice? {
             if (order == null) return null
             for (choice in entries) {
-                //枚举中的ordinal是从0开始的，但是用户提示选择的顺序从1开始，所以要加1
+                // The ordinal in enum starts from 0, but the user prompt order starts from 1, so add 1
                 if (choice.ordinal + 1 == order) {
                     return choice
                 }

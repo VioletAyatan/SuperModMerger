@@ -4,29 +4,29 @@ import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 
 /**
- * GlobalMergingStrategy
+ * Global merging strategy
  * @author Ankol
  */
 enum class GlobalMergingStrategy {
     /**
-     * 传统模式，不进行全局修复
+     * Traditional mode, no global fix
      */
     NORMAL_MODE,
 
     /**
-     * （实验性）全局修复模式，可能修复一些过期mod的问题，但会花费更多时间
+     * (Experimental) Global fix mode, may fix some outdated mod issues but takes more time
      */
     GLOBAL_FIX_MODE,
     ;
 
     companion object {
         /**
-         * 当前启用的合并策略
+         * Currently active merging strategy
          */
         lateinit var activeMode: GlobalMergingStrategy
 
         /**
-         * 询问用户是否智能合并代码项
+         * Ask user whether to enable intelligent code merging
          */
         fun askCodeMergingStrategy() {
             ColorPrinter.blue("=".repeat(75))

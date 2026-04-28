@@ -18,8 +18,8 @@ import java.util.function.Function
 import kotlin.io.path.exists
 
 /**
- * 基准MOD管理器
- * 负责基准MOD相关操作
+ * Base MOD Manager
+ * Responsible for operations related to the base MOD
  *
  * @author Ankol
  */
@@ -27,23 +27,23 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     private val log = logger()
 
     /**
-     * 文件名 → 标准路径的映射
-     * 键：文件名（小写）
-     * 值：在基准MOD中的相对路径
+     * Mapping from file name to standard path
+     * Key: file name (lowercase)
+     * Value: relative path in the base MOD
      */
     var indexedBaseModFileMap: MutableMap<String, BaseFile> = mutableMapOf()
 
     /**
-     * 基准MOD是否已加载
+     * Whether the base MOD has been loaded
      */
     var isLoaded = false
 
     private val basePakSet = setOf("data0.pak", "data1.pak", "databt.mpak")
 
-    /** AST树缓存 **/
+    /** AST tree cache **/
     private val astTreeCache = SoftLruCache<String, ParsedResult<*>>(2048)
 
-    /** 文件内容缓存 **/
+    /** File content cache **/
     private val fileContentCache = SoftLruCache<String, CachedBaseFile>(2048)
 
     private data class CachedBaseFile(
@@ -53,17 +53,16 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
 
     /**
      * Reuse zip-connection to avoid repeatedly opening and closing the same file, which is costly.
-     * Keep it open until the merged is compleate, then close it in close() method.
+     * Keep it open until the merge is complete, then close it in the close() method.
      */
     private lateinit var zipFileConnections: Map<String, ZipFile>
 
-    //初始化逻辑
     init {
         load()
     }
 
     /**
-     * 加载基准MOD
+     * Load the base MOD
      */
     fun load() {
         if (isLoaded) {
@@ -79,7 +78,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     }
 
     /**
-     * 校验基准MOD路径并建立Zip连接
+     * Validate the base MOD path and establish Zip connections
      */
     private fun openZipConnection(): MutableMap<String, ZipFile> {
         if (!basePakDirPath.exists()) {
@@ -104,7 +103,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     }
 
     /**
-     * 索引游戏基准PAK，为里面的文件建立一个映射表，方便后续操作
+     * Index the base game PAK, create a mapping table for the files inside for subsequent operations
      */
     private fun indexBasePack(zipConnections: Map<String, ZipFile>): MutableMap<String, BaseFile> {
         val pakIndexMap = HashMap<String, BaseFile>()
@@ -131,10 +130,10 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     }
 
     /**
-     * 从基准MOD中提取指定文件的内容（带缓存优化）
+     * Extract the content of the specified file from the base MOD (with cache optimization)
      *
-     * @param entryFilePath 文件在基准MOD中的相对路径
-     * @return 文件内容，如果文件不存在返回null
+     * @param entryFilePath Relative path of the file in the base MOD
+     * @return File content, or null if the file does not exist
      */
     @Synchronized
     fun extractFileContent(entryFilePath: String): String? {
@@ -159,7 +158,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     }
 
     /**
-     * 从PAK文件中提取指定文件并在内存中缓存内容与哈希
+     * Extract the specified file from the PAK file and cache the content and hash in memory
      */
     private fun extractFileFromPak(basePakName: String, archiveEntryName: String): CachedBaseFile {
         val zipFile = zipFileConnections[basePakName] ?: throw IOException(t("BASE_MOD_FILE_NOT_FOUND", basePakName))
@@ -184,9 +183,9 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     }
 
     /**
-     * 判断MOD里的文件路径是否正确
+     * Check whether the file path in the MOD is correct
      *
-     * @param filePath mod文件路径
+     * @param filePath MOD file path
      */
     fun hasPathConflict(filePath: String): Boolean {
         if (!isLoaded) {
@@ -194,16 +193,16 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
         }
         val fileName = getEntryFileName(filePath)
         val pathFileTree = indexedBaseModFileMap[fileName] ?: return false
-        //有时会有一些不属于mod的文件被加入到pak中，这里查到空后说明不是原版mod支持修改的文件.
+        // Sometimes files not belonging to the mod are added to the pak. If found empty, it's not a file supported by the original mod.
         val correctPath = pathFileTree.archiveEntryName
         return !correctPath.equals(filePath, ignoreCase = true)
     }
 
     /**
-     * 获取建议的修正路径
+     * Get the suggested corrected path
      *
-     * @param filePath 待检查的文件相对路径
-     * @return 如果存在同名文件，返回基准MOD中的正确路径；否则返回null
+     * @param filePath Relative path of the file to check
+     * @return If a file with the same name exists, return the correct path in the base MOD; otherwise return null
      */
     fun getSuggestedPath(filePath: String): String? {
         if (!isLoaded) {
@@ -214,11 +213,11 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     }
 
     /**
-     * 从基准MOD获得解析后的语法树节点，带缓存机制
+     * Get the parsed syntax tree node from the base MOD, with cache mechanism
      *
-     * @param fileEntryName 文件在压缩包中的全路径
-     * @param parseFunction      解析语法树使用的函数
-     * @return 解析结果，如果文件不存在返回null
+     * @param fileEntryName Full path of the file in the archive
+     * @param parseFunction Function used to parse the syntax tree
+     * @return Parse result, or null if the file does not exist
      */
     @Suppress("UNCHECKED_CAST")
     fun <T : BaseTreeNode> parseForm(
@@ -239,11 +238,11 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     }
 
     /**
-     * 清理内存缓存并关闭 ZipFile 连接
-     * 建议在合并完成后调用此方法释放资源
+     * Clear memory cache and close ZipFile connections
+     * It is recommended to call this method to release resources after merging is complete
      */
     override fun close() {
-        // 关闭 ZipFile 连接
+        // Close ZipFile connections
         try {
             zipFileConnections.forEach { (_, zipFile) -> zipFile.close() }
         } catch (e: IOException) {

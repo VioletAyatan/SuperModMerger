@@ -5,15 +5,15 @@ import ankol.mod.merger.tools.logger
 import java.util.concurrent.ConcurrentHashMap
 
 class MergerContext(
-    /** 基准模组管理器 **/
+    /** Base mod manager **/
     val baseModManager: BaseModManager,
-    /** 当前合并文件名 **/
+    /** Current merging file name **/
     var mergingFileName: String = "",
     var accumulatedModName: String = "",
     var mergeModName: String = "",
-    /** 合并历史 **/
+    /** Merging history **/
     var mergedHistory: MergedHistory = MergedHistory(),
-    /** 是否是第一次合并 **/
+    /** Whether this is the first merge **/
     var isFirstMerge: Boolean = false
 ) {
     companion object {
@@ -31,16 +31,16 @@ class MergerContext(
         private val map: MutableMap<String, String> = ConcurrentHashMap()
 
         /**
-         * 标记这个签名
+         * Mark this signature
          */
         fun markSignture(signature: String, modName: String) {
             if (map.putIfAbsent(signature, modName) != null) {
-                log.debug("警告，合并历史中检测到重复的签名插入：${signature}，跳过处理.")
+                log.debug("Warning, duplicate signature detected in merge history: ${signature}, skipping.")
             }
         }
 
         /**
-         * 从记录的签名中获取这个冲突来源的真正MOD名字
+         * Get the real mod name for this conflict source from the recorded signatures
          */
         fun getModNameFromSignature(signature: String): String? {
             return map[signature]

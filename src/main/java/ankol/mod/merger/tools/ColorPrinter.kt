@@ -4,9 +4,9 @@ import ankol.mod.merger.tools.Tools.format
 import java.util.*
 
 /**
- * 控制台彩色打印工具类
+ * Console color printing utility class
  *
- * 支持ANSI彩色输出，仅在Windows10+和Unix-like系统中有效，使用示例：
+ * Supports ANSI color output, effective only on Windows 10+ and Unix-like systems. Usage examples:
  * - ColorPrinter.cyan("This is cyan message");
  * - ColorPrinter.success("Operation successful");
  * - ColorPrinter.warning("Warning message");
@@ -16,7 +16,7 @@ import java.util.*
 object ColorPrinter {
     private val log = logger()
 
-    // ANSI 颜色代码
+    // ANSI color codes
     private const val RESET = "\u001b[0m"
     private const val BLACK = "\u001b[30m"
     private const val RED = "\u001b[31m"
@@ -27,7 +27,7 @@ object ColorPrinter {
     private const val CYAN = "\u001b[36m"
     private const val WHITE = "\u001b[37m"
 
-    // 高亮颜色
+    // Bright colors
     private const val BRIGHT_RED = "\u001b[91m"
     private const val BRIGHT_GREEN = "\u001b[92m"
     private const val BRIGHT_YELLOW = "\u001b[93m"
@@ -36,46 +36,46 @@ object ColorPrinter {
     private const val BRIGHT_CYAN = "\u001b[96m"
     private const val BRIGHT_WHITE = "\u001b[97m"
 
-    // 背景颜色
+    // Background colors
     private const val BG_RED = "\u001b[41m"
     private const val BG_GREEN = "\u001b[42m"
     private const val BG_YELLOW = "\u001b[43m"
     private const val BG_BLUE = "\u001b[44m"
 
-    // 样式
+    // Styles
     private const val BOLD = "\u001b[1m"
     private const val DIM = "\u001b[2m"
     private const val ITALIC = "\u001b[3m"
     private const val UNDERLINE = "\u001b[4m"
 
     /**
-     * 检查是否支持彩色输出
+     * Check if color output is supported
      */
-    // 检查是否支持彩色输出（Windows 10+ 或 Unix-like 系统）
+    // Check if color output is supported (Windows 10+ or Unix-like systems)
     val isColorSupported: Boolean = supportsColor()
 
     /**
-     * 检查系统是否支持 ANSI 彩色输出
+     * Check if the system supports ANSI color output
      */
     private fun supportsColor(): Boolean {
-        // Windows 10+ 支持 ANSI，通过检查 OS 和版本
+        // Windows 10+ supports ANSI, check OS and version
         val os = System.getProperty("os.name", "").lowercase(Locale.getDefault())
         val osVersion = System.getProperty("os.version", "")
 
-        // Unix-like 系统（Linux, macOS 等）
+        // Unix-like systems (Linux, macOS, etc.)
         if (os.contains("linux") || os.contains("mac") || os.contains("unix")) {
             return true
         }
 
-        // Windows 10+ 支持 ANSI
+        // Windows 10+ supports ANSI
         if (os.contains("windows")) {
             try {
-                // Windows 10 及更高版本
+                // Windows 10 and above
                 val versionParts: Array<String?> =
                     osVersion.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 if (versionParts.isNotEmpty()) {
                     val major = versionParts[0]!!.toInt()
-                    // Windows 10 = 10.0，Windows 11 = 10.0 但 build > 21000
+                    // Windows 10 = 10.0, Windows 11 = 10.0 but build > 21000
                     return major >= 10
                 }
             } catch (e: Exception) {
@@ -87,7 +87,7 @@ object ColorPrinter {
     }
 
     /**
-     * 应用颜色（如果不支持，返回原文本）
+     * Apply color (if not supported, return original text)
      */
     private fun applyColor(text: String, color: String): String {
         if (!isColorSupported) {
@@ -97,26 +97,26 @@ object ColorPrinter {
     }
 
     /**
-     * 打印蓝色日志
+     * Print blue log
      *
-     * @param message 文本
+     * @param message Text
      */
     fun blue(message: String) {
         log.info(applyColor(message, BRIGHT_BLUE))
     }
 
     /**
-     * 打印蓝色日志，带格式化参数
+     * Print blue log with formatted arguments
      *
-     * @param format 文本模板
-     * @param args   格式化参数
+     * @param format Text template
+     * @param args   Formatting arguments
      */
     fun blue(format: String, vararg args: Any) {
         ColorPrinter.blue(format(format, *args))
     }
 
     /**
-     * 打印青色日志
+     * Print cyan log
      */
     @JvmStatic
     fun cyan(message: String) {
@@ -124,7 +124,7 @@ object ColorPrinter {
     }
 
     /**
-     * 打印青色日志，带格式化参数
+     * Print cyan log with formatted arguments
      */
     @JvmStatic
     fun cyan(format: String, vararg args: Any) {
@@ -132,118 +132,117 @@ object ColorPrinter {
     }
 
     /**
-     * 打印成功消息（绿色）
+     * Print success message (green)
      */
     fun success(message: String) {
         log.info(applyColor(message, BRIGHT_GREEN))
     }
 
     /**
-     * 打印成功消息（绿色），带格式化参数
+     * Print success message (green) with formatted arguments
      */
     fun success(format: String, vararg args: Any) {
         ColorPrinter.success(format(format, *args))
     }
 
     /**
-     * 打印警告消息（黄色）
+     * Print warning message (yellow)
      */
     fun warning(message: String) {
         log.info(applyColor(message, BRIGHT_YELLOW))
     }
 
     /**
-     * 打印警告消息（黄色），带格式化参数
+     * Print warning message (yellow) with formatted arguments
      */
     fun warning(format: String, vararg args: Any) {
         ColorPrinter.warning(format(format, *args))
     }
 
     /**
-     * 打印错误消息（红色）
+     * Print error message (red)
      */
     fun error(message: String) {
         log.info(applyColor(message, BRIGHT_RED))
     }
 
     /**
-     * 打印错误消息（红色），带格式化参数
+     * Print error message (red) with formatted arguments
      */
     fun error(format: String, vararg args: Any?) {
         ColorPrinter.error(format(format, *args))
     }
 
     /**
-     * 打印调试消息（青色）
+     * Print debug message (cyan)
      */
     fun debug(message: String) {
         log.info(applyColor(message, BRIGHT_CYAN))
     }
 
     /**
-     * 打印调试消息（青色），带格式化参数
+     * Print debug message (cyan) with formatted arguments
      */
     fun debug(format: String, vararg args: Any) {
         ColorPrinter.debug(format(format, *args))
     }
 
     /**
-     * 打印普通消息（白色）
+     * Print normal message (white)
      */
     fun print(message: String) {
         log.info(applyColor(message, WHITE))
     }
 
     /**
-     * 打印普通消息（白色），带格式化参数
+     * Print normal message (white) with formatted arguments
      */
     fun print(format: String, vararg args: Any) {
         ColorPrinter.print(format(format, *args))
     }
 
     /**
-     * 打印加粗消息（白色加粗）
+     * Print bold message (white bold)
      */
     fun bold(message: String) {
         log.info(applyColor(BOLD + message, RESET))
     }
 
     /**
-     * 打印加粗消息（白色加粗），带格式化参数
+     * Print bold message (white bold) with formatted arguments
      */
     fun bold(format: String, vararg args: Any) {
         ColorPrinter.bold(format(format, *args))
     }
 
     /**
-     * 打印强调消息（洋红色）
+     * Print highlight message (magenta)
      */
     fun highlight(message: String) {
         log.info(applyColor(message, BRIGHT_MAGENTA))
     }
 
     /**
-     * 打印强调消息（洋红色），带格式化参数
+     * Print highlight message (magenta) with formatted arguments
      */
     fun highlight(format: String, vararg args: Any) {
         log.info(applyColor(format(format, *args), BRIGHT_MAGENTA))
     }
 
     /**
-     * 自定义颜色打印
+     * Print with custom color
      *
-     * @param message   消息内容
-     * @param colorCode ANSI 颜色代码（如 ColorPrinter.RED）
+     * @param message   Message content
+     * @param colorCode ANSI color code (e.g. ColorPrinter.RED)
      */
     fun printWithColor(message: String, colorCode: String) {
         log.info(applyColor(message, colorCode))
     }
 
     /**
-     * 获取彩色文本（不直接打印）
+     * Get colored text (does not print directly)
      */
     fun getColoredText(text: String, colorCode: String): String {
         return applyColor(text, colorCode)
     }
 }
-

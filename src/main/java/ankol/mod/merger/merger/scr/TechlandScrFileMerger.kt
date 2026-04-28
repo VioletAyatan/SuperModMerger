@@ -23,14 +23,19 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     /**
      * 标记冲突项的容器
      */
-    private val conflicts = ArrayList<ConflictRecord>()
+    private val conflicts = arrayListOf<ConflictRecord>()
+
+    private val insertOperations = arrayListOf<InsertOperation>()
 
     /**
      * 插入操作记录
      */
-    private data class InsertOperation(val tokenIndex: Int, val content: String, val nodeType: NodeType = NodeType.OTHER)
-
-    private val insertOperations = ArrayList<InsertOperation>()
+    private data class InsertOperation(
+        val tokenIndex: Int,
+        val content: String,
+        val previousSibling: BaseTreeNode?,
+        val nodeType: NodeType = NodeType.DEFAULT
+    )
 
     /**
      * 节点类型，用于确定插入位置的优先级
@@ -38,7 +43,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     private enum class NodeType {
         IMPORT,  // import 语句 - 最高优先级，放在文件最前
         SUB,     // sub 函数声明 - 次高优先级，放在 import 之后
-        OTHER    // 其他声明 - 最低优先级
+        DEFAULT    // 默认，无优先级
     }
 
     /**
@@ -88,6 +93,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         accumulatedContainer: ScrContainerNode,
         incomingModContainer: ScrContainerNode
     ) {
+        var previousSiblingInBase: BaseTreeNode? = null // 追踪前一个兄弟节点
         // 遍历 Mod 的所有子节点
         for ((signature, incomingModNode) in incomingModContainer.childrens) {
             try {
@@ -98,13 +104,14 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 val accumulatedNode = accumulatedContainer.childrens[signature]
 
                 if (accumulatedNode == null) {
-                    handleInsertion(accumulatedContainer, incomingModNode)
+                    handleInsertion(accumulatedContainer, incomingModNode, previousSiblingInBase)
                 } else {
+                    previousSiblingInBase = accumulatedNode // 更新前一个兄弟节点
                     //容器节点，递归对比
                     if (accumulatedNode is ScrContainerNode && incomingModNode is ScrContainerNode) {
                         deepCompare(vanillaNode as ScrContainerNode?, accumulatedNode, incomingModNode)
                     }
-                    //function call节点的对比逻辑
+                    //函数调用节点的对比处理
                     else if (accumulatedNode is ScrFunCallNode && incomingModNode is ScrFunCallNode) {
                         if (accumulatedNode.arguments != incomingModNode.arguments) {
                             if (!isNodeSameAsOriginalNode(vanillaNode, incomingModNode)) {
@@ -199,12 +206,16 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             when (op.nodeType) {
                 NodeType.IMPORT -> 0
                 NodeType.SUB -> 1
-                NodeType.OTHER -> 2
+                NodeType.DEFAULT -> 2
             }
         }.thenBy { it.tokenIndex })
 
         for (op in sortedOperations) {
-            rewriter.insertBefore(op.tokenIndex, op.content)
+            if (op.previousSibling == null) {
+                rewriter.insertBefore(op.tokenIndex, op.content)
+            } else {
+                rewriter.insertAfter(op.previousSibling.stopTokenIndex, "  ${op.content}")
+            }
         }
 
         // 获取重写后的文本
@@ -231,12 +242,16 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
         }
     }
 
-    private fun handleInsertion(accumulatedContainer: ScrContainerNode, incomingModNode: BaseTreeNode) {
+    private fun handleInsertion(
+        accumulatedContainer: ScrContainerNode,
+        incomingModNode: BaseTreeNode,
+        previousSiblingInBase: BaseTreeNode?
+    ) {
         // 根据节点签名确定节点类型
         val nodeType = when {
-            incomingModNode.signature.startsWith("import:") -> NodeType.IMPORT
-            incomingModNode.signature.startsWith("sub:") -> NodeType.SUB
-            else -> NodeType.OTHER
+            incomingModNode.signature.startsWith(TechlandScrFileVisitor.IMPORT) -> NodeType.IMPORT
+            incomingModNode.signature.startsWith(TechlandScrFileVisitor.SUB_FUN) -> NodeType.SUB
+            else -> NodeType.DEFAULT
         }
 
         var newContent: String
@@ -255,14 +270,14 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 findInsertPositionForSub(accumulatedContainer)
             }
 
-            NodeType.OTHER -> {
+            NodeType.DEFAULT -> {
                 // 其他节点直接插在容器的 '}' 之前
                 newContent = "\n   ${incomingModNode.sourceText}"
                 accumulatedContainer.stopTokenIndex
             }
         }
 
-        insertOperations.add(InsertOperation(insertPos, newContent, nodeType))
+        insertOperations.add(InsertOperation(insertPos, newContent, previousSiblingInBase, nodeType))
     }
 
     /**

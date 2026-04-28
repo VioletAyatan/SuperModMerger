@@ -4,23 +4,23 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * 获取指定类型的日志记录器
+ * Get a logger for the specified class type
  *
- * 扩展函数，返回与当前类相关联的 Logger 实例。使用了 reified 泛型类型参数，使得在运行时可以获取类型信息，并为该类型生成对应的日志记录器。
+ * Extension function that returns a Logger instance associated with the current class. Uses reified generic type parameter to obtain class information at runtime and generate the corresponding logger.
  *
- * @param T 泛型类型，表示调用此扩展函数的具体类。
- * @return 该类对应的 Logger 实例，用于记录日志。
+ * @param T Generic type, represents the specific class calling this extension function.
+ * @return Logger instance for the class, used for logging.
  *
- * 用法示例：
+ * Usage example:
  * ```
  * class User {
- *     private val log = logger() //返回关联这个类的日志记录器
+ *     private val log = logger() // Returns the logger associated with this class
  * }
  *
- * //或者，还可以通过变量直接获取对应类的日志记录器
+ * // Or, you can also get the logger for a class via a variable
  *
  * val user = User("Alice", 30)
- * val log = user.logger()  // 返回与 User 类关联的 Logger
+ * val log = user.logger()  // Returns the logger associated with User class
  * log.cyan("Logging some information")
  *
  * ```
@@ -28,17 +28,17 @@ import org.slf4j.LoggerFactory
 inline fun <reified T> T.logger(): Logger = LoggerFactory.getLogger(T::class.java)
 
 /**
- * 获取指定类型的日志记录器
+ * Get a logger for the specified class type
  *
- * 扩展函数，返回与当前类相关联的 Logger 实例。使用了 reified 泛型类型参数，使得在运行时可以获取类型信息，并为该类型生成对应的日志记录器。
+ * Extension function that returns a Logger instance associated with the current class. Uses reified generic type parameter to obtain class information at runtime and generate the corresponding logger.
  *
- * @param T 泛型类型，表示调用此扩展函数的具体类。
- * @return 该类对应的 Logger 实例，用于记录日志。
+ * @param T Generic type, represents the specific class calling this extension function.
+ * @return Logger instance for the class, used for logging.
  *
- * 用法示例：
+ * Usage example:
  * ```
  * class User {
- *     private val log = logger<User>() //返回关联这个类的日志记录器
+ *     private val log = logger<User>() // Returns the logger associated with this class
  * }
  *
  * ```
