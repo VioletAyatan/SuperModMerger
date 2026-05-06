@@ -111,7 +111,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
             zipFile.entries.asSequence().forEach { archiveEntry: ZipArchiveEntry ->
                 if (!archiveEntry.isDirectory) {
                     val archiveEntryName = archiveEntry.name
-                    val fileName = getEntryFileName(archiveEntryName)
+                    val fileName = getEntryFileName(archiveEntryName, "/")
                     if (fileName in pakIndexMap) {
                         ColorPrinter.warning(
                             t(
