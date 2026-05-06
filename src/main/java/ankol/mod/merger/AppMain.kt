@@ -81,7 +81,7 @@ class AppMain {
                 }
             }
             val mergingMods = mutableListOf<MergingModInfo>()
-            val exts = setOf("pak", "zip", "7z")
+            val exts = setOf("pak", "zip", "7z", "rar")
             mergingModDir.walk(PathWalkOption.FOLLOW_LINKS)
                 .forEach { path: Path ->
                     if (path.isRegularFile() && path.extension in exts) {

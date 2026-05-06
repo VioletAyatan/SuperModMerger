@@ -66,11 +66,17 @@ object Tools {
     }
 
     /**
-     * Get the file name in zipEntry, remove '/', return the lowercase file name
+     * Get the file name in archiveEntry, remove 'separator', return the lowercase file name
+     * @param entryName Archive full-path file name
+     * @param separator separator
      * @return entry file name
      */
-    fun getEntryFileName(entryName: String): String {
-        return entryName.substring(entryName.lastIndexOf("/") + 1).lowercase()
+    fun getEntryFileName(entryName: String, separator: String = "/"): String {
+        return entryName.substring(entryName.lastIndexOf(separator) + 1).lowercase()
+    }
+
+    fun getEntryFileNameForSeventz(archiveName: String, entryName: String): String {
+        return entryName.replaceFirst(archiveName, "").substring(entryName.lastIndexOf("\\") + 1).lowercase()
     }
 
     /**
@@ -101,7 +107,12 @@ object Tools {
             targetPath.parent?.createDirectories()
         }
         FileChannel.open(sourcePath).use { sourceChannel ->
-            FileChannel.open(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING).use { targetChannel ->
+            FileChannel.open(
+                targetPath,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.WRITE,
+                StandardOpenOption.TRUNCATE_EXISTING
+            ).use { targetChannel ->
                 var position = 0L
                 val size = sourceChannel.size()
                 while (position < size) {
