@@ -4,13 +4,19 @@ import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.tools.Localizations.t
 import ankol.mod.merger.tools.Tools.bytesToHex
 import ankol.mod.merger.tools.Tools.getEntryFileName
+import net.sf.sevenzipjbinding.ExtractOperationResult
+import net.sf.sevenzipjbinding.IInArchive
+import net.sf.sevenzipjbinding.SevenZip
+import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream
 import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.compress.archivers.zip.ZipFile
 import org.apache.commons.lang3.Strings
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.RandomAccessFile
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
@@ -22,6 +28,7 @@ import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.name
+import kotlin.io.path.nameWithoutExtension
 
 /**
  * .pak file management utility
@@ -30,6 +37,10 @@ import kotlin.io.path.name
  */
 object PakManager {
     private val NESTED_COUNTER = AtomicInteger(0)
+
+    init {
+        SevenZip.initSevenZipFromPlatformJAR()
+    }
 
     /**
      * Extract all files from a .pak file to a temporary directory (supports recursive extraction of nested archives)
@@ -48,12 +59,16 @@ object PakManager {
         val fileTreeMap = hashMapOf<String, PathFileTree>()
         val archiveNames = mutableListOf(archiveName)
         when {
-            pakPath.name.endsWith(".7z") -> {
+            Strings.CI.endsWithAny(pakPath.name, ".7z") -> {
                 extract7zRecursive(pakPath, tempDir, fileTreeMap, archiveNames)
             }
 
             Strings.CI.endsWithAny(pakPath.name, ".zip", ".pak") -> {
                 extractZipRecursive(pakPath, tempDir, fileTreeMap, archiveNames)
+            }
+
+            Strings.CI.endsWithAny(pakPath.name, ".rar") -> {
+                extractRarRecursive(pakPath, tempDir, fileTreeMap, archiveNames)
             }
 
             else -> {
@@ -98,7 +113,14 @@ object PakManager {
                         // Extract file
                         when (entry.size) {
                             0L -> outputPath.createFile()
-                            else -> zipFile.getInputStream(entry).use { zin -> DigestInputStream(zin, digest).use { din -> Files.copy(din, outputPath) } }
+                            else -> zipFile.getInputStream(entry).use { zin ->
+                                DigestInputStream(zin, digest).use { din ->
+                                    Files.copy(
+                                        din,
+                                        outputPath
+                                    )
+                                }
+                            }
                         }
                         val hash = bytesToHex(digest.digest())
                         // Handle nested archives
@@ -133,7 +155,7 @@ object PakManager {
             .use { sevenZFile ->
                 val digest = MessageDigest.getInstance("SHA-256")
                 val normalizedOutputDir = outputDir.normalize()
-                generateSequence { sevenZFile.nextEntry }
+                sevenZFile.entries.asSequence()
                     .filterNot { it.isDirectory }
                     .forEach { entry ->
                         val entryName = entry.name
@@ -176,6 +198,60 @@ object PakManager {
     }
 
     /**
+     * Recursively extract RAR format archives using sevenzipjbinding
+     *
+     * When encountering .pak, .zip, .7z, or .rar files, they will be recursively extracted, and the source chain will be recorded.
+     * @param pakPath Archive path
+     * @param outputDir   Output directory
+     * @param fileTreeMap File mapping, including source information
+     * @param archiveNames Current archive names (for building source chain)
+     */
+    private fun extractRarRecursive(
+        pakPath: Path,
+        outputDir: Path,
+        fileTreeMap: MutableMap<String, PathFileTree>,
+        archiveNames: MutableList<String>
+    ) {
+        val normalizedOutputDir = outputDir.normalize()
+        val archiveName = pakPath.fileName.nameWithoutExtension
+        RandomAccessFileInStream(RandomAccessFile(pakPath.toFile(), "r")).use { inStream: RandomAccessFileInStream ->
+            SevenZip.openInArchive(null, inStream).use { archive: IInArchive ->
+                val digest = MessageDigest.getInstance("SHA-256")
+                for (item in archive.simpleInterface.archiveItems) {
+                    if (item.isFolder) continue
+
+                    val entryName = item.path.replaceFirst("${archiveName}\\", "")
+                    val fileName = getEntryFileName(entryName, "\\")
+                    val outputPath = outputDir.resolve(entryName).normalize()
+
+                    // Path traversal protection
+                    require(outputPath.startsWith(normalizedOutputDir)) { "Path traversal detected in archive entry: $entryName" }
+                    outputPath.parent.createDirectories()
+
+                    // Extract file and calculate hash simultaneously
+                    FileOutputStream(outputPath.toFile()).use { fos ->
+                        val result = item.extractSlow { data ->
+                            fos.write(data)
+                            digest.update(data)
+                            data.size
+                        }
+                        require(result == ExtractOperationResult.OK) { "Failed to extract entry: $entryName, result: $result" }
+                    }
+
+                    val hash = bytesToHex(digest.digest())
+
+                    // Handle nested archives
+                    if (isArchiveFile(fileName)) {
+                        handleNestedArchive(fileName, outputPath, outputDir, fileTreeMap, archiveNames)
+                    } else {
+                        addFileToTree(fileName, entryName, archiveNames, hash, outputPath, fileTreeMap)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Handle nested archives
      */
     private fun handleNestedArchive(
@@ -198,6 +274,10 @@ object PakManager {
 
             Strings.CI.endsWithAny(fileName, ".zip", ".pak") -> {
                 extractZipRecursive(outputPath, nestedTempDir, fileTreeMap, archiveNames)
+            }
+
+            fileName.endsWith(".rar", ignoreCase = true) -> {
+                extractRarRecursive(outputPath, nestedTempDir, fileTreeMap, archiveNames)
             }
 
             else -> {
@@ -242,7 +322,8 @@ object PakManager {
     private fun isArchiveFile(fileName: String): Boolean =
         fileName.endsWith(".pak", ignoreCase = true) ||
                 fileName.endsWith(".zip", ignoreCase = true) ||
-                fileName.endsWith(".7z", ignoreCase = true)
+                fileName.endsWith(".7z", ignoreCase = true) ||
+                fileName.endsWith(".rar", ignoreCase = true)
 
     /**
      * Package merged files into a .pak file
