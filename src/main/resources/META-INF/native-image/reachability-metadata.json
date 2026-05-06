@@ -120,6 +120,127 @@
       "allDeclaredConstructors": true,
       "allDeclaredMethods": true,
       "allDeclaredFields": true
+    },
+    {
+      "type": "java.lang.Boolean",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.lang.Double",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.lang.Integer",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.lang.Long",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.lang.OutOfMemoryError",
+      "jniAccessible": true
+    },
+    {
+      "type": "java.lang.String",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.util.Date",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.sf.sevenzipjbinding.ExtractAskMode",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.sf.sevenzipjbinding.ExtractOperationResult",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.sf.sevenzipjbinding.IArchiveOpenVolumeCallback",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.sf.sevenzipjbinding.ICryptoGetTextPassword",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.sf.sevenzipjbinding.SevenZip$DummyOpenArchiveCallback",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.sf.sevenzipjbinding.impl.InArchiveImpl",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.sf.sevenzipjbinding.impl.InArchiveImpl$ExtractSlowCallback",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.sf.sevenzipjbinding.impl.RandomAccessFileInStream",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": {
+        "lambda": {
+          "declaringClass": "ankol.mod.merger.tools.PakManager",
+          "interfaces": [
+            "net.sf.sevenzipjbinding.ISequentialOutStream"
+          ]
+        }
+      },
+      "jniAccessible": true,
+      "methods": [
+        {
+          "name": "write",
+          "parameterTypes": [
+            "byte[]"
+          ]
+        }
+      ]
     }
   ],
   "resources": [
@@ -149,6 +270,15 @@
     },
     {
       "glob": "logback.xml"
+    },
+    {
+      "glob": "Windows-amd64/lib7-Zip-JBinding.dll"
+    },
+    {
+      "glob": "Windows-amd64/sevenzipjbinding-lib.properties"
+    },
+    {
+      "glob": "sevenzipjbinding-platforms.properties"
     }
   ]
 }

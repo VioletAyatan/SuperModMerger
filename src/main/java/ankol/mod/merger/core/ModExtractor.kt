@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ModExtractor(
     private val mergeableMods: List<MergingModInfo>,
-    private val tempDir: Path,
+    private val extractTempDir: Path,
     private val baseModManager: BaseModManager
 ) {
     private val log = logger()
@@ -43,7 +43,7 @@ class ModExtractor(
         mergeableMods.parallelStream().forEach { mod: MergingModInfo ->
             try {
                 val archiveName = mod.modName
-                val modTempDir = tempDir.resolve("${archiveName}${index.getAndIncrement()}")
+                val modTempDir = extractTempDir.resolve("${archiveName}${index.getAndIncrement()}")
                 val extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir) // Extract compressed archive
                 val correctedCount = groupExtractedFilesByPath(archiveName, extractedFiles, filesByPath)
                 correctionCounter.addAndGet(correctedCount)

@@ -2,6 +2,7 @@ package ankol.mod.merger.tools
 
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.tools.Localizations.t
+import java.io.File
 import java.nio.channels.FileChannel
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -71,12 +72,8 @@ object Tools {
      * @param separator separator
      * @return entry file name
      */
-    fun getEntryFileName(entryName: String, separator: String = "/"): String {
+    fun getEntryFileName(entryName: String, separator: String = File.separator): String {
         return entryName.substring(entryName.lastIndexOf(separator) + 1).lowercase()
-    }
-
-    fun getEntryFileNameForSeventz(archiveName: String, entryName: String): String {
-        return entryName.replaceFirst(archiveName, "").substring(entryName.lastIndexOf("\\") + 1).lowercase()
     }
 
     /**
