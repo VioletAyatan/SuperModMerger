@@ -171,7 +171,7 @@ class SevenZipTest {
             return
         }
 
-        rarFiles.forEach { rarFile ->
+        rarFiles.forEach { rarFile: Path ->
             val magic = rarFile.inputStream().use { it.readNBytes(8) }
             val rarMagic4 = byteArrayOf(0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00)
             val rarMagic5 = byteArrayOf(0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00)
