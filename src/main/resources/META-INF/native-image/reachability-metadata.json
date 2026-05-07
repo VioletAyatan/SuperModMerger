@@ -224,23 +224,39 @@
       "allDeclaredFields": true
     },
     {
+      "type": "ankol.mod.merger.tools.ExtractArchiveCallback",
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
       "type": {
         "lambda": {
-          "declaringClass": "ankol.mod.merger.tools.PakManager",
+          "declaringClass": "ankol.mod.merger.core.BaseModManager",
           "interfaces": [
             "net.sf.sevenzipjbinding.ISequentialOutStream"
           ]
         }
       },
       "jniAccessible": true,
-      "methods": [
-        {
-          "name": "write",
-          "parameterTypes": [
-            "byte[]"
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": {
+        "lambda": {
+          "declaringClass": "ankol.mod.merger.tools.ExtractArchiveCallback",
+          "interfaces": [
+            "net.sf.sevenzipjbinding.ISequentialOutStream"
           ]
         }
-      ]
+      },
+      "jniAccessible": true,
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
     }
   ],
   "resources": [
