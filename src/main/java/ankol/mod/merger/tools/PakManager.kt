@@ -74,6 +74,10 @@ object PakManager {
             SevenZip.openInArchive(null, inStream).use { inArchive ->
                 val crc32c = CRC32C()
 
+                //Processing extracting logics.
+                val archiveCallback = ExtractArchiveCallback(inArchive, pakPath, outputDir)
+                inArchive.extract(null, false, archiveCallback)
+
                 for (item in inArchive.simpleInterface.archiveItems) {
                     if (item.isFolder) continue
 
