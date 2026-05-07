@@ -71,9 +71,10 @@ object PakManager {
         val normalizedOutputDir = outputDir.normalize()
         val archiveName = pakPath.fileName.nameWithoutExtension
         RandomAccessFileInStream(RandomAccessFile(pakPath.toFile(), "r")).use { inStream ->
-            SevenZip.openInArchive(null, inStream).use { archive ->
+            SevenZip.openInArchive(null, inStream).use { inArchive ->
                 val crc32c = CRC32C()
-                for (item in archive.simpleInterface.archiveItems) {
+
+                for (item in inArchive.simpleInterface.archiveItems) {
                     if (item.isFolder) continue
 
                     val entryName = item.path.replaceFirst("${archiveName}${File.separator}", "")
