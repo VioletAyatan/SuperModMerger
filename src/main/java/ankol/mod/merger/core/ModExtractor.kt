@@ -40,6 +40,7 @@ class ModExtractor(
         val index = AtomicInteger(0)
         val correctionCounter = AtomicInteger(0)
 
+        val start = System.currentTimeMillis()
         mergeableMods.parallelStream().forEach { mod: MergingModInfo ->
             try {
                 val archiveName = mod.modName
@@ -52,6 +53,7 @@ class ModExtractor(
                 ErrorReporter.addErrorReport(mod.modName, t("ERROR_EXTRA_MOD_FAILED", e.message, mod.modPath))
             }
         }
+        println("Extracting file in ${System.currentTimeMillis() - start}ms")
 
         return filesByPath.values
     }

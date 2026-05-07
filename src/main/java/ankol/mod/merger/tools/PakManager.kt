@@ -2,8 +2,6 @@ package ankol.mod.merger.tools
 
 import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.tools.Localizations.t
-import ankol.mod.merger.tools.Tools.getEntryFileName
-import net.sf.sevenzipjbinding.ExtractOperationResult
 import net.sf.sevenzipjbinding.SevenZip
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
@@ -14,11 +12,8 @@ import java.io.RandomAccessFile
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.zip.CRC32C
 import kotlin.io.path.createDirectories
 import kotlin.io.path.isRegularFile
-import kotlin.io.path.nameWithoutExtension
-import kotlin.io.path.outputStream
 
 /**
  * .pak file management utility
@@ -68,47 +63,11 @@ object PakManager {
         fileTreeMap: MutableMap<String, PathFileTree>,
         archiveNames: MutableList<String>
     ) {
-        val normalizedOutputDir = outputDir.normalize()
-        val archiveName = pakPath.fileName.nameWithoutExtension
         RandomAccessFileInStream(RandomAccessFile(pakPath.toFile(), "r")).use { inStream ->
             SevenZip.openInArchive(null, inStream).use { inArchive ->
-                val crc32c = CRC32C()
-
                 //Processing extracting logics.
-                val archiveCallback = ExtractArchiveCallback(inArchive, pakPath, outputDir)
+                val archiveCallback = ExtractArchiveCallback(inArchive, pakPath, archiveNames, fileTreeMap, outputDir)
                 inArchive.extract(null, false, archiveCallback)
-
-                for (item in inArchive.simpleInterface.archiveItems) {
-                    if (item.isFolder) continue
-
-                    val entryName = item.path.replaceFirst("${archiveName}${File.separator}", "")
-                    val fileName = getEntryFileName(entryName)
-                    val outputPath = outputDir.resolve(entryName).normalize()
-
-                    // Path traversal protection
-                    require(outputPath.startsWith(normalizedOutputDir)) { "Path traversal detected in archive entry: $entryName" }
-                    outputPath.parent.createDirectories()
-
-                    // Extract file and calculate hash simultaneously
-                    outputPath.outputStream().use { fos ->
-                        val result = item.extractSlow { data ->
-                            fos.write(data)
-                            crc32c.update(data)
-                            data.size
-                        }
-                        require(result == ExtractOperationResult.OK) { "Failed to extract entry: $entryName, result: $result" }
-                    }
-
-                    val hash = crc32c.value.toString(16)
-                    crc32c.reset()
-
-                    // Handle nested archives
-                    if (isArchiveFile(fileName)) {
-                        handleNestedArchive(fileName, outputPath, outputDir, fileTreeMap, archiveNames)
-                    } else {
-                        addFileToTree(fileName, entryName, archiveNames, hash, outputPath, fileTreeMap)
-                    }
-                }
             }
         }
     }

@@ -4,55 +4,76 @@ import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import net.sf.sevenzipjbinding.*
 import java.io.File
+import java.io.OutputStream
 import java.nio.file.Path
 import java.util.zip.CRC32C
+import kotlin.io.path.createDirectories
 import kotlin.io.path.nameWithoutExtension
+import kotlin.io.path.outputStream
 
 class ExtractArchiveCallback(
     val inArchive: IInArchive,
     val pakPath: Path,
+    val archiveNames: MutableList<String>,
+    val fileTreeMap: MutableMap<String, PathFileTree>,
     val outputDir: Path
 ) : IArchiveExtractCallback {
-    /**
-     * Calculate CRC32C checksum for the extracted file.
-     */
-    private val crc32c = CRC32C()
+    private lateinit var fileOutputPath: Path
+    private lateinit var outputStream: OutputStream
+    private lateinit var fileEntryName: String
+    private lateinit var fileName: String
+
+    private var skipped = false
+    private val crc32 = CRC32C()
 
     override fun getStream(
         index: Int,
         extractAskMode: ExtractAskMode
     ): ISequentialOutStream? {
-        val entryFileName = inArchive.getProperty(index, PropID.PATH) as String?
+        skipped = false
+        fileEntryName = inArchive.getProperty(index, PropID.PATH) as String
         val isFolder = inArchive.getProperty(index, PropID.IS_FOLDER) as Boolean
 
-        if (!isFolder || entryFileName == null) {
+        if (isFolder) {
+            skipped = true
             return null
         }
 
         val pakName = pakPath.fileName.nameWithoutExtension
-        entryFileName.replaceFirst("${pakName}${File.separator}", "") //for RAR file, the name will pick some pakname prefix. Need to remove!
-        val fileName = getEntryFileName(entryFileName)
+        fileEntryName = fileEntryName.replaceFirst("${pakName}${File.separator}", "")
+        fileName = getEntryFileName(fileEntryName)
 
-        return object : ISequentialOutStream {
-            override fun write(data: ByteArray): Int {
-                return 0
-            }
+        fileOutputPath = outputDir.resolve(fileEntryName).normalize()
+        fileOutputPath.parent.createDirectories()
+        outputStream = fileOutputPath.outputStream()
+
+        return ISequentialOutStream { data ->
+            outputStream.write(data)
+            crc32.update(data)
+            data.size
         }
     }
 
-    override fun prepareOperation(extractAskMode: ExtractAskMode) {
-        TODO("Not yet implemented")
+    override fun setOperationResult(extractOperationResult: ExtractOperationResult) {
+        if (skipped) return
+        close()
+        fileTreeMap[fileName] = PathFileTree(
+            fileName,
+            fileEntryName,
+            archiveNames,
+            crc32.value.toString(),
+            fileOutputPath
+        )
     }
 
-    override fun setOperationResult(extractOperationResult: ExtractOperationResult) {
-        TODO("Not yet implemented")
-    }
+    override fun prepareOperation(extractAskMode: ExtractAskMode) = Unit
 
     override fun setTotal(total: Long) = Unit
 
     override fun setCompleted(complete: Long) = Unit
 
-    fun getPathTree(): List<PathFileTree> {
-        return emptyList()
+    private fun close() {
+        outputStream.close()
+        crc32.reset()
     }
 }
