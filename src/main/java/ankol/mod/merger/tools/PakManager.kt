@@ -10,7 +10,6 @@ import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import java.io.RandomAccessFile
 import java.nio.file.Files
@@ -20,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.io.path.createDirectories
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.nameWithoutExtension
+import kotlin.io.path.outputStream
 
 /**
  * .pak file management utility
@@ -77,7 +77,7 @@ object PakManager {
                     if (item.isFolder) continue
 
                     val entryName = item.path.replaceFirst("${archiveName}${File.separator}", "")
-                    val fileName = getEntryFileName(entryName, File.separator)
+                    val fileName = getEntryFileName(entryName)
                     val outputPath = outputDir.resolve(entryName).normalize()
 
                     // Path traversal protection
@@ -85,7 +85,7 @@ object PakManager {
                     outputPath.parent.createDirectories()
 
                     // Extract file and calculate hash simultaneously
-                    FileOutputStream(outputPath.toFile()).use { fos ->
+                    outputPath.outputStream().use { fos ->
                         val result = item.extractSlow { data ->
                             fos.write(data)
                             digest.update(data)
