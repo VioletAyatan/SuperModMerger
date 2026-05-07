@@ -44,7 +44,7 @@ object PakManager {
         tempDir.createDirectories()
         val fileTreeMap = hashMapOf<String, PathFileTree>()
         val archiveNames = mutableListOf(archiveName)
-        extractArchiveRecursive(pakPath, tempDir, fileTreeMap, archiveNames)
+        extractRecursive(pakPath, tempDir, fileTreeMap, archiveNames)
         return fileTreeMap
     }
 
@@ -57,39 +57,30 @@ object PakManager {
      * @param fileTreeMap File mapping, including source information
      * @param archiveNames Current archive names (for building source chain)
      */
-    private fun extractArchiveRecursive(
+    private fun extractRecursive(
         pakPath: Path,
         outputDir: Path,
         fileTreeMap: MutableMap<String, PathFileTree>,
         archiveNames: MutableList<String>
     ) {
+        val nestedArchives = mutableListOf<Pair<String, Path>>()
+
         RandomAccessFileInStream(RandomAccessFile(pakPath.toFile(), "r")).use { inStream ->
             SevenZip.openInArchive(null, inStream).use { inArchive ->
-                //Processing extracting logics.
-                val archiveCallback = ExtractArchiveCallback(inArchive, pakPath, archiveNames, fileTreeMap, outputDir)
+                val archiveCallback = ExtractArchiveCallback(inArchive, pakPath, archiveNames, fileTreeMap, outputDir, nestedArchives)
                 inArchive.extract(null, false, archiveCallback)
             }
         }
+
+        nestedArchives.forEach { (nestedFileName, nestedPath) ->
+            val sanitized = nestedFileName.replace(SANITIZE_REGEX, "_")
+            val nestedDir = outputDir.resolve("_nested_${NESTED_COUNTER.getAndIncrement()}_$sanitized")
+                .also { it.createDirectories() }
+            archiveNames.add(nestedFileName)
+            extractRecursive(nestedPath, nestedDir, fileTreeMap, archiveNames)
+        }
     }
 
-    /**
-     * Handle nested archives
-     */
-    private fun handleNestedArchive(
-        fileName: String,
-        outputPath: Path,
-        outputDir: Path,
-        fileTreeMap: MutableMap<String, PathFileTree>,
-        archiveNames: MutableList<String>
-    ) {
-        val sanitizedFileName = fileName.replace(SANITIZE_REGEX, "_")
-        val nestedTempDir = outputDir.resolve(
-            "_nested_${System.currentTimeMillis()}_${NESTED_COUNTER.getAndIncrement()}_$sanitizedFileName"
-        )
-        nestedTempDir.createDirectories()
-        archiveNames.add(fileName)
-        extractArchiveRecursive(outputPath, nestedTempDir, fileTreeMap, archiveNames)
-    }
 
     /**
      * Add file to the file tree mapping
@@ -117,18 +108,6 @@ object PakManager {
         }
         fileTreeMap[entryName] = current
     }
-
-    /**
-     * Determine whether the file is a supported archive format
-     *
-     * @param fileName File name
-     * @return Whether it is an archive file
-     */
-    private fun isArchiveFile(fileName: String): Boolean =
-        fileName.endsWith(".pak", ignoreCase = true) ||
-                fileName.endsWith(".zip", ignoreCase = true) ||
-                fileName.endsWith(".7z", ignoreCase = true) ||
-                fileName.endsWith(".rar", ignoreCase = true)
 
     /**
      * Package merged files into a .pak file
