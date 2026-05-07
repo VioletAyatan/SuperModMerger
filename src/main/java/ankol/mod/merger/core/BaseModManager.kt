@@ -8,13 +8,15 @@ import ankol.mod.merger.tools.Localizations.t
 import ankol.mod.merger.tools.SoftLruCache
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.logger
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
-import org.apache.commons.compress.archivers.zip.ZipFile
+import net.sf.sevenzipjbinding.IInArchive
+import net.sf.sevenzipjbinding.SevenZip
+import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream
+import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.io.RandomAccessFile
 import java.lang.AutoCloseable
 import java.nio.file.Path
-import java.util.function.Function
 import kotlin.io.path.exists
 
 /**
@@ -48,14 +50,13 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
 
     private data class CachedBaseFile(
         val content: String,
-        val isEmpty: Boolean
     )
 
     /**
      * Reuse zip-connection to avoid repeatedly opening and closing the same file, which is costly.
      * Keep it open until the merge is complete, then close it in the close() method.
      */
-    private lateinit var zipFileConnections: Map<String, ZipFile>
+    private lateinit var zipFileConnections: Map<String, IInArchive>
 
     init {
         load()
@@ -70,7 +71,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
             return
         }
         val startTime = System.currentTimeMillis()
-        this.zipFileConnections = openZipConnection()
+        this.zipFileConnections = openArchiveConnection()
         this.indexedBaseModFileMap = indexBasePack(zipFileConnections)
         this.isLoaded = true
         val timetake = System.currentTimeMillis() - startTime
@@ -80,17 +81,21 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     /**
      * Validate the base MOD path and establish Zip connections
      */
-    private fun openZipConnection(): MutableMap<String, ZipFile> {
+    private fun openArchiveConnection(): MutableMap<String, IInArchive> {
         if (!basePakDirPath.exists()) {
             throw IOException(t("BASE_MOD_FILE_NOT_FOUND", basePakDirPath))
         }
-        val connectionMap = mutableMapOf<String, ZipFile>()
+        val connectionMap = mutableMapOf<String, IInArchive>()
         for (pakName in basePakSet) {
             try {
                 val resolvePath = basePakDirPath.resolve(pakName)
                 if (resolvePath.exists()) {
-                    val zipFile = ZipFile.builder().setPath(resolvePath).get()
-                    connectionMap[pakName] = zipFile
+                    //Establish archive connection
+                    val inArchive = SevenZip.openInArchive(
+                        null,
+                        RandomAccessFileInStream(RandomAccessFile(resolvePath.toFile(), "r"))
+                    )
+                    connectionMap[pakName] = inArchive
                 }
             } catch (e: RuntimeException) {
                 log.error("Failed to create zip file $pakName. Reason: ${e.message}", e)
@@ -105,13 +110,13 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     /**
      * Index the base game PAK, create a mapping table for the files inside for subsequent operations
      */
-    private fun indexBasePack(zipConnections: Map<String, ZipFile>): MutableMap<String, BaseFile> {
+    private fun indexBasePack(archiveConnection: Map<String, IInArchive>): MutableMap<String, BaseFile> {
         val pakIndexMap = HashMap<String, BaseFile>()
-        zipConnections.forEach { (pakName, zipFile) ->
-            zipFile.entries.asSequence().forEach { archiveEntry: ZipArchiveEntry ->
-                if (!archiveEntry.isDirectory) {
-                    val archiveEntryName = archiveEntry.name
-                    val fileName = getEntryFileName(archiveEntryName, "/")
+        archiveConnection.forEach { (pakName, inArchive) ->
+            inArchive.simpleInterface.archiveItems.forEach { archiveEntry: ISimpleInArchiveItem ->
+                if (!archiveEntry.isFolder) {
+                    val archiveEntryName = archiveEntry.path
+                    val fileName = getEntryFileName(archiveEntryName)
                     if (fileName in pakIndexMap) {
                         ColorPrinter.warning(
                             t(
@@ -122,7 +127,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
                             )
                         )
                     }
-                    pakIndexMap[fileName] = BaseFile(fileName, archiveEntryName, pakName)
+                    pakIndexMap[fileName] = BaseFile(fileName, archiveEntryName, archiveEntry.itemIndex, pakName)
                 }
             }
         }
@@ -135,7 +140,6 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
      * @param entryFilePath Relative path of the file in the base MOD
      * @return File content, or null if the file does not exist
      */
-    @Synchronized
     fun extractFileContent(entryFilePath: String): String? {
         if (!isLoaded) {
             return null
@@ -146,12 +150,12 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
         val fileEntryName = baseFile.archiveEntryName
         val cached = fileContentCache.get(fileEntryName)
         if (cached != null) {
-            return if (cached.isEmpty) null else cached.content
+            return cached.content.ifEmpty { null }
         }
 
-        val extracted = extractFileFromPak(baseFile.basePakName, fileEntryName)
+        val extracted = extractFileFromPak(baseFile.basePakName, baseFile)
         fileContentCache.put(fileEntryName, extracted)
-        if (extracted.isEmpty) {
+        if (extracted.content.isEmpty()) {
             return null
         }
         return extracted.content
@@ -160,26 +164,18 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     /**
      * Extract the specified file from the PAK file and cache the content and hash in memory
      */
-    private fun extractFileFromPak(basePakName: String, archiveEntryName: String): CachedBaseFile {
-        val zipFile = zipFileConnections[basePakName] ?: throw IOException(t("BASE_MOD_FILE_NOT_FOUND", basePakName))
-        val entry = zipFile.getEntry(archiveEntryName)
-        if (entry.size == 0L) {
-            return CachedBaseFile("", true)
+    private fun extractFileFromPak(basePakName: String, entryBaseFile: BaseFile): CachedBaseFile {
+        val inArchive = zipFileConnections[basePakName] ?: throw IOException(t("BASE_MOD_FILE_NOT_FOUND", basePakName))
+        var content = ""
+        ByteArrayOutputStream().use { os ->
+            inArchive.extractSlow(entryBaseFile.archiveEntryIndex) { data ->
+                os.write(data)
+                data.size
+            }
+            content = os.toString(Charsets.UTF_8)
         }
 
-        val content = zipFile.getInputStream(entry).use { zin ->
-            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-            val output = ByteArrayOutputStream()
-            while (true) {
-                val read = zin.read(buffer)
-                if (read == -1) {
-                    break
-                }
-                output.write(buffer, 0, read)
-            }
-            output.toString(Charsets.UTF_8)
-        }
-        return CachedBaseFile(content, false)
+        return CachedBaseFile(content)
     }
 
     /**
@@ -222,7 +218,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     @Suppress("UNCHECKED_CAST")
     fun <T : BaseTreeNode> parseForm(
         fileEntryName: String,
-        parseFunction: Function<String, ParsedResult<T>>
+        parseFunction: (String) -> ParsedResult<T>
     ): ParsedResult<T>? {
         val entryFileName = getEntryFileName(fileEntryName)
         val canonicalEntryName = indexedBaseModFileMap[entryFileName]?.archiveEntryName ?: fileEntryName
@@ -232,7 +228,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
             return cached as ParsedResult<T>
         }
         val content = extractFileContent(canonicalEntryName) ?: return null
-        val result = parseFunction.apply(content)
+        val result = parseFunction(content)
         astTreeCache.put(canonicalEntryName, result)
         return result
     }

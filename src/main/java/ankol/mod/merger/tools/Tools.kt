@@ -69,11 +69,11 @@ object Tools {
     /**
      * Get the file name in archiveEntry, remove 'separator', return the lowercase file name
      * @param entryName Archive full-path file name
-     * @param separator separator
+//     * @param separator separator
      * @return entry file name
      */
-    fun getEntryFileName(entryName: String, separator: String = File.separator): String {
-        return entryName.substring(entryName.lastIndexOf(separator) + 1).lowercase()
+    fun getEntryFileName(entryName: String): String {
+        return entryName.substring(entryName.lastIndexOf(File.separator) + 1).lowercase()
     }
 
     /**
