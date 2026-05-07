@@ -2,7 +2,6 @@ package ankol.mod.merger.tools
 
 import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.tools.Localizations.t
-import ankol.mod.merger.tools.Tools.bytesToHex
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import net.sf.sevenzipjbinding.ExtractOperationResult
 import net.sf.sevenzipjbinding.SevenZip
@@ -14,8 +13,8 @@ import java.io.IOException
 import java.io.RandomAccessFile
 import java.nio.file.Files
 import java.nio.file.Path
-import java.security.MessageDigest
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.zip.CRC32C
 import kotlin.io.path.createDirectories
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.nameWithoutExtension
@@ -28,6 +27,7 @@ import kotlin.io.path.outputStream
  */
 object PakManager {
     private val NESTED_COUNTER = AtomicInteger(0)
+    private val SANITIZE_REGEX = "[^a-zA-Z0-9._-]".toRegex()
 
     init {
         SevenZip.initSevenZipFromPlatformJAR()
@@ -72,7 +72,7 @@ object PakManager {
         val archiveName = pakPath.fileName.nameWithoutExtension
         RandomAccessFileInStream(RandomAccessFile(pakPath.toFile(), "r")).use { inStream ->
             SevenZip.openInArchive(null, inStream).use { archive ->
-                val digest = MessageDigest.getInstance("SHA-256")
+                val crc32c = CRC32C()
                 for (item in archive.simpleInterface.archiveItems) {
                     if (item.isFolder) continue
 
@@ -88,13 +88,14 @@ object PakManager {
                     outputPath.outputStream().use { fos ->
                         val result = item.extractSlow { data ->
                             fos.write(data)
-                            digest.update(data)
+                            crc32c.update(data)
                             data.size
                         }
                         require(result == ExtractOperationResult.OK) { "Failed to extract entry: $entryName, result: $result" }
                     }
 
-                    val hash = bytesToHex(digest.digest())
+                    val hash = crc32c.value.toString(16)
+                    crc32c.reset()
 
                     // Handle nested archives
                     if (isArchiveFile(fileName)) {
@@ -117,7 +118,7 @@ object PakManager {
         fileTreeMap: MutableMap<String, PathFileTree>,
         archiveNames: MutableList<String>
     ) {
-        val sanitizedFileName = fileName.replace("[^a-zA-Z0-9._-]".toRegex(), "_")
+        val sanitizedFileName = fileName.replace(SANITIZE_REGEX, "_")
         val nestedTempDir = outputDir.resolve(
             "_nested_${System.currentTimeMillis()}_${NESTED_COUNTER.getAndIncrement()}_$sanitizedFileName"
         )
