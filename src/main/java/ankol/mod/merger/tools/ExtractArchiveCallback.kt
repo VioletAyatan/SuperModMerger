@@ -16,8 +16,10 @@ class ExtractArchiveCallback(
     val pakPath: Path,
     val archiveNames: MutableList<String>,
     val fileTreeMap: MutableMap<String, PathFileTree>,
-    val outputDir: Path
+    val outputDir: Path,
+    val nestedArchives: MutableList<Pair<String, Path>>
 ) : IArchiveExtractCallback {
+
     private lateinit var fileOutputPath: Path
     private lateinit var outputStream: OutputStream
     private lateinit var fileEntryName: String
@@ -54,16 +56,21 @@ class ExtractArchiveCallback(
         }
     }
 
-    override fun setOperationResult(extractOperationResult: ExtractOperationResult) {
+    override fun setOperationResult(result: ExtractOperationResult) {
         if (skipped) return
         close()
-        fileTreeMap[fileName] = PathFileTree(
-            fileName,
-            fileEntryName,
-            archiveNames,
-            crc32.value.toString(),
-            fileOutputPath
-        )
+
+        if (isArchiveFile(fileName)) {
+            nestedArchives.add(fileName to fileOutputPath)
+        } else {
+            fileTreeMap[fileName] = PathFileTree(
+                fileName,
+                fileEntryName,
+                archiveNames,
+                crc32.value.toString(),
+                fileOutputPath
+            )
+        }
     }
 
     override fun prepareOperation(extractAskMode: ExtractAskMode) = Unit
@@ -76,4 +83,17 @@ class ExtractArchiveCallback(
         outputStream.close()
         crc32.reset()
     }
+
+
+    /**
+     * Determine whether the file is a supported archive format
+     *
+     * @param fileName File name
+     * @return Whether it is an archive file
+     */
+    private fun isArchiveFile(fileName: String): Boolean =
+        fileName.endsWith(".pak", ignoreCase = true) ||
+                fileName.endsWith(".zip", ignoreCase = true) ||
+                fileName.endsWith(".7z", ignoreCase = true) ||
+                fileName.endsWith(".rar", ignoreCase = true)
 }
