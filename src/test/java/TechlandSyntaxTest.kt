@@ -22,7 +22,7 @@ import java.nio.file.Path
 import java.util.*
 import kotlin.io.path.Path
 
-class PakOpenTest {
+class TechlandSyntaxTest {
     private val log = logger()
     private val scrFileSuffix = arrayOf(".scr", ".def", ".loot", ".phx", ".ppfx", ".ares", ".mpcloth", ".gpufx", ".chs", ".scd")
     private val jsonFileSuffix = arrayOf(".model", ".gui", ".json")
@@ -37,7 +37,7 @@ class PakOpenTest {
      */
     @Test
     fun test() {
-        val dltbPath = TestTool.getDltbPath().toString() ?: return
+        val dltbPath = TestTool.getDltbPath()
         val pakFilePath = Path(dltbPath, "ph_ft", "source", "data0.pak")
 //        val pakFilePath = Path("C:\\Users\\lichengkun\\Desktop\\Works\\ModMergers\\SuperModMerger\\source\\data7.pak")
         var count: Long = 0
@@ -132,26 +132,32 @@ class PakOpenTest {
     fun walkDirTest() {
         val path = Path.of("C:\\Users\\Administrator\\Desktop\\data7")
         Files.walk(path).use { pathStream ->
-            pathStream.filter { path: Path? -> Files.isRegularFile(path) }
-                .forEach { file: Path? ->
+            pathStream.filter { path: Path -> Files.isRegularFile(path) }
+                .forEach { file: Path ->
                     try {
-                        val fileName = file!!.getFileName().toString()
+                        val fileName = file.fileName.toString()
                         if (Strings.CI.endsWithAny(fileName, *scrFileSuffix)) {
-                            println("fileName = " + fileName)
+                            println("fileName = $fileName")
                             val parser = getScrParser(file, fileName).parser!!
                             parser.file()
                         } else if (Strings.CI.endsWithAny(fileName, *jsonFileSuffix)) {
-                            println("fileName = " + fileName)
+                            println("fileName = $fileName")
                             val parser = getJsonParser(file, fileName)
                             parser.json()
                         } else {
-                            System.err.println("不支持的类型，跳过处理：" + fileName)
+                            System.err.println("不支持的类型，跳过处理：$fileName")
                         }
                     } catch (e: IOException) {
                         throw RuntimeException(e)
                     }
                 }
         }
+    }
+
+    @Test
+    fun test3() {
+        val dltbPath = TestTool.getDltbPath()
+        val sourcePath = Path(dltbPath, "ph_ft", "source")
     }
 
     @Throws(IOException::class)
