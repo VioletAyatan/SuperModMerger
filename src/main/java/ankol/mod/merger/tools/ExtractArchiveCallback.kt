@@ -63,7 +63,7 @@ class ExtractArchiveCallback(
         if (isArchiveFile(fileName)) {
             nestedArchives.add(fileName to fileOutputPath)
         } else {
-            fileTreeMap[fileName] = PathFileTree(
+            fileTreeMap[fileEntryName] = PathFileTree(
                 fileName,
                 fileEntryName,
                 archiveNames,

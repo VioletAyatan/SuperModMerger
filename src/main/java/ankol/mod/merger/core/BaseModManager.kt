@@ -181,17 +181,17 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
     /**
      * Check whether the file path in the MOD is correct
      *
-     * @param filePath MOD file path
+     * @param fileEntryName MOD file path
      */
-    fun hasPathConflict(filePath: String): Boolean {
+    fun hasPathConflict(fileEntryName: String): Boolean {
         if (!isLoaded) {
             return false
         }
-        val fileName = getEntryFileName(filePath)
+        val fileName = getEntryFileName(fileEntryName)
         val pathFileTree = indexedBaseModFileMap[fileName] ?: return false
         // Sometimes files not belonging to the mod are added to the pak. If found empty, it's not a file supported by the original mod.
         val correctPath = pathFileTree.archiveEntryName
-        return !correctPath.equals(filePath, ignoreCase = true)
+        return !correctPath.equals(fileEntryName, ignoreCase = true)
     }
 
     /**

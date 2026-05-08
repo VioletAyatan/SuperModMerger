@@ -44,8 +44,7 @@ class ModExtractor(
             try {
                 val archiveName = mod.modName
                 val modTempDir = extractTempDir.resolve("${archiveName}${index.getAndIncrement()}")
-                val extractedFiles =
-                    PakManager.extractPak(archiveName, mod.modPath, modTempDir) // Extract compressed archive
+                val extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir) // Extract compressed archive
                 val correctedCount = groupExtractedFilesByPath(archiveName, extractedFiles, filesByPath)
                 correctionCounter.addAndGet(correctedCount)
             } catch (e: Exception) {
