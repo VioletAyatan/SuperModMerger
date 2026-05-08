@@ -1,15 +1,11 @@
 package ankol.mod.merger.merger
 
-import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.domain.MergeResult
+import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.domain.ParsedResult
-import org.antlr.v4.runtime.CharStream
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
-import org.antlr.v4.runtime.Lexer
-import org.antlr.v4.runtime.Parser
+import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.ParseTree
 
 /**
@@ -43,6 +39,7 @@ abstract class AbstractFileMerger(val context: MergerContext) {
         val lexer = lexerFactory(charStream)
         val tokenStream = CommonTokenStream(lexer)
         val parser = parserFactory(tokenStream)
+//        parser.addErrorListener(SyntaxErrorListener(context))
         val parseTree = parseTreeFactory(parser)
         val astNode = astBuilder(tokenStream, parseTree)
         return ParsedResult(astNode, tokenStream)
