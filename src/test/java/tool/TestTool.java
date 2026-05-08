@@ -18,7 +18,7 @@ public abstract class TestTool {
      *
      * @return 困兽安装路径
      */
-    public static StringBuilder getDltbPath() {
+    public static String getDltbPath() {
         var dltbFound = false;
         String steamInstallPath = getSteamInstallPath();
         if (steamInstallPath == null) {
@@ -39,7 +39,7 @@ public abstract class TestTool {
             System.out.println("未检测到困兽安装");
             return null;
         }
-        return dltbPath;
+        return dltbPath.toString();
     }
 
     // 从注册表读取 SteamPath
