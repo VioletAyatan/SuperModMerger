@@ -44,7 +44,8 @@ class ModExtractor(
             try {
                 val archiveName = mod.modName
                 val modTempDir = extractTempDir.resolve("${archiveName}${index.getAndIncrement()}")
-                val extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir) // Extract compressed archive
+                val extractedFiles =
+                    PakManager.extractPak(archiveName, mod.modPath, modTempDir) // Extract compressed archive
                 val correctedCount = groupExtractedFilesByPath(archiveName, extractedFiles, filesByPath)
                 correctionCounter.addAndGet(correctedCount)
             } catch (e: Exception) {
@@ -101,12 +102,18 @@ class ModExtractor(
         }
         if (Strings.CI.endsWithAny(fileEntryName, ".dll", ".asi")) {
             log.warn("Unsupported dll/asi file: ${fileEntryName}, Please handle it yourself after merging.")
-            ErrorReporter.addErrorReport(sourceInfo.getFirstArchiveFileName(), t("ERROR_NOT_SUPPORT_DLL", fileEntryName))
+            ErrorReporter.addErrorReport(
+                sourceInfo.getFirstArchiveFileName(),
+                t("ERROR_NOT_SUPPORT_DLL", fileEntryName)
+            )
             return true
         }
-        if (Strings.CI.endsWithAny(fileEntryName, ".rpack")) {
+        if (Strings.CI.endsWithAny(fileEntryName, ".rpack", ".dds")) {
             log.warn("Unsupported rpak file: ${fileEntryName}, Marking to removal.")
-            ErrorReporter.addErrorReport(sourceInfo.getFirstArchiveFileName(), t("ERROR_NOT_SUPPORT_RPACK", fileEntryName))
+            ErrorReporter.addErrorReport(
+                sourceInfo.getFirstArchiveFileName(),
+                t("ERROR_NOT_SUPPORT_RPACK", fileEntryName)
+            )
             return true
         }
         return false
