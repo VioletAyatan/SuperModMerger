@@ -6,7 +6,7 @@
 
     <groupId>ankol.mod.merger</groupId>
     <artifactId>SuperModMerger</artifactId>
-    <version>1.6.1-SNAPSHOT</version>
+    <version>1.7.0</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -29,6 +29,10 @@
         <dependency>
             <groupId>net.sf.sevenzipjbinding</groupId>
             <artifactId>sevenzipjbinding-all-windows</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.sevenzipjbinding</groupId>
+            <artifactId>sevenzipjbinding-all-linux</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -87,6 +91,12 @@
             <dependency>
                 <groupId>net.sf.sevenzipjbinding</groupId>
                 <artifactId>sevenzipjbinding-all-windows</artifactId>
+                <version>${sevenzipjbinding.version}</version>
+            </dependency>
+            <!-- Source: https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding-all-linux -->
+            <dependency>
+                <groupId>net.sf.sevenzipjbinding</groupId>
+                <artifactId>sevenzipjbinding-all-linux</artifactId>
                 <version>${sevenzipjbinding.version}</version>
             </dependency>
             <dependency>
