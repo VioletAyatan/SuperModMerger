@@ -1,17 +1,8 @@
 package ankol.mod.merger.tools
 
+import ankol.mod.merger.constants.ErrorLevel
 import ankol.mod.merger.tools.Localizations.t
 import java.util.concurrent.ConcurrentLinkedQueue
-
-/**
- * Error level for reporting
- */
-enum class ErrorLevel {
-    /** Warning level, printed in yellow */
-    WARNING,
-    /** Error level, printed in red */
-    ERROR
-}
 
 class ErrorReporter {
     companion object {
@@ -43,24 +34,20 @@ class ErrorReporter {
         @JvmStatic
         fun printErrors() {
             if (errors.isNotEmpty()) {
-                val hasError = errors.any { it.level == ErrorLevel.ERROR }
-                val hasWarning = errors.any { it.level == ErrorLevel.WARNING }
-
-                if (hasError) {
-                    ColorPrinter.error(t("ERROR_REPORTER_TITLE"))
-                }
-                if (hasWarning) {
-                    ColorPrinter.warning(t("WARNING_REPORTER_TITLE"))
-                }
-
-                errors.forEach { error ->
-                    when (error.level) {
-                        ErrorLevel.WARNING -> ColorPrinter.warning(
-                            t("ERROR_REPORTER_MSG", error.errorSource, error.message)
-                        )
-                        ErrorLevel.ERROR -> ColorPrinter.error(
-                            t("ERROR_REPORTER_MSG", error.errorSource, error.message)
-                        )
+                ErrorLevel.entries.forEach { level: ErrorLevel ->
+                    val grouped = errors.filter { it.level == level }
+                    if (grouped.isNotEmpty()) {
+                        when (level) {
+                            ErrorLevel.WARNING -> ColorPrinter.warning(t("WARNING_REPORTER_TITLE"))
+                            ErrorLevel.ERROR -> ColorPrinter.error(t("ERROR_REPORTER_TITLE"))
+                        }
+                        grouped.forEach { error ->
+                            val msg = t("ERROR_REPORTER_MSG", error.errorSource, error.message)
+                            when (level) {
+                                ErrorLevel.WARNING -> ColorPrinter.warning(msg)
+                                ErrorLevel.ERROR -> ColorPrinter.error(msg)
+                            }
+                        }
                     }
                 }
             }

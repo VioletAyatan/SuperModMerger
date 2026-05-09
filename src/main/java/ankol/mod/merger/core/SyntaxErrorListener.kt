@@ -1,7 +1,7 @@
 package ankol.mod.merger.core
 
+import ankol.mod.merger.constants.ErrorLevel
 import ankol.mod.merger.domain.MergerContext
-import ankol.mod.merger.tools.ErrorLevel
 import ankol.mod.merger.tools.ErrorReporter
 import ankol.mod.merger.tools.Localizations.t
 import org.antlr.v4.runtime.ANTLRErrorListener

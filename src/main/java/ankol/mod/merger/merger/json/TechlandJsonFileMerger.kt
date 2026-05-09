@@ -70,7 +70,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                     record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (conflicts.isNotEmpty()) {
-                resolveConflict(conflicts, context)
+                resolveConflict(conflicts)
             }
             return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {
