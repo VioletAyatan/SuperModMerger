@@ -73,7 +73,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
-                ConflictResolver.resolveConflict(conflicts, context)
+                ConflictResolver.resolveConflict(conflicts)
             }
 
             return MergeResult(getMergedContent(accumulatedResult), context.mergedHistory)
