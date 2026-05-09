@@ -58,7 +58,6 @@ class ExtractArchiveCallback(
 
     override fun setOperationResult(result: ExtractOperationResult) {
         if (skipped) return
-        close()
 
         if (isArchiveFile(fileName)) {
             nestedArchives.add(fileName to fileOutputPath)
@@ -71,6 +70,7 @@ class ExtractArchiveCallback(
                 fileOutputPath
             )
         }
+        close()
     }
 
     override fun prepareOperation(extractAskMode: ExtractAskMode) = Unit
