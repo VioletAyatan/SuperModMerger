@@ -2,7 +2,6 @@ package ankol.mod.merger.core
 
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.constants.UserChoice.Companion.findByOrder
-import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.merger.ConflictRecord
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations.t
@@ -18,7 +17,7 @@ object ConflictResolver {
      *
      * @param conflicts Conflict items
      */
-    fun resolveConflict(conflicts: MutableList<ConflictRecord>, context: MergerContext) {
+    fun resolveConflict(conflicts: MutableList<ConflictRecord>) {
         // Filter out nodes that can be auto-merged
         val automaticMerge = handleAutoMergingCode(conflicts)
         // For real conflicts, prompt user to choose which version to use
@@ -26,14 +25,14 @@ object ConflictResolver {
             println() // New line
             ColorPrinter.warning(t("CRESOLVER_CONFLICT_DETECTED", conflicts.size))
 
-            var userChose: UserChoice? = null // User's choice
+            var userChoice: UserChoice? = null // User's choice
             for (i in conflicts.indices) {
                 val record = conflicts[i]
 
-                if (userChose == UserChoice.USE_ALL_BASE) {
-                    record.userChoice = UserChoice.BASE_MOD // 3 means user chooses all baseMod configs
-                } else if (userChose == UserChoice.USE_ALL_MERGE) {
-                    record.userChoice = UserChoice.MERGE_MOD // 4 means user chooses all mergeMod configs
+                if (userChoice == UserChoice.USE_ALL_BASE) {
+                    record.userChoice = UserChoice.BASE_MOD
+                } else if (userChoice == UserChoice.USE_ALL_MERGE) {
+                    record.userChoice = UserChoice.MERGE_MOD
                 } else {
                     // Get the text of the conflict nodes
                     val baseNodeSource = record.baseNode.sourceText.trim()
@@ -59,8 +58,12 @@ object ConflictResolver {
                         if (choice == null) {
                             ColorPrinter.warning(t("CRESOLVER_INVALID_INPUT"))
                         } else {
-                            userChose = choice
-                            record.userChoice = choice
+                            userChoice = choice
+                            record.userChoice = when (choice) {
+                                UserChoice.USE_ALL_BASE -> UserChoice.BASE_MOD
+                                UserChoice.USE_ALL_MERGE -> UserChoice.MERGE_MOD
+                                else -> choice
+                            }
                             break
                         }
                     }
