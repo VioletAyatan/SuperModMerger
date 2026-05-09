@@ -297,6 +297,12 @@
       "glob": "Windows-x86/lib7-Zip-JBinding.dll"
     },
     {
+      "glob": "Linux-amd64/lib7-Zip-JBinding.so"
+    },
+    {
+      "glob": "Linux-i386/lib7-Zip-JBinding.so"
+    },
+    {
       "glob": "sevenzipjbinding-platforms.properties"
     }
   ]
