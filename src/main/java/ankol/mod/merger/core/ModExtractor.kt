@@ -99,7 +99,7 @@ class ModExtractor(
             log.warn("Unsupported text file: ${fileEntryName}, Marking to removal.")
             return true
         }
-        if (Strings.CI.endsWithAny(fileEntryName, ".dll", ".asi")) {
+        if (Strings.CI.endsWithAny(fileEntryName, ".dll", ".asi", ".exe")) {
             log.warn("Unsupported dll/asi file: ${fileEntryName}, Please handle it yourself after merging.")
             ErrorReporter.addErrorReport(
                 sourceInfo.getFirstArchiveFileName(),
