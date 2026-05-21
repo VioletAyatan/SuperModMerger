@@ -1,4 +1,4 @@
-package ankol.mod.merger.merger.json.node
+package ankol.mod.merger.mergers.json.node
 
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.tools.logger

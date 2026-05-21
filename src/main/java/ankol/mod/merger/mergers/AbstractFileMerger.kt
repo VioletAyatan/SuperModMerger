@@ -1,4 +1,4 @@
-package ankol.mod.merger.merger
+package ankol.mod.merger.mergers
 
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.core.SyntaxErrorListener

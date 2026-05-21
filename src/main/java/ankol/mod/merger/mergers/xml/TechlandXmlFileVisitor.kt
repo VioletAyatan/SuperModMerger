@@ -1,12 +1,12 @@
-package ankol.mod.merger.merger.xml
+package ankol.mod.merger.mergers.xml
 
 import ankol.mod.merger.antlr.xml.TechlandXMLParser
 import ankol.mod.merger.antlr.xml.TechlandXMLParser.DocumentContext
 import ankol.mod.merger.antlr.xml.TechlandXMLParser.ElementContext
 import ankol.mod.merger.antlr.xml.TechlandXMLParserBaseVisitor
-import ankol.mod.merger.merger.xml.node.XmlContainerNode
-import ankol.mod.merger.merger.xml.node.XmlLeafNode
-import ankol.mod.merger.merger.xml.node.XmlNode
+import ankol.mod.merger.mergers.xml.node.XmlContainerNode
+import ankol.mod.merger.mergers.xml.node.XmlLeafNode
+import ankol.mod.merger.mergers.xml.node.XmlNode
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.ParserRuleContext
 import java.util.function.Function

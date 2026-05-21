@@ -1,12 +1,12 @@
-package ankol.mod.merger.merger.json
+package ankol.mod.merger.mergers.json
 
 import ankol.mod.merger.antlr.json.JSONBaseVisitor
 import ankol.mod.merger.antlr.json.JSONParser
 import ankol.mod.merger.core.BaseTreeNode
-import ankol.mod.merger.merger.json.node.JsonArrayNode
-import ankol.mod.merger.merger.json.node.JsonContainerNode
-import ankol.mod.merger.merger.json.node.JsonLeafNode
-import ankol.mod.merger.merger.json.node.JsonPairNode
+import ankol.mod.merger.mergers.json.node.JsonArrayNode
+import ankol.mod.merger.mergers.json.node.JsonContainerNode
+import ankol.mod.merger.mergers.json.node.JsonLeafNode
+import ankol.mod.merger.mergers.json.node.JsonPairNode
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.TokenStream
 

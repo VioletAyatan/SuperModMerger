@@ -1,4 +1,4 @@
-package ankol.mod.merger.merger.xml.node
+package ankol.mod.merger.mergers.xml.node
 
 import ankol.mod.merger.core.BaseTreeNode
 import org.antlr.v4.runtime.CommonTokenStream

@@ -1,11 +1,11 @@
-package ankol.mod.merger.merger.scr
+package ankol.mod.merger.mergers.scr
 
 import ankol.mod.merger.antlr.scr.TechlandScriptBaseVisitor
 import ankol.mod.merger.antlr.scr.TechlandScriptParser.*
 import ankol.mod.merger.core.BaseTreeNode
-import ankol.mod.merger.merger.scr.node.ScrContainerNode
-import ankol.mod.merger.merger.scr.node.ScrFunCallNode
-import ankol.mod.merger.merger.scr.node.ScrLeafNode
+import ankol.mod.merger.mergers.scr.node.ScrContainerNode
+import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
+import ankol.mod.merger.mergers.scr.node.ScrLeafNode
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.misc.Interval

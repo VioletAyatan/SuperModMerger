@@ -1,4 +1,4 @@
-package ankol.mod.merger.merger.json
+package ankol.mod.merger.mergers.json
 
 import ankol.mod.merger.antlr.json.JSONLexer
 import ankol.mod.merger.antlr.json.JSONParser
@@ -10,11 +10,11 @@ import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.BusinessException
-import ankol.mod.merger.merger.AbstractFileMerger
-import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.json.node.JsonArrayNode
-import ankol.mod.merger.merger.json.node.JsonContainerNode
-import ankol.mod.merger.merger.json.node.JsonPairNode
+import ankol.mod.merger.mergers.AbstractFileMerger
+import ankol.mod.merger.mergers.ConflictRecord
+import ankol.mod.merger.mergers.json.node.JsonArrayNode
+import ankol.mod.merger.mergers.json.node.JsonContainerNode
+import ankol.mod.merger.mergers.json.node.JsonPairNode
 import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.TokenStreamRewriter
 

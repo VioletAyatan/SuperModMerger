@@ -1,4 +1,4 @@
-package ankol.mod.merger.merger.scr
+package ankol.mod.merger.mergers.scr
 
 import ankol.mod.merger.antlr.scr.TechlandScriptLexer
 import ankol.mod.merger.antlr.scr.TechlandScriptParser
@@ -10,10 +10,10 @@ import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.BusinessException
-import ankol.mod.merger.merger.AbstractFileMerger
-import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.scr.node.ScrContainerNode
-import ankol.mod.merger.merger.scr.node.ScrFunCallNode
+import ankol.mod.merger.mergers.AbstractFileMerger
+import ankol.mod.merger.mergers.ConflictRecord
+import ankol.mod.merger.mergers.scr.node.ScrContainerNode
+import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
 import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.TokenStreamRewriter
 

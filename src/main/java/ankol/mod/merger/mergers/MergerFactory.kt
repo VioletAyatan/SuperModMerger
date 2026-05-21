@@ -1,9 +1,9 @@
-package ankol.mod.merger.merger
+package ankol.mod.merger.mergers
 
 import ankol.mod.merger.domain.MergerContext
-import ankol.mod.merger.merger.json.TechlandJsonFileMerger
-import ankol.mod.merger.merger.scr.TechlandScrFileMerger
-import ankol.mod.merger.merger.xml.TechlandXmlFileMerger
+import ankol.mod.merger.mergers.json.TechlandJsonFileMerger
+import ankol.mod.merger.mergers.scr.TechlandScrFileMerger
+import ankol.mod.merger.mergers.xml.TechlandXmlFileMerger
 import java.util.*
 
 /**
