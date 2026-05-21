@@ -1,4 +1,4 @@
-package ankol.mod.merger.merger.xml
+package ankol.mod.merger.mergers.xml
 
 import ankol.mod.merger.antlr.xml.TechlandXMLLexer
 import ankol.mod.merger.antlr.xml.TechlandXMLParser
@@ -9,11 +9,11 @@ import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.BusinessException
-import ankol.mod.merger.merger.AbstractFileMerger
-import ankol.mod.merger.merger.ConflictRecord
-import ankol.mod.merger.merger.xml.node.XmlContainerNode
-import ankol.mod.merger.merger.xml.node.XmlLeafNode
-import ankol.mod.merger.merger.xml.node.XmlNode
+import ankol.mod.merger.mergers.AbstractFileMerger
+import ankol.mod.merger.mergers.ConflictRecord
+import ankol.mod.merger.mergers.xml.node.XmlContainerNode
+import ankol.mod.merger.mergers.xml.node.XmlLeafNode
+import ankol.mod.merger.mergers.xml.node.XmlNode
 import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.TokenStreamRewriter
 

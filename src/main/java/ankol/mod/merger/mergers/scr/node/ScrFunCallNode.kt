@@ -1,4 +1,4 @@
-package ankol.mod.merger.merger.scr.node
+package ankol.mod.merger.mergers.scr.node
 
 import ankol.mod.merger.core.BaseTreeNode
 import org.antlr.v4.runtime.TokenStream

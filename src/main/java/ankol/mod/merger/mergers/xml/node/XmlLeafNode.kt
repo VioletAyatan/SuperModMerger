@@ -1,10 +1,10 @@
-package ankol.mod.merger.merger.xml.node
+package ankol.mod.merger.mergers.xml.node
 
 import org.antlr.v4.runtime.CommonTokenStream
 
 /**
  * XML叶子节点
- * 
+ *
  * @author Ankol
  */
 class XmlLeafNode(

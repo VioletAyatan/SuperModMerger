@@ -1,4 +1,4 @@
-package ankol.mod.merger.merger.xml.node
+package ankol.mod.merger.mergers.xml.node
 
 import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.CommonTokenStream
@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.CommonTokenStream
 /**
  * XML容器节点，标识可以有子节点的容器
  * 例如：<skills> ... </skills>
- * 
+ *
  * @author Ankol
  */
 class XmlContainerNode(

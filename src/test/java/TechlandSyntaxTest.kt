@@ -2,8 +2,8 @@ import ankol.mod.merger.antlr.json.JSONLexer
 import ankol.mod.merger.antlr.json.JSONParser
 import ankol.mod.merger.antlr.scr.TechlandScriptLexer
 import ankol.mod.merger.antlr.scr.TechlandScriptParser
-import ankol.mod.merger.merger.json.TechlandJsonFileVisitor
-import ankol.mod.merger.merger.scr.TechlandScrFileVisitor
+import ankol.mod.merger.mergers.json.TechlandJsonFileVisitor
+import ankol.mod.merger.mergers.scr.TechlandScrFileVisitor
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import ankol.mod.merger.tools.Tools.userDir
 import ankol.mod.merger.tools.logger

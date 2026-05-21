@@ -4,7 +4,7 @@ import ankol.mod.merger.core.filetrees.MemoryFileTree
 import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.domain.MergerContext
 import ankol.mod.merger.domain.MergingModInfo
-import ankol.mod.merger.merger.MergerFactory
+import ankol.mod.merger.mergers.MergerFactory
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Localizations.t
 import java.nio.file.Path
