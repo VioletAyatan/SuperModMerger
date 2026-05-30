@@ -3,6 +3,7 @@ package ankol.mod.merger.core
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.constants.UserChoice.Companion.findByOrder
 import ankol.mod.merger.mergers.ConflictRecord
+import ankol.mod.merger.mergers.DeletionRecord
 import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 
@@ -73,6 +74,65 @@ object ConflictResolver {
         }
         // Finally, add the auto-merged nodes back for subsequent logic to use the same container
         conflicts.addAll(automaticMerge)
+    }
+
+    /**
+     * 删除冲突交互解决
+     *
+     * 针对 incoming mod 中缺失但 accumulated 中存在的节点，询问用户是保留还是删除。
+     */
+    fun resolveDeletionConflicts(deletions: MutableList<DeletionRecord>) {
+        if (deletions.isEmpty()) return
+
+        println()
+        ColorPrinter.warning(t("DELETION_DETECTED", deletions.size))
+
+        var globalChoice: UserChoice? = null
+
+        for (i in deletions.indices) {
+            val record = deletions[i]
+
+            if (globalChoice == UserChoice.USE_ALL_BASE) {
+                record.userChoice = UserChoice.BASE_MOD
+                continue
+            } else if (globalChoice == UserChoice.USE_ALL_MERGE) {
+                record.userChoice = UserChoice.MERGE_MOD
+                continue
+            }
+
+            val nodeText = record.accumulatedNode.sourceText.trim()
+
+            ColorPrinter.blue("=".repeat(75))
+            ColorPrinter.cyan(t("DELETION_FILE_INFO", i + 1, deletions.size, record.fileName, record.deletingModName))
+            if (record.isModifyDeleteConflict) {
+                ColorPrinter.warning(t("DELETION_MODIFY_CONFLICT_WARNING", record.previousModName))
+            }
+            ColorPrinter.bold(t("DELETION_NODE_INFO", record.accumulatedNode.lineNumber, nodeText))
+            ColorPrinter.blue("=".repeat(75))
+            ColorPrinter.bold(t("DELETION_CHOOSE_PROMPT"))
+            ColorPrinter.cyan(t("DELETION_KEEP_NODE"))
+            ColorPrinter.cyan(t("DELETION_DELETE_NODE", record.deletingModName))
+            ColorPrinter.cyan(t("DELETION_KEEP_ALL"))
+            ColorPrinter.cyan(t("DELETION_DELETE_ALL"))
+
+            while (true) {
+                val input = readln()
+                val choice = findByOrder(input.toIntOrNull())
+                if (choice == null) {
+                    ColorPrinter.warning(t("CRESOLVER_INVALID_INPUT"))
+                } else {
+                    globalChoice = choice
+                    record.userChoice = when (choice) {
+                        UserChoice.USE_ALL_BASE -> UserChoice.BASE_MOD
+                        UserChoice.USE_ALL_MERGE -> UserChoice.MERGE_MOD
+                        else -> choice
+                    }
+                    break
+                }
+            }
+        }
+
+        ColorPrinter.success(t("DELETION_RESOLVED"))
     }
 
     /**

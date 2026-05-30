@@ -4,6 +4,10 @@ import ankol.mod.merger.core.BaseModManager
 import ankol.mod.merger.tools.logger
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Mod Merging Context
+ * @author Ankol
+ */
 class MergerContext(
     /** Base mod manager **/
     val baseModManager: BaseModManager,

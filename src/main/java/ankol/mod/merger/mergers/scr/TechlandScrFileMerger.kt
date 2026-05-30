@@ -12,6 +12,7 @@ import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.mergers.AbstractFileMerger
 import ankol.mod.merger.mergers.ConflictRecord
+import ankol.mod.merger.mergers.DeletionRecord
 import ankol.mod.merger.mergers.scr.node.ScrContainerNode
 import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
 import ankol.mod.merger.tools.logger
@@ -26,6 +27,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
     private val conflicts = arrayListOf<ConflictRecord>()
 
     private val insertOperations = arrayListOf<InsertOperation>()
+
+    private val deletionRecords = arrayListOf<DeletionRecord>()
 
     /**
      * 插入操作记录
@@ -76,6 +79,23 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 ConflictResolver.resolveConflict(conflicts)
             }
 
+            // 处理删除记录
+            if (deletionRecords.isNotEmpty()) {
+                if (context.isFirstMerge) {
+                    // 首次合并（与原版对比），mod 的删除视为明确意图，自动应用
+                    for (record in deletionRecords) {
+                        record.userChoice = UserChoice.MERGE_MOD
+                    }
+                    log.info(
+                        "Auto-applying {} deletion(s) from first merge: {}",
+                        deletionRecords.size,
+                        context.mergeModName
+                    )
+                } else {
+                    ConflictResolver.resolveDeletionConflicts(deletionRecords)
+                }
+            }
+
             return MergeResult(getMergedContent(accumulatedResult), context.mergedHistory)
         } catch (e: Exception) {
             log.error("Error during SCR file merge: ${accumulatedFile.fileName} Reason: ${e.message}", e)
@@ -84,6 +104,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             //清理状态，准备下一个文件合并
             conflicts.clear()
             insertOperations.clear()
+            deletionRecords.clear()
             vanillaRootNode = null
         }
     }
@@ -185,6 +206,98 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 log.error("Error in processing scr node with signature: '${signature}'", e)
             }
         }
+
+        detectDeletions(vanillaContainer, accumulatedContainer, incomingModContainer)
+    }
+
+    /**
+     * 检测 accumulated 中存在但 incoming mod 中缺失的节点，并按三路合并逻辑分类。
+     *
+     * 分类规则：
+     *  - vanilla 无此节点：前置 mod 新增，incoming 不知情 → 静默保留
+     *  - vanilla 有，accumulated 已被修改：修改-删除冲突 → 必须询问用户
+     *  - vanilla 有，accumulated 未改，incoming 触碰了该容器：很可能是故意删除 → 询问用户
+     *  - vanilla 有，accumulated 未改，incoming 未触碰该容器：版本不匹配 → 静默保留
+     */
+    private fun detectDeletions(
+        vanillaContainer: ScrContainerNode?,
+        accumulatedContainer: ScrContainerNode,
+        incomingModContainer: ScrContainerNode
+    ) {
+        for ((signature, accumulatedNode) in accumulatedContainer.childrens) {
+            if (incomingModContainer.childrens.containsKey(signature)) continue
+
+            val vanillaNode = vanillaContainer?.childrens?.get(signature)
+
+            when {
+                vanillaNode == null -> {
+                    // 该节点由前置 mod 新增，incoming mod 不知道它的存在 → 保留
+                }
+
+                isAccumulatedModifiedFromVanilla(vanillaNode, accumulatedNode) -> {
+                    // accumulated 已被其他 mod 修改，而 incoming 要删除 → 修改-删除冲突
+                    val previousModName =
+                        context.mergedHistory.getModNameFromSignature("${accumulatedContainer.signature}-${signature}")
+                            ?: context.mergedHistory.getModNameFromSignature(signature)
+                            ?: context.accumulatedModName
+                    deletionRecords.add(
+                        DeletionRecord(
+                            fileName = context.mergingFileName,
+                            deletingModName = context.mergeModName,
+                            previousModName = previousModName,
+                            signature = signature,
+                            accumulatedNode = accumulatedNode,
+                            isModifyDeleteConflict = true
+                        )
+                    )
+                }
+
+                incomingModContainer.childrens.isNotEmpty() -> {
+                    // accumulated 与原版一致，且 incoming mod 触碰了该容器 → 很可能是故意删除
+                    if (accumulatedNode is ScrFunCallNode && context.mergingFileName.contains("inventory")) {
+                        log.warn("删除节点处理，文件：${context.mergingFileName} 行: ${accumulatedNode.lineNumber}-${accumulatedNode.sourceText} 标记为智能删除！")
+                        deletionRecords.add(
+                            DeletionRecord(
+                                fileName = context.mergingFileName,
+                                deletingModName = context.mergeModName,
+                                previousModName = "Vanilla",
+                                signature = signature,
+                                accumulatedNode = accumulatedNode,
+                                isModifyDeleteConflict = false,
+                                userChoice = UserChoice.USE_ALL_MERGE
+                            )
+                        )
+                    } else {
+                        deletionRecords.add(
+                            DeletionRecord(
+                                fileName = context.mergingFileName,
+                                deletingModName = context.mergeModName,
+                                previousModName = "Vanilla",
+                                signature = signature,
+                                accumulatedNode = accumulatedNode,
+                                isModifyDeleteConflict = false
+                            )
+                        )
+                    }
+                }
+                // else: incoming 完全没触碰该容器 → 版本不匹配，保留
+            }
+        }
+    }
+
+    /**
+     * 判断 accumulated 节点相对于 vanilla 是否被修改过。
+     *
+     * 对容器节点优先做结构预检（子节点签名集合 + 参数列表），命中即提前返回，
+     * 避免对整个容器文本做 O(N) 的 equalsTrimmed 比较。
+     * 非容器节点或结构相同时回退到 isNodeSameAsOriginalNode 的文本比较。
+     */
+    private fun isAccumulatedModifiedFromVanilla(vanillaNode: BaseTreeNode, accumulatedNode: BaseTreeNode): Boolean {
+        if (vanillaNode is ScrContainerNode && accumulatedNode is ScrContainerNode) {
+            if (vanillaNode.childrens.keys != accumulatedNode.childrens.keys) return true
+            if (vanillaNode.arguments != accumulatedNode.arguments) return true
+        }
+        return !isNodeSameAsOriginalNode(vanillaNode, accumulatedNode)
     }
 
     private fun getMergedContent(accumulatedResult: ParsedResult<ScrContainerNode>): String {
@@ -215,6 +328,13 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 rewriter.insertBefore(op.tokenIndex, op.content)
             } else {
                 rewriter.insertAfter(op.previousSibling.stopTokenIndex, "  ${op.content}")
+            }
+        }
+
+        // 应用删除操作
+        for (record in deletionRecords) {
+            if (record.userChoice == UserChoice.MERGE_MOD) {
+                rewriter.delete(record.accumulatedNode.startTokenIndex, record.accumulatedNode.stopTokenIndex)
             }
         }
 
