@@ -1,9 +1,6 @@
 package ankol.mod.merger.tools
 
-import java.io.IOException
-import java.io.InputStream
 import java.util.*
-import kotlin.system.exitProcess
 
 /**
  * Internationalization utility class
@@ -11,44 +8,9 @@ import kotlin.system.exitProcess
  */
 object Localizations {
     private lateinit var defaultProperties: Properties
-    private lateinit var localProperties: Properties
 
-    private val locale: Locale = Locale.getDefault()
-    private var langCode: String = locale.language
-
-    private val translator: Properties
-        get() {
-            return if (langCode.equals("zh", ignoreCase = true)) {
-                defaultProperties
-            } else {
-                localProperties
-            }
-        }
-
-    fun init() {
-        try {
-            localProperties = Properties()
-            val localResourcePath =
-                if (locale.language.contains("zh")) "i18n/message.properties" else "i18n/message_en.properties"
-            getClassLoader().getResourceAsStream(localResourcePath).use { stream: InputStream? ->
-                if (stream == null) {
-                    throw IOException("Resource not found: $localResourcePath")
-                }
-                localProperties.load(stream)
-            }
-            defaultProperties = Properties()
-            getClassLoader().getResourceAsStream("i18n/message.properties")
-                .use { stream: InputStream? ->
-                    if (stream == null) {
-                        throw IOException("Resource not found: i18n/message.properties")
-                    }
-                    defaultProperties.load(stream)
-                }
-        } catch (e: IOException) {
-            ColorPrinter.error("Failed to load i18n resources! Please contact the author! Error message: {}", e.message)
-            exitProcess(-1)
-        }
-    }
+    private var locale: Locale = Locale.getDefault()
+    private val bundle = ResourceBundle.getBundle("i18n/message", locale)
 
     /**
      * Localization
@@ -58,7 +20,7 @@ object Localizations {
      * @return Translated string (if not found, returns default value, if none, returns key)
      */
     fun t(key: String, vararg args: Any?): String {
-        var text: String? = translator.getProperty(key)
+        var text: String? = bundle.getString(key)
         if (text.isNullOrEmpty()) {
             val defaultText = defaultProperties.getProperty(key)
             if (!defaultText.isNullOrEmpty()) {
@@ -70,11 +32,4 @@ object Localizations {
         return Tools.format(text, *args)
     }
 
-    fun setLangCode(langCode: String) {
-        Localizations.langCode = langCode.lowercase(Locale.getDefault())
-    }
-
-    fun getClassLoader(): ClassLoader {
-        return Localizations::class.java.classLoader
-    }
 }

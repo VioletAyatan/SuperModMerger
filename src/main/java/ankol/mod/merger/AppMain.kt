@@ -26,7 +26,6 @@ class AppMain {
             var exitCode = 0
             try {
                 initCharset() //初始化控制台字符集为UTF-8
-                Localizations.init() //初始化国际化文件
                 //解析命令行参数
                 val argParser = registerArgsParser()
                 argParser.parse(args)
