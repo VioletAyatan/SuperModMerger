@@ -13,6 +13,7 @@ import java.io.PrintStream
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.*
 import kotlin.system.exitProcess
@@ -33,6 +34,9 @@ class AppMain {
                     //显示帮助信息并退出
                     argParser.printHelp()
                     exitProcess(0)
+                }
+                argParser.getOptionValue("l")?.let { lancCode ->
+                    Localizations.setLocale(Locale.of(lancCode))
                 }
                 // 扫描需要合并的MOD目录
                 val modsToMerge = locateMergingMod(argParser)
@@ -120,6 +124,7 @@ class AppMain {
             argParser.addOption("o", "output", true, t("APP_MAIN_OPTION_OUTPUT_DESC"))
             argParser.addOption("b", "base", true, t("APP_MAIN_OPTION_BASE_DESC"))
             argParser.addOption("h", "help", false, t("APP_MAIN_OPTION_HELP_DESC"))
+            argParser.addOption("l", "lang", true, t("APP_MAIN_OPTION_LANGUAGE_DESC"))
             return argParser
         }
 

@@ -7,10 +7,10 @@ import java.util.*
  * @author Ankol
  */
 object Localizations {
-    private lateinit var defaultProperties: Properties
+    private val log = logger()
 
     private var locale: Locale = Locale.getDefault()
-    private val bundle = ResourceBundle.getBundle("i18n/message", locale)
+    private var bundle = ResourceBundle.getBundle("i18n/message", locale)
 
     /**
      * Localization
@@ -20,16 +20,25 @@ object Localizations {
      * @return Translated string (if not found, returns default value, if none, returns key)
      */
     fun t(key: String, vararg args: Any?): String {
-        var text: String? = bundle.getString(key)
-        if (text.isNullOrEmpty()) {
-            val defaultText = defaultProperties.getProperty(key)
-            if (!defaultText.isNullOrEmpty()) {
-                text = defaultText
+        try {
+            val text: String? = bundle.getString(key)
+            return if (text != null) {
+                Tools.format(text, *args)
             } else {
-                return key
+                key
             }
+        } catch (e: MissingResourceException) {
+            log.warn("Missing localization resource. Reason: ${e.message}", e)
+            return key
         }
-        return Tools.format(text, *args)
+    }
+
+    /**
+     * 设置本地化区域
+     */
+    fun setLocale(locale: Locale) {
+        this.locale = locale
+        this.bundle = ResourceBundle.getBundle("i18n/message", locale)
     }
 
 }
