@@ -4,7 +4,6 @@ import ankol.mod.merger.antlr.json.JSONLexer
 import ankol.mod.merger.antlr.json.JSONParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
-import ankol.mod.merger.core.ConflictResolver.resolveConflict
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergerContext
@@ -70,7 +69,7 @@ class TechlandJsonFileMerger(context: MergerContext) : AbstractFileMerger(contex
                     record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (conflicts.isNotEmpty()) {
-                resolveConflict(conflicts)
+                context.conflictStrategy.resolveConflict(conflicts)
             }
             return MergeResult(getMergedContent(baseResult), context.mergedHistory)
         } catch (e: Exception) {

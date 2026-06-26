@@ -1,6 +1,8 @@
 package ankol.mod.merger.domain
 
+import ankol.mod.merger.api.ConflictResolutionStrategy
 import ankol.mod.merger.core.BaseModManager
+import ankol.mod.merger.core.ConflictResolver
 import ankol.mod.merger.tools.logger
 import java.util.concurrent.ConcurrentHashMap
 
@@ -11,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap
 class MergerContext(
     /** Base mod manager **/
     val baseModManager: BaseModManager,
+    /** Conflict resolution strategy (switchable for GUI) **/
+    var conflictStrategy: ConflictResolutionStrategy = ConflictResolver,
     /** Current merging file name **/
     var mergingFileName: String = "",
     var accumulatedModName: String = "",

@@ -29,6 +29,12 @@ class ErrorReporter {
         }
 
         /**
+         * 获取错误总数
+         */
+        @JvmStatic
+        fun getErrorCount(): Int = errors.size
+
+        /**
          * Print error/warning reports with appropriate colors
          */
         @JvmStatic

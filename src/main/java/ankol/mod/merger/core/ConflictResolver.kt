@@ -1,5 +1,6 @@
 package ankol.mod.merger.core
 
+import ankol.mod.merger.api.ConflictResolutionStrategy
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.constants.UserChoice.Companion.findByOrder
 import ankol.mod.merger.mergers.ConflictRecord
@@ -8,17 +9,17 @@ import ankol.mod.merger.tools.ColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 
 /**
- * Conflict resolver
+ * Conflict resolver (console implementation)
  *
  * @author Ankol
  */
-object ConflictResolver {
+object ConflictResolver : ConflictResolutionStrategy {
     /**
      * Interactive conflict resolution
      *
      * @param conflicts Conflict items
      */
-    fun resolveConflict(conflicts: MutableList<ConflictRecord>) {
+    override fun resolveConflict(conflicts: MutableList<ConflictRecord>) {
         // Filter out nodes that can be auto-merged
         val automaticMerge = handleAutoMergingCode(conflicts)
         // For real conflicts, prompt user to choose which version to use
@@ -81,7 +82,7 @@ object ConflictResolver {
      *
      * 针对 incoming mod 中缺失但 accumulated 中存在的节点，询问用户是保留还是删除。
      */
-    fun resolveDeletionConflicts(deletions: MutableList<DeletionRecord>) {
+    override fun resolveDeletionConflicts(deletions: MutableList<DeletionRecord>) {
         if (deletions.isEmpty()) return
 
         println()

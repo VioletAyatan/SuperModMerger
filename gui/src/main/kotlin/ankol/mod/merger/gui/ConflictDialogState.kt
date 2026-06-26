@@ -3,15 +3,48 @@ package ankol.mod.merger.gui
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.mergers.ConflictRecord
 import ankol.mod.merger.mergers.DeletionRecord
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import java.util.concurrent.CompletableFuture
 
 /**
  * 冲突解决对话框的共享状态
  * 桥接后台合并线程（阻塞等待）和 Compose UI线程（响应式展示）
+ *
+ * 所有 UI 读取的属性都使用 [mutableStateOf]，后台线程修改时会触发 Compose 重组。
  */
 object ConflictDialogState {
 
-    // ===== 内容冲突 =====
+    // ===== 内容冲突（Compose 可观察） =====
+
+    /** 对话框是否可见 */
+    var isConflictDialogVisible by mutableStateOf(false)
+
+    /** 当前正在展示的冲突 */
+    var currentConflict: ConflictRecord? by mutableStateOf(null)
+
+    /** 当前冲突序号 */
+    var conflictNumber: Int by mutableStateOf(0)
+
+    /** 内容冲突总数 */
+    var totalConflicts: Int by mutableStateOf(0)
+
+    // ===== 删除冲突（Compose 可观察） =====
+
+    /** 删除冲突对话框是否可见 */
+    var isDeletionDialogVisible by mutableStateOf(false)
+
+    /** 当前正在展示的删除冲突 */
+    var currentDeletion: DeletionRecord? by mutableStateOf(null)
+
+    /** 当前删除冲突序号 */
+    var deletionNumber: Int by mutableStateOf(0)
+
+    /** 删除冲突总数 */
+    var totalDeletions: Int by mutableStateOf(0)
+
+    // ===== 后台线程内部状态（不需要 Compose 可观察） =====
 
     /** 待解决的内容冲突列表 */
     var pendingConflicts: List<ConflictRecord> = emptyList()
@@ -19,44 +52,24 @@ object ConflictDialogState {
     /** 当前处理的冲突索引 */
     var conflictIndex: Int = 0
 
-    /** 对话框是否可见 */
-    var isConflictDialogVisible: Boolean = false
+    /** 待解决的删除冲突列表 */
+    var pendingDeletions: List<DeletionRecord> = emptyList()
 
-    /** 当前正在展示的冲突（供 UI 读取） */
-    var currentConflict: ConflictRecord? = null
-        private set
-
-    /** 内容冲突总数 */
-    var totalConflicts: Int = 0
-
-    /** 当前冲突序号 */
-    var conflictNumber: Int = 0
+    /** 当前处理的删除冲突索引 */
+    var deletionIndex: Int = 0
 
     /** 是否应使用"全部使用左/右"模式 */
     var applyAll: UserChoice? = null
 
     private var conflictFuture: CompletableFuture<UserChoice>? = null
-
-    // ===== 删除冲突 =====
-
-    var pendingDeletions: List<DeletionRecord> = emptyList()
-    var deletionIndex: Int = 0
-    var isDeletionDialogVisible: Boolean = false
-    var currentDeletion: DeletionRecord? = null
-        private set
-    var totalDeletions: Int = 0
-    var deletionNumber: Int = 0
-
     private var deletionFuture: CompletableFuture<UserChoice>? = null
 
     // ===== 内容冲突方法 =====
 
     /**
      * 在后台线程中调用：显示下一个冲突并等待用户选择
-     * @return 用户的 [UserChoice] 选择
      */
     fun waitForNextConflictChoice(): UserChoice? {
-        // 如果已有 applyAll，直接返回对应选择
         applyAll?.let {
             return when (it) {
                 UserChoice.USE_ALL_BASE -> UserChoice.BASE_MOD
@@ -75,13 +88,10 @@ object ConflictDialogState {
         val future = CompletableFuture<UserChoice>()
         conflictFuture = future
 
-        // 阻塞等待用户选择
         return try {
             future.get()
         } catch (e: Exception) {
             null
-        } finally {
-            // 不要在 finally 中关闭，因为后续还可以继续
         }
     }
 
@@ -109,7 +119,7 @@ object ConflictDialogState {
         }
     }
 
-    /** 关闭内容冲突对话框（无更多冲突） */
+    /** 关闭内容冲突对话框 */
     fun closeConflictDialog() {
         isConflictDialogVisible = false
         conflictFuture?.complete(null)
@@ -118,9 +128,6 @@ object ConflictDialogState {
 
     // ===== 删除冲突方法 =====
 
-    /**
-     * 在后台线程中调用：显示下一个删除冲突并等待用户选择
-     */
     fun waitForNextDeletionChoice(): UserChoice? {
         applyAll?.let {
             return when (it) {
@@ -147,9 +154,6 @@ object ConflictDialogState {
         }
     }
 
-    /**
-     * 在 Compose UI 中调用：用户做出了删除选择
-     */
     fun resolveDeletionChoice(choice: UserChoice) {
         when (choice) {
             UserChoice.USE_ALL_BASE, UserChoice.USE_ALL_MERGE -> {
@@ -171,7 +175,6 @@ object ConflictDialogState {
         }
     }
 
-    /** 关闭删除冲突对话框 */
     fun closeDeletionDialog() {
         isDeletionDialogVisible = false
         deletionFuture?.complete(null)

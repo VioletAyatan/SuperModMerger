@@ -1,5 +1,9 @@
 package ankol.mod.merger.core
 
+import ankol.mod.merger.api.AssetConflictResolver
+import ankol.mod.merger.api.ConflictResolutionStrategy
+import ankol.mod.merger.api.MergeProgressCallback
+import ankol.mod.merger.api.console.ConsoleAssetConflictResolver
 import ankol.mod.merger.core.filetrees.MemoryFileTree
 import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.domain.MergerContext
@@ -18,12 +22,18 @@ import kotlin.io.path.writeText
  * @param mergeableMods List of mods to merge (.pak file paths)
  * @param outputPath Final output .pak file path
  * @param basePakDirPath Base mod file path (can be null)
+ * @param conflictStrategy 冲突解决策略（默认控制台交互）
+ * @param assetConflictResolver 资源冲突解决策略（默认控制台交互）
+ * @param progressCallback 进度回调（GUI 使用，CLI 模式为 null）
  * @author Ankol
  */
 class FileMergerEngine(
     private val mergeableMods: List<MergingModInfo>,
     private val outputPath: Path,
-    private val basePakDirPath: Path
+    private val basePakDirPath: Path,
+    private val conflictStrategy: ConflictResolutionStrategy = ConflictResolver,
+    private val assetConflictResolver: AssetConflictResolver = ConsoleAssetConflictResolver,
+    private val progressCallback: MergeProgressCallback? = null
 ) {
     private val log = logger()
 
@@ -48,9 +58,11 @@ class FileMergerEngine(
         ColorPrinter.cyan(t("ENGINE_TITLE"))
         if (mergeableMods.isEmpty()) {
             ColorPrinter.error(t("ENGINE_NO_MODS_FOUND"))
+            progressCallback?.onLog(MergeProgressCallback.Level.ERROR, t("ENGINE_NO_MODS_FOUND"))
             return
         }
         ColorPrinter.cyan(t("ENGINE_FOUND_MODS_TO_MERGE", mergeableMods.size))
+        progressCallback?.onLog(MergeProgressCallback.Level.INFO, t("ENGINE_FOUND_MODS_TO_MERGE", mergeableMods.size))
         for ((index, modInfo) in mergeableMods.withIndex()) {
             ColorPrinter.cyan("${index + 1}. ${modInfo.modName}")
         }
@@ -59,6 +71,7 @@ class FileMergerEngine(
             // Clean up temporary directory to prevent residual files
             Tools.deleteRecursively(tempDir)
             // Extract all mod files
+            progressCallback?.onLog(MergeProgressCallback.Level.INFO, "正在提取 MOD 文件...")
             val groupedFiles = modExtractor.extractAllMods()
             pathCorrectionCount += groupedFiles.size
             val mergedDir = tempDir.resolve("merged")
@@ -67,6 +80,7 @@ class FileMergerEngine(
             mergeAllFiles(groupedFiles, mergedDir)
             // Merge complete, package the result
             ColorPrinter.cyan(t("ENGINE_CREATING_MERGED_PAK"))
+            progressCallback?.onLog(MergeProgressCallback.Level.INFO, t("ENGINE_CREATING_MERGED_PAK"))
             PakManager.createPak(mergedDir, outputPath)
             ColorPrinter.success(t("ENGINE_MERGED_PAK_CREATED", outputPath))
             // Print statistics
@@ -89,8 +103,12 @@ class FileMergerEngine(
         if (globalFixActive) {
             ColorPrinter.debug(t("ENGINE_GLOBAL_FIX_ENABLED"))
         }
+        val totalFiles = groupedModFiles.size
+        var fileIndex = 0
         for ((fileEntryName, fileSources) in groupedModFiles) {
+            fileIndex++
             totalProcessed++
+            progressCallback?.onProgress(fileIndex, totalFiles, fileEntryName)
             try {
                 // Single file processing
                 if (fileSources.size == 1) {
@@ -105,6 +123,7 @@ class FileMergerEngine(
                 }
             } catch (e: Exception) {
                 log.error(e.message, e)
+                progressCallback?.onError(fileEntryName, e.message ?: "未知错误")
             }
         }
     }
@@ -121,7 +140,7 @@ class FileMergerEngine(
             if (baseModManager.isLoaded) {
                 val vanillaFileContent = baseModManager.extractFileContent(relPath)
                 if (vanillaFileContent != null) {
-                    val context = MergerContext(baseModManager)
+                    val context = MergerContext(baseModManager, conflictStrategy)
                     val merger = MergerFactory.getMerger(relPath, context)
 
                     if (merger != null) {
@@ -173,12 +192,12 @@ class FileMergerEngine(
             return
         }
 
-        val context = MergerContext(baseModManager)
+        val context = MergerContext(baseModManager, conflictStrategy)
         val merger = MergerFactory.getMerger(relPath, context) // Get the appropriate merger
 
         // Unsupported file types, let user choose which file to use
         if (merger == null) {
-            chooseWhichAssetToUse(relPath, fileSources, mergedDir)
+            assetConflictResolver.chooseAsset(relPath, fileSources, mergedDir)
             return
         }
 
@@ -254,35 +273,6 @@ class FileMergerEngine(
 
 
     /**
-     * Unsupported file types, let user choose which version to use
-     */
-    private fun chooseWhichAssetToUse(
-        relPath: String,
-        fileSources: MutableList<PathFileTree>,
-        mergedDir: Path
-    ) {
-        ColorPrinter.warning("\n${t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath)}")
-        ColorPrinter.warning(t("ASSET_CHOSE_WHICH_VERSION_TO_USE"))
-        for ((i, fileTree) in fileSources.withIndex()) {
-            ColorPrinter.cyan("{}. {}", i + 1, fileTree.getFirstArchiveFileName())
-        }
-        while (true) {
-            val input = readln()
-            try {
-                val choice = input.toInt()
-                if (choice >= 1 && choice <= fileSources.size) {
-                    val chosenSource = fileSources[choice - 1]
-                    ColorPrinter.cyan(t("ASSET_USER_CHOSE_COMPLETE", chosenSource.getFirstArchiveFileName()))
-                    Tools.zeroCopy(chosenSource.safeGetFilePath(), mergedDir.resolve(relPath))
-                    return
-                }
-            } catch (_: Exception) {
-                ColorPrinter.warning(t("ASSET_INVALID_INPUT_PLEASE_ENTER_NUMBER", 1, fileSources.size))
-            }
-        }
-    }
-
-    /**
      * Check if multiple files have identical content
      */
     private fun areAllFilesIdentical(fileSources: MutableList<PathFileTree>): Boolean {
@@ -302,6 +292,7 @@ class FileMergerEngine(
      * Print merge statistics
      */
     private fun printStatistics() {
+        val errorCount = ErrorReporter.getErrorCount()
         ColorPrinter.cyan("\n{}", "=".repeat(75))
         ColorPrinter.cyan(t("ENGINE_STATISTICS_TITLE"))
         ColorPrinter.cyan(t("ENGINE_TOTAL_FILES_PROCESSED", totalProcessed))
@@ -311,6 +302,7 @@ class FileMergerEngine(
         }
         ErrorReporter.printErrors()
         ColorPrinter.cyan("{}", "=".repeat(75))
+        progressCallback?.onComplete(totalProcessed, mergedCount, pathCorrectionCount, errorCount)
     }
 
     /**
