@@ -4,7 +4,6 @@ import ankol.mod.merger.antlr.scr.TechlandScriptLexer
 import ankol.mod.merger.antlr.scr.TechlandScriptParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
-import ankol.mod.merger.core.ConflictResolver
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergerContext
@@ -73,7 +72,7 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
                 }
             } else if (!conflicts.isEmpty()) {
                 // 正常情况下，提示用户解决冲突
-                ConflictResolver.resolveConflict(conflicts)
+                context.conflictStrategy.resolveConflict(conflicts)
             }
 
             return MergeResult(getMergedContent(accumulatedResult), context.mergedHistory)

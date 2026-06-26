@@ -3,17 +3,14 @@ package ankol.mod.merger.gui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.dialogs.compose.rememberDirectoryPickerLauncher
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
-import io.github.vinceglb.filekit.dialogs.openDirectoryPicker
-import io.github.vinceglb.filekit.path
 
 /**
  * 带浏览按钮的路径选择组件
@@ -56,7 +53,7 @@ fun FileSelectorField(
             text = label,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.width(65.dp)
+            modifier = Modifier.width(95.dp)
         )
 
         Spacer(Modifier.width(8.dp))
@@ -73,7 +70,7 @@ fun FileSelectorField(
             ),
             modifier = Modifier
                 .weight(1f)
-                .height(48.dp)
+                .height(56.dp)
         )
 
         Spacer(Modifier.width(8.dp))

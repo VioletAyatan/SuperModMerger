@@ -3,7 +3,6 @@ package ankol.mod.merger.mergers.xml
 import ankol.mod.merger.antlr.xml.TechlandXMLLexer
 import ankol.mod.merger.antlr.xml.TechlandXMLParser
 import ankol.mod.merger.constants.UserChoice
-import ankol.mod.merger.core.ConflictResolver
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergerContext
@@ -70,7 +69,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                     record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (!conflicts.isEmpty()) {
-                ConflictResolver.resolveConflict(conflicts)
+                context.conflictStrategy.resolveConflict(conflicts)
             }
 
             return MergeResult(getMergedContent(baseResult), context.mergedHistory)
