@@ -28,7 +28,7 @@ object Localizations {
                 key
             }
         } catch (e: MissingResourceException) {
-            log.warn("Missing localization resource. Reason: ${e.message}", e)
+            log.debug("Missing localization resource. Reason: ${e.message}", e)
             return key
         }
     }
