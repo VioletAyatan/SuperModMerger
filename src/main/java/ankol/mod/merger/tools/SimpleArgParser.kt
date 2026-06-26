@@ -139,12 +139,12 @@ class SimpleArgParser {
      * 打印帮助信息
      */
     fun printHelp() {
-        ColorPrinter.cyan(t("ARG_PARSER_USAGE"))
+        ConsoleColorPrinter.cyan(t("ARG_PARSER_USAGE"))
         for (opt in options.values) {
             val sName = if (opt.shortName != null) "-${opt.shortName}" else "  "
             val lName = "--${opt.longName}"
             val valParams = if (opt.hasValue) " <value>" else ""
-            ColorPrinter.cyan("  {}, {} {}", sName, lName + valParams, opt.description)
+            ConsoleColorPrinter.cyan("  {}, {} {}", sName, lName + valParams, opt.description)
         }
     }
 

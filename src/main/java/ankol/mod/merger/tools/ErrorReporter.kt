@@ -44,14 +44,14 @@ class ErrorReporter {
                     val grouped = errors.filter { it.level == level }
                     if (grouped.isNotEmpty()) {
                         when (level) {
-                            ErrorLevel.WARNING -> ColorPrinter.warning(t("WARNING_REPORTER_TITLE"))
-                            ErrorLevel.ERROR -> ColorPrinter.error(t("ERROR_REPORTER_TITLE"))
+                            ErrorLevel.WARNING -> ConsoleColorPrinter.warning(t("WARNING_REPORTER_TITLE"))
+                            ErrorLevel.ERROR -> ConsoleColorPrinter.error(t("ERROR_REPORTER_TITLE"))
                         }
                         grouped.forEach { error ->
                             val msg = t("ERROR_REPORTER_MSG", error.errorSource, error.message)
                             when (level) {
-                                ErrorLevel.WARNING -> ColorPrinter.warning(msg)
-                                ErrorLevel.ERROR -> ColorPrinter.error(msg)
+                                ErrorLevel.WARNING -> ConsoleColorPrinter.warning(msg)
+                                ErrorLevel.ERROR -> ConsoleColorPrinter.error(msg)
                             }
                         }
                     }

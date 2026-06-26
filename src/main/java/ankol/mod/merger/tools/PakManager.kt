@@ -96,7 +96,7 @@ object PakManager {
         val current = PathFileTree(fileName, entryName, archiveNames, hash, outputPath)
 
         fileTreeMap[entryName]?.let { existing ->
-            ColorPrinter.warning(
+            ConsoleColorPrinter.warning(
                 t(
                     "PAK_MANAGER_DUPLICATE_FILE_DETECTED",
                     existing.archiveFileNames,
@@ -104,7 +104,7 @@ object PakManager {
                     existing.fileEntryName
                 )
             )
-            ColorPrinter.success(t("PAK_MANAGER_USE_NEW_PATH", current.fileEntryName))
+            ConsoleColorPrinter.success(t("PAK_MANAGER_USE_NEW_PATH", current.fileEntryName))
         }
         fileTreeMap[entryName] = current
     }

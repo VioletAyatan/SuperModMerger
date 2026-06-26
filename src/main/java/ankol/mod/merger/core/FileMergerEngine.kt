@@ -1,6 +1,7 @@
 package ankol.mod.merger.core
 
 import ankol.mod.merger.api.AssetConflictResolver
+import ankol.mod.merger.api.ColorPrinter
 import ankol.mod.merger.api.ConflictResolutionStrategy
 import ankol.mod.merger.api.MergeProgressCallback
 import ankol.mod.merger.api.console.ConsoleAssetConflictResolver
@@ -33,7 +34,11 @@ class FileMergerEngine(
     private val basePakDirPath: Path,
     private val conflictStrategy: ConflictResolutionStrategy = ConflictResolver,
     private val assetConflictResolver: AssetConflictResolver = ConsoleAssetConflictResolver,
-    private val progressCallback: MergeProgressCallback? = null
+    private val progressCallback: MergeProgressCallback? = null,
+    /**
+     * 日志打印器
+     */
+    private val colorPrinter: ColorPrinter = ConsoleColorPrinter,
 ) {
     private val log = logger()
 
@@ -55,16 +60,16 @@ class FileMergerEngine(
      */
     fun merge() {
         // Print initial information
-        ColorPrinter.cyan(t("ENGINE_TITLE"))
+        colorPrinter.cyan(t("ENGINE_TITLE"))
         if (mergeableMods.isEmpty()) {
-            ColorPrinter.error(t("ENGINE_NO_MODS_FOUND"))
+            colorPrinter.error(t("ENGINE_NO_MODS_FOUND"))
             progressCallback?.onLog(MergeProgressCallback.Level.ERROR, t("ENGINE_NO_MODS_FOUND"))
             return
         }
-        ColorPrinter.cyan(t("ENGINE_FOUND_MODS_TO_MERGE", mergeableMods.size))
+        colorPrinter.cyan(t("ENGINE_FOUND_MODS_TO_MERGE", mergeableMods.size))
         progressCallback?.onLog(MergeProgressCallback.Level.INFO, t("ENGINE_FOUND_MODS_TO_MERGE", mergeableMods.size))
         for ((index, modInfo) in mergeableMods.withIndex()) {
-            ColorPrinter.cyan("${index + 1}. ${modInfo.modName}")
+            colorPrinter.cyan("${index + 1}. ${modInfo.modName}")
         }
         // Start merge
         try {
@@ -79,10 +84,10 @@ class FileMergerEngine(
             // Start merging files
             mergeAllFiles(groupedFiles, mergedDir)
             // Merge complete, package the result
-            ColorPrinter.cyan(t("ENGINE_CREATING_MERGED_PAK"))
+            colorPrinter.cyan(t("ENGINE_CREATING_MERGED_PAK"))
             progressCallback?.onLog(MergeProgressCallback.Level.INFO, t("ENGINE_CREATING_MERGED_PAK"))
             PakManager.createPak(mergedDir, outputPath)
-            ColorPrinter.success(t("ENGINE_MERGED_PAK_CREATED", outputPath))
+            colorPrinter.success(t("ENGINE_MERGED_PAK_CREATED", outputPath))
             // Print statistics
             printStatistics()
         } catch (e: Exception) {
@@ -98,10 +103,10 @@ class FileMergerEngine(
      * Process all files (merge or copy)
      */
     private fun mergeAllFiles(groupedModFiles: Collection<ModExtractor.GroupedModFile>, mergedDir: Path) {
-        ColorPrinter.cyan(t("ENGINE_PROCESSING_FILES"))
+        colorPrinter.cyan(t("ENGINE_PROCESSING_FILES"))
         val globalFixActive = GlobalMergingStrategy.activeMode == GlobalMergingStrategy.GLOBAL_FIX_MODE
         if (globalFixActive) {
-            ColorPrinter.debug(t("ENGINE_GLOBAL_FIX_ENABLED"))
+            colorPrinter.debug(t("ENGINE_GLOBAL_FIX_ENABLED"))
         }
         val totalFiles = groupedModFiles.size
         var fileIndex = 0
@@ -163,7 +168,7 @@ class FileMergerEngine(
                         targetPath.writeText(mergedContent)
 
                         this.mergedCount++
-                        ColorPrinter.success(t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
+                        colorPrinter.success(t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
                         return
                     }
                 }
@@ -171,7 +176,10 @@ class FileMergerEngine(
             Tools.zeroCopy(fileCurrent.safeGetFilePath(), mergedOutputDir.resolve(relPath))
         } catch (e: Exception) {
             Tools.zeroCopy(fileCurrent.safeGetFilePath(), mergedOutputDir.resolve(relPath))
-            log.error("Processing file '${relPath}' error. Reason: ${e.message}. Fallback to original file: ${fileCurrent.fileName}", e)
+            log.error(
+                "Processing file '${relPath}' error. Reason: ${e.message}. Fallback to original file: ${fileCurrent.fileName}",
+                e
+            )
             ErrorReporter.addErrorReport(relPath, t("ERROR_FILE_MERGE_FAILED", relPath, e.message))
         }
     }
@@ -204,7 +212,7 @@ class FileMergerEngine(
         try {
             var accumulatedContent = ""
             // Support merge, start processing merge logic
-            ColorPrinter.cyan(t("ENGINE_MERGING_FILE", relPath, fileSources.size))
+            colorPrinter.cyan(t("ENGINE_MERGING_FILE", relPath, fileSources.size))
 
             var vanillaFileContent: String? = null
             if (baseModManager.isLoaded) {
@@ -261,7 +269,7 @@ class FileMergerEngine(
             targetPath.writeText(accumulatedContent)
 
             this.mergedCount++
-            ColorPrinter.success(t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
+            colorPrinter.success(t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
         } catch (e: Exception) {
             // TODO: Adjust the strategy for merge failures here, currently using the last mod's version when failing
             val lastSource: PathFileTree = fileSources.last()
@@ -293,15 +301,15 @@ class FileMergerEngine(
      */
     private fun printStatistics() {
         val errorCount = ErrorReporter.getErrorCount()
-        ColorPrinter.cyan("\n{}", "=".repeat(75))
-        ColorPrinter.cyan(t("ENGINE_STATISTICS_TITLE"))
-        ColorPrinter.cyan(t("ENGINE_TOTAL_FILES_PROCESSED", totalProcessed))
-        ColorPrinter.success(t("ENGINE_MERGED_NO_CONFLICTS", mergedCount))
+        colorPrinter.cyan("\n{}", "=".repeat(75))
+        colorPrinter.cyan(t("ENGINE_STATISTICS_TITLE"))
+        colorPrinter.cyan(t("ENGINE_TOTAL_FILES_PROCESSED", totalProcessed))
+        colorPrinter.success(t("ENGINE_MERGED_NO_CONFLICTS", mergedCount))
         if (pathCorrectionCount > 0) {
-            ColorPrinter.success(t("ENGINE_PATH_CORRECTIONS_APPLIED", pathCorrectionCount))
+            colorPrinter.success(t("ENGINE_PATH_CORRECTIONS_APPLIED", pathCorrectionCount))
         }
         ErrorReporter.printErrors()
-        ColorPrinter.cyan("{}", "=".repeat(75))
+        colorPrinter.cyan("{}", "=".repeat(75))
         progressCallback?.onComplete(totalProcessed, mergedCount, pathCorrectionCount, errorCount)
     }
 

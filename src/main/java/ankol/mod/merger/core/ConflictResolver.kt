@@ -5,7 +5,7 @@ import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.constants.UserChoice.Companion.findByOrder
 import ankol.mod.merger.mergers.ConflictRecord
 import ankol.mod.merger.mergers.DeletionRecord
-import ankol.mod.merger.tools.ColorPrinter
+import ankol.mod.merger.tools.ConsoleColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 
 /**
@@ -25,7 +25,7 @@ object ConflictResolver : ConflictResolutionStrategy {
         // For real conflicts, prompt user to choose which version to use
         if (!conflicts.isEmpty()) {
             println() // New line
-            ColorPrinter.warning(t("CRESOLVER_CONFLICT_DETECTED", conflicts.size))
+            ConsoleColorPrinter.warning(t("CRESOLVER_CONFLICT_DETECTED", conflicts.size))
 
             var userChoice: UserChoice? = null // User's choice
             for (i in conflicts.indices) {
@@ -40,25 +40,25 @@ object ConflictResolver : ConflictResolutionStrategy {
                     val baseNodeSource = record.baseNode.sourceText.trim()
                     val modNodeSource = record.modNode.sourceText.trim()
 
-                    ColorPrinter.blue("=".repeat(75))
-                    ColorPrinter.cyan(t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
-                    ColorPrinter.warning(t("CRESOLVER_MOD_VERSION_1", record.baseModName))
-                    ColorPrinter.bold(t("CRESOLVER_LINE_INFO", record.baseNode.lineNumber, baseNodeSource))
-                    ColorPrinter.warning(t("CRESOLVER_MOD_VERSION_2", record.mergeModName))
-                    ColorPrinter.bold(t("CRESOLVER_LINE_INFO", record.modNode.lineNumber, modNodeSource))
-                    ColorPrinter.blue("=".repeat(75))
+                    ConsoleColorPrinter.blue("=".repeat(75))
+                    ConsoleColorPrinter.cyan(t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
+                    ConsoleColorPrinter.warning(t("CRESOLVER_MOD_VERSION_1", record.baseModName))
+                    ConsoleColorPrinter.bold(t("CRESOLVER_LINE_INFO", record.baseNode.lineNumber, baseNodeSource))
+                    ConsoleColorPrinter.warning(t("CRESOLVER_MOD_VERSION_2", record.mergeModName))
+                    ConsoleColorPrinter.bold(t("CRESOLVER_LINE_INFO", record.modNode.lineNumber, modNodeSource))
+                    ConsoleColorPrinter.blue("=".repeat(75))
                     // Selection dialog
-                    ColorPrinter.bold(t("CRESOLVER_CHOOSE_PROMPT"))
-                    ColorPrinter.cyan(t("CRESOLVER_USE_OPTION_1", baseNodeSource))
-                    ColorPrinter.cyan(t("CRESOLVER_USE_OPTION_2", modNodeSource))
-                    ColorPrinter.cyan(t("CRESOLVER_USE_ALL_FROM_MOD_1", record.baseModName))
-                    ColorPrinter.cyan(t("CRESOLVER_USE_ALL_FROM_MOD_2", record.mergeModName))
+                    ConsoleColorPrinter.bold(t("CRESOLVER_CHOOSE_PROMPT"))
+                    ConsoleColorPrinter.cyan(t("CRESOLVER_USE_OPTION_1", baseNodeSource))
+                    ConsoleColorPrinter.cyan(t("CRESOLVER_USE_OPTION_2", modNodeSource))
+                    ConsoleColorPrinter.cyan(t("CRESOLVER_USE_ALL_FROM_MOD_1", record.baseModName))
+                    ConsoleColorPrinter.cyan(t("CRESOLVER_USE_ALL_FROM_MOD_2", record.mergeModName))
 
                     while (true) {
                         val input = readln()
                         val choice = findByOrder(input.toIntOrNull())
                         if (choice == null) {
-                            ColorPrinter.warning(t("CRESOLVER_INVALID_INPUT"))
+                            ConsoleColorPrinter.warning(t("CRESOLVER_INVALID_INPUT"))
                         } else {
                             userChoice = choice
                             record.userChoice = when (choice) {
@@ -71,7 +71,7 @@ object ConflictResolver : ConflictResolutionStrategy {
                     }
                 }
             }
-            ColorPrinter.success(t("CRESOLVER_CONFLICT_RESOLVED"))
+            ConsoleColorPrinter.success(t("CRESOLVER_CONFLICT_RESOLVED"))
         }
         // Finally, add the auto-merged nodes back for subsequent logic to use the same container
         conflicts.addAll(automaticMerge)
@@ -86,7 +86,7 @@ object ConflictResolver : ConflictResolutionStrategy {
         if (deletions.isEmpty()) return
 
         println()
-        ColorPrinter.warning(t("DELETION_DETECTED", deletions.size))
+        ConsoleColorPrinter.warning(t("DELETION_DETECTED", deletions.size))
 
         var globalChoice: UserChoice? = null
 
@@ -103,24 +103,24 @@ object ConflictResolver : ConflictResolutionStrategy {
 
             val nodeText = record.accumulatedNode.sourceText.trim()
 
-            ColorPrinter.blue("=".repeat(75))
-            ColorPrinter.cyan(t("DELETION_FILE_INFO", i + 1, deletions.size, record.fileName, record.deletingModName))
+            ConsoleColorPrinter.blue("=".repeat(75))
+            ConsoleColorPrinter.cyan(t("DELETION_FILE_INFO", i + 1, deletions.size, record.fileName, record.deletingModName))
             if (record.isModifyDeleteConflict) {
-                ColorPrinter.warning(t("DELETION_MODIFY_CONFLICT_WARNING", record.previousModName))
+                ConsoleColorPrinter.warning(t("DELETION_MODIFY_CONFLICT_WARNING", record.previousModName))
             }
-            ColorPrinter.bold(t("DELETION_NODE_INFO", record.accumulatedNode.lineNumber, nodeText))
-            ColorPrinter.blue("=".repeat(75))
-            ColorPrinter.bold(t("DELETION_CHOOSE_PROMPT"))
-            ColorPrinter.cyan(t("DELETION_KEEP_NODE"))
-            ColorPrinter.cyan(t("DELETION_DELETE_NODE", record.deletingModName))
-            ColorPrinter.cyan(t("DELETION_KEEP_ALL"))
-            ColorPrinter.cyan(t("DELETION_DELETE_ALL"))
+            ConsoleColorPrinter.bold(t("DELETION_NODE_INFO", record.accumulatedNode.lineNumber, nodeText))
+            ConsoleColorPrinter.blue("=".repeat(75))
+            ConsoleColorPrinter.bold(t("DELETION_CHOOSE_PROMPT"))
+            ConsoleColorPrinter.cyan(t("DELETION_KEEP_NODE"))
+            ConsoleColorPrinter.cyan(t("DELETION_DELETE_NODE", record.deletingModName))
+            ConsoleColorPrinter.cyan(t("DELETION_KEEP_ALL"))
+            ConsoleColorPrinter.cyan(t("DELETION_DELETE_ALL"))
 
             while (true) {
                 val input = readln()
                 val choice = findByOrder(input.toIntOrNull())
                 if (choice == null) {
-                    ColorPrinter.warning(t("CRESOLVER_INVALID_INPUT"))
+                    ConsoleColorPrinter.warning(t("CRESOLVER_INVALID_INPUT"))
                 } else {
                     globalChoice = choice
                     record.userChoice = when (choice) {
@@ -133,7 +133,7 @@ object ConflictResolver : ConflictResolutionStrategy {
             }
         }
 
-        ColorPrinter.success(t("DELETION_RESOLVED"))
+        ConsoleColorPrinter.success(t("DELETION_RESOLVED"))
     }
 
     /**
@@ -144,7 +144,7 @@ object ConflictResolver : ConflictResolutionStrategy {
         if (!automaticMerge.isEmpty()) {
             for (item in automaticMerge) {
                 val modNodeText = item.modNode.sourceText
-                ColorPrinter.print(
+                ConsoleColorPrinter.print(
                     t(
                         "CRESOLVER_AUTO_MERGE_CODELINE",
                         "Vanilla",
@@ -154,7 +154,7 @@ object ConflictResolver : ConflictResolutionStrategy {
                     )
                 )
             }
-            ColorPrinter.success(t("CRESOLVER_AUTO_MERGE_COUNT", automaticMerge.size))
+            ConsoleColorPrinter.success(t("CRESOLVER_AUTO_MERGE_COUNT", automaticMerge.size))
             conflicts.removeAll(automaticMerge) // Temporarily remove, mainly to avoid conflict prompts.
         }
         return automaticMerge

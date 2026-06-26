@@ -1,8 +1,6 @@
 package ankol.mod.merger.core
 
 import ankol.mod.merger.api.console.ConsoleMergingStrategySelector
-import ankol.mod.merger.tools.ColorPrinter
-import ankol.mod.merger.tools.Localizations.t
 
 /**
  * Global merging strategy
