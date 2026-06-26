@@ -1,5 +1,6 @@
 package ankol.mod.merger.tools
 
+import ankol.mod.merger.api.ColorPrinter
 import ankol.mod.merger.tools.Tools.format
 import java.util.*
 
@@ -13,7 +14,7 @@ import java.util.*
  * - ColorPrinter.error("Error occurred");
  * @author Ankol
  */
-object ColorPrinter {
+object ConsoleColorPrinter : ColorPrinter {
     private val log = logger()
 
     // ANSI color codes
@@ -101,7 +102,7 @@ object ColorPrinter {
      *
      * @param message Text
      */
-    fun blue(message: String) {
+    override fun blue(message: String) {
         log.info(applyColor(message, BRIGHT_BLUE))
     }
 
@@ -111,121 +112,119 @@ object ColorPrinter {
      * @param format Text template
      * @param args   Formatting arguments
      */
-    fun blue(format: String, vararg args: Any) {
-        ColorPrinter.blue(format(format, *args))
+    override fun blue(format: String, vararg args: Any) {
+        ConsoleColorPrinter.blue(format(format, *args))
     }
 
     /**
      * Print cyan log
      */
-    @JvmStatic
-    fun cyan(message: String) {
+    override fun cyan(message: String) {
         log.info(applyColor(message, BRIGHT_CYAN))
     }
 
     /**
      * Print cyan log with formatted arguments
      */
-    @JvmStatic
-    fun cyan(format: String, vararg args: Any) {
-        ColorPrinter.cyan(format(format, *args))
+    override fun cyan(format: String, vararg args: Any) {
+        ConsoleColorPrinter.cyan(format(format, *args))
     }
 
     /**
      * Print success message (green)
      */
-    fun success(message: String) {
+    override fun success(message: String) {
         log.info(applyColor(message, BRIGHT_GREEN))
     }
 
     /**
      * Print success message (green) with formatted arguments
      */
-    fun success(format: String, vararg args: Any) {
-        ColorPrinter.success(format(format, *args))
+    override fun success(format: String, vararg args: Any) {
+        ConsoleColorPrinter.success(format(format, *args))
     }
 
     /**
      * Print warning message (yellow)
      */
-    fun warning(message: String) {
+    override fun warning(message: String) {
         log.info(applyColor(message, BRIGHT_YELLOW))
     }
 
     /**
      * Print warning message (yellow) with formatted arguments
      */
-    fun warning(format: String, vararg args: Any) {
-        ColorPrinter.warning(format(format, *args))
+    override fun warning(format: String, vararg args: Any) {
+        ConsoleColorPrinter.warning(format(format, *args))
     }
 
     /**
      * Print error message (red)
      */
-    fun error(message: String) {
+    override fun error(message: String) {
         log.info(applyColor(message, BRIGHT_RED))
     }
 
     /**
      * Print error message (red) with formatted arguments
      */
-    fun error(format: String, vararg args: Any?) {
-        ColorPrinter.error(format(format, *args))
+    override fun error(format: String, vararg args: Any?) {
+        ConsoleColorPrinter.error(format(format, *args))
     }
 
     /**
      * Print debug message (cyan)
      */
-    fun debug(message: String) {
+    override fun debug(message: String) {
         log.info(applyColor(message, BRIGHT_CYAN))
     }
 
     /**
      * Print debug message (cyan) with formatted arguments
      */
-    fun debug(format: String, vararg args: Any) {
-        ColorPrinter.debug(format(format, *args))
+    override fun debug(format: String, vararg args: Any) {
+        ConsoleColorPrinter.debug(format(format, *args))
     }
 
     /**
      * Print normal message (white)
      */
-    fun print(message: String) {
+    override fun print(message: String) {
         log.info(applyColor(message, WHITE))
     }
 
     /**
      * Print normal message (white) with formatted arguments
      */
-    fun print(format: String, vararg args: Any) {
-        ColorPrinter.print(format(format, *args))
+    override fun print(format: String, vararg args: Any) {
+        ConsoleColorPrinter.print(format(format, *args))
     }
 
     /**
      * Print bold message (white bold)
      */
-    fun bold(message: String) {
+    override fun bold(message: String) {
         log.info(applyColor(BOLD + message, RESET))
     }
 
     /**
      * Print bold message (white bold) with formatted arguments
      */
-    fun bold(format: String, vararg args: Any) {
-        ColorPrinter.bold(format(format, *args))
+    override fun bold(format: String, vararg args: Any) {
+        ConsoleColorPrinter.bold(format(format, *args))
     }
 
     /**
      * Print highlight message (magenta)
      */
-    fun highlight(message: String) {
+    override fun highlight(message: String) {
         log.info(applyColor(message, BRIGHT_MAGENTA))
     }
 
     /**
      * Print highlight message (magenta) with formatted arguments
      */
-    fun highlight(format: String, vararg args: Any) {
+    override fun highlight(format: String, vararg args: Any) {
         log.info(applyColor(format(format, *args), BRIGHT_MAGENTA))
     }
 

@@ -3,7 +3,7 @@ package ankol.mod.merger.core
 import ankol.mod.merger.core.filetrees.BaseFile
 import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.ExitProcessException
-import ankol.mod.merger.tools.ColorPrinter
+import ankol.mod.merger.tools.ConsoleColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 import ankol.mod.merger.tools.SoftLruCache
 import ankol.mod.merger.tools.Tools.getEntryFileName
@@ -67,7 +67,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
      */
     fun load() {
         if (isLoaded) {
-            ColorPrinter.warning(t("BASE_MOD_ALREADY_LOADED"))
+            ConsoleColorPrinter.warning(t("BASE_MOD_ALREADY_LOADED"))
             return
         }
         val startTime = System.currentTimeMillis()
@@ -75,7 +75,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
         this.indexedBaseModFileMap = indexBasePack(zipFileConnections)
         this.isLoaded = true
         val timetake = System.currentTimeMillis() - startTime
-        ColorPrinter.success(t("BASE_MOD_INDEXED_FILES", basePakDirPath.fileName, indexedBaseModFileMap.size, timetake))
+        ConsoleColorPrinter.success(t("BASE_MOD_INDEXED_FILES", basePakDirPath.fileName, indexedBaseModFileMap.size, timetake))
     }
 
     /**
@@ -118,7 +118,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
                     val archiveEntryName = archiveEntry.path
                     val fileName = getEntryFileName(archiveEntryName)
                     if (fileName in pakIndexMap) {
-                        ColorPrinter.warning(
+                        ConsoleColorPrinter.warning(
                             t(
                                 "TOOLS_SAME_FILE_NAME_WARNING",
                                 fileName,
@@ -242,7 +242,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
         try {
             zipFileConnections.forEach { (_, zipFile) -> zipFile.close() }
         } catch (e: IOException) {
-            ColorPrinter.warning("Failed to close ZipFile connection: " + e.message)
+            ConsoleColorPrinter.warning("Failed to close ZipFile connection: " + e.message)
         }
         fileContentCache.clear()
         astTreeCache.clear()

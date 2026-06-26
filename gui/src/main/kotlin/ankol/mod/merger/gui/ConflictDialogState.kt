@@ -1,12 +1,10 @@
 package ankol.mod.merger.gui
 
-import ankol.mod.merger.constants.UserChoice
-import ankol.mod.merger.mergers.ConflictRecord
-import ankol.mod.merger.mergers.DeletionRecord
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import java.util.concurrent.CompletableFuture
+import kotlin.collections.getOrNull
 
 /**
  * 冲突解决对话框的共享状态

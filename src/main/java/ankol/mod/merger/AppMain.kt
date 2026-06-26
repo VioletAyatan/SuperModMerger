@@ -53,16 +53,16 @@ class AppMain {
                 val start = System.currentTimeMillis()
                 FileMergerEngine(modsToMerge, outputPath, basePakDirPath).merge()
                 val end = System.currentTimeMillis()
-                ColorPrinter.success(t("APP_MAIN_DONE", end - start))
+                ConsoleColorPrinter.success(t("APP_MAIN_DONE", end - start))
             } catch (e: Exception) {
                 exitCode = 1
                 when (e) {
                     is BusinessException -> {
-                        ColorPrinter.error(t("APP_MAIN_ERROR", e.message))
+                        ConsoleColorPrinter.error(t("APP_MAIN_ERROR", e.message))
                     }
 
                     is ExitProcessException -> {
-                        ColorPrinter.error(e.errorMessage)
+                        ConsoleColorPrinter.error(e.errorMessage)
                     }
 
                     else -> {
@@ -145,7 +145,7 @@ class AppMain {
         }
 
         private fun parseAnyKeyToExit(exitCode: Int) {
-            ColorPrinter.success(t("APP_MAIN_PRESS_ANY_KEY_EXIT"))
+            ConsoleColorPrinter.success(t("APP_MAIN_PRESS_ANY_KEY_EXIT"))
             readlnOrNull()
             exitProcess(exitCode)
         }

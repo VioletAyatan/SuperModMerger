@@ -2,7 +2,7 @@ package ankol.mod.merger.core
 
 import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.domain.MergingModInfo
-import ankol.mod.merger.tools.ColorPrinter
+import ankol.mod.merger.tools.ConsoleColorPrinter
 import ankol.mod.merger.tools.ErrorReporter
 import ankol.mod.merger.tools.Localizations.t
 import ankol.mod.merger.tools.PakManager
@@ -85,9 +85,9 @@ class ModExtractor(
         }
 
         if (correctionsFileMap.isNotEmpty()) {
-            ColorPrinter.cyan(t("ENGINE_PATH_CORRECTIONS_FOR_MOD", modFileName))
+            ConsoleColorPrinter.cyan(t("ENGINE_PATH_CORRECTIONS_FOR_MOD", modFileName))
             for ((wrongPath, correctPath) in correctionsFileMap) {
-                ColorPrinter.success(t("ENGINE_PATH_CORRECTION_ITEM", wrongPath, correctPath))
+                ConsoleColorPrinter.success(t("ENGINE_PATH_CORRECTION_ITEM", wrongPath, correctPath))
             }
         }
 
