@@ -7,7 +7,7 @@ merged_mod
 logs
 mods
 source
-mods
+.gradle
 
 ### IntelliJ IDEA ###
 .idea
