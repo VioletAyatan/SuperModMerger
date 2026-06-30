@@ -15,7 +15,7 @@ dependencies {
 
     // Compose Desktop
     implementation(compose.desktop.currentOs)
-    implementation(compose.material3)
+    implementation("org.jetbrains.compose.material3:material3:1.9.0")
 
     // FileKit — 跨平台文件/目录选择器（使用平台原生 API）
     implementation("io.github.vinceglb:filekit-dialogs-compose:0.14.2")
