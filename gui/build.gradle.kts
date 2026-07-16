@@ -11,7 +11,7 @@ version = "1.7.1"
 
 dependencies {
     // 依赖 CLI 编译后的 fat-jar
-    implementation(files("../target/SuperModMerger-1.7.1-SNAPSHOT-all.jar"))
+    implementation(files("../target/SuperModMerger-1.7.1-all.jar"))
 
     // Compose Desktop
     implementation(compose.desktop.currentOs)
