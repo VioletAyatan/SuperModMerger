@@ -3,7 +3,6 @@ package ankol.mod.merger.core
 import ankol.mod.merger.api.AssetConflictResolver
 import ankol.mod.merger.api.ColorPrinter
 import ankol.mod.merger.api.ConflictResolutionStrategy
-import ankol.mod.merger.api.MergeProgressCallback
 import ankol.mod.merger.api.console.ConsoleAssetConflictResolver
 import ankol.mod.merger.core.filetrees.MemoryFileTree
 import ankol.mod.merger.core.filetrees.PathFileTree
@@ -25,7 +24,6 @@ import kotlin.io.path.writeText
  * @param basePakDirPath Base mod file path (can be null)
  * @param conflictStrategy 冲突解决策略（默认控制台交互）
  * @param assetConflictResolver 资源冲突解决策略（默认控制台交互）
- * @param progressCallback 进度回调（GUI 使用，CLI 模式为 null）
  * @author Ankol
  */
 class FileMergerEngine(
@@ -34,7 +32,6 @@ class FileMergerEngine(
     private val basePakDirPath: Path,
     private val conflictStrategy: ConflictResolutionStrategy = ConflictResolver,
     private val assetConflictResolver: AssetConflictResolver = ConsoleAssetConflictResolver,
-    private val progressCallback: MergeProgressCallback? = null,
     /**
      * 日志打印器
      */
@@ -63,11 +60,9 @@ class FileMergerEngine(
         colorPrinter.cyan(t("ENGINE_TITLE"))
         if (mergeableMods.isEmpty()) {
             colorPrinter.error(t("ENGINE_NO_MODS_FOUND"))
-            progressCallback?.onLog(MergeProgressCallback.Level.ERROR, t("ENGINE_NO_MODS_FOUND"))
             return
         }
         colorPrinter.cyan(t("ENGINE_FOUND_MODS_TO_MERGE", mergeableMods.size))
-        progressCallback?.onLog(MergeProgressCallback.Level.INFO, t("ENGINE_FOUND_MODS_TO_MERGE", mergeableMods.size))
         for ((index, modInfo) in mergeableMods.withIndex()) {
             colorPrinter.cyan("${index + 1}. ${modInfo.modName}")
         }
@@ -76,7 +71,6 @@ class FileMergerEngine(
             // Clean up temporary directory to prevent residual files
             Tools.deleteRecursively(tempDir)
             // Extract all mod files
-            progressCallback?.onLog(MergeProgressCallback.Level.INFO, "正在提取 MOD 文件...")
             val groupedFiles = modExtractor.extractAllMods()
             pathCorrectionCount += groupedFiles.size
             val mergedDir = tempDir.resolve("merged")
@@ -85,7 +79,6 @@ class FileMergerEngine(
             mergeAllFiles(groupedFiles, mergedDir)
             // Merge complete, package the result
             colorPrinter.cyan(t("ENGINE_CREATING_MERGED_PAK"))
-            progressCallback?.onLog(MergeProgressCallback.Level.INFO, t("ENGINE_CREATING_MERGED_PAK"))
             PakManager.createPak(mergedDir, outputPath)
             colorPrinter.success(t("ENGINE_MERGED_PAK_CREATED", outputPath))
             // Print statistics
@@ -113,7 +106,6 @@ class FileMergerEngine(
         for ((fileEntryName, fileSources) in groupedModFiles) {
             fileIndex++
             totalProcessed++
-            progressCallback?.onProgress(fileIndex, totalFiles, fileEntryName)
             try {
                 // Single file processing
                 if (fileSources.size == 1) {
@@ -128,7 +120,6 @@ class FileMergerEngine(
                 }
             } catch (e: Exception) {
                 log.error(e.message, e)
-                progressCallback?.onError(fileEntryName, e.message ?: "未知错误")
             }
         }
     }
@@ -310,7 +301,6 @@ class FileMergerEngine(
         }
         ErrorReporter.printErrors()
         colorPrinter.cyan("{}", "=".repeat(75))
-        progressCallback?.onComplete(totalProcessed, mergedCount, pathCorrectionCount, errorCount)
     }
 
     /**

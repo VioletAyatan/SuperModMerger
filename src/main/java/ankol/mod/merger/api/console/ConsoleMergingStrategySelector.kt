@@ -20,12 +20,16 @@ object ConsoleMergingStrategySelector : MergingStrategySelector {
         ConsoleColorPrinter.bold(t("CRESOLVER_CHOOSE_PROMPT"))
         while (true) {
             val input = readln()
-            if (input == "1") {
-                return GlobalMergingStrategy.NORMAL_MODE
-            } else if (input == "2") {
-                return GlobalMergingStrategy.GLOBAL_FIX_MODE
-            } else {
-                ConsoleColorPrinter.error(t("ASSET_INVALID_INPUT_PLEASE_ENTER_NUMBER", "1", "2"))
+            when (input) {
+                "1" -> {
+                    return GlobalMergingStrategy.NORMAL_MODE
+                }
+                "2" -> {
+                    return GlobalMergingStrategy.GLOBAL_FIX_MODE
+                }
+                else -> {
+                    ConsoleColorPrinter.error(t("ASSET_INVALID_INPUT_PLEASE_ENTER_NUMBER", "1", "2"))
+                }
             }
         }
     }
