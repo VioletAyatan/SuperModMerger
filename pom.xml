@@ -17,7 +17,7 @@
         <mainClass>ankol.mod.merger.AppMain</mainClass>
         <antlr4.version>4.13.2</antlr4.version>
         <slf4j.version>2.0.9</slf4j.version>
-        <kotlin.version>2.3.0</kotlin.version>
+        <kotlin.version>2.4.10</kotlin.version>
         <sevenzipjbinding.version>16.02-2.01</sevenzipjbinding.version>
     </properties>
 
@@ -62,11 +62,18 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -210,6 +217,7 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
+                <extensions>true</extensions>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -220,7 +228,6 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>src/main/java</sourceDir>
-                                <sourceDir>target/generated-sources/annotations</sourceDir>
                                 <sourceDir>target/generated-sources/antlr4</sourceDir>
                             </sourceDirs>
                         </configuration>
@@ -231,12 +238,6 @@
                         <goals>
                             <goal>test-compile</goal>
                         </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>src/test/java</sourceDir>
-                                <sourceDir>target/generated-test-sources/test-annotations</sourceDir>
-                            </sourceDirs>
-                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
