@@ -16,7 +16,7 @@
         <native.executable.name>SuperModMerger</native.executable.name>
         <mainClass>ankol.mod.merger.AppMain</mainClass>
         <antlr4.version>4.13.2</antlr4.version>
-        <slf4j.version>2.0.9</slf4j.version>
+        <slf4j.version>2.0.18</slf4j.version>
         <kotlin.version>2.4.10</kotlin.version>
         <sevenzipjbinding.version>16.02-2.01</sevenzipjbinding.version>
     </properties>
