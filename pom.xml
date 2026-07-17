@@ -180,7 +180,7 @@
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
-                <version>0.10.6</version>
+                <version>1.1.4</version>
                 <configuration>
                     <imageName>${native.executable.name}-${project.version}</imageName>
                     <verbose>true</verbose>
