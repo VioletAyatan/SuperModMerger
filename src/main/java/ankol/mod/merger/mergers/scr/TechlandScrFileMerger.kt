@@ -60,8 +60,8 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             // 解析base和mod文件，保留TokenStream
             val accumulatedResult = parseContent(accumulatedFile.getContent())
             val incomingModResult = parseContent(incomingModFile.getContent())
-            val accumulatedRoot: ScrContainerNode = accumulatedResult.astNode
-            val incomingModRoot: ScrContainerNode = incomingModResult.astNode
+            val accumulatedRoot = accumulatedResult.astNode
+            val incomingModRoot = incomingModResult.astNode
 
             deepCompare(vanillaRootNode, accumulatedRoot, incomingModRoot)
 
