@@ -66,11 +66,11 @@ class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context
             deepCompare(vanillaRootNode, accumulatedRoot, incomingModRoot)
 
             //第一个mod与原版文件的对比
-            if (context.isFirstMerge && !conflicts.isEmpty()) {
+            if (context.isFirstMerge && conflicts.isNotEmpty()) {
                 for (record in conflicts) {
                     record.userChoice = UserChoice.MERGE_MOD
                 }
-            } else if (!conflicts.isEmpty()) {
+            } else if (conflicts.isNotEmpty()) {
                 // 正常情况下，提示用户解决冲突
                 context.conflictStrategy.resolveConflict(conflicts)
             }
