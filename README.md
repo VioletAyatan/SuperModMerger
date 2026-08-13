@@ -48,6 +48,8 @@ Dying Light 1 should also be supported in theory, but it hasn't been tested. You
 
 If you find any issues, please report them to me promptly and provide information about the mods you're trying to merge.
 
+Before publishing or running the tool against a real game directory, review [Known Issues and Reliability Boundaries](KNOWN_ISSUES.md). It records the currently confirmed safety, determinism, deletion-semantics, output-transaction, and testing limitations.
+
 ### Supported Operating Systems
 
 - **Windows 10**
