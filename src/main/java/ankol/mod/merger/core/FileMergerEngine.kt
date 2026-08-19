@@ -6,7 +6,7 @@ import ankol.mod.merger.api.ConflictResolver
 import ankol.mod.merger.api.console.ConsoleAssetConflictResolver
 import ankol.mod.merger.core.filetrees.MemoryFileTree
 import ankol.mod.merger.core.filetrees.PathFileTree
-import ankol.mod.merger.domain.MergerContext
+import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.mergers.MergerFactory
 import ankol.mod.merger.tools.*
@@ -135,7 +135,7 @@ class FileMergerEngine(
             if (baseModManager.isLoaded) {
                 val vanillaFileContent = baseModManager.extractFileContent(relPath)
                 if (vanillaFileContent != null) {
-                    val context = MergerContext(baseModManager, conflictStrategy)
+                    val context = MergeContext(baseModManager, conflictStrategy)
                     val merger = MergerFactory.getMerger(relPath, context)
 
                     if (merger != null) {
@@ -190,7 +190,7 @@ class FileMergerEngine(
             return
         }
 
-        val context = MergerContext(baseModManager, conflictStrategy)
+        val context = MergeContext(baseModManager, conflictStrategy)
         val merger = MergerFactory.getMerger(relPath, context) // Get the appropriate merger
 
         // Unsupported file types, let user choose which file to use

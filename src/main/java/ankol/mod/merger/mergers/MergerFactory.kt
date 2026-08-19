@@ -1,6 +1,6 @@
 package ankol.mod.merger.mergers
 
-import ankol.mod.merger.domain.MergerContext
+import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.mergers.json.TechlandJsonFileMerger
 import ankol.mod.merger.mergers.scr.TechlandScrFileMerger
 import ankol.mod.merger.mergers.xml.TechlandXmlFileMerger
@@ -15,7 +15,7 @@ object MergerFactory {
     /**
      * 合并器实例缓存
      */
-    private val mergerMap: MutableMap<String, (MergerContext) -> AbstractFileMerger> = HashMap()
+    private val mergerMap: MutableMap<String, (MergeContext) -> AbstractFileMerger> = HashMap()
 
     init {
         //.scr格式的合并器
@@ -35,7 +35,7 @@ object MergerFactory {
      * @param mergerFactory 合并器创建函数。
      * @param extensions 要关联的文件扩展名（例如 .scr, .xml）。
      */
-    private fun registerMerger(mergerFactory: (MergerContext) -> AbstractFileMerger, vararg extensions: String) {
+    private fun registerMerger(mergerFactory: (MergeContext) -> AbstractFileMerger, vararg extensions: String) {
         for (ext in extensions) {
             mergerMap[ext.lowercase(Locale.getDefault())] = mergerFactory
         }
@@ -47,7 +47,7 @@ object MergerFactory {
      * @param fileName 文件名（包含扩展名）
      * @return 一个包含合并器实例的 [Optional]；如果找不到合适的合并器，则为空。
      */
-    fun getMerger(fileName: String, context: MergerContext): AbstractFileMerger? {
+    fun getMerger(fileName: String, context: MergeContext): AbstractFileMerger? {
         val extension = "." + fileName.substringAfterLast(".")
         val mergerFactory = mergerMap[extension.lowercase(Locale.getDefault())]
         return mergerFactory?.invoke(context)

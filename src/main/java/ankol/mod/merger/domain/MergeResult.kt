@@ -5,5 +5,5 @@ package ankol.mod.merger.domain
  *
  * @param mergedContent 合并后的脚本文本内容
  */
-data class MergeResult(val mergedContent: String, val mergedHistory: MergerContext.MergedHistory) {
+data class MergeResult(val mergedContent: String, val mergedHistory: MergeContext.MergedHistory) {
 }

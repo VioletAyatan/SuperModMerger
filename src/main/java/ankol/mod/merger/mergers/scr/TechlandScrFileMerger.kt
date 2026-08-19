@@ -6,7 +6,7 @@ import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.domain.MergeResult
-import ankol.mod.merger.domain.MergerContext
+import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.mergers.AbstractFileMerger
@@ -16,7 +16,7 @@ import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
 import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.TokenStreamRewriter
 
-class TechlandScrFileMerger(context: MergerContext) : AbstractFileMerger(context) {
+class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context) {
     private val log = logger()
 
     /**

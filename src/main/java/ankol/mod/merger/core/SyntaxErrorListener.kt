@@ -1,7 +1,7 @@
 package ankol.mod.merger.core
 
 import ankol.mod.merger.constants.ErrorLevel
-import ankol.mod.merger.domain.MergerContext
+import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.tools.ErrorReporter
 import ankol.mod.merger.tools.Localizations.t
 import org.antlr.v4.runtime.ANTLRErrorListener
@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.atn.ATNConfigSet
 import org.antlr.v4.runtime.dfa.DFA
 import java.util.*
 
-class SyntaxErrorListener(val context: MergerContext) : ANTLRErrorListener {
+class SyntaxErrorListener(val context: MergeContext) : ANTLRErrorListener {
 
     override fun syntaxError(
         recognizer: Recognizer<*, *>,
