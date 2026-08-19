@@ -7,7 +7,7 @@ import ankol.mod.merger.mergers.DeletionRecord
  * 冲突解决策略接口
  * CLI 和 GUI 各自实现此接口以提供不同的交互方式
  */
-interface ConflictResolutionStrategy {
+interface ConflictResolver {
     /**
      * 解决内容冲突（两个 Mod 对同一处代码有不同的修改）
      */

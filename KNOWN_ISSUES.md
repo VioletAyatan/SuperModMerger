@@ -121,14 +121,6 @@
 - 影响：用户按示例传参可能直接失败；已存在的自动检测能力无法改善首次使用体验。
 - 修复验收：统一中英文参数说明和示例；决定并测试 `-b` 的唯一契约；接入或删除未使用的自动检测逻辑。
 
-## 当前构建快照
-
-- `mvn -DskipTests package`：成功。
-- `java -jar target/SuperModMerger-1.7.1-all.jar --help`：成功。
-- `mvn -Dtest=ankol.mod.merger.tools.ArchivePathGuardTest test`：5 项通过。
-- `mvn test`：7 项通过、3 项环境错误，默认测试未通过。
-- 构建仍报告重复源码根和 Shade 重叠资源警告，当前不会阻止生成 JAR，但应在构建配置清理时处理。
-
 ## 建议修复顺序
 
 1. SMM-003：改为事务式输出。
