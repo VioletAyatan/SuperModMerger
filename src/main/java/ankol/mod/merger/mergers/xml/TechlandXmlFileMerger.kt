@@ -69,7 +69,7 @@ class TechlandXmlFileMerger(context: MergerContext) : AbstractFileMerger(context
                     record.userChoice = UserChoice.MERGE_MOD
                 }
             } else if (!conflicts.isEmpty()) {
-                context.conflictStrategy.resolveConflict(conflicts)
+                context.conflictResolver.resolveConflict(conflicts)
             }
 
             return MergeResult(getMergedContent(baseResult), context.mergedHistory)

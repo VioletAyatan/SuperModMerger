@@ -43,10 +43,9 @@ class ExtractArchiveCallback(
 
         val pakName = pakPath.fileName.nameWithoutExtension
         fileEntryName = fileEntryName.replaceFirst("${pakName}${File.separator}", "")
-        val resolvedEntry = ArchivePathGuard.resolve(outputDir, fileEntryName)
-        fileEntryName = resolvedEntry.relativeEntryName
         fileName = getEntryFileName(fileEntryName)
-        fileOutputPath = resolvedEntry.outputPath
+
+        fileOutputPath = outputDir.resolve(fileEntryName).normalize()
         fileOutputPath.parent.createDirectories()
         outputStream = fileOutputPath.outputStream()
 

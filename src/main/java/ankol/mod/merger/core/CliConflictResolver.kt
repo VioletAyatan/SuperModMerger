@@ -1,6 +1,6 @@
 package ankol.mod.merger.core
 
-import ankol.mod.merger.api.ConflictResolutionStrategy
+import ankol.mod.merger.api.ConflictResolver
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.constants.UserChoice.Companion.findByOrder
 import ankol.mod.merger.mergers.ConflictRecord
@@ -13,7 +13,7 @@ import ankol.mod.merger.tools.Localizations.t
  *
  * @author Ankol
  */
-object ConflictResolver : ConflictResolutionStrategy {
+object CliConflictResolver : ConflictResolver {
     /**
      * Interactive conflict resolution
      *

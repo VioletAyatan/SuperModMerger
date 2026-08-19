@@ -1,8 +1,8 @@
 package ankol.mod.merger.domain
 
-import ankol.mod.merger.api.ConflictResolutionStrategy
+import ankol.mod.merger.api.ConflictResolver
 import ankol.mod.merger.core.BaseModManager
-import ankol.mod.merger.core.ConflictResolver
+import ankol.mod.merger.core.CliConflictResolver
 import ankol.mod.merger.tools.logger
 import java.util.concurrent.ConcurrentHashMap
 
@@ -14,16 +14,17 @@ class MergerContext(
     /** Base mod manager **/
     val baseModManager: BaseModManager,
     /** Conflict resolution strategy (switchable for GUI) **/
-    var conflictStrategy: ConflictResolutionStrategy = ConflictResolver,
+    var conflictResolver: ConflictResolver = CliConflictResolver,
     /** Current merging file name **/
     var mergingFileName: String = "",
     var accumulatedModName: String = "",
     var mergeModName: String = "",
-    /** Merging history **/
-    var mergedHistory: MergedHistory = MergedHistory(),
     /** Whether this is the first merge **/
     var isFirstMerge: Boolean = false
 ) {
+    /** Merging history **/
+    val mergedHistory: MergedHistory = MergedHistory()
+
     companion object {
         private val log = logger()
     }

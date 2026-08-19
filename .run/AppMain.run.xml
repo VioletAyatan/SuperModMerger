@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AppMain" type="JetRunConfigurationType" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="ankol.mod.merger.AppMain" />
+    <module name="SuperModMerger" />
+    <option name="PROGRAM_PARAMETERS" value="-m &quot;D:\SteamLibrary\steamapps\common\Dying Light The Beast\ph_ft\mods&quot; -b &quot;D:\SteamLibrary\steamapps\common\Dying Light The Beast\ph_ft\source&quot;" />
+    <shortenClasspath name="NONE" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -2,7 +2,7 @@ package ankol.mod.merger.core
 
 import ankol.mod.merger.api.AssetConflictResolver
 import ankol.mod.merger.api.ColorPrinter
-import ankol.mod.merger.api.ConflictResolutionStrategy
+import ankol.mod.merger.api.ConflictResolver
 import ankol.mod.merger.api.console.ConsoleAssetConflictResolver
 import ankol.mod.merger.core.filetrees.MemoryFileTree
 import ankol.mod.merger.core.filetrees.PathFileTree
@@ -30,7 +30,7 @@ class FileMergerEngine(
     private val mergeableMods: List<MergingModInfo>,
     private val outputPath: Path,
     private val basePakDirPath: Path,
-    private val conflictStrategy: ConflictResolutionStrategy = ConflictResolver,
+    private val conflictStrategy: ConflictResolver = CliConflictResolver,
     private val assetConflictResolver: AssetConflictResolver = ConsoleAssetConflictResolver,
     /**
      * 日志打印器
@@ -101,7 +101,6 @@ class FileMergerEngine(
         if (globalFixActive) {
             colorPrinter.debug(t("ENGINE_GLOBAL_FIX_ENABLED"))
         }
-        val totalFiles = groupedModFiles.size
         var fileIndex = 0
         for ((fileEntryName, fileSources) in groupedModFiles) {
             fileIndex++
@@ -291,7 +290,6 @@ class FileMergerEngine(
      * Print merge statistics
      */
     private fun printStatistics() {
-        val errorCount = ErrorReporter.getErrorCount()
         colorPrinter.cyan("\n{}", "=".repeat(75))
         colorPrinter.cyan(t("ENGINE_STATISTICS_TITLE"))
         colorPrinter.cyan(t("ENGINE_TOTAL_FILES_PROCESSED", totalProcessed))
