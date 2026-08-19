@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
  * Mod Merging Context
  * @author Ankol
  */
-class MergerContext(
+class MergeContext(
     /** Base mod manager **/
     val baseModManager: BaseModManager,
     /** Conflict resolution strategy (switchable for GUI) **/

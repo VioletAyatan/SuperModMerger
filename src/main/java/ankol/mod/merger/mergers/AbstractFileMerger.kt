@@ -4,7 +4,7 @@ import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.core.SyntaxErrorListener
 import ankol.mod.merger.core.filetrees.AbstractFileTree
 import ankol.mod.merger.domain.MergeResult
-import ankol.mod.merger.domain.MergerContext
+import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.domain.ParsedResult
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.tree.ParseTree
@@ -16,7 +16,7 @@ import org.antlr.v4.runtime.tree.ParseTree
  * 定义了所有文件类型合并器必须实现的方法。
  * 每个实现类负责处理一种特定的文件类型（如.scr, .xml等）。
  */
-abstract class AbstractFileMerger(val context: MergerContext) {
+abstract class AbstractFileMerger(val context: MergeContext) {
     /**
      * 合并两个文件。
      *
