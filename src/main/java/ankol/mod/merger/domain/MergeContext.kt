@@ -15,11 +15,18 @@ class MergeContext(
     val baseModManager: BaseModManager,
     /** Conflict resolution strategy (switchable for GUI) **/
     var conflictResolver: ConflictResolver = CliConflictResolver,
-    /** Current merging file name **/
-    var mergingFileName: String = "",
+    /**
+     * 当前处理的文件名称（不带路径）
+     */
+    var currentFileName: String = "",
     var accumulatedModName: String = "",
+    /**
+     * 当前进行合并的mod名称
+     */
     var mergeModName: String = "",
-    /** Whether this is the first merge **/
+    /**
+     * 是否是第一次合并
+     */
     var isFirstMerge: Boolean = false
 ) {
     /** Merging history **/
@@ -30,7 +37,7 @@ class MergeContext(
     }
 
     fun configure(mergingFileName: String, accumulatedModName: String, incomingModName: String, isFirstMerge: Boolean) {
-        this.mergingFileName = mergingFileName
+        this.currentFileName = mergingFileName
         this.accumulatedModName = accumulatedModName
         this.mergeModName = incomingModName
         this.isFirstMerge = isFirstMerge

@@ -118,7 +118,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                                     context.mergedHistory.markSignture("${incomingModContainer.signature}-${signature}", context.mergeModName)
                                     //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
-                                        context.mergingFileName,
+                                        context.currentFileName,
                                         context.accumulatedModName,
                                         context.mergeModName,
                                         signature,
@@ -132,7 +132,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                                     val modName = context.mergedHistory.getModNameFromSignature("${incomingModContainer.signature}-${signature}")
                                     conflicts.add(
                                         ConflictRecord(
-                                            context.mergingFileName,
+                                            context.currentFileName,
                                             modName ?: context.accumulatedModName,
                                             context.mergeModName,
                                             signature,
@@ -155,7 +155,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                                     context.mergedHistory.markSignture(incomingModNode.signature, context.mergeModName)
                                     conflicts.add(
                                         ConflictRecord(
-                                            context.mergingFileName,
+                                            context.currentFileName,
                                             context.accumulatedModName,
                                             context.mergeModName,
                                             signature,
@@ -167,7 +167,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                                 } else {
                                     conflicts.add(
                                         ConflictRecord(
-                                            context.mergingFileName,
+                                            context.currentFileName,
                                             context.accumulatedModName,
                                             context.mergeModName,
                                             signature,
