@@ -147,7 +147,7 @@ class TechlandJsonFileMerger(context: MergeContext) : AbstractFileMerger(context
                                         if (originalValue != null && originalValue.sourceText == baseValue.sourceText) {
                                             // base与原版一致，mod做了修改，自动合并
                                             val record = ConflictRecord(
-                                                context.mergingFileName,
+                                                context.currentFileName,
                                                 context.accumulatedModName,
                                                 context.mergeModName,
                                                 baseChild.signature,
@@ -160,7 +160,7 @@ class TechlandJsonFileMerger(context: MergeContext) : AbstractFileMerger(context
                                             // 发生冲突，记录完整的PairNode（包含key和value）
                                             conflicts.add(
                                                 ConflictRecord(
-                                                    context.mergingFileName,
+                                                    context.currentFileName,
                                                     context.accumulatedModName,
                                                     context.mergeModName,
                                                     baseChild.signature,
@@ -197,7 +197,7 @@ class TechlandJsonFileMerger(context: MergeContext) : AbstractFileMerger(context
             if (!isNodeSameAsOriginalBaseMod(originalArray, modArray)) {
                 conflicts.add(
                     ConflictRecord(
-                        context.mergingFileName,
+                        context.currentFileName,
                         context.accumulatedModName,
                         context.mergeModName,
                         baseArray.signature,
@@ -231,7 +231,7 @@ class TechlandJsonFileMerger(context: MergeContext) : AbstractFileMerger(context
             if (!isNodeSameAsOriginalBaseMod(originalNode, modNode)) {
                 conflicts.add(
                     ConflictRecord(
-                        context.mergingFileName,
+                        context.currentFileName,
                         context.accumulatedModName,
                         context.mergeModName,
                         baseNode.signature,

@@ -158,7 +158,7 @@ class FileMergerEngine(
                         targetPath.writeText(mergedContent)
 
                         this.mergedCount++
-                        colorPrinter.success(t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
+                        colorPrinter.success(t("ENGINE_MERGE_SUCCESS", merger.context.currentFileName))
                         return
                     }
                 }
@@ -259,7 +259,7 @@ class FileMergerEngine(
             targetPath.writeText(accumulatedContent)
 
             this.mergedCount++
-            colorPrinter.success(t("ENGINE_MERGE_SUCCESS", context.mergingFileName))
+            colorPrinter.success(t("ENGINE_MERGE_SUCCESS", merger.context.currentFileName))
         } catch (e: Exception) {
             // TODO: Adjust the strategy for merge failures here, currently using the last mod's version when failing
             val lastSource: PathFileTree = fileSources.last()

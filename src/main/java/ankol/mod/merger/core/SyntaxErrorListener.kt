@@ -26,7 +26,7 @@ class SyntaxErrorListener(val context: MergeContext) : ANTLRErrorListener {
         ErrorReporter.addErrorReport(
             ErrorLevel.WARNING,
             context.mergeModName,
-            t("ERROR_SYNTAX_ERROR_DETECTED", context.mergingFileName, "${line}:${charPositionInLine} $msg")
+            t("ERROR_SYNTAX_ERROR_DETECTED", context.currentFileName, "${line}:${charPositionInLine} $msg")
         )
     }
 
