@@ -103,7 +103,8 @@ class ModExtractor(
             log.warn("Unsupported dll/asi file: ${fileEntryName}, Please handle it yourself after merging.")
             ErrorReporter.addErrorReport(
                 sourceInfo.getFirstArchiveFileName(),
-                t("ERROR_NOT_SUPPORT_DLL", fileEntryName)
+                fileEntryName,
+                t("ERROR_NOT_SUPPORT_DLL")
             )
             return true
         }
@@ -111,7 +112,8 @@ class ModExtractor(
             log.warn("Unsupported rpak file: ${fileEntryName}, Marking to removal.")
             ErrorReporter.addErrorReport(
                 sourceInfo.getFirstArchiveFileName(),
-                t("ERROR_NOT_SUPPORT_RPACK", fileEntryName)
+                fileEntryName,
+                t("ERROR_NOT_SUPPORT_RPACK")
             )
             return true
         }
