@@ -5,12 +5,13 @@ import ankol.mod.merger.antlr.scr.TechlandScriptParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.core.filetrees.AbstractFileTree
-import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergeContext
+import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.mergers.AbstractFileMerger
 import ankol.mod.merger.mergers.ConflictRecord
+import ankol.mod.merger.mergers.DeletionRecord
 import ankol.mod.merger.mergers.scr.node.ScrContainerNode
 import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
 import ankol.mod.merger.tools.logger
@@ -25,6 +26,9 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
     private val conflicts = arrayListOf<ConflictRecord>()
 
     private val insertOperations = arrayListOf<InsertOperation>()
+
+    /** Confirmed allowlist deletions. Non-allowlisted missing nodes are kept implicitly. */
+    private val deletionRecords = arrayListOf<DeletionRecord>()
 
     /**
      * 插入操作记录
@@ -63,7 +67,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
             val accumulatedRoot = accumulatedResult.astNode
             val incomingModRoot = incomingModResult.astNode
 
-            deepCompare(vanillaRootNode, accumulatedRoot, incomingModRoot)
+            deepCompare(vanillaRootNode, accumulatedRoot, incomingModRoot, accumulatedRoot.signature)
 
             //第一个mod与原版文件的对比
             if (context.isFirstMerge && conflicts.isNotEmpty()) {
@@ -75,6 +79,11 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                 context.conflictResolver.resolveConflict(conflicts)
             }
 
+            // Deletions are never interactive. Only allowlisted calls reach deletionRecords.
+            for (record in deletionRecords) {
+                record.userChoice = UserChoice.MERGE_MOD
+            }
+
             return MergeResult(getMergedContent(accumulatedResult), context.mergedHistory)
         } catch (e: Exception) {
             log.error("Error during SCR file merge: ${accumulatedFile.fileName} Reason: ${e.message}", e)
@@ -83,6 +92,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
             //清理状态，准备下一个文件合并
             conflicts.clear()
             insertOperations.clear()
+            deletionRecords.clear()
             vanillaRootNode = null
         }
     }
@@ -90,7 +100,8 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
     private fun deepCompare(
         vanillaContainer: ScrContainerNode?,
         accumulatedContainer: ScrContainerNode,
-        incomingModContainer: ScrContainerNode
+        incomingModContainer: ScrContainerNode,
+        containerPath: String
     ) {
         var previousSiblingInBase: BaseTreeNode? = null // 追踪前一个兄弟节点
         // 遍历 Mod 的所有子节点
@@ -103,19 +114,32 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                 val accumulatedNode = accumulatedContainer.childrens[signature]
 
                 if (accumulatedNode == null) {
-                    handleInsertion(accumulatedContainer, incomingModNode, previousSiblingInBase)
+                    val nodeKey = buildNodeKey(containerPath, signature)
+                    if (!context.mergedHistory.isDeleted(nodeKey)) {
+                        handleInsertion(accumulatedContainer, incomingModNode, previousSiblingInBase)
+                    } else {
+                        log.debug("Skipping restoration of previously deleted SCR node: {}", nodeKey)
+                    }
                 } else {
                     previousSiblingInBase = accumulatedNode // 更新前一个兄弟节点
                     //容器节点，递归对比
                     if (accumulatedNode is ScrContainerNode && incomingModNode is ScrContainerNode) {
-                        deepCompare(vanillaNode as ScrContainerNode?, accumulatedNode, incomingModNode)
+                        deepCompare(
+                            vanillaNode as ScrContainerNode?,
+                            accumulatedNode,
+                            incomingModNode,
+                            buildNodeKey(containerPath, signature)
+                        )
                     }
                     //函数调用节点的对比处理
                     else if (accumulatedNode is ScrFunCallNode && incomingModNode is ScrFunCallNode) {
                         if (accumulatedNode.arguments != incomingModNode.arguments) {
                             if (!isNodeSameAsOriginalNode(vanillaNode, incomingModNode)) {
                                 if (isNodeSameAsOriginalNode(vanillaNode, accumulatedNode)) {
-                                    context.mergedHistory.markSignture("${incomingModContainer.signature}-${signature}", context.mergeModName)
+                                    context.mergedHistory.markSignture(
+                                        "${incomingModContainer.signature}-${signature}",
+                                        context.mergeModName
+                                    )
                                     //base节点与原版一致，自动合并
                                     val record = ConflictRecord(
                                         context.currentFileName,
@@ -129,7 +153,8 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                                     conflicts.add(record)
                                 } else {
                                     //标记真正的冲突 todo MergedHistory存在作用域混乱的问题，还需改良
-                                    val modName = context.mergedHistory.getModNameFromSignature("${incomingModContainer.signature}-${signature}")
+                                    val modName =
+                                        context.mergedHistory.getModNameFromSignature("${incomingModContainer.signature}-${signature}")
                                     conflicts.add(
                                         ConflictRecord(
                                             context.currentFileName,
@@ -184,7 +209,53 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                 log.error("Error in processing scr node with signature: '${signature}'", e)
             }
         }
+
+        detectAllowlistedDeletions(vanillaContainer, accumulatedContainer, incomingModContainer, containerPath)
     }
+
+    /**
+     * Detect nodes missing from the incoming mod. Only an original-game function call that
+     * exactly matches [ScrDeletionWhitelist] is deleted. Every other missing node remains in
+     * the accumulated source and is therefore restored without prompting.
+     */
+    private fun detectAllowlistedDeletions(
+        vanillaContainer: ScrContainerNode?,
+        accumulatedContainer: ScrContainerNode,
+        incomingModContainer: ScrContainerNode,
+        containerPath: String
+    ) {
+        for ((signature, accumulatedNode) in accumulatedContainer.childrens) {
+            if (incomingModContainer.childrens.containsKey(signature)) continue
+
+            // A node not present in vanilla was added by an earlier mod and must be preserved.
+            val vanillaNode = vanillaContainer?.childrens?.get(signature) ?: continue
+            if (accumulatedNode !is ScrFunCallNode || vanillaNode !is ScrFunCallNode) continue
+            if (!ScrDeletionWhitelist.allows(context.currentFileName, accumulatedNode)) continue
+
+            val nodeKey = buildNodeKey(containerPath, signature)
+            deletionRecords.add(
+                DeletionRecord(
+                    fileName = context.currentFileName,
+                    deletingModName = context.mergeModName,
+                    previousModName = context.accumulatedModName,
+                    signature = signature,
+                    accumulatedNode = accumulatedNode,
+                    isModifyDeleteConflict = isAccumulatedModifiedFromVanilla(vanillaNode, accumulatedNode),
+                    userChoice = UserChoice.MERGE_MOD
+                )
+            )
+            context.mergedHistory.markDeleted(nodeKey, context.mergeModName)
+            log.info(
+                "Applying allowlisted SCR deletion: file={}, function={}(), line={}, mod={}",
+                context.currentFileName,
+                accumulatedNode.functionName,
+                accumulatedNode.lineNumber,
+                context.mergeModName
+            )
+        }
+    }
+
+    private fun buildNodeKey(containerPath: String, signature: String): String = "$containerPath/$signature"
 
     /**
      * 判断 accumulated 节点相对于 vanilla 是否被修改过。
@@ -209,7 +280,11 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                 // 普通修改冲突：用户选择了 Mod
                 val accumulatedNode = record.baseNode
                 val incomingModNode = record.modNode
-                rewriter.replace(accumulatedNode.startTokenIndex, accumulatedNode.stopTokenIndex, incomingModNode.sourceText)
+                rewriter.replace(
+                    accumulatedNode.startTokenIndex,
+                    accumulatedNode.stopTokenIndex,
+                    incomingModNode.sourceText
+                )
             }
         }
 
@@ -229,6 +304,12 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                 rewriter.insertBefore(op.tokenIndex, op.content)
             } else {
                 rewriter.insertAfter(op.previousSibling.stopTokenIndex, "  ${op.content}")
+            }
+        }
+
+        for (record in deletionRecords) {
+            if (record.userChoice == UserChoice.MERGE_MOD) {
+                rewriter.delete(record.accumulatedNode.startTokenIndex, record.accumulatedNode.stopTokenIndex)
             }
         }
 

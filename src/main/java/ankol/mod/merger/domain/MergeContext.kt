@@ -45,6 +45,7 @@ class MergeContext(
 
     class MergedHistory {
         private val map: MutableMap<String, String> = ConcurrentHashMap()
+        private val deletedNodes: MutableMap<String, String> = ConcurrentHashMap()
 
         /**
          * Mark this signature
@@ -61,5 +62,13 @@ class MergeContext(
         fun getModNameFromSignature(signature: String): String? {
             return map[signature]
         }
+
+        /** Persist an accepted deletion across the remaining sequential merge steps. */
+        fun markDeleted(nodeKey: String, modName: String) {
+            deletedNodes[nodeKey] = modName
+        }
+
+        /** Prevent a later, usually older, mod from silently restoring an accepted deletion. */
+        fun isDeleted(nodeKey: String): Boolean = deletedNodes.containsKey(nodeKey)
     }
 }

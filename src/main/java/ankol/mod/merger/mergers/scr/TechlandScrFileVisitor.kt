@@ -241,6 +241,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             getStopTokenIndex(ctx),
             ctx.start.line,
             tokenStream,
+            funcName,
             argsList
         )
     }
@@ -259,6 +260,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             getStopTokenIndex(ctx),
             ctx.start.line,
             tokenStream,
+            funName,
             getValueList(ctx.valueList()).map { it.text }
         )
     }

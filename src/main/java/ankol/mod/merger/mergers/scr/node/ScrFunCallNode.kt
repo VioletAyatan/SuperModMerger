@@ -12,5 +12,6 @@ class ScrFunCallNode(
     stopTokenIndex: Int,
     line: Int,
     tokenStream: TokenStream,
+    val functionName: String,
     val arguments: List<String>
 ) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream)
