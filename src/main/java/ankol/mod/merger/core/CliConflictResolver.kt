@@ -23,7 +23,7 @@ object CliConflictResolver : ConflictResolver {
         // Filter out nodes that can be auto-merged
         val automaticMerge = handleAutoMergingCode(conflicts)
         // For real conflicts, prompt user to choose which version to use
-        if (!conflicts.isEmpty()) {
+        if (conflicts.isNotEmpty()) {
             println() // New line
             ConsoleColorPrinter.warning(t("CRESOLVER_CONFLICT_DETECTED", conflicts.size))
 
@@ -141,7 +141,7 @@ object CliConflictResolver : ConflictResolver {
      */
     private fun handleAutoMergingCode(conflicts: MutableList<ConflictRecord>): List<ConflictRecord> {
         val automaticMerge = conflicts.filter { it.userChoice != null }
-        if (!automaticMerge.isEmpty()) {
+        if (automaticMerge.isNotEmpty()) {
             for (item in automaticMerge) {
                 val modNodeText = item.modNode.sourceText
                 ConsoleColorPrinter.print(
