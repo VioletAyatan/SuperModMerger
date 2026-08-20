@@ -170,7 +170,11 @@ class FileMergerEngine(
                 "Processing file '${relPath}' error. Reason: ${e.message}. Fallback to original file: ${fileCurrent.fileName}",
                 e
             )
-            ErrorReporter.addErrorReport(relPath, t("ERROR_FILE_MERGE_FAILED", relPath, e.message))
+            ErrorReporter.addErrorReport(
+                fileCurrent.getFirstArchiveFileName(),
+                relPath,
+                t("ERROR_FILE_MERGE_FAILED", e.message)
+            )
         }
     }
 
@@ -199,6 +203,7 @@ class FileMergerEngine(
             return
         }
 
+        var activeModName = fileSources.first().getFirstArchiveFileName()
         try {
             var accumulatedContent = ""
             // Support merge, start processing merge logic
@@ -214,6 +219,7 @@ class FileMergerEngine(
             for ((i, fileCurrent) in fileSources.withIndex()) {
                 val currentModPath = fileCurrent.safeGetFilePath()
                 val currentModName = fileCurrent.getFirstArchiveFileName()
+                activeModName = currentModName
 
                 // First mod: if data0.pak reference file exists, use it as base to merge with the first mod
                 if (i == 0) {
@@ -265,7 +271,11 @@ class FileMergerEngine(
             val lastSource: PathFileTree = fileSources.last()
             Tools.zeroCopy(lastSource.safeGetFilePath(), mergedDir.resolve(relPath))
             log.error("Failed to merge file '{}': {}", relPath, e.message)
-            ErrorReporter.addErrorReport(relPath, t("ERROR_FILE_MERGE_FAILED", relPath, e.message))
+            ErrorReporter.addErrorReport(
+                activeModName,
+                relPath,
+                t("ERROR_FILE_MERGE_FAILED", e.message)
+            )
         }
     }
 

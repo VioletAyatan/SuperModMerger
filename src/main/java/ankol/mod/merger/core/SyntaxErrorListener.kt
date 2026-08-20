@@ -22,11 +22,12 @@ class SyntaxErrorListener(val context: MergeContext) : ANTLRErrorListener {
         msg: String,
         e: RecognitionException?
     ) {
-        println("SyntaxErrorListener.syntaxError")
         ErrorReporter.addErrorReport(
             ErrorLevel.WARNING,
             context.mergeModName,
-            t("ERROR_SYNTAX_ERROR_DETECTED", context.currentFileName, "${line}:${charPositionInLine} $msg")
+            context.currentFileName,
+            t("ERROR_SYNTAX_REASON", line, charPositionInLine, msg),
+            t("ERROR_SYNTAX_WARNING_NOTICE")
         )
     }
 
