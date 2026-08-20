@@ -303,7 +303,6 @@
   },
   "required": [],
   "additionalProperties": false,
-
   "$defs": {
     "reflection": {
       "type": "array",
