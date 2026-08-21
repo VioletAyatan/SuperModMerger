@@ -7,9 +7,10 @@ import ankol.mod.merger.core.filetrees.MemoryFileTree
 import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.mergers.scr.node.ScrContainerNode
 import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
-import org.junit.Test
+import ankol.mod.merger.tools.AntPathMatcher
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
+import org.junit.Test
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.zip.ZipEntry
@@ -43,6 +44,60 @@ class TechlandScrDeletionWhitelistTest {
         assertEquals("Dlc", dlc.functionName)
         assertTrue(dlc.arguments.isEmpty())
         assertTrue(ScrDeletionWhitelist.allows("scripts\\inventory\\inventory_special.scr", dlc))
+    }
+
+    @Test
+    fun `allowlist path pattern preserves the existing inventory file scope`() {
+        val root = parse(vanillaContent)
+        val main = root.childrens.values.single() as ScrContainerNode
+        val dlc = main.childrens.values.filterIsInstance<ScrFunCallNode>().first()
+
+        assertTrue(ScrDeletionWhitelist.allows("scripts/inventory/inventory.scr", dlc))
+        assertTrue(ScrDeletionWhitelist.allows("SCRIPTS/INVENTORY/InventoryStuff.SCR", dlc))
+        assertFalse(ScrDeletionWhitelist.allows("scripts/inventory/nested/inventory_special.scr", dlc))
+        assertFalse(ScrDeletionWhitelist.allows("scripts/items/inventory_special.scr", dlc))
+    }
+
+    @Test
+    fun `ant path matcher supports star question mark and double star`() {
+        assertTrue(
+            AntPathMatcher.matches(
+                "scripts/inventory/inventory_*.scr",
+                "scripts/inventory/inventory_special.scr"
+            )
+        )
+        assertFalse(
+            AntPathMatcher.matches(
+                "scripts/inventory/inventory_*.scr",
+                "scripts/inventory/nested/inventory_special.scr"
+            )
+        )
+
+        assertTrue(
+            AntPathMatcher.matches(
+                "scripts/inventory/inventory_?.scr",
+                "scripts/inventory/inventory_a.scr"
+            )
+        )
+        assertFalse(
+            AntPathMatcher.matches(
+                "scripts/inventory/inventory_?.scr",
+                "scripts/inventory/inventory_ab.scr"
+            )
+        )
+
+        assertTrue(
+            AntPathMatcher.matches(
+                "scripts/**/inventory_*.scr",
+                "scripts/items/inventory/inventory_special.scr"
+            )
+        )
+        assertTrue(
+            AntPathMatcher.matches(
+                "scripts/**/inventory_*.scr",
+                "scripts/inventory_special.scr"
+            )
+        )
     }
 
     @Test
