@@ -43,9 +43,9 @@ object CliConflictResolver : ConflictResolver {
                     ConsoleColorPrinter.blue("=".repeat(75))
                     ConsoleColorPrinter.cyan(t("CRESOLVER_FILE_INFO", i + 1, conflicts.size, record.fileName))
                     ConsoleColorPrinter.warning(t("CRESOLVER_MOD_VERSION_1", record.baseModName))
-                    ConsoleColorPrinter.bold(t("CRESOLVER_LINE_INFO", record.baseNode.lineNumber, baseNodeSource))
+                    ConsoleColorPrinter.bold(t("CRESOLVER_LINE_INFO", record.baseNode.line, baseNodeSource))
                     ConsoleColorPrinter.warning(t("CRESOLVER_MOD_VERSION_2", record.mergeModName))
-                    ConsoleColorPrinter.bold(t("CRESOLVER_LINE_INFO", record.modNode.lineNumber, modNodeSource))
+                    ConsoleColorPrinter.bold(t("CRESOLVER_LINE_INFO", record.modNode.line, modNodeSource))
                     ConsoleColorPrinter.blue("=".repeat(75))
                     // Selection dialog
                     ConsoleColorPrinter.bold(t("CRESOLVER_CHOOSE_PROMPT"))
@@ -108,7 +108,7 @@ object CliConflictResolver : ConflictResolver {
             if (record.isModifyDeleteConflict) {
                 ConsoleColorPrinter.warning(t("DELETION_MODIFY_CONFLICT_WARNING", record.previousModName))
             }
-            ConsoleColorPrinter.bold(t("DELETION_NODE_INFO", record.accumulatedNode.lineNumber, nodeText))
+            ConsoleColorPrinter.bold(t("DELETION_NODE_INFO", record.accumulatedNode.line, nodeText))
             ConsoleColorPrinter.blue("=".repeat(75))
             ConsoleColorPrinter.bold(t("DELETION_CHOOSE_PROMPT"))
             ConsoleColorPrinter.cyan(t("DELETION_KEEP_NODE"))

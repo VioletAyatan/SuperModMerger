@@ -33,7 +33,7 @@ class ScrContainerNode(
      */
     fun addChild(node: BaseTreeNode) {
         if (childrens.contains(node.signature)) {
-            log.debug("Repeatable siginature detected: [${node.signature}] Line: ${node.lineNumber} SourceText: ${node.sourceText}.")
+            log.debug("Repeatable siginature detected: [${node.signature}] Line: ${node.line} SourceText: ${node.sourceText}.")
         }
         childrens[node.signature] = node
     }

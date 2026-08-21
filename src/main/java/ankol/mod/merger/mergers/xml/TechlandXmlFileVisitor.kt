@@ -34,12 +34,12 @@ class TechlandXmlFileVisitor(val tokenStream: CommonTokenStream) : TechlandXMLPa
      */
     override fun visitDocument(ctx: DocumentContext): XmlNode {
         val rootNode = XmlContainerNode(
-            "ROOT",
-            getStartTokenIndex(ctx),
-            getStopTokenIndex(ctx),
-            ctx.start.line,
-            tokenStream,
-            mutableMapOf()
+            signature = "ROOT",
+            startTokenIndex = getStartTokenIndex(ctx),
+            stopTokenIndex = getStopTokenIndex(ctx),
+            line = ctx.start.line,
+            tokenStream = tokenStream,
+            attributes = mutableMapOf()
         )
 
         val elements = ctx.element()
@@ -147,14 +147,14 @@ class TechlandXmlFileVisitor(val tokenStream: CommonTokenStream) : TechlandXMLPa
         val content = ctx.content()
 
         // 判断是否为容器节点（有子元素）
-        if (content != null && !content.element().isEmpty()) {
+        if (content != null && content.element().isNotEmpty()) {
             val containerNode = XmlContainerNode(
-                signature,
-                getStartTokenIndex(ctx),
-                getStopTokenIndex(ctx),
-                ctx.start.line,
-                tokenStream,
-                cleanAttributes
+                signature = signature,
+                startTokenIndex = getStartTokenIndex(ctx),
+                stopTokenIndex = getStopTokenIndex(ctx),
+                line = ctx.start.line,
+                tokenStream = tokenStream,
+                attributes = cleanAttributes
             )
 
             // 添加子元素
@@ -168,12 +168,12 @@ class TechlandXmlFileVisitor(val tokenStream: CommonTokenStream) : TechlandXMLPa
         } else {
             // 叶子节点（没有子元素或为自闭合标签）
             return XmlLeafNode(
-                signature,
-                getStartTokenIndex(ctx),
-                getStopTokenIndex(ctx),
-                ctx.start.line,
-                tokenStream,
-                cleanAttributes
+                signature = signature,
+                startTokenIndex = getStartTokenIndex(ctx),
+                stopTokenIndex = getStopTokenIndex(ctx),
+                line = ctx.start.line,
+                tokenStream = tokenStream,
+                attributes = cleanAttributes
             )
         }
     }

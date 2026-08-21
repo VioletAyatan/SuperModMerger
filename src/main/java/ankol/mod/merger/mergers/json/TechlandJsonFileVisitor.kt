@@ -34,11 +34,11 @@ class TechlandJsonFileVisitor(val tokenStream: TokenStream) : JSONBaseVisitor<Ba
      */
     override fun visitObj(ctx: JSONParser.ObjContext): BaseTreeNode {
         val objNode = JsonContainerNode(
-            OBJECT,
-            getStartTokenIndex(ctx),
-            getStopTokenIndex(ctx),
-            ctx.start.line,
-            tokenStream
+            signature = OBJECT,
+            startTokenIndex = getStartTokenIndex(ctx),
+            stopTokenIndex = getStopTokenIndex(ctx),
+            line = ctx.start.line,
+            tokenStream = tokenStream
         )
 
         // 遍历所有键值对
@@ -58,11 +58,11 @@ class TechlandJsonFileVisitor(val tokenStream: TokenStream) : JSONBaseVisitor<Ba
         val key = ctx.STRING().text.removeSurrounding("\"")
 
         val pairNode = JsonPairNode(
-            "pair:$key",
-            getStartTokenIndex(ctx),
-            getStopTokenIndex(ctx),
-            ctx.start.line,
-            tokenStream
+            signature = "pair:$key",
+            startTokenIndex = getStartTokenIndex(ctx),
+            stopTokenIndex = getStopTokenIndex(ctx),
+            lineNumber = ctx.start.line,
+            tokenStream = tokenStream
         )
 
         // 访问value并设置
@@ -77,11 +77,11 @@ class TechlandJsonFileVisitor(val tokenStream: TokenStream) : JSONBaseVisitor<Ba
      */
     override fun visitArr(ctx: JSONParser.ArrContext): BaseTreeNode {
         val arrNode = JsonArrayNode(
-            ARRAY,
-            getStartTokenIndex(ctx),
-            getStopTokenIndex(ctx),
-            ctx.start.line,
-            tokenStream
+            signature = ARRAY,
+            startTokenIndex = getStartTokenIndex(ctx),
+            stopTokenIndex = getStopTokenIndex(ctx),
+            lineNumber = ctx.start.line,
+            tokenStream = tokenStream
         )
 
         // 遍历所有数组元素
@@ -116,11 +116,11 @@ class TechlandJsonFileVisitor(val tokenStream: TokenStream) : JSONBaseVisitor<Ba
      */
     private fun createLeafNode(ctx: JSONParser.ValueContext, value: String): BaseTreeNode {
         return JsonLeafNode(
-            "${VALUE}:$value",
-            getStartTokenIndex(ctx),
-            getStopTokenIndex(ctx),
-            ctx.start.line,
-            tokenStream
+            signature = "${VALUE}:$value",
+            startTokenIndex = getStartTokenIndex(ctx),
+            stopTokenIndex = getStopTokenIndex(ctx),
+            lineNumber = ctx.start.line,
+            tokenStream = tokenStream
         )
     }
 
