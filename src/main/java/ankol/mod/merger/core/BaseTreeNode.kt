@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.misc.Interval
  * @param signature Signature of the current node (should be unique at the same tree level, for multi-file comparison)
  * @param startTokenIndex Start TOKEN index of the current node
  * @param stopTokenIndex End TOKEN index of the current node
- * @param lineNumber Current line number
+ * @param line Current line number
  * @param tokenStream Token stream reference
  * @author Ankol
  */
@@ -16,7 +16,7 @@ abstract class BaseTreeNode(
     var signature: String,
     val startTokenIndex: Int,
     val stopTokenIndex: Int,
-    val lineNumber: Int,
+    val line: Int,
     @field:Transient
     val tokenStream: TokenStream
 ) {

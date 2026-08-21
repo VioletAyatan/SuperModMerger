@@ -11,10 +11,10 @@ class JsonContainerNode(
     signature: String,
     startTokenIndex: Int,
     stopTokenIndex: Int,
-    lineNumber: Int,
+    line: Int,
     tokenStream: TokenStream,
     var childrens: MutableMap<String, BaseTreeNode> = mutableMapOf()
-) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, lineNumber, tokenStream) {
+) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
     private val log = logger()
 
     /**
@@ -22,7 +22,7 @@ class JsonContainerNode(
      */
     fun addChildern(node: BaseTreeNode) {
         if (childrens.contains(node.signature)) {
-            log.debug("Repeatable siginature detected: [${node.signature}] Line: ${node.lineNumber} SourceText: ${node.sourceText}.")
+            log.debug("Repeatable siginature detected: [${node.signature}] Line: ${node.line} SourceText: ${node.sourceText}.")
         }
         childrens[node.signature] = node
     }

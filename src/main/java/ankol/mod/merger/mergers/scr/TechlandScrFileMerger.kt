@@ -249,7 +249,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                 "Applying allowlisted SCR deletion: file={}, function={}(), line={}, mod={}",
                 context.currentFileName,
                 accumulatedNode.functionName,
-                accumulatedNode.lineNumber,
+                accumulatedNode.line,
                 context.mergeModName
             )
         }
