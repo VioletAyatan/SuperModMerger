@@ -1,33 +1,35 @@
 package ankol.mod.merger.mergers.scr
 
 import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
-import java.util.Locale
+import ankol.mod.merger.tools.AntPathMatcher
 
 /**
  * Internal allowlist for SCR function calls that may be deleted without user confirmation.
  * Mods cannot provide or override these rules.
  */
 internal object ScrDeletionWhitelist {
-    private const val INVENTORY_DIRECTORY = "scripts/inventory"
-    private const val INVENTORY_FILE_PREFIX = "inventory"
-    private const val SCR_EXTENSION = ".scr"
-    private const val DLC_FUNCTION = "Dlc"
+    private data class Rule(
+        val pathPattern: String,
+        val functionName: String,
+        val arguments: List<String>
+    )
+
+    private val rules = listOf(
+        Rule(
+            pathPattern = "scripts/inventory/inventory*.scr",
+            functionName = "Dlc",
+            arguments = emptyList()
+        )
+    )
 
     fun allows(filePath: String, node: ScrFunCallNode): Boolean {
-        val normalizedPath = filePath
-            .replace('\\', '/')
-            .trimStart('/')
-            .lowercase(Locale.ROOT)
-
-        val directory = normalizedPath.substringBeforeLast('/', "")
-        val fileName = normalizedPath.substringAfterLast('/')
-        val isInventoryFile = directory == INVENTORY_DIRECTORY &&
-                fileName.startsWith(INVENTORY_FILE_PREFIX) &&
-                fileName.endsWith(SCR_EXTENSION)
-
-        if (!isInventoryFile) return false
-
         val isDirectFunctionCall = node.signature.startsWith("${TechlandScrFileVisitor.FUN_CALL}:")
-        return isDirectFunctionCall && node.functionName == DLC_FUNCTION && node.arguments.isEmpty()
+        if (!isDirectFunctionCall) return false
+
+        return rules.any { rule ->
+            AntPathMatcher.matches(rule.pathPattern, filePath) &&
+                    node.functionName == rule.functionName &&
+                    node.arguments == rule.arguments
+        }
     }
 }
