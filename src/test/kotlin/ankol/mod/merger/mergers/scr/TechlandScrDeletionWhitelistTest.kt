@@ -42,7 +42,6 @@ class TechlandScrDeletionWhitelistTest {
         val dlc = main.childrens.values.filterIsInstance<ScrFunCallNode>().first()
 
         assertEquals("Dlc", dlc.functionName)
-        assertTrue(dlc.arguments.isEmpty())
         assertTrue(ScrDeletionWhitelist.allows("scripts\\inventory\\inventory_special.scr", dlc))
     }
 

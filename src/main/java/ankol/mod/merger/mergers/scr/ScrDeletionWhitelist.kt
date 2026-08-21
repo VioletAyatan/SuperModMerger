@@ -11,15 +11,18 @@ internal object ScrDeletionWhitelist {
     private data class Rule(
         val pathPattern: String,
         val functionName: String,
-        val arguments: List<String>
+        /**
+         * 允许匹配的参数数量（不限制则为-1）
+         */
+        val argumentsLimit: Int,
     )
 
     private val rules = listOf(
         Rule(
             pathPattern = "scripts/inventory/inventory*.scr",
             functionName = "Dlc",
-            arguments = emptyList()
-        )
+            argumentsLimit = -1
+        ),
     )
 
     fun allows(filePath: String, node: ScrFunCallNode): Boolean {
@@ -27,9 +30,9 @@ internal object ScrDeletionWhitelist {
         if (!isDirectFunctionCall) return false
 
         return rules.any { rule ->
-            AntPathMatcher.matches(rule.pathPattern, filePath) &&
-                    node.functionName == rule.functionName &&
-                    node.arguments == rule.arguments
+            AntPathMatcher.matches(rule.pathPattern, filePath)
+                    && rule.functionName == node.functionName
+                    && (rule.argumentsLimit == -1 || (rule.argumentsLimit == node.arguments.size))
         }
     }
 }
