@@ -24,13 +24,17 @@
 
 我做这个工具的初衷一开始是为了解决我自己使用多个MOD之间的各种冲突问题。
 
-最初，我发现了 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** 这款工具，虽然也很不错。但是有一些小问题和一些不支持的特性，所以我自己制作了这款全新的工具，基于AST语法树进行脚本分析，能够智能识别代码中冲突的地方，智能进行合并。即使是报错的情况下也不会破坏文件结构。同时，也感谢 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** 这款工具作者的辛苦付出，我的一些合并思路也参考了他的工具。
+最初，我发现了 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** 这款工具，虽然也很不错。但是有一些小问题和一些不支持的特性，所以我自己制作了这款全新的工具，基于AST语法树进行脚本分析，能够智能识别代码中冲突的地方，智能进行合并。即使是报错的情况下也不会破坏文件结构。
+
+同时，也感谢 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)** 这款工具作者的辛苦付出，我的一些合并思路也参考了他的工具。
 
 因此本工具的基础使用方法也完全兼容 **[Unleash The Mods](https://www.nexusmods.com/dyinglightthebeast/mods/140)**，并且不需要安装任何运行库，直接即可使用。
 
-**工具支持智能合并 .scr, .loot, .def .phx .ppfx 及更多scr语法结构的文件和 .xml 还有 .gui 文件，不局限于常见的player_variables.scr文件的合并，语法解析已经对整个原版data0.pak文件进行过实验，确保没有任何冲突。理论上，只要正确的scr语法的文件，工具都能识别并合并。**
+**工具支持智能合并 .scr、.loot、.def、.phx、.ppfx 以及更多符合scr语法的文件和 .xml 以及 .gui 文件。**
 
-DL1理论上支持，但未经测试，此外还需要通过命令行手动指定基准MOD位置。你可以通过命令行参数-h来显示工具支持的命令行选项。
+**不仅限于常见的诸如 player_variables.scr 之类文件的合并，语法解析器已经对整个原版 data0.pak 进行过实验，确保没有任何冲突。理论上，只要符合scr语法的文件，工具都能识别并合并。**
+
+DL1理论上支持，但未经测试，此外还需要通过命令行手动指定基准MOD位置。你可以通过命令行参数 `-h` 来显示工具支持的命令行选项。
 
 ### 命令行参数
 
@@ -48,8 +52,6 @@ DL1理论上支持，但未经测试，此外还需要通过命令行手动指�
 ### 问题反馈
 
 如果你发现了任何问题，请及时反馈给我，并提供你合并的mod信息等等。
-
-发布或在真实游戏目录中使用前，请先阅读 [已知问题与可靠性边界](KNOWN_ISSUES.md)。该文档记录了当前确认的安全、确定性、删除语义、输出事务和测试限制。
 
 ### 支持的操作系统
 
@@ -81,4 +83,5 @@ SuperModMerger.exe -m mods -b source/data0.pak -o source/data7.pak
 
 #### 3. 查看结果
 
-合并后的mod会输出到source目录下的data7.pak文件，如果你有data7.pak。注意，此工具会把旧的覆盖掉。
+合并后的mod会输出到source目录下的data7.pak文件。**注意，如果当前目录已经存在data7.pak，工具会把旧的覆盖掉！**
+
