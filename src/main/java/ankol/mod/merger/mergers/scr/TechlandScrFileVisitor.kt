@@ -6,6 +6,7 @@ import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.mergers.scr.node.ScrContainerNode
 import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
 import ankol.mod.merger.mergers.scr.node.ScrLeafNode
+import ankol.mod.merger.constants.ScrNodeType
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.misc.Interval
@@ -52,7 +53,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
             ctx.getStart().line,
-            tokenStream
+            tokenStream,
+            nodeType = ScrNodeType.ROOT
         )
         this.currentContainerNode = rootNode
         ctx.definition().forEach { def ->
@@ -75,7 +77,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.IMPORT,
+            name = unquote(importPath)
         )
     }
 
@@ -90,7 +94,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.EXPORT,
+            name = name
         )
     }
 
@@ -106,7 +112,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.SUB,
+            name = ctx.Id().text
         )
         this.currentContainerNode = subNode
         // 注意：subDecl 包含 paramList 和 functionBlock
@@ -159,6 +167,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
             tokenStream = tokenStream,
+            nodeType = ScrNodeType.FUN_BLOCK,
+            name = funcName,
             arguments = argsList
         )
         this.currentContainerNode = funBlockContainer
@@ -226,7 +236,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             line = ctx.start.line,
             tokenStream = tokenStream,
             functionName = funName,
-            arguments = getValueList(ctx.valueList()).map { it.text }
+            arguments = getValueList(ctx.valueList()).map { it.text },
+            nodeType = ScrNodeType.METHOD_REFERENCE
         )
     }
 
@@ -246,7 +257,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.DIRECTIVE,
+            name = directiveName
         )
     }
 
@@ -261,7 +274,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.MACRO,
+            name = macroId.text
         )
     }
 
@@ -275,7 +290,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.VARIABLE,
+            name = ctx.Id().text
         )
     }
 
@@ -289,7 +306,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.VARIABLE_ASSIGN,
+            name = ctx.Id().text
         )
     }
 
@@ -303,7 +322,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.EXTERN,
+            name = ctx.Id().text
         )
     }
 
@@ -322,7 +343,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.USE,
+            name = name
         )
     }
 
@@ -336,7 +359,9 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             startTokenIndex = getStartTokenIndex(ctx),
             stopTokenIndex = getStopTokenIndex(ctx),
             line = ctx.start.line,
-            tokenStream = tokenStream
+            tokenStream = tokenStream,
+            nodeType = ScrNodeType.USE_SEMANTIC,
+            name = unquote(ctx.String().text)
         )
     }
 
@@ -384,7 +409,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             getStartTokenIndex(ctx),
             getStopTokenIndex(ctx),
             ctx.start.line,
-            tokenStream
+            tokenStream,
+            nodeType = ScrNodeType.IF
         )
 
         // 切换容器到 ifNode，处理 if 块内的语句
@@ -427,7 +453,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
                 getStartTokenIndex(elseIfCtx),
                 getStopTokenIndex(elseIfCtx),
                 elseIfCtx.start.line,
-                tokenStream
+                tokenStream,
+                nodeType = ScrNodeType.ELSE_IF
             )
 
             // 处理 else if 块内的语句
@@ -447,7 +474,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
                 getStartTokenIndex(elseCtx),
                 getStopTokenIndex(elseCtx),
                 elseCtx.start.line,
-                tokenStream
+                tokenStream,
+                nodeType = ScrNodeType.ELSE
             )
 
             // 处理 else 块内的语句
@@ -612,6 +640,10 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         // 这里的 input 是 CharStream，能拿到最原始的字符流
         return ctx.start.inputStream.getText(Interval(a, b)).replace("\\s".toRegex(), "")
     }
+
+    /** 去掉字符串字面量两侧的引号 */
+    private fun unquote(text: String): String =
+        if (text.length >= 2 && text.first() == '"' && text.last() == '"') text.substring(1, text.length - 1) else text
 
     private fun getValueList(context: ValueListContext?): MutableList<ExpressionContext> {
         val valueList = ArrayList<ExpressionContext>()

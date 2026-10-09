@@ -1,6 +1,6 @@
 package ankol.mod.merger.mergers.scr.node
 
-import ankol.mod.merger.core.BaseTreeNode
+import ankol.mod.merger.constants.ScrNodeType
 import org.antlr.v4.runtime.TokenStream
 
 /**
@@ -11,5 +11,9 @@ class ScrLeafNode(
     startTokenIndex: Int,
     stopTokenIndex: Int,
     line: Int,
-    tokenStream: TokenStream
-) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream)
+    tokenStream: TokenStream,
+    override val nodeType: ScrNodeType,
+    override val name: String,
+) : AbstractScrNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
+    override val argCount: Int? get() = null
+}

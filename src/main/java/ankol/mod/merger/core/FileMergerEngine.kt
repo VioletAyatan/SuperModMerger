@@ -9,6 +9,8 @@ import ankol.mod.merger.core.filetrees.PathFileTree
 import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.mergers.MergerFactory
+import ankol.mod.merger.rules.DeletionPolicy
+import ankol.mod.merger.rules.MergeRules
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Localizations.t
 import java.nio.file.Path
@@ -36,6 +38,10 @@ class FileMergerEngine(
      * 日志打印器
      */
     private val colorPrinter: ColorPrinter = ConsoleColorPrinter,
+    /**
+     * 节点删除决策策略
+     */
+    private val deletionPolicy: DeletionPolicy = MergeRules.builtinPolicy,
 ) {
     private val log = logger()
 
@@ -51,6 +57,8 @@ class FileMergerEngine(
     private var mergedCount = 0 // Successfully merged files (no conflicts)
     private var totalProcessed = 0 // Total files processed
     private var pathCorrectionCount = 0 // Number of path corrections
+    private var deletedNodeCount = 0 // SCR nodes deleted by rules / user choice
+    private var restoredNodeCount = 0 // SCR nodes missing from mods but restored
 
     /**
      * Execute merge operation
@@ -135,7 +143,7 @@ class FileMergerEngine(
             if (baseModManager.isLoaded) {
                 val vanillaFileContent = baseModManager.extractFileContent(relPath)
                 if (vanillaFileContent != null) {
-                    val context = MergeContext(baseModManager, conflictStrategy)
+                    val context = MergeContext(baseModManager, conflictStrategy, deletionPolicy = deletionPolicy)
                     val merger = MergerFactory.getMerger(relPath, context)
 
                     if (merger != null) {
@@ -158,6 +166,7 @@ class FileMergerEngine(
                         targetPath.writeText(mergedContent)
 
                         this.mergedCount++
+                        collectNodeStatistics(context)
                         colorPrinter.success(t("ENGINE_MERGE_SUCCESS", merger.context.currentFileName))
                         return
                     }
@@ -194,7 +203,7 @@ class FileMergerEngine(
             return
         }
 
-        val context = MergeContext(baseModManager, conflictStrategy)
+        val context = MergeContext(baseModManager, conflictStrategy, deletionPolicy = deletionPolicy)
         val merger = MergerFactory.getMerger(relPath, context) // Get the appropriate merger
 
         // Unsupported file types, let user choose which file to use
@@ -265,6 +274,7 @@ class FileMergerEngine(
             targetPath.writeText(accumulatedContent)
 
             this.mergedCount++
+            collectNodeStatistics(context)
             colorPrinter.success(t("ENGINE_MERGE_SUCCESS", merger.context.currentFileName))
         } catch (e: Exception) {
             // TODO: Adjust the strategy for merge failures here, currently using the last mod's version when failing
@@ -296,6 +306,11 @@ class FileMergerEngine(
         return true
     }
 
+    private fun collectNodeStatistics(context: MergeContext) {
+        deletedNodeCount += context.deletedNodeCount
+        restoredNodeCount += context.restoredNodeCount
+    }
+
     /**
      * Print merge statistics
      */
@@ -306,6 +321,9 @@ class FileMergerEngine(
         colorPrinter.success(t("ENGINE_MERGED_NO_CONFLICTS", mergedCount))
         if (pathCorrectionCount > 0) {
             colorPrinter.success(t("ENGINE_PATH_CORRECTIONS_APPLIED", pathCorrectionCount))
+        }
+        if (deletedNodeCount > 0 || restoredNodeCount > 0) {
+            colorPrinter.success(t("ENGINE_NODE_DELETION_STATISTICS", deletedNodeCount, restoredNodeCount))
         }
         ErrorReporter.printErrors()
         colorPrinter.cyan("{}", "=".repeat(75))

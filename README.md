@@ -36,6 +36,7 @@ Dying Light 1 should also be supported in theory, but it hasn't been tested. You
 - `-m`, `--merge <path>`: Specify the mods directory. Default is `mods` under the current working directory.
 - `-o`, `--output <path>`: Specify the merged output file. Default is `source/data7.pak` under the current working directory.
 - `-b`, `--base <path>`: Specify the base game pak file. Default is `source/data0.pak` under the current working directory.
+- `-r`, `--rules <path>`: Specify the merge rules file. Defaults to `merge-rules.json` in the current working directory (built-in rules only if it does not exist).
 - `-h`, `--help`: Show command line help.
 
 ### Runtime Behavior

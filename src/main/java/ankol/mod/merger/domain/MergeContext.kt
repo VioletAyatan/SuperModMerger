@@ -3,6 +3,8 @@ package ankol.mod.merger.domain
 import ankol.mod.merger.api.ConflictResolver
 import ankol.mod.merger.core.BaseModManager
 import ankol.mod.merger.core.CliConflictResolver
+import ankol.mod.merger.rules.DeletionPolicy
+import ankol.mod.merger.rules.MergeRules
 import ankol.mod.merger.tools.logger
 import java.util.concurrent.ConcurrentHashMap
 
@@ -27,10 +29,20 @@ class MergeContext(
     /**
      * 是否是第一次合并
      */
-    var isFirstMerge: Boolean = false
+    var isFirstMerge: Boolean = false,
+    /**
+     * 节点删除决策策略（来自合并规则配置）
+     */
+    val deletionPolicy: DeletionPolicy = MergeRules.builtinPolicy,
 ) {
     /** Merging history **/
     val mergedHistory: MergedHistory = MergedHistory()
+
+    /** 本次合并中真正删除的节点数 */
+    var deletedNodeCount: Int = 0
+
+    /** 本次合并中 MOD 缺失、但被自动补回（或用户选择保留）的原版节点数 */
+    var restoredNodeCount: Int = 0
 
     companion object {
         private val log = logger()

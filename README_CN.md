@@ -41,6 +41,7 @@ DL1理论上支持，但未经测试，此外还需要通过命令行手动指�
 - `-m`, `--merge <path>`：指定待合并 mods 目录，默认是当前工作目录下的 `mods`。
 - `-o`, `--output <path>`：指定输出 pak 文件路径，默认是当前工作目录下的 `source/data7.pak`。
 - `-b`, `--base <path>`：指定基准 pak 文件路径，默认是当前工作目录下的 `source/data0.pak`。
+- `-r`, `--rules <path>`：指定合并规则文件，默认读取当前工作目录下的 `merge-rules.json`（不存在则只使用内置规则）。
 - `-h`, `--help`：显示帮助信息。
 
 ### 实际运行行为

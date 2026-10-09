@@ -12,9 +12,17 @@ import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.mergers.AbstractFileMerger
 import ankol.mod.merger.mergers.ConflictRecord
 import ankol.mod.merger.mergers.DeletionRecord
+import ankol.mod.merger.mergers.scr.node.AbstractScrNode
 import ankol.mod.merger.mergers.scr.node.ScrContainerNode
 import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
+import ankol.mod.merger.constants.ScrNodeType
+import ankol.mod.merger.rules.DeletionTarget
+import ankol.mod.merger.rules.RuleAction
+import ankol.mod.merger.tools.ConsoleColorPrinter
+import ankol.mod.merger.tools.Localizations.t
 import ankol.mod.merger.tools.logger
+import org.antlr.v4.runtime.Token
+import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.TokenStreamRewriter
 
 class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context) {
@@ -27,8 +35,12 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
 
     private val insertOperations = arrayListOf<InsertOperation>()
 
-    /** Confirmed allowlist deletions. Non-allowlisted missing nodes are kept implicitly. */
     private val deletionRecords = arrayListOf<DeletionRecord>()
+
+    /** 规则为 ASK、等待用户确认的删除 */
+    private val pendingDeletions = arrayListOf<PendingDeletion>()
+
+    private data class PendingDeletion(val record: DeletionRecord, val nodeKey: String)
 
     /**
      * 插入操作记录
@@ -79,10 +91,8 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                 context.conflictResolver.resolveConflict(conflicts)
             }
 
-            // Deletions are never interactive. Only allowlisted calls reach deletionRecords.
-            for (record in deletionRecords) {
-                record.userChoice = UserChoice.MERGE_MOD
-            }
+            // 规则为 ASK 的删除交给用户确认
+            resolvePendingDeletions()
 
             return MergeResult(getMergedContent(accumulatedResult), context.mergedHistory)
         } catch (e: Exception) {
@@ -93,6 +103,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
             conflicts.clear()
             insertOperations.clear()
             deletionRecords.clear()
+            pendingDeletions.clear()
             vanillaRootNode = null
         }
     }
@@ -103,22 +114,23 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
         incomingModContainer: ScrContainerNode,
         containerPath: String
     ) {
+        // 重复的同名函数调用按内容对齐，其余节点仍按签名匹配
+        val aligned = ScrRepeatedNodeAligner.align(vanillaContainer, accumulatedContainer, incomingModContainer)
+        val vanillaChildren = aligned.vanilla
+        val accumulatedChildren = aligned.accumulated
+
         var previousSiblingInBase: BaseTreeNode? = null // 追踪前一个兄弟节点
         // 遍历 Mod 的所有子节点
-        for ((signature, incomingModNode) in incomingModContainer.childrens) {
+        for ((signature, incomingModNode) in aligned.incoming) {
             try {
-                var vanillaNode: BaseTreeNode? = null
-                if (vanillaContainer != null) {
-                    vanillaNode = vanillaContainer.childrens[signature]
-                }
-                val accumulatedNode = accumulatedContainer.childrens[signature]
+                val vanillaNode = vanillaChildren?.get(signature)
+                val accumulatedNode = accumulatedChildren[signature]
 
                 if (accumulatedNode == null) {
-                    val nodeKey = buildNodeKey(containerPath, signature)
-                    if (!context.mergedHistory.isDeleted(nodeKey)) {
+                    if (!isDeletedBefore(containerPath, signature, incomingModNode, aligned.alignedFunctions)) {
                         handleInsertion(accumulatedContainer, incomingModNode, previousSiblingInBase)
                     } else {
-                        log.debug("Skipping restoration of previously deleted SCR node: {}", nodeKey)
+                        log.debug("Skipping restoration of previously deleted SCR node: ${containerPath}/${signature}")
                     }
                 } else {
                     previousSiblingInBase = accumulatedNode // 更新前一个兄弟节点
@@ -209,50 +221,120 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                 log.error("Error in processing scr node with signature: '${signature}'", e)
             }
         }
-
-        detectAllowlistedDeletions(vanillaContainer, accumulatedContainer, incomingModContainer, containerPath)
+        //删除节点检测
+        detectDeletions(aligned, containerPath)
     }
 
     /**
-     * Detect nodes missing from the incoming mod. Only an original-game function call that
-     * exactly matches [ScrDeletionWhitelist] is deleted. Every other missing node remains in
-     * the accumulated source and is therefore restored without prompting.
+     * 检测新 MOD 中缺失的节点，并按删除规则决定真删除、自动补回还是询问用户。
      */
-    private fun detectAllowlistedDeletions(
-        vanillaContainer: ScrContainerNode?,
-        accumulatedContainer: ScrContainerNode,
-        incomingModContainer: ScrContainerNode,
-        containerPath: String
-    ) {
-        for ((signature, accumulatedNode) in accumulatedContainer.childrens) {
-            if (incomingModContainer.childrens.containsKey(signature)) continue
+    private fun detectDeletions(aligned: ScrRepeatedNodeAligner.AlignedChildren, containerPath: String) {
+        val vanillaChildren = aligned.vanilla ?: return // 没有原版文件时无法区分删除和缺失，全部保留
+        for ((signature, accumulatedNode) in aligned.accumulated) {
+            if (aligned.incoming.containsKey(signature)) continue
+            val vanillaNode = vanillaChildren[signature] ?: continue
+            if (accumulatedNode !is AbstractScrNode) continue
 
-            // A node not present in vanilla was added by an earlier mod and must be preserved.
-            val vanillaNode = vanillaContainer?.childrens?.get(signature) ?: continue
-            if (accumulatedNode !is ScrFunCallNode || vanillaNode !is ScrFunCallNode) continue
-            if (!ScrDeletionWhitelist.allows(context.currentFileName, accumulatedNode)) continue
-
-            val nodeKey = buildNodeKey(containerPath, signature)
-            deletionRecords.add(
-                DeletionRecord(
-                    fileName = context.currentFileName,
-                    deletingModName = context.mergeModName,
-                    previousModName = context.accumulatedModName,
-                    signature = signature,
-                    accumulatedNode = accumulatedNode,
-                    isModifyDeleteConflict = isAccumulatedModifiedFromVanilla(vanillaNode, accumulatedNode),
-                    userChoice = UserChoice.MERGE_MOD
+            val action = context.deletionPolicy.decide(
+                DeletionTarget(
+                    filePath = context.currentFileName,
+                    nodeType = accumulatedNode.nodeType,
+                    name = accumulatedNode.name,
+                    argCount = accumulatedNode.argCount,
                 )
             )
-            context.mergedHistory.markDeleted(nodeKey, context.mergeModName)
-            log.info(
-                "Applying allowlisted SCR deletion: file={}, function={}(), line={}, mod={}",
-                context.currentFileName,
-                accumulatedNode.functionName,
-                accumulatedNode.line,
-                context.mergeModName
+            val nodeKey = historyKey(containerPath, signature, accumulatedNode, aligned.alignedFunctions)
+            when (action) {
+                RuleAction.RESTORE -> {
+                    context.restoredNodeCount++
+                    log.debug(
+                        "Restoring SCR node missing from mod: file={}, node={}, line={}, mod={}",
+                        context.currentFileName, signature, accumulatedNode.line, context.mergeModName
+                    )
+                }
+
+                RuleAction.DELETE, RuleAction.ASK -> {
+                    val record = DeletionRecord(
+                        fileName = context.currentFileName,
+                        deletingModName = context.mergeModName,
+                        previousModName = context.accumulatedModName,
+                        signature = signature,
+                        accumulatedNode = accumulatedNode,
+                        isModifyDeleteConflict = isAccumulatedModifiedFromVanilla(vanillaNode, accumulatedNode),
+                        userChoice = if (action == RuleAction.DELETE) UserChoice.MERGE_MOD else null
+                    )
+                    if (action == RuleAction.DELETE) {
+                        applyDeletion(record, nodeKey)
+                    } else {
+                        pendingDeletions.add(PendingDeletion(record, nodeKey))
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 统一询问规则为 ASK 的删除，用户选择删除的才真正删除
+     */
+    private fun resolvePendingDeletions() {
+        if (pendingDeletions.isEmpty()) return
+        context.conflictResolver.resolveDeletionConflicts(pendingDeletions.mapTo(mutableListOf()) { it.record })
+        for ((record, nodeKey) in pendingDeletions) {
+            if (record.userChoice == UserChoice.MERGE_MOD) {
+                applyDeletion(record, nodeKey)
+            } else {
+                context.restoredNodeCount++
+            }
+        }
+    }
+
+    private fun applyDeletion(record: DeletionRecord, nodeKey: String) {
+        deletionRecords.add(record)
+        context.deletedNodeCount++
+        context.mergedHistory.markDeleted(nodeKey, record.deletingModName)
+        val node = record.accumulatedNode
+        if (record.isModifyDeleteConflict) {
+            ConsoleColorPrinter.warning(t("DELETION_MODIFY_CONFLICT_WARNING", record.previousModName))
+        }
+        ConsoleColorPrinter.warning(
+            t("DELETION_AUTO_DELETED", record.deletingModName, node.line, node.sourceText.trim())
+        )
+        log.info(
+            "Applying SCR deletion: file={}, node={}, line={}, mod={}",
+            record.fileName, record.signature, node.line, record.deletingModName
+        )
+    }
+
+    /**
+     * 判断节点是否已被之前的 MOD 删除（避免后续 MOD 把它补回来）
+     */
+    private fun isDeletedBefore(
+        containerPath: String,
+        signature: String,
+        node: BaseTreeNode,
+        alignedFunctions: Set<String>
+    ): Boolean {
+        val history = context.mergedHistory
+        return history.isDeleted(historyKey(containerPath, signature, node, alignedFunctions))
+                || history.isDeleted(buildNodeKey(containerPath, node.signature))
+    }
+
+    /**
+     * 删除历史使用的节点键。按内容对齐的重复函数调用，其对齐键随累积结果变化，因此改用「函数名 + 参数」作为稳定的键。
+     */
+    private fun historyKey(
+        containerPath: String,
+        signature: String,
+        node: BaseTreeNode,
+        alignedFunctions: Set<String>
+    ): String {
+        if (node is ScrFunCallNode && node.nodeType == ScrNodeType.FUN_CALL && node.functionName in alignedFunctions) {
+            return buildNodeKey(
+                containerPath,
+                "${TechlandScrFileVisitor.FUN_CALL}:${node.functionName}(${node.arguments.joinToString(",")})"
             )
         }
+        return buildNodeKey(containerPath, signature)
     }
 
     private fun buildNodeKey(containerPath: String, signature: String): String = "$containerPath/$signature"
@@ -307,14 +389,39 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
             }
         }
 
-        for (record in deletionRecords) {
-            if (record.userChoice == UserChoice.MERGE_MOD) {
-                rewriter.delete(record.accumulatedNode.startTokenIndex, record.accumulatedNode.stopTokenIndex)
+        if (deletionRecords.isNotEmpty()) {
+            val tokenStream = accumulatedResult.tokenStream
+            // 所有插入操作实际落点的 token 下标，删除范围不能吞掉这些插入
+            val insertIndices = sortedOperations.mapTo(HashSet()) { op ->
+                op.previousSibling?.let { it.stopTokenIndex + 1 } ?: op.tokenIndex
+            }
+            for (record in deletionRecords) {
+                if (record.userChoice != UserChoice.MERGE_MOD) continue
+                val node = record.accumulatedNode
+                val from = deletionStartIndex(tokenStream, node, insertIndices)
+                rewriter.delete(from, node.stopTokenIndex)
             }
         }
 
         // 获取重写后的文本
         return rewriter.text
+    }
+
+    /**
+     * 删除节点时连同它前面的换行缩进一起删掉，避免留下空行。
+     * 只有前一个 token 是包含换行的空白，并且删除范围内（不含起点）没有插入操作时才扩展。
+     */
+    private fun deletionStartIndex(tokenStream: TokenStream, node: BaseTreeNode, insertIndices: Set<Int>): Int {
+        val start = node.startTokenIndex
+        val previous = start - 1
+        if (previous < 0) return start
+        val token = tokenStream.get(previous)
+        if (token.channel != Token.HIDDEN_CHANNEL) return start
+        val text = token.text ?: return start
+        if (text.isBlank() && text.contains('\n') && (previous + 1..node.stopTokenIndex).none { it in insertIndices }) {
+            return previous
+        }
+        return start
     }
 
     private fun isNodeSameAsOriginalNode(originalNode: BaseTreeNode?, incomingModNode: BaseTreeNode): Boolean {

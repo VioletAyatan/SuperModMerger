@@ -1,5 +1,6 @@
 package ankol.mod.merger.mergers.scr.node
 
+import ankol.mod.merger.constants.ScrNodeType
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.tools.logger
 import org.antlr.v4.runtime.TokenStream
@@ -16,12 +17,18 @@ class ScrContainerNode(
     stopTokenIndex: Int,
     line: Int,
     tokenStream: TokenStream,
+    override val nodeType: ScrNodeType,
+    override val name: String = "",
     /**
      * 参数列表
      */
     val arguments: List<String> = emptyList(),
-) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
+) : AbstractScrNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
     private val log = logger()
+
+    /** 只有函数块带参数列表，其余容器（sub/if/else 等）不参与参数个数匹配 */
+    override val argCount: Int?
+        get() = if (nodeType == ScrNodeType.FUN_BLOCK) arguments.size else null
 
     /**
      * 子节点映射，key 是节点签名，value 是节点对象
