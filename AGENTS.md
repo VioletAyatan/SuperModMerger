@@ -6,3 +6,8 @@
 
 - 对于大型功能改动，先生成计划。交由开发者审核确定后才进行后续开发，不要直接改动代码。
 - 对于一些描述不清楚或者功能不确定的地方，先提出自己的问题询问开发者得到详细信息，不要自己猜测。
+
+## 编译指令
+
+- native-image编译 `mvn clean package -Pnative -DskipTests`
+- 编译代码 `mvn clean compile -DskipTests`
