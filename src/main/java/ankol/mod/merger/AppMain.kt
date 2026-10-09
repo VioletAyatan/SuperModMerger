@@ -5,6 +5,7 @@ import ankol.mod.merger.core.GlobalMergingStrategy
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.exception.ExitProcessException
+import ankol.mod.merger.rules.MergeRules
 import ankol.mod.merger.tools.*
 import ankol.mod.merger.tools.Localizations.t
 import java.io.FileDescriptor
@@ -47,11 +48,18 @@ class AppMain {
                 }
                 // 定位基准MOD的位置
                 val basePakDirPath = locateBaseModPath(argParser)
+                // 加载合并规则（内置 + 外部覆盖）
+                val deletionPolicy = MergeRules.load(argParser.getOptionValue("r")?.let { Path(it) })
                 //询问自动合并代码策略
                 GlobalMergingStrategy.askCodeMergingStrategy()
                 // 执行合并
                 val start = System.currentTimeMillis()
-                FileMergerEngine(modsToMerge, outputPath, basePakDirPath).merge()
+                FileMergerEngine(
+                    modsToMerge,
+                    outputPath,
+                    basePakDirPath,
+                    deletionPolicy = deletionPolicy
+                ).merge()
                 val end = System.currentTimeMillis()
                 ConsoleColorPrinter.success(t("APP_MAIN_DONE", end - start))
             } catch (e: Exception) {
@@ -125,6 +133,7 @@ class AppMain {
             argParser.addOption("b", "base", true, t("APP_MAIN_OPTION_BASE_DESC"))
             argParser.addOption("h", "help", false, t("APP_MAIN_OPTION_HELP_DESC"))
             argParser.addOption("l", "lang", true, t("APP_MAIN_OPTION_LANGUAGE_DESC"))
+            argParser.addOption("r", "rules", true, t("APP_MAIN_OPTION_RULES_DESC"))
             return argParser
         }
 

@@ -1,6 +1,6 @@
 package ankol.mod.merger.mergers.scr.node
 
-import ankol.mod.merger.core.BaseTreeNode
+import ankol.mod.merger.constants.ScrNodeType
 import org.antlr.v4.runtime.TokenStream
 
 /**
@@ -13,5 +13,9 @@ class ScrFunCallNode(
     line: Int,
     tokenStream: TokenStream,
     val functionName: String,
-    val arguments: List<String>
-) : BaseTreeNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream)
+    val arguments: List<String>,
+    override val nodeType: ScrNodeType = ScrNodeType.FUN_CALL,
+) : AbstractScrNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
+    override val name: String get() = functionName
+    override val argCount: Int get() = arguments.size
+}

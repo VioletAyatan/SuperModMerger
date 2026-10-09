@@ -1,0 +1,21 @@
+{
+  // SuperModMerger 内置合并规则。
+  // 可在工具运行目录放置同结构的 merge-rules.json（或用 -r 指定）进行覆盖：
+  //   - 规则列表按「内置在前、外部在后」拼接，后面的规则覆盖前面的规则；
+  //   - 外部配置的 defaultAction 覆盖内置配置。
+  "scr": {
+    "deletion": {
+      // 没有规则命中时的动作：DELETE（真删除）/ RESTORE（自动补回）/ ASK（询问用户）
+      "defaultAction": "RESTORE",
+      "rules": [
+        // file: Ant 风格路径（必填）；nodeType / name / argCount 可选，不写表示不限制
+        {
+          "file": "scripts/inventory/inventory*.scr",
+          "nodeType": "funCall",
+          "name": "Dlc",
+          "action": "DELETE"
+        }
+      ]
+    }
+  }
+}

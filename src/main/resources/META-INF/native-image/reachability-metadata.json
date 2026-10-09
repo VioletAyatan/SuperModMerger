@@ -282,6 +282,9 @@
       "glob": "i18n/**.properties"
     },
     {
+      "glob": "rules/*.json"
+    },
+    {
       "glob": "logback-test.xml"
     },
     {
