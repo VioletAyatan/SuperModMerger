@@ -136,6 +136,14 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
                     previousSiblingInBase = accumulatedNode // 更新前一个兄弟节点
                     //容器节点，递归对比
                     if (accumulatedNode is ScrContainerNode && incomingModNode is ScrContainerNode) {
+                        // The header of a function block can change too, e.g. MeshLootType(..., "Hard", ...) { ... }
+                        compareBlockHeader(
+                            vanillaNode as? ScrContainerNode,
+                            accumulatedNode,
+                            incomingModNode,
+                            signature,
+                            incomingModContainer.signature
+                        )
                         deepCompare(
                             vanillaNode as ScrContainerNode?,
                             accumulatedNode,
@@ -223,6 +231,54 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
         }
         //删除节点检测
         detectDeletions(aligned, containerPath)
+    }
+
+    /**
+     * Three-way comparison of the arguments in the header of a function block. Only the header is replaced
+     * (from its name to the closing ')'); the statements inside the block are compared by deepCompare as usual.
+     */
+    private fun compareBlockHeader(
+        vanillaNode: ScrContainerNode?,
+        accumulatedNode: ScrContainerNode,
+        incomingModNode: ScrContainerNode,
+        signature: String,
+        parentSignature: String
+    ) {
+        if (accumulatedNode.arguments == incomingModNode.arguments) return
+        val accumulatedHeader = accumulatedNode.headerNode() ?: return
+        val incomingModHeader = incomingModNode.headerNode() ?: return
+        val vanillaArguments = if (vanillaRootNode != null) vanillaNode?.arguments else null
+        if (incomingModNode.arguments == vanillaArguments) return // the incoming mod left the header as in vanilla
+
+        val historyKey = "$parentSignature-$signature#header"
+        if (accumulatedNode.arguments == vanillaArguments) {
+            // only the incoming mod changed the header: take it
+            context.mergedHistory.markSignture(historyKey, context.mergeModName)
+            conflicts.add(
+                ConflictRecord(
+                    context.currentFileName,
+                    context.accumulatedModName,
+                    context.mergeModName,
+                    signature,
+                    accumulatedHeader,
+                    incomingModHeader,
+                    UserChoice.MERGE_MOD
+                )
+            )
+        } else {
+            // both changed it: ask
+            val modName = context.mergedHistory.getModNameFromSignature(historyKey)
+            conflicts.add(
+                ConflictRecord(
+                    context.currentFileName,
+                    modName ?: context.accumulatedModName,
+                    context.mergeModName,
+                    signature,
+                    accumulatedHeader,
+                    incomingModHeader
+                )
+            )
+        }
     }
 
     /**

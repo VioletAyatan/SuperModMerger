@@ -169,7 +169,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             tokenStream = tokenStream,
             nodeType = ScrNodeType.FUN_BLOCK,
             name = funcName,
-            arguments = argsList
+            arguments = argsList,
+            headerStopTokenIndex = ctx.RParen().symbol.tokenIndex
         )
         this.currentContainerNode = funBlockContainer
         visitFunctionBlockContent(funBlockContainer, ctx.functionBlock())
