@@ -24,10 +24,16 @@ class XmlContainerNode(
      * 添加子节点
      */
     fun addChild(node: XmlNode) {
-        if (childrens.contains(node.signature)) {
-            log.debug("Repeatable siginature detected: [${node.signature}] Line: ${node.line} SourceText: ${node.sourceText}.")
+        // Siblings with the same signature (e.g. the 31 <level id="1"> blocks in Dying Light 1's default_levels.xml) get #2, #3...
+        var key = node.signature
+        var occurrence = 2
+        while (childrens.contains(key)) {
+            key = "${node.signature}#${occurrence++}"
         }
-        childrens[node.signature] = node
+        if (key != node.signature) {
+            log.debug("Repeatable siginature detected: [${node.signature}] stored as [$key] Line: ${node.line} SourceText: ${node.sourceText}.")
+        }
+        childrens[key] = node
     }
 
     override fun printTree(indent: String) {
