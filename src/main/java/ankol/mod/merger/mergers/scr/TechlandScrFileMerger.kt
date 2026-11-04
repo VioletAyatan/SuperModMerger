@@ -4,7 +4,7 @@ import ankol.mod.merger.antlr.scr.TechlandScriptLexer
 import ankol.mod.merger.antlr.scr.TechlandScriptParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
-import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.core.files.AbstractArchiveFile
 import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.ParsedResult
@@ -66,7 +66,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
      */
     private var vanillaRootNode: ScrContainerNode? = null
 
-    override fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult {
+    override fun merge(accumulatedFile: AbstractArchiveFile, incomingModFile: AbstractArchiveFile): MergeResult {
         try {
             val parsedResult = context.baseModManager.parseForm(accumulatedFile.fileEntryName) { parseContent(it) }
             // 解析基准MOD文件（如果存在）

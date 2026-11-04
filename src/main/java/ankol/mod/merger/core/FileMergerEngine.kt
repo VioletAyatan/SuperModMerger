@@ -4,8 +4,8 @@ import ankol.mod.merger.api.AssetConflictResolver
 import ankol.mod.merger.api.ColorPrinter
 import ankol.mod.merger.api.ConflictResolver
 import ankol.mod.merger.api.console.ConsoleAssetConflictResolver
-import ankol.mod.merger.core.filetrees.MemoryFileTree
-import ankol.mod.merger.core.filetrees.PathFileTree
+import ankol.mod.merger.core.files.InMemoryArchiveFile
+import ankol.mod.merger.core.files.ExtractedArchiveFile
 import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.mergers.MergerFactory
@@ -138,7 +138,7 @@ class FileMergerEngine(
      * @param fileCurrent     File source
      * @param mergedOutputDir Merged output directory
      */
-    private fun mergeSingleFile(relPath: String, fileCurrent: PathFileTree, mergedOutputDir: Path) {
+    private fun mergeSingleFile(relPath: String, fileCurrent: ExtractedArchiveFile, mergedOutputDir: Path) {
         try {
             if (baseModManager.isLoaded) {
                 val vanillaFileContent = baseModManager.extractFileContent(relPath)
@@ -148,7 +148,7 @@ class FileMergerEngine(
 
                     if (merger != null) {
                         val fileName = Tools.getEntryFileName(relPath)
-                        val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), vanillaFileContent)
+                        val fileBase = InMemoryArchiveFile(fileName, relPath, mutableListOf("data0.pak"), vanillaFileContent)
 
                         context.configure(
                             relPath,
@@ -195,7 +195,7 @@ class FileMergerEngine(
      * @param fileSources Sources of files with the same name to be merged
      * @param mergedDir   Merged output directory
      */
-    private fun mergeFiles(relPath: String, fileSources: MutableList<PathFileTree>, mergedDir: Path) {
+    private fun mergeFiles(relPath: String, fileSources: MutableList<ExtractedArchiveFile>, mergedDir: Path) {
         // First check if file contents (hash values) and sizes are the same
         if (areAllFilesIdentical(fileSources)) {
             // All files are identical, use the first one directly
@@ -233,7 +233,7 @@ class FileMergerEngine(
                 // First mod: if data0.pak reference file exists, use it as base to merge with the first mod
                 if (i == 0) {
                     if (vanillaFileContent != null) {
-                        val fileBase = MemoryFileTree(fileName, relPath, mutableListOf("data0.pak"), vanillaFileContent)
+                        val fileBase = InMemoryArchiveFile(fileName, relPath, mutableListOf("data0.pak"), vanillaFileContent)
 
                         context.configure(
                             relPath,
@@ -254,7 +254,7 @@ class FileMergerEngine(
                     val previousModName = previousSource.getFirstArchiveFileName()
 
                     // Perform merge - using real MOD archive name
-                    val fileBase = MemoryFileTree(fileName, relPath, mutableListOf(previousModName), accumulatedContent)
+                    val fileBase = InMemoryArchiveFile(fileName, relPath, mutableListOf(previousModName), accumulatedContent)
 
                     context.configure(
                         relPath,
@@ -278,7 +278,7 @@ class FileMergerEngine(
             colorPrinter.success(t("ENGINE_MERGE_SUCCESS", merger.context.currentFileName))
         } catch (e: Exception) {
             // TODO: Adjust the strategy for merge failures here, currently using the last mod's version when failing
-            val lastSource: PathFileTree = fileSources.last()
+            val lastSource: ExtractedArchiveFile = fileSources.last()
             Tools.zeroCopy(lastSource.safeGetFilePath(), mergedDir.resolve(relPath))
             log.error("Failed to merge file '{}': {}", relPath, e.message)
             ErrorReporter.addErrorReport(
@@ -293,7 +293,7 @@ class FileMergerEngine(
     /**
      * Check if multiple files have identical content
      */
-    private fun areAllFilesIdentical(fileSources: MutableList<PathFileTree>): Boolean {
+    private fun areAllFilesIdentical(fileSources: MutableList<ExtractedArchiveFile>): Boolean {
         if (fileSources.size <= 1) {
             return true
         }

@@ -1,6 +1,6 @@
 package ankol.mod.merger.core
 
-import ankol.mod.merger.core.filetrees.PathFileTree
+import ankol.mod.merger.core.files.ExtractedArchiveFile
 import ankol.mod.merger.domain.MergingModInfo
 import ankol.mod.merger.tools.ConsoleColorPrinter
 import ankol.mod.merger.tools.ErrorReporter
@@ -28,7 +28,7 @@ class ModExtractor(
         /**
          * Grouped files list with the same name from different mod paks
          */
-        val fileTreePaths: MutableList<PathFileTree>
+        val archiveFiles: MutableList<ExtractedArchiveFile>
     )
 
     /**
@@ -61,7 +61,7 @@ class ModExtractor(
      */
     private fun groupExtractedFilesByPath(
         modFileName: String,
-        extractedFiles: Map<String, PathFileTree>,
+        extractedFiles: Map<String, ExtractedArchiveFile>,
         filesByPath: ConcurrentHashMap<String, GroupedModFile>
     ): Int {
         val correctionsFileMap = LinkedHashMap<String, String>()
@@ -81,7 +81,7 @@ class ModExtractor(
             }
 
             filesByPath.computeIfAbsent(targetPath) { GroupedModFile(targetPath, CopyOnWriteArrayList()) }
-                .fileTreePaths.add(sourceInfo)
+                .archiveFiles.add(sourceInfo)
         }
 
         if (correctionsFileMap.isNotEmpty()) {
@@ -94,7 +94,7 @@ class ModExtractor(
         return correctionsFileMap.size
     }
 
-    private fun shouldSkipFile(fileEntryName: String, sourceInfo: PathFileTree): Boolean {
+    private fun shouldSkipFile(fileEntryName: String, sourceInfo: ExtractedArchiveFile): Boolean {
         if (Strings.CI.endsWithAny(fileEntryName, ".txt", ".md")) {
             log.warn("Unsupported text file: ${fileEntryName}, Marking to removal.")
             return true

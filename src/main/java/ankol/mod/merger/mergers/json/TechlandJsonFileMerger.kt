@@ -4,7 +4,7 @@ import ankol.mod.merger.antlr.json.JSONLexer
 import ankol.mod.merger.antlr.json.JSONParser
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
-import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.core.files.AbstractArchiveFile
 import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.domain.ParsedResult
@@ -49,7 +49,7 @@ class TechlandJsonFileMerger(context: MergeContext) : AbstractFileMerger(context
      */
     private var vanillaRootNode: BaseTreeNode? = null
 
-    override fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult {
+    override fun merge(accumulatedFile: AbstractArchiveFile, incomingModFile: AbstractArchiveFile): MergeResult {
         try {
             //解析基准文件
             val parsedResult = context.baseModManager.parseForm(accumulatedFile.fileEntryName) { parseContent(it) }

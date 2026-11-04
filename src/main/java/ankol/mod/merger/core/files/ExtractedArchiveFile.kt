@@ -1,14 +1,14 @@
-package ankol.mod.merger.core.filetrees
+package ankol.mod.merger.core.files
 
 import java.nio.file.Files
 import java.nio.file.Path
 
 /**
- * 路径文件树，当文件是在某文件路径时的表示
+ * 已解压到磁盘的压缩包文件条目，内容从 [filePath] 读取
  * @param fileHash 文件hash值
  * @author Ankol
  */
-class PathFileTree(
+class ExtractedArchiveFile(
     fileName: String,
     fileEntryName: String,
     archiveFileName: MutableList<String>,
@@ -17,7 +17,7 @@ class PathFileTree(
      * 解压出来后的文件路径
      */
     var filePath: Path? = null
-) : AbstractFileTree(fileName, fileEntryName, archiveFileName) {
+) : AbstractArchiveFile(fileName, fileEntryName, archiveFileName) {
 
     override fun getContent(): String {
         return filePath?.let { Files.readString(it) } ?: throw IllegalArgumentException("Error, fullPathName is null")

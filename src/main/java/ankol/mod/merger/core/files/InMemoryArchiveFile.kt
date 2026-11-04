@@ -1,16 +1,16 @@
-package ankol.mod.merger.core.filetrees
+package ankol.mod.merger.core.files
 
 /**
- * 内存文件树，用于存储内存中的文件内容
+ * 内容保存在内存中的压缩包文件条目，用于原版文件内容和中间合并结果
  * 
  * @author Ankol
  */
-class MemoryFileTree(
+class InMemoryArchiveFile(
     fileName: String,
     fileEntryName: String,
     archiveFileName: MutableList<String>,
     private val contentStr: String
-) : AbstractFileTree(fileName, fileEntryName, archiveFileName) {
+) : AbstractArchiveFile(fileName, fileEntryName, archiveFileName) {
 
     override fun getContent(): String {
         return contentStr

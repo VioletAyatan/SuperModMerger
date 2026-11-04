@@ -1,6 +1,6 @@
 package ankol.mod.merger.tools
 
-import ankol.mod.merger.core.filetrees.PathFileTree
+import ankol.mod.merger.core.files.ExtractedArchiveFile
 import ankol.mod.merger.tools.Localizations.t
 import net.sf.sevenzipjbinding.SevenZip
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream
@@ -40,12 +40,12 @@ object PakManager {
      * @param tempDir Temporary extraction directory
      * @return File mapping (relative path -> FileSourceInfo), including source chain information
      */
-    fun extractPak(archiveName: String, pakPath: Path, tempDir: Path): MutableMap<String, PathFileTree> {
+    fun extractPak(archiveName: String, pakPath: Path, tempDir: Path): MutableMap<String, ExtractedArchiveFile> {
         tempDir.createDirectories()
-        val fileTreeMap = hashMapOf<String, PathFileTree>()
+        val archiveFileMap = hashMapOf<String, ExtractedArchiveFile>()
         val archiveNames = mutableListOf(archiveName)
-        extractRecursive(pakPath, tempDir, fileTreeMap, archiveNames)
-        return fileTreeMap
+        extractRecursive(pakPath, tempDir, archiveFileMap, archiveNames)
+        return archiveFileMap
     }
 
     /**
@@ -54,20 +54,20 @@ object PakManager {
      * When encountering .pak, .zip, .7z, or .rar files, they will be recursively extracted, and the source chain will be recorded.
      * @param pakPath Archive path
      * @param outputDir   Output directory
-     * @param fileTreeMap File mapping, including source information
+     * @param archiveFileMap File mapping, including source information
      * @param archiveNames Current archive names (for building source chain)
      */
     private fun extractRecursive(
         pakPath: Path,
         outputDir: Path,
-        fileTreeMap: MutableMap<String, PathFileTree>,
+        archiveFileMap: MutableMap<String, ExtractedArchiveFile>,
         archiveNames: MutableList<String>
     ) {
         val nestedArchives = mutableListOf<Pair<String, Path>>()
 
         RandomAccessFileInStream(RandomAccessFile(pakPath.toFile(), "r")).use { inStream ->
             SevenZip.openInArchive(null, inStream).use { inArchive ->
-                val archiveCallback = ExtractArchiveCallback(inArchive, pakPath, archiveNames, fileTreeMap, outputDir, nestedArchives)
+                val archiveCallback = ExtractArchiveCallback(inArchive, pakPath, archiveNames, archiveFileMap, outputDir, nestedArchives)
                 inArchive.extract(null, false, archiveCallback)
             }
         }
@@ -77,7 +77,7 @@ object PakManager {
             val nestedDir = outputDir.resolve("_nested_${NESTED_COUNTER.getAndIncrement()}_$sanitized")
                 .also { it.createDirectories() }
             archiveNames.add(nestedFileName)
-            extractRecursive(nestedPath, nestedDir, fileTreeMap, archiveNames)
+            extractRecursive(nestedPath, nestedDir, archiveFileMap, archiveNames)
         }
     }
 
@@ -91,11 +91,11 @@ object PakManager {
         archiveNames: MutableList<String>,
         hash: String,
         outputPath: Path,
-        fileTreeMap: MutableMap<String, PathFileTree>
+        archiveFileMap: MutableMap<String, ExtractedArchiveFile>
     ) {
-        val current = PathFileTree(fileName, entryName, archiveNames, hash, outputPath)
+        val current = ExtractedArchiveFile(fileName, entryName, archiveNames, hash, outputPath)
 
-        fileTreeMap[entryName]?.let { existing ->
+        archiveFileMap[entryName]?.let { existing ->
             ConsoleColorPrinter.warning(
                 t(
                     "PAK_MANAGER_DUPLICATE_FILE_DETECTED",
@@ -106,7 +106,7 @@ object PakManager {
             )
             ConsoleColorPrinter.success(t("PAK_MANAGER_USE_NEW_PATH", current.fileEntryName))
         }
-        fileTreeMap[entryName] = current
+        archiveFileMap[entryName] = current
     }
 
     /**
@@ -150,7 +150,7 @@ object PakManager {
      * @return Whether the contents of the two files are identical
      * @throws IOException If the file is unreadable
      */
-    fun areFilesIdentical(file1: PathFileTree, file2: PathFileTree): Boolean {
+    fun areFilesIdentical(file1: ExtractedArchiveFile, file2: ExtractedArchiveFile): Boolean {
         return Files.size(file1.safeGetFilePath()) == Files.size(file2.safeGetFilePath())
                 && file1.fileHash == file2.fileHash
     }

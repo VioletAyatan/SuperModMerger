@@ -1,4 +1,4 @@
-package ankol.mod.merger.core.filetrees
+package ankol.mod.merger.core.files
 
 data class BaseFile(
     val fileName: String,

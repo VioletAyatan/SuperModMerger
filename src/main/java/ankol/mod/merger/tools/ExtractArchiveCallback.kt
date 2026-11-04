@@ -1,6 +1,6 @@
 package ankol.mod.merger.tools
 
-import ankol.mod.merger.core.filetrees.PathFileTree
+import ankol.mod.merger.core.files.ExtractedArchiveFile
 import ankol.mod.merger.tools.Tools.getEntryFileName
 import net.sf.sevenzipjbinding.*
 import java.io.File
@@ -15,7 +15,7 @@ class ExtractArchiveCallback(
     val inArchive: IInArchive,
     val pakPath: Path,
     val archiveNames: MutableList<String>,
-    val fileTreeMap: MutableMap<String, PathFileTree>,
+    val archiveFileMap: MutableMap<String, ExtractedArchiveFile>,
     val outputDir: Path,
     val nestedArchives: MutableList<Pair<String, Path>>
 ) : IArchiveExtractCallback {
@@ -62,7 +62,7 @@ class ExtractArchiveCallback(
         if (isArchiveFile(fileName)) {
             nestedArchives.add(fileName to fileOutputPath)
         } else {
-            fileTreeMap[fileEntryName] = PathFileTree(
+            archiveFileMap[fileEntryName] = ExtractedArchiveFile(
                 fileName,
                 fileEntryName,
                 archiveNames,

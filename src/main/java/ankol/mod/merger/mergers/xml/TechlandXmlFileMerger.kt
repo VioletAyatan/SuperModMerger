@@ -3,7 +3,7 @@ package ankol.mod.merger.mergers.xml
 import ankol.mod.merger.antlr.xml.TechlandXMLLexer
 import ankol.mod.merger.antlr.xml.TechlandXMLParser
 import ankol.mod.merger.constants.UserChoice
-import ankol.mod.merger.core.filetrees.AbstractFileTree
+import ankol.mod.merger.core.files.AbstractArchiveFile
 import ankol.mod.merger.domain.MergeResult
 import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.domain.ParsedResult
@@ -48,7 +48,7 @@ class TechlandXmlFileMerger(context: MergeContext) : AbstractFileMerger(context)
      */
     private var vanillaRootNode: XmlContainerNode? = null
 
-    override fun merge(accumulatedFile: AbstractFileTree, incomingModFile: AbstractFileTree): MergeResult {
+    override fun merge(accumulatedFile: AbstractArchiveFile, incomingModFile: AbstractArchiveFile): MergeResult {
         try {
             val parsedResult = context.baseModManager.parseForm(accumulatedFile.fileEntryName) { parseContent(it) }
             // 解析原始基准MOD文件（如果存在）

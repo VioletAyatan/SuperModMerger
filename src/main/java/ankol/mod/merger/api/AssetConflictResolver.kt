@@ -1,6 +1,6 @@
 package ankol.mod.merger.api
 
-import ankol.mod.merger.core.filetrees.PathFileTree
+import ankol.mod.merger.core.files.ExtractedArchiveFile
 import java.nio.file.Path
 
 /**
@@ -10,7 +10,7 @@ import java.nio.file.Path
 fun interface AssetConflictResolver {
     fun chooseAsset(
         relPath: String,
-        sources: MutableList<PathFileTree>,
+        sources: MutableList<ExtractedArchiveFile>,
         mergedDir: Path
     )
 }

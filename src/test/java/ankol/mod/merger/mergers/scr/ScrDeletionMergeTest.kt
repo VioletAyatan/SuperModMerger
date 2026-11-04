@@ -3,7 +3,7 @@ package ankol.mod.merger.mergers.scr
 import ankol.mod.merger.api.ConflictResolver
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseModManager
-import ankol.mod.merger.core.filetrees.MemoryFileTree
+import ankol.mod.merger.core.files.InMemoryArchiveFile
 import ankol.mod.merger.domain.MergeContext
 import ankol.mod.merger.mergers.ConflictRecord
 import ankol.mod.merger.mergers.DeletionRecord
@@ -79,8 +79,8 @@ class ScrDeletionMergeTest {
             context.configure(relPath, accumulatedName, modName, index == 0)
             val merger = TechlandScrFileMerger(context)
             val result = merger.merge(
-                MemoryFileTree("inventory_test.scr", relPath, mutableListOf(accumulatedName), accumulated),
-                MemoryFileTree("inventory_test.scr", relPath, mutableListOf(modName), modContent),
+                InMemoryArchiveFile("inventory_test.scr", relPath, mutableListOf(accumulatedName), accumulated),
+                InMemoryArchiveFile("inventory_test.scr", relPath, mutableListOf(modName), modContent),
             )
             accumulated = result.mergedContent
             accumulatedName = modName

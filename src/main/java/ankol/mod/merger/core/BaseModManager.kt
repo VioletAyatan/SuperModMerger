@@ -1,6 +1,6 @@
 package ankol.mod.merger.core
 
-import ankol.mod.merger.core.filetrees.BaseFile
+import ankol.mod.merger.core.files.BaseFile
 import ankol.mod.merger.domain.ParsedResult
 import ankol.mod.merger.exception.ExitProcessException
 import ankol.mod.merger.tools.ConsoleColorPrinter
@@ -188,9 +188,9 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
             return false
         }
         val fileName = getEntryFileName(fileEntryName)
-        val pathFileTree = indexedBaseModFileMap[fileName] ?: return false
+        val baseFile = indexedBaseModFileMap[fileName] ?: return false
         // Sometimes files not belonging to the mod are added to the pak. If found empty, it's not a file supported by the original mod.
-        val correctPath = pathFileTree.archiveEntryName
+        val correctPath = baseFile.archiveEntryName
         return !correctPath.equals(fileEntryName, ignoreCase = true)
     }
 

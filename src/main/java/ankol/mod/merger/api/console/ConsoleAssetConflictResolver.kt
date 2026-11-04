@@ -1,7 +1,7 @@
 package ankol.mod.merger.api.console
 
 import ankol.mod.merger.api.AssetConflictResolver
-import ankol.mod.merger.core.filetrees.PathFileTree
+import ankol.mod.merger.core.files.ExtractedArchiveFile
 import ankol.mod.merger.tools.ConsoleColorPrinter
 import ankol.mod.merger.tools.Localizations.t
 import ankol.mod.merger.tools.Tools
@@ -13,11 +13,11 @@ import java.nio.file.Path
  */
 object ConsoleAssetConflictResolver : AssetConflictResolver {
 
-    override fun chooseAsset(relPath: String, sources: MutableList<PathFileTree>, mergedDir: Path) {
+    override fun chooseAsset(relPath: String, sources: MutableList<ExtractedArchiveFile>, mergedDir: Path) {
         ConsoleColorPrinter.warning("\n${t("ASSET_NOT_SUPPORT_FILE_EXTENSION", relPath)}")
         ConsoleColorPrinter.warning(t("ASSET_CHOSE_WHICH_VERSION_TO_USE"))
-        for ((i, fileTree) in sources.withIndex()) {
-            ConsoleColorPrinter.cyan("{}. {}", i + 1, fileTree.getFirstArchiveFileName())
+        for ((i, archiveFile) in sources.withIndex()) {
+            ConsoleColorPrinter.cyan("{}. {}", i + 1, archiveFile.getFirstArchiveFileName())
         }
         while (true) {
             val input = readln()
