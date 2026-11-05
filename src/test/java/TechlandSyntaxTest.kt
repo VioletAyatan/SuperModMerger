@@ -39,7 +39,6 @@ class TechlandSyntaxTest {
     fun test() {
         val dltbPath = TestTool.getDltbPath()
         val pakFilePath = Path(dltbPath, "ph_ft", "source", "data0.pak")
-//        val pakFilePath = Path("C:\\Users\\lichengkun\\Desktop\\Works\\ModMergers\\SuperModMerger\\source\\data7.pak")
         var count: Long = 0
         val stats = Stats(0, mutableSetOf())
         try {
@@ -373,6 +372,7 @@ class TechlandSyntaxTest {
         val lexer = JSONLexer(input)
         val tokens = CommonTokenStream(lexer)
         val parser = JSONParser(tokens)
+
         parser.addErrorListener(object : ANTLRErrorListener {
             override fun syntaxError(
                 recognizer: Recognizer<*, *>?,
