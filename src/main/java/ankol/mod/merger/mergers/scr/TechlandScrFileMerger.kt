@@ -2,6 +2,7 @@ package ankol.mod.merger.mergers.scr
 
 import ankol.mod.merger.antlr.scr.TechlandScriptLexer
 import ankol.mod.merger.antlr.scr.TechlandScriptParser
+import ankol.mod.merger.constants.ScrNodeType
 import ankol.mod.merger.constants.UserChoice
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.core.files.AbstractArchiveFile
@@ -15,7 +16,6 @@ import ankol.mod.merger.mergers.DeletionRecord
 import ankol.mod.merger.mergers.scr.node.AbstractScrNode
 import ankol.mod.merger.mergers.scr.node.ScrContainerNode
 import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
-import ankol.mod.merger.constants.ScrNodeType
 import ankol.mod.merger.rules.DeletionTarget
 import ankol.mod.merger.rules.RuleAction
 import ankol.mod.merger.tools.ConsoleColorPrinter
@@ -381,12 +381,18 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
             }
         }.thenBy { it.tokenIndex })
 
+        // 落在同一位置的插入按原顺序拼接后一次插入
+        val groupedInserts = LinkedHashMap<Int, StringBuilder>()
         for (op in sortedOperations) {
             if (op.previousSibling == null) {
-                rewriter.insertBefore(op.tokenIndex, op.content)
+                groupedInserts.getOrPut(op.tokenIndex) { StringBuilder() }.append(op.content)
             } else {
+                //有兄弟节点的话，插在兄弟节点后面
                 rewriter.insertAfter(op.previousSibling.stopTokenIndex, "  ${op.content}")
             }
+        }
+        for ((tokenIndex, content) in groupedInserts) {
+            rewriter.insertBefore(tokenIndex, content.toString())
         }
 
         if (deletionRecords.isNotEmpty()) {
@@ -452,7 +458,7 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
         // 根据节点签名确定节点类型
         val nodeType = when {
             incomingModNode.signature.startsWith(TechlandScrFileVisitor.IMPORT) -> NodeType.IMPORT
-            incomingModNode.signature.startsWith(TechlandScrFileVisitor.SUB_FUN) -> NodeType.SUB
+            incomingModNode.signature.startsWith(TechlandScrFileVisitor.SUB) -> NodeType.SUB
             else -> NodeType.DEFAULT
         }
 
@@ -462,20 +468,39 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
         val insertPos = when (nodeType) {
             NodeType.IMPORT -> {
                 // import语句需要插入在文件最顶上
-                newContent = "\n${incomingModNode.sourceText}"
-                findInsertPositionForImport(accumulatedContainer)
+                val (position, afterNode) = findInsertPositionForImport(accumulatedContainer)
+                newContent = if (afterNode || previousSiblingInBase != null) {
+                    "\n${incomingModNode.sourceText}"
+                } else {
+                    "${incomingModNode.sourceText}\n"
+                }
+                position
             }
 
             NodeType.SUB -> {
-                // sub 插入到import语句后，但在其他节点前
-                newContent = "${incomingModNode.sourceText}\n"
-                findInsertPositionForSub(accumulatedContainer)
+                // sub 插入到最后一个 import 之后、第一个 sub 之前
+                val (position, afterNode) = findInsertPositionForSub(accumulatedContainer)
+                newContent = if (afterNode) {
+                    "\n${incomingModNode.sourceText}"
+                } else {
+                    "${incomingModNode.sourceText}\n"
+                }
+                insertOperations.add(InsertOperation(position, newContent, null, nodeType))
+                return
             }
 
             NodeType.DEFAULT -> {
-                // 其他节点直接插在容器的 '}' 之前
-                newContent = "\n   ${incomingModNode.sourceText}"
-                accumulatedContainer.stopTokenIndex
+                val firstChild = accumulatedContainer.childrens.values.firstOrNull()
+                if (previousSiblingInBase == null && firstChild != null) {
+                    // 没有前驱兄弟节点时插在容器第一个子节点之前，沿用它的缩进
+                    val indent = leadingIndent(firstChild)
+                    newContent = "${incomingModNode.sourceText}\n$indent"
+                    firstChild.startTokenIndex
+                } else {
+                    // 其他节点直接插在容器的 '}' 之前
+                    newContent = "\n   ${incomingModNode.sourceText}"
+                    accumulatedContainer.stopTokenIndex
+                }
             }
         }
 
@@ -484,43 +509,62 @@ class TechlandScrFileMerger(context: MergeContext) : AbstractFileMerger(context)
 
     /**
      * 找到import语句的插入位置：在所有现有import之后，或者在第一个非import节点之前
+     *
+     * @return 插入位置的 token 下标，以及该位置是否紧跟在已有节点之后
      */
-    private fun findInsertPositionForImport(container: ScrContainerNode): Int {
+    private fun findInsertPositionForImport(container: ScrContainerNode): Pair<Int, Boolean> {
         var lastImportStopIndex: Int? = null
 
         for ((_, node) in container.childrens) {
-            if (node.signature.startsWith("import:")) {
+            if (node.signature.startsWith("${TechlandScrFileVisitor.IMPORT}:")) {
                 lastImportStopIndex = node.stopTokenIndex
             } else {
                 // 遇到第一个非import节点，如果有import就插在最后import之后，否则插在该节点之前
-                return lastImportStopIndex?.let { it + 1 } ?: node.startTokenIndex
+                return lastImportStopIndex?.let { it + 1 to true } ?: (node.startTokenIndex to false)
             }
         }
 
         // 所有节点都是import，或者没有节点，返回容器结束位置
-        return lastImportStopIndex?.let { it + 1 } ?: container.stopTokenIndex
+        return lastImportStopIndex?.let { it + 1 to true } ?: (container.stopTokenIndex to true)
     }
 
     /**
-     * 找到sub函数的插入位置：在所有import和sub之后，但在其他节点之前
+     * 获取节点所在行的前导缩进
      */
-    private fun findInsertPositionForSub(container: ScrContainerNode): Int {
-        var lastSubOrImportStopIndex: Int? = null
+    private fun leadingIndent(node: BaseTreeNode): String {
+        val previous = node.startTokenIndex - 1
+        if (previous < 0) return ""
+        val token = node.tokenStream.get(previous)
+        if (token.channel != Token.HIDDEN_CHANNEL) return ""
+        val text = token.text ?: return ""
+        val lineBreak = text.lastIndexOf('\n')
+        if (lineBreak < 0 || text.isNotBlank()) return ""
+        return text.substring(lineBreak + 1)
+    }
 
+    /**
+     * 找到sub函数的插入位置：在第一个sub之前；没有sub时在最后一个import之后；都没有时在第一个节点之前
+     *
+     * @return 插入位置的 token 下标，以及该位置是否紧跟在已有的 import 之后
+     */
+    private fun findInsertPositionForSub(container: ScrContainerNode): Pair<Int, Boolean> {
+        var lastImportStopIndex: Int? = null
+        var firstNodeStartIndex: Int? = null
+        //节点树从上往下找，找到第一个sub就插在它前面
         for ((_, node) in container.childrens) {
-            val isSub = node.signature.startsWith("sub:")
-            val isImport = node.signature.startsWith("import:")
-
-            if (isSub || isImport) {
-                lastSubOrImportStopIndex = node.startTokenIndex
-            } else {
-                // 遇到第一个既不是import也不是sub的节点
-                return lastSubOrImportStopIndex?.let { it + 1 } ?: node.startTokenIndex
+            if (node.signature.startsWith("${TechlandScrFileVisitor.SUB}:")) {
+                return node.startTokenIndex to false
+            }
+            if (node.signature.startsWith("${TechlandScrFileVisitor.IMPORT}:")) {
+                lastImportStopIndex = node.stopTokenIndex
+            }
+            if (firstNodeStartIndex == null) {
+                firstNodeStartIndex = node.startTokenIndex
             }
         }
 
-        // 所有节点都是import或sub，返回容器结束位置
-        return lastSubOrImportStopIndex ?: container.stopTokenIndex
+        return lastImportStopIndex?.let { it + 1 to true }
+            ?: ((firstNodeStartIndex ?: container.stopTokenIndex) to false)
     }
 
     private fun parseContent(content: String): ParsedResult<ScrContainerNode> {

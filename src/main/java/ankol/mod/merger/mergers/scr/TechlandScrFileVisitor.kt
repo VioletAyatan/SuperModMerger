@@ -2,25 +2,23 @@ package ankol.mod.merger.mergers.scr
 
 import ankol.mod.merger.antlr.scr.TechlandScriptBaseVisitor
 import ankol.mod.merger.antlr.scr.TechlandScriptParser.*
+import ankol.mod.merger.constants.ScrNodeType
 import ankol.mod.merger.core.BaseTreeNode
 import ankol.mod.merger.mergers.scr.node.ScrContainerNode
 import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
 import ankol.mod.merger.mergers.scr.node.ScrLeafNode
-import ankol.mod.merger.constants.ScrNodeType
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.runtime.misc.Interval
+import java.util.*
 
 /**
  * 用于实现将Techland scr脚本转换为AST节点树的Visitor
  * @author Ankol
  */
 class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScriptBaseVisitor<BaseTreeNode>() {
-    /** 这个MAP用于识别当前处理到哪个块中，并且用于标记重复的函数以实现重复签名的检测 */
-    private val repeatableFunctions: MutableMap<String, MutableSet<String>> = HashMap()
-
-    /** 标记当前处理到哪个函数块了，重复函数签名生成仅限自己对应的函数块内 */
-    private var currentFunBlockSignature = "ROOT"
+    /** 每个容器内已标记为可重复的签名，重复签名的编号只在同一个容器内计算 */
+    private val repeatableSignatures = IdentityHashMap<ScrContainerNode, MutableSet<String>>()
 
     /** 当前正在进行处理的容器节点 */
     private var currentContainerNode: ScrContainerNode? = null
@@ -29,7 +27,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         const val FUN_CALL = "funCall"
         const val METHOD_REFERENCE = "methodReference"
         const val FUN_BLOCK = "funBlock"
-        const val SUB_FUN = "sub"
+        const val SUB = "sub"
         const val VARIABLE = "variable"
         const val VARIABLE_ASSIGN = "varaibleAssign"
         const val USE = "use"
@@ -106,7 +104,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
     override fun visitSubDecl(ctx: SubDeclContext): BaseTreeNode {
         val previousContainer = this.currentContainerNode //这是标记上一层的容器，以便恢复
 
-        val signature = generateFunctionBlockSignature("$SUB_FUN:${ctx.Id().text}")
+        val signature = generateFunctionBlockSignature("$SUB:${ctx.Id().text}")
         val subNode = ScrContainerNode(
             signature = signature,
             startTokenIndex = getStartTokenIndex(ctx),
@@ -117,8 +115,6 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             name = ctx.Id().text
         )
         this.currentContainerNode = subNode
-        // 注意：subDecl 包含 paramList 和 functionBlock
-        this.currentFunBlockSignature = signature
         visitFunctionBlockContent(subNode, ctx.functionBlock())
 
         this.currentContainerNode = previousContainer //恢复容器节点
@@ -130,7 +126,6 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      */
     override fun visitFunctionBlockDecl(ctx: FunctionBlockDeclContext): BaseTreeNode {
         val previousContainer = this.currentContainerNode //这是标记上一层的容器，以便恢复
-        val previousFunBlockSignature = this.currentFunBlockSignature // Save previous signature
 
         val funcName = ctx.Id().text
         val valueList = getValueList(ctx.valueList())
@@ -138,7 +133,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         var signature = "$FUN_BLOCK:$funcName"
 
         //检测重复签名的处理逻辑
-        val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
+        val signatures = repeatableSignaturesOf(currentContainerNode!!)
         val children: MutableMap<String, BaseTreeNode> = currentContainerNode!!.childrens
 
         if (signatures.contains(signature)) {
@@ -158,9 +153,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             // 当前处理的签名也要重新生成
             signature = generateFunctionBlockArgsSignature(signature, argsList)
         }
-        repeatableFunctions[currentFunBlockSignature] = signatures
 
-        this.currentFunBlockSignature = signature
         val funBlockContainer = ScrContainerNode(
             signature = signature,
             startTokenIndex = getStartTokenIndex(ctx),
@@ -175,7 +168,6 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         visitFunctionBlockContent(funBlockContainer, ctx.functionBlock())
 
         this.currentContainerNode = previousContainer //恢复容器节点
-        this.currentFunBlockSignature = previousFunBlockSignature // Restore signature
         return funBlockContainer
     }
 
@@ -189,8 +181,8 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         val argsList = valueList.map { it.text }
         var signature = "$FUN_CALL:$funcName"
         //检测重复签名的处理逻辑
-        val repeatedSignatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
-        val childrens = currentContainerNode?.childrens ?: hashMapOf()
+        val repeatedSignatures = repeatableSignaturesOf(currentContainerNode!!)
+        val childrens = currentContainerNode!!.childrens
 
         if (repeatedSignatures.contains(signature)) {
             // 已标记为可重复函数，根据参数数量采用不同策略
@@ -209,7 +201,6 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             // 当前处理的签名也要重新生成
             signature = generateFunctionCallSignature(signature, argsList)
         }
-        repeatableFunctions[currentFunBlockSignature] = repeatedSignatures
         return ScrFunCallNode(
             signature = signature,
             startTokenIndex = getStartTokenIndex(ctx),
@@ -373,7 +364,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
 
         // 处理 if 语句
         var ifSignature = IF
-        val signatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
+        val signatures = repeatableSignaturesOf(previousContainer!!)
 
         // 检查是否已标记为可重复，如果是则需要计算索引
         if (signatures.contains(IF)) {
@@ -402,7 +393,6 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
                 ifSignature = "$IF:1" // 当前这个是第二个，使用索引 1
             }
         }
-        repeatableFunctions[currentFunBlockSignature] = signatures
 
         val ifNode = ScrContainerNode(
             ifSignature,
@@ -418,11 +408,12 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
         visitFunctionBlockContent(ifNode, ctx.functionBlock())
 
         // 处理 else if 子句 - 作为 if 节点的子节点（也使用索引）
+        val elseIfSignatures = repeatableSignaturesOf(ifNode)
         for ((index, elseIfCtx) in ctx.elseIfClause().withIndex()) {
             var elseIfSignature = ELSE_IF
 
             // 对于 else if，也使用延迟唯一化（基于索引）
-            if (signatures.contains(ELSE_IF)) {
+            if (elseIfSignatures.contains(ELSE_IF)) {
                 // 已标记为可重复，计算当前是第几个 else if
                 val children = ifNode.childrens
                 var elseIfIndex = 0
@@ -443,7 +434,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
                     children.remove(ELSE_IF)
                     children[existingElseIfSignature] = existingElseIfNode
 
-                    signatures.add(ELSE_IF)
+                    elseIfSignatures.add(ELSE_IF)
                     elseIfSignature = "$ELSE_IF:$index"
                 }
             }
@@ -464,7 +455,6 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             // 将 else if 节点添加为 if 节点的子节点
             ifNode.addChild(elseIfNode)
         }
-        repeatableFunctions[currentFunBlockSignature] = signatures
 
         // 处理 else 子句 - 作为 if 节点的子节点，签名固定为 "else"
         val elseCtx = ctx.elseClause()
@@ -534,7 +524,7 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
      */
     private fun generateFunctionBlockSignature(baseSignature: String): String {
         var _signature = baseSignature
-        val repeatebleSignatures = repeatableFunctions.getOrDefault(currentFunBlockSignature, HashSet())
+        val repeatebleSignatures = repeatableSignaturesOf(currentContainerNode!!)
         val childrens = currentContainerNode!!.childrens
         if (repeatebleSignatures.contains(_signature)) {
             var index = 0
@@ -600,6 +590,12 @@ class TechlandScrFileVisitor(private val tokenStream: TokenStream) : TechlandScr
             return signatureWithParam
         }
     }
+
+    /**
+     * 获取容器内已标记为可重复的签名集合
+     */
+    private fun repeatableSignaturesOf(container: ScrContainerNode): MutableSet<String> =
+        repeatableSignatures.getOrPut(container) { HashSet() }
 
     /**
      * 处理函数块内容
