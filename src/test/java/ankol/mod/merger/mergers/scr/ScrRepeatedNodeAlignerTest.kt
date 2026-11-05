@@ -12,7 +12,6 @@ import ankol.mod.merger.rules.MergeRules
 import ankol.mod.merger.tools.Tools
 import org.junit.After
 import org.junit.Test
-import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.zip.ZipEntry
@@ -24,7 +23,7 @@ import kotlin.test.assertTrue
  * 重复函数调用对齐的稳定性测试：覆盖确定性和几类已知的边界情况。
  */
 class ScrRepeatedNodeAlignerTest {
-    private val relPath = listOf("scripts", "inventory", "inventory_test.scr").joinToString(File.separator)
+    private val relPath = "scripts/inventory/inventory_test.scr"
     private val tempDirs = mutableListOf<Path>()
     private val managers = mutableListOf<BaseModManager>()
 

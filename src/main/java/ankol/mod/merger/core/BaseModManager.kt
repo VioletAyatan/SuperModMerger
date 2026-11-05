@@ -115,7 +115,7 @@ class BaseModManager(private val basePakDirPath: Path) : AutoCloseable {
         archiveConnection.forEach { (pakName, inArchive) ->
             inArchive.simpleInterface.archiveItems.forEach { archiveEntry: ISimpleInArchiveItem ->
                 if (!archiveEntry.isFolder) {
-                    val archiveEntryName = archiveEntry.path
+                    val archiveEntryName = archiveEntry.path.replace('\\', '/')
                     val fileName = getEntryFileName(archiveEntryName)
                     if (fileName in pakIndexMap) {
                         ConsoleColorPrinter.warning(

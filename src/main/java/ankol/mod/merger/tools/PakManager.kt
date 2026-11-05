@@ -3,6 +3,7 @@ package ankol.mod.merger.tools
 import ankol.mod.merger.core.files.ExtractedArchiveFile
 import ankol.mod.merger.tools.Localizations.t
 import net.sf.sevenzipjbinding.SevenZip
+import net.sf.sevenzipjbinding.SevenZipException
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
@@ -25,6 +26,7 @@ object PakManager {
     private val SANITIZE_REGEX = "[^a-zA-Z0-9._-]".toRegex()
 
     init {
+        //Init plantform envrioment. Eg: windows=dll linux=sh
         SevenZip.initSevenZipFromPlatformJAR()
     }
 
@@ -68,7 +70,12 @@ object PakManager {
         RandomAccessFileInStream(RandomAccessFile(pakPath.toFile(), "r")).use { inStream ->
             SevenZip.openInArchive(null, inStream).use { inArchive ->
                 val archiveCallback = ExtractArchiveCallback(inArchive, pakPath, archiveNames, archiveFileMap, outputDir, nestedArchives)
-                inArchive.extract(null, false, archiveCallback)
+                try {
+                    inArchive.extract(null, false, archiveCallback)
+                } catch (e: SevenZipException) {
+                    archiveCallback.unsafeEntryError?.let { throw it }
+                    throw e
+                }
             }
         }
 
@@ -76,38 +83,11 @@ object PakManager {
             val sanitized = nestedFileName.replace(SANITIZE_REGEX, "_")
             val nestedDir = outputDir.resolve("_nested_${NESTED_COUNTER.getAndIncrement()}_$sanitized")
                 .also { it.createDirectories() }
-            archiveNames.add(nestedFileName)
-            extractRecursive(nestedPath, nestedDir, archiveFileMap, archiveNames)
+            val nestedArchiveNames = (archiveNames + nestedFileName).toMutableList()
+            extractRecursive(nestedPath, nestedDir, archiveFileMap, nestedArchiveNames)
         }
     }
 
-
-    /**
-     * Add file to the file tree mapping
-     */
-    private fun addFileToTree(
-        fileName: String,
-        entryName: String,
-        archiveNames: MutableList<String>,
-        hash: String,
-        outputPath: Path,
-        archiveFileMap: MutableMap<String, ExtractedArchiveFile>
-    ) {
-        val current = ExtractedArchiveFile(fileName, entryName, archiveNames, hash, outputPath)
-
-        archiveFileMap[entryName]?.let { existing ->
-            ConsoleColorPrinter.warning(
-                t(
-                    "PAK_MANAGER_DUPLICATE_FILE_DETECTED",
-                    existing.archiveFileNames,
-                    current.fileEntryName,
-                    existing.fileEntryName
-                )
-            )
-            ConsoleColorPrinter.success(t("PAK_MANAGER_USE_NEW_PATH", current.fileEntryName))
-        }
-        archiveFileMap[entryName] = current
-    }
 
     /**
      * Package merged files into a .pak file

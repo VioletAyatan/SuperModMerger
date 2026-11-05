@@ -79,12 +79,12 @@ class FileMergerEngine(
             // Clean up temporary directory to prevent residual files
             Tools.deleteRecursively(tempDir)
             // Extract all mod files
-            val groupedFiles = modExtractor.extractAllMods()
-            pathCorrectionCount += groupedFiles.size
+            val extraction = modExtractor.extractAllMods()
+            pathCorrectionCount += extraction.pathCorrectionCount
             val mergedDir = tempDir.resolve("merged")
             mergedDir.createDirectories()
             // Start merging files
-            mergeAllFiles(groupedFiles, mergedDir)
+            mergeAllFiles(extraction.groupedFiles, mergedDir)
             // Merge complete, package the result
             colorPrinter.cyan(t("ENGINE_CREATING_MERGED_PAK"))
             PakManager.createPak(mergedDir, outputPath)

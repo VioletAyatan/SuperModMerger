@@ -2,7 +2,6 @@ package ankol.mod.merger.tools
 
 import ankol.mod.merger.exception.BusinessException
 import ankol.mod.merger.tools.Localizations.t
-import java.io.File
 import java.nio.channels.FileChannel
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -14,8 +13,6 @@ object Tools {
     val tempDir: String = System.getProperty("java.io.tmpdir")
 
     private val strFormatRegex = Regex("\\{}")
-
-    private val HEX_ARRAY = "0123456789abcdef".toCharArray()
 
     /**
      * Get the directory containing the mods to be merged
@@ -42,38 +39,12 @@ object Tools {
     }
 
     /**
-     * Scan all files in the specified directory, filter by extension
-     *
-     * @param mergedDirPath        Directory path
-     * @param extensions Extensions to search for (e.g. ".pak", ".zip")
-     * @return List of matching files
-     */
-    fun scanFiles(mergedDirPath: Path, vararg extensions: String): MutableList<Path> {
-        val results = ArrayList<Path>()
-        if (!mergedDirPath.exists()) {
-            throw BusinessException(t("TOOLS_DEFAULT_MODS_DIR_NOT_EXIST"))
-        }
-        mergedDirPath.walk(PathWalkOption.FOLLOW_LINKS)
-            .filter { it.isRegularFile() }
-            .forEach { file: Path ->
-                val filename = file.fileName.toString()
-                for (ext in extensions) {
-                    if (filename.endsWith(ext)) {
-                        results.add(file)
-                    }
-                }
-            }
-        return results
-    }
-
-    /**
      * Get the file name in archiveEntry, remove 'separator', return the lowercase file name
      * @param entryName Archive full-path file name
-//     * @param separator separator
      * @return entry file name
      */
     fun getEntryFileName(entryName: String): String {
-        return entryName.substring(entryName.lastIndexOf(File.separator) + 1).lowercase()
+        return entryName.substringAfterLast('/').lowercase()
     }
 
     /**
@@ -135,19 +106,4 @@ object Tools {
         }
     }
 
-    /**
-     * Convert byte array to hexadecimal string
-     *
-     * @param bytes Byte array
-     * @return Hexadecimal string
-     */
-    fun bytesToHex(bytes: ByteArray): String {
-        val hexChars = CharArray(bytes.size * 2)
-        for (i in bytes.indices) {
-            val v = bytes[i].toInt() and 0xFF
-            hexChars[i * 2] = HEX_ARRAY[v ushr 4]
-            hexChars[i * 2 + 1] = HEX_ARRAY[v and 0x0F]
-        }
-        return String(hexChars)
-    }
 }

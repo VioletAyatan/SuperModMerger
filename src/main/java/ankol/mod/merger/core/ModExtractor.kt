@@ -9,9 +9,6 @@ import ankol.mod.merger.tools.PakManager
 import ankol.mod.merger.tools.logger
 import org.apache.commons.lang3.Strings
 import java.nio.file.Path
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.atomic.AtomicInteger
 
 class ModExtractor(
     private val mergeableMods: List<MergingModInfo>,
@@ -32,28 +29,41 @@ class ModExtractor(
     )
 
     /**
-     * Extract files from all mods and group them by relative file path
-     * @return [Map] key is the relative file path, value is the grouped files
+     * 解压结果
+     *
+     * @param groupedFiles 按相对路径分组后的文件
+     * @param pathCorrectionCount 被修正到基准MOD路径的文件数
      */
-    fun extractAllMods(): Collection<GroupedModFile> {
-        val filesByPath = ConcurrentHashMap<String, GroupedModFile>()
-        val index = AtomicInteger(0)
-        val correctionCounter = AtomicInteger(0)
+    data class ExtractionResult(
+        val groupedFiles: Collection<GroupedModFile>,
+        val pathCorrectionCount: Int,
+    )
 
-        mergeableMods.parallelStream().forEach { mod: MergingModInfo ->
-            try {
-                val archiveName = mod.modName
-                val modTempDir = extractTempDir.resolve("${archiveName}${index.getAndIncrement()}")
-                val extractedFiles = PakManager.extractPak(archiveName, mod.modPath, modTempDir) // Extract compressed archive
-                val correctedCount = groupExtractedFilesByPath(archiveName, extractedFiles, filesByPath)
-                correctionCounter.addAndGet(correctedCount)
-            } catch (e: Exception) {
-                log.error(t("ENGINE_EXTRACT_FAILED", mod.modName), e)
-                ErrorReporter.addErrorReport(mod.modName, t("ERROR_EXTRA_MOD_FAILED", e.message, mod.modPath))
-            }
+    /**
+     * Extract files from all mods and group them by relative file path
+     * @return [ExtractionResult]
+     */
+    fun extractAllMods(): ExtractionResult {
+        val extractedMods = mergeableMods.withIndex().toList()
+            .parallelStream().map { (index, mod) ->
+                try {
+                    val archiveName = mod.modName
+                    val modTempDir = extractTempDir.resolve("${archiveName}${index}")
+                    return@map mod to PakManager.extractPak(archiveName, mod.modPath, modTempDir)
+                } catch (e: Exception) {
+                    log.error(t("ENGINE_EXTRACT_FAILED", mod.modName), e)
+                    ErrorReporter.addErrorReport(mod.modName, t("ERROR_EXTRA_MOD_FAILED", e.message, mod.modPath))
+                    return@map null
+                }
+            }.toList()
+
+        val filesByPath = LinkedHashMap<String, GroupedModFile>()
+        var correctionCount = 0
+        for (extracted in extractedMods) {
+            val (mod, extractedFiles) = extracted ?: continue
+            correctionCount += groupExtractedFilesByPath(mod.modName, extractedFiles, filesByPath)
         }
-
-        return filesByPath.values
+        return ExtractionResult(filesByPath.values, correctionCount)
     }
 
     /**
@@ -62,7 +72,7 @@ class ModExtractor(
     private fun groupExtractedFilesByPath(
         modFileName: String,
         extractedFiles: Map<String, ExtractedArchiveFile>,
-        filesByPath: ConcurrentHashMap<String, GroupedModFile>
+        filesByPath: MutableMap<String, GroupedModFile>
     ): Int {
         val correctionsFileMap = LinkedHashMap<String, String>()
 
@@ -80,7 +90,7 @@ class ModExtractor(
                 }
             }
 
-            filesByPath.computeIfAbsent(targetPath) { GroupedModFile(targetPath, CopyOnWriteArrayList()) }
+            filesByPath.getOrPut(targetPath) { GroupedModFile(targetPath, ArrayList()) }
                 .archiveFiles.add(sourceInfo)
         }
 

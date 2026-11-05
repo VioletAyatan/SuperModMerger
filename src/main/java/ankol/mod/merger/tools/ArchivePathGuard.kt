@@ -30,9 +30,6 @@ internal object ArchivePathGuard {
             reject(entryName, "drive-qualified paths and alternate data streams are not allowed")
         }
 
-
-
-
         val relativePath = try {
             Path.of(canonicalEntryName).normalize()
         } catch (e: InvalidPathException) {
@@ -49,8 +46,7 @@ internal object ArchivePathGuard {
             reject(entryName, "path escapes the extraction directory")
         }
 
-        val normalizedEntryName = relativePath.toString().replace('\\', '/')
-        return ResolvedEntry(normalizedEntryName, outputPath)
+        return ResolvedEntry(relativePath.toString().replace('\\', '/'), outputPath)
     }
 
     private fun reject(entryName: String, reason: String): Nothing {

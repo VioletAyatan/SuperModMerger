@@ -13,7 +13,6 @@ import ankol.mod.merger.rules.RuleAction
 import ankol.mod.merger.tools.Tools
 import org.junit.After
 import org.junit.Test
-import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.zip.ZipEntry
@@ -23,8 +22,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ScrDeletionMergeTest {
-    // 与运行时一致：MOD 解压后的相对路径使用系统分隔符
-    private val relPath = listOf("scripts", "inventory", "inventory_test.scr").joinToString(File.separator)
+    // 与运行时一致：条目路径统一使用 '/' 分隔
+    private val relPath = "scripts/inventory/inventory_test.scr"
     private val tempDirs = mutableListOf<Path>()
     private val managers = mutableListOf<BaseModManager>()
 
