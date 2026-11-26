@@ -25,8 +25,12 @@ class TechlandXmlFileVisitor(val tokenStream: CommonTokenStream) : TechlandXMLPa
          * 优先级属性名称列表 - 用于识别元素的主要标识符
          */
         private val PRIORITY_ATTRIBUTE_NAMES = arrayOf(
-            "id", "uid", "name", "key", "Name", "type", "property_id", "class"
+            "id", "uid", "name", "key", "Name", "type", "property_id", "class", "n"
         )
+
+        /** The name of the attribute that identifies an element in its signature; null if all its attributes do */
+        fun identifyingAttributeName(attributeNames: Collection<String>): String? =
+            PRIORITY_ATTRIBUTE_NAMES.firstOrNull { it in attributeNames }
     }
 
     /**

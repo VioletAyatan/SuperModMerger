@@ -1,6 +1,9 @@
 package ankol.mod.merger.mergers.scr
 
 import ankol.mod.merger.core.BaseTreeNode
+import ankol.mod.merger.mergers.RepeatedSiblingAligner
+import ankol.mod.merger.mergers.SiblingContent
+import ankol.mod.merger.mergers.scr.node.AbstractScrNode
 import ankol.mod.merger.mergers.scr.node.ScrContainerNode
 import ankol.mod.merger.mergers.scr.node.ScrFunCallNode
 import ankol.mod.merger.constants.ScrNodeType
@@ -53,11 +56,12 @@ object ScrRepeatedNodeAligner {
         for (calls in listOf(vanillaCalls, accumulatedCalls, incomingCalls)) {
             calls.forEach { (name, list) -> if (list.size > 1) repeatedNames += name }
         }
-        if (repeatedNames.isEmpty()) {
+        val keyOverrides = IdentityHashMap<BaseTreeNode, String>()
+        alignFunctionBlocks(vanilla, accumulated, incoming, keyOverrides)
+        if (keyOverrides.isEmpty() && repeatedNames.isEmpty()) {
             return AlignedChildren(vanilla?.childrens, accumulated.childrens, incoming.childrens, emptySet())
         }
 
-        val keyOverrides = IdentityHashMap<BaseTreeNode, String>()
         for (name in repeatedNames) {
             val accList = accumulatedCalls[name].orEmpty()
             val incList = incomingCalls[name].orEmpty()
@@ -89,6 +93,101 @@ object ScrRepeatedNodeAligner {
     }
 
     private fun alignedKey(functionName: String, id: String) = "${TechlandScrFileVisitor.FUN_CALL}:$functionName#$id"
+
+    private val ScrContainerNode?.funBlocks: Map<String, List<ScrContainerNode>>
+        get() = this?.childrens?.values?.filterIsInstance<ScrContainerNode>()
+            ?.filter { it.nodeType == ScrNodeType.FUN_BLOCK }?.groupBy { it.name }
+            ?: emptyMap()
+
+    /**
+     * Function blocks whose name is repeated in any version get keys that do not depend on what else each
+     * version has in the container: the name and the first argument, as in their signature. Blocks that share the
+     * first argument, or have no arguments, were told apart by their position: those are paired by
+     * [RepeatedSiblingAligner].
+     */
+    private fun alignFunctionBlocks(
+        vanilla: ScrContainerNode?,
+        accumulated: ScrContainerNode,
+        incoming: ScrContainerNode,
+        keys: MutableMap<BaseTreeNode, String>,
+    ) {
+        val vanillaBlocks = vanilla?.funBlocks
+        val accumulatedBlocks = accumulated.funBlocks
+        val incomingBlocks = incoming.funBlocks
+        val versions = listOfNotNull(vanillaBlocks, accumulatedBlocks, incomingBlocks)
+        val repeatedNames = linkedSetOf<String>()
+        for (blocks in versions) {
+            blocks.forEach { (name, list) -> if (list.size > 1) repeatedNames += name }
+        }
+
+        for (name in repeatedNames) {
+            fun families(blocks: Map<String, List<ScrContainerNode>>) =
+                blocks[name].orEmpty().groupBy { it.arguments.firstOrNull() }
+
+            val vanillaFamilies = vanillaBlocks?.let(::families)
+            val accumulatedFamilies = families(accumulatedBlocks)
+            val incomingFamilies = families(incomingBlocks)
+            val firstArguments = linkedSetOf<String?>()
+            listOfNotNull(vanillaFamilies, accumulatedFamilies, incomingFamilies).forEach { firstArguments += it.keys }
+            for (firstArgument in firstArguments) {
+                val vanillaFamily = vanillaFamilies?.let { it[firstArgument].orEmpty() }
+                val accumulatedFamily = accumulatedFamilies[firstArgument].orEmpty()
+                val incomingFamily = incomingFamilies[firstArgument].orEmpty()
+                val key = TechlandScrFileVisitor.FUN_BLOCK + ":" + name + (firstArgument?.let { ":$it" } ?: "")
+                if (maxOf(vanillaFamily?.size ?: 0, accumulatedFamily.size, incomingFamily.size) <= 1) {
+                    // the only one in each version: the same block
+                    (vanillaFamily.orEmpty() + accumulatedFamily + incomingFamily).forEach { keys[it] = key }
+                    continue
+                }
+                val ids = RepeatedSiblingAligner.align(
+                    vanillaFamily?.map(::content), accumulatedFamily.map(::content), incomingFamily.map(::content)
+                )
+                // the first one keeps the key it has while it is the only one with its first argument, so that
+                // what the merge history says about it is still found when a mod adds another one
+                fun keyOf(id: String) = if (id == "0") key else "$key#$id"
+                vanillaFamily?.forEachIndexed { index, block -> keys[block] = keyOf(ids.vanilla[index]) }
+                accumulatedFamily.forEachIndexed { index, block -> keys[block] = keyOf(ids.accumulated[index]) }
+                incomingFamily.forEachIndexed { index, block -> keys[block] = keyOf(ids.incoming[index]) }
+            }
+        }
+    }
+
+    private fun content(block: ScrContainerNode): SiblingContent {
+        val parts by lazy(LazyThreadSafetyMode.NONE) {
+            val values = ArrayList<String>()
+            val shape = ArrayList<String>()
+            // the first argument is the same in all the blocks of a family
+            block.arguments.forEachIndexed { index, argument -> if (index > 0) values += "#$index=$argument" }
+            collect(block, values, shape)
+            values to shape
+        }
+        return SiblingContent(withoutWhitespace(block.sourceText), block.arguments.getOrNull(1), { parts.first }, { parts.second })
+    }
+
+    /**
+     * Every statement inside a block, however deep: its name is part of the shape of the block, and what it says
+     * is one of its values. Calls and block headers count argument by argument, so that a statement whose value
+     * changed still has its other arguments to be recognised by.
+     */
+    private fun collect(container: ScrContainerNode, values: MutableList<String>, shape: MutableList<String>) {
+        for (child in container.childrens.values) {
+            val name = if (child is AbstractScrNode) "${child.nodeType}:${child.name}" else child.signature
+            shape += name
+            val arguments = when (child) {
+                is ScrContainerNode -> child.arguments
+                is ScrFunCallNode -> child.arguments
+                else -> null
+            }
+            if (arguments == null) {
+                values += withoutWhitespace(child.sourceText)
+            } else {
+                arguments.forEachIndexed { index, argument -> values += "$name#$index=$argument" }
+            }
+            if (child is ScrContainerNode) collect(child, values, shape)
+        }
+    }
+
+    private fun withoutWhitespace(text: String): String = text.filterNot(Char::isWhitespace)
 
     /**
      * 将 [other] 中的每个调用配对到 [base] 中的调用。

@@ -23,6 +23,10 @@ class ScrContainerNode(
      * 参数列表
      */
     val arguments: List<String> = emptyList(),
+    /**
+     * Token index of the ')' that closes the header of a function block, e.g. Foo("a", 1) { ... }; -1 if there is none
+     */
+    val headerStopTokenIndex: Int = -1,
 ) : AbstractScrNode(signature, startTokenIndex, stopTokenIndex, line, tokenStream) {
     private val log = logger()
 
@@ -44,6 +48,13 @@ class ScrContainerNode(
         }
         childrens[node.signature] = node
     }
+
+    /**
+     * The header of a function block (from its name to the closing ')'), as a node of its own, or null if it has none
+     */
+    fun headerNode(): ScrLeafNode? =
+        if (headerStopTokenIndex < 0) null
+        else ScrLeafNode(signature, startTokenIndex, headerStopTokenIndex, line, tokenStream, nodeType, name)
 
     override fun printTree(indent: String) {
         super.printTree(indent)
