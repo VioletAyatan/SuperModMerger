@@ -92,17 +92,16 @@ class TechlandXmlFileMerger(context: MergeContext) : AbstractFileMerger(context)
         accumulatedContainer: XmlContainerNode,
         incomingModContainer: XmlContainerNode
     ) {
+        // siblings with the same signature are paired by XmlRepeatedSiblingAligner, everything else by its signature
+        val aligned = XmlRepeatedSiblingAligner.align(vanillaContainer, accumulatedContainer, incomingModContainer)
+
         // 遍历Mod的所有子节点
         var previousSiblingInBase: XmlNode? = null // 追踪前一个兄弟节点
-        for ((signature, modNode) in incomingModContainer.childrens) {
+        for ((signature, modNode) in aligned.incoming) {
             try {
-                var vanillaNode: XmlNode? = null
+                val vanillaNode = aligned.vanilla?.get(signature)
 
-                if (vanillaContainer != null) {
-                    vanillaNode = vanillaContainer.childrens[signature]
-                }
-
-                val accumulatedNode = accumulatedContainer.childrens[signature]
+                val accumulatedNode = aligned.accumulated[signature]
 
                 if (accumulatedNode == null) {
                     //新增节点，记录插入操作
@@ -193,7 +192,8 @@ class TechlandXmlFileMerger(context: MergeContext) : AbstractFileMerger(context)
             val newNode = record.newNode
             //有兄弟节点，插在兄弟节点后面
             if (previousSibling != null) {
-                rewriter.insertBefore(previousSibling.stopTokenIndex + 1, "\n${newNode.sourceText}")
+                // insertAfter keeps several new siblings after the same node in file order
+                rewriter.insertAfter(previousSibling.stopTokenIndex, "\n${newNode.sourceText}")
             } else {
                 // xml容器的结束标签是>，然而实际需要插入在<之前，这里需要继续搜索前面的token索引
                 //todo 这里的逻辑后面看看还有没有更好的解决方法
